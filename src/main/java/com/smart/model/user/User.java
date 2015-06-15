@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -49,7 +50,7 @@ import com.smart.model.LabelValue;
  *         by David Carter david@carter.net
  */
 @Entity
-@Table(name = "app_user")
+@Table(name = "lab_user")
 @Indexed
 @XmlRootElement
 public class User extends BaseObject implements Serializable, UserDetails {
@@ -89,7 +90,9 @@ public class User extends BaseObject implements Serializable, UserDetails {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USER")
+	@SequenceGenerator(name = "SEQ_USER", sequenceName = "user_sequence", allocationSize = 1)
     @DocumentId
     public Long getId() {
         return id;
@@ -169,7 +172,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)    
     @JoinTable(
-            name = "user_role",
+            name = "lab_user_role",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -27,7 +28,7 @@ import java.io.Serializable;
  *         by David Carter david@carter.net
  */
 @Entity
-@Table(name = "role")
+@Table(name = "lab_role")
 @NamedQueries({
         @NamedQuery(
                 name = "findRoleByName",
@@ -56,7 +57,9 @@ public class Role extends BaseObject implements Serializable, GrantedAuthority {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ROLE")
+	@SequenceGenerator(name = "SEQ_ROLE", sequenceName = "role_sequence", allocationSize = 1)
     public Long getId() {
         return id;
     }

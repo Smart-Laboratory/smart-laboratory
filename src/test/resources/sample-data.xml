@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <table name="app_user">
+    <table name="lab_user">
         <column>id</column>
         <column>username</column>
         <column>password</column>
@@ -84,7 +84,7 @@
             <value description="credentials_expired">0</value>
         </row>        
     </table>
-    <table name="role">
+    <table name="lab_role">
         <column>id</column>
         <column>name</column>
         <column>description</column>
@@ -99,7 +99,7 @@
             <value description="description"><![CDATA[Default role for all Users]]></value>
         </row>
     </table>
-    <table name="user_role">
+    <table name="lab_user_role">
         <column>user_id</column>
         <column>role_id</column>
         <row>
