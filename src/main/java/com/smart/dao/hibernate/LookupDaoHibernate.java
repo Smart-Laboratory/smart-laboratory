@@ -2,13 +2,16 @@ package com.smart.dao.hibernate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.smart.dao.LookupDao;
-import com.smart.model.Role;
+import com.smart.model.user.Role;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 import org.hibernate.Session;
 
 /**

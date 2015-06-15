@@ -3,9 +3,10 @@ package com.smart.service.impl;
 import com.smart.Constants;
 import com.smart.dao.RoleDao;
 import com.smart.dao.UserDao;
-import com.smart.model.Role;
-import com.smart.model.User;
+import com.smart.model.user.Role;
+import com.smart.model.user.User;
 import com.smart.service.UserExistsException;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

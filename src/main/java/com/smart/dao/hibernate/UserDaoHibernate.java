@@ -1,7 +1,8 @@
 package com.smart.dao.hibernate;
 
 import com.smart.dao.UserDao;
-import com.smart.model.User;
+import com.smart.model.user.User;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -12,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Table;
+
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;

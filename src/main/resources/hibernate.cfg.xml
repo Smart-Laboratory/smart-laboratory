@@ -6,7 +6,7 @@
 
 <hibernate-configuration>
     <session-factory>
-        <mapping class="com.smart.model.User"/>
-        <mapping class="com.smart.model.Role"/>
+        <mapping class="com.smart.model.user.User"/>
+        <mapping class="com.smart.model.user.Role"/>
     </session-factory>
 </hibernate-configuration>

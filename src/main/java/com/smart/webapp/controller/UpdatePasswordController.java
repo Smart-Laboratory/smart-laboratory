@@ -5,8 +5,10 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import com.smart.model.User;
+
+import com.smart.model.user.User;
 import com.smart.webapp.util.RequestUtil;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;

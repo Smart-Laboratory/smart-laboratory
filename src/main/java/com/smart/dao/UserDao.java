@@ -1,6 +1,7 @@
 package com.smart.dao;
 
-import com.smart.model.User;
+import com.smart.model.user.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Propagation;

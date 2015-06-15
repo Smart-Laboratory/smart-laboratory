@@ -2,8 +2,10 @@ package com.smart.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import com.smart.model.User;
+
+import com.smart.model.user.User;
 import com.smart.service.UserManager;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

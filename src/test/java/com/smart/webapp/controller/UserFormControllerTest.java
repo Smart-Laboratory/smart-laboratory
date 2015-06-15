@@ -1,8 +1,9 @@
 package com.smart.webapp.controller;
 
 import com.smart.Constants;
-import com.smart.model.User;
+import com.smart.model.user.User;
 import com.smart.service.UserManager;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;

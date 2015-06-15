@@ -1,6 +1,7 @@
 package com.smart.webapp.listener;
 
-import com.smart.model.User;
+import com.smart.model.user.User;
+
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 

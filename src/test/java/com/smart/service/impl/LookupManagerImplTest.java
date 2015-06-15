@@ -3,7 +3,8 @@ package com.smart.service.impl;
 import com.smart.Constants;
 import com.smart.dao.LookupDao;
 import com.smart.model.LabelValue;
-import com.smart.model.Role;
+import com.smart.model.user.Role;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

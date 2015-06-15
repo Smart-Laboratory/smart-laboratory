@@ -3,8 +3,8 @@
 
     <persistence-unit name="ApplicationEntityManager" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>com.smart.model.User</class>
-        <class>com.smart.model.Role</class>
+        <class>com.smart.model.user.User</class>
+        <class>com.smart.model.user.Role</class>
     </persistence-unit>
 
     <!-- WARNING: This file's file original source is at web/common/src/main/resources/META-INF. The

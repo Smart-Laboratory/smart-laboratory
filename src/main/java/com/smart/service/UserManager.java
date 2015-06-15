@@ -1,7 +1,8 @@
 package com.smart.service;
 
 import com.smart.dao.UserDao;
-import com.smart.model.User;
+import com.smart.model.user.User;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

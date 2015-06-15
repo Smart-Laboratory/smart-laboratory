@@ -3,9 +3,11 @@ package com.smart.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.smart.Constants;
-import com.smart.model.Role;
-import com.smart.model.User;
+import com.smart.model.user.Role;
+import com.smart.model.user.User;
+
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.security.access.AccessDeniedException;

@@ -2,8 +2,9 @@ package com.smart.service.impl;
 
 import com.smart.dao.LookupDao;
 import com.smart.model.LabelValue;
-import com.smart.model.Role;
+import com.smart.model.user.Role;
 import com.smart.service.LookupManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

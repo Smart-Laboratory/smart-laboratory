@@ -2,8 +2,10 @@ package com.smart.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.smart.Constants;
-import com.smart.model.User;
+import com.smart.model.user.User;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

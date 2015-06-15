@@ -1,4 +1,4 @@
-package com.smart.model;
+package com.smart.model.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,6 +35,9 @@ import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.smart.model.BaseObject;
+import com.smart.model.LabelValue;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication

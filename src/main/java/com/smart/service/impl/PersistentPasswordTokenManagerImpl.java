@@ -10,7 +10,9 @@ import javax.sql.DataSource;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.time.DateUtils;
-import com.smart.model.User;
+
+import com.smart.model.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -62,7 +64,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see com.smart.service.impl.PasswordTokenManager#generateRecoveryToken(com.smart.model.User)
+     * @see com.smart.service.impl.PasswordTokenManager#generateRecoveryToken(com.smart.model.user.User)
      */
     @Override
     public String generateRecoveryToken(final User user) {
@@ -73,7 +75,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see com.smart.service.impl.PasswordTokenManager#isRecoveryTokenValid(com.smart.model.User, java.lang.String)
+     * @see com.smart.service.impl.PasswordTokenManager#isRecoveryTokenValid(com.smart.model.user.User, java.lang.String)
      */
     @Override
     public boolean isRecoveryTokenValid(final User user, final String token) {

@@ -1,8 +1,10 @@
-package com.smart.model;
+package com.smart.model.user;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
+
+import com.smart.model.BaseObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 import java.io.Serializable;
 
 /**

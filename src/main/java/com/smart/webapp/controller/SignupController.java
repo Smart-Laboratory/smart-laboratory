@@ -6,10 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
-import com.smart.model.User;
+import com.smart.model.user.User;
 import com.smart.service.RoleManager;
 import com.smart.service.UserExistsException;
 import com.smart.webapp.util.RequestUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;

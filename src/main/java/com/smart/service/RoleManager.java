@@ -1,6 +1,6 @@
 package com.smart.service;
 
-import com.smart.model.Role;
+import com.smart.model.user.Role;
 
 import java.util.List;
 

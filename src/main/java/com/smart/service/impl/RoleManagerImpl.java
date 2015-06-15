@@ -1,8 +1,9 @@
 package com.smart.service.impl;
 
 import com.smart.dao.RoleDao;
-import com.smart.model.Role;
+import com.smart.model.user.Role;
 import com.smart.service.RoleManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

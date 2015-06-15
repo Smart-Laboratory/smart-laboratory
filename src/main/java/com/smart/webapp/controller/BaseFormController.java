@@ -2,10 +2,12 @@ package com.smart.webapp.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.smart.Constants;
-import com.smart.model.User;
+import com.smart.model.user.User;
 import com.smart.service.MailEngine;
 import com.smart.service.UserManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

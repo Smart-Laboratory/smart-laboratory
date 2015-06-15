@@ -1,7 +1,8 @@
 package com.smart.dao;
 
 import com.smart.Constants;
-import com.smart.model.Role;
+import com.smart.model.user.Role;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

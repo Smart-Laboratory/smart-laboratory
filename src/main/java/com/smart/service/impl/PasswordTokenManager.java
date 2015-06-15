@@ -1,6 +1,6 @@
 package com.smart.service.impl;
 
-import com.smart.model.User;
+import com.smart.model.user.User;
 
 
 public interface PasswordTokenManager {

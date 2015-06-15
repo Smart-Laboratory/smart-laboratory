@@ -1,14 +1,18 @@
-package com.smart.model;
+package com.smart.model.user;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
 import java.io.Serializable;
+
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+
+import com.smart.model.BaseObject;
 
 /**
  * This class is used to represent an address with address,

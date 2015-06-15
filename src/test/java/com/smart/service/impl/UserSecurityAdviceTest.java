@@ -2,10 +2,11 @@ package com.smart.service.impl;
 
 import com.smart.Constants;
 import com.smart.dao.UserDao;
-import com.smart.model.Role;
-import com.smart.model.User;
+import com.smart.model.user.Role;
+import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.UserSecurityAdvice;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
