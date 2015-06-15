@@ -94,14 +94,14 @@
                         <skip>${skipTests}</skip>
                     </componentProperties>
                 </configuration>
-                <executions>
+                <!-- <executions>
                     <execution>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>hbm2ddl</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions> -->
                 <dependencies>
                     <dependency>
                         <groupId>${jdbc.groupId}</groupId>
