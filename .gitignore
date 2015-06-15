@@ -8,3 +8,4 @@
 .settings/org.eclipse.wst.common.component
 .project
 *.container
+velocity.log
