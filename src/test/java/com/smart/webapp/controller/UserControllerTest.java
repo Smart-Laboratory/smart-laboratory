@@ -1,41 +1,26 @@
 package com.smart.webapp.controller;
 
 import com.smart.Constants;
-import com.smart.service.UserManager;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import com.smart.service.UserManager;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerTest extends BaseControllerTestCase {
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
-    private UserController controller;
-
-    private MockMvc mockMvc;
-
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
+    private UserController c;
 
     @Test
     public void testHandleRequest() throws Exception {
-        mockMvc.perform(get("/admin/users"))
-            .andExpect(status().isOk())
-            .andExpect(model().attributeExists(Constants.USER_LIST))
-            .andExpect(view().name("admin/userList"));
+        ModelAndView mav = c.handleRequest(null);
+        Map m = mav.getModel();
+        assertNotNull(m.get(Constants.USER_LIST));
+        assertEquals("admin/userList", mav.getViewName());
     }
 
     @Test
@@ -44,16 +29,11 @@ public class UserControllerTest extends BaseControllerTestCase {
         UserManager userManager = (UserManager) applicationContext.getBean("userManager");
         userManager.reindex();
 
-        Map<String,Object> model = mockMvc.perform((get("/admin/users")).param("q", "admin"))
-            .andExpect(status().isOk())
-            .andExpect(model().attributeExists(Constants.USER_LIST))
-            .andExpect(view().name("admin/userList"))
-            .andReturn()
-            .getModelAndView()
-            .getModel();
-
-        List results = (List) model.get(Constants.USER_LIST);
+        ModelAndView mav = c.handleRequest("admin");
+        Map m = mav.getModel();
+        List results = (List) m.get(Constants.USER_LIST);
         assertNotNull(results);
         assertTrue(results.size() >= 1);
+        assertEquals("admin/userList", mav.getViewName());
     }
 }

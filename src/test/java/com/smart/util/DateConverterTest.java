@@ -1,23 +1,24 @@
 package com.smart.util;
 
-import org.junit.Test;
+import junit.framework.TestCase;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
-import static org.junit.Assert.*;
-
-public class DateConverterTest {
+public class DateConverterTest extends TestCase {
 
     private final DateConverter converter = new DateConverter();
 
-    @Test
     public void testInternationalization() throws Exception {
         final List<Locale> locales = new ArrayList<Locale>() {
 
             private static final long serialVersionUID = 1L;
-
             {
                 add(Locale.US);
                 add(Locale.GERMANY);
@@ -36,7 +37,6 @@ public class DateConverterTest {
         }
     }
 
-    @Test
     public void testConvertStringToDate() throws Exception {
         final Date today = new Date();
         final Calendar todayCalendar = new GregorianCalendar();
@@ -54,25 +54,21 @@ public class DateConverterTest {
         assertEquals(todayCalendar.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_MONTH));
     }
 
-    @Test
     public void testConvertDateToString() throws Exception {
         final Calendar cal = new GregorianCalendar(2005, 0, 16);
         final String date = (String) converter.convert(String.class, cal.getTime());
         assertEquals(DateUtil.convertDateToString(cal.getTime()), date);
     }
 
-    @Test
     public void testConvertStringToString() throws Exception {
         assertEquals(converter.convert(String.class, "anystring"), "anystring");
     }
 
-    @Test
     public void testConvertDateWithNull() throws Exception {
         final String date = (String) converter.convert(String.class, null);
         assertNull(date);
     }
 
-    @Test
     public void testConvertNotSupported() throws Exception {
         final Calendar cal = new GregorianCalendar(2005, 0, 16);
         try {
@@ -89,7 +85,6 @@ public class DateConverterTest {
         }
     }
 
-    @Test
     public void testConvertStringToTimestamp() throws Exception {
         final Date today = new Date();
         final Calendar todayCalendar = new GregorianCalendar();
@@ -104,7 +99,6 @@ public class DateConverterTest {
         assertEquals(todayCalendar.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_MONTH));
     }
 
-    @Test
     public void testConvertTimestampToString() throws Exception {
         final Timestamp timestamp = Timestamp.valueOf("2005-03-10 01:02:03.4");
         final String time = (String) converter.convert(String.class, timestamp);

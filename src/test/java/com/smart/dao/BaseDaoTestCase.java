@@ -3,18 +3,20 @@ package com.smart.dao;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.search.FullTextSession;
-import org.hibernate.search.Search;
-import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import org.hibernate.Session;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 
 /**
  * Base class for running DAO tests.
@@ -22,14 +24,12 @@ import java.util.*;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  * @author jgarcia (updated: migrate to hibernate 4; moved from compass-search to hibernate-search
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
         locations = {"classpath:/applicationContext-resources.xml",
                 "classpath:/applicationContext-dao.xml",
                 "classpath*:/applicationContext.xml",
                 "classpath:**/applicationContext*.xml"})
-@Transactional
-public abstract class BaseDaoTestCase {
+public abstract class BaseDaoTestCase extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -70,7 +70,7 @@ public abstract class BaseDaoTestCase {
         // loop through all the beans methods and set its properties from its .properties file
         Map<String, String> map = new HashMap<String, String>();
 
-        for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements(); ) {
+        for (Enumeration<String> keys = rb.getKeys(); keys.hasMoreElements();) {
             String key = keys.nextElement();
             map.put(key, rb.getString(key));
         }
@@ -84,7 +84,8 @@ public abstract class BaseDaoTestCase {
      * Create a HibernateTemplate from the SessionFactory and call flush() and clear() on it.
      * Designed to be used after "save" methods in tests: http://issues.appfuse.org/browse/APF-178.
      *
-     * @throws org.springframework.beans.BeansException when can't find 'sessionFactory' bean
+     * @throws org.springframework.beans.BeansException
+     *          when can't find 'sessionFactory' bean
      */
     protected void flush() throws BeansException {
         Session currentSession = sessionFactory.getCurrentSession();

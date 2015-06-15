@@ -1,9 +1,7 @@
 package com.smart.webapp.listener;
 
+import junit.framework.TestCase;
 import com.smart.Constants;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;
@@ -12,8 +10,6 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import static org.junit.Assert.*;
-
 
 /**
  * This class tests the StartupListener class to verify that variables are
@@ -21,18 +17,18 @@ import static org.junit.Assert.*;
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
-public class StartupListenerTest {
+public class StartupListenerTest extends TestCase {
     private MockServletContext sc = null;
     private ServletContextListener listener = null;
     private ContextLoaderListener springListener = null;
 
-    @Before
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
+        super.setUp();
         sc = new MockServletContext("");
 
         // initialize Spring
         sc.addInitParameter(ContextLoader.CONFIG_LOCATION_PARAM,
-            "classpath:/applicationContext-dao.xml, " +
+                "classpath:/applicationContext-dao.xml, " +
                 "classpath:/applicationContext-service.xml, " +
                 "classpath:/applicationContext-resources.xml");
 
@@ -41,8 +37,8 @@ public class StartupListenerTest {
         listener = new StartupListener();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    protected void tearDown() throws Exception {
+        super.tearDown();
         // cleanup: close sessionFactory and related resources (search index locks)
         springListener.closeWebApplicationContext(sc);
         springListener = null;
@@ -50,12 +46,13 @@ public class StartupListenerTest {
         sc = null;
     }
 
-    @Test
     public void testContextInitialized() {
         listener.contextInitialized(new ServletContextEvent(sc));
 
-        assertTrue(sc.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE) != null);
+        assertTrue(sc.getAttribute(WebApplicationContext
+                .ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE) != null);
         assertTrue(sc.getAttribute(Constants.AVAILABLE_ROLES) != null);
+
         assertNotNull(sc.getAttribute(Constants.ASSETS_VERSION));
     }
 }

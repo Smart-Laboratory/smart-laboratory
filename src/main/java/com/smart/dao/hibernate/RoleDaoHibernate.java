@@ -2,11 +2,11 @@ package com.smart.dao.hibernate;
 
 import com.smart.dao.RoleDao;
 import com.smart.model.Role;
+import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 
 /**

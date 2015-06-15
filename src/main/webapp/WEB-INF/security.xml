@@ -23,7 +23,8 @@
 
     <authentication-manager>
         <authentication-provider user-service-ref="userDao">
-            <password-encoder ref="passwordEncoder"/>
+            <password-encoder ref="passwordEncoder">
+            </password-encoder>
         </authentication-provider>
     </authentication-manager>
 

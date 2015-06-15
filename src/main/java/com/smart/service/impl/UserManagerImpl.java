@@ -32,6 +32,7 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
     private PasswordEncoder passwordEncoder;
     private UserDao userDao;
 
+
     private MailEngine mailEngine;
     private SimpleMailMessage message;
     private PasswordTokenManager passwordTokenManager;
@@ -227,12 +228,11 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
         final User user = getUserByUsername(username);
         final String url = buildRecoveryPasswordUrl(user, urlTemplate);
 
-        sendUserEmail(user, passwordRecoveryTemplate, url, "Password Recovery");
+        sendUserEmail(user, passwordRecoveryTemplate, url);
     }
 
-    private void sendUserEmail(final User user, final String template, final String url, final String subject) {
+    private void sendUserEmail(final User user, final String template, final String url) {
         message.setTo(user.getFullName() + "<" + user.getEmail() + ">");
-        message.setSubject(subject);
 
         final Map<String, Serializable> model = new HashMap<String, Serializable>();
         model.put("user", user);
@@ -241,6 +241,7 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
         mailEngine.sendMessage(message, template, model);
     }
 
+
     /**
      * {@inheritDoc}
      */
@@ -248,12 +249,12 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
     public User updatePassword(final String username, final String currentPassword, final String recoveryToken, final String newPassword, final String applicationUrl) throws UserExistsException {
         User user = getUserByUsername(username);
         if (isRecoveryTokenValid(user, recoveryToken)) {
-            log.debug("Updating password from recovery token for user: " + username);
+            log.debug("Updating password from recovery token for user:" + username);
             user.setPassword(newPassword);
             user = saveUser(user);
             passwordTokenManager.invalidateRecoveryToken(user, recoveryToken);
 
-            sendUserEmail(user, passwordUpdatedTemplate, applicationUrl, "Password Updated");
+            sendUserEmail(user, passwordUpdatedTemplate, applicationUrl);
 
             return user;
         } else if (StringUtils.isNotBlank(currentPassword)) {

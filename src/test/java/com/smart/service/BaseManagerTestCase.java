@@ -4,17 +4,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import com.smart.util.ConvertUtil;
-import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:/applicationContext-resources.xml", "classpath:/applicationContext-dao.xml",
         "classpath:/applicationContext-service.xml", "classpath*:/**/applicationContext.xml"
@@ -25,8 +21,7 @@ import java.util.ResourceBundle;
  *
  * @author mraible
  */
-@Transactional
-public abstract class BaseManagerTestCase {
+public abstract class BaseManagerTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 
     /**
      * A simple logger
