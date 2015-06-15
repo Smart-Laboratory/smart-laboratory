@@ -922,8 +922,8 @@
                 <jdbc.version>10.2.0.2.0</jdbc.version>
                 <jdbc.driverClassName>oracle.jdbc.OracleDriver</jdbc.driverClassName>
                 <jdbc.url>jdbc:oracle:thin:@localhost:1521:XE</jdbc.url>
-                <jdbc.username>system</jdbc.username>
-                <jdbc.password>system</jdbc.password>
+                <jdbc.username>lab</jdbc.username>
+                <jdbc.password>lab</jdbc.password>
                 <jdbc.validationQuery>SELECT 1 + 1 from DUAL</jdbc.validationQuery>
             </properties>
         </profile>
