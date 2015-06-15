@@ -9,3 +9,4 @@
 .project
 *.container
 velocity.log
+pom.xml
