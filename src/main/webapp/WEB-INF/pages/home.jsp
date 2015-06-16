@@ -11,10 +11,13 @@
 
 <ul class="glassList">
     <li>
-        <a href="<c:url value='/userform'/>"><fmt:message key="menu.user"/></a>
+        <a href="<c:url value='/manage/input'/>"><fmt:message key="sample.manage.input"/></a>
     </li>
     <li>
-        <a href="<c:url value='/fileupload'/>"><fmt:message key="menu.selectFile"/></a>
+        <a href="<c:url value='/manage/receive'/>"><fmt:message key="sample.manage.receive"/></a>
+    </li>
+    <li>
+        <a href="<c:url value='/manage/audit'/>"><fmt:message key="sample.manage.audit"/></a>
     </li>
 </ul>
 </body>

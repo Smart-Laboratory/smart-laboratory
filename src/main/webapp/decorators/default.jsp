@@ -27,7 +27,7 @@
         <%@ include file="/common/menu.jsp" %>
         <c:if test="${pageContext.request.locale.language ne 'en'}">
             <div id="switchLocale"><a href="<c:url value='/?locale=en'/>">
-                <fmt:message key="webapp.name"/> in English</a>
+                <fmt:message key="webapp.name"/> IN ENGLISH</a>
             </div>
         </c:if>
     </div>
@@ -37,10 +37,45 @@
         <div class="row">
             <decorator:body/>
 
-            <c:if test="${currentMenu == 'AdminMenu'}">
+            <c:if test="${currentMenu == 'SampleManage'}">
                 <div class="col-sm-2">
                 <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="AdminMenu"/>
+                    <menu:displayMenu name="SampleManage"/>
+                </menu:useMenuDisplayer>
+                </div>
+            </c:if>
+            <c:if test="${currentMenu == 'SampleSet'}">
+                <div class="col-sm-2">
+                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
+                    <menu:displayMenu name="SampleSet"/>
+                </menu:useMenuDisplayer>
+                </div>
+            </c:if>
+            <c:if test="${currentMenu == 'Reagent'}">
+                <div class="col-sm-2">
+                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
+                    <menu:displayMenu name="Reagent"/>
+                </menu:useMenuDisplayer>
+                </div>
+            </c:if>
+            <c:if test="${currentMenu == 'Statistic'}">
+                <div class="col-sm-2">
+                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
+                    <menu:displayMenu name="Statistic"/>
+                </menu:useMenuDisplayer>
+                </div>
+            </c:if>
+            <c:if test="${currentMenu == 'Quality'}">
+                <div class="col-sm-2">
+                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
+                    <menu:displayMenu name="Quality"/>
+                </menu:useMenuDisplayer>
+                </div>
+            </c:if>
+            <c:if test="${currentMenu == 'Individual'}">
+                <div class="col-sm-2">
+                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
+                    <menu:displayMenu name="Individual"/>
                 </menu:useMenuDisplayer>
                 </div>
             </c:if>

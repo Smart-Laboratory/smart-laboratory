@@ -4,13 +4,44 @@
         <Displayer name="Velocity" type="net.sf.navigator.displayer.VelocityMenuDisplayer"/>
     </Displayers>
     <Menus>
-        <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER"/>
-        <Menu name="UserMenu" title="menu.user" description="User Menu" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>
-        <Menu name="AdminMenu" title="menu.admin" description="Admin Menu" roles="ROLE_ADMIN" page="/admin/users">
-            <Item name="ViewUsers" title="menu.admin.users" page="/admin/users"/>
-            <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers"/>
-            <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>
-            <Item name="FileUpload" title="menu.selectFile" page="/fileupload"/>
+        <!-- <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER"/> -->
+        <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER">
+        	<Item name="Input" title="sample.manage.input" page="/manage/input"/>
+            <Item name="Receive" title="sample.manage.receive" page="/manage/receive"/>
+            <Item name="Audit" title="sample.manage.audit" page="/manage/audit"/>
+            <Item name="Search" title="sample.manage.search" page="/manage/search"/>
+            <Item name="Critical" title="sample.manage.critical" page="/manage/critical"/>
+            <Item name="Invalid" title="sample.manage.invalid" page="/manage/invalid"/>
+        </Menu>
+        <Menu name="SampleSet" title="set.title" page="/set/rule" roles="ROLE_ADMIN,ROLE_USER">
+        	<Item name="RuleManage" title="set.rule" page="/set/rule"/>
+            <Item name="Hospital" title="set.hospital" page="/set/hospital"/>
+            <Item name="YlSF" title="set.ylsf" page="/set/ylsf"/>
+            <Item name="SOP" title="set.sop" page="/set/sop"/>
+        </Menu>
+        <Menu name="Reagent" title="reagent.title" page="/reagent/stock" roles="ROLE_ADMIN,ROLE_USER">
+        	<Item name="Stock" title="reagent.stock" page="/reagent/stock"/>
+            <Item name="In" title="reagent.in" page="/reagent/in"/>
+            <Item name="Out" title="reagent.out" page="/reagent/out"/>
+            <Item name="Detail" title="reagent.detail" page="/reagent/detail"/>
+            <Item name="Set" title="reagent.set" page="/reagent/set"/>
+        </Menu>
+        <Menu name="Statistic" title="statistic.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
+        </Menu>
+        <Menu name="Quality" title="quality.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
+        </Menu>
+        <Menu name="Individual" title="individual.title" page="/userform" roles="ROLE_ADMIN,ROLE_USER">
+            <Item name="EditUser" title="menu.user" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="ViewUsers" title="menu.admin.users" page="/admin/users" roles="ROLE_ADMIN"/>
+            <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" roles="ROLE_ADMIN"/>
+            <Item name="Collect" title="individual.collect" page="/user/collect" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Ranking" title="individual.ranking" page="/user/rank" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Schedule" title="individual.schedule" page="/user/schedule" roles="ROLE_ADMIN"/>
+            <Item name="ScheduleInfo" title="individual.schedule.info" page="/user/info" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Attendance" title="individual.attendance" page="/user/attendance" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="DataInterface" title="individual.data.interface" page="/user/interface" roles="ROLE_ADMIN,ROLE_USER"/>
+            <!-- <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>
+            <Item name="FileUpload" title="menu.selectFile" page="/fileupload"/> -->
         </Menu>
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER"/>
     </Menus>
