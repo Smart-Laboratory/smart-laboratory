@@ -2,7 +2,7 @@
 
 <head>
     <title><fmt:message key="userProfile.title"/></title>
-    <meta name="menu" content="UserMenu"/>
+    <meta name="menu" content="Individual"/>
 </head>
 
 <c:set var="delObject" scope="request"><fmt:message key="userList.user"/></c:set>

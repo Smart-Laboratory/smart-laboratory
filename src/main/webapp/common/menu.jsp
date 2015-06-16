@@ -8,6 +8,7 @@
             <a href="<c:url value="/login"/>"><fmt:message key="login.title"/></a>
         </li>
     </c:if>
+    
     <menu:displayMenu name="SampleManage"/>
     <menu:displayMenu name="SampleSet"/>
     <menu:displayMenu name="Reagent"/>
@@ -15,6 +16,7 @@
     <menu:displayMenu name="Quality"/>
     <menu:displayMenu name="Individual"/>
     <menu:displayMenu name="Logout"/>
+    
 </ul>
 </div>
 </menu:useMenuDisplayer>

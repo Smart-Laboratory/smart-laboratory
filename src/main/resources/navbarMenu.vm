@@ -1,6 +1,6 @@
 #macro( displayNavbarMenu $menu $count)
+  #set ($count = $count + 1)
   #if ($displayer.isAllowed($menu))
-    #set ($count = $count + 1)
     ## set menu title
     #set ($title = $displayer.getMessage($menu.title))
     #if (!$menu.url) #set ($url="javascript:void(0)") #else #set ($url=$menu.url) #end
