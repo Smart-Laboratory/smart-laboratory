@@ -15,11 +15,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.search.annotations.Indexed;
 
+import com.smart.model.BaseObject;
+
 @Entity
 @Table(name = "Hospital")
 @Indexed
 @XmlRootElement
-public class Hospital {
+public class Hospital extends BaseObject{
 
 	
 	private String id;//医院id。主键
@@ -61,5 +63,19 @@ public class Hospital {
 	}
 	public void setIdCard(String idCard){
 		this.idCard = idCard;
+	}
+	@Override
+	public String toString() {
+		return null;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return 0;
 	}
 }

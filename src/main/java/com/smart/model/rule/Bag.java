@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,12 +14,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import com.smart.model.BaseObject;
+import com.smart.model.lis.Hospital;
 
 
+@Entity
+@Table(name = "lab_bag")
+public class Bag extends BaseObject implements Serializable{
 
-public class Bag {
-
+	
+	private static final long serialVersionUID = 1L;
 	// Primary Key
 	private Long id;
 	
@@ -26,6 +35,8 @@ public class Bag {
 	private Long parentID;
 	private boolean isCore;
 	private Set<Rule> rules = new HashSet<Rule>();
+	
+	private Hospital hospital;
 //	private Set<IDMap> idMap = new HashSet<IDMap>();
 
 	/**
@@ -98,6 +109,15 @@ public class Bag {
 
 	public void setRules(Set<Rule> rules) {
 		this.rules = rules;
+	}
+	
+	@ManyToOne(optional=false,cascade=CascadeType.ALL)
+	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
+	public Hospital getHospital(){
+		return hospital;
+	}
+	public void setHospital(Hospital hospital){
+		this.hospital = hospital; 
 	}
 
 	@Override

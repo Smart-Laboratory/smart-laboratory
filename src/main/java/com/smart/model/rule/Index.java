@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.search.annotations.DocumentId;
@@ -27,7 +29,11 @@ import com.smart.model.user.User;
 /**
 	 * Index对象表示最基本的检验项目
 	 */
+@Entity
+@Table(name = "lab_index")
 public class Index extends BaseObject implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	// Primary Key
 	private Long id;

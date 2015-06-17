@@ -9,5 +9,14 @@
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
         <mapping class="com.smart.model.lis.Hospital"/>
+        <mapping class="com.smart.model.lis.CriticalRecord"/>
+        <mapping class="com.smart.model.lis.Patient"/>
+        <mapping class="com.smart.model.lis.Sample"/>
+        <mapping class="com.smart.model.lis.TestResult"/>
+        <mapping class="com.smart.model.rule.Bag"/>
+        <mapping class="com.smart.model.rule.Index"/>
+        <mapping class="com.smart.model.rule.Item"/>
+        <mapping class="com.smart.model.rule.Result"/>
+        <mapping class="com.smart.model.rule.Rule"/>
     </session-factory>
 </hibernate-configuration>

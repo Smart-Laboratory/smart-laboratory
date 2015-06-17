@@ -1,5 +1,6 @@
 package com.smart.model.rule;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,21 +20,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.smart.model.BaseObject;
 import com.smart.model.user.User;
+import com.smart.model.lis.Hospital;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 
 /**
  * 规则
  */
-public class Rule {
+@Entity
+@Table(name="lab_rule")
+public class Rule extends BaseObject implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	// Primary Key
 	private Long id;
 	
@@ -63,6 +71,7 @@ public class Rule {
 	
 	private int hospitalmode;	//规则使用的对象，包括门诊、病房
 	private int algorithm;		//差值算法：1。差值；2.差值百分率；3.差值变化；4.差值变化率；
+	private Hospital hospital;
 
 	public Rule() {
 	}
@@ -412,6 +421,15 @@ public class Rule {
 	public void setBagId(String bagId) {
 		// System.out.println("规则包ID列表：" + bagId);
 		this.bagId = bagId;
+	}
+	
+	@ManyToOne(optional=false,cascade=CascadeType.ALL)
+	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
+	public Hospital getHospital(){
+		return hospital;
+	}
+	public void setHospital(Hospital hospital){
+		this.hospital = hospital; 
 	}
 
 	@Transient
