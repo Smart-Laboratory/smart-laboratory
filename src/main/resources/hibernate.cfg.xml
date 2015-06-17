@@ -8,5 +8,6 @@
     <session-factory>
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
+        <mapping class="com.smart.model.lis.Hospital"/>
     </session-factory>
 </hibernate-configuration>
