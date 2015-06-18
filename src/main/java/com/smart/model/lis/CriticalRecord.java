@@ -64,7 +64,7 @@ public class CriticalRecord {
 	}
 	
 	
-	@OneToOne(optional=false, cascade=CascadeType.REFRESH)
+	@OneToOne(optional=false, cascade=CascadeType.MERGE)
 	@JoinColumn(name="sampleno",referencedColumnName="sampleno",unique=true)
 	public Sample getSample(){
 		return sample;
@@ -73,20 +73,11 @@ public class CriticalRecord {
 		this.sample = sample;
 	}
 	
-	
-//	@ManyToOne(optional=false,cascade=CascadeType.ALL)
-//	@JoinColumn(name="sample_no",referencedColumnName="sampleNo",unique=true)
-//	public Sample getSample(){
-//		return sample;
-//	}
-//	public void setSample(Sample sample){
-//		this.sample = sample; 
-//	}
-	
+
 	/**
 	 * 危急值
 	 */
-	@Column(name = "CRITICALVALUES")
+	@Column(name = "CRITICALVALUES", length = 20)
 	public String getCriticalValues() {
 		return criticalValues;
 	}
@@ -98,7 +89,7 @@ public class CriticalRecord {
 	/**
 	 * 危急值标识
 	 */
-	@Column(name = "DANGERFLAG")
+	@Column(name = "DANGERFLAG", length = 10)
 	public int getCriticalDealFlag() {
 		return criticalDealFlag;
 	}
@@ -110,7 +101,7 @@ public class CriticalRecord {
 	/**
 	 * 危急值处理结果
 	 */
-	@Column(name = "DANGERDEAL")
+	@Column(name = "DANGERDEAL", length = 50)
 	public String getCriticalDeal() {
 		return criticalDeal;
 	}
@@ -146,7 +137,7 @@ public class CriticalRecord {
 	/**
 	 * 危急值处理者
 	 */
-	@Column(name = "DEALPERSON")
+	@Column(name = "DEALPERSON", length = 20)
 	public String getCriticalDealPerson() {
 		return criticalDealPerson;
 	}
@@ -155,7 +146,7 @@ public class CriticalRecord {
 		this.criticalDealPerson = criticalDealPerson;
 	}
 	
-	@Column(name = "DOCTORNAME")
+	@Column(name = "DOCTORNAME", length = 20)
 	public String getDoctorName() {
 		return doctorName;
 	}
@@ -182,7 +173,7 @@ public class CriticalRecord {
 		this.doctorDealContent = doctorDealContent;
 	}
 
-	@Column(name = "DOCTORID")
+	@Column(name = "DOCTORID", length = 20)
 	public long getDoctorId() {
 		return doctorId;
 	}
@@ -191,7 +182,7 @@ public class CriticalRecord {
 		this.doctorId = doctorId;
 	}
 
-	@Column(name = "NURSENAME")
+	@Column(name = "NURSENAME", length = 20)
 	public String getNurseName() {
 		return nurseName;
 	}
@@ -218,7 +209,7 @@ public class CriticalRecord {
 		this.nurseDealContent = nurseDealContent;
 	}
 
-	@Column(name = "NURSEID")
+	@Column(name = "NURSEID", length = 20)
 	public long getNurseId() {
 		return nurseId;
 	}
@@ -254,7 +245,7 @@ public class CriticalRecord {
 		this.testerDealContent = testerDealContent;
 	}
 
-	@Column(name = "TESTERID")
+	@Column(name = "TESTERID", length = 20)
 	public long getTesterId() {
 		return testerId;
 	}
@@ -263,7 +254,7 @@ public class CriticalRecord {
 		this.testerId = testerId;
 	}
 	
-	@Column(name = "ISDOCTORDEALED")
+	@Column(name = "ISDOCTORDEALED", length = 10)
 	public int getIsDoctorDealed() {
 		return isDoctorDealed;
 	}
@@ -272,7 +263,7 @@ public class CriticalRecord {
 		this.isDoctorDealed = isDoctorDealed;
 	}
 
-	@Column(name = "ISNURSEDEALED")
+	@Column(name = "ISNURSEDEALED", length = 10)
 	public int getIsNurseDealed() {
 		return isNurseDealed;
 	}
@@ -281,7 +272,7 @@ public class CriticalRecord {
 		this.isNurseDealed = isNurseDealed;
 	}
 
-	@Column(name = "ISTESTERDEALED")
+	@Column(name = "ISTESTERDEALED", length = 10)
 	public int getIsTesterDealed() {
 		return isTesterDealed;
 	}

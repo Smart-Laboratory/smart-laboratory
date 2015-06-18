@@ -177,7 +177,7 @@ public class Result extends BaseObject implements Serializable{
 	 */
 	@ManyToMany(targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "intlab_rule_result", 
+			name = "lab_rule_result", 
 			joinColumns = { @JoinColumn(name = "result_id", referencedColumnName = "id") }, 
 			inverseJoinColumns = @JoinColumn(name = "rule_id", referencedColumnName = "id"))
 	public Set<Rule> getRules() {

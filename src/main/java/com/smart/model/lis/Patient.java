@@ -44,7 +44,7 @@ public class Patient {
 	/**
 	 * 病例号
 	 */
-	@Column(name = "BLH")
+	@Column(name = "BLH", length = 20)
 	public String getBlh() {
 		return blh;
 	}
@@ -53,7 +53,7 @@ public class Patient {
 		this.blh = blh;
 	}
 	
-	@Column(name = "PATIENTNAME")
+	@Column(name = "PATIENTNAME", length = 50)
 	public String getPatientName() {
 		return patientName;
 	}
@@ -80,7 +80,7 @@ public class Patient {
 		this.address = address;
 	}
 	
-	@Column(name = "PHONE")
+	@Column(name = "PHONE", length = 20)
 	public String getPhone() {
 		return phone;
 	}
@@ -89,7 +89,7 @@ public class Patient {
 		this.phone = phone;
 	}
 	
-	@Column(name = "INFANTFLAG")
+	@Column(name = "INFANTFLAG", length = 10)
 	public String getInfantFlag() {
 		return infantFlag;
 	}
@@ -98,7 +98,7 @@ public class Patient {
 		this.infantFlag = infantFlag;
 	}
 	
-	@Column(name = "SEX")
+	@Column(name = "SEX", length = 10)
 	public String getSex() {
 		return sex;
 	}
@@ -107,7 +107,7 @@ public class Patient {
 		this.sex = sex;
 	}
 	
-	@Column(name = "IDCARD")
+	@Column(name = "IDCARD", length = 20)
 	public String getIdCard() {
 		return idCard;
 	}
@@ -116,7 +116,7 @@ public class Patient {
 		this.idCard = idCard;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.ALL)
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
 	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
 	public Hospital getHospital(){
 		return hospital;

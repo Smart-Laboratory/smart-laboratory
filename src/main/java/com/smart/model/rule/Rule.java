@@ -314,7 +314,7 @@ public class Rule extends BaseObject implements Serializable {
 	 */
 	@ManyToMany(targetEntity = Bag.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "intlab_bag_rule", 
+			name = "lab_bag_rule", 
 			joinColumns = { @JoinColumn(name = "rule_id", referencedColumnName = "id") }, 
 			inverseJoinColumns = @JoinColumn(name = "bag_id", referencedColumnName = "id"))
 	public Set<Bag> getBags() {
@@ -334,7 +334,7 @@ public class Rule extends BaseObject implements Serializable {
 	 */
 	@ManyToMany(targetEntity = Result.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "intlab_rule_result", 
+			name = "lab_rule_result", 
 			joinColumns = { @JoinColumn(name = "rule_id", referencedColumnName = "id") }, 
 			inverseJoinColumns = @JoinColumn(name = "result_id", referencedColumnName = "id"))
 	public Set<Result> getResults() {
@@ -354,7 +354,7 @@ public class Rule extends BaseObject implements Serializable {
 	 */
 	@ManyToMany(targetEntity = Item.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "intlab_rule_item", 
+			name = "lab_rule_item", 
 			joinColumns = { @JoinColumn(name = "rule_id", referencedColumnName = "id") }, 
 			inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
 	public Set<Item> getItems() {
@@ -423,7 +423,7 @@ public class Rule extends BaseObject implements Serializable {
 		this.bagId = bagId;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.ALL)
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
 	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
 	public Hospital getHospital(){
 		return hospital;

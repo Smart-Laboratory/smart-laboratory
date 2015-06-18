@@ -97,7 +97,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验病人
 	 */
-	@ManyToOne(optional=false,cascade=CascadeType.REFRESH)
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
 	@JoinColumn(name="patientblh",referencedColumnName="blh",unique=true)
 	public Patient getPatient(){
 		return patient;
@@ -109,7 +109,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验单开单时间
 	 */
-	@Column(name = "SAMPLENO")
+	@Column(name = "SAMPLENO", length = 20)
 	public String getSampleNo() {
 		return sampleNo;
 	}
@@ -133,7 +133,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验单开单者
 	 */
-	@Column(name = "CREATER")
+	@Column(name = "CREATER", length = 50)
 	public String getRequester() {
 		return creater;
 	}
@@ -145,7 +145,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验单类型
 	 */
-	@Column(name = "CREATEMODE")
+	@Column(name = "CREATEMODE", length = 10)
 	public String getRequestMode() {
 		return createMode;
 	}
@@ -169,7 +169,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 采样者
 	 */
-	@Column(name = "SAMPLER")
+	@Column(name = "SAMPLER", length = 20)
 	public String getExecutor() {
 		return sampler;
 	}
@@ -193,7 +193,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 接收人
 	 */
-	@Column(name = "RECEIVER")
+	@Column(name = "RECEIVER", length = 20)
 	public String getReceiver() {
 		return receiver;
 	}
@@ -205,7 +205,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 就诊类型
 	 */
-	@Column(name = "STAYHOSPITALMODE")
+	@Column(name = "STAYHOSPITALMODE", length = 10)
 	public int getStayHospitalMode() {
 		return stayHospitalMode;
 	}
@@ -313,7 +313,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验科室
 	 */
-	@Column(name = "LABDEPARTMENT")
+	@Column(name = "LABDEPARTMENT", length = 20)
 	public String getLabdepartMent() {
 		return labDepartMent;
 	}
@@ -325,7 +325,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 检验仪器号
 	 */
-	@Column(name = "LABDEPARTMENTID")
+	@Column(name = "LABDEPARTMENTID", length = 20)
 	public String getLabDepartMentId() {
 		return labDepartMentId;
 	}
@@ -385,8 +385,8 @@ public class Sample extends BaseObject{
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "intlab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
+	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
 			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
 	public Set<TestResult> getResults() {
@@ -401,7 +401,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 审核标记
 	 */
-	@Column(name = "AUDITMARK")
+	@Column(name = "AUDITMARK", length = 10)
 	public int getAuditMark() {
 		return auditMark;
 	}
@@ -413,7 +413,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 审核状态
 	 */
-	@Column(name = "AUDITSTATUS")
+	@Column(name = "AUDITSTATUS", length = 10)
 	public int getAuditStatus() {
 		return auditStatus;
 	}
@@ -451,7 +451,7 @@ public class Sample extends BaseObject{
 	/**
 	 * 样本是否包含上传的图片
 	 */
-	@Column(name = "HASIMAGES")
+	@Column(name = "HASIMAGES", length = 10)
 	public int getHasimages() {
 		return hasimages;
 	}
@@ -472,7 +472,7 @@ public class Sample extends BaseObject{
 		this.iswriteback = iswriteback;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.ALL)
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
 	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
 	public Hospital getHospital(){
 		return hostipal;

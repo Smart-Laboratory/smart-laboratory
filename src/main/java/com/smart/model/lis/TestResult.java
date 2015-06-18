@@ -44,7 +44,7 @@ public class TestResult extends BaseObject{
 	 * 主键、检验样本号
 	 */
     @Id
-    @Column(name = "SAMPLENO")
+    @Column(name = "SAMPLENO", length = 20)
     public String getSampleNo() {
         return sampleNo;
     }
@@ -66,7 +66,7 @@ public class TestResult extends BaseObject{
 	 * 主键、检验项目id
 	 */
     @Id
-    @Column(name = "TESTID")
+    @Column(name = "TESTID", length = 20)
     public String getTestId() {
         return testId;
     }
@@ -78,7 +78,7 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目结果
 	 */
-    @Column(name = "TESTRESULT")
+    @Column(name = "TESTRESULT", length = 20)
     public String getTestResult() {
         return testResult;
     }
@@ -90,7 +90,7 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目结果标记
 	 */
-    @Column(name = "RESULTFLAG")
+    @Column(name = "RESULTFLAG", length = 10)
     public String getResultFlag() {
         return resultFlag;
     }
@@ -116,7 +116,7 @@ public class TestResult extends BaseObject{
 	 * 检验项目正确标识
 	 */
     @Transient
-    @Column(name = "CORRECTFLAG")
+    @Column(name = "CORRECTFLAG", length = 10)
     public String getCorrectFlag() {
         return correctFlag;
     }
@@ -128,7 +128,7 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目样本类型
 	 */
-    @Column(name = "SAMPLETYPE")
+    @Column(name = "SAMPLETYPE", length = 10)
     public String getSampleType() {
         return sampleType;
     }
@@ -137,7 +137,7 @@ public class TestResult extends BaseObject{
         this.sampleType = sampleType;
     }
     
-    @Column(name="ckz")
+    @Column(name="ckz", length = 20)
     public String getCkz(){
     	return ckz;
     }
@@ -196,7 +196,7 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目仪器号
 	 */
-    @Column(name = "DEVICEID")
+    @Column(name = "DEVICEID", length = 10)
     public String getDeviceId() {
         return deviceId;
     }
@@ -232,7 +232,7 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目单位
 	 */
-    @Column(name = "UNIT")
+    @Column(name = "UNIT", length = 20)
     public String getUnit() {
         return unit;
     }
