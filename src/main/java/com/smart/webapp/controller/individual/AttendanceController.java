@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/user/attendace*")
+@RequestMapping("/user/attendance*")
 public class AttendanceController {
 	
 	@RequestMapping(method = RequestMethod.GET)

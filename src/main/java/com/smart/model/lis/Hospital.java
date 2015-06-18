@@ -18,7 +18,7 @@ import org.hibernate.search.annotations.Indexed;
 import com.smart.model.BaseObject;
 
 @Entity
-@Table(name = "Hospital")
+@Table(name = "LAB_HOSPITAL")
 @Indexed
 @XmlRootElement
 public class Hospital extends BaseObject{
