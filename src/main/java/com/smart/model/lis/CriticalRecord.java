@@ -15,6 +15,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.smart.model.BaseObject;
+
 
 
 
@@ -23,7 +25,12 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "l_criticalrecord")
-public class CriticalRecord {
+public class CriticalRecord extends BaseObject{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2303103818856661537L;
 	
 	private Long id; //主键 流水号
 //	private String sampleNo; // 出现危机值的样本编号
@@ -280,20 +287,20 @@ public class CriticalRecord {
 	public void setIsTesterDealed(int isTesterDealed) {
 		this.isTesterDealed = isTesterDealed;
 	}
+	
+	public String toString() {
+		return null;
+	}
 
+	public boolean equals(Object o) {
+		return false;
+	}
+
+	public int hashCode() {
+		return 0;
+	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 
 }

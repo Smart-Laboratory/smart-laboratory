@@ -47,6 +47,9 @@ public class Batch extends BaseObject implements Serializable {
 		this.id = id;
 	}
 	
+	/**
+	 * 批号
+	 */
 	@Column(length = 30)
 	public String getBatch() {
 		return batch;

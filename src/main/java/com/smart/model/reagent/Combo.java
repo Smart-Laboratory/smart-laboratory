@@ -19,6 +19,9 @@ import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
 
+/**
+ * 套餐
+ */
 @Entity
 @Table(name = "rg_combo")
 public class Combo extends BaseObject implements Serializable {

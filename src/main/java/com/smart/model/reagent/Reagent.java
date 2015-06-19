@@ -51,8 +51,11 @@ public class Reagent extends BaseObject implements Serializable {
 	private String temperature;			// 存储位置的温度
 	private int isselfmade;				// 是否为自制试剂
 	
-	private Set<Batch> batchs;
+	private Set<Batch> batchs;			//按批号  分批储存试剂
 
+	/**
+	 * 主键
+	 */
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HMM")
@@ -65,6 +68,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.id = id;
 	}
 
+	/**
+	 * 卫生材料名称
+	 */
 	@Column(length=100)
 	public String getName() {
 		return name;
@@ -74,7 +80,10 @@ public class Reagent extends BaseObject implements Serializable {
 		this.name = name;
 	}
 
-	@Column(length=20)
+	/**
+	 * 拼音
+	 */
+	@Column(length=50)
 	public String getPinyin() {
 		return pinyin;
 	}
@@ -83,6 +92,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.pinyin = pinyin;
 	}
 
+	/**
+	 * 规格
+	 */
 	@Column(length=50)
 	public String getSpecification() {
 		return specification;
@@ -92,6 +104,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.specification = specification;
 	}
 
+	/**
+	 * 产地
+	 */
 	@Column(length=20)
 	public String getPlaceoforigin() {
 		return placeoforigin;
@@ -101,6 +116,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.placeoforigin = placeoforigin;
 	}
 
+	/**
+	 * 品牌
+	 */
 	@Column(length=20)
 	public String getBrand() {
 		return brand;
@@ -110,6 +128,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.brand = brand;
 	}
 
+	/**
+	 * 单位
+	 */
 	@Column(length=10)
 	public String getUnit() {
 		return unit;
@@ -118,7 +139,10 @@ public class Reagent extends BaseObject implements Serializable {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
+
+	/**
+	 * 子单位
+	 */
 	@Column(length=10)
 	public String getSubunit() {
 		return subunit;
@@ -128,6 +152,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.subunit = subunit;
 	}
 
+	/**
+	 * 价格
+	 */
 	@Column(length=10)
 	public String getPrice() {
 		return price;
@@ -137,6 +164,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.price = price;
 	}
 
+	/**
+	 * 商品吗
+	 */
 	@Column(length=20)
 	public String getProductcode() {
 		return productcode;
@@ -146,6 +176,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.productcode = productcode;
 	}
 
+	/**
+	 * 打印顺序
+	 */
 	@Column
 	public int getPrintord() {
 		return printord;
@@ -155,6 +188,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.printord = printord;
 	}
 
+	/**
+	 * 科室
+	 */
 	@Column(length=20)
 	public String getSection() {
 		return section;
@@ -209,6 +245,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.layer = layer;
 	}
 
+	/**
+	 * 存储条件
+	 */
 	@Column(length=20)
 	public String getCondition() {
 		return condition;
@@ -218,6 +257,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.condition = condition;
 	}
 
+	/**
+	 * 库存界值
+	 */
 	@Column
 	public int getMargin() {
 		return margin;
@@ -227,6 +269,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.margin = margin;
 	}
 
+	/**
+	 * 温度
+	 */
 	@Column(length=10)
 	public String getTemperature() {
 		return temperature;
@@ -236,6 +281,9 @@ public class Reagent extends BaseObject implements Serializable {
 		this.temperature = temperature;
 	}
 
+	/**
+	 * 是否是自制试剂
+	 */
 	@Column
 	public int getIsselfmade() {
 		return isselfmade;

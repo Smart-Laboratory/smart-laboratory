@@ -360,9 +360,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "l_sample_audit", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "audit_id", referencedColumnName = "id") })
+	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
 	public Set<Audit> getAudits() {
 		return audits;
 	}
@@ -374,9 +372,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "l_sample_process", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "process_id", referencedColumnName = "id") })
+	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
 	public Set<Process> getProcess() {
 		return process;
 	}
