@@ -34,7 +34,7 @@ public class Sample extends BaseObject {
 	private Long id;//主键，流水号
 	
 	private Patient patient; //病人
-	private String patientid; // 病人 就诊号
+	private String patientId; // 病人 就诊号
 	private String departBed; //病床号
 	private String sampleNo;//样本编号， 手动生成
 	private int stayHospitalMode; //就诊方式（门诊、住院、急诊）
@@ -146,11 +146,11 @@ public class Sample extends BaseObject {
 	 */
 	@Column(name = "PATIENTID", length = 20)
 	public String getPatientId() {
-		return patientid;
+		return patientId;
 	}
 
 	public void setPatientId(String patientid) {
-		this.patientid = patientid;
+		this.patientId = patientid;
 	}
 	
 	/**
@@ -163,30 +163,6 @@ public class Sample extends BaseObject {
 
 	public void setDiagnostic(String diagnostic) {
 		this.diagnostic = diagnostic;
-	}
-	
-	/**
-	 * 检验名称
-	 */
-	@Column(name = "INSPECTIONNAME")
-	public String getExaminaim() {
-		return inspectionName;
-	}
-
-	public void setExaminaim(String inspectionName) {
-		this.inspectionName = inspectionName;
-	}
-	
-	/**
-	 * 检验科室
-	 */
-	@Column(name = "LABDEPARTMENT", length = 20)
-	public String getLabdepartMent() {
-		return labDepartMent;
-	}
-
-	public void setLabdepartMent(String labdepartMent) {
-		this.labDepartMent = labdepartMent;
 	}
 	
 	/**
@@ -213,29 +189,6 @@ public class Sample extends BaseObject {
 		this.printFlag = printFlag;
 	}
 	
-	/**
-	 * 结果状态
-	 */
-	@Column(name = "SAMPLESTATUS")
-	public String getResultStatus() {
-		return sampleStatus;
-	}
-
-	public void setResultStatus(String sampleStatus) {
-		this.sampleStatus = sampleStatus;
-	}
-	
-	/**
-	 * 就诊id
-	 */
-	@Column(name = "PATIENTID", length=30)
-	public String getPatientid() {
-		return patientid;
-	}
-	
-	public void setPatientid(String patientid) {
-		this.patientid = patientid;
-	}
 	
 	/**
 	 * 检验目的
