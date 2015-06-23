@@ -7,7 +7,6 @@
 <body>
 <div class="col-sm-10">
 
-	<h1>dskjfhskjdhfkjdsj</h1>
 
 
 </div>
