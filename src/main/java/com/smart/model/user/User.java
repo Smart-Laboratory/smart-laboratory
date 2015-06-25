@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -39,6 +41,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
+import com.smart.model.lis.Hospital;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -73,6 +76,8 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private boolean accountExpired;
     private boolean accountLocked;
     private boolean credentialsExpired;
+    
+    private Hospital hospital;
 
     /**
      * Default constructor - creates a new instance with no values set.
@@ -338,8 +343,18 @@ public class User extends BaseObject implements Serializable, UserDetails {
     public void setCredentialsExpired(boolean credentialsExpired) {
         this.credentialsExpired = credentialsExpired;
     }
+    
+    @ManyToOne(optional=false,cascade=CascadeType.MERGE)
+	@JoinColumn(name="hospital_id",referencedColumnName="id")
+    public Hospital getHospital() {
+		return hospital;
+	}
 
-    /**
+	public void setHospital(Hospital hospital) {
+		this.hospital = hospital;
+	}
+
+	/**
      * {@inheritDoc}
      */
     public boolean equals(Object o) {

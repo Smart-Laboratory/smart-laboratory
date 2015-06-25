@@ -40,7 +40,7 @@
             <Item name="ScheduleInfo" title="individual.schedule.info" page="/user/info" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="Attendance" title="individual.attendance" page="/user/attendance" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="DataInterface" title="individual.data.interface" page="/user/interface" roles="ROLE_ADMIN,ROLE_USER"/>
-            <Item name="ViewUsers" title="menu.admin.users" page="/admin/users" roles="ROLE_ADMIN"/>
+            <Item name="ViewUsers" title="menu.admin.users" page="/users" roles="ROLE_ADMIN"/>
             <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" roles="ROLE_ADMIN"/>
             <Item name="Schedule" title="individual.schedule" page="/user/schedule" roles="ROLE_ADMIN"/>
             <!-- <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>

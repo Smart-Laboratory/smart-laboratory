@@ -4,8 +4,12 @@
         <pattern>/*ajax=true*</pattern>
         <pattern>/struts/*</pattern>
         <pattern>/resources/*</pattern>
+        <pattern>*ajax*</pattern>
     </excludes> 
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>
+    </decorator>
+    <decorator name="rule" page="rule.jsp">
+        <pattern>/set/rule*</pattern>
     </decorator>
 </decorators>

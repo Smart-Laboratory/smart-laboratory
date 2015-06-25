@@ -36,5 +36,9 @@
 
     <!-- Activates scanning of @Repository -->
     <context:component-scan base-package="com.smart.dao"/>
+    
+    <bean id="bagDao" class="com.smart.dao.hibernate.rule.BagDaoHibernate" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 </beans>

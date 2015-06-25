@@ -1,8 +1,12 @@
 package com.smart.webapp.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.smart.Constants;
 import com.smart.dao.SearchException;
 import com.smart.service.UserManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
@@ -23,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/admin/users*")
+@RequestMapping("/users*")
 public class UserController {
     private UserManager userManager = null;
 
@@ -42,5 +46,12 @@ public class UserController {
             model.addAttribute(userManager.getUsers());
         }
         return new ModelAndView("admin/userList", model.asMap());
+    }
+    
+    @RequestMapping(value="/ajax/hospital", method = RequestMethod.GET)
+    public String getHospital(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(userManager.getUserByUsername(request.getRemoteUser()).getHospital().getName());
+		return null;
     }
 }

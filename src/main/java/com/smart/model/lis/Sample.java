@@ -350,7 +350,7 @@ public class Sample extends BaseObject {
 	}
 	
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id",unique=true)
+	@JoinColumn(name="hospital_id",referencedColumnName="id")
 	public Hospital getHospital(){
 		return hostipal;
 	}
