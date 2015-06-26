@@ -1,4 +1,4 @@
-package com.smart.model.util;
+package com.smart;
 
 public class Dictionary {
 

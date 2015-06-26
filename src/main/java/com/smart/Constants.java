@@ -86,4 +86,56 @@ public final class Constants {
      * @deprecated No longer used to set themes.
      */
     public static final String CSS_THEME = "csstheme";
+    
+	/**
+	 * 列表页面每页显示的数量
+	 */
+	public static final Integer PAGE_SIZE = 15;
+
+	/**
+	 * 结果修改时的操作类型
+	 */
+	public static final String ADD = "添加";
+	public static final String DELETE = "删除";
+	public static final String EDIT = "修改";
+	public static final String DRAG = "拖拽";
+
+	/**
+	 * 填充hi,lo,resultFlag的标记
+	 */
+	public static final Integer FILL_FLAG = 2;
+
+	/**
+	 * 修改testresult值的标记
+	 */
+	public static final Integer EDIT_FLAG = 3;
+
+	/**
+	 * 添加testResult整条数据的标记
+	 */
+	public static final Integer ADD_FLAG = 5;
+
+	/**
+	 * 删除标记
+	 */
+	public static final Integer DELETE_FLAG = 7;
+	
+	public static final Integer MANUAL_EDIT_FLAG = 33;
+
+	/**
+	 * 无结果
+	 */
+	public static final Integer STATUS_NORESULT = -1;
+	/**
+	 * 未审核
+	 */
+	public static final Integer STATUS_UNAUDIT = 0;
+	/**
+	 * 已通过
+	 */
+	public static final Integer STATUS_PASSED = 1;
+	/**
+	 * 未通过
+	 */
+	public static final Integer STATUS_UNPASS = 2;
 }
