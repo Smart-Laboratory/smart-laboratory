@@ -29,7 +29,6 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.model.BaseObject;
 import com.smart.model.user.User;
-import com.smart.model.lis.Hospital;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 
@@ -71,7 +70,6 @@ public class Rule extends BaseObject implements Serializable {
 	
 	private int hospitalmode;	//规则使用的对象，包括门诊、病房
 	private int algorithm;		//差值算法：1。差值；2.差值百分率；3.差值变化；4.差值变化率；
-	private Hospital hospital;
 
 	public Rule() {
 	}
@@ -421,15 +419,6 @@ public class Rule extends BaseObject implements Serializable {
 	public void setBagId(String bagId) {
 		// System.out.println("规则包ID列表：" + bagId);
 		this.bagId = bagId;
-	}
-	
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital(){
-		return hospital;
-	}
-	public void setHospital(Hospital hospital){
-		this.hospital = hospital; 
 	}
 
 	@Transient

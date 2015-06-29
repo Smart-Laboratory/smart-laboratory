@@ -331,7 +331,7 @@
 	function dataToController(action, id, name) {
 	    $.ajax({
 	        type : "POST",
-	        url : "../bag/ajax/edit",
+	        url : "/ajax/editBag",
 	        data : "action=" + action + "&id=" + id + "&name=" + name,
 	        dataType : "html",
 	        success : function() {
@@ -345,7 +345,7 @@
 			async : true,
 			cache : false,
 			type : 'GET',
-			url : "<c:url value='/bag/ajax/getBag'/>",
+			url : "<c:url value='/ajax/getBag'/>",
 			datatype : "json",
 			error : function() {
 				alert('data false');
@@ -368,7 +368,6 @@
 	background-color:#ffffff;
 }
 </style>
-
 
 <div class="border-radius-6 border-shadow" id="navContent" style="padding-bottom:30px;">
 	<div class="tag-section">

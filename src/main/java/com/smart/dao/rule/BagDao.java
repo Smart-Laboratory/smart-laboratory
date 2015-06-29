@@ -9,7 +9,7 @@ public interface BagDao extends GenericDao<Bag, Long> {
 
 	List<Bag> getByParentId(Long parentId);
 
-	List<Bag> getBag();
+	List<Bag> getBagByHospital(String hospital);
 	
 	List<Bag> getBag(String name);
 	

@@ -10,6 +10,8 @@
         <pattern>/*</pattern>
     </decorator>
     <decorator name="rule" page="rule.jsp">
-        <pattern>/set/rule*</pattern>
+        <pattern>/rule/*</pattern>
+        <pattern>/result/*</pattern>
+        <pattern>/index/*</pattern>
     </decorator>
 </decorators>

@@ -18,12 +18,12 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 
 	@SuppressWarnings("unchecked")
 	public List<Bag> getByParentId(Long parentId) {
-		return getSession().createCriteria(Bag.class).add(Restrictions.eq("parentID", parentId)).list();
+		return getSession().createQuery("from Bag b where parent_id=" + parentId + " order by upper(b.id)").list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Bag> getBag() {
-		return getSession().createQuery("from Bag b order by upper(b.id)").list();
+	public List<Bag> getBagByHospital(String hospital) {
+		return getSession().createQuery("from Bag b where hospital_id='" + hospital + "' order by upper(b.id)").list();
 	}
 
 	@SuppressWarnings("unchecked")
