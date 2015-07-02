@@ -53,7 +53,7 @@
 	    $("#globalsearchbox").catcomplete({
 		    source : function(request, response) {
 		        $.ajax({
-		            url : "../ajax/getInfo",
+		            url : "/ajax/getInfo",
 		            dataType : "json",
 		            data : {
 		                maxRows : 12,

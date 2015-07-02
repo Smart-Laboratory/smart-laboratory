@@ -67,20 +67,6 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @return
 	 */
 	int getIndexsByNameCount(String name);
-
-	/**
-	 *  添加指标
-	 * @param index
-	 * @return
-	 */
-	Index addIndex(Index index);
-	
-	/**
-	 *  更新指标Index
-	 * @param index
-	 * @return
-	 */
-	Index updateIndex(Index index);
 	
 	/**
 	 *  获取指标

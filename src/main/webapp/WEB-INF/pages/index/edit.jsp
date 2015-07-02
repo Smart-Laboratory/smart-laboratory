@@ -1,25 +1,14 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-    <title><fmt:message key="editIndex.title"/></title>
-    <meta name="heading" content="<fmt:message key='editIndex.heading'/>"/>
-    <meta name="menu" content="RulesManage"/>
+    <title><fmt:message key="set.rule"/></title>
+    <meta name="menu" content="SampleSet"/>
     <script type="text/javascript">
-    $(function() {
-    	$("#currentHospId").val($("#currentHosp").eq(0).val());
-    });
-    function HispitalSelected(obj) {
-    	for (var i=0;i<obj.length;i++) {
-    		if (obj.options[i].selected) {
-    			$("#currentHospId").val(obj.options[i].value);
-    		}
-    	}
-    }
     </script>
 </head>
 
-<body id="addIndex"/>
-
+<div class="col-sm-7">
+<h1><fmt:message key='index.edit'/></h1>
 <spring:bind path="index.*">
     <c:if test="${not empty status.errorMessages}">
     <div class="error">    
@@ -34,77 +23,64 @@
 
 <div class="separator"></div>
 
-<form:form class="form-horizontal" style="margin-left:-100px;" commandName="index" method="post" action="edit" onsubmit="return true" id="editIndexForm">
-	<div class="control-group">
+<form:form class="form-horizontal" commandName="index" method="post" action="edit" onsubmit="return true" id="editIndexForm">
+	<div class="control-groups col-sm-8">
         <appfuse:label styleClass="control-label" key="index.indexId"/>
-        <div class="controls">
+        <div class="control">
 	        <form:hidden path="id"/>
-	        <form:input path="indexId" id="indexId" cssClass="text"/>
+	        <form:input path="indexId" id="indexId" cssClass="text form-control input-group-sm"/>
         </div>
 	</div>
-    <div class="control-group">
+    <div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.name"/>
         <div class="controls">
-        	<form:input path="name" id="name" cssClass="text" />
+        	<form:input path="name" id="name" cssClass="text form-control input-group-sm" />
         </div>
     </div>
-    <div class="control-group">
-        <appfuse:label styleClass="control-label" key="index.hospital"/>
-        <div class="controls">
-        	<form:select path="currentHosp" id="currentHosp" cssClass="selects" onchange="return HispitalSelected(this);" >
-       			<form:options items="${hospIdMap}"  />
-       		</form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <appfuse:label styleClass="control-label" key="index.hospitalId"/>
-        <div class="controls">
-        	<form:input path="currentHospId" id="currentHospId" cssClass="text" />
-        </div>
-    </div>
-    <div class="control-group">
+    <div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.sampleFrom"/>
         <div class="controls">
-        	<form:select path="sampleFrom" id="sampleFrom" cssClass="selects">
+        	<form:select path="sampleFrom" id="sampleFrom" cssClass="selects form-control input-group-sm">
 	        	<form:options items="${sampleList}" />
 	        </form:select>
         </div>
     </div>
-    <div class="control-group">
+    <div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.algorithm"/>
         <div class="controls">
-			<form:select path="diffAlgo" id="diffAlgo" cssClass="selects">
+			<form:select path="diffAlgo" id="diffAlgo" cssClass="selects form-control input-group-sm">
 				<form:options items="${algorithmList}" />
 	        </form:select>
         </div>
     </div>
-    <div class="control-group">
+    <div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.unit"/>
         <div class="controls">
-        	<form:input path="unit" id="unit" cssClass="text" />
+        	<form:input path="unit" id="unit" cssClass="text form-control input-group-sm" />
         </div>
     </div>
-    <div class="control-group">
+    <div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.type"/>
         <div class="controls">
-        	<form:select path="type" id="type" cssClass="selects">
+        	<form:select path="type" id="type" cssClass="selects form-control input-group-sm">
 	        	<form:options items="${typeList}"  />
 	        </form:select>
         </div>
     </div>
-	<div class="control-group">
+	<div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.description"/>
         <div class="controls">
-        	<form:input path="description" id="description" cssClass="text"/>
+        	<form:input path="description" id="description" cssClass="text form-control input-group-sm"/>
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group col-sm-8">
     	<label class="control-label" ></label>
  		<div class="controls">
         	<input type="submit" class="btn" style="width:80px;" name="save"  value="<fmt:message key="button.save"/>"/>
-        	<input type="button" class="btn" style="width:80px;" name="cancel" onclick="location.href='<c:url value="/index/view"/>?id=${index.id}'" value="<fmt:message key="button.cancel"/>"/>
+        	<input type="button" class="btn" style="width:80px;" name="cancel" onclick="location.href='<c:url value="/index/list"/>'" value="<fmt:message key="button.cancel"/>"/>
    		</div>
     </div>
 
 </form:form>
+</div>

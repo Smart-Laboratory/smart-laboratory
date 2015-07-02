@@ -115,10 +115,8 @@ public class IndexViewController {
     public ModelAndView indexView(HttpServletRequest request, HttpServletResponse response) throws Exception {	
 	
 		String id = request.getParameter("id");
-	
 		Index index = indexManager.get(Long.parseLong(id));
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-		
 		if ("E".equals(index.getType())) {
 			index.setType("枚举型");
 		} else if ("N".equals(index.getType())) {
@@ -126,7 +124,6 @@ public class IndexViewController {
 		} else {
 			index.setType("字符型");
 		}
-	
 		request.setAttribute("canEdit", CheckAllow.allow(index, user));
 		request.setAttribute("rulesList", index.getRules());
 		return new ModelAndView("index/view","index", index);

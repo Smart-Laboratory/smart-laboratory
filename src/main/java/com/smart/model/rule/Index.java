@@ -50,8 +50,6 @@ public class Index extends BaseObject implements Serializable {
 	private Date createTime;
 	private User modifyUser;
 	private Date modifyTime;
-	private String currentHosp;
-	private String currentHospId;
 	private String importance;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 	
@@ -297,24 +295,6 @@ public class Index extends BaseObject implements Serializable {
 	@Override
 	public int hashCode() {
 		return 0;
-	}
-	
-	@Transient
-	public String getCurrentHosp() {
-		return currentHosp;
-	}
-
-	public void setCurrentHosp(String currentHosp) {
-		this.currentHosp = currentHosp;
-	}
-	
-	@Transient
-	public String getCurrentHospId() {
-		return currentHospId;
-	}
-
-	public void setCurrentHospId(String currentHospId) {
-		this.currentHospId = currentHospId;
 	}
 	
 	@Transient

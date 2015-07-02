@@ -1,9 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-<title><fmt:message key="viewIndex.title" /></title>
-<meta name="heading" content="<fmt:message key='viewIndex.heading'/>" />
-<meta name="menu" content="RulesManage" />
+<title><fmt:message key="set.rule"/></title>
+<meta name="menu" content="SampleSet"/>
 <style type="text/css">
 td {
 	padding: 7px;	
@@ -14,46 +13,20 @@ th {
 }
 </style>
 <script type="text/javascript">
-$(function() {
-	$("#hospId").html($("#hospSelect").eq(0).val());
-});
-
 function deleteConfirm() {
 	if (confirm('<fmt:message key="confirm.delete" />')) {
 		location.href='../index/delete?id=<c:out value="${index.id}" />';
 	}	
 }
-
-function HispitalSelected(obj) {
-	for (var i=0;i<obj.length;i++) {
-		if (obj.options[i].selected) {
-			$("#hospId").html(obj.options[i].value);
-		}
-	}
-}
 </script>
 </head>
-
-<div>
-	<div style="width:410px;margin-left:10px;float: left; ">
+<div class="col-sm-7">
+	<h1><fmt:message key='index.view'/></h1>
+	<div class="col-sm-8">
 		<table>
 			<tr>
 				<th class="left"><fmt:message key="index.indexId" /> :</th>
 				<td><c:out value="${index.indexId}" /></td>
-			</tr>
-			<tr>
-				<th class="left"><span style="word-spacing:24px;"><fmt:message key="index.hospital" /></span> :</th>
-				<td><select id="hospSelect" style="width:100px;" onchange="return HispitalSelected(this);">
-					<c:forEach var="map" items="${index.idMap}">
-						<option value="<c:out value="${map.hospitalID}"/>">
-							<c:out value="${map.hospital}"/>
-						</option>
-					</c:forEach>
-				</select></td>
-			</tr>
-			<tr>
-				<th class="left"><fmt:message key="index.hospitalId" /> :</th>
-				<td id="hospId"></td>
 			</tr>
 			<tr>
 				<th class="left"><fmt:message key="index.name" /> :</th>
@@ -114,7 +87,7 @@ function HispitalSelected(obj) {
 			</tr>
 		</table>
 	</div>
-	<div style="width: 180px;margin-right:70px; float: right;background-color: white;border: 1px solid #E1E1E1;padding: 5px 0px 10px 0px;" class="border-radius-6 border-shadow"">
+	<div class="col-sm-4" style="background-color: white;border: 1px solid #E1E1E1;padding: 5px 0px 10px 0px;" class="border-radius-6 border-shadow"">
 		<h4 style="padding-left:14px;font-family:Microsoft YaHei;">
 			<fmt:message key="rule.relate" />
 		</h4>
@@ -128,4 +101,3 @@ function HispitalSelected(obj) {
 		</div>
 	</div>
 </div>
-

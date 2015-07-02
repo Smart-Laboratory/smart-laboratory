@@ -33,14 +33,6 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexsByCategory(sample, pageNum, field, isAsc);
 	}
 
-	public Index addIndex(Index index) {
-		return indexDao.save(index);
-	}
-
-	public Index updateIndex(Index index) {
-		return indexDao.save(index);
-	}
-
 	public int getIndexsCount() {
 		return indexDao.getIndexsCount();
 	}
