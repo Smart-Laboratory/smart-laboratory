@@ -1,12 +1,14 @@
 <%@ include file="/common/taglibs.jsp" %>
 <head>
 	
-    <link rel="stylesheet" href="/styles/ztree/zTreeStyle.css" type="text/css">
-    <script type="text/javascript" src="/scripts/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="/scripts/jquery.ztree.all-3.5.js"></script>
-    <link rel="stylesheet" href="/styles/jquery-ui.min.css" type="text/css">
-    <script type="text/javascript" src="/scripts/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
+    <link rel="stylesheet" href="../styles/ztree/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../scripts/jquery.ztree.all-3.5.js"></script>
+    <link rel="stylesheet" href="../styles/jquery-ui.min.css" type="text/css">
+    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ruleLib.css'/>" />
+    <script type="text/javascript" src="../scripts/jquery.jstree.js"></script>
+	<script type="text/javascript" src="../scripts/jquery.json-2.3.min.js"></script>
 </head>
 
 <script type="text/javascript">
@@ -53,7 +55,7 @@
 	    $("#globalsearchbox").catcomplete({
 		    source : function(request, response) {
 		        $.ajax({
-		            url : "/ajax/getInfo",
+		            url : "../ajax/getInfo",
 		            dataType : "json",
 		            data : {
 		                maxRows : 12,
@@ -331,7 +333,7 @@
 	function dataToController(action, id, name) {
 	    $.ajax({
 	        type : "POST",
-	        url : "/ajax/editBag",
+	        url : "../ajax/editBag",
 	        data : "action=" + action + "&id=" + id + "&name=" + name,
 	        dataType : "html",
 	        success : function() {
@@ -345,7 +347,7 @@
 			async : true,
 			cache : false,
 			type : 'GET',
-			url : "<c:url value='/ajax/getBag'/>",
+			url : "<c:url value='../ajax/getBag'/>",
 			datatype : "json",
 			error : function() {
 				alert('data false');

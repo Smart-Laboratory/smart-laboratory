@@ -65,7 +65,7 @@
 		<button id="rebuildkbase" class="btn btn-info btn-sm" style="margin-right:10px;float:right">
 			<fmt:message key="rule.rebuild.kbase"/>
 		</button>
-		<button id="addbutton" class="btn btn-success btn-sm" style="margin-right:10px;float:right" onclick="location.href='<c:url value="/rule/add"/>'">
+		<button id="addbutton" class="btn btn-success btn-sm" style="margin-right:10px;float:right" onclick="location.href='<c:url value="/rule/edit"/>'">
 			<fmt:message key="rule.add"/>
 		</button>
 	</div>

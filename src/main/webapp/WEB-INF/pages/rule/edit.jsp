@@ -1,64 +1,10 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-<title><fmt:message key="editRule.title" /></title>
-<meta name="heading" content="<fmt:message key='editRule.heading'/>" />
-<meta name="menu" content="RulesManage" />
-<script type="text/javascript" src="../scripts/jquery.jstree.js"></script>
-<script type="text/javascript" src="../scripts/jquery.json-2.3.min.js"></script>
+<title><fmt:message key="set.rule"/></title>
+<meta name="menu" content="SampleSet"/>
 <style>
-#searchIndex {
-	width: 25em;
-}
 
-#searchIndexPanel div {
-	margin-top: 10px;
-}
-
-#resultPanel div {
-	margin-top: 10px;
-}
-
-#bagPanel div {
-	margin-top: 13px;
-}
-
-#indexPanel div {
-	margin-top: 15px;
-}
-
-#description {
-	font-family: Microsoft YaHei;
-	height: 45px;
-	width: 345px;
-	font-size: 14px;
-}
-
-.edit-sel {
-	width: 320px;
-}
-
-.edit-sel span {
-	font-size: 13px;
-	text-overflow: ellipsis;
-	width: 240px;
-	display: block;
-	float: left;
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-.add,.remove {
-	display: none;
-}
-
-td {
-	padding: 10px;
-}
-
-th {
-	padding: 5px;
-}
 </style>
 <script>
 	function initItemPanel() {
@@ -696,7 +642,8 @@ th {
 	}
 </script>
 </head>
-
+<div class="col-sm-7">
+<h1><fmt:message key='rule.edit'/></h1>
 <spring:bind path="rule.*">
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
@@ -982,4 +929,5 @@ th {
 			</div>
 		</div>
 	</div>
+</div>
 </div>
