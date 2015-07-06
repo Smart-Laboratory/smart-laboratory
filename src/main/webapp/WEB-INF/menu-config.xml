@@ -16,6 +16,8 @@
         <Menu name="SampleSet" title="set.title" page="/rule/list" roles="ROLE_ADMIN,ROLE_USER">
         	<Item name="RuleManage" title="set.rule" page="/rule/list"/>
             <Item name="Hospital" title="set.hospital" page="/set/hospital"/>
+            <Item name="Section" title="set.section" page="/set/section"/>
+            <Item name="Device" title="set.device" page="/set/device"/>
             <Item name="YlSF" title="set.ylsf" page="/set/ylsf"/>
             <Item name="SOP" title="set.sop" page="/set/sop"/>
         </Menu>

@@ -3,6 +3,7 @@ package com.smart.model.lis;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class Audit {
 	private Sample sample;  //审核的样本
 	
 	private Date checkTime; //审核时间
-	private Date printTime; //打印时间
+	private Date printTime; //打印时间?
 	private int auditStatus; //样本审核的状态
 	private int auditMark; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
@@ -66,6 +67,7 @@ public class Audit {
 	/**
 	 * 审核时间
 	 */
+	@Column
 	public Date getCheckTime() {
 		return checkTime;
 	}
@@ -77,6 +79,7 @@ public class Audit {
 	/**
 	 * 打印时间
 	 */
+	@Column
 	public Date getPrintTime() {
 		return printTime;
 	}
@@ -88,6 +91,7 @@ public class Audit {
 	/**
 	 * 审核状态
 	 */
+	@Column
 	public int getAuditStatus() {
 		return auditStatus;
 	}
@@ -99,6 +103,7 @@ public class Audit {
 	/**
 	 * 审核标记
 	 */
+	@Column
 	public int getAuditMark() {
 		return auditMark;
 	}
@@ -110,6 +115,7 @@ public class Audit {
 	/**
 	 * 需要标记的检验项目（检验结果不符合规则）
 	 */
+	@Column
 	public String getMarkTests() {
 		return markTests;
 	}
@@ -121,6 +127,7 @@ public class Audit {
 	/**
 	 * 检验结果 错误信息
 	 */
+	@Column
 	public String getNotes() {
 		return notes;
 	}
@@ -132,6 +139,7 @@ public class Audit {
 	/**
 	 * 不符合的规则
 	 */
+	@Column
 	public String getRuleIds() {
 		return ruleIds;
 	}
@@ -143,6 +151,7 @@ public class Audit {
 	/**
 	 * 
 	 */
+	@Column
 	public int getHasimages() {
 		return hasimages;
 	}
@@ -214,7 +223,5 @@ public class Audit {
 		}
 		return value;
 	}
-	
-	
 
 }
