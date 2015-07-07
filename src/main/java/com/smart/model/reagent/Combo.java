@@ -18,6 +18,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
+import com.smart.model.lis.Section;
 
 /**
  * 套餐
@@ -35,8 +36,9 @@ public class Combo extends BaseObject implements Serializable {
 	private String name;
 	private String creator;
 	private Date createtime;
-	private String section;
+	
 	private Set<Reagent> reagents;
+	private Set<Section> sections;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,15 +79,6 @@ public class Combo extends BaseObject implements Serializable {
 		this.createtime = createtime;
 	}
 
-	@Column(length=10)
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
-
 	@ManyToMany(targetEntity = Reagent.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "lab_combo_reagent", 
@@ -97,6 +90,19 @@ public class Combo extends BaseObject implements Serializable {
 
 	public void setReagents(Set<Reagent> reagents) {
 		this.reagents = reagents;
+	}
+	
+	@ManyToMany(targetEntity = Section.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinTable(
+			name = "lab_combo_section", 
+			joinColumns = { @JoinColumn(name = "combo_id", referencedColumnName = "id") }, 
+			inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "id"))
+	public Set<Section> getSections() {
+		return sections;
+	}
+
+	public void setSections(Set<Section> sections) {
+		this.sections = sections;
 	}
 
 	public String toString() {

@@ -15,6 +15,7 @@
         <mapping class="com.smart.model.lis.Audit"/>
         <mapping class="com.smart.model.lis.Process"/>
         <mapping class="com.smart.model.lis.TestResult"/>
+        <mapping class="com.smart.model.lis.Section"/>
         <mapping class="com.smart.model.rule.Bag"/>
         <mapping class="com.smart.model.rule.Index"/>
         <mapping class="com.smart.model.rule.Item"/>
@@ -23,5 +24,7 @@
         <mapping class="com.smart.model.reagent.Reagent"/>
         <mapping class="com.smart.model.reagent.Batch"/>
         <mapping class="com.smart.model.reagent.Combo"/>
+        <mapping class="com.smart.model.reagent.In"/>
+        <mapping class="com.smart.model.reagent.Out"/>
     </session-factory>
 </hibernate-configuration>

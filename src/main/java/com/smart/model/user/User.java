@@ -42,6 +42,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
 import com.smart.model.lis.Hospital;
+import com.smart.model.lis.Section;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -78,6 +79,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private boolean credentialsExpired;
     
     private Hospital hospital;
+    private Section section;
 
     /**
      * Default constructor - creates a new instance with no values set.
@@ -352,6 +354,16 @@ public class User extends BaseObject implements Serializable, UserDetails {
 
 	public void setHospital(Hospital hospital) {
 		this.hospital = hospital;
+	}
+	
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
+	@JoinColumn(name="section_id",referencedColumnName="id")
+	public Section getSection() {
+		return section;
+	}
+
+	public void setSection(Section section) {
+		this.section = section;
 	}
 
 	/**

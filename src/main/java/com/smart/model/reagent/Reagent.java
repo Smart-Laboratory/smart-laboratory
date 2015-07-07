@@ -40,7 +40,6 @@ public class Reagent extends BaseObject implements Serializable {
 	private String price;				// 单价
 	private String productcode;			// 商品码
 	private int printord;				// 显示顺序
-	private String section;				// 科室
 	private String creator;				// 创建者
 	private Date createtime;			// 创建本记录的时间
 	private String testname;			// 检验项目的ID
@@ -186,18 +185,6 @@ public class Reagent extends BaseObject implements Serializable {
 
 	public void setPrintord(int printord) {
 		this.printord = printord;
-	}
-
-	/**
-	 * 科室
-	 */
-	@Column(length=20)
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
 	}
 
 	@Column(length=10)
