@@ -40,7 +40,7 @@ public class Section {
 	/**
 	 * 科室代码
 	 */
-	@Column
+	@Column(length = 20)
 	public String getCode() {
 		return code;
 	}
@@ -52,7 +52,7 @@ public class Section {
 	/**
 	 * 科室名称
 	 */
-	@Column
+	@Column(length = 255)
 	public String getName() {
 		return name;
 	}

@@ -23,5 +23,6 @@
         <mapping class="com.smart.model.reagent.Reagent"/>
         <mapping class="com.smart.model.reagent.Batch"/>
         <mapping class="com.smart.model.reagent.Combo"/>
+        <mapping class="com.smart.model.lis.Section"/>
     </session-factory>
 </hibernate-configuration>
