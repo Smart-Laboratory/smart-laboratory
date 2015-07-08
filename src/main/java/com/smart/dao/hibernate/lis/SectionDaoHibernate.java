@@ -12,14 +12,5 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	public SectionDaoHibernate(){
 		super(Section.class);
 	}
-	
-	public void edit(Section section){
-		if (log.isDebugEnabled()) {
-            log.debug("user's id: " + section.getId());
-        }
-		getSession().saveOrUpdate(section);
-        // necessary to throw a DataIntegrityViolation and catch it in UserManager
-        getSession().flush();
-	}
 
 }
