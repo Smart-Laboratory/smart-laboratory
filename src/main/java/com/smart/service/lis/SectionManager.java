@@ -9,4 +9,6 @@ public interface SectionManager extends GenericManager<Section, Long> {
 	
 
 	List<Section> search(String searchTerm);
+	
+	void edit(Section section);
 }

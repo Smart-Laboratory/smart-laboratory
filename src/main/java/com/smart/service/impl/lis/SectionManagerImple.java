@@ -26,4 +26,8 @@ public class SectionManagerImple extends GenericManagerImpl<Section, Long> imple
     public List<Section> search(final String searchTerm) {
         return super.search(searchTerm, Section.class);
     }
+	
+	public void edit(Section section){
+		sectionDao.edit(section);
+	}
 }

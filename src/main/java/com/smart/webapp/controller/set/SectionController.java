@@ -1,5 +1,7 @@
 package com.smart.webapp.controller.set;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,14 +43,8 @@ public class SectionController {
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
-        Model model = new ExtendedModelMap();
-        try {
-            model.addAttribute("sectionList", sectionManager.search(query));
-        } catch (SearchException se) {
-            model.addAttribute("searchError", se.getMessage());
-//            model.addAttribute(sectionManager.getUsers());
-        }
-        return new ModelAndView("/set/section", model.asMap());
+        List<Section> list = sectionManager.search(query);
+        return new ModelAndView().addObject("list", list.size() > 0 ? list : null);
     }
 	
 	@ModelAttribute("section")
@@ -79,8 +75,28 @@ public class SectionController {
     	User user = userManager.getUserByUsername(request.getRemoteUser());
     	section.setHospital(user.getHospital());
     	sectionManager.save(section);
+    	System.out.println(name);
    	
-    	return new ModelAndView("/set/section");
+    	return new ModelAndView("redirect:/set/section");
+    }
+    
+    @RequestMapping(method = RequestMethod.POST,value="/edit")
+    public ModelAndView editSection(@ModelAttribute("section")Section section, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	String code = request.getParameter("code");
+    	String name = request.getParameter("name");
+    	section.setCode(code);
+    	section.setName(name);
+//    	User user = userManager.getUserByUsername(request.getRemoteUser());
+//    	section.setHospital(user.getHospital());
+    	sectionManager.edit(section);
+   	
+    	return new ModelAndView("redirect:/set/section");
+    }
+    
+    @RequestMapping(method = RequestMethod.POST,value="/delete")
+    public ModelAndView deleteSection(@ModelAttribute("section")Section section, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	sectionManager.remove(section);
+    	return new ModelAndView("redirect:/set/section");
     }
 
 }

@@ -5,5 +5,5 @@ import com.smart.dao.GenericDao;
 
 public interface SectionDao extends GenericDao<Section,Long>{
 	
-
+	void edit(Section section);
 }
