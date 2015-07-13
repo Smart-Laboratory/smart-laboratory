@@ -10,9 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -25,7 +24,7 @@ import com.smart.model.reagent.Out;
  * 检验科室分类
  */
 @Entity
-@Table(name = "l_deparrt")
+@Table(name = "l_depart")
 public class Section {
 	
 	private long id;    //主键
@@ -86,11 +85,7 @@ public class Section {
 		this.hospital = hospital;
 	}
 	
-	@ManyToMany(targetEntity = Batch.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(
-			name = "lab_batch_section", 
-			joinColumns = { @JoinColumn(name = "section_id", referencedColumnName = "id") }, 
-			inverseJoinColumns = @JoinColumn(name = "batch_id", referencedColumnName = "id"))
+	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Batch.class, mappedBy = "section")
 	public Set<Batch> getBatchs() {
 		return batchs;
 	}
@@ -99,11 +94,7 @@ public class Section {
 		this.batchs = batchs;
 	}
 
-	@ManyToMany(targetEntity = In.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(
-			name = "lab_in_section", 
-			joinColumns = { @JoinColumn(name = "section_id", referencedColumnName = "id") }, 
-			inverseJoinColumns = @JoinColumn(name = "in_id", referencedColumnName = "id"))
+	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = In.class, mappedBy = "section")
 	public Set<In> getIns() {
 		return ins;
 	}
@@ -112,11 +103,7 @@ public class Section {
 		this.ins = ins;
 	}
 
-	@ManyToMany(targetEntity = Out.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(
-			name = "lab_out_section", 
-			joinColumns = { @JoinColumn(name = "section_id", referencedColumnName = "id") }, 
-			inverseJoinColumns = @JoinColumn(name = "out_id", referencedColumnName = "id"))
+	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Out.class, mappedBy = "section")
 	public Set<Out> getOuts() {
 		return outs;
 	}
@@ -125,11 +112,7 @@ public class Section {
 		this.outs = outs;
 	}
 
-	@ManyToMany(targetEntity = Combo.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(
-			name = "lab_combo_section", 
-			joinColumns = { @JoinColumn(name = "section_id", referencedColumnName = "id") }, 
-			inverseJoinColumns = @JoinColumn(name = "combo_id", referencedColumnName = "id"))
+	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Combo.class, mappedBy = "section")
 	public Set<Combo> getCombos() {
 		return combos;
 	}

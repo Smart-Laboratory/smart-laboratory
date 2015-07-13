@@ -1,7 +1,6 @@
 package com.smart.model.reagent;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -39,7 +36,7 @@ public class Batch extends BaseObject implements Serializable {
 	private Integer subnum;		// 子数量
 	
 	private Reagent reagent; 	// 试剂
-	private Set<Section> sections;
+	private Section section;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -102,19 +99,15 @@ public class Batch extends BaseObject implements Serializable {
 		this.reagent = reagent;
 	}
 
-	@ManyToMany(targetEntity = Section.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(
-			name = "lab_batch_section", 
-			joinColumns = { @JoinColumn(name = "batch_id", referencedColumnName = "id") }, 
-			inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "id"))
-	public Set<Section> getSections() {
-		return sections;
+	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "section_id")
+	public Section getSection() {
+		return section;
 	}
 
-	public void setSections(Set<Section> sections) {
-		this.sections = sections;
+	public void setSection(Section section) {
+		this.section = section;
 	}
-	
 	
 	public String toString() {
 		return null;

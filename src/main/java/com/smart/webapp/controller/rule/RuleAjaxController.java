@@ -35,7 +35,7 @@ import com.smart.service.rule.RuleManager;
 
 @Controller
 @RequestMapping("/ajax*")
-public class AjaxController {
+public class RuleAjaxController {
 
 	@Autowired
 	private BagManager bagManager = null;

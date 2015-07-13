@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
 
@@ -37,6 +38,7 @@ public class Reagent extends BaseObject implements Serializable {
 	private String brand;				// 品牌/生产
 	private String unit;				// 单位
 	private String subunit;				// 子单位
+	private int subtnum;				// 子数量
 	private String price;				// 单价
 	private String productcode;			// 商品码
 	private int printord;				// 显示顺序
@@ -150,6 +152,18 @@ public class Reagent extends BaseObject implements Serializable {
 	public void setSubunit(String subunit) {
 		this.subunit = subunit;
 	}
+	
+	/**
+	 * 子数量
+	 */
+	@Column
+	public int getSubtnum() {
+		return subtnum;
+	}
+
+	public void setSubtnum(int subtnum) {
+		this.subtnum = subtnum;
+	}
 
 	/**
 	 * 价格
@@ -257,18 +271,6 @@ public class Reagent extends BaseObject implements Serializable {
 	}
 
 	/**
-	 * 温度
-	 */
-	@Column(length=10)
-	public String getTemperature() {
-		return temperature;
-	}
-
-	public void setTemperature(String temperature) {
-		this.temperature = temperature;
-	}
-
-	/**
 	 * 是否是自制试剂
 	 */
 	@Column
@@ -279,6 +281,35 @@ public class Reagent extends BaseObject implements Serializable {
 	public void setIsselfmade(int isselfmade) {
 		this.isselfmade = isselfmade;
 	}
+	
+
+	/**
+	 * 温度
+	 */
+	@Transient
+	public String getTemperature() {
+		return temperature;
+	}
+
+	public void setTemperature(String temperature) {
+		this.temperature = temperature;
+	}
+	
+	@Transient
+	public String getPosition() {
+		return this.fridge + " 第" + this.layer + "层";
+	}
+	
+	@Transient
+	public String getNameAndSpecification() {
+		return this.name + "[" + this.specification + "]";
+	}
+	
+	@Transient
+	public String getBaozhuang() {
+		return this.unit + "[" + this.subtnum + this.subunit + "]";
+	}
+	
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Batch.class, mappedBy = "reagent")
 	public Set<Batch> getBatchs() {
