@@ -12,13 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.smart.model.reagent.Batch;
 import com.smart.model.reagent.Combo;
 import com.smart.model.reagent.In;
 import com.smart.model.reagent.Out;
+import com.smart.model.reagent.Reagent;
 
 /**
  * 检验科室分类
@@ -32,7 +33,7 @@ public class Section {
 	private String name;
 	
 	private Hospital hospital;
-	private Set<Batch> batchs;
+	private Set<Reagent> reagents;
 	private Set<In> ins;
 	private Set<Out> outs;
 	private Set<Combo> combos;
@@ -85,16 +86,18 @@ public class Section {
 		this.hospital = hospital;
 	}
 	
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Batch.class, mappedBy = "section")
-	public Set<Batch> getBatchs() {
-		return batchs;
+	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Reagent.class, mappedBy = "section")
+	@OrderBy("id asc")
+	public Set<Reagent> getReagents() {
+		return reagents;
 	}
 
-	public void setBatchs(Set<Batch> batchs) {
-		this.batchs = batchs;
+	public void setReagents(Set<Reagent> reagents) {
+		this.reagents = reagents;
 	}
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = In.class, mappedBy = "section")
+	@OrderBy("id asc")
 	public Set<In> getIns() {
 		return ins;
 	}
@@ -104,6 +107,7 @@ public class Section {
 	}
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Out.class, mappedBy = "section")
+	@OrderBy("id asc")
 	public Set<Out> getOuts() {
 		return outs;
 	}
@@ -113,6 +117,7 @@ public class Section {
 	}
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Combo.class, mappedBy = "section")
+	@OrderBy("id asc")
 	public Set<Combo> getCombos() {
 		return combos;
 	}

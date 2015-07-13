@@ -1,9 +1,5 @@
 package com.smart.webapp.controller.reagent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smart.Constants;
 import com.smart.model.lis.Section;
 import com.smart.model.reagent.Batch;
+import com.smart.model.reagent.Reagent;
 import com.smart.service.UserManager;
 
 @Controller
@@ -34,39 +31,31 @@ public class ReagentAjaxController {
 	public String getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		JSONArray cell = new JSONArray();
 		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
-		Set<Batch> set = section.getBatchs();
-		Map<Long, List<Batch>> bmap = new HashMap<Long, List<Batch>>();
-		for(Batch b : set) {
-			if(b.getNum() > 0) {
-				if(bmap.containsKey(b.getReagent().getId())) {
-					bmap.get(b.getReagent().getId()).add(b);
-				} else {
-					List<Batch> list = new ArrayList<Batch>();
-					list.add(b);
-					bmap.put(b.getReagent().getId(), list);
-				}
-			}
-		}
-		for(List<Batch> list : bmap.values()) {
-			boolean isFirst = true;
+		Set<Reagent> set = section.getReagents();
+		for(Reagent r : set) {
 			JSONObject sb = new JSONObject();
-			String des = "";
-			for(Batch b : list) {
-				if(isFirst) {
-					isFirst = false;
-					sb.put("name", b.getReagent().getNameAndSpecification());
-					sb.put("place", b.getReagent().getPlaceoforigin());
-					sb.put("brand", b.getReagent().getBrand());
-					sb.put("unit", b.getReagent().getBaozhuang());
-					sb.put("price", b.getReagent().getPrice());
-					sb.put("position", b.getReagent().getPosition());
-					sb.put("condition", b.getReagent().getCondition());
-					sb.put("temp", b.getReagent().getTemperature());
-					sb.put("isself", b.getReagent().getIsselfmade() == 1 ? Constants.TRUE : Constants.FALSE);
+			sb.put("name", r.getNameAndSpecification());
+			sb.put("place", r.getPlaceoforigin());
+			sb.put("brand", r.getBrand());
+			sb.put("unit", r.getBaozhuang());
+			sb.put("price", r.getPrice());
+			sb.put("position", r.getPosition());
+			sb.put("condition", r.getCondition());
+			sb.put("temp", r.getTemperature());
+			sb.put("isself", r.getIsselfmade() == 1 ? Constants.TRUE : Constants.FALSE);
+			String html = "<tr>";
+			for(Batch b : r.getBatchs()) {
+				if(b.getSubnum() > 0) {
+					html += "<td>" + b.getBatch() + "</td><td>" + b.getNum() + r.getUnit() 
+							+ b.getSubnum() + r.getSubunit() + "</td><td>" + b.getExpdate() + "</td>";
 				} else {
-					
+					html += "<td>" + b.getBatch() + "</td><td>" + b.getNum() + r.getUnit() 
+							+ "</td><td>" + b.getExpdate() + "</td>";
 				}
 			}
+			html += "</tr>";
+			sb.put("html", html);
+			cell.put(sb);
 		}
 		JSONObject sb = new JSONObject();
 		sb.put("data", cell);

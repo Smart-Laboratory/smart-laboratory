@@ -36,7 +36,6 @@ public class Batch extends BaseObject implements Serializable {
 	private Integer subnum;		// 子数量
 	
 	private Reagent reagent; 	// 试剂
-	private Section section;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -99,16 +98,6 @@ public class Batch extends BaseObject implements Serializable {
 		this.reagent = reagent;
 	}
 
-	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "section_id")
-	public Section getSection() {
-		return section;
-	}
-
-	public void setSection(Section section) {
-		this.section = section;
-	}
-	
 	public String toString() {
 		return null;
 	}

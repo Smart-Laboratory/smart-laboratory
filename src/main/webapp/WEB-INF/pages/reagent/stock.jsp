@@ -20,19 +20,7 @@
 	<script type="text/javascript">
 	function format ( d ) {
 	    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-	        '<tr>'+
-	            '<td>Full name:</td>'+
-	            '<td>'+d.name+'</td>'+
-	        '</tr>'+
-	        '<tr>'+
-	            '<td>Extension number:</td>'+
-	            '<td>'+d.extn+'</td>'+
-	        '</tr>'+
-	        '<tr>'+
-	            '<td>Extra info:</td>'+
-	            '<td>And any further details here (images etc)...</td>'+
-	        '</tr>'+
-	    '</table>';
+	    	d.html + '</table>';
 	}
 	$(document).ready(function() {
 	    var table = $('#example').DataTable( {
@@ -54,6 +42,30 @@
 	            { "data": "temp"},
 	            { "data": "isself"}
 	        ],
+	        "language": {
+	        	"sProcessing": "\u5904\u7406\u4E2D...",
+				"sLengthMenu": "\u663E\u793A _MENU_ \u9879\u7ED3\u679C",
+				"sZeroRecords": "\u6CA1\u6709\u5339\u914D\u7ED3\u679C",
+				"sInfo": "\u663E\u793A\u7B2C _START_ \u81F3 _END_ \u9879\u7ED3\u679C\uFF0C\u5171 _TOTAL_ \u9879",
+				"sInfoEmpty": "\u663E\u793A\u7B2C 0 \u81F3 0 \u9879\u7ED3\u679C\uFF0C\u5171 0 \u9879",
+				"sInfoFiltered": "(\u7531 _MAX_ \u9879\u7ED3\u679C\u8FC7\u6EE4)",
+				"sInfoPostFix": "",
+				"sSearch": "\u641C\u7D22:",
+				"sUrl": "",
+				"sEmptyTable": "\u8868\u4E2D\u6570\u636E\u4E3A\u7A7A",
+				"sLoadingRecords": "\u8F7D\u5165\u4E2D...",
+				"sInfoThousands": ",",
+				"oPaginate": {
+					"sFirst": "\u9996\u9875",
+				    "sPrevious": "\u4E0A\u9875",
+				    "sNext": "\u4E0B\u9875",
+				    "sLast": "\u672B\u9875"
+				},
+				"oAria": {
+				    "sSortAscending": ": \u4EE5\u5347\u5E8F\u6392\u5217\u6B64\u5217",
+				    "sSortDescending": ": \u4EE5\u964D\u5E8F\u6392\u5217\u6B64\u5217"
+				}
+            },
 	        "order": [[1, 'asc']]
 	    } );
 	    $('#example tbody').on('click', 'td.details-control', function () {
@@ -78,6 +90,7 @@
 <table id="example" class="display" cellspacing="0" width="100%">
     <thead>
         <tr>
+        <th></th>
         <th><fmt:message key="reagent.name"/></th>
 		<th><fmt:message key="reagent.place"/></th>
 		<th><fmt:message key="reagent.brand"/></th>

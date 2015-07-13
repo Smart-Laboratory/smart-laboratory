@@ -11,12 +11,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
+import com.smart.model.lis.Section;
 
 /**
  * 卫生材料管理
@@ -53,6 +57,7 @@ public class Reagent extends BaseObject implements Serializable {
 	private int isselfmade;				// 是否为自制试剂
 	
 	private Set<Batch> batchs;			//按批号  分批储存试剂
+	private Section section;
 
 	/**
 	 * 主键
@@ -282,6 +287,15 @@ public class Reagent extends BaseObject implements Serializable {
 		this.isselfmade = isselfmade;
 	}
 	
+	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "section_id")
+	public Section getSection() {
+		return section;
+	}
+
+	public void setSection(Section section) {
+		this.section = section;
+	}
 
 	/**
 	 * 温度
@@ -312,6 +326,7 @@ public class Reagent extends BaseObject implements Serializable {
 	
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Batch.class, mappedBy = "reagent")
+	@OrderBy("id asc")
 	public Set<Batch> getBatchs() {
 		return batchs;
 	}
