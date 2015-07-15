@@ -2,10 +2,9 @@
 
 <head>
     <title><fmt:message key="sample.manage.audit"/></title>
-    <meta name="menu" content="SampleManage"/>
 </head>
 <body>
-<div class="col-sm-10">
+<div class="col-sm-12">
 
 	<h1>dskjfhskjdhfkjdsj</h1>
 

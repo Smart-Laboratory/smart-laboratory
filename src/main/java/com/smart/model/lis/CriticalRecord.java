@@ -33,7 +33,6 @@ public class CriticalRecord extends BaseObject{
 	private static final long serialVersionUID = -2303103818856661537L;
 	
 	private Long id; //主键 流水号
-//	private String sampleNo; // 出现危机值的样本编号
 	private String criticalValues; //危机值
 	private int criticalDealFlag; // 危机值是否被处理的标记
 	private String criticalDeal; // 危机值处理信息
@@ -72,7 +71,7 @@ public class CriticalRecord extends BaseObject{
 	
 	
 	@OneToOne(optional=false, cascade=CascadeType.MERGE)
-	@JoinColumn(name="sampleno",referencedColumnName="sampleno",unique=true)
+	@JoinColumn(name="sampleno",referencedColumnName="sampleno")
 	public Sample getSample(){
 		return sample;
 	}

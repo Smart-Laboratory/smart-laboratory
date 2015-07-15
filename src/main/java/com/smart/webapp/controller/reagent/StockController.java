@@ -18,4 +18,8 @@ public class StockController {
 		return new ModelAndView();
     }
 
+	@RequestMapping(method = RequestMethod.GET, value="/editReagent*")
+    public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+	}
 }
