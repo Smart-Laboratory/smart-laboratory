@@ -1,5 +1,6 @@
 package com.smart;
 
+import java.text.SimpleDateFormat;
 
 /**
  * Constant values used throughout the application.
@@ -151,5 +152,9 @@ public final class Constants {
 	 */
 	public static final String FALSE = "×";
 
+	/**
+	 * 日期格式
+	 */
+	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 }

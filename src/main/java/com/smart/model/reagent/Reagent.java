@@ -1,7 +1,6 @@
 package com.smart.model.reagent;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -46,11 +45,8 @@ public class Reagent extends BaseObject implements Serializable {
 	private String price;				// 单价
 	private String productcode;			// 商品码
 	private int printord;				// 显示顺序
-	private String creator;				// 创建者
-	private Date createtime;			// 创建本记录的时间
 	private String testname;			// 检验项目的ID
 	private String fridge;				// 存储的冰箱号
-	private int layer;					// 存储冰箱内的地方
 	private String condition;			// 存储条件
 	private int margin;					// 库存界值
 	private String temperature;			// 存储位置的温度
@@ -206,24 +202,6 @@ public class Reagent extends BaseObject implements Serializable {
 		this.printord = printord;
 	}
 
-	@Column(length=10)
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	@Column
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-
 	@Column(length=50)
 	public String getTestname() {
 		return testname;
@@ -240,15 +218,6 @@ public class Reagent extends BaseObject implements Serializable {
 
 	public void setFridge(String fridge) {
 		this.fridge = fridge;
-	}
-
-	@Column
-	public int getLayer() {
-		return layer;
-	}
-
-	public void setLayer(int layer) {
-		this.layer = layer;
 	}
 
 	/**
@@ -307,11 +276,6 @@ public class Reagent extends BaseObject implements Serializable {
 
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
-	}
-	
-	@Transient
-	public String getPosition() {
-		return this.fridge + " 第" + this.layer + "层";
 	}
 	
 	@Transient
