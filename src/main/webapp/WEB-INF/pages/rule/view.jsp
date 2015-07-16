@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-    <title><fmt:message key="viewRule.title"/></title>
+    <title><fmt:message key="set.rule"/></title>
     <meta name="heading" content="<fmt:message key='viewRule.heading'/>"/>
     <meta name="menu" content="RulesManage"/>
     <script type="text/javascript" src="../scripts/jquery.jstree.js"></script>
@@ -19,7 +19,7 @@
 				"json_data" : {
 					
 					"ajax" : {
-						"url" : '../rule/ajax/getRule?id=<c:out value="${rule.id}"/>'
+						"url" : '../ajax/getRule?id=<c:out value="${rule.id}"/>'
 					}
 				},
 				"themes":{
@@ -83,8 +83,9 @@
 	</style>
 </head>
 
-<div>
-	<div style="float:left;">
+<div >
+	<div class="col-sm-7" style="float:left;">
+	<h1><fmt:message key='rule.view'/></h1>
 	<table id="ruleViewTable">
 		<tr>
 			<th class="left"><fmt:message key="rule.name" /> :</th>
@@ -113,7 +114,7 @@
 			</p></td>
 		</tr>
 		<tr>
-			<th class="left"><span style="letter-spacing:6px;"><fmt:message key="rule.credibility" /></span>:</th>
+			<th class="left"><span ><fmt:message key="rule.credibility" /></span>:</th>
 			<td><c:out value="${rule.credibility}" /></td>
 		</tr>
 		<tr>
@@ -129,7 +130,7 @@
 			<td><c:out value="${rule.mode}" /></td>
 		</tr>
 		<tr>
-			<th class="left"><span style="letter-spacing:6px;"><fmt:message key="rule.createBy" /></span>:</th>
+			<th class="left"><span ><fmt:message key="rule.createBy" /></span>:</th>
 			<td><c:out value="${rule.createUser.username}" /></td>
 		</tr>
 		<tr>
@@ -137,7 +138,7 @@
 			<td><c:out value="${rule.createTime}" /></td>
 		</tr>
 		<tr>
-			<th class="left"><span style="letter-spacing:6px;"><fmt:message key="rule.modifyBy" /></span>:</th>
+			<th class="left"><span ><fmt:message key="rule.modifyBy" /></span>:</th>
 			<td><c:out value="${rule.modifyUser.username}" /></td>
 		</tr>
 		<tr>
@@ -169,14 +170,14 @@
 		</tr>
 	</table>
 	</div>
-	<div style="float:left;">
+	<%-- <div style="float:left;">
 		<div style="margin-top:50px;width:240px;height:300px;background-image:url(../images/people.png);">
 			<div style="margin-left:10px;margin-top:50px;width:218px;height:90px;">
 				<div style="padding-top:15px;padding-left:10px;font-size:14px;"><span><fmt:message key="rule.want.test" /></span></div>
 				<div style="margin:20px;font-size:18px;"><a id="textBtn" style="cursor: pointer;"><fmt:message key="rule.test" /></a></div>
 			</div>
 		</div>
-	</div>	
+	</div> --%>	
 </div>
 
 <div id="ruleTestDialog" align="left" title="<fmt:message key='rule.test'/>" >

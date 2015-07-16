@@ -4,6 +4,24 @@
     <title><fmt:message key="set.rule"/></title>
     <meta name="menu" content="SampleSet"/>
     <script type="text/javascript">
+    function validateIndex(form){
+    	var id = form["indexId"];
+    	var val = id.value;
+    	if(val==""||!val){
+    		alert("indexid can't be null!");
+    		return false;
+    	}
+    	var name = form["name"];
+    	var nameval = name.value;
+    	if(nameval==""||!nameval){
+    		alert("index Name can't be null!");
+    		return false;
+    	}
+    	
+    	return true;
+    }
+    
+    
     </script>
 </head>
 
@@ -23,7 +41,7 @@
 
 <div class="separator"></div>
 
-<form:form class="form-horizontal" commandName="index" method="post" action="edit" onsubmit="return true" id="editIndexForm">
+<form:form class="form-horizontal" commandName="index" method="post" action="edit" onsubmit="return validateIndex(this)" id="editIndexForm">
 	<div class="control-groups col-sm-8">
         <appfuse:label styleClass="control-label" key="index.indexId"/>
         <div class="control">
@@ -81,6 +99,5 @@
         	<input type="button" class="btn" style="width:80px;" name="cancel" onclick="location.href='<c:url value="/index/list"/>'" value="<fmt:message key="button.cancel"/>"/>
    		</div>
     </div>
-
 </form:form>
 </div>

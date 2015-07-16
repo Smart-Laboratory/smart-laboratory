@@ -6,6 +6,10 @@
 	table td {
 		height:20px;
 	}
+	span.pagelinks {
+		width:100%;	
+		margin-top: -5px;
+	}
 	</style>
     <script>
        	$(function() {
@@ -73,7 +77,7 @@
 
 <display:table name="ruleList" cellspacing="0" cellpadding="0" requestURI="/rule/list" partialList="true" 
     id="rules" defaultsort="5" defaultorder="ascending" sort="external"  class="table" size="${ruleList.fullListSize}" pagesize="${ruleList.objectsPerPage}">
-    <display:column sortProperty="activate"  titleKey="rule.state" sortable="true" style="width:30px;">
+    <display:column sortProperty="activate"  titleKey="rule.state" sortable="true" style="width:60px; ">
     	<input type="checkbox" style="width:20px;" class="activate" <c:if test="${disabled}">disabled</c:if> <c:if test="${rules.activate}">checked="checked"</c:if> >
     	<div style="display:none;"><c:out value="${rules.id}" /></div>
     	<div style="display:none;" class="is_self"><c:out value="${rules.selfCreate}" /></div>
@@ -82,7 +86,7 @@
     	url="/rule/view" paramId="id" paramProperty="id" />
     <display:column property="resultName" maxLength="20" titleKey="rule.result" />
     <display:column property="createUser.username" sortable="true" titleKey="rule.createBy" />
-    <display:column property="modifyTime" format="{0,date,yyyy-MM-dd hh:mm:ss}" sortable="true" titleKey="rule.modifyTime"   />
+    <display:column property="modifyTime" format="{0,date,yyyy-MM-dd hh:mm:ss}" sortable="true" titleKey="rule.modifyTime"  />
 </display:table>
 </div>
 </body>

@@ -38,7 +38,6 @@ public class IndexController {
 		request.setAttribute("sampleList", Constants.SAMPLE_TYPE);
 		
 		Map<String, String> type = new HashMap<String, String>();
-		type.put("", "");
 		type.put("N", "数值型");
 		type.put("S", "字符型");
 		type.put("E", "枚举型");
@@ -52,9 +51,11 @@ public class IndexController {
 		request.setAttribute("algorithmList", algorithm);
 		
 		Index index =  new Index();
-		Long id = Long.parseLong(request.getParameter("id"));
-		if(id != null) {
+		if(request.getParameter("id")!=null){
+			Long id = Long.parseLong(request.getParameter("id"));
+			if(id != null) {
 			index = indexManager.get(id);
+			}
 		}
 		return index;
 	}
@@ -68,6 +69,8 @@ public class IndexController {
 		index.setCreateUser(user);
 		index.setModifyTime(date);	
 		index.setCreateTime(date);
+		
+		System.out.println(index.getIndexId());
 		
 		try {
 			index = indexManager.save(index);

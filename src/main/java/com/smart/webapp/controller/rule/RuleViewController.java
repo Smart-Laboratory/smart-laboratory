@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.rule.Bag;
+import com.smart.model.rule.Index;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
@@ -112,8 +112,31 @@ public class RuleViewController {
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value="/view*")
-    public ModelAndView RuleView(@RequestParam(required = false, value = "q") String query) throws Exception {
-        return new ModelAndView();
+    public ModelAndView RuleView(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if(request.getParameter("id")==null||request.getParameter("id").isEmpty()){
+			return new ModelAndView("redirect:/rule/list");
+		}
+		String id = request.getParameter("id");
+		Rule rule = ruleManager.get(Long.parseLong(id));
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		request.setAttribute("canEdit", CheckAllow.allow(rule, user));
+		request.setAttribute("itemsList", rule.getItems());
+		return new ModelAndView("rule/view","rule", rule);
     }
 
+	@RequestMapping(method = RequestMethod.GET, value="/delete*")
+	public ModelAndView deleteRule(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String id = request.getParameter("id");
+		Rule rule = ruleManager.get(Long.parseLong(id));
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		// 是否有访问权限
+		if (!CheckAllow.allow(rule, user)) {
+			response.sendError(403);
+			return null;
+		}
+
+		ruleManager.remove(Long.parseLong(id));
+		return new ModelAndView("redirect:/rule/list");
+	}
 }

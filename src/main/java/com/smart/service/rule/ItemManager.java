@@ -1,5 +1,8 @@
 package com.smart.service.rule;
 
+import java.util.List;
+
+import com.smart.Dictionary;
 import com.smart.model.rule.Item;
 import com.smart.service.GenericManager;
 
@@ -34,4 +37,5 @@ public interface ItemManager extends GenericManager<Item, Long> {
 	 * @return
 	 */
 	Item getWithIndex(Long id);
+	
 }

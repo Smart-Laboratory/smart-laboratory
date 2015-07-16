@@ -382,7 +382,7 @@
 		<input id="globalsearchbox" placeholder="<fmt:message key="rule" />,<fmt:message key="index" />,<fmt:message key="result" />" style="width: 180px;margin-top:10px;"/>
 	</div>
 	<div class="tag-section">
-		<a class="selbtn" href="javascript:navRuleBtnClick();"><div class="tag-item">
+		<a class="selbtn" href="<c:url value="/rule/list"/>;javascript:navRuleBtnClick();"><div class="tag-item">
 			<b class="tag-name" style="letter-spacing:5px; "><fmt:message key="rule" /></b>
 			</div>
 		</a>

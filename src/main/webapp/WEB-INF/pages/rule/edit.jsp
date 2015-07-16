@@ -265,7 +265,7 @@
 			"json_data" : {
 
 				"ajax" : {
-					"url" : '../rule/ajax/getRule?id=<c:out value="${rule.id}" />'
+					"url" : '../ajax/getRule?id=<c:out value="${rule.id}" />'
 				}
 			},
 			"crrm" : {
@@ -336,7 +336,7 @@
 
 		$("#searchIndex").autocomplete({
 			source : function(request, response) {
-				$.ajax({url : "../index/ajax/getIndex",
+				$.ajax({url : "../ajax/getIndex",
 					dataType : "json",
 					data : {
 						maxRows : 12,
@@ -433,7 +433,7 @@
 		$("#searchBag").autocomplete({
 			source : function(request, response) {
 				$.ajax({
-					url : "../bag/ajax/searchBag",
+					url : "../ajax/searchBag",
 					dataType : "json",
 					data : {
 						name : request.term
