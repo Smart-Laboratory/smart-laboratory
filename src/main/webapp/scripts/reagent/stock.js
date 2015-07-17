@@ -5,8 +5,8 @@
 		   	colNames:['','名称','规格','产地', '品牌', '单位','单价','存放位置','环境条件','当前温度','自制试剂'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:155},
-		   		{name:'specification',index:'specification', width:120},
+		   		{name:'name',index:'name', width:150},
+		   		{name:'specification',index:'specification', width:100},
 		   		{name:'place',index:'place', width:100, sortable:false},
 		   		{name:'brand',index:'brand', width:80, sortable:false},
 		   		{name:'baozhuang',index:'baozhuang', width:100, align:"right", sortable:false},
@@ -22,6 +22,7 @@
 		   	sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "asc",
+		    subGrid : true,
 		    caption:"<h5><b>仓储信息</b></h5>"
 		});
 		jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:false});

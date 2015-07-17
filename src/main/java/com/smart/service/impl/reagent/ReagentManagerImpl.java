@@ -1,5 +1,7 @@
 package com.smart.service.impl.reagent;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +20,12 @@ public class ReagentManagerImpl extends GenericManagerImpl<Reagent, Long> implem
         this.dao = reagentDao;
         this.reagentDao = reagentDao;
     }
+
+	public List<Reagent> getReagents(String name, long sectionid) {
+		return reagentDao.getReagents(name, sectionid);
+	}
+
+	public Reagent getByname(String name) {
+		return reagentDao.getByname(name);
+	}
 }

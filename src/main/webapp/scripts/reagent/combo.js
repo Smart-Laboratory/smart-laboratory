@@ -1,6 +1,6 @@
 	$(function() {
 		jQuery("#list").jqGrid({
-		   	url:'../reagent/getCombo',
+		   	url:'../reagent/getCombo?q=1',
 			datatype: "json",
 		   	colNames:['','名称','创建者','创建时间'],
 		   	colModel:[
@@ -24,23 +24,53 @@
 				pager_id = "p_"+subgrid_table_id;
 				$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
 				jQuery("#"+subgrid_table_id).jqGrid({
-					url:"subgrid.php?q=2&id="+row_id,
-					datatype: "xml",
-					colNames: ['No','Item','Qty','Unit','Line Total'],
+					url:"../reagent/getByCombo?q=2&id="+row_id,
+					datatype: "json",
+					colNames: ['','名称[规格]','产地', '品牌', '包装','单价'],
 					colModel: [
-						{name:"num",index:"num",width:80,key:true},
-						{name:"item",index:"item",width:130},
-						{name:"qty",index:"qty",width:70,align:"right"},
-						{name:"unit",index:"unit",width:70,align:"right"},
-						{name:"total",index:"total",width:70,align:"right",sortable:false}
+					    {name:'id',index:'id', hidden:true},
+						{name:'name',index:'name', width:255, editable:true, editoptions:{
+							dataInit:function(elem){
+								$(elem).autocomplete({
+							        source: function( request, response ) {
+							            $.ajax({
+							            	url: "../../ajax/reagent/getReagent",
+							                dataType: "json",
+							                data: {
+							                    name : request.term
+							                },
+							                success: function( data ) {
+							                	response( $.map( data, function( result ) {
+							                		return {
+							                            label: result.name,
+							                            value: result.name,
+							                            id : result.id
+							                        }
+							                    }));
+							                    $(elem).removeClass("ui-autocomplete-loading");
+							                }
+							            });
+							        },
+							        minLength: 1/*,
+							        select : function(event, ui) {
+							        	$(elem).value();
+							        }*/
+								});
+							}
+						}},
+						{name:'place',index:'place', width:100, sortable:false},
+						{name:'brand',index:'brand', width:80, sortable:false},
+						{name:'baozhuang',index:'baozhuang', width:100, align:"right", sortable:false},
+						{name:'price',index:'price', width:60, align:"right", sortable:false}
 					],
 				   	rowNum:20,
 				   	pager: pager_id,
 				   	sortname: 'num',
 				    sortorder: "asc",
+				    editurl : "../ajax/reagent/candr?cid=" + row_id,
 				    height: '100%'
 				});
-				jQuery("#"+subgrid_table_id).jqGrid('navGrid',"#"+pager_id,{edit:false,add:false,del:false})
+				jQuery("#"+subgrid_table_id).jqGrid('navGrid',"#"+pager_id,{edit:false,add:true,del:true})
 		    },
 		    subGridRowColapsed : function(subgrid_id, row_id) {
 	          // this function is called before removing the data 
@@ -49,5 +79,6 @@
 	          //jQuery("#"+subgrid_table_id).remove();
 	        }
 		});
-		jQuery("#list").jqGrid('navGrid','#pager',{edit:true,add:true,del:true});
+		jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:true});
+		jQuery("#list").jqGrid('inlineNav',"#pager");
 	});

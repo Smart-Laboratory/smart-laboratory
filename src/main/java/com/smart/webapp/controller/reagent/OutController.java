@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/reagent/out*")
+@RequestMapping("/reagent*")
 public class OutController {
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, value="/out*")
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
         return new ModelAndView();
     }

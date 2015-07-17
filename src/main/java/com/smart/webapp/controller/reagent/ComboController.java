@@ -93,7 +93,12 @@ public class ComboController {
 		dataResponse.setRecords(set.size());
 		for(Reagent r : set) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			
+			map.put("id", r.getId());
+			map.put("name", r.getNameAndSpecification());
+			map.put("place", r.getPlaceoforigin());
+			map.put("brand", r.getBrand());
+			map.put("baozhuang", r.getBaozhuang());
+			map.put("price", r.getPrice());
 			dataRows.add(map);
 		}
 		dataResponse.setRows(dataRows);

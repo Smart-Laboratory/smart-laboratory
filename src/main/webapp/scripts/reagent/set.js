@@ -28,5 +28,6 @@
 		    sortorder: "asc",
 		    caption:"<h5><b>试剂基本信息</b></h5>"
 		});
-		jQuery("#list").jqGrid('navGrid','#pager',{edit:true,add:true,del:true});
+		jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:true});
+		jQuery("#list").jqGrid('inlineNav',"#pager");
 	});

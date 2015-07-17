@@ -1,5 +1,7 @@
 package com.smart.service.impl.reagent;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +20,8 @@ public class ComboManagerImpl extends GenericManagerImpl<Combo, Long> implements
         this.dao = comboDao;
         this.comboDao = comboDao;
     }
+
+	public List<Combo> getCombos(String name) {
+		return comboDao.getCombos(name);
+	}
 }

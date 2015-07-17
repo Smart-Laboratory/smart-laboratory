@@ -1,11 +1,8 @@
 package com.smart.service.impl.rule;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.smart.Dictionary;
 import com.smart.dao.rule.ItemDao;
 import com.smart.model.rule.Item;
 import com.smart.service.rule.ItemManager;
