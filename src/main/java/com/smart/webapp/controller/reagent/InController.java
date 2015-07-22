@@ -1,15 +1,12 @@
 package com.smart.webapp.controller.reagent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,19 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.service.UserManager;
-import com.smart.service.reagent.InManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/reagent*")
 public class InController {
-	
-	@Autowired
-	private UserManager userManager = null;
-	
-	@Autowired
-	private InManager inManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/in*")
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
@@ -46,5 +35,4 @@ public class InController {
 		response.setContentType("text/html; charset=UTF-8");
 		return dataResponse;
 	}
-
 }

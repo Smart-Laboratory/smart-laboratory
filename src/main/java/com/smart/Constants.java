@@ -155,6 +155,11 @@ public final class Constants {
 	/**
 	 * 日期格式
 	 */
-	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	/**
+	 * 日期格式
+	 */
+	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 }

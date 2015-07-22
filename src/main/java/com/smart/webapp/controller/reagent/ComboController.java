@@ -46,16 +46,36 @@ public class ComboController {
 	public DataResponse getCombo(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
 		Set<Combo> set = section.getCombos();
+		String pages = request.getParameter("page");
+		String rows = request.getParameter("rows");
+		int page = Integer.parseInt(pages);
+		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(set.size());
+		int x = set.size() % (row == 0 ? set.size() : row);
+		if (x != 0) {
+			x = row - x;
+		}
+		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		dataResponse.setPage(page);
+		dataResponse.setTotal(totalPage);
+		int start = row * (page - 1);
+		int end = row * page;
+		if(end > set.size()) {
+			end = set.size();
+		}
+		int index = 0;
 		for(Combo c : set) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", c.getId());
-			map.put("name", c.getName());
-			map.put("creator", c.getCreator());
-			map.put("createtime", Constants.SDF.format(c.getCreatetime()));
-			dataRows.add(map);
+			if(index >= start && index < end) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", c.getId());
+				map.put("name", c.getName());
+				map.put("creator", c.getCreator());
+				map.put("createtime", Constants.SDF.format(c.getCreatetime()));
+				dataRows.add(map);
+			}
+			index++;
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");
@@ -88,18 +108,38 @@ public class ComboController {
 			return null;
 		}
 		Set<Reagent> set = comboManager.get(Long.parseLong(request.getParameter("id"))).getReagents();
+		String pages = request.getParameter("page");
+		String rows = request.getParameter("rows");
+		int page = Integer.parseInt(pages);
+		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(set.size());
+		int x = set.size() % (row == 0 ? set.size() : row);
+		if (x != 0) {
+			x = row - x;
+		}
+		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		dataResponse.setPage(page);
+		dataResponse.setTotal(totalPage);
+		int start = row * (page - 1);
+		int end = row * page;
+		if(end > set.size()) {
+			end = set.size();
+		}
+		int index = 0;
 		for(Reagent r : set) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", r.getId());
-			map.put("name", r.getNameAndSpecification());
-			map.put("place", r.getPlaceoforigin());
-			map.put("brand", r.getBrand());
-			map.put("baozhuang", r.getBaozhuang());
-			map.put("price", r.getPrice());
-			dataRows.add(map);
+			if(index >= start && index < end) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", r.getId());
+				map.put("name", r.getNameAndSpecification());
+				map.put("place", r.getPlaceoforigin());
+				map.put("brand", r.getBrand());
+				map.put("baozhuang", r.getBaozhuang());
+				map.put("price", r.getPrice());
+				dataRows.add(map);
+			}
+			index++;
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");

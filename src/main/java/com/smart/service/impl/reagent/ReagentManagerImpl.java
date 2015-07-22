@@ -28,4 +28,8 @@ public class ReagentManagerImpl extends GenericManagerImpl<Reagent, Long> implem
 	public Reagent getByname(String name) {
 		return reagentDao.getByname(name);
 	}
+
+	public List<Reagent> getByIds(String ids) {
+		return reagentDao.getByIds(ids);
+	}
 }

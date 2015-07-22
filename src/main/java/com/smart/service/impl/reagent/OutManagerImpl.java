@@ -1,5 +1,7 @@
 package com.smart.service.impl.reagent;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +20,8 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
         this.dao = outDao;
         this.outDao = outDao;
     }
+
+	public void saveAll(List<Out> needSaveOut) {
+		outDao.saveAll(needSaveOut);
+	}
 }

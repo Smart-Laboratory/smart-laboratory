@@ -13,6 +13,7 @@
 		   	rowList:[10,20,30],
 		   	pager: '#pager',
 		   	sortname: 'id',
+		   	height: '100%',
 		    viewrecords: true,
 		    editurl : "editCombo",
 		    sortorder: "asc",
@@ -51,10 +52,7 @@
 							                }
 							            });
 							        },
-							        minLength: 1/*,
-							        select : function(event, ui) {
-							        	$(elem).value();
-							        }*/
+							        minLength: 1
 								});
 							}
 						}},

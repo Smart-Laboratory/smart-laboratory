@@ -22,8 +22,13 @@
   <li id="outpre" role="presentation"><a onclick="changeTab('out')"><fmt:message key="reagent.detail.out"/></a></li>
 </ul>
 
+<div id="indiv" style="margin-top:10px;">
 <table id="list" class="table table-condensed table-striped"></table>
 <div id="pager"></div>
-
+</div>
+<div id="outdiv" style="margin-top:10px;">
+<table id="list2" class="table table-condensed table-striped"></table>
+<div id="pager2"></div>
+</div>
 </div>
 </body>
