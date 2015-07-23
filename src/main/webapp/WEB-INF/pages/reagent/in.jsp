@@ -35,6 +35,10 @@
 <div style="margin-top:10px;">
 <table id="list" class="table table-condensed table-striped"></table>
 </div>
+</div>
 
+<div id="printDialog" align="left">
+	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
+	<div id="printFrame" style="height:500px;"></div>
 </div>
 </body>

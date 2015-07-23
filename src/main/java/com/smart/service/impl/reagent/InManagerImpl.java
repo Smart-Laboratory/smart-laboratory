@@ -1,5 +1,6 @@
 package com.smart.service.impl.reagent;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,9 @@ public class InManagerImpl extends GenericManagerImpl<In, Long> implements InMan
 
 	public void saveAll(List<In> needSaveIn) {
 		inDao.saveAll(needSaveIn);
+	}
+
+	public List<In> getByInDate(Date indate) {
+		return inDao.getByInDate(indate);
 	}
 }

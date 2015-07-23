@@ -197,13 +197,13 @@ public class ReagentAjaxController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", r.getId());
 			map.put("name", r.getNameAndSpecification());
-			String batch = "<select id='" + r.getId() + "_batch class='editable' style='height:18px;width:98%'>";
+			String batch = "<select id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>";
 			for(Batch b : r.getBatchs()) {
 				if(b.getNum() > 0) {
 					if(r.getSubtnum() > 1) {
-						batch += "<option>" + b.getBatch() + "[库存:" + b.getNum() + r.getUnit() + "]</option>";
+						batch += "<option value='" + b.getBatch() + "'>" + b.getBatch() + "[库存:" + b.getNum() + r.getUnit() + "]</option>";
 					} else {
-						batch += "<option>" + b.getBatch() + "[库存:" + (b.getNum()*r.getSubtnum() + b.getSubnum()) + r.getSubunit() +  "]</option>";
+						batch += "<option value='" + b.getBatch() + "'>" + b.getBatch() + "[库存:" + (b.getNum()*r.getSubtnum() + b.getSubnum()) + r.getSubunit() +  "]</option>";
 					}
 				}
 			}
@@ -250,8 +250,9 @@ public class ReagentAjaxController {
 	
 	@RequestMapping(value = "/savein*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean savein(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		boolean success = true;
+	public String savein(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		long nowtime = System.currentTimeMillis();
+		Date now = new Date(nowtime);
 		try {
 			String text = request.getParameter("text");
 			User user = userManager.getUserByUsername(request.getRemoteUser());
@@ -289,7 +290,7 @@ public class ReagentAjaxController {
 				In indata = new In();
 				indata.setBatch((String)inmap.get(r.getId()).get("batch"));
 				indata.setExdate((String)inmap.get(r.getId()).get("exedate"));
-				indata.setIndate(new Date());
+				indata.setIndate(now);
 				indata.setIsqualified(1);
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
 				indata.setOperator(user.getLastName());
@@ -300,10 +301,9 @@ public class ReagentAjaxController {
 			batchManager.saveAll(needSaveBatch);
 			inManager.saveAll(needSaveIn);
 		} catch (Exception e) {
-			success = false;
 			e.printStackTrace();
 		}
-		return success;
+		return Long.toString(nowtime);
 	}
 	
 	@RequestMapping(value = "/saveout*", method = RequestMethod.POST)
@@ -336,19 +336,47 @@ public class ReagentAjaxController {
 							b.setNum(b.getNum() - (Integer)inmap.get(r.getId()).get("num"));
 						}
 						needSaveBatch.add(b);
+						
+						Out outdata = new Out();
+						outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
+						outdata.setBatch((String)inmap.get(r.getId()).get("batch"));
+						outdata.setOperator(user.getLastName());
+						outdata.setOutdate(new Date());
+						outdata.setReagent(r);
+						outdata.setSection(user.getSection());
+						needSaveOut.add(outdata);
 					}
 				}
-				Out outdata = new Out();
-				outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
-				outdata.setBatch((String)inmap.get(r.getId()).get("batch"));
-				outdata.setOperator(user.getLastName());
-				outdata.setOutdate(new Date());
-				outdata.setReagent(r);
-				outdata.setSection(user.getSection());
-				needSaveOut.add(outdata);
 			}
 			batchManager.saveAll(needSaveBatch);
 			outManager.saveAll(needSaveOut);
+		} catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+		}
+		return success;
+	}
+	
+	@RequestMapping(value = "/cancelout*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean cancelout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		boolean success = true;
+		try {
+			Out out = outManager.get(Long.parseLong(request.getParameter("id")));
+			Reagent r = out.getReagent();
+			for(Batch b : r.getBatchs()) {
+				if(b.getBatch().equals(out.getBatch())) {
+					if(r.getSubtnum() > 1) {
+						int num = b.getNum() * r.getSubtnum() + b.getSubnum() + out.getNum();
+						b.setNum(num/r.getSubtnum());
+						b.setSubnum(num%r.getSubtnum());
+					} else {
+						b.setNum(b.getNum() + out.getNum());
+					}
+					batchManager.save(b);
+				}
+			}
+			outManager.remove(out);
 		} catch (Exception e) {
 			success = false;
 			e.printStackTrace();

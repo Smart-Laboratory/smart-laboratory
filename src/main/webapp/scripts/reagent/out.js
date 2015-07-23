@@ -42,9 +42,9 @@
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
-		    	$.post("/ajax/reagent/saveout",{text:str},function(data) {
+		    	$.post("../../ajax/reagent/saveout",{text:str},function(data) {
 		    		alert("success");
-		    		window.location.href="";
+		    		//window.location.href="";
 				});
 		    }
 		});

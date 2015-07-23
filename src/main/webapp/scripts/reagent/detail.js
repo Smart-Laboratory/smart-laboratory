@@ -14,7 +14,28 @@
 		}
 	}
 	
+	function reprint(id) {
+		$('#printFrame').empty();
+		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"/reagent/print?id=" + id + "\"/>");
+		$("#printDialog").dialog("open");
+	}
+	
+	function cancel(id) {
+		$.post("../../ajax/reagent/cancelout",{id:id},function(data) {
+    		window.location.href="";
+		});
+	}
+	
 	$(function() {
+		$("#printDialog").dialog({
+			title: "条码打印",
+			autoOpen: false,
+			resizable: false,
+			modal:true,
+		    width: 680,
+		    height: 600
+		});
+		
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/detail/getIn',
 			datatype: "json",

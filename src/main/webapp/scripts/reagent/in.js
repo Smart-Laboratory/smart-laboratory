@@ -20,6 +20,15 @@
 	}
 
 	$(function() {
+		$("#printDialog").dialog({
+			title: "条码打印",
+			autoOpen: false,
+			resizable: false,
+			modal:true,
+		    width: 680,
+		    height: 600
+		});
+		
 		$('#reagent_select').change(function(){
 			if($(this).children('option:selected').val() == 3) {
 				$("#reagentdes").attr('placeholder','提示:输入关键字(支持中文名称和拼音首字母)，然后在下拉菜单中选择套餐');
@@ -43,8 +52,10 @@
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
-		    	$.post("/ajax/reagent/savein",{text:str},function(data) {
-		    		alert("save");
+		    	$.post("../../ajax/reagent/savein",{text:str},function(data) {
+		    		$('#printFrame').empty();
+			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"/reagent/print?time=" + data + "\"/>");
+					$("#printDialog").dialog("open");
 		    		window.location.href="";
 				});
 		    }
