@@ -70,4 +70,7 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	List<Index> getUsedIndex(long id);
 
 	List<Rule> getDiffRule(int i, String mode);
+	
+	Rule saveRule(Rule rule);
+	
 }

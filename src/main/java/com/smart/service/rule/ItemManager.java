@@ -9,12 +9,6 @@ import com.smart.service.GenericManager;
 
 public interface ItemManager extends GenericManager<Item, Long> {
 	
-	/**
-	 *  添加知识点并获取id
-	 * @param item
-	 * @return 新增知识点
-	 */
-	Item addItem(Item item);
 	
 	/**
 	 *  该知识点是否冲突，包括已存在的情况

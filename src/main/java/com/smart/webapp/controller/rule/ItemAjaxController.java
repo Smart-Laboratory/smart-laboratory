@@ -92,7 +92,7 @@ public class ItemAjaxController {
 		item.setCreateUser(createUser);
 		item.setCreateTime(new Date());
 		
-		Item newItem = itemManager.addItem(item);
+		Item newItem = itemManager.save(item);
 
 		JSONObject obj = new JSONObject();
 		value = newItem.getValue().replace("&&", "与").replace("||", "或");

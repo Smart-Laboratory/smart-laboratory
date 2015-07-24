@@ -97,7 +97,7 @@ public class Section {
 	}
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = In.class, mappedBy = "section")
-	@OrderBy("id asc")
+	@OrderBy("id desc")
 	public Set<In> getIns() {
 		return ins;
 	}
@@ -107,7 +107,7 @@ public class Section {
 	}
 
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Out.class, mappedBy = "section")
-	@OrderBy("id asc")
+	@OrderBy("id desc")
 	public Set<Out> getOuts() {
 		return outs;
 	}

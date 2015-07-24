@@ -25,8 +25,9 @@ th {
 	padding: 10px;
 }
 </style>
-<div>
-<div style="width:430px;float:left;">
+<div class="col-sm-7">
+<h1><fmt:message key='result.view'/></h1>
+<div class="col-sm-8" style="width:430px;float:left;">
 <table>
 	<tr>
 		<th style="padding-top:13px;" valign="top">
@@ -85,7 +86,7 @@ th {
 </table>
 </div>
 
-<div style="width: 180px;margin-right:70px; float: right;background-color: white;border: 1px solid #E1E1E1;padding: 5px 0px 10px 0px;" class="border-radius-6 border-shadow"">
+<div class="col-sm-4" style="background-color: white;border: 1px solid #E1E1E1;padding: 5px 0px 10px 0px; ">
 	<h4 style="padding-left:14px;font-family:Microsoft YaHei;">
 		<fmt:message key="rule.relate" />
 	</h4>

@@ -58,6 +58,19 @@ public class ResultViewController {
 		request.setAttribute("listparm", request.getQueryString());
 		return new ModelAndView("result/list","resultList",resultList);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET,value="/view*")
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {	
+		
+		String id = request.getParameter("id");
+		Result result = resultManager.get(Long.parseLong(id));
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+
+		request.setAttribute("canEdit", CheckAllow.allow(result, user));	
+		request.setAttribute("rulesList", result.getRules());
+		
+		return new ModelAndView("result/view","result",result);
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/delete")
     public ModelAndView resultDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {	

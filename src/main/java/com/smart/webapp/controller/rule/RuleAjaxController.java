@@ -162,7 +162,7 @@ public class RuleAjaxController {
 		result.setModifyUser(user);
 		result.setModifyTime(now);
 		
-		Result newResult = resultManager.addResult(result);
+		Result newResult = resultManager.save(result);
 		return newResult.getId().toString();
 	}
 	

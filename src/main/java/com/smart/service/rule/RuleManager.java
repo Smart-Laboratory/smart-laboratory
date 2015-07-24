@@ -64,6 +64,7 @@ public interface RuleManager extends GenericManager<Rule, Long> {
 	 * @param rule
 	 * @return
 	 */
+	
 	Rule addRule(Rule rule);
 	
 	/**
@@ -72,6 +73,8 @@ public interface RuleManager extends GenericManager<Rule, Long> {
 	 * @return
 	 */
 	Rule updateRule(Rule rule);
+	
+	Rule saveRule(Rule rule);
 	
 	/**
 	 *  通过规则类型获取规则

@@ -76,6 +76,10 @@ public class RuleManagerImpl extends GenericManagerImpl<Rule, Long> implements R
 	public Rule updateRule(Rule rule) {
 		return ruleDao.save(rule);
 	}
+	
+	public Rule saveRule(Rule rule){
+		return ruleDao.saveRule(rule);
+	}
 
 	public List<Rule> getRuleByType(int type) {
 		return ruleDao.getRuleByType(type);

@@ -3,15 +3,7 @@
 <head>
 <title><fmt:message key="set.rule"/></title>
 <meta name="menu" content="SampleSet"/>
-<style type="text/css">
-td {
-	padding: 7px;	
-}
-th {
-	width:85px;
-	padding: 7px;
-}
-</style>
+
 <script type="text/javascript">
 function deleteConfirm() {
 	if (confirm('<fmt:message key="confirm.delete" />')) {
@@ -20,9 +12,23 @@ function deleteConfirm() {
 }
 </script>
 </head>
+<style type="text/css">
+table {
+	font-size:14px;border:solid #add9c0; border-width:1px 0px 0px 1px;
+}
+td {
+	border:solid #add9c0; border-width:0px 1px 1px 0px; padding:10px 10px 10px 10px;
+	line-height:20px;
+}
+th {
+	width:90px;
+	border:solid #add9c0; border-width:0px 1px 1px 0px; padding:10px 10px 10px 10px;
+}
+</style>
+
 <div class="col-sm-7">
 	<h1><fmt:message key='index.view'/></h1>
-	<div class="col-sm-8">
+	<div class="col-sm-8" style="width:430px;float:left;">
 		<table>
 			<tr>
 				<th class="left"><fmt:message key="index.indexId" /> :</th>

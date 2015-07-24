@@ -163,21 +163,14 @@
 				<fmt:message key="button.delete" /></button>
 			</c:if>	
 				<button id="returnBtn" class="btn" 
-				onclick='javascript:history.go(-${history})'>
+				onclick="javascript:history.go(-1)">
 				<fmt:message key="button.return" /></button>
 			</div>
 			</td>
 		</tr>
 	</table>
 	</div>
-	<%-- <div style="float:left;">
-		<div style="margin-top:50px;width:240px;height:300px;background-image:url(../images/people.png);">
-			<div style="margin-left:10px;margin-top:50px;width:218px;height:90px;">
-				<div style="padding-top:15px;padding-left:10px;font-size:14px;"><span><fmt:message key="rule.want.test" /></span></div>
-				<div style="margin:20px;font-size:18px;"><a id="textBtn" style="cursor: pointer;"><fmt:message key="rule.test" /></a></div>
-			</div>
-		</div>
-	</div> --%>	
+	
 </div>
 
 <div id="ruleTestDialog" align="left" title="<fmt:message key='rule.test'/>" >

@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.rule;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.service.UserManager;
 import com.smart.service.rule.ResultManager;
+import com.smart.model.user.User;
 import com.smart.model.rule.Result;
 
 @Controller
@@ -23,6 +26,8 @@ public class ResultAjaxController {
 
 	@Autowired
 	private ResultManager resultManager = null;
+	@Autowired
+	private  UserManager userManager = null;
 	
 	@RequestMapping(value = "/getResult*", method = RequestMethod.GET)
 	@ResponseBody
@@ -54,4 +59,27 @@ public class ResultAjaxController {
 		response.getWriter().print(array.toString());
 		return null;
 	}
+	@RequestMapping(value = "/add*", method = RequestMethod.POST)
+	@ResponseBody
+	public String add(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String content = request.getParameter("content");
+		String category = request.getParameter("category");
+		String percent = request.getParameter("percent");
+		Result result = new Result();
+		result.setContent(content);
+		result.setCategory(category);
+		result.setPercent(percent);
+		
+		// 创建者信息保存
+		String userName = request.getRemoteUser();
+		User user = userManager.getUserByUsername(userName);
+		Date now = new Date();
+		result.setCreateUser(user);
+		result.setCreateTime(now);
+		
+		Result newResult = resultManager.save(result);
+		
+		return newResult.getId().toString();
+	}	
 }

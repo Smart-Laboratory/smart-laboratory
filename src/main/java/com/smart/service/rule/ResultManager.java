@@ -20,7 +20,4 @@ public interface ResultManager extends GenericManager<Result, Long> {
 	
 	List<Result> getResults(String category, int pageNum, String field, boolean isAsc);
 	
-	Result addResult(Result result);
-	
-	Result updateResult(Result result);
 }

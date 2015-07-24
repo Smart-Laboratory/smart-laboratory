@@ -91,7 +91,7 @@ public class RuleController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String onSubmit(Rule rule, BindingResult errors, HttpServletRequest request, HttpServletResponse response)
+	public String onSubmit(@ModelAttribute Rule rule, BindingResult errors, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 		User user = userManager.getUserByUsername(request.getRemoteUser());
@@ -126,23 +126,28 @@ public class RuleController {
 				rule.addResult(resultManager.get(Long.parseLong(result)));
 			}
 		}
-
 		// 编辑者信息保存
-		rule.setModifyUser(user);
-		rule.setModifyTime(new Date());
+		if(rule.getId()==null || StringUtils.isEmpty(rule.getId().toString())){
+			rule.setCreateUser(user);
+			rule.setCreateTime(new Date());
+		}
+		else{
+			Rule oldrule = ruleManager.get(rule.getId());
+			rule.setCreateUser(oldrule.getCreateUser());
+			rule.setCreateTime(oldrule.getCreateTime());
+			rule.setModifyUser(user);
+			rule.setModifyTime(new Date());
+		}
+		
 		for (Role role : user.getRoles()) {
 			if ("ROLE_ADMIN".equals(role.getName())) {
 				rule.setCore(true);
 				break;
 			}
 		}
-		if(rule.getId() == null) {
-			rule.setCreateUser(user);
-			rule.setCreateTime(new Date());
-		}
 
 		try {
-			ruleManager.updateRule(rule);
+			rule = ruleManager.save(rule);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

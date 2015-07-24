@@ -135,4 +135,15 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 		}
 		return rules;
 	}
+	
+	public Rule saveRule(Rule rule){
+		if (log.isDebugEnabled()) {
+            log.debug("user's id: " + rule.getId());
+        }
+        getSession().saveOrUpdate(rule);
+        // necessary to throw a DataIntegrityViolation and catch it in UserManager
+        getSession().flush();
+        return rule;
+		
+	}
 }
