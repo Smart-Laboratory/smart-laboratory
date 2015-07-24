@@ -33,7 +33,6 @@ public class In extends BaseObject implements Serializable {
 	
 	private Long id;
 	private String batch;
-	private int iscomplete;
 	private int isqualified;
 	private String operator;
 	private Date indate;
@@ -63,15 +62,6 @@ public class In extends BaseObject implements Serializable {
 
 	public void setBatch(String batch) {
 		this.batch = batch;
-	}
-
-	@Column
-	public int getIscomplete() {
-		return iscomplete;
-	}
-
-	public void setIscomplete(int iscomplete) {
-		this.iscomplete = iscomplete;
 	}
 
 	@Column

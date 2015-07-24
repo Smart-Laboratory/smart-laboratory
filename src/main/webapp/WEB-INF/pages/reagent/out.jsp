@@ -22,8 +22,19 @@
   <li role="presentation" class="active"><a href="#"><fmt:message key="reagent.out"/></a></li>
 </ul>
 
-<table id="list" class="table table-condensed table-striped" style="margin-top:5px;"></table>
-<div id="pager"></div>
+<div class="form-inline" style="margin-top:10px;">
+	<label for="reagentdes"><fmt:message key="guanjianzi"/></label>
+	<input type="text" id="reagentdes" name="reagentdes" class="form-control" style="width:600px;" onkeypress="getData(this,event);" placeholder="<fmt:message key='reagent.tips'/>">
+	<select id="reagent_select" class="form-control select">
+		<option value="1"><fmt:message key='barcode'/></option>
+		<option value="2" selected><fmt:message key='reagent.single'/></option>
+		<option value="3"><fmt:message key='reagent.combo.select'/></option>
+	</select>
+	<button id="outBtn" type="button" class="btn btn-success" style="float:right;"><fmt:message key='reagent.out'/></button>
+</div>
+<div style="margin-top:10px;">
+<table id="list" class="table table-condensed table-striped"></table>
+</div>
 
 </div>
 </body>

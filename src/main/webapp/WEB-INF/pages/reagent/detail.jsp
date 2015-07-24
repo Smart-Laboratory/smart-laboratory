@@ -22,8 +22,18 @@
   <li id="outpre" role="presentation"><a onclick="changeTab('out')"><fmt:message key="reagent.detail.out"/></a></li>
 </ul>
 
+<div id="indiv" style="margin-top:10px;">
 <table id="list" class="table table-condensed table-striped"></table>
 <div id="pager"></div>
+</div>
+<div id="outdiv" style="margin-top:10px;">
+<table id="list2" class="table table-condensed table-striped"></table>
+<div id="pager2"></div>
+</div>
+</div>
 
+<div id="printDialog" align="left">
+	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
+	<div id="printFrame" style="height:500px;"></div>
 </div>
 </body>

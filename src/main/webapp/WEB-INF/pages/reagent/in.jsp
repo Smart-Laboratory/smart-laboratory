@@ -24,16 +24,21 @@
 
 <div class="form-inline" style="margin-top:10px;">
 	<label for="reagentdes"><fmt:message key="guanjianzi"/></label>
-	<input type="text" id="reagentdes" name="reagentdes" class="form-control" style="width:500px;" onkeypress="getData(this,event);">
+	<input type="text" id="reagentdes" name="reagentdes" class="form-control" style="width:600px;" onkeypress="getData(this,event);" placeholder="<fmt:message key='reagent.tips'/>">
 	<select id="reagent_select" class="form-control select">
-		<option value="1"><fmt:message key='reagent.single'/></option>
-		<option value="2"><fmt:message key='reagent.combo.select'/></option>
+		<option value="1"><fmt:message key='barcode'/></option>
+		<option value="2" selected><fmt:message key='reagent.single'/></option>
+		<option value="3"><fmt:message key='reagent.combo.select'/></option>
 	</select>
-	<button id="hmCombo" type="button" class="btn btn-success" style="float:right;"><fmt:message key='reagent.in'/></button>
-	<h5 style="margin-left:50px;"><b><fmt:message key="reagent.tips"/></b></h5>
+	<button id="inBtn" type="button" class="btn btn-success" style="float:right;"><fmt:message key='reagent.in'/></button>
 </div>
-<table id="list" class="table table-condensed table-striped" style="margin-top:10px;"></table>
-<div id="pager"></div>
+<div style="margin-top:10px;">
+<table id="list" class="table table-condensed table-striped"></table>
+</div>
+</div>
 
+<div id="printDialog" align="left">
+	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
+	<div id="printFrame" style="height:500px;"></div>
 </div>
 </body>

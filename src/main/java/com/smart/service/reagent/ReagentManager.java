@@ -11,4 +11,5 @@ public interface ReagentManager extends GenericManager<Reagent, Long> {
 
 	Reagent getByname(String name);
 
+	List<Reagent> getByIds(String s);
 }

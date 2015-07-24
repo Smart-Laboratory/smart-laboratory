@@ -24,4 +24,9 @@ public class ReagentDaoHibernate extends GenericDaoHibernate<Reagent, Long> impl
 		return (Reagent) getSession().createQuery("from Reagent r where name='" + name + "' order by upper(r.id)").list().get(0);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Reagent> getByIds(String ids) {
+		return getSession().createQuery("from Reagent r where id in (" + ids + ")").list();
+	}
+
 }

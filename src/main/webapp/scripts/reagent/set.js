@@ -23,6 +23,7 @@
 		   	rowList:[10,20,30],
 		   	pager: '#pager',
 		   	sortname: 'id',
+		   	height: '100%',
 		    viewrecords: true,
 		    editurl : "editReagent",
 		    sortorder: "asc",

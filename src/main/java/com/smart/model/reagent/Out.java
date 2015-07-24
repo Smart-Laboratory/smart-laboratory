@@ -34,6 +34,7 @@ public class Out extends BaseObject implements Serializable {
 	private String operator;
 	private Date outdate;
 	private int num;
+	private String batch;
 	private int testnum;				// 试剂能用多少次检验
 	
 	private Reagent reagent;
@@ -67,6 +68,15 @@ public class Out extends BaseObject implements Serializable {
 
 	public void setOutdate(Date outdate) {
 		this.outdate = outdate;
+	}
+	
+	@Column(length=20)
+	public String getBatch() {
+		return batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 	@Column

@@ -5,6 +5,7 @@
         <pattern>/struts/*</pattern>
         <pattern>/resources/*</pattern>
         <pattern>*ajax*</pattern>
+        <pattern>*print*</pattern>
     </excludes> 
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>
