@@ -12,9 +12,16 @@ import com.smart.service.lis.SampleManager;
 @Service("sampleManager")
 public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implements SampleManager {
 	
-	SampleDao sampleDao;
+	@SuppressWarnings("unused")
+	private SampleDao sampleDao;
 	
-    @Autowired
+	@Autowired
+    public void setSampleDao(SampleDao sampleDao) {
+    	this.dao = sampleDao;
+		this.sampleDao = sampleDao;
+	}
+
+	@Autowired
     public SampleManagerImpl(SampleDao sampleDao) {
         super(sampleDao);
         this.sampleDao = sampleDao;

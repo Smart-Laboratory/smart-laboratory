@@ -36,7 +36,7 @@ public class StockController {
 	private UserManager userManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/stock*")
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView handleRequest() throws Exception {
 		return new ModelAndView();
     }
 

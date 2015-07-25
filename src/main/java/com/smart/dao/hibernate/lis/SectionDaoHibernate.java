@@ -7,7 +7,7 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.SectionDao;
 
 @Repository("sectionDao")
-public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> implements SectionDao{
+public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> implements SectionDao {
 	
 	public SectionDaoHibernate(){
 		super(Section.class);

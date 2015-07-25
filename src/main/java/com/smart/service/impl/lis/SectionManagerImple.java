@@ -10,9 +10,8 @@ import com.smart.model.lis.Section;
 import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.lis.SectionManager;
 
-
 @Service("sectionManager")
-public class SectionManagerImple extends GenericManagerImpl<Section, Long> implements SectionManager{
+public class SectionManagerImple extends GenericManagerImpl<Section, Long> implements SectionManager {
 
 	@SuppressWarnings("unused")
 	private SectionDao sectionDao;
