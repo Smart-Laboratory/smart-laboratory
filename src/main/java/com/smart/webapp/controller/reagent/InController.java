@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,7 +30,7 @@ public class InController {
 	private InManager inManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/in*")
-    public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
+    public ModelAndView handleRequest() throws Exception {
         return new ModelAndView();
     }
 	
