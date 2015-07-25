@@ -1,4 +1,6 @@
 	$(function() {
+		
+		
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getReagent?q=1',
 			datatype: "json",
@@ -50,4 +52,10 @@
 	        }
 		});
 		jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:false});
+		
 	});
+	
+	
+	
+	
+	

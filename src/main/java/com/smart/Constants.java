@@ -161,5 +161,9 @@ public final class Constants {
 	 * 日期格式
 	 */
 	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+	/**
+	 * 日期格式:yyyy-MM-dd
+	 */
+	public static final SimpleDateFormat DF2 = new SimpleDateFormat("yyyy-MM-dd");
 
 }

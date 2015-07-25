@@ -14,7 +14,6 @@
 <body>
 <div class="col-sm-10">
 
-
 <table id="list" class="table table-condensed table-striped"></table>
 <div id="pager"></div>
 
