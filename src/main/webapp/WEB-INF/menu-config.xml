@@ -32,6 +32,9 @@
         <Menu name="Statistic" title="statistic.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
         </Menu>
         <Menu name="Quality" title="quality.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
+        	<Item name="InvalidForm" title="menu.quality.form" page="/qualityManage/invalidSamplesform" />
+        	<Item name="InvalidList" title="menu.quality.list" page="/qualityManage/invalidSamples" />
+        	<Item name="SampleTrace" title="menu.quality.trace" page="/qualityManage/sampleTrace" />
         </Menu>
         <Menu name="Individual" title="individual.title" page="/userform" roles="ROLE_ADMIN,ROLE_USER">
             <Item name="EditUser" title="menu.user" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>

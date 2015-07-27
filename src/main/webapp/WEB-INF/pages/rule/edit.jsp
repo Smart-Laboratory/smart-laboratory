@@ -3,9 +3,7 @@
 <head>
 <title><fmt:message key="set.rule"/></title>
 <meta name="menu" content="SampleSet"/>
-<style>
 
-</style>
 <script>
 function initItemPanel() {
 	$("#dataType").css('display', 'none');
@@ -643,6 +641,18 @@ function typeChange(select) {
 }
 </script>
 </head>
+
+<style>
+
+td {
+	padding: 0px 0px 10px 5px;
+}
+
+th {
+	padding: 0px 0px 10px 5px;
+}
+</style>
+
 <div class="col-sm-7">
 <h1><fmt:message key='rule.edit'/></h1>
 <spring:bind path="rule.*">
@@ -669,7 +679,7 @@ function typeChange(select) {
 	<form:hidden path="credibility" />
 	<table>
 		<tr>
-			<th><appfuse:label styleClass="desc" key="rule.name" /></th>
+			<th><appfuse:label styleClass="desc"  key="rule.name" /></th>
 			<td><form:input path="name" id="name" cssClass="large" /></td>
 		</tr>
 		<tr>
@@ -699,8 +709,8 @@ function typeChange(select) {
 			<td>
 				<div>
 					<div style="float: left;">
-						<select size="2" id="result_select"
-							style="width: 300px; height: 55px;">
+						<select multiple class="form-control" id="result_select"
+							style="width: 300px; ">
 							<c:forEach var="result" items="${resultIdList}">
 								<option value="<c:out value="${result.id}"/>">
 									<c:out value="${result.content}" />
@@ -712,9 +722,10 @@ function typeChange(select) {
 						</select>
 					</div>
 					<div style="width: 30px; float: right;">
-						<input type="button" value="+" id="addResult" class="btn"
-							style="width: 30px;" /> <input type="button" value="-"
-							id="removeResult" class="btn" style="width: 30px;" />
+						<input type="button"  value="+"   id="addResult" class="btn btn-info btn-sm"
+							style="width: 40px; height: 40px;" > 
+						<input type="button" class="btn btn-info btn-sm"
+							value="-" id="removeResult" style="width: 40px; height: 40px;" />
 					</div>
 				</div>
 			</td>
@@ -726,7 +737,7 @@ function typeChange(select) {
 			<td>
 				<div>
 					<div style="float: left;">
-						<select size=2 id="bag_select" style="width: 300px; height: 55px;">
+						<select multiple class="form-control" id="bag_select" style="width: 300px;">
 							<c:forEach var="bag" items="${bagIdList}">
 								<option value="<c:out value="${bag.id}"/>">
 									<c:out value="${bag.name}" />
@@ -735,9 +746,9 @@ function typeChange(select) {
 						</select>
 					</div>
 					<div style="width: 30px; float: right;">
-						<input type="button" class="btn" value="+" id="addBag"
-							style="width: 30px;" /> <input type="button" class="btn"
-							value="-" id="removeBag" style="width: 30px;" />
+						<input type="button" class="btn btn-info btn-sm" value="+" id="addBag"
+							style="width: 40px; height: 40px;" /> <input type="button" class="btn btn-info btn-sm"
+							value="-" id="removeBag" style="width: 40px; height: 40px;" />
 					</div>
 				</div>
 			</td>
@@ -770,7 +781,7 @@ function typeChange(select) {
 			<th valign="top"><appfuse:label styleClass="desc"
 					key="rule.description" /></th>
 			<td>
-				<form:textarea path="description" id="description" cssClass="false" />
+				<form:textarea path="description" id="description" class="form-control" style="width:300px " />
 			</td>
 		</tr>
 		<tr>

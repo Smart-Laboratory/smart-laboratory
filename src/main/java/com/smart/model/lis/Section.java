@@ -22,7 +22,7 @@ import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 
 /**
- * 检验科室分类
+ * 科室内部 部门分类
  */
 @Entity
 @Table(name = "l_depart")
@@ -32,7 +32,7 @@ public class Section {
 	private String code;
 	private String name;
 	
-	private Hospital hospital;
+	private HosSection hosSection;
 	private Set<Reagent> reagents;
 	private Set<In> ins;
 	private Set<Out> outs;
@@ -53,7 +53,7 @@ public class Section {
 	}
 
 	/**
-	 * 科室代码
+	 * 部门代码
 	 */
 	@Column(length=30)
 	public String getCode() {
@@ -65,7 +65,7 @@ public class Section {
 	}
 
 	/**
-	 * 科室名称
+	 * 部门名称
 	 */
 	@Column(length=50)
 	public String getName() {
@@ -77,13 +77,13 @@ public class Section {
 	}
 
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital() {
-		return hospital;
+	@JoinColumn(name="section_id",referencedColumnName="id")
+	public HosSection getHosSection() {
+		return hosSection;
 	}
 
-	public void setHospital(Hospital hospital) {
-		this.hospital = hospital;
+	public void setHosSection(HosSection hosSection) {
+		this.hosSection = hosSection;
 	}
 	
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Reagent.class, mappedBy = "section")
