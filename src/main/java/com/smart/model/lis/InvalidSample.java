@@ -18,7 +18,7 @@ import javax.persistence.Table;
 public class InvalidSample {
 
 	// Primary Key
-	private Long id;
+	private long id;
 	
 	private Sample sample;
 
@@ -39,6 +39,9 @@ public class InvalidSample {
 	@SequenceGenerator(name = "SEQ_INVALIDSAMPLE", sequenceName = "invalidsample_sequence", allocationSize=1)	
 	public long getId() {
 		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	

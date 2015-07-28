@@ -32,7 +32,7 @@ public class Section {
 	private String code;
 	private String name;
 	
-	private HosSection hosSection;
+	private Hospital hospital;
 	private Set<Reagent> reagents;
 	private Set<In> ins;
 	private Set<Out> outs;
@@ -77,13 +77,13 @@ public class Section {
 	}
 
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="section_id",referencedColumnName="id")
-	public HosSection getHosSection() {
-		return hosSection;
+	@JoinColumn(name="hospital_id",referencedColumnName="id")
+	public Hospital getHospital() {
+		return hospital;
 	}
 
-	public void setHosSection(HosSection hosSection) {
-		this.hosSection = hosSection;
+	public void setHospital(Hospital hospital) {
+		this.hospital = hospital;
 	}
 	
 	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Reagent.class, mappedBy = "section")
