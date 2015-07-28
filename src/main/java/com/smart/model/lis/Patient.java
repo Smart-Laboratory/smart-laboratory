@@ -2,14 +2,11 @@ package com.smart.model.lis;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,8 +25,6 @@ public class Patient {
 	private String infantFlag;//婴儿标识
 	private String sex;//性别
 	private String idCard;//身份证号
-	
-	private Hospital hospital;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
@@ -114,14 +109,5 @@ public class Patient {
 
 	public void setIdCard(String idCard) {
 		this.idCard = idCard;
-	}
-	
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital(){
-		return hospital;
-	}
-	public void setHospital(Hospital hospital){
-		this.hospital = hospital; 
 	}
 }

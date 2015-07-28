@@ -153,17 +153,21 @@ public final class Constants {
 	public static final String FALSE = "×";
 
 	/**
-	 * 日期格式
+	 * 日期格式:yyyy-MM-dd hh:mm:ss
 	 */
 	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	
 	/**
-	 * 日期格式
+	 * 日期格式:yyyy-MM-dd hh:mm
 	 */
 	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 	/**
 	 * 日期格式:yyyy-MM-dd
 	 */
 	public static final SimpleDateFormat DF2 = new SimpleDateFormat("yyyy-MM-dd");
+	/**
+	 * 日期格式:yyyyMMdd
+	 */
+	public static final SimpleDateFormat DF3 = new SimpleDateFormat("yyyyMMdd");
 
 }

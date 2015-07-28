@@ -10,8 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -34,7 +33,6 @@ public class Audit {
 	private String markTests; //出现异常 需要标记的检验项目
 	private String notes; //自动审核的结果记录
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
-	private int hasimages;  
 	
 	/**
 	 * 主键、自增
@@ -53,9 +51,8 @@ public class Audit {
 	/**
 	 * 审核的样本
 	 */
-	@ManyToOne(optional=false, fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
-	@JoinColumn(name = "sample_id")
-	@OrderBy(value = "checkTime des")
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
+	@JoinColumn(name = "sample_id",insertable=true,unique=true)
 	public Sample getSample(){
 		return this.sample;
 	}
@@ -147,19 +144,6 @@ public class Audit {
 	public void setRuleIds(String ruleIds) {
 		this.ruleIds = ruleIds;
 	}
-
-	/**
-	 * 
-	 */
-	@Column
-	public int getHasimages() {
-		return hasimages;
-	}
-
-	public void setHasimages(int hasimages) {
-		this.hasimages = hasimages;
-	}
-	
 	
 	@Transient
 	public String getAuditMarkValue() {

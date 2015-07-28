@@ -1,5 +1,7 @@
 package com.smart.service.impl.lis;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,6 @@ import com.smart.service.lis.SampleManager;
 @Service("sampleManager")
 public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implements SampleManager {
 	
-	@SuppressWarnings("unused")
 	private SampleDao sampleDao;
 	
 	@Autowired
@@ -26,5 +27,13 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
         super(sampleDao);
         this.sampleDao = sampleDao;
     }
+
+	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
+		return sampleDao.getSampleList(date, lab, code, mark, status);
+	}
+
+	public List<Sample> getListBySampleNo(String sampleno) {
+		return sampleDao.getListBySampleNo(sampleno);
+	}
 
 }

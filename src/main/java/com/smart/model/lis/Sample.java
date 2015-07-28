@@ -38,13 +38,12 @@ public class Sample extends BaseObject {
 	private String departBed; //病床号
 	private String sampleNo;//样本编号， 手动生成
 	private int stayHospitalMode; //就诊方式（门诊、住院、急诊）
-	private String section; //检验科室
+	private String hosSection; //申请科室
 	private String diagnostic; //诊断
 	private String inspectionName; //检验项目及套餐名称
+	private String ylxh;//检验项目及套餐序号
 	private String sampleType; //样本类型 、来源（血液、粪便）
-	private String sampleStatus; //样本所处的状态（申请、采集、测试。。。）
-	private String labDepartMent; //检验部门
-	private String labDepartMentId; //检验仪器号
+	private int sampleStatus; //样本所处的状态（申请、采集、测试。。。）
 	private String printFlag; //是否打印
 	private String fee;	//费用
 	private String feestatus;	//收费状态
@@ -52,12 +51,15 @@ public class Sample extends BaseObject {
 	private String description; //描述
 	private String note; //性状
 	private String count; //采集数量
+	private int modifyFlag;//修改标识
+	private int iswriteback;//写回标识
+	private int hasimages;//是否包含图片
 	
 	
 	private CriticalRecord criticalRecord;
-	private Hospital hostipal;
+	private Section section;
 	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
-	private Set<Audit> audits = new HashSet<Audit>(); //检验项目的结果集
+	private Audit audit = new Audit(); //检验项目的结果集
 	private Set<Process> process = new HashSet<Process>(); //检验项目的结果集
 
 	
@@ -121,12 +123,12 @@ public class Sample extends BaseObject {
 	 * 就诊科室
 	 */
 	@Column(name = "SECTION", length = 20)
-	public String getSection() {
-		return section;
+	public String getHosSection() {
+		return hosSection;
 	}
 
-	public void setSection(String section) {
-		this.section = section;
+	public void setHosSection(String hosSection) {
+		this.hosSection = hosSection;
 	}
 
 	/**
@@ -166,15 +168,15 @@ public class Sample extends BaseObject {
 	}
 	
 	/**
-	 * 检验仪器号
+	 * 检验项目及套餐序号
 	 */
-	@Column(name = "LABDEPARTMENTID", length = 20)
-	public String getLabDepartMentId() {
-		return labDepartMentId;
+	@Column( length = 20)
+	public String getYlxh() {
+		return ylxh;
 	}
 
-	public void setLabDepartMentId(String labDepartMentId) {
-		this.labDepartMentId = labDepartMentId;
+	public void setYlxh(String ylxh) {
+		this.ylxh = ylxh;
 	}
 	
 	/**
@@ -218,28 +220,16 @@ public class Sample extends BaseObject {
 	 * 样本状态
 	 */
 	@Column(name = "samplestatus")
-	public String getSampleStatus() {
+	public int getSampleStatus() {
 		return sampleStatus;
 	}
 	
-	public void setSampleStatus(String sampleStatus) {
+	public void setSampleStatus(int sampleStatus) {
 		this.sampleStatus = sampleStatus;
 	}
 	
 	/**
-	 * 实验室部门
-	 */
-	@Column(name = "labdepartment")
-	public String getLabDepartMent() {
-		return labDepartMent;
-	}
-	
-	public void setLabDepartMent(String labDepartMent) {
-		this.labDepartMent = labDepartMent;
-	}
-	
-	/**
-	 * 实验室部门
+	 * 收费
 	 */
 	@Column(name = "fee")
 	public String getFee() {
@@ -251,7 +241,7 @@ public class Sample extends BaseObject {
 	}
 	
 	/**
-	 * 实验室部门
+	 * 收费状态
 	 */
 	@Column(name = "feestatus")
 	public String getFeestatus() {
@@ -310,16 +300,47 @@ public class Sample extends BaseObject {
 		this.count = count;
 	}
 	
+	@Column
+	public int getModifyFlag() {
+		return modifyFlag;
+	}
+	
+	public void setModifyFlag(int modifyFlag) {
+		this.modifyFlag = modifyFlag;
+	}
+	
+	@Column
+	public int getIswriteback() {
+		return iswriteback;
+	}
+	
+	public void setIswriteback(int iswriteback) {
+		this.iswriteback = iswriteback;
+	}
+	
+	/**
+	 * 
+	 */
+	@Column
+	public int getHasimages() {
+		return hasimages;
+	}
+
+	public void setHasimages(int hasimages) {
+		this.hasimages = hasimages;
+	}
+	
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
-	public Set<Audit> getAudits() {
-		return audits;
+	@OneToOne(targetEntity = Audit.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
+	@JoinColumn(name="audit_id",insertable=true,unique=true)
+	public Audit getAudit() {
+		return audit;
 	}
 	
-	public void setAudits(Set<Audit> audits) {
-		this.audits = audits;
+	public void setAudit(Audit audit) {
+		this.audit = audit;
 	}
 	
 	/**
@@ -350,12 +371,12 @@ public class Sample extends BaseObject {
 	}
 	
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital(){
-		return hostipal;
+	@JoinColumn(name="section_id",referencedColumnName="id")
+	public Section getSection(){
+		return section;
 	}
-	public void setHospital(Hospital hospital){
-		this.hostipal = hospital; 
+	public void setSection(Section section){
+		this.section = section; 
 	}
 	
 	public String toString() {
