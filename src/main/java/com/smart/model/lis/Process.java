@@ -84,7 +84,7 @@ public class Process extends BaseObject {
 	}
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "sample_id")
+	@JoinColumn(name = "sample_id",referencedColumnName="id")
 	public Sample getSample() {
 		return sample;
 	}

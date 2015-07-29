@@ -8,16 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
-
-
 
 
 /**
@@ -71,7 +67,7 @@ public class CriticalRecord extends BaseObject{
 	
 	
 	@OneToOne(optional=false, cascade=CascadeType.MERGE)
-	@JoinColumn(name="sampleno",referencedColumnName="sampleno")
+	@JoinColumn(name="sample_id",referencedColumnName="id")
 	public Sample getSample(){
 		return sample;
 	}

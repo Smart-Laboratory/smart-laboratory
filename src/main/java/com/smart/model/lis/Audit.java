@@ -15,19 +15,25 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.smart.model.BaseObject;
+
 /**
  * 智能审核结果表
  */
 @Entity
 @Table(name = "l_audit")
-public class Audit {
+public class Audit extends BaseObject {
 	
-	private long id;    //主键
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7750774634593117901L;
+
+	private Long id;    //主键
 	
 	private Sample sample;  //审核的样本
 	
 	private Date checkTime; //审核时间
-	private Date printTime; //打印时间?
 	private int auditStatus; //样本审核的状态
 	private int auditMark; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
@@ -40,11 +46,11 @@ public class Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_AUDIT")
 	@SequenceGenerator(name = "SEQ_AUDIT", sequenceName = "audit_sequence", allocationSize=1)	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -71,18 +77,6 @@ public class Audit {
 
 	public void setCheckTime(Date checkTime) {
 		this.checkTime = checkTime;
-	}
-
-	/**
-	 * 打印时间
-	 */
-	@Column
-	public Date getPrintTime() {
-		return printTime;
-	}
-
-	public void setPrintTime(Date printTime) {
-		this.printTime = printTime;
 	}
 
 	/**
@@ -206,6 +200,18 @@ public class Audit {
 			break;
 		}
 		return value;
+	}
+
+	public String toString() {
+		return null;
+	}
+
+	public boolean equals(Object o) {
+		return false;
+	}
+
+	public int hashCode() {
+		return 0;
 	}
 
 }

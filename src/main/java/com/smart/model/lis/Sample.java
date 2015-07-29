@@ -1,5 +1,6 @@
 package com.smart.model.lis;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,21 +30,23 @@ import com.smart.model.lis.TestResult;
 @Table(name = "l_sample")
 public class Sample extends BaseObject {
 	
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -583231534825801731L;
+
 	private Long id;//主键，流水号
 	
-	private Patient patient; //病人
 	private String patientId; // 病人 就诊号
 	private String departBed; //病床号
 	private String sampleNo;//样本编号， 手动生成
-	private int stayHospitalMode; //就诊方式（门诊、住院、急诊）
+	private Integer stayHospitalMode; //就诊方式（门诊、住院、急诊）
 	private String hosSection; //申请科室
 	private String diagnostic; //诊断
 	private String inspectionName; //检验项目及套餐名称
 	private String ylxh;//检验项目及套餐序号
 	private String sampleType; //样本类型 、来源（血液、粪便）
-	private int sampleStatus; //样本所处的状态（申请、采集、测试。。。）
+	private Integer sampleStatus; //样本所处的状态（申请、采集、测试。。。）
 	private String printFlag; //是否打印
 	private String fee;	//费用
 	private String feestatus;	//收费状态
@@ -51,11 +54,12 @@ public class Sample extends BaseObject {
 	private String description; //描述
 	private String note; //性状
 	private String count; //采集数量
-	private int modifyFlag;//修改标识
-	private int iswriteback;//写回标识
-	private int hasimages;//是否包含图片
+	private Integer modifyFlag;//修改标识
+	private Integer iswriteback;//写回标识
+	private Integer hasimages;//是否包含图片
+	private Date printTime; //打印时间?
 	
-	
+	private Patient patient; //病人
 	private CriticalRecord criticalRecord;
 	private Section section;
 	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
@@ -69,40 +73,19 @@ public class Sample extends BaseObject {
 	public Long getId(){
 		return this.id;
 	}
+	
 	public void setId(Long id){
 		this.id = id;
 	}
 	
 	/**
-	 * 危机值处理
-	 */
-	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample")
-	public CriticalRecord getCriticalRecord(){
-		return criticalRecord;
-	}
-	public void setCriticalRecord(CriticalRecord cri){
-		this.criticalRecord = cri;
-	}
-	/**
-	 * 检验病人
-	 */
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="patientblh",referencedColumnName="blh",unique=true)
-	public Patient getPatient(){
-		return patient;
-	}
-	public void setPatient(Patient patient){
-		this.patient = patient; 
-	}
-	
-	/**
 	 * 检验单开单时间
 	 */
-	@Column(name = "SAMPLENO", length = 20)
+	@Column(name = "sampleno", length = 20)
 	public String getSampleNo() {
 		return sampleNo;
 	}
-
+	
 	public void setSampleNo(String sampleNo) {
 		this.sampleNo = sampleNo;
 	}
@@ -110,7 +93,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 就诊类型
 	 */
-	@Column(name = "STAYHOSPITALMODE", length = 10)
+	@Column(name = "stayhospitalmode", length = 10)
 	public int getStayHospitalMode() {
 		return stayHospitalMode;
 	}
@@ -122,7 +105,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 就诊科室
 	 */
-	@Column(name = "SECTION", length = 20)
+	@Column(name = "hossection", length = 20)
 	public String getHosSection() {
 		return hosSection;
 	}
@@ -134,7 +117,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 病床号
 	 */
-	@Column(name = "DEPART_BED", length = 10)
+	@Column(name = "depart_bed", length = 10)
 	public String getDepartBed() {
 		return departBed;
 	}
@@ -146,7 +129,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 病例号
 	 */
-	@Column(name = "PATIENTID", length = 20)
+	@Column(name = "patientid", length = 20)
 	public String getPatientId() {
 		return patientId;
 	}
@@ -158,7 +141,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 诊断
 	 */
-	@Column(name = "DIAGNOSTIC")
+	@Column(name = "diagnostic")
 	public String getDiagnostic() {
 		return diagnostic;
 	}
@@ -170,7 +153,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验项目及套餐序号
 	 */
-	@Column( length = 20)
+	@Column(length = 20)
 	public String getYlxh() {
 		return ylxh;
 	}
@@ -182,7 +165,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 打印标识
 	 */
-	@Column(name = "ISPRINT", length = 1)
+	@Column(name = "isprint", length = 1)
 	public String getPrintFlag() {
 		return printFlag;
 	}
@@ -195,7 +178,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验目的
 	 */
-	@Column(name = "INSPECTIONNAME")
+	@Column(name = "inspectionname")
 	public String getInspectionName() {
 		return inspectionName;
 	}
@@ -207,7 +190,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 样本类型
 	 */
-	@Column(name = "SAMPLETYPE")
+	@Column(name = "sampletype")
 	public String getSampleType() {
 		return sampleType;
 	}
@@ -300,7 +283,7 @@ public class Sample extends BaseObject {
 		this.count = count;
 	}
 	
-	@Column
+	@Column(name = "modifyflag")
 	public int getModifyFlag() {
 		return modifyFlag;
 	}
@@ -309,7 +292,7 @@ public class Sample extends BaseObject {
 		this.modifyFlag = modifyFlag;
 	}
 	
-	@Column
+	@Column(name = "iswriteback")
 	public int getIswriteback() {
 		return iswriteback;
 	}
@@ -321,7 +304,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 
 	 */
-	@Column
+	@Column(name = "hasimages")
 	public int getHasimages() {
 		return hasimages;
 	}
@@ -331,10 +314,21 @@ public class Sample extends BaseObject {
 	}
 	
 	/**
+	 * 打印时间
+	 */
+	@Column(name = "printtime")
+	public Date getPrintTime() {
+		return printTime;
+	}
+
+	public void setPrintTime(Date printTime) {
+		this.printTime = printTime;
+	}
+	
+	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToOne(targetEntity = Audit.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
-	@JoinColumn(name="audit_id",insertable=true,unique=true)
+	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample")
 	public Audit getAudit() {
 		return audit;
 	}
@@ -346,7 +340,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
+	@OneToMany(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
 	public Set<Process> getProcess() {
 		return process;
 	}
@@ -375,8 +369,35 @@ public class Sample extends BaseObject {
 	public Section getSection(){
 		return section;
 	}
+	
 	public void setSection(Section section){
 		this.section = section; 
+	}
+	
+
+	/**
+	 * 危机值处理
+	 */
+	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample")
+	public CriticalRecord getCriticalRecord(){
+		return criticalRecord;
+	}
+	
+	public void setCriticalRecord(CriticalRecord cri){
+		this.criticalRecord = cri;
+	}
+	
+	/**
+	 * 检验病人
+	 */
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
+	@JoinColumn(name="patientblh",referencedColumnName="blh")
+	public Patient getPatient(){
+		return patient;
+	}
+	
+	public void setPatient(Patient patient){
+		this.patient = patient; 
 	}
 	
 	public String toString() {

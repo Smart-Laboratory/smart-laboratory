@@ -16,6 +16,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.smart.model.BaseObject;
 import com.smart.model.reagent.Combo;
 import com.smart.model.reagent.In;
 import com.smart.model.reagent.Out;
@@ -26,9 +27,14 @@ import com.smart.model.reagent.Reagent;
  */
 @Entity
 @Table(name = "l_depart")
-public class Section {
+public class Section extends BaseObject {
 	
-	private long id;    //主键
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7918375753453175457L;
+	
+	private Long id;    //主键
 	private String code;
 	private String name;
 	
@@ -44,11 +50,11 @@ public class Section {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_DEPART")
 	@SequenceGenerator(name = "SEQ_DEPART", sequenceName = "depart_sequence", allocationSize=1)	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -124,6 +130,18 @@ public class Section {
 
 	public void setCombos(Set<Combo> combos) {
 		this.combos = combos;
+	}
+
+	public String toString() {
+		return null;
+	}
+
+	public boolean equals(Object o) {
+		return false;
+	}
+
+	public int hashCode() {
+		return 0;
 	}
 
 }

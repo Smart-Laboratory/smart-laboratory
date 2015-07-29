@@ -10,10 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.smart.model.BaseObject;
+
 //
 @Entity
 @Table(name = "lab_patient")
-public class Patient {
+public class Patient extends BaseObject {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4497319050923705128L;
 
 	private Long id;// 主键，自增
 	
@@ -109,5 +116,17 @@ public class Patient {
 
 	public void setIdCard(String idCard) {
 		this.idCard = idCard;
+	}
+	
+	public String toString() {
+		return null;
+	}
+	
+	public boolean equals(Object o) {
+		return false;
+	}
+	
+	public int hashCode() {
+		return 0;
 	}
 }
