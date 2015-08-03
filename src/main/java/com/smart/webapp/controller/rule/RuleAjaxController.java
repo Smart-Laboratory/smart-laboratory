@@ -1,6 +1,5 @@
 package com.smart.webapp.controller.rule;
 
-import java.io.Reader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.Dictionary;
 import com.smart.model.lis.Hospital;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Index;
@@ -27,6 +27,7 @@ import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.model.rule.Item;
+import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.rule.BagManager;
 import com.smart.service.rule.IndexManager;
@@ -52,6 +53,8 @@ public class RuleAjaxController {
 	@Autowired
 	private IndexManager indexManager = null;
 	
+	@Autowired
+	private DictionaryManager dictionaryManager = null;
 	private String bagJson = null;
 	private AtomicBoolean isChanged = new AtomicBoolean(true);
 	
@@ -261,12 +264,12 @@ public class RuleAjaxController {
 					i.getIndex().getName() + ":" + i.getValue() + " (" + i.getIndex().getSampleFrom()
 							+ unit + ")");
 		}
-		/*List<Dictionary> pInfo = itemManager.getPatientInfo("");
+		List<Dictionary> pInfo = dictionaryManager.getPatientInfo("");
 		if (pInfo != null) {
-			for (Library p : pInfo) {
+			for (Dictionary p : pInfo) {
 				map.put("P" + p.getId().toString(), p.getValue());
 			}
-		}*/
+		}
 
 		if (StringUtils.isEmpty(r.getRelation()))
 			return null;

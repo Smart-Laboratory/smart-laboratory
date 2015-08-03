@@ -11,4 +11,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getListBySampleNo(String sampleno);
 
+	List<Sample> getNeedAudit(String format);
+
 }

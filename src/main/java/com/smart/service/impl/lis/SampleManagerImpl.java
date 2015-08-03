@@ -36,4 +36,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getListBySampleNo(sampleno);
 	}
 
+	public List<Sample> getNeedAudit(String day) {
+		return sampleDao.getNeedAudit(day);
+	}
+
 }

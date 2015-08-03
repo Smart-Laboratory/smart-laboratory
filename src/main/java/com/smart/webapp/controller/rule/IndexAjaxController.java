@@ -1,7 +1,6 @@
 package com.smart.webapp.controller.rule;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.service.rule.IndexManager;
 import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Result;
-import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.ResultManager;
 import com.smart.Dictionary;
 
@@ -33,11 +30,7 @@ public class IndexAjaxController {
 	@Autowired
 	private IndexManager indexManager = null;
 	@Autowired
-	private UserManager userManager = null;
-	@Autowired
 	private ResultManager resultManager = null;
-	@Autowired
-	private ItemManager itemManager = null;
 	@Autowired
 	private DictionaryManager dictionaryManager = null;
 	

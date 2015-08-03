@@ -13,7 +13,6 @@
         <mapping class="com.smart.model.lis.CriticalRecord"/>
         <mapping class="com.smart.model.lis.Patient"/>
         <mapping class="com.smart.model.lis.Sample"/>
-        <mapping class="com.smart.model.lis.Audit"/>
         <mapping class="com.smart.model.lis.Process"/>
         <mapping class="com.smart.model.lis.TestResult"/>
         <mapping class="com.smart.model.lis.Section"/>

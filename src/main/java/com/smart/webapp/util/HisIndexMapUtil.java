@@ -8,15 +8,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class IndexMapUtil {
+public class HisIndexMapUtil {
+
 
 	private Map<String, String> map = null;
+	private static HisIndexMapUtil instance = new HisIndexMapUtil();
 	
-	private static IndexMapUtil instance = new IndexMapUtil();
+	private HisIndexMapUtil() {}
 	
-	private IndexMapUtil() {}
-	
-	public static IndexMapUtil getInstance() {
+	public static HisIndexMapUtil getInstance() {
 		if (instance.map == null) {
 			synchronized (instance) {
 				instance.initMap();
@@ -29,14 +29,13 @@ public class IndexMapUtil {
 		
 		map = new HashMap<String, String>();
 		String dic = this.getClass().getResource("/").getPath();
-		File file = new File(dic + "/map.txt");
+		File file = new File(dic + "/indexMap.txt");
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line = reader.readLine();
 			while (line != null) {
 				String[] mp = line.split(":");
 				map.put(mp[0], mp[1]);
-//				System.out.println("mp[]=="+mp[0]+"---"+mp[1]);
 				line = reader.readLine();
 			}
 			reader.close();
@@ -50,37 +49,20 @@ public class IndexMapUtil {
 	 * @param indexId  原始指标ID
 	 * @return	映射后的指标ID
 	 */
-	public String getValue(String testId) {
-		if (map.containsKey(testId)) {
-			return map.get(testId);
+	public String getValue(String indexId) {
+		if (map.containsKey(indexId)) {
+			return map.get(indexId);
 		} else {
-			return testId;
+			return indexId;
 		}
-	}
-	
-	public Set<String> getKey(String indexId) {
-//		String str = indexId;
-		Set<String> setr = new HashSet<String>();
-		if (map.containsValue(indexId)) {
-			for(String s : map.keySet()) {
-				if(map.get(s).equals(indexId))
-					setr.add(s);
-			}
-		} 
-		else {
-			setr.add(indexId);
-		}
-		return setr;
 	}
 	
 	public Set<String> getKeySet(String indexId) {
 		Set<String> set = new HashSet<String>();
-		if (map.containsValue(indexId)) {
-			for(String s : map.keySet()) {
-				if(map.get(s).equals(indexId))
-					set.add(s);
-			}
-		} 
+		for(String s : map.keySet()) {
+			if(map.get(s).equals(indexId))
+				set.add(s);
+		}
 		return set;
 	}
 	
@@ -92,4 +74,3 @@ public class IndexMapUtil {
 		}
 	}
 }
-
