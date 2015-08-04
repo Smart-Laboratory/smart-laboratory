@@ -71,6 +71,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return getSession().createQuery("from Sample where sampleNo='" + sampleno + "' order by upper(c.id)").list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
 		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' order by upper(c.id)");
 		q.setFirstResult(0);

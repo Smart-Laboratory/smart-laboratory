@@ -57,6 +57,7 @@ public class Sample extends BaseObject {
 	private Integer modifyFlag;//修改标识
 	private Integer iswriteback;//写回标识
 	private Integer hasimages;//是否包含图片
+	private int cycle;
 	
 	private int auditStatus; //样本审核的状态
 	private int auditMark; //审核标记
@@ -315,6 +316,15 @@ public class Sample extends BaseObject {
 
 	public void setHasimages(int hasimages) {
 		this.hasimages = hasimages;
+	}
+
+	@Column(name = "CYCLE")
+	public int getCycle() {
+		return cycle;
+	}
+
+	public void setCycle(int cycle) {
+		this.cycle = cycle;
 	}
 	
 	/**

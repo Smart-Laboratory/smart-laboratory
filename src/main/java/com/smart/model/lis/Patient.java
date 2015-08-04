@@ -1,5 +1,6 @@
 package com.smart.model.lis;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
 
@@ -32,6 +34,7 @@ public class Patient extends BaseObject {
 	private String infantFlag;//婴儿标识
 	private String sex;//性别
 	private String idCard;//身份证号
+	private int age;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
@@ -116,6 +119,21 @@ public class Patient extends BaseObject {
 
 	public void setIdCard(String idCard) {
 		this.idCard = idCard;
+	}
+	
+	@Transient
+	public int getAge() {
+		if (birthday != null) {
+			Calendar now = Calendar.getInstance();
+			Calendar previous = Calendar.getInstance();
+			previous.setTime(birthday);
+			setAge(now.get(Calendar.YEAR) - previous.get(Calendar.YEAR)+1);
+		}
+		return age;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
 	}
 	
 	public String toString() {

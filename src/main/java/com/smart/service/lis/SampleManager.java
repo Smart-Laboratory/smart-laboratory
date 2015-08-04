@@ -13,4 +13,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getNeedAudit(String format);
 
+	List<Sample> getDiffCheck(Sample info);
+
 }

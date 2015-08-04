@@ -6,4 +6,6 @@ import com.smart.service.GenericManager;
 
 public interface TestResultManager extends GenericManager<TestResult, TestResultPK> {
 
+	void updateFormula(TestResult t, String fm);
+
 }

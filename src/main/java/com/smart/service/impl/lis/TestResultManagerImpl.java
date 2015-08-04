@@ -11,12 +11,15 @@ import com.smart.service.lis.TestResultManager;
 @Service("testResultManager")
 public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestResultPK> implements TestResultManager {
 
-	@SuppressWarnings("unused")
 	private TestResultDao testResultDao;
 
 	public void setTestResultDao(TestResultDao testResultDao) {
 		this.dao = testResultDao;
 		this.testResultDao = testResultDao;
+	}
+
+	public void updateFormula(TestResult t, String fm) {
+		testResultDao.updateFormula(t, fm);
 	}
 	
 	
