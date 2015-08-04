@@ -11,4 +11,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	List<Sample> getListBySampleNo(String sampleno);
 
+	List<Sample> getNeedAudit(String day);
+
 }

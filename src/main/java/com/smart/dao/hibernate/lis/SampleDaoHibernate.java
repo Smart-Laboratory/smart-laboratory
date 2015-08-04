@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.lis;
 
 import com.smart.dao.lis.SampleDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -57,31 +56,27 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		builder.append(" and ");
 		builder.append("sampleNo like ?");
-		/*builder.append(date);
-		if(!code.isEmpty()) {
-			builder.append(code);
-		}*/
 		builder.append(" order by sampleNo");
-		System.out.println(builder.toString());
 		Query query = getSession().createQuery(builder.toString()).setString(0, lab);
 		if(!code.isEmpty()) {
 			query = query.setString(1, date + code + "%");
 		} else {
 			query = query.setString(1, date + "%");
 		}
-		List<Sample> sample = new ArrayList<Sample>();
-		try {
-			sample = query.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(sample.size());
-		return sample;
+		return query.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getListBySampleNo(String sampleno) {
 		return getSession().createQuery("from Sample where sampleNo='" + sampleno + "' order by upper(c.id)").list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getNeedAudit(String day) {
+		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' order by upper(c.id)");
+		q.setFirstResult(0);
+		q.setMaxResults(100);
+		return q.list();
 	}
 	
 }

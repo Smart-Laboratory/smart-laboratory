@@ -24,7 +24,7 @@ import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/audit*")
-public class DataController {
+public class SampleController {
 	
 	@Autowired
 	private SampleManager sampleManager = null;
@@ -134,9 +134,9 @@ public class DataController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			Sample info = list.get(start + index);
 			map.put("id", info.getId());
-			map.put("mark", info.getAudit().getAuditMarkValue());
+			map.put("mark", info.getAuditMarkValue());
 			map.put("sample", info.getSampleNo());
-			map.put("status", info.getAudit().getAuditStatusValue());
+			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());
 			map.put("size", 0);
 			if (info.getSampleStatus()>=5) {

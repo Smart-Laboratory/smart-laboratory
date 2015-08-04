@@ -6,4 +6,6 @@ import com.smart.model.lis.TestResult;
 
 public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 
+	void updateFormula(TestResult t, String fm);
+
 }

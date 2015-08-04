@@ -1,6 +1,5 @@
 package com.smart.model.lis;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
 import com.smart.model.lis.TestResult;
@@ -57,13 +57,18 @@ public class Sample extends BaseObject {
 	private Integer modifyFlag;//修改标识
 	private Integer iswriteback;//写回标识
 	private Integer hasimages;//是否包含图片
-	private Date printTime; //打印时间?
+	private int cycle;
+	
+	private int auditStatus; //样本审核的状态
+	private int auditMark; //审核标记
+	private String markTests; //出现异常 需要标记的检验项目
+	private String notes; //自动审核的结果记录
+	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
 	
 	private Patient patient; //病人
 	private CriticalRecord criticalRecord;
 	private Section section;
 	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
-	private Audit audit = new Audit(); //检验项目的结果集
 	private Set<Process> process = new HashSet<Process>(); //检验项目的结果集
 
 	
@@ -312,29 +317,137 @@ public class Sample extends BaseObject {
 	public void setHasimages(int hasimages) {
 		this.hasimages = hasimages;
 	}
-	
-	/**
-	 * 打印时间
-	 */
-	@Column(name = "printtime")
-	public Date getPrintTime() {
-		return printTime;
+
+	@Column(name = "CYCLE")
+	public int getCycle() {
+		return cycle;
 	}
 
-	public void setPrintTime(Date printTime) {
-		this.printTime = printTime;
+	public void setCycle(int cycle) {
+		this.cycle = cycle;
 	}
 	
 	/**
-	 * 该样本所做的结果集
+	 * 审核状态
 	 */
-	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample")
-	public Audit getAudit() {
-		return audit;
+	@Column
+	public int getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(int auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	/**
+	 * 审核标记
+	 */
+	@Column
+	public int getAuditMark() {
+		return auditMark;
+	}
+
+	public void setAuditMark(int auditMark) {
+		this.auditMark = auditMark;
+	}
+
+	/**
+	 * 需要标记的检验项目（检验结果不符合规则）
+	 */
+	@Column
+	public String getMarkTests() {
+		return markTests;
+	}
+
+	public void setMarkTests(String markTests) {
+		this.markTests = markTests;
+	}
+
+	/**
+	 * 检验结果 错误信息
+	 */
+	@Column
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	/**
+	 * 不符合的规则
+	 */
+	@Column
+	public String getRuleIds() {
+		return ruleIds;
+	}
+
+	public void setRuleIds(String ruleIds) {
+		this.ruleIds = ruleIds;
 	}
 	
-	public void setAudit(Audit audit) {
-		this.audit = audit;
+	@Transient
+	public String getAuditMarkValue() {
+		String value = "";
+		switch (getAuditMark()) {
+		case 0:
+			break;
+		case 1:
+			value = "自动";
+			break;
+		case 2:
+			value = "差值";
+			break;
+		case 3:
+			value = "比值";
+			break;
+		case 4:
+			value = "少做";
+			break;
+		case 5:
+			value = "复检";
+			break;
+		case 6:
+			value = "危急";
+			break;
+		case 7:
+			value = "警戒1";
+			break;
+		case 8:
+			value = "警戒2";
+			break;
+		case 9:
+			value = "极值";
+			break;
+		case 10:
+			value = "自动b";
+			break;
+		}
+		return value;
+	}
+
+	@Transient
+	public String getAuditStatusValue() {
+		String value = "";
+		switch (getAuditStatus()) {
+		case -1:
+			value = "无结果";
+			break;
+		case 0:
+			value = "未审核";
+			break;
+		case 1:
+			value = "已通过";
+			break;
+		case 2:
+			value = "未通过";
+			break;
+		default:
+			value = "未审核";
+			break;
+		}
+		return value;
 	}
 	
 	/**
