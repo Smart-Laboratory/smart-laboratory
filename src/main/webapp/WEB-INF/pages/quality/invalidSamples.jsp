@@ -4,67 +4,84 @@
 <title><fmt:message key="invalidSamplesList.title" /></title>
 <meta name="heading"
 	content="<fmt:message key='invalidSamplesList.heading'/>" />
-<meta name="menu" content="InvalidSamplesMenu" />
+<meta name="menu" content="Quality" />
+<script type="text/javascript">
+function searchSample(){
+	var text = $("#sampleSearch").val();
+	location.href="../quality/invalidSamples?text="+text;
+}
 
+</script>
 </head>
+<style>
+
+</style>
 
 <body>
 
-<div class="col-sm-7">
+<div class="col-sm-10">
 <h1><fmt:message key='invalidSamples.title'/></h1>
-	<div class="form-inline" style="margin-bottom: 50px;">
-		<div>
-			<label for="sampleSearch"><fmt:message key="invalidSamplesList.search"/></label>
-			<input id="sampleSearch" type="text" class="form-control" placeholder="please enter id">
-			<button type="button" class="btn btn-info"><fmt:message key="button.search"/></button>
-			<button type="button" class="btn btn-primary"><fmt:message key="button.add"/></button>
-		</div>
-	</div>
-	
-<display:table name="invalidSamples" cellspacing="0" cellpadding="0" requestURI="/quality/invalidSamples" partialList="true"
-id="invalidSamples" defaultsort="5" defaultorder="ascending" sort="external"  class="table"  pagesize="25">
-	<display:column property="sample.id" sortable="true"
-		href="invalidSamplesform" media="html" paramId="id"
-		paramProperty="sample.id" titleKey="invalidSamples.id" />
-	<display:column property="sample.sampleType" sortable="true"
+
+<div class="form-inline" style="margin-bottom: 50px; width:auto;">
+	<label for="sampleSearch"><fmt:message key="invalidSamplesList.search"/>:</label>
+	<input id="sampleSearch" type="text" class="form-control" placeholder="please enter id"/>
+	<button type="button" class="btn btn-info" onclick="searchSample();"><fmt:message key="button.search"/></button>
+	<button type="button" class="btn btn-primary"><fmt:message key="button.add"/></button>
+</div>
+
+<display:table name="invalidSamples" cellspacing="0" cellpadding="0" requestURI="" 
+				defaultsort="1" id="invalidSamples"  class="table table-condensed table-striped table-hover"  pagesize="25" >
+	<display:column property="sampleId" sortable="true"
+		href="/quality/invalidSampleView" media="html" paramId="id" style="width:10%"
+		paramProperty="id" titleKey="sample.id" />
+	<display:column property="sampleType" sortable="true" style="width:9%"
 		titleKey="sample.sampleType" />
-	<display:column property="sample.section" sortable="true"
-		titleKey="sample.section" />
-	<display:column property="sample.labDepartMent" sortable="true"
-		titleKey="sample.labDepartment" />
-	<display:column property="rejectTime" sortable="true"
-		titleKey="invalidSamples.rejectTime" />
-	<display:column name="containerType" sortable="true"
+	<display:column property="sample.hosSection" sortable="true" style="width:5%"
+		titleKey="sample.hosSection" /> 
+	<display:column property="sample.section.name" sortable="true" style="width:9%"
+		titleKey="sample.section" /> 
+	<display:column  sortable="true" style="width:10%"
 		titleKey="invalidSamples.containerType" >
 		<c:choose>
-			<c:when test="${containerType==2}"><fmt:message key="containerType.2"/></c:when>
+			<c:when test="${invalidSamples.containerType==2}"><fmt:message key="containerType.2"/></c:when>
 			<c:otherwise><fmt:message key="containerType.1"/></c:otherwise>
-		</c:choose>
-		
+		</c:choose>		
+	</display:column> 
+	<display:column sortable="false" style="width:5%"
+		titleKey="invalidSamples.labelType" >
+		<c:choose>
+			<c:when test="${invalidSamples.labelType==1}"><fmt:message key="labelType.1"/></c:when>
+			<c:when test="${invalidSamples.labelType==2}"><fmt:message key="labelType.2"/></c:when>
+			<c:when test="${invalidSamples.labelType==3}"><fmt:message key="labelType.3"/></c:when>
+			<c:otherwise><fmt:message key="labelType.4"/></c:otherwise>
+		</c:choose>	
 	</display:column>
-	<display:column property="labelTypeString" sortable="true"
-		titleKey="invalidSamples.labelType" />
-	<display:column property="requestionTypeString" sortable="true"
-		titleKey="invalidSamples.requestionType" />
-	<display:column property="rejectSampleReasonString" sortable="true"
+	<display:column  sortable="false" style="width:7%"
+		titleKey="invalidSamples.requestionType" >
+		<c:choose>
+			<c:when test="${invalidSamples.requestionType==1}"><fmt:message key="requestionType.1"/></c:when>
+			<c:when test="${invalidSamples.requestionType==2}"><fmt:message key="requestionType.2"/></c:when>
+			<c:otherwise><fmt:message key="requestionType.3"/></c:otherwise>
+		</c:choose>
+	</display:column>
+	<display:column property="rejectSampleReasonStr" sortable="true" style="width:11%"
 		titleKey="invalidSamples.rejectSampleReason" />
-	<display:column property="measureTakenString" sortable="true"
-		titleKey="invalidSamples.measureTaken" />
-	<display:column property="notes" sortable="true"
+	<display:column  sortable="true" style="width:11%"
+		titleKey="invalidSamples.measureTaken" >
+		<c:choose>
+			<c:when test="${invalidSamples.measureTaken==1}"><fmt:message key="measureTaken.1"/></c:when>
+			<c:when test="${invalidSamples.measureTaken==2}"><fmt:message key="measureTaken.2"/></c:when>
+			<c:when test="${invalidSamples.measureTaken==3}"><fmt:message key="measureTaken.3"/></c:when>
+			<c:when test="${invalidSamples.measureTaken==4}"><fmt:message key="measureTaken.4"/></c:when>
+			<c:otherwise><fmt:message key="measureTaken.5"/></c:otherwise>
+		</c:choose>	
+	</display:column>
+	<display:column property="notes" sortable="true" style="width:5%"
 		titleKey="invalidSamples.notes" />
-	<display:column property="rejectPerson" sortable="true"
+	<display:column property="rejectPerson" sortable="true" style="width:7%"
 		titleKey="invalidSamples.rejectPerson" />
-
-
-
-	<display:setProperty name="paging.banner.item_name">
-		<fmt:message key="invalidSamplesList.invalidSample" />
-	</display:setProperty>
-
-	<display:setProperty name="export.excel.filename">invalidSample.xls</display:setProperty>
-	<display:setProperty name="export.csv.filename">invalidSample.csv</display:setProperty>
-	<display:setProperty name="export.pdf.filename">invalidSample.pdf</display:setProperty>
-	
+	<display:column property="rejectTime" sortable="true" style="width:14%"
+		titleKey="invalidSamples.rejectTime" />
 </display:table>
 
 

@@ -93,7 +93,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 就诊类型
 	 */
-	@Column(name = "stayhospitalmode", length = 10)
+	@Column(name = "stayhospitalmode", length = 10,columnDefinition="int default 0" )
 	public int getStayHospitalMode() {
 		return stayHospitalMode;
 	}

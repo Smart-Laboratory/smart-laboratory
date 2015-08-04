@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.smart.model.BaseObject;
 
@@ -33,6 +34,15 @@ public class Patient extends BaseObject {
 	private String sex;//性别
 	private String idCard;//身份证号
 	
+	private int age;
+	
+	@Column
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
 	@SequenceGenerator(name = "SEQ_PATIENT", sequenceName = "patient_seq", allocationSize=1)
