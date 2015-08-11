@@ -1,11 +1,17 @@
 package com.smart.model.lis;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
 
-
+/**
+ * 检验套餐（新）
+ */
+@Entity
+@Table(name = "L_YLXHDESCRIBE")
 public class Ylxh extends BaseObject {
 	
 	/**

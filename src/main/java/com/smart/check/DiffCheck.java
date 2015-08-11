@@ -10,21 +10,20 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
-import com.smart.model.rule.Index;
 import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.AuditUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 
 public class DiffCheck implements Check {
 
-	private Map<String, Index> idMap = null;
+	private Map<String, String> idMap = null;
 	private Map<String, Diff> mDiffMap = null;
 	private Map<String, Diff> bDiffMap = null;
 	private Map<Long, Sample> diffDataMap = null;
 	private DroolsRunner droolsRunner = null;
 	private static HisIndexMapUtil hisutil = HisIndexMapUtil.getInstance(); //检验项映射
 
-	public DiffCheck(DroolsRunner droolsRunner, Map<String, Index> idMap, RuleManager ruleManager,
+	public DiffCheck(DroolsRunner droolsRunner, Map<String, String> idMap, RuleManager ruleManager,
 			Map<Long, Sample> diffDataMap) {
 		this.idMap = idMap;
 		this.droolsRunner = droolsRunner;
@@ -66,11 +65,11 @@ public class DiffCheck implements Check {
 				TestResult test = testMap.get(diffId);
 				if (test.getResultFlag().charAt(0) != 'A') {
 					markTests += diffId + DIFF_COLOR;
-					Index des = idMap.get(diffId);
-					if (des != null)
-						noteSet.add(des.getName());
-					else
+					if(idMap.containsKey(diffId)) {
+						noteSet.add(idMap.get(diffId));
+					} else {
 						noteSet.add(diffId);
+					}
 				}
 			}
 			

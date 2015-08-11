@@ -36,15 +36,6 @@ public class Patient extends BaseObject {
 	private String idCard;//身份证号
 	private int age;
 	
-	private int age;
-	
-	@Column
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
 	@SequenceGenerator(name = "SEQ_PATIENT", sequenceName = "patient_seq", allocationSize=1)
@@ -143,6 +134,16 @@ public class Patient extends BaseObject {
 	
 	public void setAge(int age) {
 		this.age = age;
+	}
+	
+	@Transient
+	public int getSexValue() {
+		if (sex.equals("男")) {
+			return 1;
+		} else if (sex.equals("女")) {
+			return 2;
+		}
+		return 3;
 	}
 	
 	public String toString() {

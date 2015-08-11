@@ -55,6 +55,7 @@ public class Sample extends BaseObject {
 	private String note; //性状
 	private String count; //采集数量
 	private Integer modifyFlag;//修改标识
+	private Integer writeback;//写回标识
 	private Integer iswriteback;//写回标识
 	private Integer hasimages;//是否包含图片
 	private int cycle;
@@ -64,6 +65,7 @@ public class Sample extends BaseObject {
 	private String markTests; //出现异常 需要标记的检验项目
 	private String notes; //自动审核的结果记录
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
+	private String checkerOpinion;
 	
 	private Patient patient; //病人
 	private CriticalRecord criticalRecord;
@@ -98,7 +100,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 就诊类型
 	 */
-	@Column(name = "stayhospitalmode", length = 10,columnDefinition="int default 0" )
+	@Column(name = "stayhospitalmode", length = 10)
 	public int getStayHospitalMode() {
 		return stayHospitalMode;
 	}
@@ -297,6 +299,15 @@ public class Sample extends BaseObject {
 		this.modifyFlag = modifyFlag;
 	}
 	
+	@Column(name = "writeback")
+	public int getWriteback() {
+		return writeback;
+	}
+	
+	public void setWriteback(int writeback) {
+		this.writeback = writeback;
+	}
+	
 	@Column(name = "iswriteback")
 	public int getIswriteback() {
 		return iswriteback;
@@ -373,6 +384,15 @@ public class Sample extends BaseObject {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+	
+	@Column
+	public String getCheckerOpinion() {
+		return checkerOpinion;
+	}
+
+	public void setCheckerOpinion(String checkerOpinion) {
+		this.checkerOpinion = checkerOpinion;
 	}
 
 	/**

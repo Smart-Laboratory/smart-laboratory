@@ -21,8 +21,8 @@ public class HasRuleCheck implements Check {
 		for(TestResult t : info.getResults()) {
 			String testid = t.getTestId();
 			if(hasRuleSet.contains(testid)) {
-					result = true;
-					break;
+				result = true;
+				break;
 			}
 		}
 		

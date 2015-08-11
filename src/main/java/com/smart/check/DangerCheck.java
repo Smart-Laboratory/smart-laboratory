@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.smart.drools.R;
+import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Index;
@@ -41,23 +44,30 @@ public class DangerCheck implements Check {
 		
 		for (Rule rule : ruleManager.getRuleList(ruleId)) {
 			if (rule.getType() == DANGER_RULE) {
-				result = false;
 				List<Index> indexs = ruleManager.getUsedIndex(rule.getId());
 				for (Index i : indexs) {
 					Set<String> set = util.getKeySet(i.getIndexId());
 					if (trMap.containsKey(i.getIndexId())) {
-						markTests += i.getIndexId() + DANGER_COLOR;
 						TestResult tr = trMap.get(i.getIndexId());
-						criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
+						if(StringUtils.isNumericSpace(tr.getTestResult().replace(".", ""))) {
+							result = false;
+							markTests += i.getIndexId() + DANGER_COLOR;
+							criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
+						}
 						/*if(markTests.contains(i.getIndexId() + DIFF_COLOR) || !note.contains("差值")) {
 							
 						}*/
 					} else {
 						for(String s : set) {
 							if (trMap.containsKey(s)) {
-								markTests += i.getIndexId() + DANGER_COLOR;
 								TestResult tr = trMap.get(i.getIndexId());
-								criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
+								if(StringUtils.isNumericSpace(tr.getTestResult().replace(".", ""))) {
+									result = false;
+									markTests += i.getIndexId() + DANGER_COLOR;
+									criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
+									CriticalRecord cr = new CriticalRecord();
+								
+								}
 								/*if(markTests.contains(s + DIFF_COLOR) || !note.contains("差值")) {
 									
 								}*/

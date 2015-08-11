@@ -18,8 +18,8 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		this.testResultDao = testResultDao;
 	}
 
-	public void updateFormula(TestResult t, String fm) {
-		testResultDao.updateFormula(t, fm);
+	public String getFormulaResult(String fm) {
+		return testResultDao.getFormulaResult(fm);
 	}
 	
 	

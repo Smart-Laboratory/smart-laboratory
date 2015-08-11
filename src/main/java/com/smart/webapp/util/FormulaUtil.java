@@ -9,13 +9,10 @@ import com.zju.api.service.RMIService;
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
-import com.smart.model.lis.TestResultPK;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.zju.api.model.Describe;
 import com.zju.api.model.FormulaItem;
-
-
 
 public class FormulaUtil {
 
@@ -91,13 +88,13 @@ public class FormulaUtil {
 						isFloat = false;
 					}
 					
-					boolean isSave = true;
 					if(isFloat){
 						TestResult t = null;
 						String k = testid + "[" + sampletype;
 						Describe des = fillUtil.getDescribe(testid);
 						if (testMap.containsKey(k)) {
 							t = testMap.get(k);
+							info.getResults().remove(t);
 							t.setCorrectFlag("6");
 							if (t.getEditMark() != 0 && t.getEditMark() % Constants.EDIT_FLAG != 0){
 								t.setEditMark(t.getEditMark() * Constants.EDIT_FLAG);
@@ -110,7 +107,6 @@ public class FormulaUtil {
 							t.setTestStatus(1);
 							t.setCorrectFlag("3");
 							t.setEditMark(Constants.ADD_FLAG);
-							isSave = false;
 						}
 						if (des != null) {
 							t.setUnit(des.getUNIT());
@@ -118,25 +114,11 @@ public class FormulaUtil {
 						t.setMeasureTime(new Date());
 						t.setOperator(operator);
 						t.setIsprint(isprint);
-						
-						if (isSave) {
-							testResultManager.save(t);
-						} else {
-							info.getResults().add(t);
-							sampleManager.save(info);
-						}
-						
-						testResultManager.updateFormula(t, fm);
-						
-						TestResult test = testResultManager.get(new TestResultPK(info.getSampleNo(), testid));
-						fillUtil.fillResult(test, info);
-						testResultManager.save(test);
-						for (TestResult tr : info.getResults()) {
-							String id = test.getTestId();
-							if (tr.getTestId().equals(id)) {
-								tr.setTestResult(test.getTestResult());
-							}
-						}
+						t.setTestResult(testResultManager.getFormulaResult(fm));
+						testResultManager.save(t);
+						fillUtil.fillResult(t, info);
+						info.getResults().add(t);
+						sampleManager.save(info);
 					}
 				}
 			}

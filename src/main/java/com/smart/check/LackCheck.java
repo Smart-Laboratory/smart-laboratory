@@ -12,17 +12,15 @@ import com.smart.drools.R;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
-import com.smart.model.rule.Index;
 import com.smart.webapp.util.IndexMapUtil;
-
 
 public class LackCheck implements Check {
 
 	private Map<Long, Ylxh> ylxhMap = null;
-	private Map<String, Index> idMap = null;
+	private Map<String, String> idMap = null;
 	private static IndexMapUtil util = IndexMapUtil.getInstance(); //检验项映射
 	
-	public LackCheck(Map<Long, Ylxh> ylxhMap, Map<String, Index> idMap) {
+	public LackCheck(Map<Long, Ylxh> ylxhMap, Map<String, String> idMap) {
 		this.ylxhMap = ylxhMap;
 		this.idMap = idMap;
 	}
@@ -73,9 +71,8 @@ public class LackCheck implements Check {
 			for (String xh : xhList) {
 				if(!testIdSet.contains(xh)
 						&& !testIdSet.contains(util.getValue(xh))) {
-					Index des = idMap.get(xh);
-					if (des != null) {
-						lackSet.add(des.getName());
+					if(idMap.containsKey(xh)) {
+						lackSet.add(idMap.get(xh));
 					} else {
 						lackSet.add(xh);
 					}
@@ -84,11 +81,10 @@ public class LackCheck implements Check {
 			
 			for (String testid : testIdSet) {
 				if(!xhList.contains(testid) && !xhList2.contains(testid)) {
-					Index des = idMap.get(testid);
-					if (des != null) {
-						overSet.add(des.getName());
+					if(idMap.containsKey(testid)) {
+						lackSet.add(idMap.get(testid));
 					} else {
-						overSet.add(testid);
+						lackSet.add(testid);
 					}
 				}
 			}
