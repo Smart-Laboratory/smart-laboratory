@@ -15,4 +15,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getDiffCheck(Sample info);
 
+	void saveAll(List<Sample> updateSample);
+
 }

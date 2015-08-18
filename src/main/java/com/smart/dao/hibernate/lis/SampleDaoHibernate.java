@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -73,10 +74,18 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
-		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' order by upper(c.id)");
+		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by upper(c.id)");
 		q.setFirstResult(0);
 		q.setMaxResults(100);
 		return q.list();
+	}
+
+	public void saveAll(List<Sample> updateSample) {
+		Session s = getSession();
+		for(Sample sample : updateSample) {
+			s.saveOrUpdate(sample);
+		}
+		s.flush();
 	}
 	
 }

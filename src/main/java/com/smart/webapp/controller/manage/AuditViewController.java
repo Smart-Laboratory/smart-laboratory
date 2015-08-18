@@ -13,7 +13,7 @@ import com.smart.Constants;
 
 @Controller
 @RequestMapping("/manage/audit*")
-public class AuditController {
+public class AuditViewController {
 
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {

@@ -65,7 +65,6 @@ public class DangerCheck implements Check {
 									result = false;
 									markTests += i.getIndexId() + DANGER_COLOR;
 									criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
-									CriticalRecord cr = new CriticalRecord();
 								
 								}
 								/*if(markTests.contains(s + DIFF_COLOR) || !note.contains("差值")) {
@@ -83,6 +82,14 @@ public class DangerCheck implements Check {
 			info.getCriticalRecord().setCriticalContent(CheckUtil.toString(criticalContent));
 			info.setAuditStatus(UNPASS);
 			info.setAuditMark(DANGER_MARK);
+			/*cr.setSampleno(info.getSampleNo());
+			cr.setAge(info.getAge());
+			cr.setBlh(Long.parseLong(info.getBlh()));
+			cr.setCriticalContent(info.getCriticalContent());
+			cr.setSex(info.getSex());
+			if (!criticalRecordManager.exists(info.getSampleNo())) {
+				return cr;
+			}*/
 		}
 		
 		return result;

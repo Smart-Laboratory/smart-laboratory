@@ -1,5 +1,8 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -11,6 +14,14 @@ public class CriticalRecordDaoHibernate extends GenericDaoHibernate<CriticalReco
 	
 	public CriticalRecordDaoHibernate(){
 		super(CriticalRecord.class);
+	}
+
+	public void saveAll(List<CriticalRecord> updateCriticalRecord) {
+		Session s = getSession();
+		for(CriticalRecord cr : updateCriticalRecord) {
+			s.saveOrUpdate(cr);
+		}
+		s.flush();		
 	}
 
 }

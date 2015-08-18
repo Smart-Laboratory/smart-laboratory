@@ -22,9 +22,10 @@ function getList(text, lab) {
     	multiselect: true,
     	multiboxonly:true,
     	onSelectRow: function(id) {
-    		/*$("#rbcLabel").css('display','none');
-    		var ret = jQuery("#s3list").jqGrid('getRowData',id);
+    		$("#rbcLabel").css('display','none');
+    		var ret = jQuery("#list").jqGrid('getRowData',id);
     		getPatient(ret);
+    		/*
     		$("#collectBtn").css('display','inline');
     		$("#testAdd").css('display','inline');
 			$("#testDelete").css('display','inline');

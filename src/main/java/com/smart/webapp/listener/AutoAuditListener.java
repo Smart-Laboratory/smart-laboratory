@@ -1,6 +1,7 @@
 package com.smart.webapp.listener;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +40,7 @@ import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.rule.ItemManager;
@@ -51,6 +53,7 @@ import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.zju.api.service.RMIService;
+import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
@@ -80,6 +83,9 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
     @Autowired
     private RMIService rmiService = null;
     
+    @Autowired
+    private CriticalRecordManager criticalRecordManager = null;
+    
     @SuppressWarnings("unchecked")
     public void contextInitialized(ServletContextEvent event) {
         log.debug("Initializing context...");
@@ -93,10 +99,12 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         }
 
         try {
-        	Map<String, Describe> idMap = new HashMap<String, Describe>();
-        	Map<String, String> indexNameMap = new HashMap<String, String>();
-        	Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
-        	AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
+        	final Map<String, Describe> idMap = new HashMap<String, Describe>();
+        	final Map<String, String> indexNameMap = new HashMap<String, String>();
+        	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
+        	final List<Sample> updateSample = new ArrayList<Sample>();
+        	final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
+        	final AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
 			Reader reader = analyticUtil.getReader(ruleManager.getRuleByTypes("0,3,4,5,6,7"));
             KieServices ks = KieServices.Factory.get(); 
     		KieFileSystem kfs = ks.newKieFileSystem();
@@ -108,8 +116,8 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
     		log.debug("规则库构造完成!");
     		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
     		KieSession kSession = kContainer.newKieSession();
-    		DroolsRunner droolsRunner = new DroolsRunner(kSession);
-    		Set<String> hasRuleSet = new HashSet<String>();
+    		final DroolsRunner droolsRunner = new DroolsRunner(kSession);
+    		final Set<String> hasRuleSet = new HashSet<String>();
     		for (Item i : itemManager.getAll()) {
     			String testid = i.getIndex().getIndexId();
     			hasRuleSet.add(testid);
@@ -121,7 +129,7 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
     			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
     		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-            FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+            final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
             log.debug("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				
@@ -219,15 +227,18 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
     									info.setCheckerOpinion(Check.AUTO_AUDIT);
     								}
     							}
-    							
+    							if (info.getAuditMark() == 6) {
+    								updateCriticalRecord.add(info.getCriticalRecord());
+    							}
         	        		}
+        	        		sampleManager.saveAll(updateSample);
+        					criticalRecordManager.saveAll(updateCriticalRecord);
         	                Thread.sleep(20000);  
         	            } catch (Exception e) {  
         	                e.printStackTrace();  
         	            }  
         	        } 
         		}
-        		
         	});
         	autoAudit.start();
         } catch (Exception e) {

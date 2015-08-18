@@ -51,6 +51,7 @@ public class Index extends BaseObject implements Serializable {
 	private User modifyUser;
 	private Date modifyTime;
 	private String importance;
+	private String knowledgename;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 	
 	public Index() {
@@ -227,6 +228,18 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setImportance(String importance) {
 		this.importance = importance;
+	}
+	
+	/**
+	 * 知识库名称
+	 */
+	@Column
+	public String getKnowledgename() {
+		return knowledgename;
+	}
+
+	public void setKnowledgename(String knowledgename) {
+		this.knowledgename = knowledgename;
 	}
 
 	/**

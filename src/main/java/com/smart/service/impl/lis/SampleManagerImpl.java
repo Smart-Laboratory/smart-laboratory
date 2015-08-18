@@ -38,4 +38,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return null;
 	}
 
+	public void saveAll(List<Sample> updateSample) {
+		sampleDao.saveAll(updateSample);
+	}
+
 }

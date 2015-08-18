@@ -45,6 +45,7 @@ public class DiffCheck implements Check {
 		
 		Set<String> diffResult = new HashSet<String>();
 		Map<String, TestResult> testMap = new HashMap<String, TestResult>();
+		Map<String, TestResult> lastTestMap = new HashMap<String, TestResult>();
 		if (diffDataMap.containsKey(info.getId())) {
 			System.out.println(info.getId());
 			isDiff = true;
@@ -55,6 +56,9 @@ public class DiffCheck implements Check {
 			for (TestResult t : currTr) {
 				testMap.put(t.getTestId(), t);
 			}
+			for (TestResult t : lastTr) {
+				lastTestMap.put(t.getTestId(), t);
+			}
 		}
 
 		if (diffResult.size() != 0) {
@@ -63,7 +67,8 @@ public class DiffCheck implements Check {
 
 			for (String diffId : diffResult) {
 				TestResult test = testMap.get(diffId);
-				if (test.getResultFlag().charAt(0) != 'A') {
+				TestResult lastTest = lastTestMap.get(diffId);
+				if (test.getResultFlag().charAt(0) != 'A' || lastTest.getResultFlag().charAt(0) != 'A') {
 					markTests += diffId + DIFF_COLOR;
 					if(idMap.containsKey(diffId)) {
 						noteSet.add(idMap.get(diffId));

@@ -13,4 +13,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	List<Sample> getNeedAudit(String day);
 
+	void saveAll(List<Sample> updateSample);
+
 }

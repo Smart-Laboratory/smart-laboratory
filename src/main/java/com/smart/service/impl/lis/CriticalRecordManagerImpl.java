@@ -1,5 +1,7 @@
 package com.smart.service.impl.lis;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.CriticalRecordDao;
@@ -15,6 +17,10 @@ public class CriticalRecordManagerImpl extends GenericManagerImpl<CriticalRecord
 	public void setCriticalRecordDao(CriticalRecordDao criticalRecordDao) {
 		this.dao = criticalRecordDao;
 		this.criticalRecordDao = criticalRecordDao;
+	}
+
+	public void saveAll(List<CriticalRecord> updateCriticalRecord) {
+		criticalRecordDao.saveAll(updateCriticalRecord);		
 	}
 	
 }
