@@ -48,6 +48,9 @@ public class Sample extends BaseObject {
 	private String sampleType; //样本类型 、来源（血液、粪便）
 	private Integer sampleStatus; //样本所处的状态（申请、采集、测试。。。）
 	private String printFlag; //是否打印
+	private String printTime;
+	private String chkoper2;
+	private int requestMode;
 	private String fee;	//费用
 	private String feestatus;	//收费状态
 	private String part;	//采集部位
@@ -182,6 +185,30 @@ public class Sample extends BaseObject {
 	}
 	
 	
+	public String getPrintTime() {
+		return printTime;
+	}
+
+	public void setPrintTime(String printTime) {
+		this.printTime = printTime;
+	}
+
+	public String getChkoper2() {
+		return chkoper2;
+	}
+
+	public void setChkoper2(String chkoper2) {
+		this.chkoper2 = chkoper2;
+	}
+
+	public int getRequestMode() {
+		return requestMode;
+	}
+
+	public void setRequestMode(int requestMode) {
+		this.requestMode = requestMode;
+	}
+
 	/**
 	 * 检验目的
 	 */
@@ -497,8 +524,8 @@ public class Sample extends BaseObject {
 		this.results = results;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="section_id",referencedColumnName="id")
+	@ManyToOne(optional=true,cascade = CascadeType.MERGE)
+	@JoinColumn(name="section_id",referencedColumnName="code")
 	public Section getSection(){
 		return section;
 	}
@@ -523,7 +550,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验病人
 	 */
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
+	@ManyToOne(optional=true,cascade=CascadeType.MERGE)
 	@JoinColumn(name="patientblh",referencedColumnName="blh")
 	public Patient getPatient(){
 		return patient;

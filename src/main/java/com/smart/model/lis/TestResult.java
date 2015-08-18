@@ -35,7 +35,6 @@ public class TestResult extends BaseObject{
     private int testStatus;
     private String correctFlag;
     private String sampleType; //检验项目类型、来源
-    private String ckz; //参考值
     private String refLo; // 参考范围低值
     private String refHi; // 参考范围高值
     private String deviceId; // 设备号
@@ -60,7 +59,7 @@ public class TestResult extends BaseObject{
     }
     
 
-    @ManyToOne(optional=false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(optional=true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "sampleId",referencedColumnName="id")
     public Sample getSample(){
     	return this.sample;
@@ -118,7 +117,6 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目状态
 	 */
-    @Transient
     @Column(name = "TESTSTATUS")
     public int getTestStatus() {
         return testStatus;
@@ -131,7 +129,6 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目正确标识
 	 */
-    @Transient
     @Column(name = "CORRECTFLAG", length = 10)
     public String getCorrectFlag() {
         return correctFlag;
@@ -153,31 +150,11 @@ public class TestResult extends BaseObject{
         this.sampleType = sampleType;
     }
     
-    @Column(name="ckz", length = 20)
-    public String getCkz(){
-    	return ckz;
-    }
-    public void setCkz(String ckz){ 
-    	this.ckz = ckz;
-    }
-
     /**
 	 * 检验项目参考低值
 	 */
-    @Transient
-//    @Column(name = "REFLO")
+    @Column(name = "REFLO",length=20)
     public String getRefLo() {  
-    	String ckz = this.getCkz();
-    	if(ckz!=null && !ckz.isEmpty()){
-    	String[] ck = this.getCkz().split("-");
-    	if(ck.length>1)
-    	{
-    		this.refLo = ck[0];
-    	}
-    	else {
-			this.refLo = ckz;
-		}
-    	}
         return refLo;
     }
 
@@ -188,20 +165,8 @@ public class TestResult extends BaseObject{
     /**
 	 * 检验项目参考高值
 	 */
-    @Transient
-//    @Column(name = "REFHI")
+    @Column(name = "REFHI",length=20)
     public String getRefHi() {
-    	String ckz = this.getCkz();
-    	if(ckz!=null&&!ckz.isEmpty()){
-    	String[] ck = this.getCkz().split("-");
-    	if(ck.length>1)
-    	{
-    		this.refHi = ck[1];
-    	}
-    	else {
-//			this.refHi = ckz;
-		}
-    	}
         return refHi;
     }
 
@@ -272,7 +237,6 @@ public class TestResult extends BaseObject{
 	/**
 	 * 检验项目编辑标记
 	 */
-	@Transient
     @Column(name = "EDITMARK")
     public int getEditMark() {
 		return editMark;
