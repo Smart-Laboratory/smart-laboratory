@@ -21,7 +21,6 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,51 +43,18 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Item;
-import com.smart.service.DictionaryManager;
-import com.smart.service.lis.CriticalRecordManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.TestResultManager;
-import com.smart.service.rule.ItemManager;
-import com.smart.service.rule.ResultManager;
-import com.smart.service.rule.RuleManager;
-import com.smart.webapp.listener.StartupListener;
 import com.smart.webapp.util.AnalyticUtil;
 import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/audit*")
-public class AuditController {
+public class AuditController extends BaseAuditController {
 	
-	private static final Log log = LogFactory.getLog(StartupListener.class);
-    
-    @Autowired
-    private SampleManager sampleManager = null;
-    
-    @Autowired
-    private TestResultManager testResultManager = null;
-    
-    @Autowired
-    private DictionaryManager dictionaryManager = null;
-    
-    @Autowired
-    private ItemManager itemManager = null;
-    
-    @Autowired
-    private ResultManager resultManager = null;
-    
-    @Autowired
-    private RuleManager ruleManager = null;
-    
-    @Autowired
-    private RMIService rmiService = null;
-    
-    @Autowired
-    private CriticalRecordManager criticalRecordManager = null;
+	private static final Log log = LogFactory.getLog(AuditController.class);
     
     @RequestMapping(value = "/result*", method = RequestMethod.GET)
 	public void getAuditResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -98,8 +64,8 @@ public class AuditController {
         	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
         	final List<Sample> updateSample = new ArrayList<Sample>();
         	final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
-        	final AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
-			Reader reader = analyticUtil.getReader(ruleManager.getRuleByTypes("0,3,4,5,6,7"));
+        	final AnalyticUtil analyticUtil = new AnalyticUtil(this.dictionaryManager, this.itemManager, this.resultManager);
+        	Reader reader = analyticUtil.getReader(this.ruleManager.getRuleByTypes("0,3,4,5,6,7"));
             KieServices ks = KieServices.Factory.get(); 
     		KieFileSystem kfs = ks.newKieFileSystem();
     		kfs.write("rule", ks.getResources().newReaderResource(reader).setResourceType(ResourceType.DRL));
@@ -112,18 +78,18 @@ public class AuditController {
     		KieSession kSession = kContainer.newKieSession();
     		final DroolsRunner droolsRunner = new DroolsRunner(kSession);
     		final Set<String> hasRuleSet = new HashSet<String>();
-    		for (Item i : itemManager.getAll()) {
+    		for (Item i : this.itemManager.getAll()) {
     			String testid = i.getIndex().getIndexId();
     			hasRuleSet.add(testid);
     		}
-    		List<Describe> desList = rmiService.getDescribe();
-            List<Reference> refList = rmiService.getReference();
+    		List<Describe> desList = this.rmiService.getDescribe();
+            List<Reference> refList = this.rmiService.getReference();
     		for (Describe t : desList) {
     			idMap.put(t.getTESTID(), t);
     			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
     		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-            final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+            final FormulaUtil formulaUtil = FormulaUtil.getInstance(this.rmiService, this.testResultManager, this.sampleManager, idMap, fillUtil);
             log.debug("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				
@@ -222,7 +188,7 @@ public class AuditController {
 							}
     	        		}
     	        		sampleManager.saveAll(updateSample);
-    					criticalRecordManager.saveAll(updateCriticalRecord);
+    	        		criticalRecordManager.saveAll(updateCriticalRecord);
     	                Thread.sleep(20000);  
     	            } catch (Exception e) {  
     	                e.printStackTrace();  

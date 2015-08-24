@@ -39,6 +39,7 @@ public class Index extends BaseObject implements Serializable {
 	private Long id;
 		
 	private String indexId;
+	private String english;
 	private String name;
 	private String sampleFrom;
 	private String unit;
@@ -94,6 +95,17 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * 检验项目英文项目
+	 */
+	public String getEnglish() {
+		return english;
+	}
+
+	public void setEnglish(String english) {
+		this.english = english;
 	}
 
 	/**

@@ -30,4 +30,9 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		return q.list(); 
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Dictionary> getSampleType() {
+		return getSession().createQuery("from Dictionary where type=1").list(); 
+	}
+
 }

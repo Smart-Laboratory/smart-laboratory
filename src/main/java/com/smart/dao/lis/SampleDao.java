@@ -15,4 +15,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	void saveAll(List<Sample> updateSample);
 
+	List<Sample> getHistorySample(String patientId, String blh);
+
 }
