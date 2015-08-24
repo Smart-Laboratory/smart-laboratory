@@ -87,9 +87,5 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		s.flush();
 	}
-
-	public List<Sample> getHistorySample(String patientId, String blh) {
-		return null;
-	}
 	
 }

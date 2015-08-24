@@ -12,6 +12,4 @@ public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 	
 	List<Dictionary> getPatientInfo(String name);
 
-	List<Dictionary> getSampleType();
-
 }

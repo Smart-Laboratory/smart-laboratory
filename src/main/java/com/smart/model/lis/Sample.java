@@ -69,7 +69,6 @@ public class Sample extends BaseObject {
 	private String notes; //自动审核的结果记录
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
 	private String checkerOpinion;
-	private String passReason;
 	
 	private Patient patient; //病人
 	private CriticalRecord criticalRecord;
@@ -414,9 +413,6 @@ public class Sample extends BaseObject {
 		this.notes = notes;
 	}
 	
-	/**
-	 * 审核意见
-	 */
 	@Column
 	public String getCheckerOpinion() {
 		return checkerOpinion;
@@ -424,18 +420,6 @@ public class Sample extends BaseObject {
 
 	public void setCheckerOpinion(String checkerOpinion) {
 		this.checkerOpinion = checkerOpinion;
-	}
-	
-	/**
-	 * 通过原因
-	 */
-	@Column
-	public String getPassReason() {
-		return passReason;
-	}
-
-	public void setPassReason(String passReason) {
-		this.passReason = passReason;
 	}
 
 	/**

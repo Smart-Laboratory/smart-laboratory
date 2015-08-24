@@ -17,6 +17,4 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	void saveAll(List<Sample> updateSample);
 
-	List<Sample> getHistorySample(String patientId, String blh);
-
 }

@@ -11,11 +11,4 @@ public interface DictionaryManager  extends GenericManager<Dictionary, Long>{
 	 * @return
 	 */
 	List<Dictionary> getPatientInfo(String name);
-	
-	/**
-	 *  样本来源（血液，尿液等）
-	 * @param item
-	 * @return
-	 */
-	List<Dictionary> getSampleType();
 }

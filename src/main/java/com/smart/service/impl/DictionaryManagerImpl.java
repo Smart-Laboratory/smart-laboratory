@@ -26,8 +26,4 @@ public class DictionaryManagerImpl extends GenericManagerImpl<Dictionary, Long> 
 	public List<Dictionary> getPatientInfo(String name){
 		return  dictionaryDao.getPatientInfo(name);
 	}
-
-	public List<Dictionary> getSampleType() {
-		return  dictionaryDao.getSampleType();
-	}
 }

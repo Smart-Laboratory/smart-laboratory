@@ -177,37 +177,5 @@ public final class Constants {
 	 * 日期格式:yyyyMMdd
 	 */
 	public static final SimpleDateFormat DF3 = new SimpleDateFormat("yyyyMMdd");
-	/**
-	 * 日期格式:MMdd
-	 */
-	public final static SimpleDateFormat DF4 = new SimpleDateFormat("MM/dd");
-	/**
-	 * 日期格式:HH:mm
-	 */
-	public final static SimpleDateFormat DF5 = new SimpleDateFormat("HH:mm");
-	/**
-	 * 检验流程——申请
-	 */
-	public static final String PROCESS_REQUEST = "申请";
-	/**
-	 * 检验流程——采样
-	 */
-	public static final String PROCESS_EXECUTE = "采样";
-	/**
-	 * 检验流程——运送
-	 */
-	public static final String PROCESS_SEND = "运送";
-	/**
-	 * 检验流程——接收
-	 */
-	public static final String PROCESS_RECEIVE = "接收";
-	/**
-	 * 检验流程——报告
-	 */
-	public static final String PROCESS_CKECK = "报告";
-	/**
-	 * 检验流程——打印
-	 */
-	public static final String PROCESS_PRINT = "打印";
 
 }
