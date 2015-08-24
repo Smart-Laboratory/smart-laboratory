@@ -42,4 +42,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		sampleDao.saveAll(updateSample);
 	}
 
+	public List<Sample> getHistorySample(String patientId, String blh) {
+		return sampleDao.getHistorySample(patientId, blh);
+	}
+
 }
