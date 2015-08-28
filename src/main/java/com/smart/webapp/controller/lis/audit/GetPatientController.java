@@ -133,13 +133,15 @@ public class GetPatientController extends BaseAuditController {
 			}
 			map.put("type",
 					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
-			map.put("dgFlag", info.getCriticalRecord().getCriticalDealFlag());
-			map.put("dgInfo", info.getCriticalRecord().getCriticalDeal());
-			String dealTimeStr = "";
-			if (info.getCriticalRecord().getCriticalDealTime() != null) {
-				dealTimeStr = Constants.SDF.format(info.getCriticalRecord().getCriticalDealTime());
+			if(info.getCriticalRecord() != null) {
+				map.put("dgFlag", info.getCriticalRecord().getCriticalDealFlag());
+				map.put("dgInfo", info.getCriticalRecord().getCriticalDeal());
+				String dealTimeStr = "";
+				if (info.getCriticalRecord().getCriticalDealTime() != null) {
+					dealTimeStr = Constants.SDF.format(info.getCriticalRecord().getCriticalDealTime());
+				}
+				map.put("dgTime", dealTimeStr);
 			}
-			map.put("dgTime", dealTimeStr);
 			map.put("bed", info.getDepartBed());
 			map.put("size", size);
 			map.put("passReason", info.getPassReason());

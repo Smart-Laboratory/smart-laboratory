@@ -42,7 +42,7 @@ public class Index extends BaseObject implements Serializable {
 	private String english;
 	private String name;
 	private String sampleFrom;
-	private String unit;
+	//private String unit;
 	private String type;
 	private int diffAlgo;
 	private String description;
@@ -122,7 +122,7 @@ public class Index extends BaseObject implements Serializable {
 
 	/**
 	 * 检验项目单位
-	 */
+	 *//*
 	@Column(length = 20)
 	public String getUnit() {
 		return unit;
@@ -130,7 +130,7 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
-	}
+	}*/
 
 	/**
 	 * 检验项目类型，0：枚举型；1：数字型；2：字符型；

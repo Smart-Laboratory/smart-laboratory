@@ -185,7 +185,7 @@ public class Sample extends BaseObject {
 		this.printFlag = printFlag;
 	}
 	
-	
+	@Column
 	public String getPrintTime() {
 		return printTime;
 	}
@@ -194,6 +194,7 @@ public class Sample extends BaseObject {
 		this.printTime = printTime;
 	}
 
+	@Column
 	public String getChkoper2() {
 		return chkoper2;
 	}
@@ -202,6 +203,7 @@ public class Sample extends BaseObject {
 		this.chkoper2 = chkoper2;
 	}
 
+	@Column
 	public int getRequestMode() {
 		return requestMode;
 	}

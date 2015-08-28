@@ -3,6 +3,10 @@
 #btnMenu button {
 	font-size:12px;
 }
+.pinfo {
+	padding-right: 5px;
+	padding-left: 5px;
+}
 </style>
 
 <div id="mid" class="col-sm-6">
@@ -12,43 +16,43 @@
 		<b id="passreason"></b>
 	</div>
 	<div class="clearfix alert alert-info" style="margin-bottom:5px;padding:5px;padding-bottom:4px;">
-		<div class="col-sm-12">
-			<div class="col-sm-3">
+		<div class="col-sm-12 pinfo">
+			<div class="col-sm-4 pinfo">
 				<fmt:message key="patient.name" />:<b id="pName"></b>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-3 pinfo">
 				<fmt:message key="patient.sex" />:<b id="pSex"></b>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-2 pinfo">
 				<fmt:message key="patient.age" />:<b id="pAge"></b><fmt:message key="patient.year" />
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-3 pinfo">
 				<fmt:message key="sample.type" />:<b id="pType"></b>
 			</div>
 		</div>
-		<div class="col-sm-12">
-			<div class="col-sm-3">
-				<fmt:message key="sample.mode" />:<b id="stayhospitalmode"></b>
-			</div>
-			<div id="pBedHtml" class="col-sm-3">
-				<fmt:message key="patient.departbed" />:<b id="pBed"></b>
-			</div>
-			<div class="col-sm-6">
-				<fmt:message key="patient.section" />:<b id="pSection"></b>
-			</div>
-		</div>
-		<div class="col-sm-12">
-			<div class="col-sm-3">
-				<fmt:message key="patient.blh" />:<b id="blh"></b>
-			</div>
-			<div class="col-sm-3">
+		<div class="col-sm-12 pinfo">
+			<div class="col-sm-4 pinfo">
 				<fmt:message key="sample.id" />:<b id="doctadviseno"></b>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-3 pinfo">
+				<fmt:message key="sample.mode" />:<b id="stayhospitalmode"></b>
+			</div>
+			<div class="col-sm-5 pinfo">
+				<fmt:message key="patient.blh" />:<b id="blh"></b>
+			</div>
+		</div>
+		<div class="col-sm-12 pinfo">
+			<div class="col-sm-4 pinfo">
+				<fmt:message key="patient.section" />:<b id="pSection"></b>
+			</div>
+			<div id="pBedHtml" class="col-sm-3 pinfo">
+				<fmt:message key="patient.departbed" />:<b id="pBed"></b>
+			</div>
+			<div class="col-sm-5 pinfo">
 				<fmt:message key="diagnostic" />:<b id="diagnostic"></b>
 			</div>
 		</div>
-		<div class="col-sm-12">
+		<div class="col-sm-12 pinfo">
 			<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
 				<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
 			</div>
@@ -76,7 +80,7 @@
 		</div>
 	</div>
 	
-	<div id="patientRow">
+	<div id="patientRow" style="margin-top:10px;">
 		<table id="rowed3" style="font-size: 14px;"></table>
 	</div>
 	<div id="twosampleTable" style="float:left; width:750px;">

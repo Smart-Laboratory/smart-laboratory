@@ -95,4 +95,8 @@
     <!-- Password reset token encoder -->
     <bean id="passwordTokenEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
 
+	<bean id="rmiService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="rmi://192.168.75.51:1099/RmiService" />  
+        <property name="serviceInterface" value="com.zju.api.service.RMIService" />
+	</bean>
 </beans>

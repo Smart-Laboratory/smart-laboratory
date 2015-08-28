@@ -18,7 +18,7 @@ public class AuditViewController {
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
 		request.setAttribute("today", Constants.DF3.format(new Date()));
-		request.setAttribute("lab", "1300000");
+		request.setAttribute("lab", "1300101");
         return new ModelAndView();
     }
 }

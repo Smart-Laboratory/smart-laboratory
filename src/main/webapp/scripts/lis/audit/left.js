@@ -25,7 +25,7 @@ function getList(text, lab) {
     		$("#rbcLabel").css('display','none');
     		var ret = jQuery("#list").jqGrid('getRowData',id);
     		getPatient(ret);
-    		/*
+    		
     		$("#collectBtn").css('display','inline');
     		$("#testAdd").css('display','inline');
 			$("#testDelete").css('display','inline');
@@ -34,16 +34,16 @@ function getList(text, lab) {
 			$("#auditPrintBtn").css('display','none');
 			
 			$("#needEdit").val(true);
-    		if(ret.status == "<fmt:message key='audit.unaudit'/>") {
+    		if(ret.status == "未审核") {
     			$("#unaudit_reason_btn").hide();	
-    		} else if(ret.status == "<fmt:message key='audit.pass'/>") {
+    		} else if(ret.status == "已通过") {
     			$("#unaudit_reason_btn").hide();
     			$("#testAdd").css('display','none');
     			$("#testDelete").css('display','none');
     			$("#auditPrintBtn").css('display','inline');
     			$("#auditPassBtn").css('display','none');
     			$("#needEdit").val(false);
-    		} else if (ret.status == "\u65e0\u7ed3\u679c"){
+    		} else if (ret.status == "未通过"){
     			$("#unaudit_reason_btn").hide();
     			$("#testAdd").css('display','none');
     			$("#testDelete").css('display','none');
@@ -62,14 +62,12 @@ function getList(text, lab) {
     		$("#hisLastResult").val(null);
     		$("#span_sampleNo").html(ret.sample);
     		$("#test_sampleNo").val(ret.sample);
-
-    		
     		
     		if(ret.flag==0){
     			$("#modifyBtn").css('display','none');
     		}else{
     			$("#modifyBtn").css('display','inline');
-    		}*/
+    		}
     	},
     	loadComplete: function() {
     		jQuery("#list").jqGrid("setGridParam",{url:"<c:url value='../audit/data'/>?lab=" + $("#labSelect").val()});

@@ -85,12 +85,12 @@ public class IndexAjaxController {
 				}
 				
 				JSONObject o = new JSONObject();
-				String unit = index.getUnit();
+				//String unit = index.getUnit();
 				String sample = index.getSampleFrom();
 				
-				if (StringUtils.isEmpty(unit)) {
+				/*if (StringUtils.isEmpty(unit)) {
 					unit = "";
-				}
+				}*/
 //				if (map.containsKey(sample)) {
 //					sample = map.get(sample);
 //				}
@@ -98,7 +98,7 @@ public class IndexAjaxController {
 				o.put("id", "I" + index.getId().toString());
 				o.put("indexId", index.getIndexId());
 				o.put("sample", sample);
-				o.put("unit", unit);
+				//o.put("unit", unit);
 				o.put("name", index.getName());
 				
 				if (StringUtils.isEmpty(index.getType())) {

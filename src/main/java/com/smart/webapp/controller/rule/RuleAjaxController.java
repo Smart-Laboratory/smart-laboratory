@@ -199,18 +199,19 @@ public class RuleAjaxController {
 		}
 		Map<String, String> map = new HashMap<String, String>();
 		for (Index index : indexs) {
-			String unit = index.getUnit();
+			//String unit = index.getUnit();
 			String sample = index.getSampleFrom();
 			if (map.containsKey(sample)) {
 				sample = map.get(index.getSampleFrom());
 			}
-			String indexStr = index.getName() + " (" + sample;
+			String indexStr = index.getName() + " (" + sample + ")";
+			/*String indexStr = index.getName() + " (" + sample;
 			if (!StringUtils.isEmpty(unit)) {
 				unit = "," + unit;
 			} else {
 				unit = "";
 			}
-			indexStr += unit + ")";
+			indexStr += unit + ")";*/
 			
 			JSONObject i = new JSONObject();
 			i.put("id", index.getId());
