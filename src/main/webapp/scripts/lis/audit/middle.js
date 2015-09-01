@@ -29,6 +29,7 @@
         		getSample(ret.sample, isFirst);
 			}
     		
+    		
 			if($("#englishToChBtn").attr("checked") == "checked") {
 				jQuery("#rowed3").setGridParam().showCol("ab");
 				jQuery("#rowed3").setGridParam().hideCol("name");
@@ -57,7 +58,7 @@
 				jQuery("#rowed3").setGridParam().showCol("device");
 				jQuery("#rowed3").setGridParam().showCol("checktime");
     		} else {
-    			getSopSchedule($("#labSelect").val());
+//    			getSopSchedule($("#labSelect").val());
     		}
     		$("#historyTabs").css('display','block');
 			
@@ -79,16 +80,17 @@
 				$("#imageBtn").css('display','none');
 			}
 			$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
-			$("#sample1").jqGrid("setCaption", data.examinaim);
+			//$("#sample1").jqGrid("setCaption", data.examinaim);
         	$("#audit_reason").html(data.reason);
         	$("#pName").html("<a href='../patientList?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>");
         	/* $("#pName").html("<a href='../../patient/list?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>"); */
         	$("#pAge").html(data.age);
         	$("#blh").html("<a href='http://192.168.17.102/ZWEMR/SysLogin.aspx?lcation=inside&ly=D&edt=N&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
-        	$("#pId").html(data.id);
+        	$("#doctadviseno").html(data.id);
         	$("#pSex").html(data.sex);
         	$("#pSection").html(data.section);
         	$("#pType").html(data.type);
+        	$("#stayhospitalmode").html(data.stayhospitalmode);
         	if(data.diagnosticKnow == "") {
         		$("#diagnostic").html(data.diagnostic);
         	} else {

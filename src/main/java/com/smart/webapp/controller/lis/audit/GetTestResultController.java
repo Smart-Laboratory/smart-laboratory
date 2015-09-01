@@ -79,6 +79,7 @@ public class GetTestResultController extends BaseAuditController {
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
 			
 			int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
+			if(list!=null && list.size()>0){
 			for (Sample pinfo : list) {
 				boolean isHis = false;
 				Set<TestResult> his = pinfo.getResults();
@@ -149,6 +150,7 @@ public class GetTestResultController extends BaseAuditController {
 					sameSample += pinfo.getSampleNo();
 				}
 			}
+			}
 		}
 		int color = 0;
 		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
@@ -173,6 +175,7 @@ public class GetTestResultController extends BaseAuditController {
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			if (idMap.containsKey(id)) {
+//			if(true){
 				String testId = tr.getTestId();
 				Set<String> sameTests = util.getKeySet(testId);
 				sameTests.add(testId);
@@ -213,7 +216,7 @@ public class GetTestResultController extends BaseAuditController {
 					map.put("scope", "");
 				}
 				map.put("unit", tr.getUnit());
-				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+//				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				dataRows.add(map);

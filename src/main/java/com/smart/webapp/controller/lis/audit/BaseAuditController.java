@@ -98,10 +98,12 @@ public class BaseAuditController {
 	
 	protected Map<String, Integer> StringToMap(String ts) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (String s : ts.split(";")) {
-			if (!"".equals(s) && s.contains(":")) {
-				String[] array = s.split(":");
-				map.put(array[0], Integer.parseInt(array[1]));
+		if(ts!=null){
+			for (String s : ts.split(";")) {
+				if (!"".equals(s) && s.contains(":")) {
+					String[] array = s.split(":");
+					map.put(array[0], Integer.parseInt(array[1]));
+				}
 			}
 		}
 		return map;

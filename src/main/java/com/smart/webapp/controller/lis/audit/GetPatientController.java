@@ -75,6 +75,7 @@ public class GetPatientController extends BaseAuditController {
 				map.put("examinaim", "");
 			}
 			map.put("mode", info.getRequestMode());
+			map.put("stayhospitalmode", info.getStayHospitalMode()==1 ? "门诊":"住院");
 			map.put("diagnostic", info.getDiagnostic());
 			if(diagMap.containsKey(info.getDiagnostic())) {
 				map.put("diagnosticKnow", diagMap.get(info.getDiagnostic()));
