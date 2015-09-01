@@ -518,7 +518,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
+	@OneToMany(targetEntity = Process.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE,mappedBy="sample")
 	public Set<Process> getProcess() {
 		return process;
 	}
@@ -530,7 +530,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
 			@JoinColumn(name = "test_id", referencedColumnName = "testId") })

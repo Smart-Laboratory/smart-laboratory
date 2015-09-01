@@ -100,6 +100,7 @@ public class Index extends BaseObject implements Serializable {
 	/**
 	 * 检验项目英文项目
 	 */
+	@Column(name = "english", length = 20)
 	public String getEnglish() {
 		return english;
 	}

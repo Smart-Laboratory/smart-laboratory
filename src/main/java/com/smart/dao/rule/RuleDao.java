@@ -1,6 +1,9 @@
 package com.smart.dao.rule;
 
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Rule;
@@ -15,12 +18,14 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param isAsc 排序方向
 	 * @return
 	 */
+	@Transactional
 	List<Rule> getRules(int pageNum, String field, boolean isAsc);
 	
 	/**
 	 *  返回规则数
 	 * @return
 	 */
+	@Transactional
 	int getRulesCount();
 	
 	/**
@@ -28,6 +33,7 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param category  类别
 	 * @return
 	 */
+	@Transactional
 	List<Rule> getRulesByBagID(Long bagId);
 	
 	/**
@@ -38,6 +44,7 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param isAsc
 	 * @return
 	 */
+	@Transactional
 	List<Rule> getRulesByBagID(Long bagId, int pageNum, String field, boolean isAsc);
 	
 	/**
@@ -45,6 +52,7 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param bagId
 	 * @return
 	 */
+	@Transactional
 	int getRulesCount(Long bagId);
 	
 	/**
@@ -52,6 +60,7 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param ruleName
 	 * @return
 	 */
+	@Transactional
 	List<Rule> getRulesByName(String ruleName);
 	
 	/**
@@ -59,18 +68,25 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	 * @param type
 	 * @return
 	 */
+	@Transactional
 	List<Rule> getRuleByType(int type);
 
+	@Transactional
 	List<Rule> getRuleList(String ruleIds);
 	
+	@Transactional
 	List<Rule> getRuleManual(String ruleIds);
 
+	@Transactional
 	List<Rule> getRuleByTypes(String type);
 	
+	@Transactional
 	List<Index> getUsedIndex(long id);
 
+	@Transactional
 	List<Rule> getDiffRule(int i, String mode);
 	
+	@Transactional
 	Rule saveRule(Rule rule);
 	
 }

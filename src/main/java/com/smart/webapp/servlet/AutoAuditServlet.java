@@ -1,4 +1,4 @@
-package com.smart.webapp.listener;
+package com.smart.webapp.servlet;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -10,10 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +22,8 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.smart.Constants;
 import com.smart.check.Alarm2Check;
@@ -39,10 +38,18 @@ import com.smart.check.RatioCheck;
 import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
+import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestResult;
+import com.smart.model.lis.Ylxh;
+import com.smart.model.rule.Bag;
+import com.smart.model.rule.Item;
+import com.smart.model.rule.Rule;
 import com.smart.service.DictionaryManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
+import com.smart.service.rule.BagManager;
 import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.ResultManager;
 import com.smart.service.rule.RuleManager;
@@ -53,50 +60,30 @@ import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.zju.api.service.RMIService;
-import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestResult;
-import com.smart.model.lis.Ylxh;
-import com.smart.model.rule.Item;
 
-public class AutoAuditListener implements ServletContextListener, HttpSessionListener {
-    private static final Log log = LogFactory.getLog(StartupListener.class);
-    
-    @Autowired
-    private SampleManager sampleManager = null;
-    
-    @Autowired
-    private TestResultManager testResultManager = null;
-    
-    @Autowired
-    private DictionaryManager dictionaryManager = null;
-    
-    @Autowired
-    private ItemManager itemManager = null;
-    
-    @Autowired
-    private ResultManager resultManager = null;
-    
-    @Autowired
-    private RuleManager ruleManager = null;
-    
-    @Autowired
-    private RMIService rmiService = null;
-    
-    @Autowired
-    private CriticalRecordManager criticalRecordManager = null;
-    
-    @SuppressWarnings("unchecked")
-    public void contextInitialized(ServletContextEvent event) {
+public class AutoAuditServlet extends HttpServlet {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 941602442597073184L;
+	private static final Log log = LogFactory.getLog(AutoAuditServlet.class);
+	
+	public void init() throws ServletException {  
+		ServletContext context = getServletContext();
+    	ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+    	final SampleManager sampleManager = (SampleManager) ctx.getBean("sampleManager");
+        final TestResultManager testResultManager = (TestResultManager) ctx.getBean("testResultManager");
+        final DictionaryManager dictionaryManager = (DictionaryManager) ctx.getBean("dictionaryManager");
+        final ItemManager itemManager = (ItemManager) ctx.getBean("itemManager");
+        final ResultManager resultManager = (ResultManager) ctx.getBean("resultManager");
+        final RuleManager ruleManager = (RuleManager) ctx.getBean("ruleManager");
+        final BagManager bagManager = (BagManager) ctx.getBean("bagManager");
+        final RMIService rmiService = (RMIService) ctx.getBean("rmiService");
+        final CriticalRecordManager criticalRecordManager = (CriticalRecordManager) ctx.getBean("criticalRecordManager");
+        
         log.debug("Initializing context...");
-
-        ServletContext context = event.getServletContext();
-
-        Map<String, Object> config = (HashMap<String, Object>) context.getAttribute(Constants.CONFIG);
-
-        if (config == null) {
-            config = new HashMap<String, Object>();
-        }
+        System.out.println("Initializing context...");
 
         try {
         	final Map<String, Describe> idMap = new HashMap<String, Describe>();
@@ -105,7 +92,16 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	final List<Sample> updateSample = new ArrayList<Sample>();
         	final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
         	final AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
-			Reader reader = analyticUtil.getReader(ruleManager.getRuleByTypes("0,3,4,5,6,7"));
+        	List<Bag> bags = bagManager.getBagByHospital("1");
+			List<Rule> ruleList = new ArrayList<Rule>();
+			for(Bag b : bags) {
+				for(Rule r : b.getRules()) {
+					if(r.getType() != 1 && r.getType() != 2) {
+						ruleList.add(r);
+					}
+				}
+			}
+        	Reader reader = analyticUtil.getReader(ruleList);
             KieServices ks = KieServices.Factory.get(); 
     		KieFileSystem kfs = ks.newKieFileSystem();
     		kfs.write("rule", ks.getResources().newReaderResource(reader).setResourceType(ResourceType.DRL));
@@ -114,6 +110,7 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
     		    throw new RuntimeException("规则库构建 错误:\n" + kbuilder.getResults().toString());
     		}
     		log.debug("规则库构造完成!");
+    		System.out.println("规则库构造完成!");
     		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
     		KieSession kSession = kContainer.newKieSession();
     		final DroolsRunner droolsRunner = new DroolsRunner(kSession);
@@ -131,6 +128,7 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
             log.debug("初始化常量完成");
+            System.out.println("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				
         		public void run() {
@@ -139,6 +137,7 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	            try {
         	            	autocount++;
         	            	log.debug("开始第" + autocount + "次审核...");
+        	            	System.out.println("开始第" + autocount + "次审核...");
         	            	Date today = new Date();
         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
         	            	Map<Long, Sample> diffData = new HashMap<Long, Sample>();
@@ -155,7 +154,7 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	        					testIdSet.add(t.getTestId());
         	        				}
         	        				System.out.println(info.getSampleNo()+" : " + now.size());
-        	        				List<Sample> list = sampleManager.getDiffCheck(info);
+        	        				List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh());
         	        				for (Sample p : list) {
         	        					boolean isHis = false;
         	        					if (p.getSampleNo().equals(info.getSampleNo())) {
@@ -181,9 +180,11 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	        			} catch (Exception e) {
         	        				samples.remove(info);
         	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
+        	        				e.printStackTrace();
         	        			}
         	        		}
         	                log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
+        	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
         	        		DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
         	        		Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
@@ -233,9 +234,15 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	        		}
         	        		sampleManager.saveAll(updateSample);
         					criticalRecordManager.saveAll(updateCriticalRecord);
-        	                Thread.sleep(20000);  
-        	            } catch (Exception e) {  
-        	                e.printStackTrace();  
+        	                Thread.sleep(120000);  
+        	            } catch (Exception e) {
+        	            	log.error(e.getMessage());
+        	                e.printStackTrace();
+        	                try {
+        	    				Thread.sleep(20000);
+        	    			} catch (InterruptedException e1) {
+        	    				e1.printStackTrace();
+        	    			}
         	            }  
         	        } 
         		}
@@ -243,26 +250,8 @@ public class AutoAuditListener implements ServletContextListener, HttpSessionLis
         	autoAudit.start();
         } catch (Exception e) {
         	log.error(e.getMessage());
-        }
+        	e.printStackTrace();
+        } 
     }
 
-    /**
-     * Shutdown servlet context (currently a no-op method).
-     *
-     * @param servletContextEvent The servlet context event
-     */
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        //LogFactory.release(Thread.currentThread().getContextClassLoader());
-        //Commented out the above call to avoid warning when SLF4J in classpath.
-        //WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
-        //WARN: Please see http://www.slf4j.org/codes.html for an explanation.
-    }
-
-	public void sessionCreated(HttpSessionEvent arg0) {
-		
-	}
-
-	public void sessionDestroyed(HttpSessionEvent arg0) {
-		
-	}
 }

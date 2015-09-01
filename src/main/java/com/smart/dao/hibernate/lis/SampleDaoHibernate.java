@@ -2,6 +2,7 @@ package com.smart.dao.hibernate.lis;
 
 import com.smart.dao.lis.SampleDao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
+import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 
 @Repository("sampleDao")
@@ -92,6 +94,26 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	public List<Sample> getHistorySample(String patientId, String blh) {
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getDiffCheck(Sample info) {
+		Date toDate = null;
+		for(Process process : info.getProcess()) {
+			if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
+				toDate = process.getTime();
+			}
+		}
+        Calendar calendar = Calendar.getInstance(); 
+        calendar.setTime(toDate); 
+        calendar.add(Calendar.DATE,-180); 
+        Date fromDate = calendar.getTime();
+        
+		List<Sample> infos = getSession().createQuery(
+                "from PatientInfo p where (p.patientId='" + info.getPatientId() + "' or p.patientId='" + info.getPatient().getBlh() + "') and p.receivetime between to_date('" + Constants.SDF.format(fromDate) + "','"
+                        + Constants.DATEFORMAT + "') and to_date('" + Constants.SDF.format(toDate) + "','" + Constants.DATEFORMAT
+                        + "') order by p.receivetime desc").list();
+        return infos;
 	}
 	
 }

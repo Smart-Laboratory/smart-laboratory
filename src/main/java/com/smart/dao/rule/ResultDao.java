@@ -2,6 +2,8 @@ package com.smart.dao.rule;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Result;
 
@@ -13,8 +15,10 @@ public interface ResultDao extends GenericDao<Result, Long> {
 	 * @param pageSize	每页显示条数 
 	 * @return
 	 */
+	@Transactional
 	List<Result> getResults(int pageNum, String field, boolean isAsc);
 	
+	@Transactional
 	int getResultsCount();
 	
 	/**
@@ -24,6 +28,7 @@ public interface ResultDao extends GenericDao<Result, Long> {
 	 * @param pageSize
 	 * @return
 	 */
+	@Transactional
 	List<Result> getResultsByCategory(String category, int pageNum, String field, boolean isAsc);
 	
 	/**
@@ -31,6 +36,7 @@ public interface ResultDao extends GenericDao<Result, Long> {
 	 * @param result
 	 * @return
 	 */
+	@Transactional
 	List<Result> getResultsByName(String result);
 	
 	/**
@@ -38,6 +44,7 @@ public interface ResultDao extends GenericDao<Result, Long> {
 	 * @param reuslt  更新后的结果对象
 	 * @return  更新成功的结果
 	 */
+	@Transactional
 	Result updateResult(Result result);
 	
 	/**
@@ -45,5 +52,6 @@ public interface ResultDao extends GenericDao<Result, Long> {
 	 * @param result
 	 * @return
 	 */
+	@Transactional
 	Result addResult(Result result);
 }
