@@ -27,6 +27,7 @@ public class Patient extends BaseObject {
 	private Long id;// 主键，自增
 	
 	private String blh;//病例号
+	private String patientId;
 	private String patientName;//病人姓名
 	private Date birthday; // 
 	private String address;//病人地址
@@ -56,6 +57,18 @@ public class Patient extends BaseObject {
 
 	public void setBlh(String blh) {
 		this.blh = blh;
+	}
+	
+	/**
+	 * 就诊卡号
+	 */
+	@Column(name = "PATIENTID", length = 50)
+	public String getPatientId() {
+		return patientId;
+	}
+	
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
 	
 	@Column(name = "PATIENTNAME", length = 50)

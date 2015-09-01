@@ -161,6 +161,11 @@ public final class Constants {
 	public static final String FALSE = "×";
 
 	/**
+	 * 字符串:yyyy-MM-dd hh24:mi:ss
+	 */
+	public static final String DATEFORMAT = "yyyy-MM-dd hh24:mi:ss";
+
+	/**
 	 * 日期格式:yyyy-MM-dd hh:mm:ss
 	 */
 	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -169,42 +174,52 @@ public final class Constants {
 	 * 日期格式:yyyy-MM-dd hh:mm
 	 */
 	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+	
 	/**
 	 * 日期格式:yyyy-MM-dd
 	 */
 	public static final SimpleDateFormat DF2 = new SimpleDateFormat("yyyy-MM-dd");
+	
 	/**
 	 * 日期格式:yyyyMMdd
 	 */
 	public static final SimpleDateFormat DF3 = new SimpleDateFormat("yyyyMMdd");
+	
 	/**
 	 * 日期格式:MMdd
 	 */
 	public final static SimpleDateFormat DF4 = new SimpleDateFormat("MM/dd");
+	
 	/**
 	 * 日期格式:HH:mm
 	 */
 	public final static SimpleDateFormat DF5 = new SimpleDateFormat("HH:mm");
+	
 	/**
 	 * 检验流程——申请
 	 */
 	public static final String PROCESS_REQUEST = "申请";
+	
 	/**
 	 * 检验流程——采样
 	 */
 	public static final String PROCESS_EXECUTE = "采样";
+	
 	/**
 	 * 检验流程——运送
 	 */
 	public static final String PROCESS_SEND = "运送";
+	
 	/**
 	 * 检验流程——接收
 	 */
 	public static final String PROCESS_RECEIVE = "接收";
+	
 	/**
 	 * 检验流程——报告
 	 */
 	public static final String PROCESS_CKECK = "报告";
+	
 	/**
 	 * 检验流程——打印
 	 */

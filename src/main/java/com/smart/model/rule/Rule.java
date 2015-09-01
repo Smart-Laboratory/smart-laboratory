@@ -330,7 +330,7 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则推出的结果
 	 */
-	@ManyToMany(targetEntity = Result.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToMany(targetEntity = Result.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "lab_rule_result", 
 			joinColumns = { @JoinColumn(name = "rule_id", referencedColumnName = "id") }, 
@@ -350,7 +350,7 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则包含的条目
 	 */
-	@ManyToMany(targetEntity = Item.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToMany(targetEntity = Item.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "lab_rule_item", 
 			joinColumns = { @JoinColumn(name = "rule_id", referencedColumnName = "id") }, 

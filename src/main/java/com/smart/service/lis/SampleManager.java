@@ -13,10 +13,10 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getNeedAudit(String format);
 
-	List<Sample> getDiffCheck(Sample info);
-
 	void saveAll(List<Sample> updateSample);
 
 	List<Sample> getHistorySample(String patientId, String blh);
+
+	List<Sample> getDiffCheck(Sample info);
 
 }

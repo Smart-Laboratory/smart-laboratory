@@ -34,16 +34,16 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getNeedAudit(day);
 	}
 
-	public List<Sample> getDiffCheck(Sample info) {
-		return null;
-	}
-
 	public void saveAll(List<Sample> updateSample) {
 		sampleDao.saveAll(updateSample);
 	}
 
 	public List<Sample> getHistorySample(String patientId, String blh) {
 		return sampleDao.getHistorySample(patientId, blh);
+	}
+
+	public List<Sample> getDiffCheck(Sample info) {
+		return sampleDao.getDiffCheck(info);
 	}
 
 }
