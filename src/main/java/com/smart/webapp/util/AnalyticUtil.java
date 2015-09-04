@@ -47,10 +47,10 @@ public class AnalyticUtil {
 			}
 		}
 		StringBuilder builder = new StringBuilder();
-		builder.append("import com.zju.drools.I;\n");
-		builder.append("import com.zju.drools.SI;\n");
-		builder.append("import com.zju.drools.P;\n");
-		builder.append("import com.zju.drools.R;\n");
+		builder.append("import com.smart.drools.I;\n");
+		builder.append("import com.smart.drools.SI;\n");
+		builder.append("import com.smart.drools.P;\n");
+		builder.append("import com.smart.drools.R;\n");
 		builder.append("\nglobal R r;\n");
 		try {
 			for (Rule r : rules) {

@@ -18,6 +18,7 @@
         <mapping class="com.smart.model.lis.Section"/>
         <mapping class="com.smart.model.lis.InvalidSample"/>
         <mapping class="com.smart.model.lis.Diagnostic"/>
+        <mapping class="com.smart.model.lis.Ylxh"/>
         <mapping class="com.smart.model.rule.Bag"/>
         <mapping class="com.smart.model.rule.Index"/>
         <mapping class="com.smart.model.rule.Item"/>

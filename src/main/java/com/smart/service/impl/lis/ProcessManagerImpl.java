@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.ProcessDao;
@@ -12,6 +13,7 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 	
 	private ProcessDao processDao;
 
+	@Autowired
 	public void setProcessDao(ProcessDao processDao) {
 		this.dao = processDao;
 		this.processDao = processDao;

@@ -164,7 +164,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验项目及套餐序号
 	 */
-	@Column(length = 20)
+	@Column(length = 50)
 	public String getYlxh() {
 		return ylxh;
 	}

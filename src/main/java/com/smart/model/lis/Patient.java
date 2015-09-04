@@ -150,13 +150,13 @@ public class Patient extends BaseObject {
 	}
 	
 	@Transient
-	public int getSexValue() {
-		if (sex.equals("男")) {
-			return 1;
-		} else if (sex.equals("女")) {
-			return 2;
+	public String getSexValue() {
+		if (sex.equals("1")) {
+			return "男";
+		} else if (sex.equals("2")) {
+			return "女";
 		}
-		return 3;
+		return "未知";
 	}
 	
 	public String toString() {

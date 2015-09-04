@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.TestResultDao;
@@ -13,6 +14,7 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 
 	private TestResultDao testResultDao;
 
+	@Autowired
 	public void setTestResultDao(TestResultDao testResultDao) {
 		this.dao = testResultDao;
 		this.testResultDao = testResultDao;

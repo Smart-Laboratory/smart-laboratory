@@ -19,6 +19,7 @@ import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
+import com.smart.service.rule.BagManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.ResultManager;
@@ -46,6 +47,9 @@ public class BaseAuditController {
     
 	@Autowired
     protected RuleManager ruleManager = null;
+    
+    @Autowired
+    protected BagManager bagManager = null;
     
 	@Autowired
     protected RMIService rmiService = null;
@@ -89,7 +93,7 @@ public class BaseAuditController {
 		}
 	}
 	
-	synchronized private void initYLXHMap() {
+	protected synchronized void initYLXHMap() {
 		List<Ylxh> list = ylxhManager.getAll();
 		for (Ylxh y : list) {
 			ylxhMap.put(y.getYlxh(), y);

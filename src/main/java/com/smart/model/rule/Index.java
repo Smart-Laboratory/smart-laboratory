@@ -53,6 +53,7 @@ public class Index extends BaseObject implements Serializable {
 	private Date modifyTime;
 	private String importance;
 	private String knowledgename;
+	private int isprint;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 	
 	public Index() {
@@ -253,6 +254,18 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setKnowledgename(String knowledgename) {
 		this.knowledgename = knowledgename;
+	}
+	
+	/**
+	 * 指标是否打印
+	 */
+	@Column
+	public int getIsprint() {
+		return isprint;
+	}
+
+	public void setIsprint(int isprint) {
+		this.isprint = isprint;
 	}
 
 	/**

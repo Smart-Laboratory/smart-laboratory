@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.DeviceDao;
@@ -12,6 +13,7 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long> implemen
 	
 	private DeviceDao deviceDao;
 
+	@Autowired
 	public void setDeviceDao(DeviceDao deviceDao) {
 		this.dao = deviceDao;
 		this.deviceDao = deviceDao;

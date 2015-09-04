@@ -17,6 +17,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getHistorySample(String patientId, String blh);
 
-	List<Sample> getDiffCheck(Sample info);
+	List<Sample> getDiffCheck(String patientId, String blh, String sampleNo);
 
 }

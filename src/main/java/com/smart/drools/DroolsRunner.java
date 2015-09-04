@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -22,11 +24,11 @@ import com.smart.webapp.util.HisIndexMapUtil;
 
 public class DroolsRunner {
 	
-	private KieSession ksession = null;
+	private KieBase kbase = null;
 	private static HisIndexMapUtil hisutil = HisIndexMapUtil.getInstance(); //检验项映射
 
-	public DroolsRunner(KieSession kSession) {
-		ksession = kSession;
+	public DroolsRunner(KieBase kBase) {
+		kbase = kBase;
 	}
 	
 	public Set<String> getDiffCheckResult(Set<TestResult> result, Set<TestResult> l_result, Map<String, Diff> diff) {
@@ -131,8 +133,10 @@ public class DroolsRunner {
 
 	public R getResult(Set<TestResult> set, String patientid, int age, int sex) {
 		R result = null;
+		KieSession ksession = null;
 		try {
-			if (ksession != null) {
+			if (kbase != null) {
+				ksession = kbase.newKieSession();
 				ksession.setGlobal("r", new R());
 				P p = new P();
 				p.setId(patientid);
@@ -140,8 +144,10 @@ public class DroolsRunner {
 				p.setS(sex);
 				ksession.insert(p);
 				for (TestResult t : set) {
-					I i = new I(t.getTestId(), t.getSampleType(), t.getUnit(), t.getTestResult());
-					ksession.insert(i);
+					if(StringUtils.isNumeric(t.getTestId())) {
+						I i = new I(t.getTestId(), t.getSampleType(), t.getUnit(), t.getTestResult());
+						ksession.insert(i);
+					}
 				}
 				ksession.fireAllRules();
 				result = (R) ksession.getGlobal("r");
@@ -149,7 +155,7 @@ public class DroolsRunner {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (ksession != null) {
+			if(ksession != null) {
 				ksession.dispose();
 			}
 		}
@@ -162,8 +168,10 @@ public class DroolsRunner {
 			test.put(t.getTestId(), t);
 		}
 		R result = null;
+		KieSession ksession = null;
 		try {
-			if (ksession != null) {
+			if (kbase != null) {
+				ksession = kbase.newKieSession();
 				ksession.setGlobal("r", new R());
 				P p = new P();
 				p.setId(patientid);

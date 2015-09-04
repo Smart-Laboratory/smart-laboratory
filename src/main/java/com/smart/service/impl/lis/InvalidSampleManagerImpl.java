@@ -13,7 +13,6 @@ import com.smart.service.lis.InvalidSampleManager;
 @Service("invalidSampleManager")
 public class InvalidSampleManagerImpl extends GenericManagerImpl<InvalidSample, Long> implements InvalidSampleManager {
 	
-	@SuppressWarnings("unused")
 	private InvalidSampleDao invalidSampleDao;
 	
 	@Autowired

@@ -1,5 +1,7 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -12,7 +14,10 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	public YlxhDaoHibernate() {
 		super(Ylxh.class);
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
+	public List<Ylxh> getYlxh() {
+		return getSession().createQuery("from Ylxh").list();
+	}
 
 }

@@ -79,7 +79,14 @@ public class DangerCheck implements Check {
 		
 		if (!result) {
 			info.setMarkTests(markTests);
-			info.getCriticalRecord().setCriticalContent(CheckUtil.toString(criticalContent));
+			if(info.getCriticalRecord() == null) {
+				CriticalRecord cr = new CriticalRecord();
+				cr.setCriticalContent(CheckUtil.toString(criticalContent));
+				cr.setSample(info);
+				info.setCriticalRecord(cr);
+			} else {
+				info.getCriticalRecord().setCriticalContent(CheckUtil.toString(criticalContent));
+			}
 			info.setAuditStatus(UNPASS);
 			info.setAuditMark(DANGER_MARK);
 			/*cr.setSampleno(info.getSampleNo());

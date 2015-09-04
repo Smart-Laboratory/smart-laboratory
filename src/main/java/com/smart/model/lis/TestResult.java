@@ -2,14 +2,10 @@ package com.smart.model.lis;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,8 +20,6 @@ import com.smart.model.BaseObject;
 public class TestResult extends BaseObject{
 
 	private static final long serialVersionUID = 1234221L;
-	
-	private Sample sample; //样本编号
 	
 	private String sampleNo;
     private String testId;  //检验项目id（每个id对应一个确定的检验项目）
@@ -56,16 +50,6 @@ public class TestResult extends BaseObject{
 
     public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
-    }
-    
-
-    @ManyToOne(optional=true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "sampleId",referencedColumnName="id")
-    public Sample getSample(){
-    	return this.sample;
-    }
-    public void setSample(Sample sample){
-    	this.sample = sample;
     }
     
     @Column(name = "TESTNAME")

@@ -2,6 +2,7 @@ package com.smart.service.impl.lis;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.CriticalRecordDao;
@@ -14,6 +15,7 @@ public class CriticalRecordManagerImpl extends GenericManagerImpl<CriticalRecord
 
 	private CriticalRecordDao criticalRecordDao;
 
+	@Autowired
 	public void setCriticalRecordDao(CriticalRecordDao criticalRecordDao) {
 		this.dao = criticalRecordDao;
 		this.criticalRecordDao = criticalRecordDao;

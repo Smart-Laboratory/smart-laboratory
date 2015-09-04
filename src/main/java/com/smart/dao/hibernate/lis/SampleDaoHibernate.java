@@ -2,6 +2,7 @@ package com.smart.dao.hibernate.lis;
 
 import com.smart.dao.lis.SampleDao;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
-import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 
 @Repository("sampleDao")
@@ -73,12 +73,12 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getListBySampleNo(String sampleno) {
-		return getSession().createQuery("from Sample  where sampleNo='" + sampleno + "' order by id").list();
+		return getSession().createQuery("from Sample where sampleNo='" + sampleno + "' order by id").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
-		Query q =  getSession().createQuery("from Sample  where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by id");
+		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by id");
 		q.setFirstResult(0);
 		q.setMaxResults(100);
 		return q.list();
@@ -97,23 +97,23 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Sample> getDiffCheck(Sample info) {
-		Date toDate = null;
-		for(Process process : info.getProcess()) {
-			if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-				toDate = process.getTime();
-			}
+	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno) {
+		try {
+			String to = sampleno.substring(0, 8);
+			Date todate = Constants.DF3.parse(to);
+			Calendar calendar = Calendar.getInstance(); 
+	        calendar.setTime(todate); 
+	        calendar.add(Calendar.DATE,-180); 
+	        Date fromdate = calendar.getTime();
+	        String from = Constants.DF3.format(fromdate);
+	        List<Sample> infos = getSession().createQuery(
+	                "from Sample s where (s.patientId='" + patientid + "' or s.patientId='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
+	                        + to + "' order by s.sampleNo desc").list();
+	        return infos;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
 		}
-        Calendar calendar = Calendar.getInstance(); 
-        calendar.setTime(toDate); 
-        calendar.add(Calendar.DATE,-180); 
-        Date fromDate = calendar.getTime();
-        
-		List<Sample> infos = getSession().createQuery(
-                "from PatientInfo p where (p.patientId='" + info.getPatientId() + "' or p.patientId='" + info.getPatient().getBlh() + "') and p.receivetime between to_date('" + Constants.SDF.format(fromDate) + "','"
-                        + Constants.DATEFORMAT + "') and to_date('" + Constants.SDF.format(toDate) + "','" + Constants.DATEFORMAT
-                        + "') order by p.receivetime desc").list();
-        return infos;
 	}
 	
 }
