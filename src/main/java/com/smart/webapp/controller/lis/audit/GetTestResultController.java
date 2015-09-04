@@ -164,6 +164,7 @@ public class GetTestResultController extends BaseAuditController {
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		
 		for (TestResult tr : info.getResults()) {
+			System.out.println(tr.getTestId());
 			if (tr.getEditMark() == Constants.DELETE_FLAG)
 				continue;
 

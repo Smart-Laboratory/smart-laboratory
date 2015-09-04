@@ -39,7 +39,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			// all
 		} else if (status == -2) {
 			builder.append(" and ");
-			builder.append("audit.auditStatus>-1");
+			builder.append("auditStatus>-1");
 		} else if(status == 3){
 			builder.append(" and ");
 			builder.append("modifyFlag=1");
@@ -52,11 +52,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			return getSession().createQuery(builder.toString()).list();
 		} else {
 			builder.append(" and ");
-			builder.append("audit.auditStatus=");
+			builder.append("auditStatus=");
 			builder.append(status);
 		}
 		if (mark != 0) {
-			builder.append(" and audit.auditMark=");
+			builder.append(" and auditMark=");
 			builder.append(mark);
 		}
 		builder.append(" and ");

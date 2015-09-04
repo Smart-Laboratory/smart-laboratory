@@ -1,3 +1,16 @@
+function labChange(select) {
+		$("#lastDepLib").val(select.value);
+		jQuery("#s3list").jqGrid("setGridParam",{
+			url:"<c:url value='/explain/audit/data'/>?lab="+select.value+"&text="+${strToday}}).trigger("reloadGrid"); 
+		$.ajax({
+			  type: 'POST',
+			  url: "<c:url value='/explain/audit/labChange'/>?lab="+select.value
+		});
+		selectNoteAdd = true;
+		
+//		getSopSchedule(select.value);
+	}
+
 $(function() {
 	$("#historyTabs").tabs({
 		selected: 2,

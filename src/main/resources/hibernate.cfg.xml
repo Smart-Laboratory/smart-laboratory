@@ -6,15 +6,17 @@
 
 <hibernate-configuration>
     <session-factory>
+    	<mapping class="com.smart.model.lis.Sample"/>
+    	<mapping class="com.smart.model.lis.TestResult"/>
     	<mapping class="com.smart.Dictionary"/>
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
         <mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.lis.CriticalRecord"/>
         <mapping class="com.smart.model.lis.Patient"/>
-        <mapping class="com.smart.model.lis.Sample"/>
+        
         <mapping class="com.smart.model.lis.Process"/>
-        <mapping class="com.smart.model.lis.TestResult"/>
+        
         <mapping class="com.smart.model.lis.Section"/>
         <mapping class="com.smart.model.lis.InvalidSample"/>
         <mapping class="com.smart.model.lis.Diagnostic"/>

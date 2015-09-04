@@ -569,6 +569,7 @@
     				//alert($("#rowed3").jqGrid("getCaption"));
     				$.each(jQuery('#rowed3').jqGrid('getCol','id', false), function(k,v) {
             			var ret = jQuery("#rowed3").jqGrid('getRowData',v);
+            			alert(v.html());
             			if (ret.last != null && ret.last != "")
             				$("#hisLastResult").val(1);
             			else
