@@ -1,3 +1,19 @@
+//var today = "${strToday}";
+function labChange(select) {
+		$("#lastDepLab").val(select.value);
+		jQuery("#list").jqGrid("setGridParam",{
+			url:"../audit/data?lab="+select.value+"&text="+"${strToday}"}).trigger("reloadGrid");
+		
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+select.value
+		});
+		selectNoteAdd = true;
+		
+//		getSopSchedule(select.value);
+}
+
+
 var isFirstSop = true;
 	var g1, g2, g3, g4;
 	function getSopSchedule(lab) {
@@ -67,6 +83,34 @@ var isFirstSop = true;
 $(function() {
 	
 	getList($("#sampletext").val(),$("#lab").val());
+	
+	$("#historyTabs").tabs({
+		selected: 1,
+		select: function(event, ui) { 
+			if(ui.index == 2) {
+			} else if(ui.index == 1) {
+			} else {
+			}
+		}
+	});
+	
+	$("#englishToChBtn").click(function(){
+		if($("#englishToChBtn").prop("checked") == true) {
+			jQuery("#rowed3").setGridParam().showCol("ab");
+			jQuery("#rowed3").setGridParam().hideCol("name");
+			jQuery("#sample0").setGridParam().showCol("ab");
+			jQuery("#sample0").setGridParam().hideCol("name");
+			jQuery("#sample1").setGridParam().showCol("ab");
+			jQuery("#sample1").setGridParam().hideCol("name");
+		} else {
+			jQuery("#rowed3").setGridParam().showCol("name");
+			jQuery("#rowed3").setGridParam().hideCol("ab");
+			jQuery("#sample0").setGridParam().showCol("name");
+			jQuery("#sample0").setGridParam().hideCol("ab");
+			jQuery("#sample1").setGridParam().showCol("name");
+			jQuery("#sample1").setGridParam().hideCol("ab");
+		}
+	});
 	
 
 });

@@ -22,11 +22,11 @@
     		if(data.size > 30 && $("#oneColumnShowBtn").attr("checked") != "checked") {
     			$("#patientRow").css('display','none');
     			$("#twosampleTable").css('display','block');
-        		getTwoSample(ret.sample, isFirst);
+        		getTwoSample(ret.sample);
 			} else {
         		$("#twosampleTable").css('display','none');
         		$("#patientRow").css('display','block');
-        		getSample(ret.sample, isFirst);
+        		getSample(ret.sample);
 			}
     		
     		
@@ -149,7 +149,7 @@
 		//getRelativeTests(ret.sample);
 	}
 	
-	function getSample(sampleNo, isFirst) {
+	function getSample(sampleNo) {
 
         var lastsel;
         var cl = "";
@@ -569,7 +569,6 @@
     				//alert($("#rowed3").jqGrid("getCaption"));
     				$.each(jQuery('#rowed3').jqGrid('getCol','id', false), function(k,v) {
             			var ret = jQuery("#rowed3").jqGrid('getRowData',v);
-            			alert(v.html());
             			if (ret.last != null && ret.last != "")
             				$("#hisLastResult").val(1);
             			else
@@ -703,6 +702,6 @@
     			editurl: "../audit/edit?sampleNo=" + sampleNo
     		});
         } else {
-        	
+        	jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+sampleNo,editurl: "../audit/edit?sampleNo=" + sampleNo}).trigger("reloadGrid");
         }
 	}

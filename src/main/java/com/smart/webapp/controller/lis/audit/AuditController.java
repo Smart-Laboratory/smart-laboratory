@@ -19,9 +19,11 @@ import org.kie.api.KieServices;
 import org.kie.api.io.ResourceType;
 import org.kie.internal.builder.KnowledgeBuilder;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
 import com.smart.check.Alarm2Check;
@@ -48,6 +50,8 @@ import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
+import com.smart.model.user.User;
+import com.smart.service.UserManager;
 
 @Controller
 @RequestMapping("/audit*")
@@ -225,4 +229,17 @@ public class AuditController extends BaseAuditController {
         	e.printStackTrace();
         } 
     }
+    
+    @RequestMapping(value = "/labChange*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean labChange(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String lab = request.getParameter("lab");
+		User operator = userManager.getUserByUsername(request.getRemoteUser());
+		operator.setLastLibrary(lab);
+		userManager.saveUser(operator);
+		return true;
+	}
+    
+    @Autowired
+    private UserManager userManager = null;
 }

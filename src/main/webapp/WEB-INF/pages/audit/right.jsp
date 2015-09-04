@@ -1,11 +1,12 @@
 <script type="text/javascript" src="../scripts/lis/audit/right.js"></script>
 <div id="right" class="col-sm-3">
+	<div>
 	<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
-		<c:forEach var="depart" items="${departList}">
+		<span ><c:forEach var="depart" items="${departList}">
 			<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-		</c:forEach>
+		</c:forEach></span>
 	</select>
-	
+	</div>
 	<div id="historyTabs">
 		<ul>
 			<li><a href="#tabs-0"><fmt:message key="sample.explain"/></a></li>

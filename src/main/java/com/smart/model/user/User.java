@@ -78,6 +78,9 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private boolean accountLocked;
     private boolean credentialsExpired;
     
+    private String department;
+    private String lastLibrary;
+    
     private Hospital hospital;
     private Section section;
 
@@ -346,7 +349,27 @@ public class User extends BaseObject implements Serializable, UserDetails {
         this.credentialsExpired = credentialsExpired;
     }
     
-    @ManyToOne(optional=false,cascade=CascadeType.MERGE)
+    
+    
+    @Column
+    public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	@Column
+	public String getLastLibrary() {
+		return lastLibrary;
+	}
+
+	public void setLastLibrary(String lastLibrary) {
+		this.lastLibrary = lastLibrary;
+	}
+
+	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
 	@JoinColumn(name="hospital_id",referencedColumnName="id")
     public Hospital getHospital() {
 		return hospital;
