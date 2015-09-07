@@ -1,6 +1,5 @@
 package com.smart.webapp.controller.lis.audit;
 
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,12 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kie.api.KieBase;
-import org.kie.api.KieServices;
-import org.kie.api.io.ResourceType;
-import org.kie.internal.builder.KnowledgeBuilder;
-import org.kie.internal.builder.KnowledgeBuilderFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,14 +37,12 @@ import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
-import com.smart.webapp.util.AnalyticUtil;
 import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.smart.model.user.User;
-import com.smart.service.UserManager;
 
 @Controller
 @RequestMapping("/audit*")
@@ -64,7 +55,6 @@ public class AuditController extends BaseAuditController {
     	try {
     		final Map<String, Describe> idMap = new HashMap<String, Describe>();
         	final Map<String, String> indexNameMap = new HashMap<String, String>();
-        	final AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
         	List<Bag> bags = bagManager.getBagByHospital("1");
         	List<Rule> ruleList = new ArrayList<Rule>();
 			Set<Long> have = new HashSet<Long>();
@@ -76,13 +66,7 @@ public class AuditController extends BaseAuditController {
 					}
 				}
 			}
-			Reader reader = analyticUtil.getReader(ruleList);
-            KieServices ks = KieServices.Factory.get(); 
-            KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            kbuilder.add(ks.getResources().newReaderResource(reader), ResourceType.DRL);
-            System.out.println("规则库构造完成!");
-            KieBase kbase = kbuilder.newKnowledgeBase();
-    		final DroolsRunner droolsRunner = new DroolsRunner(kbase);
+    		final DroolsRunner droolsRunner = DroolsRunner.getInstance();
     		final Set<String> hasRuleSet = new HashSet<String>();
     		for (Item i : itemManager.getAll()) {
     			String testid = i.getIndex().getIndexId();
@@ -235,11 +219,8 @@ public class AuditController extends BaseAuditController {
 	public boolean labChange(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String lab = request.getParameter("lab");
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
-		operator.setLastLibrary(lab);
+		operator.setLastLab(lab);
 		userManager.saveUser(operator);
 		return true;
 	}
-    
-    @Autowired
-    private UserManager userManager = null;
 }

@@ -15,11 +15,6 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kie.api.KieBase;
-import org.kie.api.KieServices;
-import org.kie.api.io.ResourceType;
-import org.kie.internal.builder.KnowledgeBuilder;
-import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -89,7 +84,6 @@ public class AutoAuditServlet extends HttpServlet {
         	final Map<String, Describe> idMap = new HashMap<String, Describe>();
         	final Map<String, String> indexNameMap = new HashMap<String, String>();
         	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
-        	final AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
         	List<Bag> bags = bagManager.getBagByHospital("1");
 			List<Rule> ruleList = new ArrayList<Rule>();
 			Set<Long> have = new HashSet<Long>();
@@ -101,13 +95,13 @@ public class AutoAuditServlet extends HttpServlet {
 					}
 				}
 			}
-        	Reader reader = analyticUtil.getReader(ruleList);
-            KieServices ks = KieServices.Factory.get(); 
-            KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            kbuilder.add(ks.getResources().newReaderResource(reader), ResourceType.DRL);
-            System.out.println("规则库构造完成!");
-            KieBase kbase = kbuilder.newKnowledgeBase();
-    		final DroolsRunner droolsRunner = new DroolsRunner(kbase);
+        	if (!DroolsRunner.getInstance().isBaseInited()) {
+        		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
+        		Reader reader = analyticUtil.getReader(ruleList);
+    			DroolsRunner.getInstance().buildKnowledgeBase(reader);
+    			reader.close();
+    		}
+            final DroolsRunner droolsRunner = DroolsRunner.getInstance();
     		final Set<String> hasRuleSet = new HashSet<String>();
     		for (Item i : itemManager.getAll()) {
     			String testid = i.getIndex().getIndexId();

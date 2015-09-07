@@ -14,6 +14,7 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
+import com.smart.service.UserManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.SampleManager;
@@ -65,6 +66,9 @@ public class BaseAuditController {
 	
 	@Autowired
     protected YlxhManager ylxhManager = null;
+	
+	@Autowired
+    protected UserManager userManager = null;
 	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();

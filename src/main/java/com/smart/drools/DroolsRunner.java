@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
@@ -17,6 +19,8 @@ import org.kie.api.builder.Message.Level;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
 
 import com.smart.model.lis.TestResult;
 import com.smart.webapp.util.HisIndexMapUtil;
@@ -26,9 +30,41 @@ public class DroolsRunner {
 	
 	private KieBase kbase = null;
 	private static HisIndexMapUtil hisutil = HisIndexMapUtil.getInstance(); //检验项映射
+	private static final Log log = LogFactory.getLog(DroolsRunner.class);
+	private static DroolsRunner runner = new DroolsRunner();
+	
+	private DroolsRunner() {
+	}
+	
+	public static DroolsRunner getInstance() {
+		return runner;
+	}
+	
+	public boolean isBaseInited() {
+		if (kbase == null)
+			return false;
+		else 
+			return true;
+	}
+	
+	public void buildKnowledgeBase(Reader reader) {
 
-	public DroolsRunner(KieBase kBase) {
-		kbase = kBase;
+		try {
+			if (kbase == null) {
+				synchronized (this) {
+					if (kbase == null) {
+						KieServices ks = KieServices.Factory.get(); 
+			            KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+			            kbuilder.add(ks.getResources().newReaderResource(reader), ResourceType.DRL);
+			            kbase = kbuilder.newKnowledgeBase();
+			            log.debug("规则库构造完成!");
+			            System.out.println("规则库构造完成!");
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Set<String> getDiffCheckResult(Set<TestResult> result, Set<TestResult> l_result, Map<String, Diff> diff) {

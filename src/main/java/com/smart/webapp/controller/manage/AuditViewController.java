@@ -29,18 +29,18 @@ public class AuditViewController {
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
-		String library = "";
+		String lab = "";
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String department = operator.getDepartment();
 		Map<String, String> depart = new HashMap<String, String>();
-		if (operator.getLastLibrary() != null) {
-			library = operator.getLastLibrary();
+		if (operator.getLastLab() != null) {
+			lab = operator.getLastLab();
 		}
 		if (department != null) {
 			for (String s : department.split(",")) {
 				depart.put(s, sectionUtil.getValue(s));
-				if (StringUtils.isEmpty(library)) {
-					library = s;
+				if (StringUtils.isEmpty(lab)) {
+					lab = s;
 				}
 			}
 		}

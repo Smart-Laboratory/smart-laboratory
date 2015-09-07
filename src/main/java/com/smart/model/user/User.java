@@ -79,7 +79,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private boolean credentialsExpired;
     
     private String department;
-    private String lastLibrary;
+    private String lastLab;
     
     private Hospital hospital;
     private Section section;
@@ -349,8 +349,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
         this.credentialsExpired = credentialsExpired;
     }
     
-    
-    
     @Column
     public String getDepartment() {
 		return department;
@@ -361,12 +359,12 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	}
 
 	@Column
-	public String getLastLibrary() {
-		return lastLibrary;
+	public String getLastLab() {
+		return lastLab;
 	}
 
-	public void setLastLibrary(String lastLibrary) {
-		this.lastLibrary = lastLibrary;
+	public void setLastLab(String lastLab) {
+		this.lastLab = lastLab;
 	}
 
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
