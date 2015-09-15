@@ -63,6 +63,10 @@ public class GetPatientController extends BaseAuditController {
 			initDiagMap();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
+		if(info.getPatient()==null){
+			return null;
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		if (info != null) {

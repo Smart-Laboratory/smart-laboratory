@@ -1,4 +1,5 @@
 <script type="text/javascript" src="../scripts/lis/audit/right.js"></script>
+<script src="../jquery.easyui.min.js" type="text/javascript"></script>
 <div id="right" class="col-sm-3">
 	<div>
 	<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
@@ -7,7 +8,7 @@
 		</c:forEach></span>
 	</select>
 	</div>
-	<div id="historyTabs">
+	<div id="historyTabs"  >
 		<ul>
 			<li><a href="#tabs-0"><fmt:message key="sample.explain"/></a></li>
 			<li><a href="#tabs-1"><fmt:message key="result.history"/></a></li>

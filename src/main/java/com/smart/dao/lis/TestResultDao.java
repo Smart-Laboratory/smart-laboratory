@@ -1,5 +1,7 @@
 package com.smart.dao.lis;
 
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
@@ -11,4 +13,12 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	@Transactional
 	String getFormulaResult(String fm);
 
+	@Transactional
+	List<TestResult> getTestBySampleNo(String sampleNo);
+	
+	@Transactional
+	TestResult getSingleTestResult(String sampleNo, String testId);
+	
+	@Transactional
+	List<TestResult> getListByTestString (String sampleNo, String testString);
 }

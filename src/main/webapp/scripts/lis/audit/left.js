@@ -24,6 +24,7 @@ function getList(text, lab) {
     	onSelectRow: function(id) {
     		$("#rbcLabel").css('display','none');
     		var ret = jQuery("#list").jqGrid('getRowData',id);
+    		$("#hiddenSampleNo").val(ret.sample);
     		getPatient(ret);
     		
     		$("#collectBtn").css('display','inline');
@@ -57,7 +58,7 @@ function getList(text, lab) {
     			$("#collectBtn").css('display','none');
     		}
     		
-    		$("#hiddenSampleNo").val(ret.sample);
+    		
     		$("#sampleTitle").html("");
     		$("#hisLastResult").val(null);
     		$("#span_sampleNo").html(ret.sample);
@@ -70,7 +71,7 @@ function getList(text, lab) {
     		}
     	},
     	loadComplete: function() {
-    		jQuery("#list").jqGrid("setGridParam",{url:"<c:url value='../audit/data'/>?lab=" + $("#labSelect").val()});
+    		jQuery("#list").jqGrid("setGridParam",{url:"../audit/data?lab=" + $("#labSelect").val()});
     		
     		var firstDocId, firstSampleNo;
     		var length = jQuery('#list').jqGrid('getCol','id', false).length;

@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +24,7 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.webapp.util.DataResponse;
 import com.zju.api.model.SyncResult;
+
 
 @Controller
 @RequestMapping("/audit*")
@@ -163,7 +166,9 @@ public class GetTestResultController extends BaseAuditController {
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		
-		for (TestResult tr : info.getResults()) {
+		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
+		
+		for (TestResult tr : testResults) {
 			if (tr.getEditMark() == Constants.DELETE_FLAG)
 				continue;
 
@@ -280,6 +285,7 @@ public class GetTestResultController extends BaseAuditController {
 				testIdSet.add(t.getTestId());
 			}
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
+			if(list!=null && list.size()>0){
 			for (Sample pinfo : list) {
 				boolean isHis = false;
 				Set<TestResult> his = pinfo.getResults();
@@ -339,6 +345,7 @@ public class GetTestResultController extends BaseAuditController {
 					sameSample += pinfo.getSampleNo();
 				}
 			}
+			}
 		}
 		int color = 0;
 		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
@@ -352,7 +359,8 @@ public class GetTestResultController extends BaseAuditController {
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> dataRows2 = new ArrayList<Map<String, Object>>();
 		int i = 2;
-		for (TestResult tr : info.getResults()) {
+		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
+		for (TestResult tr : testResults) {
 			if (tr.getEditMark() == Constants.DELETE_FLAG)
 				continue;
 
@@ -405,6 +413,8 @@ public class GetTestResultController extends BaseAuditController {
 			}
 
 		}
+		dataArray[0] = new DataResponse();
+		dataArray[1] = new DataResponse();
 		dataArray[0].setRows(dataRows);
 		dataArray[0].setRecords(dataRows.size());
 		userdata.put("hisDate", hisDate);
@@ -413,8 +423,118 @@ public class GetTestResultController extends BaseAuditController {
 		dataArray[0].setUserdata(userdata);
 		dataArray[1].setRows(dataRows2);
 		dataArray[1].setRecords(dataRows2.size());
+		dataArray[1].setUserdata(userdata);
 		response.setContentType("text/html;charset=UTF-8");
 		return dataArray;
 	}
 
+	@RequestMapping(value = "/edit*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean editTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String result = request.getParameter("result");
+		String testId = request.getParameter("id");
+		String sampleNo = request.getParameter("sampleNo");
+		
+//		if (fillUtil == null) {
+//			List<Describe> desList = syncManager.getAllDescribe();
+//			List<ReferenceValue> refList = syncManager.getAllReferenceValue();
+//			fillUtil = FillFieldUtil.getInstance(desList, refList);
+//		}
+		
+//		if (formulaUtil == null) {
+//			formulaUtil = FormulaUtil.getInstance(rmiService, syncManager, testResultManager, patientInfoManager, idMap, fillUtil);
+//		}
+
+		if (!StringUtils.isEmpty(testId) && !StringUtils.isEmpty(sampleNo)) {
+			TestResult testResult = testResultManager.getSingleTestResult(sampleNo, testId);
+			Sample info = sampleManager.getBySampleNo(sampleNo);
+			
+			if (testResult == null)
+				return false;
+			
+			List<TestResult> tr = null;
+			if (testId.equals("9046")) {
+				tr = testResultManager.getListByTestString(sampleNo, "9045,9051");
+			}
+			if (testId.equals("9047")) {
+				tr = testResultManager.getListByTestString(sampleNo, "9045,9055");
+			}
+			if (testId.equals("9048")) {
+				tr = testResultManager.getListByTestString(sampleNo, "9045,9089");
+			}
+			if (testId.equals("9049")) {
+				tr = testResultManager.getListByTestString(sampleNo, "9045,9091");
+			}
+			if (testId.equals("9050")) {
+				tr = testResultManager.getListByTestString(sampleNo, "9045,9090");
+			}
+			
+			Double rbc = 0.0;
+			TestResult testresult2 = null;
+			if (tr != null) {
+				if(tr.get(0).getTestId().equals("9045")) {
+					rbc = Double.parseDouble(tr.get(0).getTestResult());
+					testresult2 = tr.get(1);
+				} else {
+					rbc = Double.parseDouble(tr.get(1).getTestResult());
+					testresult2 = tr.get(0);
+				}
+				Double newresult2 = Double.parseDouble(result)*rbc/100;
+				if (testresult2.getTestId().equals("9051") || testresult2.getTestId().equals("9055")) {
+					DecimalFormat df = new DecimalFormat("0.0");
+					testresult2.setTestResult(df.format(newresult2));
+					testresult2.setOperator(request.getRemoteUser());
+					testresult2.setMeasureTime(new Date());
+					testresult2.setResultFlag("AAAAAA");
+					testresult2.setEditMark(Constants.MANUAL_EDIT_FLAG);
+//					fillUtil.fillResult(testresult2, info);
+					testResultManager.save(testresult2);
+				} else {
+					DecimalFormat df = new DecimalFormat("0.00");
+					testresult2.setTestResult(df.format(newresult2));
+					testresult2.setOperator(request.getRemoteUser());
+					testresult2.setMeasureTime(new Date());
+					testresult2.setResultFlag("AAAAAA");
+					testresult2.setEditMark(Constants.MANUAL_EDIT_FLAG);
+//					fillUtil.fillResult(testresult2, info);
+					testResultManager.save(testresult2);
+				}
+			}
+			
+			String oldResult = testResult.getTestResult();
+			testResult.setTestResult(result);
+			testResult.setOperator(request.getRemoteUser());
+			testResult.setMeasureTime(new Date()); 
+			
+			testResult.setResultFlag("AAAAAA");
+//			fillUtil.fillResult(testResult, info);
+			if (testResult.getEditMark() == 0) {
+				testResult.setEditMark(Constants.MANUAL_EDIT_FLAG);
+			} else if (testResult.getEditMark() % Constants.MANUAL_EDIT_FLAG != 0) {
+				testResult.setEditMark(Constants.MANUAL_EDIT_FLAG * testResult.getEditMark());
+			}
+			testResultManager.save(testResult);
+			
+//			formulaUtil.formula(info, request.getRemoteUser());
+			
+			info.setModifyFlag(1);
+			info.setAuditStatus(0);
+			sampleManager.save(info);
+			
+//			TestModify testModify = new TestModify();
+//			testModify.setModifyTime(new Date());
+//			testModify.setModifyUser(request.getRemoteUser());
+//			testModify.setSampleNo(sampleNo);
+//			testModify.setTestId(testId);
+//			testModify.setNewValue(result);
+//			testModify.setOldValue(oldResult);
+//			testModify.setType(Constants.EDIT);
+//			testModifyManager.save(testModify);
+		} else {
+			return false;
+		}
+
+		return true;
+	}
+	
 }

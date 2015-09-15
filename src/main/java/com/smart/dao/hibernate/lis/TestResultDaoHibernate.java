@@ -1,5 +1,10 @@
 package com.smart.dao.hibernate.lis;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -35,6 +40,25 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 		}
 		String sql = "select to_char(round(" + formula + ", 2),'fm99990.00') from dual";
 		return (String) getSession().createSQLQuery(sql).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getTestBySampleNo(String sampleNo){
+//		String sql = "select t.* from l_testResult t where  t.sampleno='"+ sampleNo + "' order by t.testid ";
+		
+		return getSession().createQuery("from TestResult where sampleNo='"+sampleNo+"' order by testId").list();
+		
+		
+	}
+	
+	public TestResult getSingleTestResult(String sampleNo, String testId){
+		return (TestResult)getSession().createQuery("from TestResult where sampleNo='"+sampleNo+"' and testId='"+testId+"'").list().get(0);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getListByTestString (String sampleNo, String testString){
+		return getSession().createQuery("from TestResult where sampleNo='" + sampleNo
+				+ "' and testId in ('"+ testString.replace(",", "','") +"')").list();
 	}
 	
 }

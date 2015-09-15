@@ -1,5 +1,7 @@
 package com.smart.service.impl.lis;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,16 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getFormulaResult(fm);
 	}
 	
+	public List<TestResult> getTestBySampleNo(String sampleNo){
+		return testResultDao.getTestBySampleNo(sampleNo);
+	}
 	
+	public TestResult getSingleTestResult(String sampleNo, String testId){
+		return testResultDao.getSingleTestResult(sampleNo,testId);
+	}
 	
+	public List<TestResult> getListByTestString (String sampleNo, String testString){
+		return testResultDao.getListByTestString(sampleNo,testString);
+	}
 	
 }
