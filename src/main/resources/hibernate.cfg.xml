@@ -30,6 +30,7 @@
         <mapping class="com.smart.model.reagent.Batch"/>
         <mapping class="com.smart.model.reagent.Combo"/>
         <mapping class="com.smart.model.reagent.In"/>
-        <mapping class="com.smart.model.reagent.Out"/>
+        <mapping class="com.smart.model.reagent.Out"/> 
+        <mapping class="com.smart.model.lis.CollectSample"/>
     </session-factory>
 </hibernate-configuration>

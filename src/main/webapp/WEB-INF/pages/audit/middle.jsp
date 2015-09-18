@@ -74,7 +74,7 @@
 		</div>
 		<div style="margin-top:4px;float:right;">
 			<button id="testAdd" class="btn"><b><fmt:message key="button.add" /></b></button>
-			<button id="testDelete" class="btn"><b><fmt:message key="button.delete" /></b></button>
+			<button id="testDelete" class="btn" onclick="confirm('<fmt:message key="confirm.delete" />')"><b><fmt:message key="button.delete" /></b></button>
 			<button id="tatBtn" class="btn"><b>TAT</b></button>
 			<button id="modifyBtn" class="btn"><b><fmt:message key="sample.test.modify.record" /></b></button>
 		</div>

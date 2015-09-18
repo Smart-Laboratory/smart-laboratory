@@ -44,7 +44,7 @@ function getList(text, lab) {
     			$("#auditPrintBtn").css('display','inline');
     			$("#auditPassBtn").css('display','none');
     			$("#needEdit").val(false);
-    		} else if (ret.status == "未通过"){
+    		} else if (ret.status == "无结果"){
     			$("#unaudit_reason_btn").hide();
     			$("#testAdd").css('display','none');
     			$("#testDelete").css('display','none');
@@ -125,3 +125,68 @@ function getList(text, lab) {
     jQuery("#list").jqGrid('filterToolbar');
     jQuery("#list").jqGrid('navButtonAdd',"#pager",{caption:"",title:"", buttonicon :'ui-icon-pin-s', onClickButton:function(){ mygrid[0].toggleToolbar() } });
 }
+
+$(function(){
+	$("#manualAuditPassBtn").click(function() {
+			var s; 
+			s = jQuery("#list").jqGrid('getGridParam','selarrrow'); 
+			var ids = "";
+			for (var c in s) {
+				if (ids != "") {
+					ids += ",";
+				}
+				ids += s[c];
+			}
+			if (s.length != 0 && confirm("确认通过这 "+s.length+" 个样本？")) {
+				$.post("../audit/batch",{ids:ids,op:"pass"},function(data) {
+					if (data == true) {
+						jQuery("#list").trigger("reloadGrid");
+					}
+				});
+			}
+		});
+		$("#manualAuditUnPassBtn").click(function() {
+			var s; 
+			s = jQuery("#list").jqGrid('getGridParam','selarrrow'); 
+			var ids = "";
+			for (var c in s) {
+				if (ids != "") {
+					ids += ",";
+				}
+				ids += s[c];
+			}
+			if (s.length != 0 && confirm("确认不通过这 "+s.length+" 条样本？")) {
+				$.post("../audit/batch",{ids:ids,op:"unpass"},function(data) {
+
+					if (data == true) {
+						for (var c in s) {
+							jQuery("#list").jqGrid('setRowData', s[c], {status:"<font color='red'><fmt:message key='audit.unpass'/></font>"});	
+						}
+					}
+				});
+			}
+		});
+		$("#manualWriteBackBtn").click(function() {
+			var s; 
+			s = jQuery("#list").jqGrid('getGridParam','selarrrow'); 
+			var samples = "";
+			for (var i=0; i<s.length; i++) {
+				var sample = jQuery("#list").jqGrid('getCell',s[i],'sample'); 
+				if (samples != "") {
+					samples += ",";
+				}
+				samples += "'"+sample+"'";
+			}
+			if (s.length != 0 && confirm("确认写回这 "+s.length+" 条样本？")) {
+				$.getJSON("${catcherUrl}ajax/writeBack/batch.htm?callback=?",{samples:samples,lab:$("#lastDepLib").val(),user:"${checkOperator}"},function(data){
+	   				 if (data.result == 0) {
+	   					alert("正在写回中...");
+	   				 } else if (data.result == 1) {
+	   					alert("写回成功");
+	   				 } else {
+	   					alert("写回失败");
+	   				 }
+	   			});
+			}
+		});
+});

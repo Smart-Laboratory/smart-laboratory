@@ -795,7 +795,6 @@
 								var pre = "<div class='"+$(ret.result).attr('class')+"'>";
 								cl = pre + $(ret.result).html() + "</div>";
 								lastval = $(ret.result).find(":eq(0)").html();
-								alert(lastval);
 								jQuery("#sample0").jqGrid('setRowData', id, {result:lastval});
 								jQuery("#sample0").jqGrid('editRow',id, {
 									keys:true,

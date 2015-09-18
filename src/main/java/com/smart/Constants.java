@@ -214,7 +214,7 @@ public final class Constants {
 	 * 检验流程——接收
 	 */
 	public static final String PROCESS_RECEIVE = "接收";
-	
+	public static final String PROCESS_KSRECEIVE = "科室接收";
 	/**
 	 * 检验流程——报告
 	 */

@@ -11,8 +11,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,7 @@ import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Bag;
@@ -42,13 +45,18 @@ import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
+import com.smart.model.lis.CollectSample;
 import com.smart.model.user.User;
+import com.smart.service.lis.CollectSampleManager;
 
 @Controller
 @RequestMapping("/audit*")
 public class AuditController extends BaseAuditController {
 	
 	private static final Log log = LogFactory.getLog(AuditController.class);
+	
+	@Autowired
+	private CollectSampleManager collectSampleManager;
     
     @RequestMapping(value = "/result*", method = RequestMethod.GET)
 	public void getAuditResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -213,7 +221,15 @@ public class AuditController extends BaseAuditController {
         	e.printStackTrace();
         } 
     }
-    
+    /**
+	 * 通过或未通过 标本
+	 * 
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
     @RequestMapping(value = "/labChange*", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean labChange(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -222,5 +238,134 @@ public class AuditController extends BaseAuditController {
 		operator.setLastLab(lab);
 		userManager.saveUser(operator);
 		return true;
+	}
+    
+    @RequestMapping(value = "/manual*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean manualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		boolean result = false;
+
+		String op = request.getParameter("operate");
+		String note = request.getParameter("note");
+		String sampleNo = request.getParameter("sample");
+		String text = request.getParameter("text");
+		Sample sample = sampleManager.getBySampleNo(sampleNo);
+		
+		try {
+				sample.setPassReason(note);
+				if ("pass".equals(op)) {
+					sample.setAuditStatus(1);
+				} else if ("unpass".equals(op)) {
+					sample.setAuditStatus(2);
+				}
+				for(Process process : sample.getProcess()){
+					if(process.getOperation().equals(Constants.PROCESS_CKECK)){
+						process.setOperator(request.getRemoteUser());
+						process.setTime(new Date());
+					}
+				}
+				sample.setWriteback(1);
+				if (StringUtils.isEmpty(text)) {
+					text = Check.MANUAL_AUDIT;
+				}
+				if (sample.getCheckerOpinion()!=null
+					&& !sample.getCheckerOpinion().contains(Check.MANUAL_AUDIT)
+						&& !sample.getCheckerOpinion().contains(Check.AUTO_AUDIT)) {
+					sample.setCheckerOpinion(sample.getCheckerOpinion() + "  " + text);
+				} else {
+					sample.setCheckerOpinion(text);
+				}
+				result = true;
+			sampleManager.save(sample);
+		} catch (Exception e) {
+			log.error("通过或不通过出错！", e);
+		}
+		return result;
+	}
+    
+    /**
+	 * 样本收藏
+	 * 
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+    @RequestMapping(value = "/collect*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean collectSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String sampleno = request.getParameter("sample");
+		String text = request.getParameter("text");
+		String type = request.getParameter("type");
+		String bamc = request.getParameter("bamc");
+		String username = request.getRemoteUser();
+		User user = userManager.getUserByUsername(username);
+		String name = user.getLastName();
+		
+		if(!collectSampleManager.isSampleCollected(username, sampleno)) {
+			CollectSample cs = new CollectSample();
+			cs.setName(name);
+			cs.setUsername(username);
+			cs.setSampleno(sampleno);
+			cs.setBamc(bamc);
+			cs.setType(type);
+			cs.setCollecttime(new Date());
+			collectSampleManager.save(cs);
+			return true;
+		}
+		return false;
+	}
+    
+    @RequestMapping(value = "/batch*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean batchManualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		boolean result = true;
+
+		String ids = request.getParameter("ids");
+		String op = request.getParameter("op");
+		int status = Constants.STATUS_UNAUDIT;
+		boolean pass = false;
+		if ("pass".equals(op)) {
+			status = Constants.STATUS_PASSED;
+			pass = true;
+		} else if ("unpass".equals(op)) {
+			status = Constants.STATUS_UNPASS;
+		}
+		
+		List<Sample> updateP = new ArrayList<Sample>();
+
+		for (String id : ids.split(",")) {
+			Sample info = sampleManager.get(Long.parseLong(id));
+			//if (info.getAuditStatus() == Constants.STATUS_PASSED + Constants.STATUS_UNPASS - status) {
+			if (info.getAuditStatus() != -1) {
+				info.setAuditStatus(status);
+				for(Process process : info.getProcess()){
+					if(process.getOperation().equals(Constants.PROCESS_CKECK)){
+						process.setOperator(request.getRemoteUser());
+						process.setTime(new Date());
+					}
+				}
+				String profileName = info.getSampleNo().substring(8, 11);
+				String deviceId = null;
+				for (TestResult tr : info.getResults()) {
+					if (deviceId == null) {
+						deviceId = tr.getDeviceId();
+						break;
+					}
+				}
+				if (StringUtils.isEmpty(info.getChkoper2())) {
+					info.setChkoper2(FillFieldUtil.getJYZ(rmiService, profileName, deviceId));
+				}
+				info.setWriteback(1);
+				if (pass) {
+					info.setPassReason("批量通过");
+				}
+				updateP.add(info);
+			}
+		}
+		sampleManager.saveAll(updateP);
+		return result;
 	}
 }

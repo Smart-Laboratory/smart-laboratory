@@ -65,15 +65,6 @@ function getSopSchedule(lab) {
 		}
 	}
 
-$(function() {
-	
-	
-	
-	
-	
-
-});
-
 
 $(function(){
 	
@@ -200,13 +191,7 @@ $(function(){
 		modal:true
 	});
 	
-	$("#opStatusDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 340,
-	    height: 350
-	});
+	
 	
 	$("#collectDialog").dialog({
 		autoOpen: false,
@@ -307,9 +292,8 @@ $(function(){
 	$("#historyTabs").tabs({
 		active : 1,
 		activate : function(event, ui) {
-//			alert(ui.newTab.html);
-//			alert(ui.oldTab.index);
-			if(ui.index == 1) {
+			var id = ui.newPanel.attr("id");
+			if(id == "tabs-1") {
 				/* jQuery("#rowed3").setGridParam().showCol("last1"); */
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
@@ -324,7 +308,7 @@ $(function(){
 				jQuery("#rowed3").setGridParam().hideCol("device");
 				jQuery("#rowed3").setGridParam().hideCol("checktime");
 				var s = jQuery("#list").jqGrid('getGridParam','selrow');
-				if (ui.index == 0) {
+				if (id == "tabs-0") {
 					getExplain(s);
 				}
 			}
@@ -452,21 +436,21 @@ $(function(){
 	var selectNoteAdd = true;
 	$("#auditPassBtn").click(function() {
 		$("#hiddenIsPass").val(true);
-		$("#passNotes").html("不通过原因");
+		$("#passNotes").html("通过原因");
 		
 		if (selectNoteAdd) {
-			if ($("#lastDepLib").val() == '1300101' || $("#lastDepLib").val() == '1300200' || $("#lastDepLib").val() == '1300100' || $("#lastDepLib").val() == '1300201') {
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason' checked><span class='label selectLabel'>\u6807\u672c\u91cd\u65b0\u68c0\u6d4b</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u63a8\u7247\u663e\u5fae\u955c\u68c0\u67e5</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u624b\u5de5\u5206\u7c7b</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u7b26\u5408\u903b\u8f91\u89c4\u5219</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u5176\u5b83</span></label>");
-			} else if ($("#lastDepLib").val() == '1300600') {
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u91cd\u65b0\u68c0\u6d4b</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u7a00\u91ca\u6216\u52a0\u91cf\u68c0\u6d4b</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u67e5\u770b\u6807\u672c</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u7b26\u5408\u903b\u8f91\u89c4\u5219</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>\u5176\u5b83</span></label>");
+			if ($("#lastDepLab").val() == '1300101' || $("#lastDepLab").val() == '1300200' || $("#lastDepLab").val() == '1300100' || $("#lastDepLab").val() == '1300201') {
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason' checked><span class='label selectLabel'>标本重新检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>推片显微镜检查</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>手工分类</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
+			} else if ($("#lastDepLab").val() == '1300600') {
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>重新检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>稀释或加量检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>查看标本</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
+				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
 			}
 			selectNoteAdd = false;
 		}
@@ -480,16 +464,12 @@ $(function(){
 		if ($("#hiddenIsPass").val() == "true") {
 			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
 			var text = $("#noteText").val();
-			$.post("<c:url value='/explain/audit/manual'/>",{sample:sample, operate:"pass", note:note, text:text},function(data) {
+			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text},function(data) {
 				if (data == true) {
-					var s = jQuery("#s3list").jqGrid('getGridParam','selrow');
-					jQuery("#s3list").jqGrid('setRowData', s, {status:"<fmt:message key='audit.pass'/>"});
+					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
 					
-					/* var next = $("#"+s).next("tr").attr("id");
-					if (next != null) {
-						$("#s3list").setSelection(s, false);
-						$("#s3list").setSelection(next, true);
-					} */
+					
 					$("#testAdd").css('display','none');
 	    			$("#testDelete").css('display','none');
 	    			$("#auditUnpassBtn").css('display','inline');
@@ -501,10 +481,10 @@ $(function(){
 				}
 			});
 		} else {
-			$.post("<c:url value='/explain/audit/manual'/>",{sample:sample, operate:"unpass", note:""},function(data) {
+			$.post("../audit/manual",{sample:sample, operate:"unpass", note:""},function(data) {
 				if (data == true) {
-					var s = jQuery("#s3list").jqGrid('getGridParam','selrow');
-					jQuery("#s3list").jqGrid('setRowData', s, {status:"<font color='red'><fmt:message key='audit.unpass'/></font>"});
+					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
 					$("#testAdd").css('display','inline');
 	    			$("#testDelete").css('display','inline');
 	    			$("#auditUnpassBtn").css('display','none');
@@ -524,11 +504,14 @@ $(function(){
 	
 	$("#auditUnpassBtn").click(function(){
 		$("#hiddenIsPass").val(false);
-		$("#passNotes").html("<fmt:message key='unpass.notes' />");
+		$("#passNotes").html("未通过原因");
 		$("#opStatusDialog").dialog("open");
 	});
 
 	$("#collectBtn").click(function(){
+		$("#collectText").val("");
+		$("#collect_bamc").val("");
+		$("#collect_type").val("");
 		$("#collectDialog").dialog("open");
 	});
 	
@@ -621,5 +604,20 @@ $(function(){
 		
 	});
 	
+	$("#collectConfirm").click(function() {
+		var sample = $("#hiddenSampleNo").val();
+		var text = $("#collectText").val();
+		var bamc = $("#collect_bamc").val();
+		var type = $("#collect_type").val();
+		
+		$.post("../audit/collect",{sample:sample, text:text, type:type, bamc:bamc},function(data) {
+			if (data == true) {
+				alert("收藏成功！");
+			} else {
+				alert("您已收藏过该样本！");
+			}
+			$("#collectDialog").dialog("close");
+		});
+	});
 	
 });

@@ -2,10 +2,13 @@ package com.smart.dao.hibernate.lis;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.smart.dao.lis.ReasoningModifyDao;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.ReasoningModify;
 
+@Repository("reasoningModifyDao")
 public class ReasoningModifyDaoHibernate extends GenericDaoHibernate<ReasoningModify, Long> implements ReasoningModifyDao {
 
 	/**

@@ -51,3 +51,17 @@ function getExplain(docNo){
 	
 }
 
+$(function() {
+	
+	
+	$("#opStatusDialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		modal:true,
+	    width: 340,
+	    height: 350
+	});
+	
+	
+
+});
