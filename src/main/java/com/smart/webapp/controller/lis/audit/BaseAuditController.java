@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -69,6 +70,11 @@ public class BaseAuditController {
 	
 	@Autowired
     protected UserManager userManager = null;
+	
+	protected final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	protected final static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+	protected final static SimpleDateFormat mdf = new SimpleDateFormat("MM/dd");
+	protected final static SimpleDateFormat hmf = new SimpleDateFormat("HH:mm");
 	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();

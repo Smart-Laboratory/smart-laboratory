@@ -2,9 +2,10 @@ package com.smart.service.lis;
 
 import java.util.List;
 
-import com.smart.model.lis.ReasoningModify;;
+import com.smart.model.lis.ReasoningModify;
+import com.smart.service.GenericManager;;
 
-public interface reasoningModifyManager {
+public interface reasoningModifyManager extends GenericManager<ReasoningModify, Long> {
 
 	/**
 	 *  获取某样本的解释列表

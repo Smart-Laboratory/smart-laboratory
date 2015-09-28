@@ -38,4 +38,8 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getListByTestString(sampleNo,testString);
 	}
 	
+	public List<TestResult> getSingleHistory(String testid, String patientName,
+			String patientid) {
+		return testResultDao.getSingleHistory(testid, patientName, patientid);
+	}
 }

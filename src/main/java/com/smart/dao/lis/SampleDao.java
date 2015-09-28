@@ -29,4 +29,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	
 	@Transactional
 	Sample getBySampleNo(String sampleNo);
+	
+	@Transactional
+	List<Integer> getAuditInfo(String date, String department, String user);
 }

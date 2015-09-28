@@ -77,6 +77,8 @@ public class AuditUtil {
 			List<Item> items = new ArrayList<Item>(r.getItems());
 			Ratio ra = new Ratio();
 			String ref = "";
+			if(items.size()==0)
+				continue;
 			if (items.get(0).getValue().equals("=1")) {
 				ra.setDenominatorId(items.get(0).getIndex().getIndexId());
 				ra.setNumeratorId(items.get(1).getIndex().getIndexId());

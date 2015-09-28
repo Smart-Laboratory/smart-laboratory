@@ -1,16 +1,15 @@
 package com.smart.dao.hibernate.lis;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.TestResultDao;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
+import com.smart.model.lis.Sample;
 
 @Repository("testResultDao")
 public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, TestResultPK> implements TestResultDao {
@@ -59,6 +58,15 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	public List<TestResult> getListByTestString (String sampleNo, String testString){
 		return getSession().createQuery("from TestResult where sampleNo='" + sampleNo
 				+ "' and testId in ('"+ testString.replace(",", "','") +"')").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getSingleHistory(String testid, String patientName,
+			String patientid) {
+		String hql = "select t.* from Sample s, TestResult t where t.testid in (" + testid
+				+ ")  and s.patientId='" + patientid + "' and s.sampleno=t.sampleno order by t.measuretime desc";
+		Query q = getSession().createQuery(hql);
+		return q.list();
 	}
 	
 }

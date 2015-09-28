@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jettison.json.JSONObject;
+import org.kie.internal.task.api.TaskPersistenceContextManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -367,5 +369,88 @@ public class AuditController extends BaseAuditController {
 		}
 		sampleManager.saveAll(updateP);
 		return result;
+	}
+    
+    @RequestMapping(value = "/count*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSampleCount(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		JSONObject json = new JSONObject();
+		String strToday = df.format(new Date());
+		User operator = userManager.getUserByUsername(request.getRemoteUser());
+
+		String department = operator.getDepartment();
+		if (StringUtils.isEmpty(operator.getLastLab()) && department != null) {
+			String[] deps = department.split(",");
+			if (deps.length >= 1) {
+				operator.setLastLab(deps[0]);
+				userManager.save(operator);
+			}
+		}
+		if (!StringUtils.isEmpty(operator.getLastLab())) {
+			// List<Integer> list = patientInfoManager.getAuditInfo("", operator.getLastLibrary(),
+			// operator.getLabCode());
+			List<Integer> todayList = sampleManager.getAuditInfo(strToday, operator.getLastLab(),
+					 operator.getUsername());
+			// json.put("unaudit", list.get(0));
+			// json.put("unpass", list.get(1));
+			json.put("todayunaudit", todayList.get(0));
+			json.put("todayunpass", todayList.get(1));
+			json.put("dangerous", todayList.get(2));
+//			json.put("needwriteback", todayList.get(3));
+			json.put("needwriteback", 0);
+			
+//			long interval = new Date().getTime() - manager.getLastFinishTime(operator.getUsername());
+			// 0:不需要自动审核
+			// 1:正在自动审核
+			// 2:需要自动审核
+			/*if (!startBackAudit) {
+				// System.out.println(interval);
+				if (manager.isAuditing(operator.getUsername())) {
+					json.put("status", 1);
+					// } else if (todayList.get(0) > MAX_UNAUDIT_COUNT || todayList.get(0) != 0 && interval >
+					// AUDIT_INTERVAL_TIME) {
+				} else if (todayList.get(0) != 0 && interval > AUDIT_INTERVAL_TIME) {
+					json.put("status", 2);
+				} else {
+					json.put("status", 0);
+				}
+			} else {
+				json.put("status", 0);
+			}*/
+			json.put("status", 0);
+		} else {
+			// json.put("unaudit", 0);
+			// json.put("unpass", 0);
+			json.put("todayunaudit", 0);
+			json.put("todayunpass", 0);
+			json.put("dangerous", 0);
+			json.put("needwriteback", 0);
+			json.put("status", 0);
+		}
+
+		return json.toString();
+	}
+    
+    /**
+	 * 删除一条检验样本
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sampleDelete*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean deleteSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String id = request.getParameter("id");
+
+		if (!StringUtils.isEmpty(id)) {
+			sampleManager.remove(Long.parseLong(id));
+		} else {
+			return false;
+		}
+		return true;
 	}
 }

@@ -84,7 +84,7 @@
     		if ($("#historyTabs").tabs('option', 'active') == 0) {
    				jQuery("#audit_information").jqGrid("setGridParam",{
    					url:"../audit/explain?id="+ret.id,
-   					editurl: "../audit/explain/edit?docNo=" + ret.id
+   					editurl: "../audit/explain/edit?id=" + ret.id
    				}).trigger("reloadGrid");
     		} else if ($("#historyTabs").tabs('option', 'active') == 1) {
 				jQuery("#rowed3").setGridParam().showCol("last2");
@@ -98,7 +98,7 @@
     		
     		$("#historyTabs").css('display','block');
 			
-			$("#midContent").css('display','block');
+			$("#mid").css('display','block');
 			if(data.mode == 1) {
 				$("#sampleTitle").html("<font color='red'>★</font>" + $("#hiddenSampleNo").val() + "  " + data.examinaim);
 				$("#sample0").jqGrid("setCaption", "<font color='red'>★</font>&nbsp" + $("#hiddenSampleNo").val() + " (共" + data.size + "项)");        	
@@ -194,23 +194,25 @@
         jQuery("#rowed3").jqGrid({
 		   	url:"../audit/sample?id="+sampleNo,
 			datatype: "json",
+			shrinkToFit:true,
+			autowidth:true,
 			jsonReader : {repeatitems : false, userdata : "userdata"},  
 		   	colNames:['ID','Color','英文缩写','项目', '结果', '历史', '历史', '历史', '历史', '历史', '测定时间', '机器号', '参考值', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true},
 		   		{name:'color',index:'color',hidden:true},
-		   		{name:'ab',index:'ab',width:135,hidden:true},
-		   		{name:'name',index:'name',width:135,sortable:false},
-		   		{name:'result',index:'result',width:75,sortable:false,editable:true},
-		   		{name:'last',index:'last',width:50,sortable:false},
-		   		{name:'last1',index:'last1',width:50,sortable:false},
-		   		{name:'last2',index:'last2',width:50,hidden:true,sortable:false},
-		   		{name:'last3',index:'last3',width:50,hidden:true,sortable:false},
-		   		{name:'last4',index:'last4',width:50,hidden:true,sortable:false},
-		   		{name:'checktime',index:'checktime',width:50,hidden:true,sortable:false},
-		   		{name:'device',index:'device',width:50,hidden:true,sortable:false},
-		   		{name:'scope',index:'scope',width:80,sortable:false},
-		   		{name:'unit', sortable:false, width:65,index:'unit'},
+		   		{name:'ab',index:'ab',width:"20%",hidden:true},
+		   		{name:'name',index:'name',width:"20%",sortable:false},
+		   		{name:'result',index:'result',width:"8%",sortable:false,editable:true},
+		   		{name:'last',index:'last',width:"8%",sortable:false},
+		   		{name:'last1',index:'last1',width:"8%",sortable:false},
+		   		{name:'last2',index:'last2',width:"8%",hidden:true,sortable:false},
+		   		{name:'last3',index:'last3',width:"8%",hidden:true,sortable:false},
+		   		{name:'last4',index:'last4',width:"8%",hidden:true,sortable:false},
+		   		{name:'checktime',index:'checktime',width:"8%",hidden:true,sortable:false},
+		   		{name:'device',index:'device',width:"8%",hidden:true,sortable:false},
+		   		{name:'scope',index:'scope',width:"8%",sortable:false},
+		   		{name:'unit', sortable:false, width:"6%",index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName',hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
@@ -762,6 +764,7 @@
 		jQuery("#sample0").jqGrid({
 		   	data:mydata,
 			datatype: "local",
+			shrinkToFit:true,
 			jsonReader : {repeatitems : false, userdata : userdata},  
 		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
@@ -972,6 +975,7 @@
 		jQuery("#sample1").jqGrid({
 		   	data: mydata,
 			datatype: "local",
+			shrinkToFit:true,
 			jsonReader : {repeatitems : false, userdata : userdata},  
 		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
@@ -990,6 +994,7 @@
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
 		   	],
 		   	height: "100%",
+		   	
 		   	rowNum: 50,
 		    caption: "",
 			onSelectRow: function(id) {

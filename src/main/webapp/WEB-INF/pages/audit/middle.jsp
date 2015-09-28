@@ -9,7 +9,8 @@
 }
 </style>
 
-<div id="mid" class="col-sm-6">
+<div id="mid" class="col-sm-9" >
+	<div id="patientinfo" class="col-sm-9">
 	<h2 style="display:none;" id="sampleTitle"></h2>
 	<div id='passLabel' class="alert alert-success" style="display:none;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
 		<b><fmt:message key="passreason"/>&nbsp;</b>
@@ -42,13 +43,13 @@
 			</div>
 		</div>
 		<div class="col-sm-12 pinfo">
-			<div class="col-sm-4 pinfo">
+			<div class="col-sm-6 pinfo">
 				<fmt:message key="patient.section" />:<b id="pSection"></b>
 			</div>
-			<div id="pBedHtml" class="col-sm-3 pinfo">
+			<div id="pBedHtml" class="col-sm-2 pinfo">
 				<fmt:message key="patient.departbed" />:<b id="pBed"></b>
 			</div>
-			<div class="col-sm-5 pinfo">
+			<div class="col-sm-4 pinfo">
 				<fmt:message key="diagnostic" />:<b id="diagnostic"></b>
 			</div>
 		</div>
@@ -68,7 +69,7 @@
 			<button id="auditUnpassBtn" class="btn"><b><fmt:message key="button.unpass" /></b></button>
 			<button id="imageBtn" class="btn btn-success"><b><fmt:message key="button.image" /></b></button>
 			<button id="uploadBtn" class="btn btn-info"><b><fmt:message key="button.upload" /></b></button>
-			<button id="unaudit_reason_btn" class="btn btn-danger" style="width:85px;"><b><fmt:message key="sample.unpass.reason" /></b></button>
+			<button id="unaudit_reason_btn" type="button" data-container="body" data-toggle="popover" data-placement="right" class="btn btn-danger" style="width:85px;"><b><fmt:message key="sample.unpass.reason" /></b></button>
 			<button id="auditPrintBtn" class="btn"><b><fmt:message key="print" /></b></button>
 			<button id="collectBtn" class="btn btn-info"><b><fmt:message key="button.collect" /></b></button>
 		</div>
@@ -79,13 +80,22 @@
 			<button id="modifyBtn" class="btn"><b><fmt:message key="sample.test.modify.record" /></b></button>
 		</div>
 	</div>
+	</div>
 	
+	<div class="col-sm-11" >
 	<div id="patientRow" style="margin-top:10px;">
 		<table id="rowed3" style="font-size: 14px;"></table>
 	</div>
-	<div id="twosampleTable" style="float:left; width:750px;">
-		<table id="sample0" style="font-size: 14px;"></table>
-		<table id="sample1" style="font-size: 14px;"></table>
+	<div class="col-sm-12">
+	
+	<div id="twosampleTable" >
+		<div class="col-sm-6">
+			<table id="sample0" style="font-size: 14px;"></table>
+		</div>
+		<div class="col-sm-6">
+			<table id="sample1" style="font-size: 14px;"></table>
+		</div>	
+	</div>
 	</div>
 	<div style="font-size: 13px; display:none;margin-top: 10px;">
 		<input type="hidden" id="hiddenDocId"/>
@@ -106,5 +116,6 @@
 	</div>
 	<div id="relative-tests" style="float:left;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;margin-top:2px;width:500px;">
 		<div id='showGalleria'></div>
+	</div>
 	</div>
 </div>

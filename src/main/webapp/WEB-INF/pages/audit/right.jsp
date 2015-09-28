@@ -1,6 +1,6 @@
 <script type="text/javascript" src="../scripts/lis/audit/right.js"></script>
 <script src="../jquery.easyui.min.js" type="text/javascript"></script>
-<div id="right" class="col-sm-3">
+<div id="right" style="position:absolute;right:0px;" style="width:20%">
 	<div>
 	<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
 		<span ><c:forEach var="depart" items="${departList}">
@@ -50,7 +50,7 @@
 				<div id="g1"></div>
 				<span class="label"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
    				<div id="g2"></div>
-   				<span class="label label-warning"><a onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></a></span>
+   				<span class="label label-warning"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
    				<div id="g3"></div>
    				<span class="label label-important"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
 				<div id="g4"></div>

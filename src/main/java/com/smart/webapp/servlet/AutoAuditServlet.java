@@ -237,11 +237,10 @@ public class AutoAuditServlet extends HttpServlet {
         					criticalRecordManager.saveAll(updateCriticalRecord);
         					log.debug("第" + autocount + "次审核结束！");
         	            	System.out.println("第" + autocount + "次审核结束！");
-        	                Thread.sleep(120000);  
+//        	                Thread.sleep(120000);  
         	            } catch (Exception e) {
         	            	log.error(e.getMessage());
         	                e.printStackTrace();
-        	                continue;
         	            }
         	        } 
         		}
