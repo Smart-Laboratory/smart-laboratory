@@ -80,7 +80,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getNeedAudit(String day) {
 		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by id");
 		q.setFirstResult(0);
-		q.setMaxResults(100);             
+		q.setMaxResults(500);             
 		return q.list();
 	}
 

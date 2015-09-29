@@ -15,13 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.rule.Bag;
-import com.smart.model.rule.Index;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.rule.BagManager;
-import com.smart.service.rule.ItemManager;
-import com.smart.service.rule.ResultManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.util.PageList;
 import com.smart.webapp.util.CheckAllow;
@@ -39,12 +36,6 @@ public class RuleViewController {
 	
 	@Autowired
 	private UserManager userManager = null;
-	
-	@Autowired
-	private ItemManager itemManager = null;
-	
-	@Autowired
-	private ResultManager resultManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/list*")
     public ModelAndView RuleList(HttpServletRequest request, HttpServletResponse response) throws Exception {

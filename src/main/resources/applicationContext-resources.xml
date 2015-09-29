@@ -31,4 +31,14 @@
         <property name="validationQuery" value="${jdbc.validationQuery}"/>
         <property name="testOnBorrow" value="true"/>
     </bean>
+    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="url" value="jdbc:oracle:thin:@192.168.1.7:1521:jyk" />
+        <property name="username" value="zjhis" />
+        <property name="password" value="zjhis" />
+    </bean>
+    <bean id="jdbcTemplatez1" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource-z1"></property>
+    </bean>
 </beans>
