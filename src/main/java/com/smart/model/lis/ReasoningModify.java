@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.DocumentId;
 
 import com.smart.model.BaseObject;
 
@@ -24,7 +25,8 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6368008987990359409L;
+
 	
 	// Primary Key
 	private Long id;
@@ -44,6 +46,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ReasoningModify")
 	@SequenceGenerator(name = "SEQ_ReasoningModify", sequenceName = "reasoningmodify_sequence", allocationSize = 1)
+	@DocumentId
 	public Long getId() {
 		return id;
 	}

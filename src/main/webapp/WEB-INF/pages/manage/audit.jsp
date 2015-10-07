@@ -4,16 +4,33 @@
     <title><fmt:message key="sample.manage.audit"/></title>
     
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<c:url value='/scripts/jquery.tablednd_0_5.js'/> "></script>
+	<link rel="stylesheet" type="test/css"  href="<c:url value='../styles/lis/audit.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
+	<link rel="stylesheet" type="test/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+    
+    <script type="text/javascript" src="../scripts/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="../scripts/justgage.1.0.1.min.js"></script>
+    
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
-	
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
 	<script type="text/javascript" src="../scripts/lis/audit.js"></script>
-	
+
+<style>
+.ui-tabs-anchor {
+	padding: 0 10px;
+}
+</style>
 </head>
+
+
 <body>
+
+
 <input type="hidden" id="lab" value="${lab}">
 <input type="hidden" id="sampletext" value="${today}">
 

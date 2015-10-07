@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -228,5 +229,75 @@ public class ExplainController extends BaseAuditController{
 			precent = Double.parseDouble(re.getPercent());
 		}
 		return importance * 0.5 + level * 0.3 + precent * 0.1;
+	}
+	
+	/**
+	 * 拖拽智能解释
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/drag*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean dragResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String content = request.getParameter("content");
+		String docNo = request.getParameter("id");
+		int dragCount = reasoningModifyManager.getDragNumber();
+
+		if (!StringUtils.isEmpty(content) && !StringUtils.isEmpty(docNo)) {
+			ReasoningModify reasoningModify = new ReasoningModify();
+			reasoningModify.setModifyTime(new Date());
+			reasoningModify.setModifyUser(request.getRemoteUser());
+			reasoningModify.setModifyId("drag" + dragCount);
+			reasoningModify.setContent(content);
+			reasoningModify.setDocNo(docNo);
+			reasoningModify.setType(Constants.DRAG);
+			reasoningModifyManager.save(reasoningModify);
+		} else {
+			return false;
+		}
+
+		return true;
+	}
+	
+	/**
+	 * 编辑智能解释的某结果值
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/explain/edit*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean editExplain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String modifyId = request.getParameter("id");
+		String result = request.getParameter("result");
+		String oldResult = request.getParameter("oldResult");
+		String docNo = request.getParameter("docNo");
+		String content = request.getParameter("content");
+		
+		System.out.println(modifyId+result+oldResult+content);
+
+		if (!StringUtils.isEmpty(modifyId) && !StringUtils.isEmpty(docNo)) {
+			ReasoningModify reasoningModify = new ReasoningModify();
+			reasoningModify.setModifyTime(new Date());
+			reasoningModify.setModifyUser(request.getRemoteUser());
+			reasoningModify.setNewResult(result);
+			reasoningModify.setOldResult(oldResult);
+			reasoningModify.setContent(content);
+			reasoningModify.setModifyId(modifyId);
+			reasoningModify.setDocNo(docNo);
+			reasoningModify.setType(Constants.EDIT);
+			reasoningModifyManager.save(reasoningModify);
+		} else {
+			return false;
+		}
+
+		return true;
 	}
 }

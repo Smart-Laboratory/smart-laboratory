@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.lis;
 import com.smart.dao.lis.SampleDao;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +79,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
-		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by id");
+		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) and section.code=1300200 order by id");
 		q.setFirstResult(0);
 		q.setMaxResults(500);             
 		return q.list();
@@ -118,5 +119,55 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	
 	public Sample getBySampleNo(String sampleNo){
 		return (Sample)getSession().createQuery("from Sample s where s.sampleNo='"+sampleNo+"'").uniqueResult();
+	}
+	
+public List<Integer> getAuditInfo(String date, String department,String user) {
+		
+		if (StringUtils.isEmpty(department) ) {
+			return null;
+		}
+		if (StringUtils.isEmpty(date)) {
+			date = "________";
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("select count(p) from Sample p where p.section.code");
+		if (department.contains(",")) {
+			builder.append(" in (");
+			builder.append(department);
+			builder.append(")");
+		} else {
+			builder.append("=");
+			builder.append(department);
+		}
+		
+		
+		
+		int unaudit = ((Number)getSession().createQuery(builder.toString() + " and p.auditStatus=0").uniqueResult()).intValue();
+		int unpass = ((Number)getSession().createQuery(builder.toString() + " and p.auditStatus=2").uniqueResult()).intValue(); 
+		int danger = ((Number)getSession().createQuery(builder.toString() + " and p.auditMark=6 and p.criticalRecord.criticalDealFlag=0").uniqueResult()).intValue(); 
+		
+		List<Integer> list = new ArrayList<Integer>();
+		list.add(unaudit);
+		list.add(unpass);
+		list.add(danger);
+		
+		StringBuilder builder2 = new StringBuilder();
+		builder2.append("select count(s) from Sample s, Process p where s.section.code");
+		if (department.contains(",")) {
+			builder2.append(" in (");
+			builder2.append(department);
+			builder2.append(")");
+		} else {
+			builder2.append("=");
+			builder2.append(department);
+		}
+		
+		if (!date.equals("________")) {
+			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.id = p.sample.id and p.operation='报告' and p.operator='" + user + "' and s.iswriteback!=0").uniqueResult()).intValue(); 
+			list.add(needwriteBack);
+		}
+		
+		return list;
 	}
 }

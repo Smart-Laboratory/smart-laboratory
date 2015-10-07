@@ -1,5 +1,6 @@
 package com.smart.service.impl.reagent;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,9 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
 
 	public void saveAll(List<Out> needSaveOut) {
 		outDao.saveAll(needSaveOut);
+	}
+	
+	public List<Out> getLastHMs(String testid, Date measuretime) {
+		return outDao.getLastHMs(testid, measuretime);
 	}
 }

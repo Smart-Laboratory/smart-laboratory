@@ -1,0 +1,341 @@
+.ui-progressbar .ui-progressbar-value { background-image: url(<c:url value='/images/pbar-ani.gif'/>); }
+@-moz-keyframes twinkling{
+	0%{
+		opacity:0;
+	}
+	100%{
+		opacity:1;
+	}
+}
+button.btn {
+	font-family: Microsoft YaHei;
+}
+#btnMenu h3 {
+	color:#ee0000;
+	font-weight:bold;
+}
+.ui-jqgrid .ui-jqgrid-htable th div {
+    height: 20px;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+float: left;
+padding: 0 10px;
+margin-right: 2px;
+line-height: 34px;
+border-radius: 4px 4px 0 0;
+}
+
+#rowed3 input {
+	padding-top:1px;
+	padding-bottom:1px;
+	width:90%;
+}
+
+#patient-info .pLabel {
+}
+#addTestList {
+	margin-top:10px;
+}
+.c_td {
+	display: inline-block;
+	padding-left:18px;
+}
+#addTestList .testName {
+	display:block; 
+	float:left; 
+	text-align:right;
+	margin-right:10px;
+	margin-top:5px;
+}
+
+#addTestList .testValue {
+	height:16px;
+	margin-bottom:6px;
+}
+
+#codeSetDiv div {
+	height:30px;
+	font-size:15px;
+}
+
+#selectNoteDiv .selectLabel {
+	cursor:pointer;
+}
+
+#patient-info .pText {
+	margin-right:20px;
+}
+
+#patient-info2 .pText {
+	margin-right:15px;
+}
+
+#rowed3 {
+	font-family: Microsoft YaHei;
+}
+
+select {
+	padding: 0px;
+}
+
+#labSelect {
+	width:120px;
+	padding: 4px 6px;
+	margin-bottom:0px;
+}
+
+#profileList {
+	padding: 4px 6px;
+	margin-bottom:0px;
+	width:240px;
+}
+
+#cellSelect {
+	width:150px;
+	padding: 4px 6px;
+	margin-bottom:0px;
+}
+
+#cellTemplateSelect {
+	width:150px;
+	padding: 4px 6px;
+	margin-bottom:0px;
+}
+
+/* textarea, input[type="text"]{
+	padding: 1px;
+}
+ */
+#addTestForm tr {
+	height:30px;
+}
+
+#gview_s3list .ui-jqgrid-hdiv {
+	overflow-y:hidden;
+}
+
+#gview_rowed3 .ui-jqgrid-bdiv {
+	overflow-y:hidden;s
+}
+
+#addTestForm td {
+	padding-left:20px;
+}
+
+#btnMenu button {
+	width:60px;
+	padding:2px;
+}
+
+#reasonBtn button {
+	padding:2px;
+}
+
+h2 {
+	color: #B4C24B;
+	font-size: 2.0em;
+	letter-spacing: -1px;
+	margin: 0 0 0.5em;
+	padding: 0;
+	display: inline;
+}
+
+.pagelinks {
+	line-height: 17px;
+}
+.ui-jqgrid-titlebar {
+	height:20px;
+	font-size:16px;
+	line-height:19px;
+}
+
+.ui-th-column {
+	line-height:20px;
+}
+
+#gview_s3list .ui-search-toolbar th {
+	border-top-width:0px !important;
+}
+
+#gs_sample {
+	height: 88%;
+	font-size:12px;
+	font-weight:700;
+	margin:0px;
+	color:#000000;
+}
+
+#gs_mark {
+	height: 100%;
+}
+
+#gs_status {
+	height: 100%;
+}
+
+#gview_s3list .ui-jqgrid-htable th {
+	padding:0px;
+}
+
+#s3list {
+	font-size:12px;
+}
+.ui-jqgrid-labels {
+	height:25px;
+}
+#auditDialog .proId {
+	display:none;
+}
+#auditDialog .proStart {
+	float:left;
+}
+#auditDialog .proEnd {
+	float:right;
+}
+#auditDialog .proValue {
+	height:22px;
+}
+#auditDialog .proStatus {
+	width:40px;
+}
+
+input {
+	width:20px;
+}
+
+.status_icon {
+   	width : 30px;
+   	height : 30px;
+   	margin-top : -5px;
+   	margin-bottom : -5px;
+   	margin-left : -2px;
+}
+.diff_td {
+	height:21px;
+	line-height:21px;
+	background-color:#FFFF00;
+}
+.ratio_td {
+	height:21px;
+	line-height:21px;
+	background-color:#00c0bF;
+}
+.dan_td {
+	height:21px;
+	line-height:21px;
+	background-color:#ff7070;
+}
+.re_td {
+	height:21px;
+	line-height:21px;
+	background-color:#ffbbff;
+}
+.al2_td {
+	height:21px;
+	line-height:21px;
+	background-color:#00FF00;
+}
+.al3_td {
+	height:21px;
+	line-height:21px;
+	background-color:#F4A460;
+}
+.ex_td {
+	height:21px;
+	line-height:21px;
+	background-color:#EE4000;
+}
+.result_span {
+	display:block;
+	float:left;
+	width:60px;
+	font-weight:700;
+	margin-left:2px;
+}
+.last_span {
+	display:block;
+	float:left;
+	width:40px;
+	font-weight:500;
+	margin-left:2px;
+}
+.two_result_span {
+	display:block;
+	float:left;
+	width:40px;
+	font-weight:700;
+	margin-left:2px;
+}
+.two_last_span {
+	display:block;
+	float:left;
+	width:30px;
+	font-weight:500;
+	margin-left:2px;
+}
+#need_writeback_table .wb_checker {
+	display:none;
+}
+#need_writeback_table .wb_lab {
+	display:none;e
+}
+#tasklist_table .ut_id {
+	display:none;
+}
+
+.ui-tabs-vertical { width: 580; }
+.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+.ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
+.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 370px;}
+#audit_information td {white-space:normal;}
+#addResultForm .controls {
+	margin-left:80px;
+}
+#addResultForm .control-label {
+	width:60px;
+}
+.compare_td {
+	height:21px;
+	line-height:21px;
+	background-color:#EEE685;
+}
+.add-on {
+    background-color: #EEEEEE;
+    border: 1px solid #CCCCCC;
+    display: inline-block;
+    font-weight: normal;
+    height: 20px;
+    line-height: 20px;
+    min-width: 16px;
+    padding: 4px 5px;
+    text-align: center;
+    text-shadow: 0 1px 0 #FFFFFF;
+    width: auto;
+}
+.lisPass-info {
+    background-color: #CEFFCE;
+    border-color: #BCE8F1;
+    color: #3C3C3C;
+}
+
+#g1, #g2, #g3, #g4 {
+	width:180px; height:100px;
+	display: inline-block;
+	margin: 1em;
+}
+
+#switchLocale {
+	display : none;
+}
+
+#historyTabs{
+	line-height : 1;
+	padding-bottom: 0px;
+	padding-top: 0px;
+}
+	
+
+

@@ -1,312 +1,31 @@
 
-var isFirstSop = true;
-var g1, g2, g3, g4;
-function getSopSchedule(lab) {
-	$.get("<c:url value='/sop/ajax/schedule'/>",{lab:lab},function(data){
-		data = jQuery.parseJSON(data);
-		if(isFirstSop) {
-			isFirstSop = false;
-			g1 = new JustGage({
-				id: "g1", 
-		        value: data.g1, 
-		        min: 0,
-		        max: 100,
-		        title: "<fmt:message key='sop.g1'/>",
-			});
-				g2 = new JustGage({
-		            id: "g2", 
-		            value: data.g2,
-		            min: 0,
-		            max: 100,
-		            title: "<fmt:message key='sop.g2'/>",
-				});
-				g3 = new JustGage({
-		            id: "g3", 
-		            value: data.g3, 
-		            min: 0,
-		            max: 100,
-		            title: "<fmt:message key='sop.g3'/>",
-				});
-				g4 = new JustGage({
-		        	id: "g4", 
-					value: data.g4, 
-					min: 0,
-					max: 100,
-					title: "<fmt:message key='sop.g4'/>",
-				});
-			} else {
-				g1.refresh(data.g1);
-				g2.refresh(data.g2);          
-				g3.refresh(data.g3);
-				g4.refresh(data.g4);
-			}
-			
-		});
-	}
 
-	function getDetailSop(type) {
-		$.get("<c:url value='/sop/ajax/detail'/>",{type:type, lab:$("#labSelect").val()},function(data){
-			data = jQuery.parseJSON(data);
-			$("#sopDetailHtml").html(data.html);
-		});		
-		switch (type) {
-		case 0:
-			$('#sopDetailDialog').dialog("option","title", "<fmt:message key='sop.detail.g1'/>").dialog('open');
-			break;
-		case 1:
-			$('#sopDetailDialog').dialog("option","title", "<fmt:message key='sop.detail.g2'/>").dialog('open');
-			break;
-		case 2:
-			$('#sopDetailDialog').dialog("option","title", "<fmt:message key='sop.detail.g3'/>").dialog('open');
-			break;
-		case 3:
-			$('#sopDetailDialog').dialog("option","title", "<fmt:message key='sop.detail.g4'/>").dialog('open');
-			break;
-		}
-	}
 
 
 $(function(){
 	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
 	
-	$("#auditDialog").dialog({
-		autoOpen: false,
-	    resizable: false,
-	    width: 600,
-	    height: 360,
-	    close: function(event, ui) {
-	    	$("#isContinued").html("0");
-	    }
-	});
-	$("#auditPrint").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 700,
-	    height: 500
-	});
-	$("#chartDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 680,
-	    height: 480
-	});
-	$("#samplePrint").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 1000,
-	    height: 600
-	});
-	
-	$( "#dialog" ).dialog({
-        autoOpen: false,
-        modal:true,
-        width: 680,
-		height: 360
-    });
-	
-	$("#addTestResultDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 450,
-	    height: 400,
-	    buttons:{
-	    	"<fmt:message key='button.add'/>":function() {
-	    		var result = false;
-	    		$("#addTestList .testValue").each(function(index,self){
-		    		if ($(self).val() != "") {
-		    			result = true;
-		    		}
-		    	});
-	    		if (!result) {
-	    			//alert("<fmt:message key='alert.input.testresult'/>");
-	    		} else {
-	    			var postStr = "";
-	    			var sample = $("#hiddenSampleNo").val();
-	    			$("#addTestList div").each(function(index,self){
-    		    		var id = $(self).find(".testID").val();
-    		    		var value = $(self).find(".testValue").val();
-    		    		if (value != null && value != "") {
-	    		    		if (postStr != "") postStr+=";";
-	    		    		postStr += id + ":" + value;
-    		    		}
-    		    	});
-	    			//alert(postStr);
-	    			if (postStr != "") {
-		    			$.post("<c:url value='/explain/audit/add'/>",{test:postStr,sample:sample},function(data){
-		    				if (data) {
-		    					$("#addTestResultDialog").dialog("close");
-		    					var s = jQuery("#s3list").jqGrid('getGridParam','selrow');
-		    					var ret = jQuery("#s3list").jqGrid('getRowData',s);
-		    					
-		    					if(ret.size > 30) {
-		    						jQuery("#sample0").jqGrid("setGridParam",{url:"<c:url value='/explain/audit/sample0'/>?id="+sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + sample}).trigger("reloadGrid");
-			    					jQuery("#sample1").jqGrid("setGridParam",{url:"<c:url value='/explain/audit/sample1'/>?id="+sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + sample}).trigger("reloadGrid");
-			    					
-		    	    			} else {
-		    	    				jQuery("#rowed3").jqGrid("setGridParam",{url:"<c:url value='/explain/audit/sample'/>?id="+sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + sample}).trigger("reloadGrid");
-		    	    			}
-		    					
-		    				} else {
-		    					alert("Failed!");
-		    				}
-		    			});
-	    			}
-	    		}
-	    	},
-	    	"<fmt:message key='button.cancel'/>":function() {
-	    		$(this).dialog("close");
-	    	}
-	    }
-	});	
-	
-	$(".ui-dialog-buttonset button").each(function(index,self){
-		$(self).addClass('btn');
-	});
-
-	$("#addResultDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-	    width: 340,
-	    height: 300
-	});
-	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	$("#twoColumnDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	
-	
-	$("#collectDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 320,
-	    height: 400
-	});
-	
-	$("#uploadDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 400,
-	    height: 500
-	});
-	
-	$("#templateDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 380,
-	    height: 460
-	});
-	
-	$("#imageDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 800,
-	    height: 700
-	});
-	
-	$("#codeSetDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 340,
-	    height: 250
-	});
-	
-	$("#writeBackPartDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 480
-	});
-	
-	$("#testModifyDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 480,
-	    height: 320
-	});
-	
-	$("#sampleCompareDialog").dialog({
-		autoOpen: false,
-	    width: 600,
-	    height: 500
-	});
-	
-	$("#auditTraceDialog").dialog({
-		autoOpen: false,
-	    width: 600,
-	    height: 500
-	});
-	
-	$("#allNeedWriteBackDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 580,
-	    height: 320
-	});
-	
-	$("#taskListDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 580,
-	    height: 320
-	});
-	
-	$("#statisticDialog").dialog({
-		autoOpen: false,
-	    width: 600,
-	    height: 500
-	});
-	
-	$("#sopDetailDialog").dialog({
-		autoOpen: false,
-	    width: 400
-	});
 	
 	getList($("#sampletext").val(),$("#lab").val());
+	
+	getSopSchedule($("#labSelect").val());
 	
 	$("#historyTabs").tabs({
 		active : 1,
 		activate : function(event, ui) {
 			var id = ui.newPanel.attr("id");
 			if(id == "tabs-1") {
-				/* jQuery("#rowed3").setGridParam().showCol("last1"); */
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
 				jQuery("#rowed3").setGridParam().showCol("last4");
-				jQuery("#rowed3").setGridParam().showCol("device");
-				jQuery("#rowed3").setGridParam().showCol("checktime");
+//				jQuery("#rowed3").setGridParam().showCol("device");
+//				jQuery("#rowed3").setGridParam().showCol("checktime");
 			} else {
-				/* jQuery("#rowed3").setGridParam().hideCol("last1"); */
 				jQuery("#rowed3").setGridParam().hideCol("last2");
 				jQuery("#rowed3").setGridParam().hideCol("last3");
 				jQuery("#rowed3").setGridParam().hideCol("last4");
-				jQuery("#rowed3").setGridParam().hideCol("device");
-				jQuery("#rowed3").setGridParam().hideCol("checktime");
+//				jQuery("#rowed3").setGridParam().hideCol("device");
+//				jQuery("#rowed3").setGridParam().hideCol("checktime");
 				var s = jQuery("#list").jqGrid('getGridParam','selrow');
 				if (id == "tabs-0") {
 					getExplain(s);
@@ -314,7 +33,6 @@ $(function(){
 			}
 		}
 	});
-	
 	
 	$("#reason_block").click(function() {
 		$("#reason_none").css('display','inline');
@@ -555,15 +273,100 @@ $(function(){
 			$.get("<c:url value='/explain/audit/result'/>",{sample:text,reaudit:reaudit},function() {});
 		}
 	});
+
 	$("#auditBtn").click(function(){
-		var s = jQuery("#s3list").jqGrid('getGridParam','selrow');
-		var ret = jQuery("#s3list").jqGrid('getRowData',s);
+		var s = jQuery("#list").jqGrid('getGridParam','selrow');
+		var ret=jQuery("#list").jqGrid('getRowData',s);
+		
 		$("#auditText2").val(ret.sample);
 		$("#auditDialog").dialog("open");
-		//$("#auditDialog").modal('show');
 		$("#isContinued").html("1");
 		getProValue();
 	});
+	
+	function getProValue() {
+    	$.get("<c:url value='/task/ajax/audit'/>",{},function(data){
+
+    		var ids = {
+     			put : function(key,value){this[key] = value},
+     			get : function(key){return this[key]},
+     			contains : function(key){return this[key] == null?false:true},
+     			remove : function(key){delete this[key]}
+     		}
+    		
+    		$("#auditDialog div.proId").each(function(index,self) {
+    			alert($(self).html());
+    			ids.put($(self).html(),$(self).html())
+    		});
+    		
+    		var map = {
+   				put : function(key,value){this[key] = value},
+   				get : function(key){return this[key]},
+   				contains : function(key){return this[key] == null?false:true},
+   				remove : function(key){delete this[key]}
+   			}
+    		var array = jQuery.parseJSON(data);
+    		for (var i=0 ; i < array.length ; i++) {
+    			map.put(array[i].id,i);
+    			if (!ids.contains(array[i].id)) {
+    				var text = array[i].text;
+    				/* if (text.length > 11) {
+    					text=text.slice(0,11)+"...";
+    				} */
+    				var content = "<div><table style='margin:0px;'><tr><td><div class='proRatio'></div></td><td><div class='proId'>"
+    				+ array[i].id
+    				+ "</div></td><td><div style='width:320px;'><div class='proStart'>"
+    				+ "</div><div class='proEnd'></div></div></td><td></td></tr><tr><td style='width:150px;display:block;'><span>"
+    				+ text
+    				+ "</span></td><td>"
+    				+ "<div class='proStatus'></div><input class='hiddenValue' type='hidden' value='100' ></td><td><div class='proValue'>"
+    				+ "</div></td><td><input type='button' class='stopAudit btn' value='\u505c\u6b62'/></td></tr>"
+    				+ "</table><div style='border-top: 1px solid #E1E1E1;margin-bottom:10px;'></div></div>";
+    				//$("#auditDialog").prepend(content);
+    				$(content).insertAfter($("#searchPanel"));
+    			}
+    		}
+    		
+   			$("#auditDialog table").each(function(index,self) {
+       			var id = $(self).find("div.proId").html();
+       			var da = array[map.get(id)];
+       			if (da == null) return true; //continue;
+       			$(self).find("div.proStart").html(da.start);
+       			$(self).find("div.proEnd").html(da.end);
+       			$(self).find("div.proRatio").html(da.ratio);
+       			$(self).find("div.proValue").progressbar({value:da.value});
+       			if (da.status == "1") {
+       				$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.run.png'/>' class='status_icon'/>");
+       				$(self).find(".stopAudit").removeAttr("disabled");
+       				$(self).find(".stopAudit").click(function(){
+       					$.get("<c:url value='/task/ajax/cancel'/>",{id : id}, function() {});
+       				});
+        		} else if (da.status =="2") {
+        			var value = $(self).find("input.hiddenValue").val();
+        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.finished.png'/>' class='status_icon'/>");
+        			$(self).find(".stopAudit").attr('disabled',"true");
+        			if (value != 100 && da.value != 0) {
+        				jQuery("#s3list").trigger("reloadGrid");
+        			}
+        		} else if (da.status == "3") {
+        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.cancel.png'/>' class='status_icon'/>");
+        			$(self).find(".stopAudit").attr('disabled',"true");
+        		} else if (da.status == "0") {
+        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.wait.gif'/>' style='width:20px;height:20px;margin-left:1px;' class='status_icon'/>");
+        			$(self).find(".stopAudit").removeAttr("disabled");
+       				$(self).find(".stopAudit").click(function(){
+       					$.get("<c:url value='/task/ajax/cancel'/>",{id : id}, function() {});
+       				});
+        		}
+       			$(self).find("input.hiddenValue").val(da.value);
+       		});
+   			
+   			if ($("#isContinued").html() == "1") {
+   				//getProValue(1000);
+   				setTimeout(getProValue,1000);
+   			}
+    	});
+    }
 	
 	var isFirstCompare = true;
 	$("#compareBtn").click(function(){
@@ -620,4 +423,49 @@ $(function(){
 		});
 	});
 	
+	$("#unaudit_reason_btn").hover(function(){
+ 		$("#unaudit_reason_btn").popover({title:"未通过原因",html:true,content:$("#audit_reason").html(),trigger:'manual'});
+ 		$("#unaudit_reason_btn").popover("show");
+ 	},function(){
+ 		$("#unaudit_reason_btn").popover("destroy");
+ 	});
+	
+	$.get("../audit/count",{}, function(data) {
+			$("#today_info_unaudit").html(data.todayunaudit);
+			$("#today_info_unpass").html(data.todayunpass);
+			$("#need_write_back").html(data.needwriteback);
+			$("#info_dangerous_undeal").html(data.dangerous);
+			if (data.dangerous != 0) {
+				$("#div_dangerous").removeClass('alert-success');
+				$("#div_dangerous").addClass('alert-error');
+			} else {
+				$("#div_dangerous").removeClass('alert-error');
+				$("#div_dangerous").addClass('alert-success');
+			}
+		},'json');
+	
+ 	setInterval(function() {
+ 		
+ 		$.get("../audit/count",{}, function(data) {
+ 			$("#today_info_unaudit").html(data.todayunaudit);
+ 			$("#today_info_unpass").html(data.todayunpass);
+ 			$("#need_write_back").html(data.needwriteback);
+ 			$("#info_dangerous_undeal").html(data.dangerous);
+ 			if (data.dangerous != 0) {
+ 				$("#div_dangerous").removeClass('alert-success');
+ 				$("#div_dangerous").addClass('alert-error');
+ 			} else {
+ 				$("#div_dangerous").removeClass('alert-error');
+ 				$("#div_dangerous").addClass('alert-success');
+ 			}
+
+ 			$("#audit_status_info").html("");
+ 		},'json');
+ 	}, 15000);
+ 	
+ 	$(window).resize(function(){
+
+ 		$("#rowed3").setGridWidth($(window).width()*0.99);
+ 		$("#sample0").setGridWidth(document.body.clientWidth*0.99);
+ 	});
 });

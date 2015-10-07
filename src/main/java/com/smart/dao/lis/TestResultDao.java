@@ -1,5 +1,6 @@
 package com.smart.dao.lis;
 
+import java.beans.Transient;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,4 +22,8 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	
 	@Transactional
 	List<TestResult> getListByTestString (String sampleNo, String testString);
+	
+	@Transient
+	List<TestResult> getSingleHistory(String testid, String patientName,
+			String birthday);
 }

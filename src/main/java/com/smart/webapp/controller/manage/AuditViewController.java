@@ -48,7 +48,7 @@ public class AuditViewController {
 		request.setAttribute("strtoday", df.format(new Date()));
 		request.setAttribute("departList", depart);
 		request.setAttribute("today", Constants.DF3.format(new Date()));
-		request.setAttribute("lab", "1300101");
+		request.setAttribute("lab", operator.getLastLab());
         return new ModelAndView();
     }
 	

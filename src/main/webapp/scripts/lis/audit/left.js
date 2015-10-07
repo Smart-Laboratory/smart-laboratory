@@ -3,7 +3,7 @@ function getList(text, lab) {
 	jQuery("#list").jqGrid({ 
     	url:"../audit/data?sample="+text+"&lab="+lab, 
     	datatype: "json", 
-    	width: 255, 
+    	autowidth:true,
     	colNames:['ID','状态', '标记', '', '样本号','FLAG','SIZE'], 
     	colModel:[ 
     		{name:'id',index:'id', hidden:true}, 
@@ -188,5 +188,15 @@ $(function(){
 	   				 }
 	   			});
 			}
+		});
+		$("#sampleDelete").click(function(){
+			
+			var id = jQuery("#list").jqGrid('getGridParam','selrow');
+			confirm("确认删除"+id);
+			$.post("../audit/sampleDelete",{id:id},function(data) {
+				if (data == true) {
+					jQuery("#list").trigger("reloadGrid");
+				}
+			});
 		});
 });
