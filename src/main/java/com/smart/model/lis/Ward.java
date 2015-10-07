@@ -1,5 +1,15 @@
 package com.smart.model.lis;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * 医生的联系信息
+ */
+@Entity
+@Table(name = "l_ward")
 public class Ward {
 
 	private String code;
@@ -7,6 +17,7 @@ public class Ward {
 	private String type;
 	private String phone;
 	
+	@Id
 	public String getCode() {
 		return code;
 	}
@@ -15,6 +26,7 @@ public class Ward {
 		this.code = code;
 	}
 	
+	@Column
 	public String getWard() {
 		return ward;
 	}
@@ -23,6 +35,7 @@ public class Ward {
 		this.ward = ward;
 	}
 	
+	@Column
 	public String getType() {
 		return type;
 	}
@@ -31,6 +44,7 @@ public class Ward {
 		this.type = type;
 	}
 	
+	@Column
 	public String getPhone() {
 		return phone;
 	}

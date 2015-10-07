@@ -13,7 +13,7 @@ import com.smart.dao.lis.CollectSampleDao;
 import com.smart.model.lis.CollectSample;
 
 @Repository("collectSampleDao")
-public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample, Long> implements CollectSampleDao{
+public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample, Long> implements CollectSampleDao {
 
 	public CollectSampleDaoHibernate() {
 		super(CollectSample.class);

@@ -1,0 +1,22 @@
+.docId {
+	display:none;
+}
+#operationDlg .row {
+	margin-left:6px;
+	margin-top:10px;
+}
+
+.spanb {
+	margin-left:0px;
+	width:80px;
+}
+
+.spanc {
+	margin-left:0px;
+	width:180px;
+}
+
+.spand {
+	margin-left:0px;
+	width:240px;
+}
