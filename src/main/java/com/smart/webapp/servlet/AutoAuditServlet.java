@@ -136,7 +136,8 @@ public class AutoAuditServlet extends HttpServlet {
         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
         	            	Map<Long, Sample> diffData = new HashMap<Long, Sample>();
         	            	List<Sample> samples = sampleManager.getNeedAudit(Constants.DF3.format(today));
-        	            	if (samples.size() == 0) {
+        	            	if (samples == null || samples.size() == 0) {
+        	            		Thread.sleep(120000);
         	        			throw new Exception("无数据！");
         	        		}
         	                for (Sample info : samples) {
