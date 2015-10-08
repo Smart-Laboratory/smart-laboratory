@@ -1,6 +1,6 @@
 <script type="text/javascript" src="../scripts/lis/audit/right.js"></script>
 <script src="../jquery.easyui.min.js" type="text/javascript"></script>
-<div id="right" style="position:absolute;right:0px;" style="width:20%">
+<div id="right" style="position:absolute;right:0px;" style="width:22%">
 	<div>
 	<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
 		<span ><c:forEach var="depart" items="${departList}">

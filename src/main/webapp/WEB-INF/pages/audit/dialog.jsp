@@ -47,24 +47,18 @@
 </div>
 
 <div id="addResultDialog" style="text-align:left;" title="<fmt:message key='addReuslt'/>">
-	<form id="addResultForm" class="form-horizontal" action="<c:url value='/explain/audit/addResult'/>" method="post">
+	<form id="addResultForm" class="form-horizontal" action="<c:url value='../audit/addResult'/>" method="post">
 			<div class="control-group">
 				<label class="control-label" ><fmt:message key="addResult.number" /></label>
-				<div class="controls">
 					<input type="text" class="span3" id="span_docNo" disabled></input>
-				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label"><fmt:message key="addResult.result" /></label>
-				<div class="controls">
 					<input id="result_result" type="text" class="span3" name="result"/>
-				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label"><fmt:message key="addResult.content" /></label>
-				<div class="controls">
 					<textarea id="result_content" class="span3" name="content"></textarea>
-				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">

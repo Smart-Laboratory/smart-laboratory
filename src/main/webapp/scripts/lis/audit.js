@@ -468,4 +468,15 @@ $(function(){
  		$("#rowed3").setGridWidth($(window).width()*0.99);
  		$("#sample0").setGridWidth(document.body.clientWidth*0.99);
  	});
+ 	
+ 	jQuery("#addResultForm").validate({
+        submitHandler: function(form) {
+            jQuery(form).ajaxSubmit({
+                                    dataType:"json",
+                success:function(json){
+                                         alert(json.message);
+                                    }
+            });
+        }
+    });
 });

@@ -12,7 +12,7 @@
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-    
+    <script type="text/javascript" src="../scripts/jquery.validate.js"></script>
     <script type="text/javascript" src="../scripts/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="../scripts/justgage.1.0.1.min.js"></script>
     

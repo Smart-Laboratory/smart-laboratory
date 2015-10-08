@@ -300,4 +300,38 @@ public class ExplainController extends BaseAuditController{
 
 		return true;
 	}
+	
+	/**
+	 * 添加一条智能解释
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/addResult*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String content = request.getParameter("content");
+		String result = request.getParameter("result");
+		String docNo = request.getParameter("docNo");
+		int addCount = reasoningModifyManager.getAddNumber();
+
+		if (!StringUtils.isEmpty(docNo)) {
+			ReasoningModify reasoningModify = new ReasoningModify();
+			reasoningModify.setModifyTime(new Date());
+			reasoningModify.setModifyUser(request.getRemoteUser());
+			reasoningModify.setOldResult(result);
+			reasoningModify.setNewResult(result);
+			reasoningModify.setContent(content);
+			reasoningModify.setDocNo(docNo);
+			reasoningModify.setModifyId("add" + addCount);
+			reasoningModify.setType(Constants.ADD);
+			reasoningModifyManager.save(reasoningModify);
+		} else {
+			return false;
+		}
+
+		return true;
+	}
 }
