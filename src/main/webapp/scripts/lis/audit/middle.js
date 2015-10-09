@@ -37,6 +37,7 @@
     						array[i] = data[i];
     					}
     				});
+    				alert(array[0]);
     				if(array[0].rows==""){
     					jQuery("#sample0").jqGrid("clearGridData");
     					jQuery("#sample1").jqGrid("clearGridData");
