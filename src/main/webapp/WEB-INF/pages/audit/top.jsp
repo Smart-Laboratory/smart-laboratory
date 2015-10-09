@@ -24,6 +24,9 @@
 			<button id="pageRefreshBtn" class="btn" style="width:30px;height:28px;padding:4px;">
 				<span class="glyphicon glyphicon-refresh" style="margin:3px;"></span>
 			</button>
+			<button id="fullScreen" class="btn" style="width:30px;height:28px;padding:5px;">
+				<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+			</button>
 			<input type="hidden" value="0" id="isfulltag">
 			<input type="hidden" id="lastDepLab" value="${lab}">
 		</div>
