@@ -119,14 +119,14 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	 * 修改解释的样本医嘱号
 	 */
 	@Column(name = "sample_id")
-	public String getDocNo() {
+	public String getSampleId() {
 		return sampleId;
 	}
 
-	public void setDocNo(String sampleId) {
+	public void setSampleId(String sampleId) {
 		this.sampleId = sampleId;
 	}
-	
+
 	/**
 	 * 解释类型
 	 */

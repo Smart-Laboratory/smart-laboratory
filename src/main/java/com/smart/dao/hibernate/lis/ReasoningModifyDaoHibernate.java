@@ -24,14 +24,14 @@ public class ReasoningModifyDaoHibernate extends GenericDaoHibernate<ReasoningMo
 	@SuppressWarnings("unchecked")
 	public List<ReasoningModify> getBySampleId(String sampleId) {
 		
-		return getSession().createQuery("from ReasoningModify r where r.docNo='"+sampleId+"' order by r.modifyTime").list();
+		return getSession().createQuery("from ReasoningModify r where r.sampleId='"+sampleId+"' order by r.modifyTime").list();
 	}
 
 	public int getAddNumber() {
-		return getSession().createQuery("from ReasoningModify r where r.type='ADD'").list().size();
+		return getSession().createQuery("from ReasoningModify r where r.type='添加'").list().size();
 	}
 
 	public int getDragNumber() {
-		return getSession().createQuery("from ReasoningModify r where r.type='DRAG'").list().size();
+		return getSession().createQuery("from ReasoningModify r where r.type='拖拽'").list().size();
 	}
 }

@@ -15,6 +15,7 @@
         <mapping class="com.smart.model.lis.Sample"/>
         <mapping class="com.smart.model.lis.Process"/>
         <mapping class="com.smart.model.lis.TestResult"/>
+        <mapping class="com.smart.model.lis.TestModify"/>
         <mapping class="com.smart.model.lis.Section"/>
         <mapping class="com.smart.model.lis.InvalidSample"/>
         <mapping class="com.smart.model.lis.Diagnostic"/>
@@ -32,5 +33,7 @@
         <mapping class="com.smart.model.reagent.In"/>
         <mapping class="com.smart.model.reagent.Out"/> 
         <mapping class="com.smart.model.lis.CollectSample"/>
+        <mapping class="com.smart.model.lis.SOPIndex"/>
+        <mapping class="com.smart.model.lis.ReasoningModify"/>
     </session-factory>
 </hibernate-configuration>

@@ -93,7 +93,7 @@
 				jQuery("#rowed3").setGridParam().showCol("device");
 				jQuery("#rowed3").setGridParam().showCol("checktime");
     		} else {
-//    			getSopSchedule($("#labSelect").val());
+    			getSopSchedule($("#labSelect").val());
     		}
     		
     		$("#historyTabs").css('display','block');
@@ -255,6 +255,7 @@
 										jQuery("#rowed3").jqGrid('setRowData', id, {
 											result:pre + "<span class='result_span'>" + newVal.result + "</span>"+res+"</div>"
 										});
+										$("#modifyBtn").css('display','inline');
 										switch (id) {
 											case '9046':
 												//9051
@@ -751,7 +752,6 @@
 				array[i] = data[i];
 			}
 		});
-//		alert(array[0].userdata);
 		getSample0(sampleNo, array[0].userdata, array[0].rows);
 		getSample1(sampleNo, array[0].userdata, array[1].rows);
 	}
@@ -794,9 +794,8 @@
 								isEdit = true;
 								
 								var ret = jQuery("#sample0").jqGrid('getRowData',id);
-								alert(ret.result);
-								var pre = "<div class='"+$(ret.result).attr('class')+"'>";
-								cl = pre + $(ret.result).html() + "</div>";
+								var pre = "<div class=''>";
+								cl = ret.result;
 								lastval = $(ret.result).find(":eq(0)").html();
 								jQuery("#sample0").jqGrid('setRowData', id, {result:lastval});
 								jQuery("#sample0").jqGrid('editRow',id, {
@@ -937,18 +936,18 @@
 	        				}
         				}
         			}
-        			
 					if (ret.editMark != 0 && ret.editMark % 33 == 0) {
+						
         				jQuery("#sample0").jqGrid('setRowData', v, {
-        					result:color+"<span class='two_result_span'>"+$(ret.result).find(":eq(0)")+"</span>"+res+"</div>",
-        					last:"<span class='two_last_span'>" + $(ret.last).find(":eq(0)") + "</span>"+res1,
-        					last1:"<span class='two_last_span'>" + $(ret.last1).find(":eq(0)") + "</span>"+res2
+        					result:color+"<span class='two_result_span'>"+ret.result+"</span>"+res+"</div>",
+        					last:"<span class='two_last_span'>" + ret.last + "</span>"+res1,
+        					last1:"<span class='two_last_span'>" + ret.last1 + "</span>"+res2
         				});
 					} else {
 						jQuery("#sample0").jqGrid('setRowData', v, {
-							result:color+"<span class='two_result_span'>"+$(ret.result).find(":eq(0)")+"</span>"+res+"</div>",
-							last:"<span class='two_last_span'>" + $(ret.last).find(":eq(0)") + "</span>"+res1,
-        					last1:"<span class='two_last_span'>" + $(ret.last1).find(":eq(0)") + "</span>"+res2
+							result:color+"<span class='two_result_span'>"+ret.result+"</span>"+res+"</div>",
+        					last:"<span class='two_last_span'>" + ret.last + "</span>"+res1,
+        					last1:"<span class='two_last_span'>" + ret.last1 + "</span>"+res2
 						});
 					}
 					
@@ -1005,9 +1004,9 @@
 							if (!isEdit) {
 								isEdit = true;
 								var ret = jQuery("#sample1").jqGrid('getRowData',id);
-								var pre = "<div class='"+$(ret.result).attr('class')+"'>";
-								cl = pre + $(ret.result).html() + "</div>";
-								lastval = $(ret.result).find(":eq(0)").html();
+								var pre = "<div class=''>";
+								cl=ret.result;
+								lastval =  $(ret.result).find(":eq(0)").html();
 								jQuery("#sample1").jqGrid('setRowData', id, {result:lastval});
 								jQuery("#sample1").jqGrid('editRow',id, {
 									keys:true,
@@ -1018,7 +1017,6 @@
 					        			var l = parseFloat(hl[0]);
 					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
 					        			var res = "";
-					        			
 					        			if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
 					        				if (va < l) {
 					        					res = "<font color='red'>\u2193</font>";
@@ -1116,7 +1114,6 @@
         			var res = "";
         			var res1 = "";
         			var res2 = "";
-        			
         			if (!isNaN(h) && !isNaN(l)) {
         				if (!isNaN(va)) {
         					if (va < l) {
@@ -1142,18 +1139,17 @@
 	        				}
         				}
         			}
-        			
         			if (ret.editMark != 0 && ret.editMark % 33 == 0) {
-        				jQuery("#sample0").jqGrid('setRowData', v, {
-        					result:color+"<span class='two_result_span'>"+$(ret.result).find(":eq(0)")+"</span>"+res+"</div>",
-        					last:"<span class='two_last_span'>" + $(ret.last).find(":eq(0)") + "</span>"+res1,
-        					last1:"<span class='two_last_span'>" + $(ret.last1).find(":eq(0)") + "</span>"+res2
+        				jQuery("#sample1").jqGrid('setRowData', v, {
+        					result:color+"<span class='two_result_span'>"+ret.result+"</span>"+res+"</div>",
+        					last:"<span class='two_last_span'>" + ret.last + "</span>"+res1,
+        					last1:"<span class='two_last_span'>" + ret.last1 + "</span>"+res2
         				});
 					} else {
-						jQuery("#sample0").jqGrid('setRowData', v, {
-							result:color+"<span class='two_result_span'>"+$(ret.result).find(":eq(0)")+"</span>"+res+"</div>",
-							last:"<span class='two_last_span'>" + $(ret.last).find(":eq(0)") + "</span>"+res1,
-        					last1:"<span class='two_last_span'>" + $(ret.last1).find(":eq(0)") + "</span>"+res2
+						jQuery("#sample1").jqGrid('setRowData', v, {
+							result:color+"<span class='two_result_span'>"+ret.result+"</span>"+res+"</div>",
+        					last:"<span class='two_last_span'>" + ret.last + "</span>"+res1,
+        					last1:"<span class='two_last_span'>" + ret.last1 + "</span>"+res2
 						});
 					}
 					
@@ -1169,3 +1165,35 @@
 		$("#gbox_sample1").css('float','left');
 		$("#gbox_sample1").css('margin-left','5px');
 	}
+	
+	function getTestModifyTable(sample) {
+		jQuery("#test_modify_information").jqGrid({
+			url:"../audit/testModify?sampleNo="+sample,
+			datatype: "json",
+			jsonReader : {repeatitems : false}, 
+			colNames:['项目名称','修改类型','修改前'
+			          ,'修改后','修改时间','修改者'],
+		   	colModel:[{name:'test',index:'test',width:80,sortable:false},
+		   		{name:'type',index:'type',width:60,sortable:false},
+		   		{name:'oldValue',index:'oldValue',width:40,sortable:false},
+		   		{name:'newValue',index:'newValue',width:40,sortable:false},
+		   		{name:'modifyTime',index:'modifyTime',sortable:false},
+		   		{name:'modifyUser',index:'modifyUser',width:60,sortable:false}],
+		   	height: '100%'
+		});
+	}
+	
+$(function(){
+	var isTestModifyFirst = true;
+	$("#modifyBtn").click(function() {
+		if (isTestModifyFirst) {
+			getTestModifyTable($("#hiddenSampleNo").val());
+			isTestModifyFirst = false;
+		} else {
+			jQuery("#test_modify_information").jqGrid("setGridParam",{
+				url:"../audit/testModify?sampleNo="+$("#hiddenSampleNo").val()
+			}).trigger("reloadGrid");
+		}
+		$("#testModifyDialog").dialog("open");
+	});
+});

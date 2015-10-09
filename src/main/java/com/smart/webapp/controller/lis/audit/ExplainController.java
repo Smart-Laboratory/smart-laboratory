@@ -72,7 +72,7 @@ public class ExplainController extends BaseAuditController{
 		dataResponse.setPage(1);
 		dataResponse.setTotal(1);
 
-		if (StringUtils.isEmpty(ruleIds)) {
+		if (StringUtils.isEmpty(ruleIds)) { 
 			dataResponse.setRecords(0);
 			return dataResponse;
 		}
@@ -100,6 +100,7 @@ public class ExplainController extends BaseAuditController{
 			}
 		}
 		List<ReasoningModify> modifyList = reasoningModifyManager.getBySampleId(id);
+		System.out.println(modifyList.size()+modifyList.get(0).getSampleId());
 		dataResponse.setRows(modifyData(modifyList, dataRows));
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
@@ -253,7 +254,7 @@ public class ExplainController extends BaseAuditController{
 			reasoningModify.setModifyUser(request.getRemoteUser());
 			reasoningModify.setModifyId("drag" + dragCount);
 			reasoningModify.setContent(content);
-			reasoningModify.setDocNo(docNo);
+			reasoningModify.setSampleId(docNo);
 			reasoningModify.setType(Constants.DRAG);
 			reasoningModifyManager.save(reasoningModify);
 		} else {
@@ -291,7 +292,7 @@ public class ExplainController extends BaseAuditController{
 			reasoningModify.setOldResult(oldResult);
 			reasoningModify.setContent(content);
 			reasoningModify.setModifyId(modifyId);
-			reasoningModify.setDocNo(docNo);
+			reasoningModify.setSampleId(docNo);
 			reasoningModify.setType(Constants.EDIT);
 			reasoningModifyManager.save(reasoningModify);
 		} else {
@@ -324,7 +325,7 @@ public class ExplainController extends BaseAuditController{
 			reasoningModify.setOldResult(result);
 			reasoningModify.setNewResult(result);
 			reasoningModify.setContent(content);
-			reasoningModify.setDocNo(docNo);
+			reasoningModify.setSampleId(docNo);
 			reasoningModify.setModifyId("add" + addCount);
 			reasoningModify.setType(Constants.ADD);
 			reasoningModifyManager.save(reasoningModify);

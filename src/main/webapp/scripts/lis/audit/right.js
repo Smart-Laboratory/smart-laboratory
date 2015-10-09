@@ -61,7 +61,9 @@ function getSopSchedule(lab) {
 			isFirstSop = false;
 			g1 = new JustGage({
 				id: "g1", 
-		        value: data.g1, 
+		        value: data.g1,
+		        width: 100,
+		        height: 100,
 		        min: 0,
 		        max: 100,
 		        title: "通用文档",
@@ -117,6 +119,17 @@ function getDetailSop(type) {
 		break;
 	}
 }
+
+function validate(formData, jqForm, options) {
+	
+	for (var i=0; i < formData.length; i++) {
+        if (!formData[i].value) {
+            return false;  
+        }
+	}
+	return true;
+}
+
 $(function() {
 	
 	
@@ -126,6 +139,18 @@ $(function() {
 		modal:true,
 	    width: 340,
 	    height: 350
+	});
+	
+	$("#addResultForm").ajaxForm({
+		beforeSubmit: validate,
+		success: function(data) {
+			if (data == true) {
+				$("#addResultDialog").dialog("close");
+				jQuery("#audit_information").trigger("reloadGrid");
+			} else {
+				alert("Fail!!!")
+			}
+	    }
 	});
 	
 	

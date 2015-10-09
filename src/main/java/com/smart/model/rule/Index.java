@@ -54,6 +54,7 @@ public class Index extends BaseObject implements Serializable {
 	private String importance;
 	private String knowledgename;
 	private int isprint;
+	private String printord;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 	
 	public Index() {
@@ -266,6 +267,19 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setIsprint(int isprint) {
 		this.isprint = isprint;
+	}
+	
+	
+	/**
+	 * 指标打印顺序
+	 */
+	@Column
+	public String getPrintord() {
+		return printord;
+	}
+
+	public void setPrintord(String printord) {
+		this.printord = printord;
 	}
 
 	/**

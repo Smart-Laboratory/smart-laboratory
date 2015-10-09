@@ -63,7 +63,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<input id="result_docNo" name="docNo" type="hidden"></input>
-					<button type="submit" class="btn" ><fmt:message key='button.submit' /></button>
+					<button id="addResult" type="submit" class="btn" ><fmt:message key='button.submit' /></button>
 				</div>
 			</div>
 		</form>

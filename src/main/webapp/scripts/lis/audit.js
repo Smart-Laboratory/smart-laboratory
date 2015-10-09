@@ -59,7 +59,7 @@ $(function(){
 	$("#resultDelete").click(function() {
 		var ii = jQuery("#audit_information").jqGrid('getGridParam','selrow');
 		if (ii != null) {
-			$.post("<c:url value='/explain/audit/deleteResult'/>",{docNo:$("#hiddenDocId").val(),id:ii}, function(data) {
+			$.post("../audit/deleteResult",{docNo:$("#hiddenDocId").val(),id:ii}, function(data) {
 				if (data == true) {
 					$("#audit_information").jqGrid('delRowData',ii);
 				} else {
@@ -94,28 +94,48 @@ $(function(){
 			var ret = jQuery("#list").jqGrid('getRowData',s);
        		$("#twosampleTable").css('display','none');
        		$("#patientRow").css('display','block');
-       		if (isFirst) {
-       			getSample(ret.sample);
-       			getSample0(ret.sample);
-       			getSample1(ret.sample);
-    			isFirst = false;
-       		} else {
-       			jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "/audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
-       		}
+       		if(isFirst){
+				getSample(ret.sample);
+				getTwoSample(ret.sample);
+				isFirst = false;
+			}
+			else{
+				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
+			}
  		} else {
  			var s = jQuery("#list").jqGrid('getGridParam','selrow');
 			var ret = jQuery("#list").jqGrid('getRowData',s);
  			$("#patientRow").css('display','none');
 			$("#twosampleTable").css('display','block');
-			if (isFirst) {
+			if(isFirst){
 				getSample(ret.sample);
-    			getSample0(ret.sample);
-    			getSample1(ret.sample);
-    			isFirst = false;
-    		} else {
-    			jQuery("#sample0").jqGrid("setGridParam",{url:"../audit/twosample?id="+ret.sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + ret.sample}).trigger("reloadGrid");
-    			jQuery("#sample1").jqGrid("setGridParam",{url:"../audit/twosample?id="+ret.sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + ret.sample}).trigger("reloadGrid");
-    		}
+				getTwoSample(ret.sample);
+				isFirst = false;
+			}
+			else{
+				var array = new Array();
+				$.ajaxSetup({
+					async:false
+				});
+				$.get("../audit/twosample", {id:ret.sample}, function(data){
+					for(var i=0; i< data.length; i++) {
+						array[i] = data[i];
+					}
+				});
+				if(array[0].rows==""){
+					jQuery("#sample0").jqGrid("clearGridData");
+					jQuery("#sample1").jqGrid("clearGridData");
+				}
+					
+				jQuery("#sample0").jqGrid("setGridParam",{
+					data:array[0].rows,
+					userdata:array[0].userdata
+				}).trigger("reloadGrid");
+				jQuery("#sample1").jqGrid("setGridParam",{
+					data:array[1].rows,
+					userdata:array[0].userdata
+				}).trigger("reloadGrid");
+			}
  		}
  	});
 	
@@ -463,20 +483,7 @@ $(function(){
  		},'json');
  	}, 15000);
  	
- 	$(window).resize(function(){
-
- 		$("#rowed3").setGridWidth($(window).width()*0.99);
- 		$("#sample0").setGridWidth(document.body.clientWidth*0.99);
- 	});
  	
- 	jQuery("#addResultForm").validate({
-        submitHandler: function(form) {
-            jQuery(form).ajaxSubmit({
-                                    dataType:"json",
-                success:function(json){
-                                         alert(json.message);
-                                    }
-            });
-        }
-    });
+ 	
+ 	
 });
