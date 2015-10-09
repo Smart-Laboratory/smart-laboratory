@@ -10,6 +10,7 @@ import com.smart.dao.lis.TestResultDao;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
 import com.smart.model.lis.Sample;
+import com.smart.model.rule.Index;
 
 @Repository("testResultDao")
 public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, TestResultPK> implements TestResultDao {
@@ -45,7 +46,7 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	public List<TestResult> getTestBySampleNo(String sampleNo){
 //		String sql = "select t.* from l_testResult t where  t.sampleno='"+ sampleNo + "' order by t.testid ";
 		
-		return getSession().createQuery("from TestResult where sampleNo='"+sampleNo+"' order by testId").list();
+		return getSession().createQuery("select t from TestResult as t, Index as i where t.testId=i.indexId and sampleNo='"+sampleNo+"' order by i.printord").list();
 		
 		
 	}

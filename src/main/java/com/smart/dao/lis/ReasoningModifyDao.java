@@ -6,7 +6,7 @@ import com.smart.dao.GenericDao;
 import com.smart.model.lis.ReasoningModify;
 
 public interface ReasoningModifyDao extends GenericDao<ReasoningModify, Long> {
-	List<ReasoningModify> getBySampleId(String docNo);
+	List<ReasoningModify> getBySampleId(String sampleId);
 
 	int getAddNumber();
 

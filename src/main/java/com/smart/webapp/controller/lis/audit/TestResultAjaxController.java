@@ -1,14 +1,18 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,8 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
+import com.smart.model.lis.TestModify;
+import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/audit*")
@@ -134,4 +140,6 @@ public class TestResultAjaxController extends BaseAuditController{
 		json.put("tat", diff);
 		return json.toString();
 	}
+	
+	
 }

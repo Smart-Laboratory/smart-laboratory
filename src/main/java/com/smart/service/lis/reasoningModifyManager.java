@@ -12,7 +12,7 @@ public interface reasoningModifyManager extends GenericManager<ReasoningModify, 
 	 * @param sampleId
 	 * @return
 	 */
-	List<ReasoningModify> getBySampleId(String docNo);
+	List<ReasoningModify> getBySampleId(String sampleId);
 
 	int getAddNumber();
 

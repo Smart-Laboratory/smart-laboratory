@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smart.Constants;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestModify;
 import com.smart.model.lis.TestResult;
+import com.smart.service.lis.TestModifyManager;
 import com.smart.webapp.util.DataResponse;
 import com.zju.api.model.SyncResult;
 
@@ -29,6 +32,9 @@ import com.zju.api.model.SyncResult;
 @Controller
 @RequestMapping("/audit*")
 public class GetTestResultController extends BaseAuditController {
+	
+	@Autowired
+	private TestModifyManager testModifyManager;
 	
 	/**
 	 * 获取某一样本的检验数据
@@ -264,7 +270,7 @@ public class GetTestResultController extends BaseAuditController {
 		if (idMap.size() == 0)
 			initMap();
 
-		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);;
+		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		int isLastYear = 2;
@@ -521,15 +527,15 @@ public class GetTestResultController extends BaseAuditController {
 			info.setAuditStatus(0);
 			sampleManager.save(info);
 			
-//			TestModify testModify = new TestModify();
-//			testModify.setModifyTime(new Date());
-//			testModify.setModifyUser(request.getRemoteUser());
-//			testModify.setSampleNo(sampleNo);
-//			testModify.setTestId(testId);
-//			testModify.setNewValue(result);
-//			testModify.setOldValue(oldResult);
-//			testModify.setType(Constants.EDIT);
-//			testModifyManager.save(testModify);
+			TestModify testModify = new TestModify();
+			testModify.setModifyTime(new Date());
+			testModify.setModifyUser(request.getRemoteUser());
+			testModify.setSampleNo(sampleNo);
+			testModify.setTestId(testId);
+			testModify.setNewValue(result);
+			testModify.setOldValue(oldResult);
+			testModify.setType(Constants.EDIT);
+			testModifyManager.save(testModify);
 		} else {
 			return false;
 		}
@@ -574,6 +580,54 @@ public class GetTestResultController extends BaseAuditController {
 		}
 
 		return true;
+	}
+	
+	
+	/**
+	 * 获取样本中检验项目的修改记录
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/testModify*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getTestModify(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String sampleNo = request.getParameter("sampleNo");
+		if (StringUtils.isEmpty(sampleNo))
+			throw new NullPointerException();
+
+		List<TestModify> modifyList = testModifyManager.getBySampleNo(sampleNo);
+		DataResponse dataResponse = new DataResponse();
+		dataResponse.setPage(1);
+		dataResponse.setTotal(1);
+
+		if (modifyList.size() == 0) {
+			dataResponse.setRecords(0);
+			return dataResponse;
+		}
+
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		dataResponse.setRecords(modifyList.size());
+		if (idMap.size() == 0)
+			initMap();
+
+		for (TestModify t : modifyList) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("test",  idMap.get(t.getTestId()).getName());
+			map.put("type", t.getType());
+			map.put("oldValue", t.getOldValue());
+			map.put("newValue", t.getNewValue());
+			map.put("modifyTime", sdf.format(t.getModifyTime()));
+			map.put("modifyUser", t.getModifyUser());
+			dataRows.add(map);
+		}
+		dataResponse.setRows(dataRows);
+
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
 	}
 	
 }

@@ -21,8 +21,8 @@ public class ReasoningModifyManagerImpl extends GenericManagerImpl<ReasoningModi
 		this.dao = reasoningModifyDao;
 	}
 
-	public List<ReasoningModify> getBySampleId(String docNo) {
-		return reasoningModifyDao.getBySampleId(docNo);
+	public List<ReasoningModify> getBySampleId(String sampleId) {
+		return reasoningModifyDao.getBySampleId(sampleId);
 	}
 
 	public int getAddNumber() {
