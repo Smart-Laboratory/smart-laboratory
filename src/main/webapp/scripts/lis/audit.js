@@ -94,7 +94,6 @@ $(function(){
 			var ret = jQuery("#list").jqGrid('getRowData',s);
        		$("#twosampleTable").css('display','none');
        		$("#patientRow").css('display','block');
-<<<<<<< HEAD
        		if(isFirst){
 				getSample(ret.sample);
 				getTwoSample(ret.sample);
@@ -103,16 +102,6 @@ $(function(){
 			else{
 				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
 			}
-=======
-       		if (isFirst) {
-       			getSample(ret.sample);
-       			getSample0(ret.sample);
-       			getSample1(ret.sample);
-    			isFirst = false;
-       		} else {
-       			jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "/audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
-       		}
->>>>>>> origin/master
  		} else {
  			var s = jQuery("#list").jqGrid('getGridParam','selrow');
 			var ret = jQuery("#list").jqGrid('getRowData',s);
@@ -120,7 +109,6 @@ $(function(){
 			$("#twosampleTable").css('display','block');
 			if(isFirst){
 				getSample(ret.sample);
-<<<<<<< HEAD
 				getTwoSample(ret.sample);
 				isFirst = false;
 			}
@@ -148,15 +136,6 @@ $(function(){
 					userdata:array[0].userdata
 				}).trigger("reloadGrid");
 			}
-=======
-    			getSample0(ret.sample);
-    			getSample1(ret.sample);
-    			isFirst = false;
-    		} else {
-    			jQuery("#sample0").jqGrid("setGridParam",{url:"../audit/twosample?id="+ret.sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + ret.sample}).trigger("reloadGrid");
-    			jQuery("#sample1").jqGrid("setGridParam",{url:"../audit/twosample?id="+ret.sample,editurl: "<c:url value='/explain/audit/edit'/>?sampleNo=" + ret.sample}).trigger("reloadGrid");
-    		}
->>>>>>> origin/master
  		}
  	});
 	
@@ -499,21 +478,8 @@ $(function(){
  				$("#div_dangerous").removeClass('alert-error');
  				$("#div_dangerous").addClass('alert-success');
  			}
-<<<<<<< HEAD
-=======
-
  			$("#audit_status_info").html("");
  		},'json');
  	}, 15000);
- 	
- 	$(window).resize(function(){
->>>>>>> origin/master
-
- 			$("#audit_status_info").html("");
- 		},'json');
- 	}, 15000);
- 	
- 	
- 	
  	
 });
