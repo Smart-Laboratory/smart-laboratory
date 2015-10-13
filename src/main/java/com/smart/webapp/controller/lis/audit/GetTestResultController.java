@@ -107,7 +107,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				Date preceivetime = null;
-				for(Process process : info.getProcess()) {
+				for(Process process : pinfo.getProcess()) {
 					if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
 						preceivetime = process.getTime();
 					}

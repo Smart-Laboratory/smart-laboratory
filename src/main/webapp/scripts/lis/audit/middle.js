@@ -201,9 +201,9 @@
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true},
 		   		{name:'color',index:'color',hidden:true},
-		   		{name:'ab',index:'ab',width:"20%",hidden:true},
-		   		{name:'name',index:'name',width:"20%",sortable:false},
-		   		{name:'result',index:'result',width:"8%",sortable:false,editable:true},
+		   		{name:'ab',index:'ab',width:"18%",hidden:true},
+		   		{name:'name',index:'name',width:"18%",sortable:false},
+		   		{name:'result',index:'result',width:"10%",sortable:false,editable:true},
 		   		{name:'last',index:'last',width:"8%",sortable:false},
 		   		{name:'last1',index:'last1',width:"8%",sortable:false},
 		   		{name:'last2',index:'last2',width:"8%",hidden:true,sortable:false},
@@ -707,7 +707,8 @@
 	        				}
         				}
         			}
-        			
+//        			alert(ret.result);
+//        			alert(ret.last);
 					if (ret.editMark != 0 && ret.editMark % 33 == 0) {
         				jQuery("#rowed3").jqGrid('setRowData', v, {
         					result:color+"<span class='result_span'>"+ret.result+"</span>"+res+"</div>",
@@ -727,6 +728,9 @@
         					last4:"<span class='last_span'>" + ret.last4 + "</span>"+res5
 						});
 					}
+//					alert(res);
+//    				alert(ret.result);
+//    				alert(ret.last);
 					
 					$('#' + v).find("td:eq(5)").attr("title",ret.lastEdit);
 					if(ret.lastEdit.indexOf(" ") > 0) {

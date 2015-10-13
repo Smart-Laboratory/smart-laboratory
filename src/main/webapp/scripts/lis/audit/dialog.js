@@ -36,6 +36,7 @@ $(function(){
 	
 	$("#searchProject").autocomplete({
         source: function( request, response ) {
+        	alert(request.term);
             $.ajax({
             	url: "../index/ajax/searchTest",
                 dataType: "json",
@@ -235,7 +236,7 @@ $(function(){
 	    width: 450,
 	    height: 400,
 	    buttons:{
-	    	"<fmt:message key='button.add'/>":function() {
+	    	"添加":function() {
 	    		var result = false;
 	    		$("#addTestList .testValue").each(function(index,self){
 		    		if ($(self).val() != "") {
@@ -278,7 +279,7 @@ $(function(){
 	    			}
 	    		}
 	    	},
-	    	"<fmt:message key='button.cancel'/>":function() {
+	    	"取消":function() {
 	    		$(this).dialog("close");
 	    	}
 	    }

@@ -30,7 +30,7 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 
 	@SuppressWarnings("unchecked")
 	public List<Out> getLastHMs(String testid, Date measuretime) {
-		String hql = "select o from Out o where o.reagent.testname like '%" + testid +"%' and o.outdate<"+measuretime+" order by o.outdate desc";
+		String hql = "select o from Out o where o.reagent.testname like '%" + testid +"%' and o.outdate<'"+measuretime+"' order by o.outdate desc";
 		List<Out> list = getSession().createQuery(hql).list();
 		Set<String> name = new HashSet<String>();
 		List<Out> out = new ArrayList<Out>();

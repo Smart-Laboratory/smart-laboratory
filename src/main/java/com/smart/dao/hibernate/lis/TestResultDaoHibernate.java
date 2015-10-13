@@ -64,8 +64,8 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getSingleHistory(String testid, String patientName,
 			String patientid) {
-		String hql = "select t.* from Sample s, TestResult t where t.testid in (" + testid
-				+ ")  and s.patientId='" + patientid + "' and s.sampleno=t.sampleno order by t.measuretime desc";
+		String hql = "select t from Sample s, TestResult t where t.testId in (" + testid
+				+ ")  and s.patientId='" + patientid + "' and s.sampleNo=t.sampleNo order by t.measureTime desc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}

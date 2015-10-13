@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../scripts/justgage.1.0.1.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
     <script type="text/javascript" src="../scripts/lis/audit.js"></script>
+    <script type="text/javascript" src="../scripts/highcharts.js"></script>
     
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />

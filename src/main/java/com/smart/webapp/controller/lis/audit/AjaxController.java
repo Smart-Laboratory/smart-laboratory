@@ -41,7 +41,7 @@ public class AjaxController extends BaseAuditController{
 		String testid = request.getParameter("id");
 		String sample = request.getParameter("sample");
 		DecimalFormat deFormat = new DecimalFormat("#.##");
-
+		
 		Sample info = sampleManager.getBySampleNo(sample);
 		Date measuretime = new Date();
 		String patientid = info.getPatientId();
@@ -61,11 +61,14 @@ public class AjaxController extends BaseAuditController{
 			}
 		}
 		map.put("hmList", outManager.getLastHMs(testid, measuretime));
+		if (idMap.size() == 0)
+			initMap();
+		
         if(list.size()>1) {
-        	if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty()) {
-        		map.put("name", list.get(0).getChineseName() + " (" + list.get(0).getUnit() + ")");
+        	if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && idMap.containsKey(list.get(0).getTestId())) {
+        		map.put("name", idMap.get(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
         	} else {
-        		map.put("name", list.get(0).getChineseName());
+        		map.put("name", idMap.get(list.get(0).getTestId()).getName());
         	}
         	int num = list.size();
         	int count = 0;

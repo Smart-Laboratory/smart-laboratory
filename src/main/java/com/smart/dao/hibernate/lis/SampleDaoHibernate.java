@@ -93,7 +93,12 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		s.flush();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Sample> getHistorySample(String patientId, String blh) {
+		
+		if(blh != null){
+			return getSession().createQuery("from Sample where patient.blh ='"+blh+"'").list();
+		}
 		return null;
 	}
 
