@@ -35,5 +35,7 @@
         <mapping class="com.smart.model.lis.CollectSample"/>
         <mapping class="com.smart.model.lis.SOPIndex"/>
         <mapping class="com.smart.model.lis.ReasoningModify"/>
+        <mapping class="com.smart.model.lis.AuditTrace"/>
+        <mapping class="com.smart.model.lis.Task"/>
     </session-factory>
 </hibernate-configuration>

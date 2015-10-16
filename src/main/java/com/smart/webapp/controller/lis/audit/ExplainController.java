@@ -26,7 +26,7 @@ import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
-import com.smart.service.lis.reasoningModifyManager;
+import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.PatientUtil;
 import com.smart.Constants;
@@ -42,7 +42,7 @@ public class ExplainController extends BaseAuditController{
 	private UserManager userManager = null;
 	
 	@Autowired
-	private reasoningModifyManager reasoningModifyManager = null;
+	private ReasoningModifyManager reasoningModifyManager = null;
 	
 	@Autowired
 	private DictionaryManager dictionaryManager = null;

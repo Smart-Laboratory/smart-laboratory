@@ -38,6 +38,7 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
+import com.smart.model.lis.AuditTrace;
 import com.smart.service.DictionaryManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.SampleManager;
@@ -228,6 +229,12 @@ public class AutoAuditServlet extends HttpServlet {
 	    							if (info.getAuditMark() == 6) {
 	    								updateCriticalRecord.add(info.getCriticalRecord());
 	    							}
+	    							AuditTrace a = new AuditTrace();
+    								a.setSampleno(info.getSampleNo());
+    								a.setChecktime(new Date());
+    								a.setChecker("Robot");
+    								a.setType(1);
+    								a.setStatus(info.getAuditStatus());	
         	        			} catch (Exception e) {
         	        				log.error("样本"+info.getSampleNo()+"审核出错:\r\n", e);
                 	                e.printStackTrace();
@@ -238,7 +245,7 @@ public class AutoAuditServlet extends HttpServlet {
         					criticalRecordManager.saveAll(updateCriticalRecord);
         					log.debug("第" + autocount + "次审核结束！");
         	            	System.out.println("第" + autocount + "次审核结束！");
-//        	                Thread.sleep(120000);  
+        	                Thread.sleep(120000);  
         	            } catch (Exception e) {
         	            	log.error(e.getMessage());
         	                e.printStackTrace();

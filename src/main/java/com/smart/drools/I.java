@@ -52,6 +52,15 @@ public class I {
 			if (value.contains("> ")) {
 				fvalue = Float.parseFloat(value.replace("> ", ""));
 				this.setV(fvalue);
+			} else if (value.contains(">")) {
+				fvalue = Float.parseFloat(value.replace(">", ""));
+				this.setV(fvalue);
+			} else if (value.contains("< ")) {
+				fvalue = Float.parseFloat(value.replace("< ", ""));
+				this.setV(fvalue);
+			} else if (value.contains("<")) {
+				fvalue = Float.parseFloat(value.replace("<", ""));
+				this.setV(fvalue);
 			} else {
 				this.setV(0);
 			}

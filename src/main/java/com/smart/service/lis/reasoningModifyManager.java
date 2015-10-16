@@ -5,7 +5,7 @@ import java.util.List;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.service.GenericManager;;
 
-public interface reasoningModifyManager extends GenericManager<ReasoningModify, Long> {
+public interface ReasoningModifyManager extends GenericManager<ReasoningModify, Long> {
 
 	/**
 	 *  获取某样本的解释列表
