@@ -3,6 +3,12 @@
 <head>
     <title><fmt:message key="sample.manage.audit"/></title>
     
+        <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/lis/audit.css'/>" />
+    
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<c:url value='/scripts/jquery.tablednd_0_5.js'/> "></script>
@@ -15,12 +21,7 @@
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
     <script type="text/javascript" src="../scripts/lis/audit.js"></script>
     <script type="text/javascript" src="../scripts/highcharts.js"></script>
-    
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/lis/audit.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
+
 
 <style>
 .ui-tabs-anchor {

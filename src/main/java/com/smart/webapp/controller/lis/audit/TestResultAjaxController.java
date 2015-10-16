@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,8 +26,13 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
+import com.smart.service.lis.TestModifyManager;
 import com.smart.model.lis.TestModify;
 import com.smart.webapp.util.DataResponse;
+import com.smart.model.lis.Sample;
+import com.smart.webapp.util.FillFieldUtil;
+import com.zju.api.model.Describe;
+import com.zju.api.model.Reference;
 
 @Controller
 @RequestMapping("/audit*")
@@ -61,6 +67,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		String test = request.getParameter("test");
 		User operator =	userManager.getUserByUsername(request.getRemoteUser());
 //		operator.setLastProfile(test);
+		System.out.println("test:"+test);
 		userManager.saveUser(operator);
 		if (test.endsWith(","))
 			test = test.substring(0, test.length() - 1);
@@ -135,11 +142,80 @@ public class TestResultAjaxController extends BaseAuditController{
 		String diff = "";
 		if (executeTime != null && checkTime != null) {
 			long df = checkTime.getTime() - executeTime.getTime();
-			diff = String.valueOf(df / 60000);
+			diff = String.valueOf(df/60000);
 		}
 		json.put("tat", diff);
 		return json.toString();
 	}
+	/**
+	 * 样本添加检验项目
+	 * 
+	 * @param request（test-testid:result）
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/add*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addProject(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		try {
+			String testResults = request.getParameter("test");
+			String sample = request.getParameter("sample");
+			String[] testResult = testResults.split(";");
+
+			List<Describe> desList = rmiService.getDescribe();
+            List<Reference> refList = rmiService.getReference();
+            FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
+            
+
+			Sample info = sampleManager.getBySampleNo(sample);
+
+			for (String test : testResult) {
+				String[] idValue = test.split(":");
+				if (idValue.length == 2) {
+					TestResult nt = new TestResult();
+					/*
+					 * TestResult tr = testResultManager.get(new TestResultPK(sample, idValue[0])); if (tr != null) { nt
+					 * = tr; }
+					 */
+					nt.setTestId(idValue[0]);
+					nt.setSampleNo(sample);
+					nt.setTestResult(idValue[1]);
+					nt.setOperator(request.getRemoteUser());
+					nt.setCorrectFlag("1");
+					nt.setMeasureTime(new Date());
+					nt.setResultFlag("AAAAAA");
+					nt.setEditMark(Constants.ADD_FLAG);
+					Describe des = fillUtil.getDescribe(idValue[0]);
+					if (des != null) {
+						nt.setSampleType(""+ des.getSAMPLETYPE());
+						nt.setUnit(des.getUNIT());
+					}
+					fillUtil.fillResult(nt, info);
+					info.getResults().add(nt);
+					testResultManager.save(nt);
+					TestModify testModify = new TestModify();
+					testModify.setModifyTime(new Date());
+					testModify.setModifyUser(request.getRemoteUser());
+					testModify.setSampleNo(sample);
+					testModify.setTestId(idValue[0]);
+					testModify.setNewValue(idValue[1]);
+					testModify.setType(Constants.ADD);
+					testModifyManager.save(testModify);
+					info.setModifyFlag(1);
+					// info.setWriteBack(1);
+					sampleManager.save(info);
+				}
+			}
+		} catch (Exception e) {
+			return false;
+		}
+
+		// System.out.println(testResult);
+		return true;
+	}
 	
-	
+	@Autowired
+	private TestModifyManager testModifyManager;
 }

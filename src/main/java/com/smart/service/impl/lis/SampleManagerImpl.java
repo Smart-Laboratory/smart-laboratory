@@ -53,4 +53,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public List<Integer> getAuditInfo(String date, String department, String user) {
 		return sampleDao.getAuditInfo(date, department, user);
 	}
+	
+	public List<Sample> getSampleByPatientName(String fromDate, String toDate, String patientName){
+		return  sampleDao.getSampleByPatientName(fromDate,toDate,patientName);
+	}
 }

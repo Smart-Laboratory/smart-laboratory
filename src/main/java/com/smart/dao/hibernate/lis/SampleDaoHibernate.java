@@ -24,6 +24,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
         super(Sample.class);
     }
 
+	private static String DATEFORMAT = "yyyy-MM-dd hh24:mi:ss";
+	
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
 		if (StringUtils.isEmpty(lab)) {
@@ -174,5 +176,13 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 		}
 		
 		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getSampleByPatientName(String from, String to,String pName) {
+		String hql = "from PatientInfo p where p.patientName='" + pName + "' and p.receivetime between to_date('" + from + " 00:00:00','"
+                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
+                    + "') order by p.receivetime desc";
+		return getSession().createQuery(hql).list();
 	}
 }

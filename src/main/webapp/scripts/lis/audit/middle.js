@@ -8,6 +8,31 @@
 		});
 	}
 	
+	function twsSampleReload(sample){
+		var array = new Array();
+		$.ajaxSetup({
+			async:false
+		});
+		$.get("../audit/twosample", {id:sample}, function(data){
+			for(var i=0; i< data.length; i++) {
+				array[i] = data[i];
+			}
+		});
+		if(array[0].rows==""){
+			jQuery("#sample0").jqGrid("clearGridData");
+			jQuery("#sample1").jqGrid("clearGridData");
+		}
+			
+		jQuery("#sample0").jqGrid("setGridParam",{
+			data:array[0].rows,
+			userdata:array[0].userdata
+		}).trigger("reloadGrid");
+		jQuery("#sample1").jqGrid("setGridParam",{
+			data:array[1].rows,
+			userdata:array[0].userdata
+		}).trigger("reloadGrid");
+	}
+	
 	var isFirst = true;
 	function getPatient(ret) {
  		var docNo = ret.id;
@@ -28,28 +53,7 @@
     				isFirst = false;
     			}
     			else{
-    				var array = new Array();
-    				$.ajaxSetup({
-    					async:false
-    				});
-    				$.get("../audit/twosample", {id:ret.sample}, function(data){
-    					for(var i=0; i< data.length; i++) {
-    						array[i] = data[i];
-    					}
-    				});
-    				if(array[0].rows==""){
-    					jQuery("#sample0").jqGrid("clearGridData");
-    					jQuery("#sample1").jqGrid("clearGridData");
-    				}
-    					
-    				jQuery("#sample0").jqGrid("setGridParam",{
-    					data:array[0].rows,
-    					userdata:array[0].userdata
-    				}).trigger("reloadGrid");
-    				jQuery("#sample1").jqGrid("setGridParam",{
-    					data:array[1].rows,
-    					userdata:array[0].userdata
-    				}).trigger("reloadGrid");
+    				twsSampleReload(ret.sample);
     			}
 			} else {
 				$("#patientRow").css('display','block');
@@ -118,8 +122,7 @@
 			$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
 			$("#sample1").jqGrid("setCaption", data.examinaim);
         	$("#audit_reason").html(data.reason);
-        	$("#pName").html("<a href='../patientList?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>");
-        	/* $("#pName").html("<a href='../../patient/list?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>"); */
+        	$("#pName").html("<a href='../manage/patientList?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>");
         	$("#pAge").html(data.age);
         	$("#blh").html("<a href='http://192.168.17.102/ZWEMR/SysLogin.aspx?lcation=inside&ly=D&edt=N&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
         	$("#doctadviseno").html(data.id);

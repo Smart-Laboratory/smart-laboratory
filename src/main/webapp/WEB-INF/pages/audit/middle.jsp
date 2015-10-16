@@ -43,13 +43,13 @@
 			</div>
 		</div>
 		<div class="col-sm-12 pinfo">
-			<div class="col-sm-6 pinfo">
+			<div class="col-sm-4 pinfo">
 				<fmt:message key="patient.section" />:<b id="pSection"></b>
 			</div>
-			<div id="pBedHtml" class="col-sm-2 pinfo">
+			<div id="pBedHtml" class="col-sm-3 pinfo">
 				<fmt:message key="patient.departbed" />:<b id="pBed"></b>
 			</div>
-			<div class="col-sm-4 pinfo">
+			<div class="col-sm-5 pinfo">
 				<fmt:message key="diagnostic" />:<b id="diagnostic"></b>
 			</div>
 		</div>
@@ -75,7 +75,7 @@
 		</div>
 		<div style="margin-top:4px;float:right;">
 			<button id="testAdd" class="btn"><b><fmt:message key="button.add" /></b></button>
-			<button id="testDelete" class="btn" onclick="confirm('<fmt:message key="confirm.delete" />')"><b><fmt:message key="button.delete" /></b></button>
+			<button id="testDelete" class="btn" ><b><fmt:message key="button.delete" /></b></button>
 			<button id="tatBtn" class="btn"><b>TAT</b></button>
 			<button id="modifyBtn" class="btn"><b><fmt:message key="sample.test.modify.record" /></b></button>
 		</div>

@@ -35,7 +35,7 @@
 <div id="addTestResultDialog" style="text-align:left;" title="<fmt:message key='add.test.result'/>">
 	<div>
 		<span style=""><fmt:message key='add.single'/></span>
-		<input class="span4" id="searchProject" type="text" placeholder="<fmt:message key='add.single'/>">
+		<input  id="searchProject"  placeholder="<fmt:message key='add.single'/>">
 	</div>
 	<div>
 		<select id="profileList"></select>
@@ -43,6 +43,7 @@
 		<button id="deleteAllTest" class="btn btn-danger"><fmt:message key="button.empty" /></button>
 	</div>
 	<div id="addTestList">
+	
 	</div>
 </div>
 
@@ -66,8 +67,8 @@
 					<button id="addResult" type="submit" class="btn" ><fmt:message key='button.submit' /></button>
 				</div>
 			</div>
-		</form>
-	</div>
+	</form>
+</div>
 
 	<div id="tatDialog" title="TAT"  style="text-align:left;" >
 		<table class="table">
