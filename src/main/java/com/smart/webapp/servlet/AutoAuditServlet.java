@@ -22,6 +22,7 @@ import com.smart.Constants;
 import com.smart.check.Alarm2Check;
 import com.smart.check.Alarm3Check;
 import com.smart.check.Check;
+import com.smart.check.CheckUtil;
 import com.smart.check.DangerCheck;
 import com.smart.check.DiffCheck;
 import com.smart.check.ExtremeCheck;
@@ -225,6 +226,8 @@ public class AutoAuditServlet extends HttpServlet {
 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
 	    								}
 	    							}
+	    							String ruleId = CheckUtil.toString(r.getRuleIds());
+	    							info.setRuleIds(ruleId);
 	    							updateSample.add(info);
 	    							if (info.getAuditMark() == 6) {
 	    								updateCriticalRecord.add(info.getCriticalRecord());

@@ -38,7 +38,7 @@ import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.ItemManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
-import com.smart.service.lis.reasoningModifyManager;
+import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
@@ -59,7 +59,7 @@ public class PatientListController {
 	private ItemManager itemManager = null;
 	private RuleManager ruleManager = null;
 	private UserManager userManager = null;
-	private reasoningModifyManager reasoningModifyManager = null;
+	private ReasoningModifyManager reasoningModifyManager = null;
 	private Map<String, Index> idMap = new HashMap<String, Index>();
 	private static IndexMapUtil util = IndexMapUtil.getInstance();
 	
@@ -505,7 +505,7 @@ public class PatientListController {
 	
 	@Autowired
 	public void setReasoningModifyManager(
-			reasoningModifyManager reasoningModifyManager) {
+			ReasoningModifyManager reasoningModifyManager) {
 		this.reasoningModifyManager = reasoningModifyManager;
 	}
 	

@@ -55,7 +55,6 @@ public class RetestCheck implements Check {
 			}
 		}
 		
-		info.setRuleIds(ruleId);
 		if (!result) {
 			info.setMarkTests(markTests);
 			info.setAuditStatus(UNPASS);
