@@ -38,6 +38,9 @@
         <property name="username" value="zjhis" />
         <property name="password" value="zjhis" />
     </bean>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
     <bean id="jdbcTemplatez1" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource-z1"></property>
     </bean>

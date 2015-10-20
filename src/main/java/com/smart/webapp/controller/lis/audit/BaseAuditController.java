@@ -1,6 +1,5 @@
 package com.smart.webapp.controller.lis.audit;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +15,11 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
+import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.TaskManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.service.rule.BagManager;
@@ -39,7 +40,7 @@ public class BaseAuditController {
     protected TestResultManager testResultManager = null;
     
 	@Autowired
-    protected final DictionaryManager dictionaryManager = null;
+    protected DictionaryManager dictionaryManager = null;
     
 	@Autowired
     protected ItemManager itemManager = null;
@@ -71,10 +72,11 @@ public class BaseAuditController {
 	@Autowired
     protected UserManager userManager = null;
 	
-	protected final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	protected final static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-	protected final static SimpleDateFormat mdf = new SimpleDateFormat("MM/dd");
-	protected final static SimpleDateFormat hmf = new SimpleDateFormat("HH:mm");
+	@Autowired
+    protected TaskManager taskManager = null;
+	
+	@Autowired
+	protected CollectSampleManager collectSampleManager = null;
 	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();

@@ -1,13 +1,9 @@
-
-
-
-
 $(function(){
 	
 	
 	
 	getList($("#sampletext").val(),$("#lab").val());
-	
+
 	getSopSchedule($("#labSelect").val());
 	
 	$("#historyTabs").tabs({
@@ -269,20 +265,6 @@ $(function(){
 		$("#imageDialog").dialog("open");
 	});
 	
-	$("#tcPassBtn").click(function() {
-		$("#hiddenIsPass").val(true);
-		$("#passNotes").html("<fmt:message key='pass.notes' />");
-		$("#opStatusDialog").dialog("open");
-	});
-	$("#tcUnpassBtn").click(function(){
-		$("#hiddenIsPass").val(false);
-		$("#passNotes").html("<fmt:message key='unpass.notes' />");
-		$("#opStatusDialog").dialog("open");
-	});
-	$("#tcCloseBtn").click(function(){
-		$("#twoColumnDialog").dialog("close");
-	});
-	
 	$("#auditBtn2").click(function(){
 		var text = $("#auditText2").val();
 		if (text != "") {
@@ -290,7 +272,7 @@ $(function(){
 			if (!!$("#auditAllbtn").attr("checked")) {
 				reaudit = true;
 			}
-			$.get("<c:url value='/explain/audit/result'/>",{sample:text,reaudit:reaudit},function() {});
+			$.get("../audit/result",{sample:text,reaudit:reaudit},function() {});
 		}
 	});
 
@@ -305,7 +287,7 @@ $(function(){
 	});
 	
 	function getProValue() {
-    	$.get("<c:url value='/task/ajax/audit'/>",{},function(data){
+    	$.get("../task/ajax/audit",{},function(data){
 
     		var ids = {
      			put : function(key,value){this[key] = value},
@@ -315,7 +297,6 @@ $(function(){
      		}
     		
     		$("#auditDialog div.proId").each(function(index,self) {
-    			alert($(self).html());
     			ids.put($(self).html(),$(self).html())
     		});
     		
@@ -356,26 +337,26 @@ $(function(){
        			$(self).find("div.proRatio").html(da.ratio);
        			$(self).find("div.proValue").progressbar({value:da.value});
        			if (da.status == "1") {
-       				$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.run.png'/>' class='status_icon'/>");
+       				$(self).find("div.proStatus").html("<img src='../images/status.run.png' class='status_icon'/>");
        				$(self).find(".stopAudit").removeAttr("disabled");
        				$(self).find(".stopAudit").click(function(){
-       					$.get("<c:url value='/task/ajax/cancel'/>",{id : id}, function() {});
+       					$.get("../task/ajax/cancel",{id : id}, function() {});
        				});
         		} else if (da.status =="2") {
         			var value = $(self).find("input.hiddenValue").val();
-        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.finished.png'/>' class='status_icon'/>");
+        			$(self).find("div.proStatus").html("<img src='../images/status.finished.png' class='status_icon'/>");
         			$(self).find(".stopAudit").attr('disabled',"true");
         			if (value != 100 && da.value != 0) {
         				jQuery("#s3list").trigger("reloadGrid");
         			}
         		} else if (da.status == "3") {
-        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.cancel.png'/>' class='status_icon'/>");
+        			$(self).find("div.proStatus").html("<img src='../images/status.cancel.png' class='status_icon'/>");
         			$(self).find(".stopAudit").attr('disabled',"true");
         		} else if (da.status == "0") {
-        			$(self).find("div.proStatus").html("<img src='<c:url value='/images/status.wait.gif'/>' style='width:20px;height:20px;margin-left:1px;' class='status_icon'/>");
+        			$(self).find("div.proStatus").html("<img src='../images/status.wait.gif' style='width:20px;height:20px;margin-left:1px;' class='status_icon'/>");
         			$(self).find(".stopAudit").removeAttr("disabled");
        				$(self).find(".stopAudit").click(function(){
-       					$.get("<c:url value='/task/ajax/cancel'/>",{id : id}, function() {});
+       					$.get("../task/ajax/cancel",{id : id}, function() {});
        				});
         		}
        			$(self).find("input.hiddenValue").val(da.value);

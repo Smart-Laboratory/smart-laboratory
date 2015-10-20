@@ -41,6 +41,7 @@ public class LackCheck implements Check {
 					String[] linshi_xh = xh.split("\\[");
 					xh = linshi_xh[0];
 				}
+				System.out.println(Long.parseLong(xh));
 				Ylxh y = ylxhMap.get(Long.parseLong(xh));
 				if (y.getProfiletest() != null) {
 					for (String s : y.getProfiletest().split(",")) {
