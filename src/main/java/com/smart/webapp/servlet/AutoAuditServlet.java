@@ -227,6 +227,7 @@ public class AutoAuditServlet extends HttpServlet {
 	    								}
 	    							}
 	    							String ruleId = CheckUtil.toString(r.getRuleIds());
+	    							System.out.println("ruleId: "+ruleId);
 	    							info.setRuleIds(ruleId);
 	    							updateSample.add(info);
 	    							if (info.getAuditMark() == 6) {
