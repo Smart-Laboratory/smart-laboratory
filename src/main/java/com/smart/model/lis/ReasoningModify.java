@@ -118,7 +118,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 修改解释的样本医嘱号
 	 */
-	@Column(name = "sample_id")
+	@Column(name = "doc_no")
 	public String getSampleId() {
 		return sampleId;
 	}
@@ -130,6 +130,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 解释类型
 	 */
+	@Column
 	public String getType() {
 		return type;
 	}
@@ -141,6 +142,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 解释的原因
 	 */
+	@Column
 	public String getContent() {
 		return content;
 	}

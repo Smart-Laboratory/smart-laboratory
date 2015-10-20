@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONObject;
-import org.kie.internal.task.api.TaskPersistenceContextManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +26,7 @@ import com.smart.Constants;
 import com.smart.check.Alarm2Check;
 import com.smart.check.Alarm3Check;
 import com.smart.check.Check;
+import com.smart.check.CheckUtil;
 import com.smart.check.DangerCheck;
 import com.smart.check.DiffCheck;
 import com.smart.check.ExtremeCheck;
@@ -38,6 +39,7 @@ import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.Task;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
@@ -45,184 +47,315 @@ import com.smart.model.rule.Rule;
 import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
+import com.smart.webapp.util.TaskManagerUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
+import com.smart.model.lis.AuditTrace;
 import com.smart.model.lis.CollectSample;
 import com.smart.model.user.User;
-import com.smart.service.lis.CollectSampleManager;
+import com.smart.util.Config;
 
 @Controller
 @RequestMapping("/audit*")
 public class AuditController extends BaseAuditController {
 	
+	private final static int ONCE_MAX_AUDIT = Config.getOnceAuditMaxCount(); // 一次自动审核最大样本数
 	private static final Log log = LogFactory.getLog(AuditController.class);
 	
-	@Autowired
-	private CollectSampleManager collectSampleManager;
     
     @RequestMapping(value = "/result*", method = RequestMethod.GET)
 	public void getAuditResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	try {
-    		final Map<String, Describe> idMap = new HashMap<String, Describe>();
-        	final Map<String, String> indexNameMap = new HashMap<String, String>();
-        	List<Bag> bags = bagManager.getBagByHospital("1");
-        	List<Rule> ruleList = new ArrayList<Rule>();
-			Set<Long> have = new HashSet<Long>();
-			for(Bag b : bags) {
-				for(Rule r : b.getRules()) {
-					if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
-						ruleList.add(r);
-						have.add(r.getId());
-					}
+    		
+		final Map<String, Describe> idMap = new HashMap<String, Describe>();
+    	final Map<String, String> indexNameMap = new HashMap<String, String>();
+    	List<Bag> bags = bagManager.getBagByHospital("1");
+    	List<Rule> ruleList = new ArrayList<Rule>();
+		Set<Long> have = new HashSet<Long>();
+		for(Bag b : bags) {
+			for(Rule r : b.getRules()) {
+				if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
+					ruleList.add(r);
+					have.add(r.getId());
 				}
 			}
-    		final DroolsRunner droolsRunner = DroolsRunner.getInstance();
-    		final Set<String> hasRuleSet = new HashSet<String>();
-    		for (Item i : itemManager.getAll()) {
-    			String testid = i.getIndex().getIndexId();
-    			hasRuleSet.add(testid);
+		}
+		final DroolsRunner droolsRunner = DroolsRunner.getInstance();
+		final Set<String> hasRuleSet = new HashSet<String>();
+		for (Item i : itemManager.getAll()) {
+			String testid = i.getIndex().getIndexId();
+			hasRuleSet.add(testid);
+		}
+		List<Describe> desList = rmiService.getDescribe();
+        List<Reference> refList = rmiService.getReference();
+		for (Describe t : desList) {
+			idMap.put(t.getTESTID(), t);
+			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
+		}
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
+        final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+        log.debug("初始化常量完成");
+        System.out.println("初始化常量完成");
+        String sample = request.getParameter("sample").toUpperCase();
+        String currentUser = request.getRemoteUser();
+        final Task task = createTask(sample, currentUser);
+		TaskManagerUtil manager = TaskManagerUtil.getInstance();
+		manager.addOperatorName(currentUser);
+		manager.addTask(task);
+		final List<Sample> samples = new ArrayList<Sample>();
+		User operator = userManager.getUserByUsername(currentUser);
+		Map<Long, Sample> diffData = new HashMap<Long, Sample>();
+		final List<Sample> updateSample = new ArrayList<Sample>();
+		final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
+    	log.debug("开始手工审核...");
+    	System.out.println("开始手工审核...");
+    	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
+    	try {
+    		int status = 0;
+    		String reAudit = request.getParameter("reaudit");
+    		String auto = request.getParameter("auto");
+
+    		String preText = sample;
+    		String code;
+    		if (auto == null) {
+    			code = operator.getLabCode();
+    		} else {
+    			code = operator.getActiveCode();
     		}
-    		List<Describe> desList = rmiService.getDescribe();
-            List<Reference> refList = rmiService.getReference();
-    		for (Describe t : desList) {
-    			idMap.put(t.getTESTID(), t);
-    			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
+    		if (reAudit != null) {
+    			try {
+    				if (Boolean.valueOf(reAudit)) {
+    					status = -2;
+    				}
+    			} catch (Exception e) {
+    			}
     		}
-            FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-            final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
-            log.debug("初始化常量完成");
-            System.out.println("初始化常量完成");
-            Thread autoAudit = new Thread(new Runnable(){
-				
-        		public void run() {
-    	            try {
-    	            	List<Sample> updateSample = new ArrayList<Sample>();
-    	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
-    	            	log.debug("开始手工审核...");
-    	            	System.out.println("开始手工审核...");
-    	            	Date today = new Date();
-    	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
-    	            	Map<Long, Sample> diffData = new HashMap<Long, Sample>();
-    	            	List<Sample> samples = sampleManager.getNeedAudit(Constants.DF3.format(today));
-    	            	if (samples.size() == 0) {
-    	        			throw new Exception("无数据！");
-    	        		}
-    	                for (Sample info : samples) {
-    	        			try {
-    	        				formulaUtil.formula(info, "admin");
-    	        				Set<TestResult> now = info.getResults();
-    	        				Set<String> testIdSet = new HashSet<String>();
-    	        				for (TestResult t : now) {
-    	        					testIdSet.add(t.getTestId());
-    	        				}
-    	        				System.out.println(info.getSampleNo()+" : " + now.size());
-    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
-    	        				for (Sample p : list) {
-    	        					boolean isHis = false;
-    	        					if (p.getSampleNo().equals(info.getSampleNo())) {
-    	        						continue;
-    	        					}
-    	        					Set<TestResult> his = p.getResults();
-    	        					for (TestResult t : his) {
-    	        						String testid = t.getTestId();
-    	        						Set<String> sameTests = util.getKeySet(testid);
-    	        						sameTests.add(testid);
-    	        						if (testIdSet.contains(t.getTestId())) {
-    	        							isHis = true;
-    	        							break;
-    	        						}
-    	        					}
-    	        					
-    	        					if (isHis) {
-    	        						diffData.put(info.getId(), p);
-    	        						System.out.println(p.getSampleNo());
-    	        						break;
-    	        					}
-    	        				}
-    	        			} catch (Exception e) {
-    	        				samples.remove(info);
-    	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
-    	        				e.printStackTrace();
-    	        			}
-    	        		}
-    	                log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
-    	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
-    	                Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
-    	        		DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
-    	        		Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
-    	        		Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
-    	        		Check reTestCheck = new RetestCheck(ruleManager);
-    	        		Check dangerCheck = new DangerCheck(ruleManager);
-    	        		Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
-    	        		Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
-    	        		ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
-    	        		for (Sample info : samples) {
-    	        			try{
-	    	        			info.setMarkTests("");
-	    	        			info.setAuditStatus(Check.PASS);
-	    	        			info.setAuditMark(Check.AUTO_MARK);
-	    	        			info.setNotes("");
-	    	        			info.setRuleIds("");
-	    	        			hasRuleCheck.doCheck(info);
-								boolean lack = lackCheck.doCheck(info);
-								diffCheck.doCheck(info);
-								Map<String, Boolean> diffTests = diffCheck.doFiffTests(info);
-								ratioCheck.doCheck(info);
-								R r = droolsRunner.getResult(info.getResults(), info.getPatientId(), info.getPatient().getAge(), Integer.parseInt(info.getPatient().getSex()));
-								if (!r.getRuleIds().isEmpty()) {
-									reTestCheck.doCheck(info, r);
-									alarm2Check.doCheck(info, r, diffTests);
-									alarm3Check.doCheck(info, r, diffTests);
-									extremeCheck.doCheck(info, r, diffTests);
-									if (!lack && info.getAuditMark() != Check.LACK_MARK) {
-										info.setAuditMark(Check.LACK_MARK);
-									}
-									dangerCheck.doCheck(info, r);
-								}
-								//bayesCheck.doCheck(info); // Bayes审核及学习
-								
-								if (info.getAuditStatus() == Constants.STATUS_PASSED) {
-									info.setWriteback(1);
-									if (info.getCheckerOpinion()!=null 
-											&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)
-												&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)) {
-										info.setCheckerOpinion(info.getCheckerOpinion() + " " + Check.AUTO_AUDIT);
-									} else {
-										info.setCheckerOpinion(Check.AUTO_AUDIT);
-									}
-								}
-								updateSample.add(info);
-								if (info.getAuditMark() == 6) {
-									updateCriticalRecord.add(info.getCriticalRecord());
-								}
-    	        			} catch (Exception e) {
-    	        				log.error("样本"+info.getSampleNo()+"审核出错:\r\n", e);
-            	                e.printStackTrace();
-            	                continue;
-            	            }
-    	        		}
-    	        		sampleManager.saveAll(updateSample);
-    					criticalRecordManager.saveAll(updateCriticalRecord);
-    					log.debug("手工审核结束！");
-    	            	System.out.println("手工审核结束！");
-    	                Thread.sleep(120000);  
-    	            } catch (Exception e) {
-    	            	log.error(e.getMessage());
-    	                e.printStackTrace();
-    	                try {
-    	    				Thread.sleep(20000);
-    	    			} catch (InterruptedException e1) {
-    	    				e1.printStackTrace();
-    	    			}
-    	            }  
+
+    		if (StringUtils.isEmpty(code)) {
+    			throw new Exception("该用户没有被分配代码段！");
+    		}
+
+    		if (sample.length() >= 11 && code.indexOf(sample.substring(8, 11)) == -1) {
+    			throw new Exception("没有Code:" + sample.substring(8, 11) + "的权限!");
+    		}
+
+    		if (sample.length() == 8 && StringUtils.isNumeric(sample)) {
+    		} else if (sample.length() == 11 && StringUtils.isNumeric(sample.substring(0, 8))) {
+    			preText = sample.substring(0, 8);
+    			code = sample.substring(8);
+    		} else if (sample.length() == 14) {
+    			preText = sample;
+    			code = sample.substring(8, 11);
+    		} else if (sample.length() == 18) {
+    			preText = sample.substring(0, 8);
+    			code = sample.substring(8, 11);
+    		} else {
+    			throw new Exception("格式不符合要求!");
+    		}
+    		List<Sample> patientInfo = new ArrayList<Sample>();
+    		if (sample.length() != 14) {
+    			List<Sample> patientUnauditList = sampleManager.getSampleList(preText, operator.getLastLab(), code, 0, status);
+    			patientInfo.addAll(patientUnauditList);
+    			if (auto != null) {
+    				List<Sample> patientLackList = sampleManager.getSampleList(preText, operator.getLastLab(), code, 4, 2);
+    				patientInfo.addAll(patientLackList);
+    			}
+    		} else {
+    			List<Sample> simpleInfo = sampleManager.getListBySampleNo(preText);
+    			if (simpleInfo != null && operator.getLastLab().indexOf(simpleInfo.get(0).getSection().getCode()) != -1) {
+    				patientInfo = simpleInfo;
+    			}
+    		}
+
+    		if (sample.length() == 18) {
+    			int start = Integer.valueOf(sample.substring(11, 14));
+    			int end = Integer.valueOf(sample.substring(15, 18));
+    			System.out.println(start + "," + end);
+    			Iterator<Sample> itr = patientInfo.iterator();
+    			while (itr.hasNext()) {
+    				Sample info = itr.next();
+    				int index = Integer.parseInt(info.getSampleNo().substring(11));
+    				if (index < start || index > end) {
+    					itr.remove();
+    				}
+    			}
+    		}
+
+    		if (auto != null) {
+    			HttpSession session = request.getSession();
+    			String scope = (String) session.getAttribute("scope");
+    			if (!StringUtils.isEmpty(scope)) {
+    				String[] sp = scope.split(";");
+    				for (String s : sp) {
+    					String[] codeScope = s.split(":");
+    					String[] loHi = codeScope[1].split("-");
+    					int start = Integer.valueOf(loHi[0]);
+    					int end = Integer.valueOf(loHi[1]);
+    					Iterator<Sample> itr = patientInfo.iterator();
+    					while (itr.hasNext()) {
+    						Sample info = itr.next();
+    						String preSampleNo = info.getSampleNo().substring(8, 11);
+    						if (preSampleNo.equals(codeScope[0])) {
+    							int index = Integer.parseInt(info.getSampleNo().substring(11));
+    							if (index < start || index > end) {
+    								itr.remove();
+    							}
+    						}
+    					}
+    				}
+    			}
+    		}
+
+    		if (patientInfo.size() <= ONCE_MAX_AUDIT) {
+    			samples.addAll(patientInfo);
+    		} else {
+    			for (int i = 0; i < ONCE_MAX_AUDIT; i++) {
+    				samples.add(patientInfo.get(i));
+    			}
+    		}
+    		task.setSampleCount(samples.size());
+    		for (Sample info : samples) {
+    			try {
+    				formulaUtil.formula(info, "admin");
+    				Set<TestResult> now = info.getResults();
+    				Set<String> testIdSet = new HashSet<String>();
+    				for (TestResult t : now) {
+    					testIdSet.add(t.getTestId());
+    				}
+    				System.out.println(info.getSampleNo()+" : " + now.size());
+    				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
+    				for (Sample p : list) {
+    					boolean isHis = false;
+    					if (p.getSampleNo().equals(info.getSampleNo())) {
+    						continue;
+    					}
+    					Set<TestResult> his = p.getResults();
+    					for (TestResult t : his) {
+    						String testid = t.getTestId();
+    						Set<String> sameTests = util.getKeySet(testid);
+    						sameTests.add(testid);
+    						if (testIdSet.contains(t.getTestId())) {
+    							isHis = true;
+    							break;
+    						}
+    					}
+    					
+    					if (isHis) {
+    						diffData.put(info.getId(), p);
+    						System.out.println(p.getSampleNo());
+    						break;
+    					}
+    				}
+    			} catch (Exception e) {
+    				samples.remove(info);
+    				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
+    				e.printStackTrace();
+    			}
+    		}	// 由于延迟加载,在session关闭前获取检验数据
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			manager.removeOperatorName(currentUser);
+			task.setEndTime(new Date());
+			task.setStatus(Constants.THREAD_STOPPED);
+			//return;
+		}
+        log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
+        System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
+        final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
+        final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
+        final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
+        final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
+        final Check reTestCheck = new RetestCheck(ruleManager);
+        final Check dangerCheck = new DangerCheck(ruleManager);
+        final Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
+        final Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
+        final ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
+		
+        manager.execute(new Runnable() {
+			
+    		public void run() {
+    			int index = 0;
+        		for (Sample info : samples) {
+        			try {
+	        			info.setMarkTests("");
+	        			info.setAuditStatus(Check.PASS);
+	        			info.setAuditMark(Check.AUTO_MARK);
+	        			info.setNotes("");
+	        			info.setRuleIds("");
+	        			hasRuleCheck.doCheck(info);
+						boolean lack = lackCheck.doCheck(info);
+						diffCheck.doCheck(info);
+						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info);
+						ratioCheck.doCheck(info);
+						R r = droolsRunner.getResult(info.getResults(), info.getPatientId(), info.getPatient().getAge(), Integer.parseInt(info.getPatient().getSex()));
+						if (!r.getRuleIds().isEmpty()) {
+							reTestCheck.doCheck(info, r);
+							alarm2Check.doCheck(info, r, diffTests);
+							alarm3Check.doCheck(info, r, diffTests);
+							extremeCheck.doCheck(info, r, diffTests);
+							if (!lack && info.getAuditMark() != Check.LACK_MARK) {
+								info.setAuditMark(Check.LACK_MARK);
+							}
+							dangerCheck.doCheck(info, r);
+						}
+						//bayesCheck.doCheck(info); // Bayes审核及学习
+						
+						if (info.getAuditStatus() == Constants.STATUS_PASSED) {
+							info.setWriteback(1);
+							if (info.getCheckerOpinion()!=null 
+									&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)
+										&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)) {
+								info.setCheckerOpinion(info.getCheckerOpinion() + " " + Check.AUTO_AUDIT);
+							} else {
+								info.setCheckerOpinion(Check.AUTO_AUDIT);
+							}
+						}
+						String ruleId = CheckUtil.toString(r.getRuleIds());
+						info.setRuleIds(ruleId);
+						updateSample.add(info);
+						if (info.getAuditMark() == 6) {
+							updateCriticalRecord.add(info.getCriticalRecord());
+						}
+						AuditTrace a = new AuditTrace();
+						a.setSampleno(info.getSampleNo());
+						a.setChecktime(new Date());
+						a.setChecker("Robot");
+						a.setType(1);
+						a.setStatus(info.getAuditStatus());	
+        			} catch (Exception e) {
+        				e.printStackTrace();
+						log.error("样本:" + info.getSampleNo() + "审核出错！", e);
+						continue;
+					} finally {
+						if (task.hasStopped())
+							break; // 终止线程
+						task.setFinishCount(++index);
+					}
         		}
-        	});
-        	autoAudit.start();
-        } catch (Exception e) {
-        	log.error(e.getMessage());
-        	e.printStackTrace();
-        } 
+        		sampleManager.saveAll(updateSample);
+				criticalRecordManager.saveAll(updateCriticalRecord);
+				log.debug("手工审核结束！");
+            	System.out.println("手工审核结束！");
+            	task.setEndTime(new Date());
+    			task.setStatus(Constants.THREAD_FINISHED);
+    		}
+    	});
+		return;
     }
+    
+    private Task createTask(String sample, final String currentUser) {
+
+		// 创建一个工作实体
+		Task task = new Task();
+		task.setStartBy(currentUser);
+		task.setStartTime(new Date());
+
+		// 将task存入数据库，获得为唯一的id值
+		Task newTask = taskManager.save(task);
+		newTask.setSearchText(sample);
+		return newTask;
+	}
+    
     /**
 	 * 通过或未通过 标本
 	 * 
@@ -376,7 +509,7 @@ public class AuditController extends BaseAuditController {
 	public String getSampleCount(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		JSONObject json = new JSONObject();
-		String strToday = df.format(new Date());
+		String strToday = Constants.DF3.format(new Date());
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 
 		String department = operator.getDepartment();

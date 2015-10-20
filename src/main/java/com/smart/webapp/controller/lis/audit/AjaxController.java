@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
-import com.smart.model.reagent.Out;
 import com.smart.service.reagent.OutManager;
 
 @Controller
@@ -93,7 +93,7 @@ public class AjaxController extends BaseAuditController{
         			loArr.add(Double.parseDouble(list.get(i).getRefLo()));
             		reArr.add(Double.parseDouble(list.get(i).getTestResult()));
             		hiArr.add(Double.parseDouble(list.get(i).getRefHi()));
-            		timeArr.add(sdf.format(list.get(i).getMeasureTime()));
+            		timeArr.add(Constants.SDF.format(list.get(i).getMeasureTime()));
             	}
         	}
         	map.put("max", max);

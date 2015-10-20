@@ -620,7 +620,7 @@ public class GetTestResultController extends BaseAuditController {
 			map.put("type", t.getType());
 			map.put("oldValue", t.getOldValue());
 			map.put("newValue", t.getNewValue());
-			map.put("modifyTime", sdf.format(t.getModifyTime()));
+			map.put("modifyTime", Constants.SDF.format(t.getModifyTime()));
 			map.put("modifyUser", t.getModifyUser());
 			dataRows.add(map);
 		}

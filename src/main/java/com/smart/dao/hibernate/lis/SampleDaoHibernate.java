@@ -116,7 +116,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	        String from = Constants.DF3.format(fromdate);
 	        List<Sample> infos = getSession().createQuery(
 	                "from Sample s where (s.patientId='" + patientid + "' or s.patientId='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
-	                        + to + "' order by s.sampleNo desc").list();
+	                        + sampleno + "' order by s.sampleNo desc").list();
 	        return infos;
 		} catch (ParseException e) {
 			e.printStackTrace();

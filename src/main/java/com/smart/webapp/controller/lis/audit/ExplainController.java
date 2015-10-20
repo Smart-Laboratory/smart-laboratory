@@ -78,7 +78,7 @@ public class ExplainController extends BaseAuditController{
 		}
 
 		List<Rule> rules = ruleManager.getRuleList(ruleIds);
-
+		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
 
@@ -100,7 +100,6 @@ public class ExplainController extends BaseAuditController{
 			}
 		}
 		List<ReasoningModify> modifyList = reasoningModifyManager.getBySampleId(id);
-		System.out.println(modifyList.size()+modifyList.get(0).getSampleId());
 		dataResponse.setRows(modifyData(modifyList, dataRows));
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;

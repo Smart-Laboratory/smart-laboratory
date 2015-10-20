@@ -194,6 +194,11 @@ public final class Constants {
 	 * 日期格式:HH:mm
 	 */
 	public final static SimpleDateFormat DF5 = new SimpleDateFormat("HH:mm");
+
+	/**
+	 * 日期格式:HH:mm
+	 */
+	public final static SimpleDateFormat DF6 = new SimpleDateFormat("HH:mm:ss");
 	
 	/**
 	 * 检验流程——申请
@@ -224,5 +229,20 @@ public final class Constants {
 	 * 检验流程——打印
 	 */
 	public static final String PROCESS_PRINT = "打印";
+	
+	/**
+	 * 任务管理流程——在运行
+	 */
+	public final static int THREAD_RUNNING = 1;
+	
+	/**
+	 * 任务管理流程——已结束
+	 */
+	public final static int THREAD_FINISHED = 2;
+	
+	/**
+	 * 任务管理流程——停止
+	 */
+	public final static int THREAD_STOPPED = 3;
 
 }
