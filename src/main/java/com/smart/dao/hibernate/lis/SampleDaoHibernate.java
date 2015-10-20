@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
-import com.smart.model.lis.Process;
 
 @Repository("sampleDao")
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
@@ -181,10 +180,9 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleByPatientName(String from, String to,String pName) {
-//		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' and s.time between to_date('" + from + " 00:00:00','"
-//                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
-//                    + "') order by s.time desc";
-		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "'";
+		String hql = "from PatientInfo p where p.patientName='" + pName + "' and p.receivetime between to_date('" + from + " 00:00:00','"
+                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
+                    + "') order by p.receivetime desc";
 		return getSession().createQuery(hql).list();
 	}
 }
