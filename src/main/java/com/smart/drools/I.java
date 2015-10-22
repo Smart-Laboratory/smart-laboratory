@@ -20,8 +20,22 @@ public class I {
 		this.setU(unit);
 		float fvalue = 0;
 		try {
-			fvalue = Float.parseFloat(value);
-			this.setV(fvalue);
+			if (value.contains("> ")) {
+				fvalue = Float.parseFloat(value.replace("> ", ""));
+				this.setV(fvalue);
+			} else if (value.contains(">")) {
+				fvalue = Float.parseFloat(value.replace(">", ""));
+				this.setV(fvalue);
+			} else if (value.contains("< ")) {
+				fvalue = Float.parseFloat(value.replace("< ", ""));
+				this.setV(fvalue);
+			} else if (value.contains("<")) {
+				fvalue = Float.parseFloat(value.replace("<", ""));
+				this.setV(fvalue);
+			} else {
+				fvalue = Float.parseFloat(value);
+				this.setV(fvalue);
+			}
 		} catch (NumberFormatException e) {
 			if (value.contains("阴性") || value.contains("正常") || value.equals("-")) {
 				this.setU("-");
@@ -49,21 +63,7 @@ public class I {
 				}
 				this.setV(count);
 			}
-			if (value.contains("> ")) {
-				fvalue = Float.parseFloat(value.replace("> ", ""));
-				this.setV(fvalue);
-			} else if (value.contains(">")) {
-				fvalue = Float.parseFloat(value.replace(">", ""));
-				this.setV(fvalue);
-			} else if (value.contains("< ")) {
-				fvalue = Float.parseFloat(value.replace("< ", ""));
-				this.setV(fvalue);
-			} else if (value.contains("<")) {
-				fvalue = Float.parseFloat(value.replace("<", ""));
-				this.setV(fvalue);
-			} else {
-				this.setV(0);
-			}
+			this.setV(0);
 		}
 	}
 

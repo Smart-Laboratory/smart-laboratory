@@ -153,6 +153,52 @@ $(function() {
 	    }
 	});
 	
+	$("#AuditCodeSetting").click(function(){
+		$("#codeSetDialog").dialog("open");
+	});
 	
+	$("#controlAuditBtn").click(function() {
+ 		var btnText = $("#controlAuditBtn").html().trim();
+ 		var status = 0;
+ 		if (btnText == "启动") {
+ 			status = 1;
+ 		}
+ 		var flag = true;
+		var codeScope = "";
+		if (status == 1) {
+     		$("#codeSetDiv .codeItem").each(function(index,self) {
+    			if ($(self).find(".codeCheck").attr("checked") == "checked"){
+    				var code = $(self).find(".codeText").html();
+    				var lo = $(self).find(".val-lo").val();
+        			var hi = $(self).find(".val-hi").val();
+        			if (codeScope != "") codeScope += ";";
+        			if (lo.length == 0 && hi.length == 0) {
+        			} else if (lo.length == 3 && hi.length == 3) {
+        				codeScope += code + ":" + lo + "-" + hi;
+        			} else {
+        				flag = false;
+        			}
+    			}
+    		});
+		}
+ 		if (flag) {
+			$.get("../audit/autoAudit",{status:status, scope:codeScope},function(data){
+     			
+     			if (data) {
+     				if (status == 1) {
+     					$("#controlAuditBtn").html("停止");
+     					$("#hiddenAuditConfirm").val(true);
+     					$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
+     				} else {
+     					$("#controlAuditBtn").html("启动");
+     					$("#hiddenAuditConfirm").val(false);
+     					$("#codeSetDiv .input-ctl").removeAttr('disabled');
+     				}
+     			}
+     		});
+		} else {
+			alert("输入错误！");
+		}	
+ 	});
 
 });

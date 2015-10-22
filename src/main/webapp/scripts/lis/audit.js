@@ -1,7 +1,5 @@
 $(function(){
 	
-	
-	
 	getList($("#sampletext").val(),$("#lab").val());
 
 	getSopSchedule($("#labSelect").val());

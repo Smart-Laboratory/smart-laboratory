@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
-    <title><fmt:message key="sample.manage.input"/></title>
+    <title><fmt:message key="sample.manage.invalid"/></title>
     <meta name="menu" content="SampleManage"/>
 </head>
 <body>

@@ -37,7 +37,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append("from Sample s where section.code=?");
+		if(lab.contains(",")) {
+			builder.append("from Sample where section.code in (" + lab + ")");
+		} else {
+			builder.append("from Sample where section.code=" + lab);
+		}
 		if (status == -3) {
 			// all
 		} else if (status == -2) {
@@ -51,7 +55,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			builder.append("sampleStatus<5");
 		} else if(status == 5){
 			builder = new StringBuilder();
-			builder.append("from Sample s where hasimages=1 order by sampleNo");
+			builder.append("from Sample where hasimages=1 order by sampleNo");
 			return getSession().createQuery(builder.toString()).list();
 		} else {
 			builder.append(" and ");
@@ -65,11 +69,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		builder.append(" and ");
 		builder.append("sampleNo like ?");
 		builder.append(" order by sampleNo");
-		Query query = getSession().createQuery(builder.toString()).setString(0, lab);
+		Query query = getSession().createQuery(builder.toString());
 		if(!code.isEmpty()) {
-			query = query.setString(1, date + code + "%");
+			query = query.setString(0, date + code + "%");
 		} else {
-			query = query.setString(1, date + "%");
+			query = query.setString(0, date + "%");
 		}
 		return query.list();
 	}

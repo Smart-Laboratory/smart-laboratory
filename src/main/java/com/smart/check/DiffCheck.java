@@ -47,7 +47,7 @@ public class DiffCheck implements Check {
 		Map<String, TestResult> testMap = new HashMap<String, TestResult>();
 		Map<String, TestResult> lastTestMap = new HashMap<String, TestResult>();
 		if (diffDataMap.containsKey(info.getId())) {
-			System.out.println(info.getId());
+			//System.out.println(info.getId());
 			isDiff = true;
 			Set<TestResult> currTr = info.getResults();
 			Set<TestResult> lastTr = diffDataMap.get(info.getId()).getResults();

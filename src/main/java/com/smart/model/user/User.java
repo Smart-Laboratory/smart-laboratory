@@ -82,6 +82,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private String lastLab;
     private String labCode;
 	private String activeCode;
+	private String lastProfile;
     
     private Hospital hospital;
     private Section section;
@@ -385,6 +386,16 @@ public class User extends BaseObject implements Serializable, UserDetails {
 
 	public void setActiveCode(String activeCode) {
 		this.activeCode = activeCode;
+	}
+	
+	@Column(name = "lastprofile")
+	public String getLastProfile() {
+		return lastProfile;
+	}
+
+
+	public void setLastProfile(String lastProfile) {
+		this.lastProfile = lastProfile;
 	}
 
 	@ManyToOne(optional=false,cascade=CascadeType.MERGE)

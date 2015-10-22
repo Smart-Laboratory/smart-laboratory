@@ -1,11 +1,15 @@
 package com.smart.webapp.controller.manage;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.Constants;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
+import com.smart.util.Config;
+import com.smart.Constants;
+import com.smart.model.Code;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 
@@ -24,13 +30,21 @@ import com.smart.service.UserManager;
 @RequestMapping("/manage/audit*")
 public class AuditViewController {
 	
-	private final static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-
+	/**
+	 * 根据条件查询该检验人员的样本
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(method = RequestMethod.GET)
-    public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
-		String lab = "";
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		String strToday = Constants.DF3.format(new Date());
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
+		String lab = "";
 		String department = operator.getDepartment();
 		Map<String, String> depart = new HashMap<String, String>();
 		if (operator.getLastLab() != null) {
@@ -38,19 +52,75 @@ public class AuditViewController {
 		}
 		if (department != null) {
 			for (String s : department.split(",")) {
-				depart.put(s, sectionUtil.getValue(s));
+				depart.put(s, sectionutil.getValue(s));
 				if (StringUtils.isEmpty(lab)) {
 					lab = s;
 				}
 			}
 		}
+
+		Map<String, Code> actiCodeMap = new HashMap<String, Code>();
+		String labCode = operator.getLabCode();
+		String activeCode = operator.getActiveCode();
+		if (!StringUtils.isEmpty(labCode)) {
+			String[] codes = labCode.split(",");
+			for (String code : codes) {
+				Code nCode = new Code();
+				nCode.setActive(false);
+				nCode.setLabCode(code);
+				actiCodeMap.put(code, nCode);
+			}
+		}
+		if (!StringUtils.isEmpty(activeCode)) {
+			String[] codes = activeCode.split(",");
+			for (String code : codes) {
+				if (actiCodeMap.containsKey(code)) {
+					Code nCode = actiCodeMap.get(code);
+					nCode.setActive(true);
+				}
+			}
+		}
+		HttpSession session = request.getSession();
+		String scope = (String) session.getAttribute("scope");
+		if (!StringUtils.isEmpty(scope)) {
+			String[] sp = scope.split(";");
+			for (String s : sp) {
+				String[] codeScope = s.split(":");
+				String[] loHi = codeScope[1].split("-");
+				if (actiCodeMap.containsKey(codeScope[0])) {
+					Code nCode = actiCodeMap.get(codeScope[0]);
+					nCode.setLo(loHi[0]);
+					nCode.setHi(loHi[1]);
+				}
+			}
+		}
+
+		Boolean isAuto = (Boolean) request.getSession().getAttribute("isAuto");
+		if (isAuto == null) {
+			isAuto = false;
+		}
 		
-		request.setAttribute("strtoday", df.format(new Date()));
+		List<Code> codeList = new ArrayList<Code>();
+		Object[] obj = actiCodeMap.keySet().toArray();
+		Arrays.sort(obj);
+		for (Object o : obj) {
+			codeList.add(actiCodeMap.get(o.toString()));
+		}
+		
+		if (operator.getLastProfile() != null) {
+			request.setAttribute("lastProfile", operator.getLastProfile());
+		}
+		request.setAttribute("date", Constants.DF2.format(new Date()));
+		request.setAttribute("activeAuto", isAuto);
+		request.setAttribute("catcherUrl", Config.getCatcherUrl());
+		request.setAttribute("today", strToday);
+		request.setAttribute("userCode", operator.getLabCode());
+		request.setAttribute("lab", lab);
 		request.setAttribute("departList", depart);
-		request.setAttribute("today", Constants.DF3.format(new Date()));
-		request.setAttribute("lab", operator.getLastLab());
-        return new ModelAndView();
-    }
+		request.setAttribute("codeList", codeList);
+		//request.setAttribute("checkOperator", operator.getUsername());
+		return new ModelAndView();
+	}
 	
 	
 	@Autowired

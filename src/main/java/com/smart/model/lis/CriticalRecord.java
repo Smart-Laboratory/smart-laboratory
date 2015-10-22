@@ -52,7 +52,7 @@ public class CriticalRecord extends BaseObject{
 	private String testerName;
 	private Date testerDealTime;
 	private String testerDealContent;
-	private long testerId;
+	private String testerId;
 	private int isTesterDealed;
 	
 	@Id
@@ -248,11 +248,11 @@ public class CriticalRecord extends BaseObject{
 	}
 
 	@Column(name = "TESTERID", length = 20)
-	public long getTesterId() {
+	public String getTesterId() {
 		return testerId;
 	}
 
-	public void setTesterId(long testerId) {
+	public void setTesterId(String testerId) {
 		this.testerId = testerId;
 	}
 	

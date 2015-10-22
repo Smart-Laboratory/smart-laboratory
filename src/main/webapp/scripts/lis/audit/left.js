@@ -199,4 +199,10 @@ $(function(){
 				}
 			});
 		});
+		$("#sampleListRefreshBtn").click(function() {
+     		jQuery("#list").trigger("reloadGrid");
+		});
+     	$("#pageRefreshBtn").click(function() {
+     		window.location.reload();
+		});
 });

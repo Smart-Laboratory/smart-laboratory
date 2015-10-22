@@ -1,8 +1,5 @@
 $(function(){
 	
-
-	
-	
 	$("#tatDialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -166,7 +163,7 @@ $(function(){
 		autoOpen: false,
 		resizable: false,
 		modal:true,
-	    width: 340,
+	    width: 360,
 	    height: 250
 	});
 	
@@ -223,15 +220,6 @@ $(function(){
 		autoOpen: false,
 	    width: 400
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	$("#testAdd").click(function() {
 		$("#profileList").empty();
@@ -404,6 +392,21 @@ $(function(){
 		});
 	});
 	
+	$("#codeSetDiv .codeCheck").click(function(){
+ 		var code = $(this).parent().find(".codeText").html();
+			//alert(code);
+ 		if ($(this).attr("checked") == "checked"){
+ 			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
+ 			$.post("../audit/activeCode",{code:code,active:true},function() {}); 		
+        } else {
+        	$(this).parent().parent().parent().find(".scopeDiv").css('display','none');
+        	$.post("../audit/activeCode",{code:code,active:false},function() {});
+        }
+ 	});
+	
+	$("#autoAuditNote").html("参考范围为<strong class='text-warning'>3位</strong>数字,不输入审核<strong class='text-warning'>整个段</strong>");
+
+
 	
 });
 

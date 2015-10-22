@@ -125,6 +125,20 @@ public class BaseAuditController {
 		return map;
 	}
 	
+	protected String setToString(Set<String> set) {
+
+		String result = "";
+		if (set.size() != 0) {
+			for (String s : set) {
+				if (!result.equals("")) {
+					result += ",";
+				}
+				result += s;
+			}
+		}
+		return result;
+	}
+	
 	protected boolean sameSample(Sample info, Sample pinfo) {
 		if (ylxhMap.size() == 0)
 			initYLXHMap();

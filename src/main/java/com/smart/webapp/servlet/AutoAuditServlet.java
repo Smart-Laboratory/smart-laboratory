@@ -143,42 +143,47 @@ public class AutoAuditServlet extends HttpServlet {
         	        			throw new Exception("无数据！");
         	        		}
         	                for (Sample info : samples) {
-        	        			try {
+        	                	try {
         	        				formulaUtil.formula(info, "admin");
-        	        				Set<TestResult> now = info.getResults();
-        	        				Set<String> testIdSet = new HashSet<String>();
-        	        				for (TestResult t : now) {
-        	        					testIdSet.add(t.getTestId());
-        	        				}
-        	        				System.out.println(info.getSampleNo()+" : " + now.size());
-        	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
-        	        				for (Sample p : list) {
-        	        					boolean isHis = false;
-        	        					if (p.getSampleNo().equals(info.getSampleNo())) {
-        	        						continue;
-        	        					}
-        	        					Set<TestResult> his = p.getResults();
-        	        					for (TestResult t : his) {
-        	        						String testid = t.getTestId();
-        	        						Set<String> sameTests = util.getKeySet(testid);
-        	        						sameTests.add(testid);
-        	        						if (testIdSet.contains(t.getTestId())) {
-        	        							isHis = true;
-        	        							break;
-        	        						}
-        	        					}
-        	        					
-        	        					if (isHis) {
-        	        						diffData.put(info.getId(), p);
-        	        						System.out.println(p.getSampleNo());
-        	        						break;
-        	        					}
-        	        				}
-        	        			} catch (Exception e) {
-        	        				samples.remove(info);
-        	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
-        	        				e.printStackTrace();
-        	        			}
+        	                	} catch (Exception e) {
+         	        				samples.remove(info);
+         	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
+         	        				e.printStackTrace();
+         	        			}
+        	                	Set<TestResult> now = info.getResults();
+    	        				Set<String> testIdSet = new HashSet<String>();
+    	        				for (TestResult t : now) {
+    	        					testIdSet.add(t.getTestId());
+    	        				}
+    	        				//System.out.println(info.getSampleNo()+" : " + now.size());
+    	        				try {
+	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
+	    	        				for (Sample p : list) {
+	    	        					boolean isHis = false;
+	    	        					if (p.getSampleNo().equals(info.getSampleNo())) {
+	    	        						continue;
+	    	        					}
+	    	        					Set<TestResult> his = p.getResults();
+	    	        					for (TestResult t : his) {
+	    	        						String testid = t.getTestId();
+	    	        						Set<String> sameTests = util.getKeySet(testid);
+	    	        						sameTests.add(testid);
+	    	        						if (testIdSet.contains(t.getTestId())) {
+	    	        							isHis = true;
+	    	        							break;
+	    	        						}
+	    	        					}
+	    	        					
+	    	        					if (isHis) {
+	    	        						diffData.put(info.getId(), p);
+	    	        						break;
+	    	        					}
+	    	        				}
+    	        				} catch (Exception e) {
+         	        				samples.remove(info);
+         	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
+         	        				e.printStackTrace();
+         	        			}	
         	        		}
         	                log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
@@ -204,7 +209,7 @@ public class AutoAuditServlet extends HttpServlet {
 	    							Map<String, Boolean> diffTests = diffCheck.doFiffTests(info);
 	    							ratioCheck.doCheck(info);
 	    							R r = droolsRunner.getResult(info.getResults(), info.getPatientId(), info.getPatient().getAge(), Integer.parseInt(info.getPatient().getSex()));
-	    							if (!r.getRuleIds().isEmpty()) {
+	    							if (r!= null && !r.getRuleIds().isEmpty()) {
 	    								reTestCheck.doCheck(info, r);
 	    								alarm2Check.doCheck(info, r, diffTests);
 	    								alarm3Check.doCheck(info, r, diffTests);
@@ -213,6 +218,8 @@ public class AutoAuditServlet extends HttpServlet {
 	    									info.setAuditMark(Check.LACK_MARK);
 	    								}
 	    								dangerCheck.doCheck(info, r);
+	    							} else {
+	    								
 	    							}
 	    							//bayesCheck.doCheck(info); // Bayes审核及学习
 	    							

@@ -53,7 +53,7 @@ public class CriticalController {
 			HttpServletResponse response) throws Exception {
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String lab = operator.getLastLab();
-		List<Sample> samples = sampleManager.getSampleList(Constants.DF2.format(new Date()),
+		List<Sample> samples = sampleManager.getSampleList(Constants.DF3.format(new Date()),
 				operator.getDepartment(), "", 6, -3);
 		List<Critical> criticals = new ArrayList<Critical>();
 		StringBuilder patientIds = new StringBuilder();
@@ -135,13 +135,13 @@ public class CriticalController {
 			try {
 				dateText = date;
 				Date d = Constants.DF3.parse(date);
-				date = Constants.DF2.format(d);
+				date = Constants.DF3.format(d);
 			} catch (Exception e) {
 				date = null;
 			}
 		}
 		if (date == null) {
-			date = Constants.DF2.format(new Date());
+			date = Constants.DF3.format(new Date());
 			dateText = Constants.DF3.format(new Date());
 		}
 		request.setAttribute("date", dateText);
@@ -213,7 +213,6 @@ public class CriticalController {
 				criticals.add(ctl);
 			}
 		}
-
 		return new ModelAndView("manage/criticalDealed", "criticals", criticals);
 	}
 
@@ -261,7 +260,7 @@ public class CriticalController {
 				curInfo += orignal;
 			}
 			cr.setTesterDealContent(curInfo);
-			cr.setTesterId(Long.parseLong(request.getRemoteUser()));
+			cr.setTesterId(request.getRemoteUser());
 			cr.setTesterDealTime(new Date());
 			cr.setCriticalDealPerson(request.getRemoteUser());
 			cr.setCriticalDeal(curInfo);

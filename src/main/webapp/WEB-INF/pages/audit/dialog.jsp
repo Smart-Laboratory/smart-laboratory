@@ -202,7 +202,7 @@
 	</div>
 	
 	<div id="codeSetDialog" title="<fmt:message key='audit.code.setting' />" style="text-align:left;" >
-		<div style="margin:10px;margin-left:25px;">
+		<div style="margin:10px;">
 			<span><fmt:message key='auto.audit'/></span>
 			<button id="controlAuditBtn" class="btn btn-info">
 			<c:choose>
@@ -216,11 +216,7 @@
 			</button>
 			
 		</div>
-		<div>
-			<blockquote class="" style="margin-left:20px;margin-bottom:8px;">
-				<small id="autoAuditNote" ></small>
-			</blockquote>
-		</div>
+		<div><blockquote><small id="autoAuditNote" ></small></blockquote></div>
 		<div id="codeSetDiv" >
 			<c:forEach var="code" items="${codeList}">
 			<div class="codeItem" style="margin-bottom:5px;">

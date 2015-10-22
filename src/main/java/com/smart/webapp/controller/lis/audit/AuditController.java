@@ -61,11 +61,14 @@ public class AuditController extends BaseAuditController {
 	
 	private final static int ONCE_MAX_AUDIT = Config.getOnceAuditMaxCount(); // 一次自动审核最大样本数
 	private static final Log log = LogFactory.getLog(AuditController.class);
-	
     
     @RequestMapping(value = "/result*", method = RequestMethod.GET)
 	public void getAuditResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    		
+    	
+    	if(ylxhMap.size() == 0) {
+    		initYLXHMap();
+    	}
+    	
 		final Map<String, Describe> idMap = new HashMap<String, Describe>();
     	final Map<String, String> indexNameMap = new HashMap<String, String>();
     	List<Bag> bags = bagManager.getBagByHospital("1");
@@ -241,7 +244,6 @@ public class AuditController extends BaseAuditController {
     					
     					if (isHis) {
     						diffData.put(info.getId(), p);
-    						System.out.println(p.getSampleNo());
     						break;
     					}
     				}
@@ -585,5 +587,53 @@ public class AuditController extends BaseAuditController {
 			return false;
 		}
 		return true;
+	}
+	
+	@RequestMapping(value = "/autoAudit*", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean autoAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String status = request.getParameter("status");
+		String scope = request.getParameter("scope");
+		HttpSession session = request.getSession();
+		try {
+			if ("1".equals(status)) {
+				session.setAttribute("isAuto", true);
+				session.setAttribute("scope", scope);
+			} else {
+				session.setAttribute("isAuto", false);
+				session.removeAttribute("scope");
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	@RequestMapping(value = "/activeCode*", method = RequestMethod.POST)
+	@ResponseBody
+	public void activeCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String cd = request.getParameter("code");
+		String active = request.getParameter("active");
+
+		User operator = userManager.getUserByUsername(request.getRemoteUser());
+		String activeCode = operator.getActiveCode();
+		Set<String> codeSet = new HashSet<String>();
+
+		if (!StringUtils.isEmpty(activeCode)) {
+			String[] codes = activeCode.split(",");
+			for (String code : codes) {
+				codeSet.add(code);
+			}
+		}
+
+		if ("true".equals(active)) {
+			codeSet.add(cd);
+		} else {
+			codeSet.remove(cd);
+		}
+		operator.setActiveCode(setToString(codeSet));
+		userManager.save(operator);
 	}
 }
