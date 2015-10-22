@@ -130,7 +130,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 解释类型
 	 */
-	@Column
+	@Column(name = "type")
 	public String getType() {
 		return type;
 	}
@@ -142,7 +142,7 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	/**
 	 * 解释的原因
 	 */
-	@Column
+	@Column(name = "content")
 	public String getContent() {
 		return content;
 	}

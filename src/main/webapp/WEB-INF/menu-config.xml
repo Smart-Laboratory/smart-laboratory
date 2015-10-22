@@ -9,7 +9,7 @@
         	<Item name="Input" title="sample.manage.input" page="/manage/input"/>
             <Item name="Receive" title="sample.manage.receive" page="/manage/receive"/>
             <Item name="Audit" title="sample.manage.audit" page="/manage/audit"/>
-            <Item name="Search" title="sample.manage.search" page="/manage/search"/>
+            <Item name="Search" title="sample.manage.search" page="/manage/patientList"/>
             <Item name="Critical" title="sample.manage.critical" page="/critical/undeal"/>
             <Item name="Invalid" title="sample.manage.invalid" page="/manage/invalid"/>
         </Menu>

@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kie.internal.builder.KnowledgeBuilderError;
+import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
@@ -56,6 +58,14 @@ public class DroolsRunner {
 						KieServices ks = KieServices.Factory.get(); 
 			            KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
 			            kbuilder.add(ks.getResources().newReaderResource(reader), ResourceType.DRL);
+			            KnowledgeBuilderErrors errors = kbuilder.getErrors();
+						if (errors.size() > 0) {
+							for (KnowledgeBuilderError error : errors) {
+								System.err.println(error);
+							}
+							throw new IllegalArgumentException("Could not parse knowledge.");
+						}
+			            
 			            kbase = kbuilder.newKnowledgeBase();
 			            log.debug("规则库构造完成!");
 			            System.out.println("规则库构造完成!");

@@ -145,6 +145,7 @@ public class AutoAuditServlet extends HttpServlet {
         	                for (Sample info : samples) {
         	                	try {
         	        				formulaUtil.formula(info, "admin");
+<<<<<<< HEAD
         	                	} catch (Exception e) {
          	        				samples.remove(info);
          	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
@@ -184,6 +185,41 @@ public class AutoAuditServlet extends HttpServlet {
          	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
          	        				e.printStackTrace();
          	        			}	
+=======
+        	        				Set<TestResult> now = info.getResults();
+        	        				Set<String> testIdSet = new HashSet<String>();
+        	        				for (TestResult t : now) {
+        	        					testIdSet.add(t.getTestId());
+        	        				}
+        	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
+        	        				for (Sample p : list) {
+        	        					boolean isHis = false;
+        	        					if (p.getSampleNo().equals(info.getSampleNo())) {
+        	        						continue;
+        	        					}
+        	        					Set<TestResult> his = p.getResults();
+        	        					for (TestResult t : his) {
+        	        						String testid = t.getTestId();
+        	        						Set<String> sameTests = util.getKeySet(testid);
+        	        						sameTests.add(testid);
+        	        						if (testIdSet.contains(t.getTestId())) {
+        	        							isHis = true;
+        	        							break;
+        	        						}
+        	        					}
+        	        					
+        	        					if (isHis) {
+        	        						diffData.put(info.getId(), p);
+        	        						System.out.println(p.getSampleNo());
+        	        						break;
+        	        					}
+        	        				}
+        	        			} catch (Exception e) {
+        	        				samples.remove(info);
+        	        				log.error("样本"+info.getSampleNo()+"出错:\r\n", e);
+        	        				e.printStackTrace();
+        	        			}
+>>>>>>> origin/master
         	        		}
         	                log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");

@@ -94,10 +94,10 @@ public class PatientListController {
 			map.put("id", info.getPatientId());
 			map.put("name", info.getPatient().getPatientName());
 			map.put("age", String.valueOf(info.getPatient().getAge()));
-			String ex = info.getDiagnostic().trim();
-//			if (ex.length() > 16) {
-//				ex = ex.substring(0, 16) + "...";
-//			}
+			String ex = info.getInspectionName();
+			if (ex.length() > 16) {
+				ex = ex.substring(0, 16) + "...";
+			}
 			map.put("examinaim", ex);
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("section", info.getSection().getName());
@@ -396,27 +396,28 @@ public class PatientListController {
 
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
-		String patientId = request.getParameter("patientId");
-		String blh = request.getParameter("blh");
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
-		String pName = request.getParameter("pName");
-		String doct = request.getParameter("doct");
+		String text = request.getParameter("text");
+		String type = request.getParameter("type");
 		DataResponse dataResponse = new DataResponse();
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
+		int select = Integer.parseInt(type);
 
 		List<Sample> list = new ArrayList<Sample>();
-		if (patientId != null) {
-			list = sampleManager.getHistorySample(patientId, blh);
-		} else if (pName != null && from != null && to != null) {
-			list = sampleManager.getSampleByPatientName(from, to, pName);
-		} else if (doct != null) {
-			Sample p = sampleManager.get(Long.parseLong(doct));
+		if (select == 1) {
+			list = sampleManager.getHistorySample(text,text);
+		} else if (select==2 && text != null && from != null && to != null) {
+			list = sampleManager.getSampleByPatientName(from, to, text);
+		} else if (select==3) {
+			Sample p = sampleManager.get(Long.parseLong(text));
 			if (p != null) {
-				list.add(p);
+				list.add(p);  
 			}
 		}
+		if(list.size()==0)
+			return dataResponse;
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		int listSize = 0;
