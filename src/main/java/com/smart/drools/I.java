@@ -59,7 +59,6 @@ public class I {
 				fvalue = Float.parseFloat(value.replace("< ", ""));
 				this.setV(fvalue);
 			} else if (value.contains("<")) {
-				System.out.println("value : "+value);
 				fvalue = Float.parseFloat(value.replace("<", ""));
 				this.setV(fvalue);
 			} else {

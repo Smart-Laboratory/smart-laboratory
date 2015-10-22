@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
+
+import net.sf.ehcache.search.expression.And;
+
 import com.smart.model.lis.Process;
 
 @Repository("sampleDao")
@@ -184,7 +187,12 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 //		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' and s.time between to_date('" + from + " 00:00:00','"
 //                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
 //                    + "') order by s.time desc";
-		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "'";
+		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' ";
+		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
+			hql+="and s.time between to_date('" + from + " 00:00:00','"
+                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
+                    + "') order by s.time desc";
+		}
 		return getSession().createQuery(hql).list();
 	}
 }

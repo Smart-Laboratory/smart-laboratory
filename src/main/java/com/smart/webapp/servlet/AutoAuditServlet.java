@@ -150,7 +150,6 @@ public class AutoAuditServlet extends HttpServlet {
         	        				for (TestResult t : now) {
         	        					testIdSet.add(t.getTestId());
         	        				}
-        	        				System.out.println(info.getSampleNo()+" : " + now.size());
         	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
         	        				for (Sample p : list) {
         	        					boolean isHis = false;
@@ -227,7 +226,6 @@ public class AutoAuditServlet extends HttpServlet {
 	    								}
 	    							}
 	    							String ruleId = CheckUtil.toString(r.getRuleIds());
-	    							System.out.println("ruleId: "+ruleId);
 	    							info.setRuleIds(ruleId);
 	    							updateSample.add(info);
 	    							if (info.getAuditMark() == 6) {

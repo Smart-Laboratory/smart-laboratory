@@ -94,10 +94,10 @@ public class PatientListController {
 			map.put("id", info.getPatientId());
 			map.put("name", info.getPatient().getPatientName());
 			map.put("age", String.valueOf(info.getPatient().getAge()));
-			String ex = info.getDiagnostic().trim();
-//			if (ex.length() > 16) {
-//				ex = ex.substring(0, 16) + "...";
-//			}
+			String ex = info.getInspectionName();
+			if (ex.length() > 16) {
+				ex = ex.substring(0, 16) + "...";
+			}
 			map.put("examinaim", ex);
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("section", info.getSection().getName());

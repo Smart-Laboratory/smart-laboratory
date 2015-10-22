@@ -382,7 +382,6 @@ $(function(){
 			$("#tat_send").html(data.send);
 			$("#tat_ksreceive").html(data.ksreceive);
 			var time = parseInt(data.tat);
-			alert(time);
 			var tStr = "";
 			if (time >= 1440) {
 				var day = Math.floor(time / 1440);

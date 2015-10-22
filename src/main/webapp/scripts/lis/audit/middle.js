@@ -88,7 +88,7 @@
     		if ($("#historyTabs").tabs('option', 'active') == 0) {
    				jQuery("#audit_information").jqGrid("setGridParam",{
    					url:"../audit/explain?id="+ret.id,
-   					editurl: "../audit/explain/edit?id=" + ret.id
+   					editurl: "../audit/explain/edit?docNo=" + ret.id
    				}).trigger("reloadGrid");
     		} else if ($("#historyTabs").tabs('option', 'active') == 1) {
 				jQuery("#rowed3").setGridParam().showCol("last2");

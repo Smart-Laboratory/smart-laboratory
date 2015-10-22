@@ -87,8 +87,10 @@
 			</div>
 		</div>
 		<div style="height:20px"></div>
+		<div class="col-sm-11">
 		<div id="patientRow" style="font-size: 13px;">
 			<table id="rowed3"></table>
+		</div>
 		</div>
 		<div style="font-size: 13px; display:none;margin-top: 10px;">
 			<div style="margin-left:60px;">

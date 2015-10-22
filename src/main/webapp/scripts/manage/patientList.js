@@ -35,15 +35,16 @@
 		   	colNames:['ID','项目', '结果','历史', '历史1', '历史2', '参考范围', '单位'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name',width:150,sortable:false},
-		   		{name:'result',index:'result',width:80, sortable:false},
-		   		{name:'last',index:'last',width:60, sortable:false},
-		   		{name:'last1',index:'last1',width:60, hidden:true, sortable:false},
-		   		{name:'last2',index:'last2',width:60, hidden:true, sortable:false},
-		   		{name:'scope',index:'scope',width:100,sortable:false},
-		   		{name:'unit', sortable:false, width:80, index:'unit'},
+		   		{name:'name',index:'name',width:'20%',sortable:false},
+		   		{name:'result',index:'result',width:'15%', sortable:false},
+		   		{name:'last',index:'last',width:'13%', sortable:false},
+		   		{name:'last1',index:'last1',width:'13%', hidden:true, sortable:false},
+		   		{name:'last2',index:'last2',width:'13%', hidden:true, sortable:false},
+		   		{name:'scope',index:'scope',width:'15%',sortable:false},
+		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
 		   	],
-		   	height: '404',
+//		   	width: 630,
+//		   	height: '404',
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: " ",
@@ -80,7 +81,7 @@
 			url:"../manage/patientList/explain?id="+docNo,
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','OLDRESULT','添加','详细','RANK'],
+			colNames:['ID','OLDRESULT','解释','原因','RANK'],
 		   	colModel:[{name:'id',index:'id',sortable:false,hidden:true},
 		   		{name:'oldResult',index:'oldResult',sortable:false,hidden:true},
 		   		{name:'result',index:'result',width:90,sortable:false},
@@ -123,7 +124,7 @@
         			jQuery("#rowed3").jqGrid("setGridParam",{url:"../manage/patientList/sample?id="+ret.sample}).trigger("reloadGrid");
         		}
         		
-        		if ($("#historyTabs").tabs('option', 'selected') == 0) {
+        		if ($("#historyTabs").tabs('option', 'active') == 0) {
        				jQuery("#audit_information").jqGrid("setGridParam",{
        					url:"../manage/patientList/explain?id="+ret.id
        				}).trigger("reloadGrid");
@@ -181,7 +182,6 @@
 		});
 		
 		$("#searchBtn").click(function() {
-			alert($("#search_text").val());
 			var from = $("#from").val();
 			var to = $("#to").val();
 			var select = $("#search_select").val();
@@ -195,8 +195,10 @@
 		});
 		
 		$("#historyTabs").tabs({
-			select: function(event, ui) { 
-				if(ui.index == 1) {
+			active : 1,
+			activate: function(event, ui) { 
+				var id = ui.newPanel.attr("id");
+				if(id == "tabs-1") {
 					jQuery("#rowed3").setGridParam().showCol("last1");
 					jQuery("#rowed3").setGridParam().showCol("last2");
 				} else {
