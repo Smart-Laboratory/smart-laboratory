@@ -37,10 +37,10 @@
 <input type="hidden" id="sampletext" value="${today}">
 
 <%@ include file="../audit/top.jsp" %>
+<%@ include file="../audit/dialog.jsp" %>
 <div class="col-sm-12">
 	<%@ include file="../audit/left.jsp" %>
 	<%@ include file="../audit/middle.jsp" %>
 	<%@ include file="../audit/right.jsp" %>
 </div>
-<%@ include file="../audit/dialog.jsp" %>
 </body>

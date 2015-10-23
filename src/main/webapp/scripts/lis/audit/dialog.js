@@ -393,10 +393,11 @@ $(function(){
 	
 	$("#codeSetDiv .codeCheck").click(function(){
  		var code = $(this).parent().find(".codeText").html();
-			//alert(code);
- 		if ($(this).attr("checked") == "checked"){
+ 		alert($(this).attr("checked"));
+ 		if ($(this).attr("checked")){
+ 			alert(code);
  			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
- 			$.post("../audit/activeCode",{code:code,active:true},function() {}); 		
+ 			$.post("../audit/activeCode",{code:code,active:true},function() {}); 
         } else {
         	$(this).parent().parent().parent().find(".scopeDiv").css('display','none');
         	$.post("../audit/activeCode",{code:code,active:false},function() {});
