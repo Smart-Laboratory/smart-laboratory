@@ -43,8 +43,8 @@
 		   		{name:'scope',index:'scope',width:'15%',sortable:false},
 		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
 		   	],
-//		   	width: 630,
-//		   	height: '404',
+		   	width: 630,
+		   	height: '404',
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: " ",
@@ -195,15 +195,15 @@
 		});
 		
 		$("#historyTabs").tabs({
-			active : 1,
+			active : 0,
 			activate: function(event, ui) { 
 				var id = ui.newPanel.attr("id");
 				if(id == "tabs-1") {
 					jQuery("#rowed3").setGridParam().showCol("last1");
 					jQuery("#rowed3").setGridParam().showCol("last2");
 				} else {
-					jQuery("#rowed3").setGridParam().hideCol("last1");
-					jQuery("#rowed3").setGridParam().hideCol("last2");
+//					jQuery("#rowed3").setGridParam().hideCol("last1");
+//					jQuery("#rowed3").setGridParam().hideCol("last2");
 					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 					getExplain(s);
 				}

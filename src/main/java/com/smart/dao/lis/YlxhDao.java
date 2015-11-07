@@ -11,5 +11,11 @@ public interface YlxhDao extends GenericDao<Ylxh, Long> {
 
 	@Transactional
 	List<Ylxh> getYlxh();
+	
+	@Transactional
+	List<Ylxh> getTest(String lab);
 
+	//搜索检验套餐
+	@Transactional
+	List<Ylxh> getSearchData(String text);
 }

@@ -66,18 +66,18 @@
 	<div style="height:35px;" id="btnMenu">
 		<div style="margin-top:4px;float:left;">
 			<button id="auditPassBtn" class="btn btn-success"><b><fmt:message key="button.pass" /></b></button>
-			<button id="auditUnpassBtn" class="btn"><b><fmt:message key="button.unpass" /></b></button>
+			<button id="auditUnpassBtn" class="btn btn-info"><b><fmt:message key="button.unpass" /></b></button>
 			<button id="imageBtn" class="btn btn-success"><b><fmt:message key="button.image" /></b></button>
 			<button id="uploadBtn" class="btn btn-info"><b><fmt:message key="button.upload" /></b></button>
 			<button id="unaudit_reason_btn" type="button" data-container="body" data-toggle="popover" data-placement="right" class="btn btn-danger" style="width:85px;"><b><fmt:message key="sample.unpass.reason" /></b></button>
-			<button id="auditPrintBtn" class="btn"><b><fmt:message key="print" /></b></button>
+			<button id="auditPrintBtn" class="btn btn-info"><b><fmt:message key="print" /></b></button>
 			<button id="collectBtn" class="btn btn-info"><b><fmt:message key="button.collect" /></b></button>
 		</div>
 		<div style="margin-top:4px;float:right;">
-			<button id="testAdd" class="btn"><b><fmt:message key="button.add" /></b></button>
-			<button id="testDelete" class="btn" ><b><fmt:message key="button.delete" /></b></button>
-			<button id="tatBtn" class="btn"><b>TAT</b></button>
-			<button id="modifyBtn" class="btn"><b><fmt:message key="sample.test.modify.record" /></b></button>
+			<button id="testAdd" class="btn btn-success"><b><fmt:message key="button.add" /></b></button>
+			<button id="testDelete" class="btn btn-danger" ><b><fmt:message key="button.delete" /></b></button>
+			<button id="tatBtn" class="btn btn-info"><b>TAT</b></button>
+			<button id="modifyBtn" class="btn btn-success"><b><fmt:message key="sample.test.modify.record" /></b></button>
 		</div>
 	</div>
 	</div>

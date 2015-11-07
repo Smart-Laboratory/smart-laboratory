@@ -198,7 +198,8 @@
 		   	url:"../audit/sample?id="+sampleNo,
 			datatype: "json",
 			shrinkToFit:true,
-			autowidth:true,
+//			autowidth:true,
+			width:800,
 			jsonReader : {repeatitems : false, userdata : "userdata"},  
 		   	colNames:['ID','Color','英文缩写','项目', '结果', '历史', '历史', '历史', '历史', '历史', '测定时间', '机器号', '参考值', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
@@ -1203,4 +1204,6 @@ $(function(){
 		}
 		$("#testModifyDialog").dialog("open");
 	});
+	$("#colorHelp").append("<span class='c_td diff_td'> </span>\u5dee\u503c <span class='c_td ratio_td'> </span>\u6bd4\u503c <span class='c_td re_td'> </span>\u590d\u68c0<span class='c_td dan_td'></span>\u5371\u6025 <span class='c_td al2_td'> </span>\u8b66\u62121 <span class='c_td al3_td'> </span>\u8b66\u62122 <span class='c_td ex_td'> </span>\u6781\u503c");
+		
 });

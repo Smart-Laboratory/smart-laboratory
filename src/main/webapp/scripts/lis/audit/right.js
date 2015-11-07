@@ -133,14 +133,6 @@ function validate(formData, jqForm, options) {
 $(function() {
 	
 	
-	$("#opStatusDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 340,
-	    height: 350
-	});
-	
 	$("#addResultForm").ajaxForm({
 		beforeSubmit: validate,
 		success: function(data) {
