@@ -37,8 +37,9 @@ public class Process extends BaseObject {
 	private Sample sample;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PROCESS")
-	@SequenceGenerator(name = "SEQ_PROCESS", sequenceName = "pro_sequence", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PROCESS")
+	@SequenceGenerator(name = "SEQ_PROCESS", sequenceName = "pro_sequence", allocationSize=1)*/
 	public long getId() {
 		return id;
 	}

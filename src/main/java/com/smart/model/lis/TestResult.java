@@ -9,6 +9,8 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.IndexColumn;
+
 import com.smart.model.BaseObject;
 
 /**
@@ -43,6 +45,7 @@ public class TestResult extends BaseObject{
 	 * 主键、检验样本号
 	 */
     @Id
+    @IndexColumn(name = "sample_no")
     @Column(name = "SAMPLENO", length = 20)
     public String getSampleNo() {
         return sampleNo;

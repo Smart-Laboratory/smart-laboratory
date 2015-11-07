@@ -393,9 +393,7 @@ $(function(){
 	
 	$("#codeSetDiv .codeCheck").click(function(){
  		var code = $(this).parent().find(".codeText").html();
- 		alert($(this).attr("checked"));
- 		if ($(this).attr("checked")){
- 			alert(code);
+ 		if ($(this).is(':checked')){
  			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
  			$.post("../audit/activeCode",{code:code,active:true},function() {}); 
         } else {

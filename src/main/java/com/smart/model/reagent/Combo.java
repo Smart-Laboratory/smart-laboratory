@@ -42,9 +42,9 @@ public class Combo extends BaseObject implements Serializable {
 	private Section section;
 	
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HMC")
-	@SequenceGenerator(name = "SEQ_HMC", sequenceName = "hmc_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HMC")
+	@SequenceGenerator(name = "SEQ_HMC", sequenceName = "hmc_sequence", allocationSize = 1)*/
 	public Long getId() {
 		return id;
 	}

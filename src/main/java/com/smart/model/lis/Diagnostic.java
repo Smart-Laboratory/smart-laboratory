@@ -21,8 +21,9 @@ public class Diagnostic {
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_DIAG")
-	@SequenceGenerator(name = "SEQ_DIAG", sequenceName = "diagnostic_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_DIAG")
+	@SequenceGenerator(name = "SEQ_DIAG", sequenceName = "diagnostic_seq", allocationSize=1)*/
 	public Long getId() {
 		return id;
 	}

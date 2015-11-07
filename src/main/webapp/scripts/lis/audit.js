@@ -1,4 +1,6 @@
 $(function(){
+	var scope = "${session.scope}";
+	alert(scope);
 	
 	getList($("#sampletext").val(),$("#lab").val());
 
@@ -366,6 +368,8 @@ $(function(){
    			}
     	});
     }
+	
+	
 	
 	var isFirstCompare = true;
 	$("#compareBtn").click(function(){

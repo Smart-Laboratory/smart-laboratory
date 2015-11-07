@@ -220,16 +220,16 @@
 		<div id="codeSetDiv" >
 			<c:forEach var="code" items="${codeList}">
 			<div class="codeItem" style="margin-bottom:5px;">
-				<div class="span">
+				<div class="col-sm-3">
 					<label class="checkbox inline">
 						<input type="checkbox" class="codeCheck input-ctl" <c:if test="${code.active == true}">checked</c:if>>
 						<span class="codeText"><c:out value="${code.labCode}" /></span>
 					</label>
 				</div>
-				<div class="span scopeDiv" <c:if test="${code.active == false}">style="display:none;"</c:if>>
-					<input class="span1 input-ctl val-lo" style="color:#000000;" type="text" value="${code.lo}" /> 
-					<input style="width:17px;" type="text" value=" -" disabled/> 
-					<input class="span1 input-ctl val-hi" style="color:#000000;" type="text" value="${code.hi}" /> 
+				<div class="col-sm-9 scopeDiv form-inline" <c:if test="${code.active == false}">style="display:none;"</c:if>>
+					<input class="input-ctl val-lo form-control" style="color:#000000; width:80px;" type="text" value="${code.lo}" /> 
+					<input class="form-control" type="text" style="width:30px;" value="-" disabled/> 
+					<input class="input-ctl val-hi form-control" style="color:#000000; width:80px;" type="text" value="${code.hi}" /> 
 				</div>
 			</div>
 			</c:forEach>
