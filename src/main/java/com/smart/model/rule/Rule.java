@@ -78,8 +78,9 @@ public class Rule extends BaseObject implements Serializable {
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RULE")
-	@SequenceGenerator(name = "SEQ_RULE", sequenceName = "rule_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RULE")
+	@SequenceGenerator(name = "SEQ_RULE", sequenceName = "rule_sequence", allocationSize = 1)*/
 	public Long getId() {
 		return id;
 	}

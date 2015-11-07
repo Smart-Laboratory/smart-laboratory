@@ -35,8 +35,9 @@ public class SOPIndex extends BaseObject implements Serializable{
 	private String lab;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SOP")
-	@SequenceGenerator(name = "SEQ_SOP", sequenceName = "sop_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SOP")
+	@SequenceGenerator(name = "SEQ_SOP", sequenceName = "sop_sequence", allocationSize = 1)*/
 	@DocumentId
 	public long getId() {
 		return id;

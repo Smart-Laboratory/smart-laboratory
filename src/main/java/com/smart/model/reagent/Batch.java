@@ -38,9 +38,9 @@ public class Batch extends BaseObject implements Serializable {
 	private Reagent reagent; 	// 试剂
 	
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BAN")
-	@SequenceGenerator(name = "SEQ_BAN", sequenceName = "ban_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BAN")
+	@SequenceGenerator(name = "SEQ_BAN", sequenceName = "ban_sequence", allocationSize = 1)*/
 	public Long getId() {
 		return id;
 	}

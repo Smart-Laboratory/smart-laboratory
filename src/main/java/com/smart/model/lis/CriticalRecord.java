@@ -56,8 +56,9 @@ public class CriticalRecord extends BaseObject{
 	private int isTesterDealed;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_CRITICAL")
-	@SequenceGenerator(name="SEQ_CRITICAL",sequenceName="critical_seq",allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_CRITICAL")
+	@SequenceGenerator(name="SEQ_CRITICAL",sequenceName="critical_seq",allocationSize=1)*/
 	public Long getId(){
 		return this.id;
 	}

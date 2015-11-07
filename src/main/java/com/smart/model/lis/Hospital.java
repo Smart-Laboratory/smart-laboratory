@@ -33,8 +33,9 @@ public class Hospital extends BaseObject{
 	private String idCard;//组织代码
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HOSPITAL")
-	@SequenceGenerator(name="SEQ_HOSPITAL", sequenceName = "hospital_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HOSPITAL")
+	@SequenceGenerator(name="SEQ_HOSPITAL", sequenceName = "hospital_seq", allocationSize = 1)*/
 	public String getId(){
 		return id;
 	}

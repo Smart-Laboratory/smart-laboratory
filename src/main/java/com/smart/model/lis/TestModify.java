@@ -41,8 +41,9 @@ public class TestModify extends BaseObject implements Serializable {
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_test_modify")
-	@SequenceGenerator(name = "seq_test_modify", sequenceName = "test_modify_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_test_modify")
+	@SequenceGenerator(name = "seq_test_modify", sequenceName = "test_modify_sequence", allocationSize = 1)*/
 	public Long getId() {
 		return id;
 	}

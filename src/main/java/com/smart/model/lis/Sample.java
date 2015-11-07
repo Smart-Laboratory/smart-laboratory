@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.search.annotations.DocumentId;
 
 import com.smart.model.BaseObject;
@@ -81,8 +82,9 @@ public class Sample extends BaseObject {
 
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
-	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
+	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_seq", allocationSize=1)*/
 	@DocumentId
 	public Long getId(){
 		return this.id;
@@ -95,8 +97,8 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验单开单时间
 	 */
+	@IndexColumn(name = "sampleno") 
 	@Column(name = "sampleno", length = 20)
-	
 	public String getSampleNo() {
 		return sampleNo;
 	}
