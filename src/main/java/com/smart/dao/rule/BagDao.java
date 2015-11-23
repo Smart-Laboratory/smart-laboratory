@@ -14,7 +14,7 @@ public interface BagDao extends GenericDao<Bag, Long> {
 	List<Bag> getByParentId(Long parentId);
 
 	@Transactional
-	List<Bag> getBagByHospital(String hospital);
+	List<Bag> getBagByHospital(Long hospital);
 	
 	@Transactional
 	List<Bag> getBag(String name);

@@ -71,7 +71,7 @@ public class AuditController extends BaseAuditController {
     	
 		final Map<String, Describe> idMap = new HashMap<String, Describe>();
     	final Map<String, String> indexNameMap = new HashMap<String, String>();
-    	List<Bag> bags = bagManager.getBagByHospital("1");
+    	List<Bag> bags = bagManager.getBagByHospital(1L);
     	List<Rule> ruleList = new ArrayList<Rule>();
 		Set<Long> have = new HashSet<Long>();
 		for(Bag b : bags) {

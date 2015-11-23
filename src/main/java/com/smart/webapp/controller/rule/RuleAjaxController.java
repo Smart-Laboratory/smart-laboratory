@@ -61,7 +61,7 @@ public class RuleAjaxController {
 	@RequestMapping(value = "/getBag", method = { RequestMethod.GET })
 	@ResponseBody
 	public String getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospital().getId();
+		long hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospital().getId();
 		if (isChanged.get()) {
 			List<Bag> bags = bagManager.getBagByHospital(hospital);
 			JSONArray cell = new JSONArray();

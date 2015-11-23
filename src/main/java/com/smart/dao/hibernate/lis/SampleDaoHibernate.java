@@ -208,4 +208,139 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 		}
 		return getSession().createQuery(hql).list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end) {
+		String sql = "from Sample s where s.section.code in (" + lab + ") ";
+		String[] cds = code.split(",");
+		switch (text.length()) {
+		case 8:
+			if (StringUtils.isNumeric(text)) {
+				sql += "and (";
+				for (int i=0; i<cds.length; i++) {
+					sql += "s.sampleNo like '" + text + cds[i] + "%'";
+					if (cds.length != i+1) {
+						sql += " or ";
+					}
+				}
+				sql += ")";
+			}
+			break;
+		case 11:
+			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
+				sql += "and s.sampleno like '" + text + "%'";
+			}
+			break;
+		case 14:
+			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
+				code.indexOf(text.substring(8, 11)) != -1) {
+				sql += "and s.sampleno='" + text + "'";
+			}
+			break;
+		case 18:
+			if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
+				&& StringUtils.isNumeric(text.substring(11, 14))
+				&& StringUtils.isNumeric(text.substring(15, 18))
+				&& code.indexOf(text.substring(8, 11)) != -1) {
+				sql += "and s.sampleno>='" + text.substring(0, 14) 
+					+ "' and s.sampleno<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+			}
+			break;
+		}
+		
+		switch (status) {
+		case -3:
+			break;
+		case -2:
+			sql += " and s.auditStatus>-1";
+			break;
+		case 3:
+			sql += " and s.modifyFlag=1";
+			break;
+		case 4:
+			sql += " and s.sampleStatus<5";
+			break;
+		case 5:
+			sql += " and s.hasimages=1";
+			break;
+		default:
+			sql += " and s.auditStatus=" + status;
+			break;
+		}
+		if (mark != 0) {
+			sql += " and s.auditMark=" + mark;
+		}
+		sql += " order by s.sampleNo";
+		System.out.println(sql);
+		Query q =  getSession().createQuery(sql);
+		q.setFirstResult(start);
+		q.setMaxResults(end); 
+		return q.list();
+	}
+
+	public int getSampleCount(String text, String lab, int mark, int status, String code) {
+		String sql = "select count(s.id) from Sample s where s.section.code in (" + lab + ") ";
+		String[] cds = code.split(",");
+		switch (text.length()) {
+		case 8:
+			if (StringUtils.isNumeric(text)) {
+				sql += "and (";
+				for (int i=0; i<cds.length; i++) {
+					sql += "s.sampleNo like '" + text + cds[i] + "%'";
+					if (cds.length != i+1) {
+						sql += " or ";
+					}
+				}
+				sql += ")";
+			}
+			break;
+		case 11:
+			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
+				sql += "and s.sampleno like '" + text + "%'";
+			}
+			break;
+		case 14:
+			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
+				code.indexOf(text.substring(8, 11)) != -1) {
+				sql += "and s.sampleno='" + text + "'";
+			}
+			break;
+		case 18:
+			if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
+				&& StringUtils.isNumeric(text.substring(11, 14))
+				&& StringUtils.isNumeric(text.substring(15, 18))
+				&& code.indexOf(text.substring(8, 11)) != -1) {
+				sql += "and s.sampleno>='" + text.substring(0, 14) 
+					+ "' and s.sampleno<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+			}
+			break;
+		}
+		
+		switch (status) {
+		case -3:
+			break;
+		case -2:
+			sql += " and s.auditStatus>-1";
+			break;
+		case 3:
+			sql += " and s.modifyFlag=1";
+			break;
+		case 4:
+			sql += " and s.sampleStatus<5";
+			break;
+		case 5:
+			sql += " and s.hasimages=1";
+			break;
+		default:
+			sql += " and s.auditStatus=" + status;
+			break;
+		}
+		if (mark != 0) {
+			sql += " and s.auditMark=" + mark;
+		}
+		sql += " order by s.sampleNo";
+		System.out.println(sql);
+		Query q =  getSession().createQuery(sql);
+		return new Integer(q.uniqueResult() + "");
+	}
 }

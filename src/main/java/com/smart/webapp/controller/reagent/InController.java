@@ -63,7 +63,7 @@ public class InController {
 				ib.setBatch(in.getBatch());
 				ib.setExdate(in.getExdate());
 				ib.setIndate(Constants.DF2.format(in.getIndate()));
-				ib.setCondition(in.getReagent().getCondition());
+				ib.setCondition(in.getReagent().getStorageCondition());
 				ibList.add(ib);
 			}
 		}

@@ -26,7 +26,7 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Bag> getBagByHospital(String hospital) {
+	public List<Bag> getBagByHospital(Long hospital) {
 		return getSession().createQuery("from Bag b where hospital_id=" + hospital + " order by upper(b.id)").list();
 	}
 	

@@ -35,4 +35,10 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	
 	@Transactional
 	List<Sample> getSampleByPatientName(String fromDate, String toDate, String patientName);
+
+	@Transactional
+	List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end);
+
+	@Transactional
+	int getSampleCount(String text, String lab, int mark, int status, String code);
 }

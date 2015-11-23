@@ -37,4 +37,9 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	 * @return
 	 */
 	List<Sample> getSampleByPatientName(String fromDate, String toDate, String patientName);
+
+	List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end);
+
+	int getSampleCount(String text, String lab, int mark, int status, String labCode);
+
 }

@@ -57,7 +57,7 @@ public class StockController {
 			reagent.setUnit(request.getParameter("unit"));
 			reagent.setSubtnum(Integer.parseInt(request.getParameter("subnum")));
 			reagent.setSubunit(request.getParameter("subunit"));
-			reagent.setCondition(request.getParameter("condition"));
+			reagent.setStorageCondition(request.getParameter("condition"));
 			reagentManager.save(reagent);
 		} else if(request.getParameter("oper").equals("edit")) {
 			Reagent reagent = reagentManager.get(Long.parseLong(request.getParameter("id")));
@@ -73,7 +73,7 @@ public class StockController {
 			reagent.setUnit(request.getParameter("unit"));
 			reagent.setSubtnum(Integer.parseInt(request.getParameter("subnum")));
 			reagent.setSubunit(request.getParameter("subunit"));
-			reagent.setCondition(request.getParameter("condition"));
+			reagent.setStorageCondition(request.getParameter("condition"));
 			reagentManager.save(reagent);
 		} else {
 			reagentManager.remove(Long.parseLong(request.getParameter("id")));
@@ -120,7 +120,7 @@ public class StockController {
 				map.put("price", r.getPrice());
 				map.put("address", r.getFridge());
 				map.put("margin", r.getMargin());
-				map.put("condition", r.getCondition());
+				map.put("condition", r.getStorageCondition());
 				map.put("pcode", r.getProductcode());
 				map.put("temp", r.getTemperature());
 				map.put("isself", r.getIsselfmade() == 1 ? Constants.TRUE : Constants.FALSE);

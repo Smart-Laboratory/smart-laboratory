@@ -1,6 +1,5 @@
 package com.smart.webapp.controller.lis.audit;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
+import com.smart.model.user.User;
+import com.smart.service.UserManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.webapp.util.DataResponse;
 
@@ -28,6 +29,9 @@ public class SampleController {
 	
 	@Autowired
 	private SampleManager sampleManager = null;
+	
+	@Autowired
+	private UserManager userManager = null;
 	
 	/**
 	 * 根据条件查询该检验人员的样本
@@ -48,8 +52,11 @@ public class SampleController {
 		String lab = request.getParameter("lab");
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
+		int start = row * (page - 1);
+		int end = row * page;
 		int mark = 0;
 		int status = -3;
+		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
 		if (!StringUtils.isEmpty(request.getParameter("mark"))) {
 			mark = Integer.parseInt(request.getParameter("mark"));
@@ -62,77 +69,33 @@ public class SampleController {
 		if (!StringUtils.isEmpty(sample)) {
 			text = sample;
 		} else {
-			text = new SimpleDateFormat("yyyyMMdd").format(new Date());
+			text = Constants.DF3.format(new Date());
 		}
 
 		DataResponse dataResponse = new DataResponse();
+		
 		List<Sample> list = new ArrayList<Sample>();
 		if (status < 1)
 			mark = 0;
 
-		if (!StringUtils.isEmpty(text)) {
-			text = text.toUpperCase();
-			switch (text.length()) {
-			case 3:
-				if ("ALL".equals(text)) {
-					list = sampleManager.getSampleList("", lab, "", mark, status);
-				}
-				break;
-			case 8:
-				if (StringUtils.isNumeric(text)) {
-					list = sampleManager.getSampleList(text, lab, "", mark, status);
-				}
-				break;
-			case 11:
-				if (StringUtils.isNumeric(text.substring(0, 8))) {
-					list = sampleManager.getSampleList(text.substring(0, 8), lab, text.substring(8),
-							mark, status);
-				}
-				break;
-			case 14:
-				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11))) {
-					list = sampleManager.getListBySampleNo(text);
-				}
-				break;
-			case 18:
-				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
-						&& StringUtils.isNumeric(text.substring(11, 14))
-						&& StringUtils.isNumeric(text.substring(15, 18))) {
-					List<Sample> result = sampleManager.getSampleList(text.substring(0, 8), lab,
-							text.substring(8, 11), mark, status);
-
-					list = new ArrayList<Sample>();
-					int start = Integer.parseInt(text.substring(11, 14));
-					int end = Integer.parseInt(text.substring(15, 18));
-					// 过滤
-					for (Sample s : result) {
-						int index = Integer.parseInt(s.getSampleNo().substring(11));
-						if (index >= start && index <= end) {
-							list.add(s);
-						}
-					}
-				}
-				break;
-			}
-		}
+		text = text.toUpperCase();
+		Long logstart = System.currentTimeMillis();
+		int size = sampleManager.getSampleCount(text, lab, mark, status, user.getLabCode());
+		System.out.println(System.currentTimeMillis()-logstart);
+		list = sampleManager.getSampleList(text, lab, mark, status, user.getLabCode(), start, end);
+		System.out.println(System.currentTimeMillis()-logstart);
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		int listSize = 0;
-		if (list != null)
-			listSize = list.size();
-		dataResponse.setRecords(listSize);
-		int x = listSize % (row == 0 ? listSize : row);
+		dataResponse.setRecords(size);
+		int x = size % (row == 0 ? size : row);
 		if (x != 0) {
 			x = row - x;
 		}
-		int totalPage = (listSize + x) / (row == 0 ? listSize : row);
+		int totalPage = (size + x) / (row == 0 ? size : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
-		int start = row * (page - 1);
-		int index = 0;
-		while (index < row && (start + index) < listSize) {
+		for(Sample info :list) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			Sample info = list.get(start + index);
 			map.put("id", info.getId());
 			map.put("mark", info.getAuditMarkValue());
 			map.put("sample", info.getSampleNo());
@@ -149,7 +112,6 @@ public class SampleController {
 				map.put("lisPass", "");
 			}
 			dataRows.add(map);
-			index++;
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html;charset=UTF-8");

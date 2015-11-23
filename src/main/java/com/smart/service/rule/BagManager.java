@@ -10,10 +10,10 @@ public interface BagManager extends GenericManager<Bag, Long> {
 
 	/**
 	 *  获取所有的包
-	 * @param hospital 
+	 * @param hid 
 	 * @return
 	 */
-	List<Bag> getBagByHospital(String hospital);
+	List<Bag> getBagByHospital(Long hid);
 	
 	/**
 	 *  获取所有子包

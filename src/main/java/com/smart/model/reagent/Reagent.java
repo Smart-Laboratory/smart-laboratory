@@ -47,7 +47,7 @@ public class Reagent extends BaseObject implements Serializable {
 	private int printord;				// 显示顺序
 	private String testname;			// 检验项目的ID
 	private String fridge;				// 存储的冰箱号
-	private String condition;			// 存储条件
+	private String storageCondition;			// 存储条件
 	private int margin;					// 库存界值
 	private String temperature;			// 存储位置的温度
 	private int isselfmade;				// 是否为自制试剂
@@ -224,12 +224,12 @@ public class Reagent extends BaseObject implements Serializable {
 	 * 存储条件
 	 */
 	@Column(length=20)
-	public String getCondition() {
-		return condition;
+	public String getStorageCondition() {
+		return storageCondition;
 	}
 
-	public void setCondition(String condition) {
-		this.condition = condition;
+	public void setStorageCondition(String storageCondition) {
+		this.storageCondition = storageCondition;
 	}
 
 	/**

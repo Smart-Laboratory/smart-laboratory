@@ -25,7 +25,7 @@ public class BagManagerImpl extends GenericManagerImpl<Bag, Long> implements Bag
 		return bagDao.getBag(name);
 	}
 
-	public List<Bag> getBagByHospital(String hospital) {
+	public List<Bag> getBagByHospital(Long hospital) {
 		return bagDao.getBagByHospital(hospital);
 	}
 

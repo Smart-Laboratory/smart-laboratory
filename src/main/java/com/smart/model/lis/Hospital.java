@@ -24,7 +24,7 @@ public class Hospital extends BaseObject{
 	 */
 	private static final long serialVersionUID = -7195317090926126664L;
 
-	private String id;//医院id。主键
+	private Long id;//医院id。主键
 	
 	private String name;//医院名称
 	private String address;//地址
@@ -36,11 +36,11 @@ public class Hospital extends BaseObject{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HOSPITAL")
 	@SequenceGenerator(name="SEQ_HOSPITAL", sequenceName = "hospital_seq", allocationSize = 1)*/
-	public String getId(){
+	public Long getId(){
 		return id;
 	}
 	
-	public void setId(String id){
+	public void setId(Long id){
 		this.id = id;
 	}
 	

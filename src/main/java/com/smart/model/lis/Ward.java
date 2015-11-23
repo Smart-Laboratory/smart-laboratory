@@ -12,12 +12,23 @@ import javax.persistence.Table;
 @Table(name = "l_ward")
 public class Ward {
 
+	private Long id;
 	private String code;
 	private String ward;
 	private String type;
 	private String phone;
 	
+	
 	@Id
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Column
 	public String getCode() {
 		return code;
 	}
