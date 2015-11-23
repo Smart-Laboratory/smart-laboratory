@@ -82,8 +82,7 @@ public class Item extends BaseObject implements Serializable{
 	/**
 	 * 条目所涉及的指标，指标与条目的关系一对多
 	 */
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "index_id")
 	public Index getIndex() {
 		return index;

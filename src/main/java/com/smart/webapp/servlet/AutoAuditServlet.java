@@ -79,24 +79,17 @@ public class AutoAuditServlet extends HttpServlet {
         final CriticalRecordManager criticalRecordManager = (CriticalRecordManager) ctx.getBean("criticalRecordManager");
         final YlxhManager ylxhManager = (YlxhManager) ctx.getBean("ylxhManager");
         
-        log.debug("Initializing context...");
+        log.info("Initializing context...");
         System.out.println("Initializing context...");
 
         try {
         	final Map<String, Describe> idMap = new HashMap<String, Describe>();
         	final Map<String, String> indexNameMap = new HashMap<String, String>();
         	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
-        	List<Bag> bags = bagManager.getBagByHospital("1");
-			List<Rule> ruleList = new ArrayList<Rule>();
-			Set<Long> have = new HashSet<Long>();
-			for(Bag b : bags) {
-				for(Rule r : b.getRules()) {
-					if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
-						ruleList.add(r);
-						have.add(r.getId());
-					}
-				}
-			}
+        	Long start = System.currentTimeMillis();
+        	List<Rule> ruleList = bagManager.getRuleByBag("1");
+        	log.info("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
+        	System.out.println("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
         	if (!DroolsRunner.getInstance().isBaseInited()) {
         		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
         		Reader reader = analyticUtil.getReader(ruleList);
@@ -121,7 +114,7 @@ public class AutoAuditServlet extends HttpServlet {
     		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
-            log.debug("初始化常量完成");
+            log.info("初始化常量完成");
             System.out.println("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				

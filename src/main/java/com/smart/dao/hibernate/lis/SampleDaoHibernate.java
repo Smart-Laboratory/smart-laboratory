@@ -17,9 +17,6 @@ import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
 
-import net.sf.ehcache.search.expression.And;
-
-import com.smart.model.lis.Process;
 
 @Repository("sampleDao")
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
@@ -73,13 +70,16 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		builder.append(" and ");
 		builder.append("sampleNo like ?");
 		builder.append(" order by sampleNo");
+		Long start = System.currentTimeMillis();
 		Query query = getSession().createQuery(builder.toString());
 		if(!code.isEmpty()) {
 			query = query.setString(0, date + code + "%");
 		} else {
 			query = query.setString(0, date + "%");
 		}
-		return query.list();
+		List<Sample> list = query.list();
+		System.out.println("获取样本列表：" + (System.currentTimeMillis()-start) + "毫秒");
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,8 +91,14 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getNeedAudit(String day) {
 		Query q =  getSession().createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by id");
 		q.setFirstResult(0);
-		q.setMaxResults(500);             
-		return q.list();
+		q.setMaxResults(500);  
+		List<Sample> list = q.list();
+		for(Sample s : list) {
+			s.getPatient();
+			s.getResults().size();
+			s.getProcess().size();
+		}
+		return list;
 	}
 
 	public void saveAll(List<Sample> updateSample) {
@@ -125,6 +131,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	        List<Sample> infos = getSession().createQuery(
 	                "from Sample s where (s.patientId='" + patientid + "' or s.patientId='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
 	                        + sampleno + "' order by s.sampleNo desc").list();
+	        for(Sample s : infos) {
+	        	s.getResults().size();
+	        }
 	        return infos;
 		} catch (ParseException e) {
 			e.printStackTrace();

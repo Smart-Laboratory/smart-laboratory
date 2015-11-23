@@ -20,25 +20,26 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	}
 
 	public void updateFormula(TestResult t, String formula) {
-		if(formula.contains("decode(1,2,0.742,1)")) {
-			formula = formula.replace("decode(1,2,0.742,1)", "1");
+		if(formula.contains("decode(1,2")) {
+			formula = formula.substring(formula.indexOf("),1,(")+5, formula.indexOf("))"));
 		}
-		if(formula.contains("decode(2,2,0.742,1)")) {
-			formula = formula.replace("decode(2,2,0.742,1)", "0.742");
+		if(formula.contains("decode(2,2")) {
+			formula = formula.substring(12, formula.indexOf("),1,("));
 		}
-		String sql = "update l_testresult set testresult=to_char(round(" + formula + ", 2),'fm99990.00') where testid='" + t.getTestId()
+		String sql = "update l_testresult set testresult=concat(round(" + formula + ", 2),'') where testid='" + t.getTestId()
 				+ "' and sampleno='" + t.getSampleNo() + "'";
+		System.out.println(sql);
 		getSession().createSQLQuery(sql).executeUpdate();
 	}
 
 	public String getFormulaResult(String formula) {
-		if(formula.contains("decode(1,2,0.742,1)")) {
-			formula = formula.replace("decode(1,2,0.742,1)", "1");
+		if(formula.contains("decode(1,2")) {
+			formula = formula.substring(formula.indexOf("),1,(")+5, formula.indexOf("))"));
 		}
-		if(formula.contains("decode(2,2,0.742,1)")) {
-			formula = formula.replace("decode(2,2,0.742,1)", "0.742");
+		if(formula.contains("decode(2,2")) {
+			formula = formula.substring(12, formula.indexOf("),1,("));
 		}
-		String sql = "select to_char(round(" + formula + ", 2),'fm99990.00') from dual";
+		String sql = "select concat(round(" + formula + ", 2),'')";
 		return (String) getSession().createSQLQuery(sql).uniqueResult();
 	}
 	

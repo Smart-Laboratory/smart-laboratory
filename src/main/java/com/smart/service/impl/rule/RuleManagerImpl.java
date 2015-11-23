@@ -107,4 +107,5 @@ public class RuleManagerImpl extends GenericManagerImpl<Rule, Long> implements R
 	public List<Rule> getDiffRule(int i, String mode) {
 		return ruleDao.getDiffRule(i, mode);
 	}
+	
 }

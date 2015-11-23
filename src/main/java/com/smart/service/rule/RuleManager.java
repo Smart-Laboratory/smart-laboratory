@@ -118,4 +118,5 @@ public interface RuleManager extends GenericManager<Rule, Long> {
 	 * @return
 	 */
 	List<Rule> getDiffRule(int i, String mode);
+
 }

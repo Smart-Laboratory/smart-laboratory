@@ -82,10 +82,6 @@ public class Sample extends BaseObject {
 
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
-	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_seq", allocationSize=1)*/
-	@DocumentId
 	public Long getId(){
 		return this.id;
 	}
@@ -524,7 +520,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = Process.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE,mappedBy="sample")
+	@OneToMany(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
 	public Set<Process> getProcess() {
 		return process;
 	}
@@ -536,7 +532,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
 			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
@@ -548,7 +544,7 @@ public class Sample extends BaseObject {
 		this.results = results;
 	}
 	
-	@ManyToOne(optional=true,cascade = CascadeType.MERGE)
+	@ManyToOne(optional=true,cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	@JoinColumn(name="section_id",referencedColumnName="code")
 	public Section getSection(){
 		return section;
@@ -562,7 +558,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 危机值处理
 	 */
-	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample")
+	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample", fetch = FetchType.LAZY)
 	public CriticalRecord getCriticalRecord(){
 		return criticalRecord;
 	}
@@ -574,7 +570,7 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验病人
 	 */
-	@ManyToOne(optional=true,cascade=CascadeType.MERGE)
+	@ManyToOne(optional=true, fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
 	@JoinColumn(name="patientblh",referencedColumnName="blh")
 	public Patient getPatient(){
 		return patient;

@@ -99,7 +99,7 @@ public class Bag extends BaseObject implements Serializable{
 	/**
 	 * 规则包所包含的规则集合，规则包和规则的关系为多对多
 	 */
-	@ManyToMany(targetEntity = Rule.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToMany(targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "lab_bag_rule", 
 			joinColumns = { @JoinColumn(name = "bag_id", referencedColumnName = "id") }, 

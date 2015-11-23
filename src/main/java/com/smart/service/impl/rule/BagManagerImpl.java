@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.smart.dao.rule.BagDao;
 import com.smart.model.rule.Bag;
+import com.smart.model.rule.Rule;
 import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.rule.BagManager;
 
@@ -30,5 +31,9 @@ public class BagManagerImpl extends GenericManagerImpl<Bag, Long> implements Bag
 
 	public List<Bag> getBag(Long parentId) {
 		return bagDao.getByParentId(parentId);
+	}
+
+	public List<Rule> getRuleByBag(String hid) {
+		return bagDao.getRuleByBag(hid);
 	}
 }

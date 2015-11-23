@@ -88,5 +88,4 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	
 	@Transactional
 	Rule saveRule(Rule rule);
-	
 }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Bag;
+import com.smart.model.rule.Rule;
 
 public interface BagDao extends GenericDao<Bag, Long> {
 
@@ -17,5 +18,8 @@ public interface BagDao extends GenericDao<Bag, Long> {
 	
 	@Transactional
 	List<Bag> getBag(String name);
+
+	@Transactional
+	List<Rule> getRuleByBag(String hid);
 	
 }
