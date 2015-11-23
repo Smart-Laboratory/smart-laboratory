@@ -8,5 +8,9 @@ import com.smart.service.GenericManager;
 public interface YlxhManager extends GenericManager<Ylxh, Long> {
 
 	List<Ylxh> getYlxh();
+	
+	List<Ylxh> getTest(String lab);
+	
+	List<Ylxh> getSearchData(String text);
 
 }

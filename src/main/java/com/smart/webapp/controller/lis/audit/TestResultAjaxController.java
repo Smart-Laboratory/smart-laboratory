@@ -209,6 +209,8 @@ public class TestResultAjaxController extends BaseAuditController{
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			return false;
 		}
 

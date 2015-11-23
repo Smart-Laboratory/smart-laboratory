@@ -33,18 +33,23 @@
 </div>
 
 <div id="addTestResultDialog" style="text-align:left;" title="<fmt:message key='add.test.result'/>">
-	<div>
-		<span style=""><fmt:message key='add.single'/></span>
-		<input  id="searchProject"  placeholder="<fmt:message key='add.single'/>">
+	<div class="form-inline">
+		<span class="form-control" style=""><fmt:message key='add.single'/></span>
+		<input  id="searchProject" class="form-control" style="width:250px;" placeholder="<fmt:message key='add.single'/>">
 	</div>
-	<div>
-		<select id="profileList"></select>
+	
+	<div class="form-inline">
+		<input id="lastprofile" type="hidden" value="<c:out value='${lastprofle}'/>"  />
+		<select id="profileList" class="form-control" style="width:280px;"></select>
 		<button id="addProfileBtn" class="btn btn-info"><fmt:message key="button.add.profile" /></button>
 		<button id="deleteAllTest" class="btn btn-danger"><fmt:message key="button.empty" /></button>
 	</div>
+	<fieldset>
+	<legend><fmt:message key="index.message" /></legend>
 	<div id="addTestList">
 	
 	</div>
+	</fieldset>
 </div>
 
 <div id="addResultDialog" style="text-align:left;" title="<fmt:message key='addReuslt'/>">
@@ -140,8 +145,8 @@
 		<textarea id="noteText" rows="3" style="width:280px;"></textarea>
 		
 		<div style="margin-top:20px;margin-left:20px;">
-			<button id="opConfirm" class="btn btn-info" ><fmt:message key='button.confirm' /></button>
-			<button id="opCancel" class="btn" ><fmt:message key='button.cancel' /></button>
+			<button id="opConfirm" class="btn btn-success" ><fmt:message key='button.confirm' /></button>
+			<button id="opCancel" class="btn btn-info" ><fmt:message key='button.cancel' /></button>
 		</div>
 	</div>
 	

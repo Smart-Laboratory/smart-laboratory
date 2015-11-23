@@ -113,7 +113,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getHistorySample(String patientId, String blh) {
 		
 		if(blh != null){
-			return getSession().createQuery("from Sample where patient.blh ='"+blh+"'").list();
+			return getSession().createQuery("from Sample s where s.patient.blh ='"+blh+"'  order by s.id desc").list();
 		}
 		return null;
 	}

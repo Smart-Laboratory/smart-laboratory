@@ -150,7 +150,7 @@ public class IndexAjaxController {
 				
 				JSONObject o = new JSONObject();
 				o.put("id", d.getIndexId());
-//				o.put("ab", d.getEnglish());
+				o.put("ab", d.getEnglish());
 				o.put("name", d.getName());
 				array.put(o);
 			}

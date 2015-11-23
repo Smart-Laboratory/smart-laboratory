@@ -44,7 +44,7 @@ public class AjaxController extends BaseAuditController{
 		
 		Sample info = sampleManager.getBySampleNo(sample);
 		Date measuretime = new Date();
-		String patientid = info.getPatientId();
+		String patientid = info.getPatient().getBlh();
 		Set<String> sameTests = new HashSet<String>();
 		sameTests.add(testid);
 		String tests = sameTests.toString().replace("[", "'").replace("]", "'");

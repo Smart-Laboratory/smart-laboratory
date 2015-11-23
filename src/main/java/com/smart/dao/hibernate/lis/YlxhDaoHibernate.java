@@ -17,7 +17,16 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 
 	@SuppressWarnings("unchecked")
 	public List<Ylxh> getYlxh() {
-		return getSession().createQuery("from Ylxh").list();
+		return getSession().createQuery("from Ylxh order by profiletest").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Ylxh> getTest(String lab){
+		return getSession().createQuery("from Ylxh where ksdm='"+lab+"' order by profiletest").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Ylxh> getSearchData(String text){
+		return getSession().createQuery("from Ylxh where ylmc like '%"+text+"%'").list();
+	}
 }

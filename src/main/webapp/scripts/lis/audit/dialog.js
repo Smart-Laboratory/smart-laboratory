@@ -1,4 +1,11 @@
 $(function(){
+	$("#opStatusDialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		modal:true,
+	    width: 340,
+	    height: 430,
+	});
 	
 	$("#tatDialog").dialog({
 		autoOpen: false,
@@ -71,7 +78,7 @@ $(function(){
 	    		    		postStr += id + ":" + value;
     		    		}
     		    	});
-	    			//alert(postStr);
+	    			alert(postStr);
 	    			if (postStr != "") {
 		    			$.post("../audit/add",{test:postStr,sample:sample},function(data){
 		    				if (data) {
@@ -222,21 +229,20 @@ $(function(){
 	});
 	
 	$("#testAdd").click(function() {
-		$("#profileList").empty();
+		$("#profileList").empty(); 
 		$("#addTestList").html("");
-		var lastProfile;
-//		$.get("../audit/ajax/profileList",{lab:$("#labSelect").val()},function(data){
-//			//alert(data);
-//			var array = jQuery.parseJSON(data);
-//			for (var i=0 ; i < array.length ; i++) {
-//				var html = array[i].describe+","+array[i].device;
-//				if(lastProfile == array[i].test) {
-//					$("#profileList").append("<option value='"+array[i].test+"' selected>"+html+"</option>");
-//				} else {
-//					$("#profileList").append("<option value='"+array[i].test+"'>"+html+"</option>");
-//				}
-//			}
-//		 });
+		var lastProfile =$("#lastprofile").val();
+		$.get("../set/ylsf/ajax/ylsfList",{lab:$("#labSelect").val()},function(data){
+			var array = jQuery.parseJSON(data);
+			for (var i=0 ; i < array.length ; i++) {
+				var html = array[i].ksdm+","+array[i].ylmc;
+				if(lastProfile == array[i].test) {
+					$("#profileList").append("<option value='"+array[i].test+"' selected>"+html+"</option>");
+				} else {
+					$("#profileList").append("<option value='"+array[i].test+"'>"+html+"</option>");
+				}
+			}
+		 });
 		$("#addTestResultDialog").dialog("open");
 //		
 //		if (lastProfile != "") {
@@ -288,7 +294,7 @@ $(function(){
 	    			result = false;
 	    	});
 			if(result){
-				$("#addTestList").append("<div><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2'/></div>")
+				$("#addTestList").append("<div><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2 form-control'/></div>")
 			}else{
 				alert("样本列表或者添加列表中已包含该检验项目!");
 			}
@@ -393,9 +399,10 @@ $(function(){
 	
 	$("#codeSetDiv .codeCheck").click(function(){
  		var code = $(this).parent().find(".codeText").html();
- 		if ($(this).is(':checked')){
+			//alert(code);
+ 		if ($(this).attr("checked") == "checked"){
  			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
- 			$.post("../audit/activeCode",{code:code,active:true},function() {}); 
+ 			$.post("../audit/activeCode",{code:code,active:true},function() {}); 		
         } else {
         	$(this).parent().parent().parent().find(".scopeDiv").css('display','none');
         	$.post("../audit/activeCode",{code:code,active:false},function() {});
@@ -405,10 +412,29 @@ $(function(){
 	$("#autoAuditNote").html("参考范围为<strong class='text-warning'>3位</strong>数字,不输入审核<strong class='text-warning'>整个段</strong>");
 
 
+	$("#addProfileBtn").click(function() {
+ 		var testIds = $("#profileList").val();
+ 		$.post("../set/ylsf/ajax/profileTest",{test:testIds,sample:$("#hiddenSampleNo").val()},function(data) {
+ 			var array = jQuery.parseJSON(data);
+			for (var i=0 ; i < array.length ; i++) {
+				var result = true;
+				$("#addTestList .testID").each(function(index,self){
+		    		if ($(self).val() == array[i].test)
+		    			result = false;
+		    	});
+				if (result) {
+					$("#addTestList").append("<div><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue  form-control'/></div>")
+				}
+			}
+			//alert("<fmt:message key='alert.add.profile.finished' />");
+ 		});
+	});
+	
+	$("#deleteAllTest").click(function(){
+ 		$("#addTestList").html("");
+	});
 	
 });
-
-
 
 
 
