@@ -228,13 +228,13 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 			break;
 		case 11:
 			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
-				sql += "and s.sampleno like '" + text + "%'";
+				sql += "and s.sampleNo like '" + text + "%'";
 			}
 			break;
 		case 14:
 			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
 				code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleno='" + text + "'";
+				sql += "and s.sampleNo='" + text + "'";
 			}
 			break;
 		case 18:
@@ -242,8 +242,8 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 				&& StringUtils.isNumeric(text.substring(11, 14))
 				&& StringUtils.isNumeric(text.substring(15, 18))
 				&& code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleno>='" + text.substring(0, 14) 
-					+ "' and s.sampleno<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+				sql += "and s.sampleNo>='" + text.substring(0, 14) 
+					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
 			}
 			break;
 		}
@@ -296,13 +296,13 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 			break;
 		case 11:
 			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
-				sql += "and s.sampleno like '" + text + "%'";
+				sql += "and s.sampleNo like '" + text + "%'";
 			}
 			break;
 		case 14:
 			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
 				code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleno='" + text + "'";
+				sql += "and s.sampleNo='" + text + "'";
 			}
 			break;
 		case 18:
@@ -310,8 +310,8 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 				&& StringUtils.isNumeric(text.substring(11, 14))
 				&& StringUtils.isNumeric(text.substring(15, 18))
 				&& code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleno>='" + text.substring(0, 14) 
-					+ "' and s.sampleno<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+				sql += "and s.sampleNo>='" + text.substring(0, 14) 
+					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
 			}
 			break;
 		}

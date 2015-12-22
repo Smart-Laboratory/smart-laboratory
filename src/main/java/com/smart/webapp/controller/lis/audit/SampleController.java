@@ -79,11 +79,8 @@ public class SampleController {
 			mark = 0;
 
 		text = text.toUpperCase();
-		Long logstart = System.currentTimeMillis();
 		int size = sampleManager.getSampleCount(text, lab, mark, status, user.getLabCode());
-		System.out.println(System.currentTimeMillis()-logstart);
 		list = sampleManager.getSampleList(text, lab, mark, status, user.getLabCode(), start, end);
-		System.out.println(System.currentTimeMillis()-logstart);
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
