@@ -89,7 +89,7 @@ public class FormulaUtil {
 					}
 					
 					if(isFloat){
-						TestResult t = null;
+						TestResult t = new TestResult();
 						String k = testid + "[" + sampletype;
 						Describe des = fillUtil.getDescribe(testid);
 						if (testMap.containsKey(k)) {
@@ -100,7 +100,6 @@ public class FormulaUtil {
 								t.setEditMark(t.getEditMark() * Constants.EDIT_FLAG);
 							}
 						} else {
-							t = new TestResult();
 							t.setSampleNo(info.getSampleNo());
 							t.setTestId(testid);
 							t.setSampleType(sampletype);
@@ -115,14 +114,14 @@ public class FormulaUtil {
 						t.setOperator(operator);
 						t.setIsprint(isprint);
 						t.setTestResult(testResultManager.getFormulaResult(fm));
-						testResultManager.save(t);
 						fillUtil.fillResult(t, info);
+						testResultManager.save(t);
 						info.getResults().add(t);
-						sampleManager.save(info);
 					}
 				}
 			}
 		}
+		//sampleManager.save(info);
 	}
 	
 	private boolean isDouble(String str) {
