@@ -68,17 +68,18 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			builder.append(mark);
 		}
 		builder.append(" and ");
-		builder.append("sampleNo like ?");
-		builder.append(" order by sampleNo");
+		builder.append("sampleNo like '");
+		if(!code.isEmpty()) {
+			builder.append(date + code);
+		} else {
+			builder.append(date);
+		}
+		builder.append("%' order by sampleNo");
+		System.out.println(builder.toString());
 		Long start = System.currentTimeMillis();
 		Query query = getSession().createQuery(builder.toString());
-		if(!code.isEmpty()) {
-			query = query.setString(0, date + code + "%");
-		} else {
-			query = query.setString(0, date + "%");
-		}
 		List<Sample> list = query.list();
-		System.out.println("获取样本列表：" + (System.currentTimeMillis()-start) + "毫秒");
+		System.out.println("获取样本列表：" + (System.currentTimeMillis()-start) + "毫秒。个数：" + list.size());
 		return list;
 	}
 
@@ -148,7 +149,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return (Sample)getSession().createQuery("from Sample s where s.sampleNo='"+sampleNo+"'").uniqueResult();
 	}
 	
-public List<Integer> getAuditInfo(String date, String department,String user) {
+public List<Integer> getAuditInfo(String date, String department, String code, String user) {
 		
 		if (StringUtils.isEmpty(department) ) {
 			return null;
@@ -157,6 +158,7 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 			date = "________";
 		}
 		
+		String[] cds = code.split(",");
 		StringBuilder builder = new StringBuilder();
 		builder.append("select count(p) from Sample p where p.section.code");
 		if (department.contains(",")) {
@@ -168,6 +170,20 @@ public List<Integer> getAuditInfo(String date, String department,String user) {
 			builder.append(department);
 		}
 		
+		builder.append(" and ");
+		StringBuilder bld = new StringBuilder();
+		bld.append("(");
+		for (int i=0; i<cds.length; i++) {
+			bld.append("p.sampleNo like '");
+			bld.append(date);
+			bld.append(cds[i]);
+			bld.append("%'");
+			if (cds.length != i+1) {
+				bld.append(" or ");
+			}
+		}
+		bld.append(")");
+		builder.append(bld.toString());
 		
 		
 		int unaudit = ((Number)getSession().createQuery(builder.toString() + " and p.auditStatus=0").uniqueResult()).intValue();

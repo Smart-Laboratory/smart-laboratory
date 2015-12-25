@@ -399,11 +399,13 @@ $(function(){
 	
 	$("#codeSetDiv .codeCheck").click(function(){
  		var code = $(this).parent().find(".codeText").html();
-			//alert(code);
+		alert($(this).attr("checked"));
  		if ($(this).attr("checked") == "checked"){
+ 			alert(code + 'true');
  			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
  			$.post("../audit/activeCode",{code:code,active:true},function() {}); 		
         } else {
+        	alert(code + 'false');
         	$(this).parent().parent().parent().find(".scopeDiv").css('display','none');
         	$.post("../audit/activeCode",{code:code,active:false},function() {});
         }

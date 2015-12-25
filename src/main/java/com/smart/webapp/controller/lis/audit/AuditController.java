@@ -528,7 +528,7 @@ public class AuditController extends BaseAuditController {
 		if (!StringUtils.isEmpty(operator.getLastLab())) {
 			// List<Integer> list = patientInfoManager.getAuditInfo("", operator.getLastLibrary(),
 			// operator.getLabCode());
-			List<Integer> todayList = sampleManager.getAuditInfo(strToday, operator.getLastLab(),
+			List<Integer> todayList = sampleManager.getAuditInfo(strToday, operator.getLastLab(), operator.getActiveCode(),
 					 operator.getUsername());
 			// json.put("unaudit", list.get(0));
 			// json.put("unpass", list.get(1));
