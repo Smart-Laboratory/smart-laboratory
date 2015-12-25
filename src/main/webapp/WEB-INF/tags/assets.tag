@@ -19,7 +19,7 @@
         <script type="text/javascript" src="${base}/scripts/script.js"></script>
     </c:when>
     <c:otherwise>
-        <link rel="stylesheet" type="text/css" href="${base}/assets/v/${applicationScope.assetsVersion}/${group}.css"/>
-        <script type="text/javascript" src="${base}/assets/v/${applicationScope.assetsVersion}/${group}.js"></script>
+        <link rel="stylesheet" type="text/css" href="${base}/styles/main.css"/>
+        <script type="text/javascript" src="${base}/scripts/main.js"></script>
     </c:otherwise>
 </c:choose>

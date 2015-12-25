@@ -1,6 +1,8 @@
 $(function(){
-	var scope = "${session.scope}";
-	alert(scope);
+	
+
+	
+	$("#footer").css('display','none');
 	
 	getList($("#sampletext").val(),$("#lab").val());
 
