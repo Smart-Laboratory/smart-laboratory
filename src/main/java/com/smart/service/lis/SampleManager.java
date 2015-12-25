@@ -25,9 +25,10 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	 * 	 样本数统计
 	 * @param date	日期，样本号前缀，如20130813
 	 * @param department	部门
+	 * @param string 
 	 * @return	返回今日未审核数，今日未通过数、未处理的危急样本数，需写回数
 	 */
-	List<Integer> getAuditInfo(String date, String department, String user);
+	List<Integer> getAuditInfo(String date, String department, String code, String user);
 	
 	/**
 	 *   获取某一时间段中某患者的样本

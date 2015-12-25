@@ -5,7 +5,7 @@ $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
 		$.ajax({
 	        type : "GET",
-	        url : "/users/ajax/hospital",
+	        url : "<c:url value='/users/ajax/hospital'/>",
 	        success : function(data) {
 	           $("#hospital").append(data);
 	        }
@@ -49,7 +49,8 @@ $(function() {
     <menu:displayMenu name="Individual"/>
     <menu:displayMenu name="Logout"/>
 </ul>
-<div id="hospital" style="folat:right;margin-left:1000px;height:30px;padding-top:8px;padding-bottom:7px;">
+
+<div id="hospital" style="folat:right;height:50px;padding-top:13px;">
 	<c:if test="${pageContext.request.remoteUser != null}">
 		${pageContext.request.remoteUser} |
 	</c:if>

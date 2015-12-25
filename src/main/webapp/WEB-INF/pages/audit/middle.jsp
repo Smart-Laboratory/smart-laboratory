@@ -19,38 +19,38 @@
 	<div class="clearfix alert alert-info" style="margin-bottom:5px;padding:5px;padding-bottom:4px;">
 		<div class="col-sm-12 pinfo">
 			<div class="col-sm-4 pinfo">
-				<fmt:message key="patient.name" />:<b id="pName"></b>
+				<span class='col-sm-4'><fmt:message key="patient.name" />:</span><b id="pName"></b>
 			</div>
 			<div class="col-sm-3 pinfo">
-				<fmt:message key="patient.sex" />:<b id="pSex"></b>
+				<span class='col-sm-6'><fmt:message key="patient.sex" />:</span><b id="pSex"></b>
 			</div>
 			<div class="col-sm-2 pinfo">
-				<fmt:message key="patient.age" />:<b id="pAge"></b><fmt:message key="patient.year" />
+				<span class='col-sm-6'><fmt:message key="patient.age" />:</span><b id="pAge"></b><fmt:message key="patient.year" />
 			</div>
 			<div class="col-sm-3 pinfo">
-				<fmt:message key="sample.type" />:<b id="pType"></b>
+				<span class='col-sm-6'><fmt:message key="sample.type" />:</span><b id="pType"></b>
 			</div>
 		</div>
 		<div class="col-sm-12 pinfo">
 			<div class="col-sm-4 pinfo">
-				<fmt:message key="sample.id" />:<b id="doctadviseno"></b>
+				<span class='col-sm-4'><fmt:message key="sample.id" />:</span><b id="doctadviseno"></b>
 			</div>
 			<div class="col-sm-3 pinfo">
-				<fmt:message key="sample.mode" />:<b id="stayhospitalmode"></b>
+				<span class='col-sm-6'><fmt:message key="sample.mode" />:</span><b id="stayhospitalmode"></b>
 			</div>
 			<div class="col-sm-5 pinfo">
-				<fmt:message key="patient.blh" />:<b id="blh"></b>
+				<span class='col-sm-3'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
 			</div>
 		</div>
 		<div class="col-sm-12 pinfo">
 			<div class="col-sm-4 pinfo">
-				<fmt:message key="patient.section" />:<b id="pSection"></b>
+				<span class='col-sm-4'><fmt:message key="patient.section" />:</span><b id="pSection"></b>
 			</div>
 			<div id="pBedHtml" class="col-sm-3 pinfo">
-				<fmt:message key="patient.departbed" />:<b id="pBed"></b>
+				<span class='col-sm-6'><fmt:message key="patient.departbed" />:</span><b id="pBed"></b>
 			</div>
 			<div class="col-sm-5 pinfo">
-				<fmt:message key="diagnostic" />:<b id="diagnostic"></b>
+				<span class='col-sm-3'><fmt:message key="diagnostic" />:</span><b id="diagnostic"></b>
 			</div>
 		</div>
 		<div class="col-sm-12 pinfo">
