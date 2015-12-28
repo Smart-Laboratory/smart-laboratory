@@ -185,7 +185,7 @@
         		});
         	}
         }, "json");
-		//getRelativeTests(ret.sample);
+		getRelativeTests(ret.sample);
 	}
 	
 	function getSample(sampleNo) {

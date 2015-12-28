@@ -1,5 +1,6 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,31 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	@SuppressWarnings("unchecked")
 	public List<Ylxh> getSearchData(String text){
 		return getSession().createQuery("from Ylxh where ylmc like '%"+text+"%'").list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getRelativeTest(String ylxh) {
+		List<String> list = new ArrayList<String>();
+		if(ylxh.contains("+")) {
+			String sql = "select profiletest3 from Ylxh where ylxh in (";
+			for (String s : ylxh.split("[+]")) {
+				sql += Long.parseLong(s) + ",";
+			}
+			list = getSession().createQuery(sql.substring(0, sql.length()-1) + ")").list();
+		} else if (ylxh.contains("[")) {
+			list = getSession().createQuery("select profiletest3 from Ylxh where ylxh=" + Long.parseLong(ylxh.substring(0, ylxh.indexOf("[")))).list();
+		} else {
+			list = getSession().createQuery("select profiletest3 from Ylxh where ylxh=" + Long.parseLong(ylxh)).list();
+		}
+		if(list.size() > 0) {
+			String str = "";
+			for (String s : list) {
+				if(s != null) {
+					str += s;
+				}
+			}
+			return str;
+		}
+		return null;
 	}
 }

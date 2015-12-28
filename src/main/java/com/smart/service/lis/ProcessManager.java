@@ -5,4 +5,6 @@ import com.smart.service.GenericManager;
 
 public interface ProcessManager extends GenericManager<Process, Long> {
 
+	void removeBySampleId(long id);
+
 }

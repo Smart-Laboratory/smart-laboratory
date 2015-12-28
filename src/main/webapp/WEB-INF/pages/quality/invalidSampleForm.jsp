@@ -47,7 +47,7 @@
 	<tr>
 		<td><appfuse:label key="sample.id"/> :
 			<form:input path="sampleId" cssclass="text form-control input-group-sm" /></td>
-		<td><appfuse:label key="patient.patientName"/>  :
+		<td><appfuse:label key="patient.name"/>  :
 			<form:input path="patientName" cssclass="text form-control input-group-sm" />
 			</td>
 		<td><appfuse:label key="patient.sex"/> :

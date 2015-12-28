@@ -359,7 +359,7 @@ $(function() {
 				<td width="70px"><fmt:message key='patient.sampleType'/></td>
 				<td width="100px"><fmt:message key='patient.section'/></td>
 				<td width="70px"><fmt:message key='patient.patientId'/></td>
-				<td width="60px"><fmt:message key='patient.patientName'/></td>
+				<td width="60px"><fmt:message key='patient.name'/></td>
 				<td width="30px"><fmt:message key='patients.sex'/></td>
 				<td width="30px"><fmt:message key='patients.age'/></td>
 				<td width="100px"><fmt:message key='diagnostic'/></td>

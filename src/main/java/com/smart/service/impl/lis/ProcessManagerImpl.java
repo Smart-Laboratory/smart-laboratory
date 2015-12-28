@@ -18,5 +18,9 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 		this.dao = processDao;
 		this.processDao = processDao;
 	}
+
+	public void removeBySampleId(long id) {
+		processDao.removeBySampleId(id);
+	}
 	
 }

@@ -15,9 +15,11 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
+import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TaskManager;
 import com.smart.service.lis.TestResultManager;
@@ -32,6 +34,9 @@ import com.zju.api.model.LabGroupInfo;
 import com.zju.api.service.RMIService;
 
 public class BaseAuditController {
+	
+	@Autowired
+    protected AuditTraceManager auditTraceManager = null;
 	
 	@Autowired
     protected SampleManager sampleManager = null;
@@ -77,6 +82,9 @@ public class BaseAuditController {
 	
 	@Autowired
 	protected CollectSampleManager collectSampleManager = null;
+	
+	@Autowired
+    protected ProcessManager processManager = null;
 	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();

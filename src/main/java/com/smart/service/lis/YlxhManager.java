@@ -13,4 +13,6 @@ public interface YlxhManager extends GenericManager<Ylxh, Long> {
 	
 	List<Ylxh> getSearchData(String text);
 
+	String getRelativeTest(String ylxh);
+
 }

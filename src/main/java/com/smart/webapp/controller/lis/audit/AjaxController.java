@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,6 +121,57 @@ public class AjaxController extends BaseAuditController{
         map.put("hi", hiArr);
         map.put("time", timeArr);
         return map;
+	}
+	
+	@RequestMapping(value = "/ajax/relativeTest*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getRelativeTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String sample = request.getParameter("sample");
+		String html = "";
+		Sample info = sampleManager.getBySampleNo(sample);
+		String history = ylxhManager.getRelativeTest(info.getYlxh());
+		int num = history.split(",").length;
+		if(history == null || history.isEmpty()) {
+			return "";
+		} else {
+			history = history.substring(0, history.length()-1);
+			history = "('" + history.replaceAll(",", "','") + "')";
+		}
+		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), history);
+		if(hisTests.size()>0) {
+			int count = 3;
+			if(hisTests.size() < num * count) {
+				num = hisTests.size();
+			} else {
+				num = num * count;
+			}
+			if (idMap.size() == 0)
+				initMap();
+			Map<String, String> htmlMap = new HashMap<String, String>();
+			html += "<table>";
+			for(int i=0; i<num; i++) {
+				if(htmlMap.containsKey(hisTests.get(i).getSampleNo())) {
+					String s = htmlMap.get(hisTests.get(i).getSampleNo()) 
+							+ "<td>" + idMap.get(hisTests.get(i).getTestId()).getName() + "</td>"
+							+ "<td width='50px;'>" + hisTests.get(i).getTestResult() + "</td>";
+					htmlMap.put(hisTests.get(i).getSampleNo(), s);
+				} else {
+					htmlMap.put(hisTests.get(i).getSampleNo(), 
+							"<tr><td>" + hisTests.get(i).getSampleNo() + "</td>"
+							+ "<td>" + idMap.get(hisTests.get(i).getTestId()).getName() + "</td>"
+							+ "<td width='50px;'>" + hisTests.get(i).getTestResult() + "</td>");
+				}
+			}
+			for(String s : htmlMap.keySet()) {
+				html += htmlMap.get(s) + "</tr>";
+			}
+			html += "</table>";
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("html", html);
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(obj.toString());
+		return null;
 	}
 
 }

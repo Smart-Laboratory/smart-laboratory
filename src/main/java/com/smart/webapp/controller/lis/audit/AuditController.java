@@ -44,6 +44,7 @@ import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
+import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
@@ -585,6 +586,7 @@ public class AuditController extends BaseAuditController {
 		String id = request.getParameter("id");
 
 		if (!StringUtils.isEmpty(id)) {
+			processManager.removeBySampleId(Long.parseLong(id));
 			sampleManager.remove(Long.parseLong(id));
 		} else {
 			return false;
@@ -638,5 +640,49 @@ public class AuditController extends BaseAuditController {
 		}
 		operator.setActiveCode(setToString(codeSet));
 		userManager.save(operator);
+	}
+	
+	/**
+	 * 获取样本中检验项目的修改记录
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/trace*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getAuditTrace(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String sampleNo = request.getParameter("sample");
+		if (StringUtils.isEmpty(sampleNo))
+			throw new NullPointerException();
+
+		List<AuditTrace> traceList = auditTraceManager.getBySampleNo(sampleNo);
+		DataResponse dataResponse = new DataResponse();
+
+		if (traceList.size() == 0) {
+			dataResponse.setRecords(0);
+			return dataResponse;
+		}
+
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		dataResponse.setRecords(traceList.size());
+		if (idMap.size() == 0)
+			initMap();
+
+		for (AuditTrace t : traceList) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("sampleno", t.getSampleno());
+			map.put("checker", t.getChecker());
+			map.put("checktime", Constants.SDF.format(t.getChecktime()));
+			map.put("status", t.getStatusValue());
+			map.put("type", t.getTypeValue());
+			dataRows.add(map);
+		}
+		dataResponse.setRows(dataRows);
+
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
 	}
 }

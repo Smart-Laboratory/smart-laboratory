@@ -13,4 +13,8 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		super(Process.class);
 	}
 
+	public void removeBySampleId(long id) {
+		getSession().createSQLQuery("delete from l_process where sample_id=" + id).executeUpdate();
+	}
+
 }

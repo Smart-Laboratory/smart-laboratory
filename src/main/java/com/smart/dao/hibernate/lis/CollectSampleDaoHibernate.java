@@ -47,7 +47,7 @@ public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample
 	}
 	
 	public void removeCollectSample(String collector, String sampleno) {
-		String hql = "delete CollectSample where username='" + collector +"' and sampleno='" + sampleno +"'";
+		String hql = "delete from CollectSample where username='" + collector +"' and sampleno='" + sampleno +"'";
 		Query q = getSession().createQuery(hql);
 		q.executeUpdate();
 	}	

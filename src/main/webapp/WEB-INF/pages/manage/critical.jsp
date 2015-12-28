@@ -38,74 +38,74 @@
 	</display:table>
 </div>
 
-<div id="operationDlg" align="left" title='<fmt:message key='audit.info.dangerous' /><fmt:message key="operation" />'>
+<div id="operationDlg" align="left" title='<fmt:message key='info.danger' /><fmt:message key="operation" />'>
 	<input id="doc" type="hidden" />
 	<input id="index" type="hidden">
 	<div id="historyInfo" class="alert alert-info" style="margin-bottom:5px;padding-right:8px;">
 		<div id="historyText"></div>
 	</div>
 	<div class="row">
-		<label class="spanb"><fmt:message key="patient.info" /> : </label>
+		<label class="spana"><fmt:message key="patient.info" /> : </label>
 		<label class="spanb" id="patientPhoneText"></label>
-		<label class="span3" style="width:270px;" id="patientAddressText"></label>
+		<label class="spand" style="width:270px;" id="patientAddressText"></label>
 	</div>
 	<div class="row">
-		<label class="spanb"><fmt:message key="requester.name" /> : </label>
-		<label class="spanc" id="requesterNameText"></label>
+		<label class="spana"><fmt:message key="requester.name" /> : </label>
+		<label class="spanb" id="requesterNameText"></label>
 		<label class="spanb"><fmt:message key="requester.phone" /> : </label>
 		<label class="spanb" id="requesterPhoneText"></label>
 	</div>
 	<div class="row">
-		<label class="spanb"><fmt:message key="requester.section" /> : </label>
-		<label class="spanc" id="requesterSectionText"></label>
+		<label class="spana"><fmt:message key="requester.section" /> : </label>
+		<label class="spand" id="requesterSectionText"></label>
 	</div>
 	
 	<div id="ward" style="display:none;">
 		<div class="row">
-			<label class="spanb"><fmt:message key="ward.type" /> : </label>
-			<label class="spanc" id="wardTypeText"></label>
+			<label class="spana"><fmt:message key="ward.type" /> : </label>
+			<label class="spanb" id="wardTypeText"></label>
 			<label class="spanb"><fmt:message key="ward.phone" /> : </label>
 			<label class="spanb" id="wardPhoneText"></label>
 		</div>
 		<div class="row">
-			<label class="spanb"><fmt:message key="ward.section" /> : </label>
+			<label class="spana"><fmt:message key="ward.section" /> : </label>
 			<label class="spand" id="wardSectionText"></label>
 		</div>		
 	</div>
 	
 	<div class="row">
-		<label class="spanb"><fmt:message key="role" /> : </label>
-		<label class="radio span1" id="role-radio" style="margin-left:0px;margin-bottom:0px;">
+		<label class="spana" style="float:left;"><fmt:message key="role" /> : </label>
+		<label class="radio spanb" id="role-radio" style="float:left;margin-top:0px;">
 			<input type="radio" name="role" value="0" checked><fmt:message key="doctor" />
 		</label>
-		<label class="radio span1" style="margin-left:0px;margin-bottom:0px;">
+		<label class="radio spanb" style="float:left;margin-top:0px;">
 			<input type="radio" name="role" value="1"><fmt:message key="nurse" />
 		</label>
-		<label class="radio span1" style="margin-left:0px;margin-bottom:0px;">
+		<label class="radio spanb" style="float:left;margin-top:0px;">
 			<input type="radio" name="role" value="2"><fmt:message key="patient" />
 		</label>
 	</div>
 	<div class="row">
-		<label class="spanb" style="margin-top:5px;"><fmt:message key="number" /> : </label>
-		<input type="text" id="targetText" class="span4">
+		<label class="spana" style="margin-top:5px;"><fmt:message key="number" /> : </label>
+		<input type="text" id="targetText" class="spand">
 	</div>
 	<div class="row">
-		<label class="spanb"><fmt:message key="contact" /> : </label>
-		<label class="radio span1" style="margin-left:0px;margin-bottom:0px;">
+		<label class="spana" style="float:left;"><fmt:message key="contact" /> : </label>
+		<label class="radio spanb" style="float:left;margin-top:0px;">
 			<input type="radio" name="success" value="1" ><fmt:message key="success" />
 		</label>
-		<label class="radio span1" style="margin-left:0px;margin-bottom:0px;">
+		<label class="radio spanb" style="float:left;margin-top:0px;">
 			<input type="radio" id="failed-radio" name="success" value="0" checked><fmt:message key="failed" />
 		</label>
 	</div>
 	<div class="row">
-		<label class="spanb" style="margin-top:5px;"><fmt:message key="contact.info" /> : </label>
-		<input type="text" id="resultText" class="span4">
+		<label class="spana" style="margin-top:5px;"><fmt:message key="contact.info" /> : </label>
+		<input type="text" id="resultText" class="spand">
 	</div>
 	<div class="row">
-		<label class="spanb"></label>
-		<button id="dealBtn" class="btn btn-info span2" style="margin-left:0px;"></button>
-		<button id="deleteBtn" class="btn btn-danger span2" style="margin-left:10px;"><fmt:message key="button.delete" /></button>
+		<label class="spana"></label>
+		<button id="dealBtn" class="btn btn-info spanb" style="margin-left:0px;"></button>
+		<button id="deleteBtn" class="btn btn-danger spanb" style="margin-left:10px;"><fmt:message key="button.delete" /></button>
 	</div>
 	
 </div>

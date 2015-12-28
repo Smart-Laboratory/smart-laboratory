@@ -70,5 +70,10 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getRelative(String patientId, String history) {
+		return null;
+	}
 	
 }

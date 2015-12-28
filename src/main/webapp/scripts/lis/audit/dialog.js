@@ -198,8 +198,8 @@ $(function(){
 	
 	$("#auditTraceDialog").dialog({
 		autoOpen: false,
-	    width: 600,
-	    height: 500
+	    width: 520,
+	    height: 460
 	});
 	
 	$("#allNeedWriteBackDialog").dialog({
@@ -374,8 +374,7 @@ $(function(){
 			$("#tat_request").html(data.request);
 			$("#tat_execute").html(data.execute);
 			$("#tat_receive").html(data.receive);
-//			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
-			$("#tat_audit").html(data.audit);
+			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
 			$("#tat_auditor").html(data.auditor);
 			$("#tat_result").html(data.result);
 			$("#tat_send").html(data.send);
@@ -402,15 +401,12 @@ $(function(){
 		});
 	});
 	
-	$("#codeSetDiv .codeCheck").click(function(){
+	$("#codeSetDiv :checkbox").click(function(){
  		var code = $(this).parent().find(".codeText").html();
-		alert($(this).attr("checked"));
- 		if ($(this).attr("checked") == "checked"){
- 			alert(code + 'true');
+ 		if ($(this).prop("checked")){
  			$(this).parent().parent().parent().find(".scopeDiv").css('display','block');
  			$.post("../audit/activeCode",{code:code,active:true},function() {}); 		
         } else {
-        	alert(code + 'false');
         	$(this).parent().parent().parent().find(".scopeDiv").css('display','none');
         	$.post("../audit/activeCode",{code:code,active:false},function() {});
         }
@@ -443,7 +439,31 @@ $(function(){
 	
 });
 
-
+var isFirstTrace = true;
+function getAuditHistory() {
+	var sample = $("#hiddenSampleNo").val();
+	if(isFirstTrace){
+		jQuery("#audit_trace_information").jqGrid({
+			url:"../audit/trace?sample="+sample,
+			datatype: "json",
+			jsonReader : {repeatitems : false}, 
+			colNames:['样本号','审核者','报告时间','状态','审核类型'],
+		   	colModel:[{name:'sampleno',index:'sampleno',width:120,sortable:false},
+		   		{name:'checker',index:'checker',width:60,sortable:false},
+		   		{name:'checktime',index:'checktime',width:160,sortable:false},
+		   		{name:'status',index:'status',width:60,sortable:false},
+		   		{name:'type',index:'type',width:80,sortable:false}],
+		   	height: '100%'
+		});
+		isFirstTrace=false;
+	}else{
+		jQuery("#audit_trace_information").jqGrid("setGridParam",{
+			url:"。。/audit/trace?sample="+sample
+		}).trigger("reloadGrid"); 
+	} 
+	$("#auditTraceDialog").dialog("open");
+	
+}
 
 
 
