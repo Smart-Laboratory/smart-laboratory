@@ -16,26 +16,27 @@
 			<li><a href="#tabs-2"><fmt:message key="knowledge"/></a></li>
 		</ul>
 		<div id="tabs-0" style="padding:5px;">
-			<div style="margin: 10px;">
-				<span class="label label-info"><fmt:message key="sample.explain" /></span>
-				<div style="margin-right:5px;float:right;" id="reasonBtn">	
-					<button id="reason_block" class="btn" style="font-size:12px;">
+			<div style="margin:5px;">
+				<!-- <span class="label label-info"><fmt:message key="sample.explain" /></span> -->
+				
+				<div style="margin-right:10px;float:right;" id="reasonBtn">	
+					<button id="reason_block" class="btn btn-info" style="font-size:15px;">
 						<fmt:message key="sample.explain.block" />
 					</button>
-					<button id="reason_none" class="btn" style="font-size:12px;display:none;">
+					<button id="reason_none" class="btn btn-info" style="font-size:15px;display:none;">
 						<fmt:message key="sample.explain.none" />
 					</button>
 				</div>
 			</div>
 			<div>
-				<div style="margin-top:10px;">
-					<div id="explainRow" style="margin-top: 4px; font-size: 13px;">
+				<div style="margin-top:30px;">
+					<div id="explainRow" style="margin-top: 6px; font-size: 13px;">
 						<table id="audit_information"></table>
 					</div>
 				</div>
 				<div style="margin-top:5px;">
-					<button id="resultAdd" class="btn"><fmt:message key="button.add" /></button>
-					<button id="resultDelete" class="btn"><fmt:message key="button.delete" /></button>
+					<button id="resultAdd" class="btn btn-success"><fmt:message key="button.add" /></button>
+					<button id="resultDelete" class="btn btn-danger"><fmt:message key="button.delete" /></button>
 				</div>
 			</div>
 		</div>
@@ -49,11 +50,11 @@
 		</div>
 		<div id="tabs-2" style="padding:5px;">
 				<div id="g1"></div>
-				<span class="label" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
+				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
    				<div id="g2"></div>
-   				<span class="label label-warning" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
+   				<span class="label label-info" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
    				<div id="g3"></div>
-   				<span class="label label-important" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
+   				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
 				<div id="g4"></div>
 				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(3)"><fmt:message key="sop.detail.g4" /></a></span>
 		</div>

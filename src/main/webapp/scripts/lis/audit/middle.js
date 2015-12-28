@@ -1191,6 +1191,54 @@
 		});
 	}
 	
+	function show_knowledge(item) {
+ 		jQuery.ajax({
+	  		type:'GET',
+			url: encodeURI('item.jsp?page='+item),
+	  		dataType: 'html',
+	  		success: function(data) {
+				var data2=dataProcess(data);
+	  	    	document.getElementById("dialog").innerHTML = data2;
+	  	    	$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+				$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+				$( "#dialog" ).dialog( "open" );
+	  	  	}
+	  	});
+ 	}
+	
+	function dataProcess(data){
+		var title="<ul>";
+		/* data = data.replace('<div class="tabbedSection">',"!@#$%^&*");
+		var array = data.split("!@#$%^&*");
+		//var data = array[1];
+		alert(array);
+		array = data.split("<\/body>");
+		data = "<div> "+array[0]; */
+		var dataArray = data.split('<div class="tab-');
+		for(var i=0; i<dataArray.length;i++){
+			var str = dataArray[i].replace('">',"!@#$%^&*");
+			if(i!=0){
+				var arr = str.split("!@#$%^&*");
+				
+				title = title+'<li><a href="#tabs-'+i+'">'+arr[0]+'<\/a><\/li>';
+				dataArray[i] = '<div id="tabs-'+i+'">'+arr[1]; 
+			}
+			if(i==dataArray.length-1){
+				dataArray[i] = dataArray[i].replace("<\/div>","");
+				dataArray[i] = dataArray[i].replace("<\/div>","");
+			}
+		}
+		title = title + "<\/ul>";
+		var result = '<div id="tabs">'+title;
+		for(var j=0;j<dataArray.length;j++){
+			if(j!=0){
+				result = result + dataArray[j]; 
+			}
+		}
+		result = result + "<\/div>";
+		return result;
+	}
+	
 $(function(){
 	var isTestModifyFirst = true;
 	$("#modifyBtn").click(function() {

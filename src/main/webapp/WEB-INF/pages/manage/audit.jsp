@@ -2,12 +2,13 @@
 
 <head>
     <title><fmt:message key="sample.manage.audit"/></title>
-    
+        
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/lis/audit.css'/>" />
+	
     
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
@@ -35,6 +36,7 @@
 
 <input type="hidden" id="lab" value="${lab}">
 <input type="hidden" id="sampletext" value="${today}">
+<input id="strTody" type="hidden" value="${strToday}" />
 
 <%@ include file="../audit/top.jsp" %>
 <div class="col-sm-12">

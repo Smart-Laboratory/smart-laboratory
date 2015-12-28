@@ -4,6 +4,7 @@ $(function(){
 	
 	$("#footer").css('display','none');
 	
+	
 	getList($("#sampletext").val(),$("#lab").val());
 
 	getSopSchedule($("#labSelect").val());
@@ -172,7 +173,7 @@ $(function(){
 	var selectNoteAdd = true;
 	$("#auditPassBtn").click(function() {
 		$("#hiddenIsPass").val(true);
-		$("#passNotes").html("通过原因");
+		$("#passNotes").html("<b>通过原因</b>");
 		
 		if (selectNoteAdd) {
 			if ($("#lastDepLab").val() == '1300101' || $("#lastDepLab").val() == '1300200' || $("#lastDepLab").val() == '1300100' || $("#lastDepLab").val() == '1300201') {
@@ -240,7 +241,7 @@ $(function(){
 	
 	$("#auditUnpassBtn").click(function(){
 		$("#hiddenIsPass").val(false);
-		$("#passNotes").html("未通过原因");
+		$("#passNotes").html("<b>未通过原因</b>");
 		$("#opStatusDialog").dialog("open");
 	});
 

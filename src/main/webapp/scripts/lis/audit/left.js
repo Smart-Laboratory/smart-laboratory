@@ -127,6 +127,8 @@ function getList(text, lab) {
 }
 
 $(function(){
+	var strTody = $("#strTody").val();
+	$("#gs_sample").val(strTody);
 	$("#manualAuditPassBtn").click(function() {
 			var s; 
 			s = jQuery("#list").jqGrid('getGridParam','selarrrow'); 

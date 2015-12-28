@@ -116,8 +116,9 @@ $(function(){
 	$("#addResultDialog").dialog({
 		autoOpen: false,
 		resizable: false,
+		modal:true,
 	    width: 340,
-	    height: 300
+	    height: 260
 	});
 	
 	$("#tatDialog").dialog({
@@ -226,6 +227,10 @@ $(function(){
 	$("#sopDetailDialog").dialog({
 		autoOpen: false,
 	    width: 400
+	});
+	
+	$("#addCancel").click(function() {
+		$("#addResultDialog").dialog("close");
 	});
 	
 	$("#testAdd").click(function() {

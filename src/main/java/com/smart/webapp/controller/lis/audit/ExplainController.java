@@ -60,7 +60,8 @@ public class ExplainController extends BaseAuditController{
 
 		String id = request.getParameter("id");
 		if (StringUtils.isEmpty(id))
-			throw new NullPointerException();
+			return null;
+//			throw new NullPointerException();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
 		User user = userManager.getUserByUsername(request.getRemoteUser());

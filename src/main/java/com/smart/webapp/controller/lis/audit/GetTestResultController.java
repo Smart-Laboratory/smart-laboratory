@@ -227,7 +227,7 @@ public class GetTestResultController extends BaseAuditController {
 					map.put("scope", "");
 				}
 				map.put("unit", tr.getUnit());
-//				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				dataRows.add(map);

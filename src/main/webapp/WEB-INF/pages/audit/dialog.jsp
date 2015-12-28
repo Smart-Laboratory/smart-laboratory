@@ -54,24 +54,27 @@
 
 <div id="addResultDialog" style="text-align:left;" title="<fmt:message key='addReuslt'/>">
 	<form id="addResultForm" class="form-horizontal" action="<c:url value='../audit/addResult'/>" method="post">
+	<div class="form-inline">
 			<div class="control-group">
-				<label class="control-label" ><fmt:message key="addResult.number" /></label>
-					<input type="text" class="span3" id="span_docNo" disabled></input>
+				<label class="control-label form-control" ><fmt:message key="addResult.number" /> : </label>
+					<input type="text" class="span3 form-control" id="span_docNo" disabled></input>
 			</div>
 			<div class="control-group">
-				<label class="control-label"><fmt:message key="addResult.result" /></label>
-					<input id="result_result" type="text" class="span3" name="result"/>
+				<label class="control-label form-control"><fmt:message key="addResult.result" /> : </label>
+					<input id="result_result" type="text" class="span3 form-control" name="result"/>
 			</div>
-			<div class="control-group">
-				<label class="control-label"><fmt:message key="addResult.content" /></label>
-					<textarea id="result_content" class="span3" name="content"></textarea>
+			<div class="control-group ">
+				<label class="control-label form-control"><fmt:message key="addResult.content" /> : </label>
+					<textarea id="result_content" class="span3 form-control" name="content"></textarea>
 			</div>
 			<div class="control-group">
 				<div class="controls">
 					<input id="result_docNo" name="docNo" type="hidden"></input>
-					<button id="addResult" type="submit" class="btn" ><fmt:message key='button.submit' /></button>
+					<button id="addResult" type="submit" class="btn btn-success" ><fmt:message key='button.submit' /></button>
+					<button id="addCancel" class="btn btn-info" ><fmt:message key='button.cancel' /></button>
 				</div>
 			</div>
+	</div>
 	</form>
 </div>
 
@@ -141,7 +144,7 @@
 		<!-- <textarea id="noteText" rows="1" style="width:280px;"></textarea> -->
 		<div id="selectNoteDiv" class="clearfix"></div>
 		
-		<h5 id="passNotes"><fmt:message key='audit.infomation'/></h5>
+		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
 		<textarea id="noteText" rows="3" style="width:280px;"></textarea>
 		
 		<div style="margin-top:20px;margin-left:20px;">
