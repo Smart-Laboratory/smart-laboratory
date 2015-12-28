@@ -36,11 +36,11 @@ import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
-import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.model.lis.AuditTrace;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
@@ -78,6 +78,7 @@ public class AutoAuditServlet extends HttpServlet {
         final RMIService rmiService = (RMIService) ctx.getBean("rmiService");
         final CriticalRecordManager criticalRecordManager = (CriticalRecordManager) ctx.getBean("criticalRecordManager");
         final YlxhManager ylxhManager = (YlxhManager) ctx.getBean("ylxhManager");
+        final AuditTraceManager auditTraceManager = (AuditTraceManager) ctx.getBean("auditTraceManager");
         
         log.info("Initializing context...");
         System.out.println("Initializing context...");
@@ -124,6 +125,7 @@ public class AutoAuditServlet extends HttpServlet {
         	            try {
         	            	List<Sample> updateSample = new ArrayList<Sample>();
         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
+        	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
         	            	autocount++;
         	            	log.debug("开始第" + autocount + "次审核...");
         	            	System.out.println("开始第" + autocount + "次审核...");
@@ -240,7 +242,8 @@ public class AutoAuditServlet extends HttpServlet {
     								a.setChecktime(new Date());
     								a.setChecker("Robot");
     								a.setType(1);
-    								a.setStatus(info.getAuditStatus());	
+    								a.setStatus(info.getAuditStatus());
+    								updateAuditTrace.add(a);
         	        			} catch (Exception e) {
         	        				log.error("样本"+info.getSampleNo()+"审核出错:\r\n", e);
                 	                e.printStackTrace();
@@ -249,9 +252,10 @@ public class AutoAuditServlet extends HttpServlet {
         	        		}
         	        		sampleManager.saveAll(updateSample);
         					criticalRecordManager.saveAll(updateCriticalRecord);
+        					auditTraceManager.saveAll(updateAuditTrace);
         					log.debug("第" + autocount + "次审核结束！");
         	            	System.out.println("第" + autocount + "次审核结束！");
-//        	                Thread.sleep(120000);  
+        	                Thread.sleep(120000);  
         	            } catch (Exception e) {
         	            	log.error(e.getMessage());
         	                e.printStackTrace();

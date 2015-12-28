@@ -81,7 +81,7 @@ $(function() {
 	<display:column property="DOCTADVISENO" sortable="true" titleKey="patient.doctadviseno"/>
 	<display:column property="SAMPLENO" sortable="true" titleKey="patients.sampleNo"/>
 	<display:column property="PATIENTID" sortable="false" titleKey="patient.patientId"/>
-	<display:column property="PATIENTNAME" sortable="true" style="width:40px;" titleKey="patient.patientName"/>
+	<display:column property="PATIENTNAME" sortable="true" style="width:40px;" titleKey="patient.name"/>
 	<display:column property="sexValue" sortable="false" titleKey="patients.sex"/>
 	<display:column property="age" sortable="false" titleKey="patients.age"/>
 	<display:column property="SECTION" sortable="false" titleKey="hm.section"/>

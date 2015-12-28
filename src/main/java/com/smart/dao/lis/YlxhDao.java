@@ -18,4 +18,7 @@ public interface YlxhDao extends GenericDao<Ylxh, Long> {
 	//搜索检验套餐
 	@Transactional
 	List<Ylxh> getSearchData(String text);
+
+	@Transactional
+	String getRelativeTest(String ylxh);
 }

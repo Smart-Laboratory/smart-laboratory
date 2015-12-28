@@ -50,7 +50,7 @@ $(function() {
     <menu:displayMenu name="Logout"/>
 </ul>
 
-<div id="hospital" style="folat:right;height:50px;padding-top:13px;">
+<div id="hospital" style="float:right;padding-top:8px;">
 	<c:if test="${pageContext.request.remoteUser != null}">
 		${pageContext.request.remoteUser} |
 	</c:if>

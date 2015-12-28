@@ -32,5 +32,9 @@ public class YlxhManagerImpl extends GenericManagerImpl<Ylxh, Long> implements Y
 	public List<Ylxh> getSearchData(String text){
 		return ylxhDao.getSearchData(text);
 	}
+
+	public String getRelativeTest(String ylxh) {
+		return ylxhDao.getRelativeTest(ylxh);
+	}
 	
 }

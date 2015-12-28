@@ -42,4 +42,8 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 			String patientid) {
 		return testResultDao.getSingleHistory(testid, patientName, patientid);
 	}
+
+	public List<TestResult> getRelative(String patientId, String history) {
+		return testResultDao.getRelative(patientId, history);
+	}
 }

@@ -41,9 +41,9 @@
 		<div class="clearfix">
 			<div id="patient-info" class="alert alert-info" style="margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
 				<div class="pItem">
-					<span class="pLabel"><fmt:message key="patient.patientName" /></span>
+					<span class="pLabel"><fmt:message key="patient.name" /></span>
 					<span class="pText"><b id="pName"></b></span>
-					<span class="pLabel"><fmt:message key="patient.patientSex" /></span>
+					<span class="pLabel"><fmt:message key="patient.sex" /></span>
 					<span class="pText"><b id="pSex"></b></span>
 					<span class="pLabel"><fmt:message key="patient.age" /></span>
 					<span class="pText"><b id="pAge"></b></span>

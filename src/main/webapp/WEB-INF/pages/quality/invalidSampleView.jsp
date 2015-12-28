@@ -25,7 +25,7 @@
 	<tr>
 		<th><appfuse:label key="sample.id"/> :</th>
 		<td><span class="pText"> <c:out value="${invalidSample.sampleId}"/></span>  </td>
-		<th><appfuse:label key="patient.patientName"/>  :</th>
+		<th><appfuse:label key="patient.name"/>  :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.patientName}"/></span>   </td>
 		<th><appfuse:label key="patient.sex"/> :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.sex}"/></span>   </td>
