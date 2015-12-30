@@ -46,14 +46,19 @@
 </div>
 <%@ include file="../audit/dialog.jsp" %>
 
-<div id="footer123" class="">
-        <span class="col-sm-6 text-left"><fmt:message key="webapp.version"/>
+
+<div id="footer" class="container navbar-fixed-bottom">
+        <span class="col-sm-6 text-left">
+        	<fmt:message key="project.name"/> | 
+        	<fmt:message key="webapp.version"/>
             <c:if test="${pageContext.request.remoteUser != null}">
             | <fmt:message key="user.status"/> ${pageContext.request.remoteUser}
             </c:if>
-        </span>
-        <span class="col-sm-6 text-right">
-            &copy; <fmt:message key="copyright.year"/> <a href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
+            | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
+       	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
+   		</span>
+   		<span class="right">
+       		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
         </span>
 </div>
 </body>

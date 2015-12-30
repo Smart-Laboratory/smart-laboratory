@@ -72,11 +72,7 @@ public class GetTestResultController extends BaseAuditController {
 		if (info != null) {
 			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh());
 			Date receivetime = null;
-			for(Process process : info.getProcess()) {
-				if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-					receivetime = process.getTime();
-				}
-			}
+			receivetime = info.getProcess().getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
 			int index = 0;
 			Map<String, String> rmap = null;
@@ -107,11 +103,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				Date preceivetime = null;
-				for(Process process : pinfo.getProcess()) {
-					if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-						preceivetime = process.getTime();
-					}
-				}
+				preceivetime = pinfo.getProcess().getReceivetime();
 				if (preceivetime == null || pinfo.getSampleNo() == null) {
 					continue;
 				}
@@ -277,11 +269,7 @@ public class GetTestResultController extends BaseAuditController {
 		if (info != null) {
 			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh());
 			Date receivetime = null;
-			for(Process process : info.getProcess()) {
-				if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-					receivetime = process.getTime();
-				}
-			}
+			receivetime = info.getProcess().getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
 			int index = 0;
 			Map<String, String> rmap = null;
@@ -311,11 +299,7 @@ public class GetTestResultController extends BaseAuditController {
 				}
 				int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
 				Date preceivetime = null;
-				for(Process process : info.getProcess()) {
-					if(process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-						preceivetime = process.getTime();
-					}
-				}
+				preceivetime = info.getProcess().getReceivetime();
 				if (preceivetime == null || pinfo.getSampleNo() == null) {
 					continue;
 				}

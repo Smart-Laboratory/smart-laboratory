@@ -94,11 +94,7 @@ public class CriticalController {
 				ctl.setDocId(sample.getId());
 				ctl.setBlh(sample.getPatient().getBlh());
 				ctl.setSampleNo(sample.getSampleNo());
-				for(Process p : sample.getProcess()) {
-					if(p.getOperation().equals(Constants.PROCESS_REQUEST)) {
-						ctl.setRequester(p.getOperator());
-					}
-				}
+				ctl.setRequester(sample.getProcess().getRequester());
 				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
@@ -189,11 +185,7 @@ public class CriticalController {
 				ctl.setDocId(sample.getId());
 				ctl.setBlh(sample.getPatient().getBlh());
 				ctl.setSampleNo(sample.getSampleNo());
-				for(Process p : sample.getProcess()) {
-					if(p.getOperation().equals(Constants.PROCESS_REQUEST)) {
-						ctl.setRequester(p.getOperator());
-					}
-				}
+				ctl.setRequester(sample.getProcess().getRequester());
 				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
@@ -300,11 +292,7 @@ public class CriticalController {
 		Sample info = sampleManager.get(Long.parseLong(docId));
 		String dealInfo = info.getCriticalRecord().getCriticalDeal();
 		String requester = "";
-		for(Process p : info.getProcess()) {
-			if(p.getOperation().equals(Constants.PROCESS_REQUEST)) {
-				requester = p.getOperator();
-			}
-		}
+		requester = info.getProcess().getRequester();
 		ContactInfor contactInfor= contactManager.get(requester);
 		
 		JSONObject root = new JSONObject();

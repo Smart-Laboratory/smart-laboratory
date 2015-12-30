@@ -399,12 +399,8 @@ public class AuditController extends BaseAuditController {
 				} else if ("unpass".equals(op)) {
 					sample.setAuditStatus(2);
 				}
-				for(Process process : sample.getProcess()){
-					if(process.getOperation().equals(Constants.PROCESS_CKECK)){
-						process.setOperator(request.getRemoteUser());
-						process.setTime(new Date());
-					}
-				}
+				sample.getProcess().setCheckoperator(request.getRemoteUser());;
+				sample.getProcess().setChecktime(new Date());
 				sample.setWriteback(1);
 				if (StringUtils.isEmpty(text)) {
 					text = Check.MANUAL_AUDIT;
@@ -482,12 +478,8 @@ public class AuditController extends BaseAuditController {
 			//if (info.getAuditStatus() == Constants.STATUS_PASSED + Constants.STATUS_UNPASS - status) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
-				for(Process process : info.getProcess()){
-					if(process.getOperation().equals(Constants.PROCESS_CKECK)){
-						process.setOperator(request.getRemoteUser());
-						process.setTime(new Date());
-					}
-				}
+				info.getProcess().setCheckoperator(request.getRemoteUser());;
+				info.getProcess().setChecktime(new Date());
 				String profileName = info.getSampleNo().substring(8, 11);
 				String deviceId = null;
 				for (TestResult tr : info.getResults()) {

@@ -123,17 +123,12 @@ public class GetPatientController extends BaseAuditController {
 			String code = info.getSampleNo().substring(8, 11);
 			map.put("requester", "");
 			map.put("isOverTime", false);
-			for(Process process : info.getProcess()) {
-				if(process.getOperation().equals(Constants.PROCESS_REQUEST)) {
-					map.put("requester", process.getTime());
-				}
-				
-				if(slgiMap.containsKey(code) && process.getOperation().equals(Constants.PROCESS_RECEIVE)) {
-					long exceptTime = slgiMap.get(code) * 60 * 1000;
-					long df = new Date().getTime() - process.getTime().getTime();
-					if (info.getAuditStatus()<5 && df>exceptTime) {
-						map.put("isOverTime", true);
-					}
+			map.put("requester", info.getProcess().getRequester());
+			if(slgiMap.containsKey(code)) {
+				long exceptTime = slgiMap.get(code) * 60 * 1000;
+				long df = new Date().getTime() - info.getProcess().getReceivetime().getTime();
+				if (info.getAuditStatus()<5 && df>exceptTime) {
+					map.put("isOverTime", true);
 				}
 			}
 			map.put("type",

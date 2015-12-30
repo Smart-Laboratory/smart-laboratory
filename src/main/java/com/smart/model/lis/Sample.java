@@ -78,7 +78,7 @@ public class Sample extends BaseObject {
 	private CriticalRecord criticalRecord;
 	private Section section;
 	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
-	private Set<Process> process = new HashSet<Process>(); //检验项目的结果集
+	private Process process = new Process(); //检验项目的结果集
 
 	
 	@Id
@@ -520,12 +520,12 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
-	public Set<Process> getProcess() {
+	@OneToOne(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
+	public Process getProcess() {
 		return process;
 	}
 	
-	public void setProcess(Set<Process> process) {
+	public void setProcess(Process process) {
 		this.process = process;
 	}
 	

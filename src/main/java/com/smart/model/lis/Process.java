@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -29,10 +29,23 @@ public class Process extends BaseObject {
 	private static final long serialVersionUID = -1430918242317268010L;
 	
 	private long id;
-	private Date time;
-	private String operation;
-	private String operator;
-	private String note;
+
+	private String requester;
+	private Date requesttime;
+	private String executor;
+	private Date executetime;
+	private String sender;
+	
+	
+	private Date sendtime;
+	private String receiver;
+	private Date receivetime;
+	private String ksreceiver;
+	private Date ksreceivetime;
+	private String checkoperator;
+	private Date checktime;
+	private int isprint;
+	private Date printtime;
 	
 	private Sample sample;
 
@@ -48,51 +61,143 @@ public class Process extends BaseObject {
 		this.id = id;
 	}
 
-	@Column
-	public Date getTime() {
-		return time;
-	}
-
-	public void setTime(Date time) {
-		this.time = time;
-	}
-
-	@Column
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-
-	@Column(length=20)
-	public String getOperator() {
-		return operator;
-	}
-
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
-
-	@Column
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-
-	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "sample_id",referencedColumnName="id")
 	public Sample getSample() {
 		return sample;
 	}
-
+	
 	public void setSample(Sample sample) {
 		this.sample = sample;
 	}
+
+	@Column
+	public String getRequester() {
+		return requester;
+	}
+
+	public void setRequester(String requester) {
+		this.requester = requester;
+	}
+
+	@Column
+	public Date getRequesttime() {
+		return requesttime;
+	}
+
+	public void setRequesttime(Date requesttime) {
+		this.requesttime = requesttime;
+	}
+
+	@Column
+	public String getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(String executor) {
+		this.executor = executor;
+	}
+
+	@Column
+	public Date getExecutetime() {
+		return executetime;
+	}
+
+	public void setExecutetime(Date executetime) {
+		this.executetime = executetime;
+	}
+
+	@Column
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	@Column
+	public Date getSendtime() {
+		return sendtime;
+	}
+
+	public void setSendtime(Date sendtime) {
+		this.sendtime = sendtime;
+	}
+
+	@Column
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+
+	@Column
+	public Date getReceivetime() {
+		return receivetime;
+	}
+
+	public void setReceivetime(Date receivetime) {
+		this.receivetime = receivetime;
+	}
+
+	@Column
+	public String getKsreceiver() {
+		return ksreceiver;
+	}
+
+	public void setKsreceiver(String ksreceiver) {
+		this.ksreceiver = ksreceiver;
+	}
+
+	@Column
+	public Date getKsreceivetime() {
+		return ksreceivetime;
+	}
+
+	public void setKsreceivetime(Date ksreceivetime) {
+		this.ksreceivetime = ksreceivetime;
+	}
+
+	@Column
+	public String getCheckoperator() {
+		return checkoperator;
+	}
+
+	public void setCheckoperator(String checkoperator) {
+		this.checkoperator = checkoperator;
+	}
+
+	@Column
+	public Date getChecktime() {
+		return checktime;
+	}
+
+	public void setChecktime(Date checktime) {
+		this.checktime = checktime;
+	}
+
+	@Column
+	public int getIsprint() {
+		return isprint;
+	}
+
+	public void setIsprint(int isprint) {
+		this.isprint = isprint;
+	}
+
+	@Column
+	public Date getPrinttime() {
+		return printtime;
+	}
+
+	public void setPrinttime(Date printtime) {
+		this.printtime = printtime;
+	}
+
+	
 
 	public String toString() {
 		return null;

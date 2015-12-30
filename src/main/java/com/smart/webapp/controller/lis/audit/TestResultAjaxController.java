@@ -106,30 +106,16 @@ public class TestResultAjaxController extends BaseAuditController{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date executeTime = new Date();
 		Date checkTime = new Date();
-		for(Process process : info.getProcess()){
-			String operation = process.getOperation();
-			if(operation.equals(Constants.PROCESS_REQUEST)){
-				json.put("request", process.getTime() == null ? "" : sdf.format(process.getTime()));
-			}
-			else if(operation.equals(Constants.PROCESS_EXECUTE)){
-				executeTime = process.getTime();
-				json.put("execute", process.getTime() == null ? "" : sdf.format(process.getTime()));
-			}
-			else if(operation.equals(Constants.PROCESS_SEND)){
-				json.put("send", process.getTime() == null ? "" : sdf.format(process.getTime()));
-			}
-			else if(operation.equals(Constants.PROCESS_RECEIVE)){
-				json.put("receive", process.getTime() == null ? "" : sdf.format(process.getTime()));
-			}
-			else if(operation.equals(Constants.PROCESS_KSRECEIVE)){
-				json.put("ksreceive", process.getTime() == null ? "" : sdf.format(process.getTime()));
-			}
-			else if(operation.equals(Constants.PROCESS_CKECK)){
-				checkTime = process.getTime();
-				json.put("audit", process.getTime() == null ? "" : sdf.format(process.getTime()));
-				json.put("auditor", process.getTime() == null ? "" : process.getTime());
-			}
-		}
+		Process process = info.getProcess();
+		json.put("request", process.getRequesttime() == null ? "" : sdf.format(process.getRequesttime()));
+		executeTime = process.getExecutetime();
+		json.put("execute", process.getExecutetime() == null ? "" : sdf.format(process.getExecutetime()));
+		json.put("send", process.getSendtime() == null ? "" : sdf.format(process.getSendtime()));
+		json.put("receive", process.getReceivetime() == null ? "" : sdf.format(process.getReceivetime()));
+		json.put("ksreceive", process.getKsreceivetime() == null ? "" : sdf.format(process.getKsreceivetime()));
+		checkTime = process.getChecktime();
+		json.put("audit", process.getChecktime() == null ? "" : sdf.format(process.getChecktime()));
+		json.put("auditor", process.getCheckoperator());
 		
 		Date resultTime = new Date(0);
 		for (TestResult result : info.getResults()) {

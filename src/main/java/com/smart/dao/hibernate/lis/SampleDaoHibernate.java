@@ -99,7 +99,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			System.out.println(s.getSampleNo() + " " + s.getResults().size());
 			s.getPatient();
 			s.getResults().size();
-			s.getProcess().size();
+			s.getProcess();
 		}
 		session.flush();
 		return list;
