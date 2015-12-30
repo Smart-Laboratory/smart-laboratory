@@ -130,7 +130,11 @@ public class AjaxController extends BaseAuditController{
 		String html = "";
 		Sample info = sampleManager.getBySampleNo(sample);
 		String history = ylxhManager.getRelativeTest(info.getYlxh());
-		int num = history.split(",").length;
+		String[] tests = history.split(",");
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for(String s : tests) {
+			map.put(s, 0);
+		}
 		if(history == null || history.isEmpty()) {
 			return "";
 		} else {
@@ -139,27 +143,25 @@ public class AjaxController extends BaseAuditController{
 		}
 		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), history);
 		if(hisTests.size()>0) {
-			int count = 3;
-			if(hisTests.size() < num * count) {
-				num = hisTests.size();
-			} else {
-				num = num * count;
-			}
 			if (idMap.size() == 0)
 				initMap();
 			Map<String, String> htmlMap = new HashMap<String, String>();
 			html += "<table>";
-			for(int i=0; i<num; i++) {
-				if(htmlMap.containsKey(hisTests.get(i).getSampleNo())) {
-					String s = htmlMap.get(hisTests.get(i).getSampleNo()) 
-							+ "<td>" + idMap.get(hisTests.get(i).getTestId()).getName() + "</td>"
-							+ "<td width='50px;'>" + hisTests.get(i).getTestResult() + "</td>";
-					htmlMap.put(hisTests.get(i).getSampleNo(), s);
-				} else {
-					htmlMap.put(hisTests.get(i).getSampleNo(), 
-							"<tr><td>" + hisTests.get(i).getSampleNo() + "</td>"
-							+ "<td>" + idMap.get(hisTests.get(i).getTestId()).getName() + "</td>"
-							+ "<td width='50px;'>" + hisTests.get(i).getTestResult() + "</td>");
+			for(int i=0; i<hisTests.size(); i++) {
+				TestResult tr = hisTests.get(i);
+				if(map.get(tr.getTestId()) < 3) {
+					if(htmlMap.containsKey(tr.getSampleNo())) {
+						String s = htmlMap.get(tr.getSampleNo()) 
+								+ "<td>" + idMap.get(tr.getTestId()).getName() + "</td>"
+								+ "<td width='50px;'>" + tr.getTestResult() + "</td>";
+						htmlMap.put(tr.getSampleNo(), s);
+					} else {
+						htmlMap.put(tr.getSampleNo(), 
+								"<tr><td>" + tr.getSampleNo() + "</td>"
+								+ "<td>" + idMap.get(tr.getTestId()).getName() + "</td>"
+								+ "<td width='50px;'>" + tr.getTestResult() + "</td>");
+					}
+					map.put(tr.getTestId(), map.get(tr.getTestId()) + 1);
 				}
 			}
 			for(String s : htmlMap.keySet()) {

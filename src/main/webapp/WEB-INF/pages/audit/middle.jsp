@@ -82,20 +82,18 @@
 	</div>
 	</div>
 	
-	<div class="col-sm-11" >
-	<div id="patientRow" style="margin-top:10px;">
+	<div class="col-sm-12">
+	<div id="patientRow" style="margin-top:5px;">
 		<table id="rowed3" style="font-size: 14px;"></table>
 	</div>
-	<div class="col-sm-12">
 	
-	<div id="twosampleTable" >
+	<div id="twosampleTable" style="margin-top:5px;">
 		<div class="col-sm-6">
 			<table id="sample0" style="font-size: 14px;"></table>
 		</div>
 		<div class="col-sm-6">
 			<table id="sample1" style="font-size: 14px;"></table>
 		</div>	
-	</div>
 	</div>
 	<div style="font-size: 13px; display:none;margin-top: 10px;">
 		<input type="hidden" id="hiddenDocId"/>
