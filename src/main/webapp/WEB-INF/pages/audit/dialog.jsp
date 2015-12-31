@@ -170,8 +170,8 @@
 	    <%-- <h5><fmt:message key='image.name'/></h5>
 		<input id="image_name" type="text" class="span4"/> --%>
 		<div>
-		    <button class="btn" onclick="createInput();"><fmt:message key='add.point'/></button>
-		    <button class="btn" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
+		    <button class="btn btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
+		    <button class="btn btn-success" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
 			<div id="more"></div>
 		</div>
 		<h5><fmt:message key='template.select'/></h5>

@@ -465,6 +465,37 @@ function getAuditHistory() {
 	
 }
 
+function createInput(){
+    count++;
+    var str = '<div name="div" ><font style="font-size:12px;"></font>'+
+    '   '+ '<input type="file" contentEditable="false" id="uploads' + count + '' +
+    '" name="uploads'+ count +'" style="margin-top:5px;width:230px"/><button onclick="removeInput(event,\'more\')">'+'<fmt:message key="button.delete"/></button></div>';
+    //document.getElementById(parentId).insertAdjacentHTML("beforeEnd",str);
+    $("#more").append(str);
+}
+
+function ajaxFileUpload(){
+    var uplist = $("input[name^=uploads]");
+	var arrId = [];
+	for (var i=0; i< uplist.length; i++){
+	    if(uplist[i].value){
+	    	arrId[i] = uplist[i].id;
+		}
+    }
+	$.ajaxFileUpload({
+		url:'../audit/ajax/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
+		secureuri:false,
+		fileElementId: arrId,  
+		success: function (){
+			alert("<fmt:message key='display.title'/>");
+			$("#uploadDialog").dialog("close");
+			jQuery("#s3list").trigger("reloadGrid");
+		},
+		error: function(){
+			alert("error");
+		}
+	});
+}
 
 
 

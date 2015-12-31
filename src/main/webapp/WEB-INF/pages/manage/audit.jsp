@@ -36,7 +36,7 @@
 
 <input type="hidden" id="lab" value="${lab}">
 <input type="hidden" id="sampletext" value="${today}">
-<input id="strTody" type="hidden" value="${strToday}" />
+<input id="strTody" type="hidden" value="${today}" />
 
 <%@ include file="../audit/top.jsp" %>
 <div class="col-sm-12">
@@ -47,7 +47,7 @@
 <%@ include file="../audit/dialog.jsp" %>
 
 
-<div id="footer" class="container navbar-fixed-bottom">
+<div id="footer2" class="">
         <span class="col-sm-6 text-left">
         	<fmt:message key="project.name"/> | 
         	<fmt:message key="webapp.version"/>
