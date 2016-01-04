@@ -29,4 +29,8 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
 	public List<Out> getLastHMs(String testid, Date measuretime) {
 		return outDao.getLastHMs(testid, measuretime);
 	}
+
+	public List<Out> getByLab(String lab) {
+		return outDao.getByLab(lab);
+	}
 }

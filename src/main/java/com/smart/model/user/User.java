@@ -408,16 +408,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.hospital = hospital;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="section_id",referencedColumnName="id")
-	public Section getSection() {
-		return section;
-	}
-
-	public void setSection(Section section) {
-		this.section = section;
-	}
-
 	/**
      * {@inheritDoc}
      */

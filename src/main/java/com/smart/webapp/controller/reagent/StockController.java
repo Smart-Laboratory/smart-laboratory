@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,23 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
-import com.smart.model.lis.Section;
 import com.smart.model.reagent.Batch;
 import com.smart.model.reagent.Reagent;
-import com.smart.service.UserManager;
-import com.smart.service.reagent.ReagentManager;
 import com.smart.webapp.util.DataResponse;
 
 
 @Controller
 @RequestMapping("/reagent*")
-public class StockController {
-	
-	@Autowired
-	private ReagentManager reagentManager = null;
-	
-	@Autowired
-	private UserManager userManager = null;
+public class StockController extends ReagentBaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="/stock*")
     public ModelAndView handleRequest() throws Exception {
@@ -44,7 +33,11 @@ public class StockController {
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
 			Reagent reagent = new Reagent();
-			reagent.setSection(userManager.getUserByUsername(request.getRemoteUser()).getSection());
+			if(labMap.size() == 0) {
+				initLabMap();
+			}
+			String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+			reagent.setLab(labName);
 			reagent.setName(request.getParameter("name"));
 			reagent.setSpecification(request.getParameter("specification"));
 			reagent.setPlaceoforigin(request.getParameter("place"));
@@ -83,8 +76,11 @@ public class StockController {
 	@RequestMapping(value = "/getReagent*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
-		Set<Reagent> set = section.getReagents();
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		List<Reagent> set = reagentManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);

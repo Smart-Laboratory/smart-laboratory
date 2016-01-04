@@ -9,4 +9,6 @@ public interface ComboDao extends GenericDao<Combo, Long> {
 
 	List<Combo> getCombos(String name);
 
+	List<Combo> getByLab(String lab);
+
 }

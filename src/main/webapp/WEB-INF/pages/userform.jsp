@@ -121,6 +121,22 @@
                 </div>
             </div>
         </div>
+        <div>
+            <legend class="accordion-heading">
+                <a data-toggle="collapse" href="#collapse-labset"><fmt:message key="user.lab.set"/></a>
+            </legend>
+            <div id="collapse-labset" class="accordion-body collapse">
+                <div class="form-group">
+                    <appfuse:label styleClass="control-label" key="user.lab.set"/>
+                    <form:input cssClass="form-control" path="department" id="department"/>
+                </div>
+                <div class="form-group">
+                    <appfuse:label styleClass="control-label" key="lab.code"/>
+                    <form:input cssClass="form-control" path="labCode" id="labCode"/>
+                </div>
+            </div>
+        </div>
+        
 <c:choose>
     <c:when test="${param.from == 'list' or param.method == 'Add'}">
         <div class="form-group">

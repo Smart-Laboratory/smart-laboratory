@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -41,5 +42,10 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 			}
 		}
 		return out;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Out> getByLab(String lab) {
+		return getSession().createCriteria(Out.class).add(Restrictions.eq("lab", lab)).list();
 	}
 }

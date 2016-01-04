@@ -141,7 +141,7 @@ public class AjaxController extends BaseAuditController{
 			history = history.substring(0, history.length()-1);
 			history = "('" + history.replaceAll(",", "','") + "')";
 		}
-		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), history);
+		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), info.getPatient().getBlh(), history);
 		if(hisTests.size()>0) {
 			if (idMap.size() == 0)
 				initMap();

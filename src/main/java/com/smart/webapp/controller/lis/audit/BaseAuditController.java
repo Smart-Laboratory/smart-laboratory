@@ -153,6 +153,9 @@ public class BaseAuditController {
 		if (!info.getSampleNo().equals(pinfo.getSampleNo())) {
 			String ylxh = info.getYlxh();
 			String ylxh2 = pinfo.getYlxh();
+			if(ylxh == null || ylxh2 == null) {
+				return false;
+			}
 			if (!StringUtils.isEmpty(ylxh) && !StringUtils.isEmpty(ylxh2)) {
 				if (ylxh.equals(ylxh2)) {
 					return true;

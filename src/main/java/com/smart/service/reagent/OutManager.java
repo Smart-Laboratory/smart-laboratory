@@ -11,4 +11,6 @@ public interface OutManager extends GenericManager<Out, Long> {
 	void saveAll(List<Out> needSaveOut);
 	
 	List<Out> getLastHMs(String testid, Date measuretime);
+
+	List<Out> getByLab(String lab);
 }

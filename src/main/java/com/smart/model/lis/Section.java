@@ -1,26 +1,16 @@
 package com.smart.model.lis;
 
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
-import com.smart.model.reagent.Combo;
-import com.smart.model.reagent.In;
-import com.smart.model.reagent.Out;
-import com.smart.model.reagent.Reagent;
 
 /**
  * 科室内部 部门分类
@@ -39,10 +29,6 @@ public class Section extends BaseObject {
 	private String name;
 	
 	private Hospital hospital;
-	private Set<Reagent> reagents;
-	private Set<In> ins;
-	private Set<Out> outs;
-	private Set<Combo> combos;
 	
 	/**
 	 * 主键、自增
@@ -93,46 +79,6 @@ public class Section extends BaseObject {
 		this.hospital = hospital;
 	}
 	
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Reagent.class, mappedBy = "section")
-	@OrderBy("id asc")
-	public Set<Reagent> getReagents() {
-		return reagents;
-	}
-
-	public void setReagents(Set<Reagent> reagents) {
-		this.reagents = reagents;
-	}
-
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = In.class, mappedBy = "section")
-	@OrderBy("id desc")
-	public Set<In> getIns() {
-		return ins;
-	}
-
-	public void setIns(Set<In> ins) {
-		this.ins = ins;
-	}
-
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Out.class, mappedBy = "section")
-	@OrderBy("id desc")
-	public Set<Out> getOuts() {
-		return outs;
-	}
-
-	public void setOuts(Set<Out> outs) {
-		this.outs = outs;
-	}
-
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Combo.class, mappedBy = "section")
-	@OrderBy("id asc")
-	public Set<Combo> getCombos() {
-		return combos;
-	}
-
-	public void setCombos(Set<Combo> combos) {
-		this.combos = combos;
-	}
-
 	public String toString() {
 		return null;
 	}

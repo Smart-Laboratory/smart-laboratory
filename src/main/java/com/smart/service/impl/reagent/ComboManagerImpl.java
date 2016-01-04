@@ -24,4 +24,8 @@ public class ComboManagerImpl extends GenericManagerImpl<Combo, Long> implements
 	public List<Combo> getCombos(String name) {
 		return comboDao.getCombos(name);
 	}
+
+	public List<Combo> getByLab(String lab) {
+		return comboDao.getByLab(lab);
+	}
 }
