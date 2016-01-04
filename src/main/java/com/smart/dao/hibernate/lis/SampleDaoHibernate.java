@@ -207,7 +207,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		
 		if (!date.equals("________")) {
-			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.iswriteback!=0").uniqueResult()).intValue(); 
+			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.writeback!=0").uniqueResult()).intValue(); 
 			list.add(needwriteBack);
 		}
 		

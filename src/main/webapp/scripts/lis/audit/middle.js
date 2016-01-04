@@ -1192,7 +1192,7 @@
 	function show_knowledge(item) {
  		jQuery.ajax({
 	  		type:'GET',
-			url: encodeURI('item.jsp?page='+item),
+			url: encodeURI('/item.jsp?page='+item),
 	  		dataType: 'html',
 	  		success: function(data) {
 				var data2=dataProcess(data);
