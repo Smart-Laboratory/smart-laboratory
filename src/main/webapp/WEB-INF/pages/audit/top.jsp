@@ -1,7 +1,7 @@
 <script type="text/javascript" src="../scripts/lis/audit/top.js"></script>
 
 <div class="col-sm-12">
-<div class="alert alert-success" style="margin-bottom:5px;padding:5px;">
+<div class="alert alert-success" style="margin-bottom:5px;padding:0px 5px;">
 	<div class="form-inline">
 		<div class="form-group" style="margin-right:30px;">
 			<b><fmt:message key="info.today.unaudit" /> : </b><a id="t_info_unaudit"><span id="today_info_unaudit"><c:out

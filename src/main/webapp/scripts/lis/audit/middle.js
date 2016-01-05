@@ -18,10 +18,8 @@
 				array[i] = data[i];
 			}
 		});
-		if(array[0].rows==""){
-			jQuery("#sample0").jqGrid("clearGridData");
-			jQuery("#sample1").jqGrid("clearGridData");
-		}
+		jQuery("#sample0").jqGrid("clearGridData");
+		jQuery("#sample1").jqGrid("clearGridData");
 			
 		jQuery("#sample0").jqGrid("setGridParam",{
 			data:array[0].rows,
@@ -606,7 +604,6 @@
 						$("#jqgh_rowed3_last4").css('color','#CFCFCF');
 					}
 				}
-				//alert($("#rowed3").jqGrid("getCaption"));
 				$.each(jQuery('#rowed3').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#rowed3").jqGrid('getRowData',v);
         			if (ret.last != null && ret.last != "")
@@ -709,8 +706,6 @@
 	        				}
         				}
         			}
-//        			alert(ret.result);
-//        			alert(ret.last);
 					if (ret.editMark != 0 && ret.editMark % 33 == 0) {
         				jQuery("#rowed3").jqGrid('setRowData', v, {
         					result:color+"<span class='result_span'>"+ret.result+"</span>"+res+"</div>",
@@ -730,9 +725,6 @@
         					last4:"<span class='last_span'>" + ret.last4 + "</span>"+res5
 						});
 					}
-//					alert(res);
-//    				alert(ret.result);
-//    				alert(ret.last);
 					
 					$('#' + v).find("td:eq(5)").attr("title",ret.lastEdit);
 					if(ret.lastEdit.indexOf(" ") > 0) {
@@ -760,9 +752,12 @@
 		});
 		getSample0(sampleNo, array[0].userdata, array[0].rows);
 		getSample1(sampleNo, array[0].userdata, array[1].rows);
+		
+		
 	}
 	
 	function getSample0(sampleNo, userdata, mydata) {
+		
 
         var lastsel;
         var cl = "";
@@ -1076,6 +1071,7 @@
 				}
 				$.each(jQuery('#sample1').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#sample1").jqGrid('getRowData',v);
+        			
         			if (ret.last != null && ret.last != "")
         				$("#hisLastResult").val(1);
         			else

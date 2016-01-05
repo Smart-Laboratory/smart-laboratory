@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
-    <title><fmt:message key="sample.manage.audit"/></title>
+    <title><fmt:message key="sample.manage.collect"/></title>
         
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
@@ -31,10 +31,10 @@
 .ui-tabs-anchor {
 	padding: 0 10px;
 }
-.ui-jqgrid .ui-jqgrid-titlebar {height:30px;}
 </style>
 </head>
 
+<script type="text/javascript" src="../scripts/manage/collect.js"></script>
 
 <body>
 
@@ -42,13 +42,13 @@
 <input type="hidden" id="sampletext" value="${today}">
 <input id="strTody" type="hidden" value="${today}" />
 
-<%@ include file="../audit/top.jsp" %>
+<%@ include file="../collect/top.jsp" %>
 <div class="col-sm-12">
-	<%@ include file="../audit/left.jsp" %>
-	<%@ include file="../audit/middle.jsp" %>
-	<%@ include file="../audit/right.jsp" %>
+	<%@ include file="../collect/left.jsp" %>
+	<%@ include file="../collect/middle.jsp" %>
+	<%@ include file="../collect/right.jsp" %>
 </div>
-<%@ include file="../audit/dialog.jsp" %>
+<%@ include file="../collect/dialog.jsp" %>
 
 
 <div id="footer2" class="">

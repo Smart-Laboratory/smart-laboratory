@@ -61,7 +61,7 @@ public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample
 	public List<String> getAllCollectType() {
 		JdbcTemplate jdbcTemplate =
                 new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
-        String sql = "select distinct type from collect";
+        String sql = "select distinct type from l_collectsample";
         return jdbcTemplate.queryForList(sql, String.class);
 	}
 
