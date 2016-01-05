@@ -289,88 +289,7 @@ $(function(){
 		getProValue();
 	});
 	
-	function getProValue() {
-    	$.get("../task/ajax/audit",{},function(data){
-
-    		var ids = {
-     			put : function(key,value){this[key] = value},
-     			get : function(key){return this[key]},
-     			contains : function(key){return this[key] == null?false:true},
-     			remove : function(key){delete this[key]}
-     		}
-    		
-    		$("#auditDialog div.proId").each(function(index,self) {
-    			ids.put($(self).html(),$(self).html())
-    		});
-    		
-    		var map = {
-   				put : function(key,value){this[key] = value},
-   				get : function(key){return this[key]},
-   				contains : function(key){return this[key] == null?false:true},
-   				remove : function(key){delete this[key]}
-   			}
-    		var array = jQuery.parseJSON(data);
-    		for (var i=0 ; i < array.length ; i++) {
-    			map.put(array[i].id,i);
-    			if (!ids.contains(array[i].id)) {
-    				var text = array[i].text;
-    				/* if (text.length > 11) {
-    					text=text.slice(0,11)+"...";
-    				} */
-    				var content = "<div><table style='margin:0px;'><tr><td><div class='proRatio'></div></td><td><div class='proId'>"
-    				+ array[i].id
-    				+ "</div></td><td><div style='width:320px;'><div class='proStart'>"
-    				+ "</div><div class='proEnd'></div></div></td><td></td></tr><tr><td style='width:150px;display:block;'><span>"
-    				+ text
-    				+ "</span></td><td>"
-    				+ "<div class='proStatus'></div><input class='hiddenValue' type='hidden' value='100' ></td><td><div class='proValue'>"
-    				+ "</div></td><td><input type='button' class='stopAudit btn' value='\u505c\u6b62'/></td></tr>"
-    				+ "</table><div style='border-top: 1px solid #E1E1E1;margin-bottom:10px;'></div></div>";
-    				//$("#auditDialog").prepend(content);
-    				$(content).insertAfter($("#searchPanel"));
-    			}
-    		}
-    		
-   			$("#auditDialog table").each(function(index,self) {
-       			var id = $(self).find("div.proId").html();
-       			var da = array[map.get(id)];
-       			if (da == null) return true; //continue;
-       			$(self).find("div.proStart").html(da.start);
-       			$(self).find("div.proEnd").html(da.end);
-       			$(self).find("div.proRatio").html(da.ratio);
-       			$(self).find("div.proValue").progressbar({value:da.value});
-       			if (da.status == "1") {
-       				$(self).find("div.proStatus").html("<img src='../images/status.run.png' class='status_icon'/>");
-       				$(self).find(".stopAudit").removeAttr("disabled");
-       				$(self).find(".stopAudit").click(function(){
-       					$.get("../task/ajax/cancel",{id : id}, function() {});
-       				});
-        		} else if (da.status =="2") {
-        			var value = $(self).find("input.hiddenValue").val();
-        			$(self).find("div.proStatus").html("<img src='../images/status.finished.png' class='status_icon'/>");
-        			$(self).find(".stopAudit").attr('disabled',"true");
-        			if (value != 100 && da.value != 0) {
-        				jQuery("#s3list").trigger("reloadGrid");
-        			}
-        		} else if (da.status == "3") {
-        			$(self).find("div.proStatus").html("<img src='../images/status.cancel.png' class='status_icon'/>");
-        			$(self).find(".stopAudit").attr('disabled',"true");
-        		} else if (da.status == "0") {
-        			$(self).find("div.proStatus").html("<img src='../images/status.wait.gif' style='width:20px;height:20px;margin-left:1px;' class='status_icon'/>");
-        			$(self).find(".stopAudit").removeAttr("disabled");
-       				$(self).find(".stopAudit").click(function(){
-       					$.get("../task/ajax/cancel",{id : id}, function() {});
-       				});
-        		}
-       			$(self).find("input.hiddenValue").val(da.value);
-       		});
-   			
-   			if ($("#isContinued").html() == "1") {
-   				//getProValue(1000);
-   				setTimeout(getProValue,1000);
-   			}
-    	});
-    }
+	
 	
 	
 	
@@ -469,3 +388,99 @@ $(function(){
  	}, 15000);
  	
 });
+
+function getProValue() {
+	$.get("../task/ajax/audit",{},function(data){
+
+		var ids = {
+ 			put : function(key,value){this[key] = value},
+ 			get : function(key){return this[key]},
+ 			contains : function(key){return this[key] == null?false:true},
+ 			remove : function(key){delete this[key]}
+ 		}
+		
+		$("#auditDialog div.proId").each(function(index,self) {
+			ids.put($(self).html(),$(self).html())
+		});
+		
+		var map = {
+				put : function(key,value){this[key] = value},
+				get : function(key){return this[key]},
+				contains : function(key){return this[key] == null?false:true},
+				remove : function(key){delete this[key]}
+			}
+		var array = jQuery.parseJSON(data);
+		for (var i=0 ; i < array.length ; i++) {
+			map.put(array[i].id,i);
+			if (!ids.contains(array[i].id)) {
+				var text = array[i].text;
+				/* if (text.length > 11) {
+					text=text.slice(0,11)+"...";
+				} */
+				var content = "<div><table style='margin:0px;'><tr><td><div class='proRatio'></div></td><td><div class='proId'>"
+				+ array[i].id
+				+ "</div></td><td><div style='width:320px;'><div class='proStart'>"
+				+ "</div><div class='proEnd'></div></div></td><td></td></tr><tr><td style='width:150px;display:block;'><span>"
+				+ text
+				+ "</span></td><td>"
+				+ "<div class='proStatus'></div><input class='hiddenValue' type='hidden' value='100' ></td><td><div class='proValue'>"
+				+ "</div></td><td><input type='button' class='stopAudit btn' value='\u505c\u6b62'/></td></tr>"
+				+ "</table><div style='border-top: 1px solid #E1E1E1;margin-bottom:10px;'></div></div>";
+				//$("#auditDialog").prepend(content);
+				$(content).insertAfter($("#searchPanel"));
+			}
+		}
+		
+			$("#auditDialog table").each(function(index,self) {
+   			var id = $(self).find("div.proId").html();
+   			var da = array[map.get(id)];
+   			if (da == null) return true; //continue;
+   			$(self).find("div.proStart").html(da.start);
+   			$(self).find("div.proEnd").html(da.end);
+   			$(self).find("div.proRatio").html(da.ratio);
+   			$(self).find("div.proValue").progressbar({value:da.value});
+   			if (da.status == "1") {
+   				$(self).find("div.proStatus").html("<img src='../images/status.run.png' class='status_icon'/>");
+   				$(self).find(".stopAudit").removeAttr("disabled");
+   				$(self).find(".stopAudit").click(function(){
+   					$.get("../task/ajax/cancel",{id : id}, function() {});
+   				});
+    		} else if (da.status =="2") {
+    			var value = $(self).find("input.hiddenValue").val();
+    			$(self).find("div.proStatus").html("<img src='../images/status.finished.png' class='status_icon'/>");
+    			$(self).find(".stopAudit").attr('disabled',"true");
+    			if (value != 100 && da.value != 0) {
+    				jQuery("#s3list").trigger("reloadGrid");
+    			}
+    		} else if (da.status == "3") {
+    			$(self).find("div.proStatus").html("<img src='../images/status.cancel.png' class='status_icon'/>");
+    			$(self).find(".stopAudit").attr('disabled',"true");
+    		} else if (da.status == "0") {
+    			$(self).find("div.proStatus").html("<img src='../images/status.wait.gif' style='width:20px;height:20px;margin-left:1px;' class='status_icon'/>");
+    			$(self).find(".stopAudit").removeAttr("disabled");
+   				$(self).find(".stopAudit").click(function(){
+   					$.get("../task/ajax/cancel",{id : id}, function() {});
+   				});
+    		}
+   			$(self).find("input.hiddenValue").val(da.value);
+   		});
+			
+			if ($("#isContinued").html() == "1") {
+				//getProValue(1000);
+				setTimeout(getProValue,1000);
+			}
+	});
+}
+
+function getImages(sampleno){
+	$("#showGalleria").html("");
+	$.get("../audit/ajax/getImage",{sampleno:sampleno}, function(data) {
+		data = jQuery.parseJSON(data);
+		$('#showGalleria').css('height','600px');//#galleria{height:320px}
+		Galleria.loadTheme('../../scripts/galleria.classic.min.js');
+	    Galleria.run('#showGalleria', {
+	        dataSource: data.html,
+	        keepSource: false
+		});
+	});
+}

@@ -458,18 +458,19 @@ function getAuditHistory() {
 		isFirstTrace=false;
 	}else{
 		jQuery("#audit_trace_information").jqGrid("setGridParam",{
-			url:"。。/audit/trace?sample="+sample
+			url:"../audit/trace?sample="+sample
 		}).trigger("reloadGrid"); 
 	} 
 	$("#auditTraceDialog").dialog("open");
 	
 }
 
+var count=0;
 function createInput(){
     count++;
-    var str = '<div name="div" ><font style="font-size:12px;"></font>'+
+    var str = '<div class="form-group" >'+
     '   '+ '<input type="file" contentEditable="false" id="uploads' + count + '' +
-    '" name="uploads'+ count +'" style="margin-top:5px;width:230px"/><button onclick="removeInput(event,\'more\')">'+'<fmt:message key="button.delete"/></button></div>';
+    '" name="uploads'+ count +'" style="margin-top:5px;width:230px"/></div><div class="form-group" ><button onclick="removeInput(event,\'more\')">'+'删除</button></div>';
     //document.getElementById(parentId).insertAdjacentHTML("beforeEnd",str);
     $("#more").append(str);
 }
@@ -487,9 +488,9 @@ function ajaxFileUpload(){
 		secureuri:false,
 		fileElementId: arrId,  
 		success: function (){
-			alert("<fmt:message key='display.title'/>");
+			alert("上传成功");
 			$("#uploadDialog").dialog("close");
-			jQuery("#s3list").trigger("reloadGrid");
+			jQuery("#list").trigger("reloadGrid");
 		},
 		error: function(){
 			alert("error");
@@ -497,7 +498,15 @@ function ajaxFileUpload(){
 	});
 }
 
-
+function removeInput(evt, parentId){
+	   var el = evt.target == null ? evt.srcElement : evt.target;
+	   var div = el.parentNode.parentNode;
+	   var cont = document.getElementById(parentId);       
+	   if(cont.removeChild(div) == null){
+	    return false;
+	   }
+	   return true;
+}
 
 
 

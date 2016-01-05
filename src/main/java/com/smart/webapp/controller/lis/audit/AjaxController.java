@@ -1,10 +1,15 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +26,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
@@ -35,6 +42,8 @@ public class AjaxController extends BaseAuditController{
 	
 	@Autowired
 	private OutManager outManager;
+	private final static String imageUrl_bak = "/home/images/upload/";
+	private final static String imageUrl = "/lab/images/upload/";
 	
 	@RequestMapping(value = "/singleChart*", method = RequestMethod.GET)
 	@ResponseBody
@@ -175,5 +184,118 @@ public class AjaxController extends BaseAuditController{
 		response.getWriter().print(obj.toString());
 		return null;
 	}
+	/**
+	 * 文件上传
+	 * 
+	 * @param multipartRequest
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(method=RequestMethod.POST, value="/uploadFile")
+	@ResponseBody
+	public void uploadImg(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
+        String sampleno = multipartRequest.getParameter("sampleno");
+        String imgDescription = multipartRequest.getParameter("imgnote");
+        String uploadFileUrl = imageUrl + sampleno;
+        String uploadFileUrl_bak = imageUrl_bak + sampleno;
+        int count = 0;
+        
+        File dir = new File(uploadFileUrl);
+		dir.setWritable(true,false);
+		if (!dir.exists()) {
+			dir.mkdirs();
+			System.out.println("创建目录1");
+		} else {
+			count = dir.listFiles().length;
+		}
+		//获取多个file
+		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
+			String key = (String) it.next();
+			MultipartFile imgFile = multipartRequest.getFile(key);
+			if (imgFile.getOriginalFilename().length() > 0) {
+				String fileName = imgFile.getOriginalFilename();
+				String newFileName = (count + 1) + fileName.substring(fileName.lastIndexOf("."), fileName.length());
+				try {
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, newFileName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				count++;
+			}
+		}
+		
+		File dir_bak = new File(uploadFileUrl_bak);
+		dir_bak.setWritable(true,false);
+		if (!dir.exists()) {
+			dir.mkdirs();
+			System.out.println("创建目录2");
+		} else {
+			System.out.println("目录存在2");
+			count = dir.listFiles().length;
+		}
+		//获取多个file
+		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
+			String key = (String) it.next();
+			MultipartFile imgFile = multipartRequest.getFile(key);
+			if (imgFile.getOriginalFilename().length() > 0) {
+				String fileName = imgFile.getOriginalFilename();
+				String newFileName = (count + 1) + fileName.substring(fileName.lastIndexOf("."), fileName.length());
+				try {
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl_bak, newFileName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				count++;
+			}
+		}
+		
+		Sample info = sampleManager.getBySampleNo(sampleno);
+		info.setNote(info.getNote()+imgDescription);
+		info.setHasimages(1);
+		sampleManager.save(info);
+	}
 
+    //保存文件
+	private File saveFileFromInputStream(InputStream stream, String path, String filename) throws IOException {
+		File file = new File(path + "/" + filename);
+		FileOutputStream fs = new FileOutputStream(file);
+		byte[] buffer = new byte[1024 * 1024];
+		int byteread = 0;
+		while ((byteread = stream.read(buffer)) != -1) {
+			fs.write(buffer, 0, byteread);
+			fs.flush();
+		}
+		fs.close();
+		stream.close();
+		return file;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/getImage")
+	@ResponseBody
+	public void getImages(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject obj = new JSONObject();
+		String html = "";
+        String sampleno = request.getParameter("sampleno");
+        Sample info = sampleManager.getBySampleNo(sampleno);
+        String uploadFileUrl = imageUrl + sampleno;
+        String imgUrl = "/lab/images/upload/" + sampleno + "/";
+        //String imgUrl = "/images/upload/" + sampleno + "/";
+		File dir = new File(uploadFileUrl);
+		if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (File f : files) {
+				if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+					html += "<a href='" + imgUrl + f.getName() + "'><img src='" + imgUrl + f.getName() 
+							+ "' data-title='" + sampleno + "' data-description='" + info.getNote() + "'></a>";
+				}
+			}
+			/*if (files.length >= 1) {
+				html = "<div id='galleria_" + sampleno +"'>" + html + "</div>";
+			}*/
+			obj.put("html", html);
+		}
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(obj.toString());
+	}
 }

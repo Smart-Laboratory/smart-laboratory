@@ -358,7 +358,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			sql += " and s.auditMark=" + mark;
 		}
 		sql += " order by s.sampleNo";
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q =  getSession().createQuery(sql);
 		return new Integer(q.uniqueResult() + "");
 	}
