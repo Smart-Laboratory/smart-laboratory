@@ -9,8 +9,6 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.TestResultDao;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
-import com.smart.model.lis.Sample;
-import com.smart.model.rule.Index;
 
 @Repository("testResultDao")
 public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, TestResultPK> implements TestResultDao {
@@ -28,7 +26,6 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 		}
 		String sql = "update l_testresult set testresult=concat(round(" + formula + ", 2),'') where testid='" + t.getTestId()
 				+ "' and sampleno='" + t.getSampleNo() + "'";
-		System.out.println(sql);
 		getSession().createSQLQuery(sql).executeUpdate();
 	}
 
@@ -72,8 +69,11 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TestResult> getRelative(String patientId, String history) {
-		return null;
+	public List<TestResult> getRelative(String patientId, String blh, String history) {
+		String hql = "select t from Sample s, TestResult t where s.patientId='" + patientId
+				+ "' or s.patientId='" + blh + "' and t.sampleNo=p.sampleNo and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
+		Query q = getSession().createQuery(hql);
+		return q.list();
 	}
 	
 }

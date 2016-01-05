@@ -20,5 +20,5 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 	List<TestResult> getSingleHistory(String testid, String patientName,
 			String patientid);
 
-	List<TestResult> getRelative(String patientId, String history);
+	List<TestResult> getRelative(String patientId, String blh, String history);
 }

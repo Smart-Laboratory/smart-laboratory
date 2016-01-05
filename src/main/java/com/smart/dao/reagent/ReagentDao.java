@@ -7,9 +7,11 @@ import com.smart.model.reagent.Reagent;
 
 public interface ReagentDao extends GenericDao<Reagent, Long> {
 
-	List<Reagent> getReagents(String name, long sectionid);
+	List<Reagent> getReagents(String name, String lab);
 
 	Reagent getByname(String name);
 
 	List<Reagent> getByIds(String ids);
+
+	List<Reagent> getByLab(String lab);
 }

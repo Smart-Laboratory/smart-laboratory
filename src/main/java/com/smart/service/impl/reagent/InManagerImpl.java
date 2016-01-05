@@ -29,4 +29,8 @@ public class InManagerImpl extends GenericManagerImpl<In, Long> implements InMan
 	public List<In> getByInDate(Date indate) {
 		return inDao.getByInDate(indate);
 	}
+
+	public List<In> getByLab(String lab) {
+		return inDao.getByLab(lab);
+	}
 }

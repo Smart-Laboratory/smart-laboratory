@@ -12,12 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
-import com.smart.model.lis.Section;
-
 
 /**
  * 卫生材料入库
@@ -41,7 +38,7 @@ public class In extends BaseObject implements Serializable {
 	private int num;
 	
 	private Reagent reagent;
-	private Section section;
+	private String lab;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -128,14 +125,13 @@ public class In extends BaseObject implements Serializable {
 		this.reagent = reagent;
 	}
 	
-	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "section_id")
-	public Section getSection() {
-		return section;
+	@Column
+	public String getLab() {
+		return lab;
 	}
 
-	public void setSection(Section section) {
-		this.section = section;
+	public void setLab(String lab) {
+		this.lab = lab;
 	}
 
 	public String toString() {

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,14 +18,11 @@ import com.smart.Constants;
 import com.smart.model.reagent.In;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
-import com.smart.service.UserManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/reagent/detail*")
-public class DetailController {
-	@Autowired
-	private UserManager userManager = null;
+public class DetailController extends ReagentBaseController {
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest() throws Exception {
@@ -37,28 +32,32 @@ public class DetailController {
 	@RequestMapping(value = "/getIn*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Set<In> set = userManager.getUserByUsername(request.getRemoteUser()).getSection().getIns();
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		List<In> list = inManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(set.size());
-		int x = set.size() % (row == 0 ? set.size() : row);
+		dataResponse.setRecords(list.size());
+		int x = list.size() % (row == 0 ? list.size() : row);
 		if (x != 0) {
 			x = row - x;
 		}
-		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		int totalPage = (list.size() + x) / (row == 0 ? list.size() : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int end = row * page;
-		if(end > set.size()) {
-			end = set.size();
+		if(end > list.size()) {
+			end = list.size();
 		}
 		int index = 0;
-		for(In i : set) {
+		for(In i : list) {
 			if(index >= start && index < end) {
 				Reagent r = i.getReagent();
 				Map<String, Object> map = new HashMap<String, Object>();
@@ -83,28 +82,32 @@ public class DetailController {
 	@RequestMapping(value = "/getOut*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Set<Out> set = userManager.getUserByUsername(request.getRemoteUser()).getSection().getOuts();
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		List<Out> list = outManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(set.size());
-		int x = set.size() % (row == 0 ? set.size() : row);
+		dataResponse.setRecords(list.size());
+		int x = list.size() % (row == 0 ? list.size() : row);
 		if (x != 0) {
 			x = row - x;
 		}
-		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		int totalPage = (list.size() + x) / (row == 0 ? list.size() : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int end = row * page;
-		if(end > set.size()) {
-			end = set.size();
+		if(end > list.size()) {
+			end = list.size();
 		}
 		int index = 0;
-		for(Out o: set) {
+		for(Out o: list) {
 			if(index >= start && index < end) {
 				Reagent r = o.getReagent();
 				Map<String, Object> map = new HashMap<String, Object>();

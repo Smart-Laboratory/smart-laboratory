@@ -9,4 +9,6 @@ public interface ComboManager extends GenericManager<Combo, Long> {
 
 	List<Combo> getCombos(String name);
 
+	List<Combo> getByLab(String lab);
+
 }

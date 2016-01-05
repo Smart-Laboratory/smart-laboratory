@@ -1,11 +1,8 @@
 $(function(){
-	
-
-	
 	$("#footer").css('display','none');
+	$("#labSelect").val($("#lab").val());
 	
-	
-	getList($("#sampletext").val(),$("#lab").val());
+	getList($("#sampletext").val(),$("#labSelect").val());
 
 	getSopSchedule($("#labSelect").val());
 	

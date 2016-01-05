@@ -31,4 +31,9 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 		return getSession().createCriteria(In.class).add(Restrictions.eq("indate", indate)).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<In> getByLab(String lab) {
+		return getSession().createCriteria(In.class).add(Restrictions.eq("lab", lab)).list();
+	}
+
 }

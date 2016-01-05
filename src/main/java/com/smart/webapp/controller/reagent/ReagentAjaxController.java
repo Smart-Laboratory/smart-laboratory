@@ -12,49 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
-import com.smart.model.lis.Section;
 import com.smart.model.reagent.Batch;
 import com.smart.model.reagent.Combo;
 import com.smart.model.reagent.In;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.user.User;
-import com.smart.service.UserManager;
-import com.smart.service.reagent.BatchManager;
-import com.smart.service.reagent.ComboManager;
-import com.smart.service.reagent.InManager;
-import com.smart.service.reagent.OutManager;
-import com.smart.service.reagent.ReagentManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/ajax/reagent*")
-public class ReagentAjaxController {
-
-	@Autowired
-	private UserManager userManager = null;
-
-	@Autowired
-	private ReagentManager reagentManager = null;
-	
-	@Autowired
-	private ComboManager comboManager = null;
-	
-	@Autowired
-	private InManager inManager = null;
-	
-	@Autowired
-	private OutManager outManager = null;
-	
-	@Autowired
-	private BatchManager batchManager = null;
+public class ReagentAjaxController extends ReagentBaseController {
 
 	@RequestMapping(value = "/getReagent*", method = RequestMethod.GET)
 	@ResponseBody
@@ -65,8 +39,11 @@ public class ReagentAjaxController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
-		List<Reagent> list = reagentManager.getReagents(name, section.getId());
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		List<Reagent> list = reagentManager.getReagents(name, labName);
 		JSONArray array = new JSONArray();
 		if (list != null) {
 			for (Reagent r : list) {
@@ -91,12 +68,14 @@ public class ReagentAjaxController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
-		JSONArray array = new JSONArray();
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());		JSONArray array = new JSONArray();
 		if(type == 1) {
 			
 		} else if(type == 2) {
-			List<Reagent> list = reagentManager.getReagents(name, section.getId());
+			List<Reagent> list = reagentManager.getReagents(name, labName);
 			if (list != null) {
 				for (Reagent r : list) {
 					JSONObject o = new JSONObject();
@@ -295,7 +274,7 @@ public class ReagentAjaxController {
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
 				indata.setOperator(user.getLastName());
 				indata.setReagent(r);
-				indata.setSection(user.getSection());
+				indata.setLab(labMap.get(user.getLastLab()));
 				needSaveIn.add(indata);
 			}
 			batchManager.saveAll(needSaveBatch);
@@ -343,7 +322,7 @@ public class ReagentAjaxController {
 						outdata.setOperator(user.getLastName());
 						outdata.setOutdate(new Date());
 						outdata.setReagent(r);
-						outdata.setSection(user.getSection());
+						outdata.setLab(labMap.get(user.getLastLab()));
 						needSaveOut.add(outdata);
 					}
 				}

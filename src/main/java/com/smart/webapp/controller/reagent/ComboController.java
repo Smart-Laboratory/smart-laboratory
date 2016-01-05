@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,24 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
-import com.smart.model.lis.Section;
 import com.smart.model.reagent.Combo;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.user.User;
-import com.smart.service.UserManager;
-import com.smart.service.reagent.ComboManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/reagent*")
-public class ComboController {
+public class ComboController extends ReagentBaseController {
 	
-	@Autowired
-	private UserManager userManager = null;
-	
-	@Autowired
-	private ComboManager comboManager = null;
-
 	@RequestMapping(method = RequestMethod.GET, value="/combo*")
     public ModelAndView handleRequest() throws Exception {
 		return new ModelAndView();
@@ -44,29 +34,32 @@ public class ComboController {
 	@RequestMapping(value = "/getCombo*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getCombo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Section section = userManager.getUserByUsername(request.getRemoteUser()).getSection();
-		Set<Combo> set = section.getCombos();
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		List<Combo> list = comboManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(set.size());
-		int x = set.size() % (row == 0 ? set.size() : row);
+		dataResponse.setRecords(list.size());
+		int x = list.size() % (row == 0 ? list.size() : row);
 		if (x != 0) {
 			x = row - x;
 		}
-		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		int totalPage = (list.size() + x) / (row == 0 ? list.size() : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int end = row * page;
-		if(end > set.size()) {
-			end = set.size();
+		if(end > list.size()) {
+			end = list.size();
 		}
 		int index = 0;
-		for(Combo c : set) {
+		for(Combo c : list) {
 			if(index >= start && index < end) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", c.getId());
@@ -90,7 +83,7 @@ public class ComboController {
 			c.setName(request.getParameter("name"));
 			c.setCreatetime(new Date());
 			c.setCreator(user.getLastName());
-			c.setSection(user.getSection());
+			c.setLab(labMap.get(user.getLastLab()));
 			comboManager.save(c);
 		} else if(request.getParameter("oper").equals("edit")) {
 			Combo c = comboManager.get(Long.parseLong(request.getParameter("id")));

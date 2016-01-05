@@ -75,11 +75,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			builder.append(date);
 		}
 		builder.append("%' order by sampleNo");
-		System.out.println(builder.toString());
-		Long start = System.currentTimeMillis();
 		Query query = getSession().createQuery(builder.toString());
 		List<Sample> list = query.list();
-		System.out.println("获取样本列表：" + (System.currentTimeMillis()-start) + "毫秒。个数：" + list.size());
 		return list;
 	}
 
@@ -96,7 +93,6 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		q.setMaxResults(500);  
 		List<Sample> list = q.list();
 		for(Sample s : list) {
-			System.out.println(s.getSampleNo() + " " + s.getResults().size());
 			s.getPatient();
 			s.getResults().size();
 			s.getProcess();
@@ -207,7 +203,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		
 		if (!date.equals("________")) {
-			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.iswriteback!=0").uniqueResult()).intValue(); 
+			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.writeback!=0").uniqueResult()).intValue(); 
 			list.add(needwriteBack);
 		}
 		
@@ -290,7 +286,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			sql += " and s.auditMark=" + mark;
 		}
 		sql += " order by s.sampleNo";
-		System.out.println(sql);
 		Query q =  getSession().createQuery(sql);
 		q.setFirstResult(start);
 		q.setMaxResults(end); 
@@ -358,7 +353,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			sql += " and s.auditMark=" + mark;
 		}
 		sql += " order by s.sampleNo";
-//		System.out.println(sql);
+
 		Query q =  getSession().createQuery(sql);
 		return new Integer(q.uniqueResult() + "");
 	}

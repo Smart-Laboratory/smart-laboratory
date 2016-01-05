@@ -7,9 +7,11 @@ import com.smart.service.GenericManager;
 
 public interface ReagentManager extends GenericManager<Reagent, Long> {
 
-	List<Reagent> getReagents(String name, long id);
+	List<Reagent> getReagents(String name, String lab);
 
 	Reagent getByname(String name);
 
 	List<Reagent> getByIds(String s);
+
+	List<Reagent> getByLab(String lab);
 }

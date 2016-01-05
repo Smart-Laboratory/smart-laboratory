@@ -27,5 +27,5 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 			String birthday);
 
 	@Transactional
-	List<TestResult> getRelative(String patientId, String history);
+	List<TestResult> getRelative(String patientId, String blh, String history);
 }

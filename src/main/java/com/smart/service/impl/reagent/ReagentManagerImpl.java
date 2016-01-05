@@ -21,8 +21,8 @@ public class ReagentManagerImpl extends GenericManagerImpl<Reagent, Long> implem
         this.reagentDao = reagentDao;
     }
 
-	public List<Reagent> getReagents(String name, long sectionid) {
-		return reagentDao.getReagents(name, sectionid);
+	public List<Reagent> getReagents(String name, String lab) {
+		return reagentDao.getReagents(name, lab);
 	}
 
 	public Reagent getByname(String name) {
@@ -31,5 +31,9 @@ public class ReagentManagerImpl extends GenericManagerImpl<Reagent, Long> implem
 
 	public List<Reagent> getByIds(String ids) {
 		return reagentDao.getByIds(ids);
+	}
+
+	public List<Reagent> getByLab(String lab) {
+		return reagentDao.getByLab(lab);
 	}
 }
