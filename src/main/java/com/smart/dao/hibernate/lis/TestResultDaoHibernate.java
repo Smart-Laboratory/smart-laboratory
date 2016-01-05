@@ -71,7 +71,7 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getRelative(String patientId, String blh, String history) {
 		String hql = "select t from Sample s, TestResult t where s.patientId='" + patientId
-				+ "' or s.patientId='" + blh + "' and t.sampleNo=p.sampleNo and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
+				+ "' or s.patientId='" + blh + "' and t.sampleNo=s.sampleNo and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}

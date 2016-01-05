@@ -132,7 +132,7 @@ public class AjaxController extends BaseAuditController{
         return map;
 	}
 	
-	@RequestMapping(value = "/ajax/relativeTest*", method = RequestMethod.GET)
+	@RequestMapping(value = "/relativeTest*", method = RequestMethod.GET)
 	@ResponseBody
 	public String getRelativeTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String sample = request.getParameter("sample");
@@ -158,6 +158,7 @@ public class AjaxController extends BaseAuditController{
 			html += "<table>";
 			for(int i=0; i<hisTests.size(); i++) {
 				TestResult tr = hisTests.get(i);
+				System.out.println(tr.getTestId());
 				if(map.get(tr.getTestId()) < 3) {
 					if(htmlMap.containsKey(tr.getSampleNo())) {
 						String s = htmlMap.get(tr.getSampleNo()) 

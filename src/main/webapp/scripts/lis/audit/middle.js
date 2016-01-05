@@ -1,11 +1,11 @@
 	function getRelativeTests(sample){
 		$("#relative-tests").html(" ");
-		$.get("../audit/ajax/relativeTest",{sample:sample}, function(data) {
+		/*$.get("../audit/ajax/relativeTest",{sample:sample}, function(data) {
 			if(data != "") {
 				data = jQuery.parseJSON(data);
 				$("#relative-tests").html(data.html);
 			}
-		});
+		});*/
 	}
 	
 	function twsSampleReload(sample){
