@@ -371,15 +371,15 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		Map<String, Integer> cMap = new HashMap<String, Integer>();
 		Map<String, String> sMap = new HashMap<String, String>();
 		for(String s : list) {
-			if(cMap.containsKey(s.substring(9, 3))) {
-				cMap.put(s.substring(9, 3), 1);
+			if(cMap.containsKey(s.substring(8, 11))) {
+				cMap.put(s.substring(8, 11), cMap.get(s.substring(8, 11)) + 1);
 			} else {
-				cMap.put(s.substring(9, 3), cMap.get(s.substring(9, 3)) + 1);
+				cMap.put(s.substring(8, 11), 1);
 			}
-			if(sMap.containsKey(s.substring(9, 3))) {
-				sMap.put(s.substring(9, 3), s + "<br/>");
+			if(sMap.containsKey(s.substring(8, 11))) {
+				sMap.put(s.substring(8, 11), sMap.get(s.substring(8, 11)) + s + "<br/>");
 			} else {
-				sMap.put(s.substring(9, 3), sMap.get(s.substring(9, 3)) + s + "<br/>");
+				sMap.put(s.substring(8, 11), s + "<br/>");
 			}
 		}
 		List<NeedWriteCount> nwcList = new ArrayList<NeedWriteCount>();

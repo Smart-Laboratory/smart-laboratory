@@ -19,7 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -42,7 +41,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
 import com.smart.model.lis.Hospital;
-import com.smart.model.lis.Section;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -85,8 +83,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	private String lastProfile;
     
     private Hospital hospital;
-    private Section section;
-
     private int collectNum;
 	private int evaluatenum;
 	private int checknum;

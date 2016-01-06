@@ -6,12 +6,9 @@ $(function(){
  			var array = jQuery.parseJSON(data);
  			for(var i=0; i<array.length; i++) {
  				var trLine = "<tr>";
- 				trLine += "<td class='wb_checker'>" + array[i].checker + "</rd>";
- 				trLine += "<td>" + array[i].name + "<div class='sample_list_div' style='display:none;'>"+array[i].list+"</div></td>";
- 				trLine += "<td class='wb_code' style='width:200px;word-break:break-all;'>" + array[i].code + "</td>";
- 				trLine += "<td class='wb_lab'>" + array[i].lab + "</td>";
- 				trLine += "<td class='wb_count'>" + array[i].count + "</td>";
- 				trLine += "<td><button class='btn wb_detail'>Detail</button><button class='btn btn-info wb_button'><fmt:message key='writeback' /></button></td>";
+ 				trLine += "<td style='width:40%'>" + array[i].code + "<div class='sample_list_div' style='display:none;'>"+array[i].list+"</div></td>";
+  				trLine += "<td class='wb_count' style='width:30%'>" + array[i].count + "</td>";
+ 				trLine += "<td style='width:30%'><button class='btn btn-success wb_detail' style='padding:2px;width:60px;'>详情</button><button class='btn btn-info wb_button' style='margin-left:5px;padding:2px;width:60px;'>写回</button></td>";
  				$("#need_writeback_table").append(trLine);
  			}
  			$("#need_writeback_table .wb_button").click(function(){
