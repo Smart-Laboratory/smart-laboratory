@@ -37,5 +37,6 @@
         <mapping class="com.smart.model.lis.ReasoningModify"/>
         <mapping class="com.smart.model.lis.AuditTrace"/>
         <mapping class="com.smart.model.lis.Task"/>
+        <mapping class="com.smart.model.user.UserLevel"/>
     </session-factory>
 </hibernate-configuration>

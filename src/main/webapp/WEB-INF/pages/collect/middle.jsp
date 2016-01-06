@@ -1,4 +1,3 @@
-<script type="text/javascript" src="../scripts/lis/audit/middle.js"></script>
 <style>
 #btnMenu button {
 	font-size:12px;
@@ -59,62 +58,52 @@
 			</div>
 		</div>
 	</div>
-	<div style="display:none;" class="clearfix" id="unaudit_reason">
-		<div style="float:left;width:80px;margin:0px;padding:2px;padding-left:10px;margin-right:10px;" class="alert alert-error"><b><fmt:message key="unpass.reason" /></b></div>
-		<div style="width: 350px;float:left;"><span id="audit_reason"></span></div>
-	</div>
 	<div style="height:35px;" id="btnMenu">
 		<div style="margin-top:4px;float:left;">
-			<button id="auditPassBtn" class="btn btn-success"><b><fmt:message key="button.pass" /></b></button>
-			<button id="auditUnpassBtn" class="btn btn-info"><b><fmt:message key="button.unpass" /></b></button>
-			<button id="imageBtn" class="btn btn-success"><b><fmt:message key="button.image" /></b></button>
-			<button id="uploadBtn" class="btn btn-info"><b><fmt:message key="button.upload" /></b></button>
-			<button id="unaudit_reason_btn" type="button" data-container="body" data-toggle="popover" data-placement="right" class="btn btn-danger" style="width:85px;"><b><fmt:message key="sample.unpass.reason" /></b></button>
-			<button id="auditPrintBtn" class="btn btn-info"><b><fmt:message key="print" /></b></button>
-			<button id="collectBtn" class="btn btn-info"><b><fmt:message key="button.collect" /></b></button>
+			<button id="cancelBtn" class="btn" style="font-size: 12px;">
+					<b><fmt:message key="button.cancel" /></b>
+			</button>
+			<button id="collectBtn" class="btn btn-info" style="font-size: 12px;">
+					<b><fmt:message key="collect.button" /></b>
+			</button>
+			<button id="evaluateBtn" class="btn btn-success" style="font-size: 12px;">
+					<b><fmt:message key="evaluate.button" /></b>
+			</button>
 		</div>
 		<div style="margin-top:4px;float:right;">
-			<button id="testAdd" class="btn btn-success"><b><fmt:message key="button.add" /></b></button>
-			<button id="testDelete" class="btn btn-danger" ><b><fmt:message key="button.delete" /></b></button>
-			<button id="tatBtn" class="btn btn-info"><b>TAT</b></button>
-			<button id="modifyBtn" class="btn btn-success"><b><fmt:message key="sample.test.modify.record" /></b></button>
+			<button id="imageBtn" class="btn btn-success" style="font-size: 12px;">
+					<b><fmt:message key="knowledge.check10" /></b>
+			</button>
+			<button id="uploadBtn" class="btn btn-info" style="font-size: 12px;">
+					<b><fmt:message key="button.upload" /></b>
+			</button>
 		</div>
 	</div>
+	
+	<marquee behavior="scroll" style="margin-bottom:5px;" bgcolor="#DFF0D8" onMouseOut="this.start()" onMouseOver="this.stop()"><a id="show_history" style="color:#3A87AD"><fmt:message key="button.upload" /></a></marquee>
 	</div>
 	
 	<div class="col-sm-12">
-	<div id="patientRow" >
-
+	<div id="patientRow" style="margin-top:5px;">
 		<table id="rowed3" style="font-size: 14px;"></table>
 	</div>
 	
-	<div id="twosampleTable" style="float:left;margin-top:5px;">
+	<div id="twosampleTable" style="margin-top:5px;">
 		<div class="col-sm-6">
-			<table id="sample0" style="font-size:14px;"></table>
+			<table id="sample0" style="font-size: 14px;"></table>
 		</div>
 		<div class="col-sm-6">
-			<table id="sample1" style="font-size:14px;"></table>
+			<table id="sample1" style="font-size: 14px;"></table>
 		</div>	
 	</div>
 	<div style="font-size: 13px; display:none;margin-top: 10px;">
-		<input type="hidden" id="hiddenDocId"/>
-		<input type="hidden" id="hiddenSampleNo"/>
-		<input type="hidden" id="hisLastResult"/>
-		<input type="hidden" id="needEdit" /> 
-		<input type="hidden" id="hiddenIsPass"/>
-		<input type="hidden" id="hiddenAuditConfirm" value="${activeAuto}"/>
-	</div>
-	<div id="colorHelp" style="float:left;margin-top:3px;">
-	</div>
-	<div id="critical_div" style="float:left;margin-top:10px;">
-		<div id="critical_alert" class="alert">
-			<b id="critical_title" style="font-size:18px;margin-right:20px;"></b>
-			<span id="critical_time"></span>
-			<div id="critical_info"></div>
-		</div>
-	</div>
-	<div id="relative-tests" style="float:left;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;margin-top:2px;width:500px;">
-		<div id='showGalleria'></div>
+				<input type="hidden" id="hiddenSampleNo"/>
+				<input type="hidden" id="hiddenBAMC"/>
+				<input type="hidden" id="hiddenType"/>
+				<input type="hidden" id="hiddenCollector"/>
+				<input type="hidden" id="hiddenCollectorId"/>
+				<input type="hidden" id="hisLastResult"/>
 	</div>
 	</div>
+	
 </div>

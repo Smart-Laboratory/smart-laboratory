@@ -118,10 +118,8 @@ $(function(){
 						array[i] = data[i];
 					}
 				});
-				if(array[0].rows==""){
-					jQuery("#sample0").jqGrid("clearGridData");
-					jQuery("#sample1").jqGrid("clearGridData");
-				}
+				jQuery("#sample0").jqGrid("clearGridData");
+				jQuery("#sample1").jqGrid("clearGridData");
 					
 				jQuery("#sample0").jqGrid("setGridParam",{
 					data:array[0].rows,

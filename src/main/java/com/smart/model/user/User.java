@@ -87,6 +87,9 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private Hospital hospital;
     private Section section;
 
+    private int collectNum;
+	private int evaluatenum;
+	private int checknum;
     /**
      * Default constructor - creates a new instance with no values set.
      */
@@ -406,6 +409,38 @@ public class User extends BaseObject implements Serializable, UserDetails {
 
 	public void setHospital(Hospital hospital) {
 		this.hospital = hospital;
+	}
+	
+	@Column(name = "collectnum")
+	public int getCollectNum() {
+		return collectNum;
+	}
+
+	public void setCollectNum(int collectNum) {
+		this.collectNum = collectNum;
+	}
+
+	@Column(name = "checknum")
+	public int getChecknum() {
+		return checknum;
+	}
+
+	public void setChecknum(int checknum) {
+		this.checknum = checknum;
+	}
+	
+	@Column(name = "evaluatenum")
+	public int getEvaluatenum() {
+		return evaluatenum;
+	}
+
+	public void setEvaluatenum(int evaluatenum) {
+		this.evaluatenum = evaluatenum;
+	}
+
+	@Transient
+	public double getIntegration() {
+		return (double)checknum/100 + collectNum + evaluatenum;
 	}
 	
 	/**
