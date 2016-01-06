@@ -280,61 +280,61 @@ public class GetTestResultController extends BaseAuditController {
 			}
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
 			if(list!=null && list.size()>0){
-			for (Sample pinfo : list) {
-				boolean isHis = false;
-				Set<TestResult> his = pinfo.getResults();
-				for (TestResult test: his) {
-					String testid = test.getTestId();
-					Set<String> sameTests = util.getKeySet(testid);
-					sameTests.add(testid);
-					for (String id : sameTests) {
-						if (testIdSet.contains(id)) {
-							isHis = true;
+				for (Sample pinfo : list) {
+					boolean isHis = false;
+					Set<TestResult> his = pinfo.getResults();
+					for (TestResult test: his) {
+						String testid = test.getTestId();
+						Set<String> sameTests = util.getKeySet(testid);
+						sameTests.add(testid);
+						for (String id : sameTests) {
+							if (testIdSet.contains(id)) {
+								isHis = true;
+								break;
+							}
+						}
+						if (isHis) {
 							break;
 						}
 					}
-					if (isHis) {
-						break;
+					int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
+					Date preceivetime = null;
+					preceivetime = pinfo.getProcess().getReceivetime();
+					if (preceivetime == null || pinfo.getSampleNo() == null) {
+						continue;
+					}
+					String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
+					int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
+					if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
+						if (index > 1)
+							break;
+						switch (index) {
+						case 0:
+							rmap = resultMap1;
+							break;
+						case 1:
+							rmap = resultMap2;
+							break;
+						}
+						for (TestResult result : pinfo.getResults()) {
+							rmap.put(result.getTestId(), result.getTestResult());
+						}
+						if (!"".equals(hisDate)) {
+							hisDate += ",";
+						}
+						if(pyear == year) {
+							isLastYear--;
+						}
+						hisDate += pDay + ":" + pinfo.getSampleNo();
+						index++;
+					}
+					if (day.equals(pDay) && sameSample(info, pinfo) && pyear == year) {
+						if (!"".equals(sameSample)) {
+							sameSample += ",";
+						}
+						sameSample += pinfo.getSampleNo();
 					}
 				}
-				int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
-				Date preceivetime = null;
-				preceivetime = info.getProcess().getReceivetime();
-				if (preceivetime == null || pinfo.getSampleNo() == null) {
-					continue;
-				}
-				String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
-				int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
-				if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
-					if (index > 2)
-						break;
-					switch (index) {
-					case 0:
-						rmap = resultMap1;
-						break;
-					case 1:
-						rmap = resultMap2;
-						break;
-					}
-					for (TestResult result : pinfo.getResults()) {
-						rmap.put(result.getTestId(), result.getTestResult());
-					}
-					if (!"".equals(hisDate)) {
-						hisDate += ",";
-					}
-					if(pyear == year) {
-						isLastYear--;
-					}
-					hisDate += pDay + ":" + pinfo.getSampleNo();
-					index++;
-				}
-				if (day.equals(pDay) && sameSample(info, pinfo) && pyear == year) {
-					if (!"".equals(sameSample)) {
-						sameSample += ",";
-					}
-					sameSample += pinfo.getSampleNo();
-				}
-			}
 			}
 		}
 		int color = 0;

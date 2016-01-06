@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.SampleDao;
 import com.smart.model.lis.Sample;
+import com.smart.model.util.NeedWriteCount;
 import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.lis.SampleManager;
 
@@ -64,5 +65,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 
 	public int getSampleCount(String text, String lab, int mark, int status, String code) {
 		return sampleDao.getSampleCount(text, lab, mark, status, code);
+	}
+
+	public List<NeedWriteCount> getAllWriteBack(String date) {
+		return sampleDao.getAllWriteBack(date);
 	}
 }

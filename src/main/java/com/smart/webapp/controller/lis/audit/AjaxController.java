@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.smart.model.util.NeedWriteCount;
 import com.smart.service.reagent.OutManager;
 
 @Controller
@@ -158,7 +160,6 @@ public class AjaxController extends BaseAuditController{
 			html += "<table>";
 			for(int i=0; i<hisTests.size(); i++) {
 				TestResult tr = hisTests.get(i);
-				System.out.println(tr.getTestId());
 				if(map.get(tr.getTestId()) < 3) {
 					if(htmlMap.containsKey(tr.getSampleNo())) {
 						String s = htmlMap.get(tr.getSampleNo()) 
@@ -298,5 +299,22 @@ public class AjaxController extends BaseAuditController{
 		}
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(obj.toString());
+	}
+	
+	@RequestMapping(value = "/writeBack*", method = RequestMethod.GET)
+	@ResponseBody
+	public void getNeedWriteBack(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		List<NeedWriteCount> list = sampleManager.getAllWriteBack(Constants.DF3.format(new Date()));
+		JSONArray array = new JSONArray();
+		for (NeedWriteCount nwc : list) {
+			JSONObject obj = new JSONObject();
+			obj.put("code", nwc.getCode());
+			obj.put("count", nwc.getCount());
+			obj.put("list", nwc.getList());
+			array.put(obj);
+		}
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(array.toString());
 	}
 }

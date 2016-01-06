@@ -25,7 +25,6 @@ import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
 import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.PatientUtil;
@@ -38,9 +37,6 @@ import com.smart.model.rule.Item;;
 @RequestMapping("/audit*")
 public class ExplainController extends BaseAuditController{
 
-	@Autowired
-	private UserManager userManager = null;
-	
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager = null;
 	

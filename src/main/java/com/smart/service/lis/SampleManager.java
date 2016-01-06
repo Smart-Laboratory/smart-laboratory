@@ -3,6 +3,7 @@ package com.smart.service.lis;
 import java.util.List;
 
 import com.smart.model.lis.Sample;
+import com.smart.model.util.NeedWriteCount;
 import com.smart.service.GenericManager;
 
 public interface SampleManager extends GenericManager<Sample, Long> {
@@ -42,5 +43,7 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end);
 
 	int getSampleCount(String text, String lab, int mark, int status, String labCode);
+
+	List<NeedWriteCount> getAllWriteBack(String date);
 
 }

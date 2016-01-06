@@ -248,7 +248,7 @@
 		<table id="sample_compare_information"></table>
 	</div>
 	
-	<div id="allNeedWriteBackDialog" title="<fmt:message key='audit.info.need.writeback' />" style="text-align:left;" >
+	<div id="allNeedWriteBackDialog" title="<fmt:message key='info.need.writeback' />" style="text-align:left;" >
 		<table id="need_writeback_table" class="table">
 			
 		</table>

@@ -6,16 +6,21 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
+import com.smart.model.util.NeedWriteCount;
 
 
 @Repository("sampleDao")
@@ -356,5 +361,35 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 
 		Query q =  getSession().createQuery(sql);
 		return new Integer(q.uniqueResult() + "");
+	}
+
+	public List<NeedWriteCount> getAllWriteBack(String date) {
+		JdbcTemplate jdbcTemplate =
+                new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
+		String sql = "select sampleno from l_sample where sampleno like '" + date + "%' and writeback=1";
+		List<String> list = jdbcTemplate.queryForList(sql, String.class);
+		Map<String, Integer> cMap = new HashMap<String, Integer>();
+		Map<String, String> sMap = new HashMap<String, String>();
+		for(String s : list) {
+			if(cMap.containsKey(s.substring(9, 3))) {
+				cMap.put(s.substring(9, 3), 1);
+			} else {
+				cMap.put(s.substring(9, 3), cMap.get(s.substring(9, 3)) + 1);
+			}
+			if(sMap.containsKey(s.substring(9, 3))) {
+				sMap.put(s.substring(9, 3), s + "<br/>");
+			} else {
+				sMap.put(s.substring(9, 3), sMap.get(s.substring(9, 3)) + s + "<br/>");
+			}
+		}
+		List<NeedWriteCount> nwcList = new ArrayList<NeedWriteCount>();
+		for(String code : cMap.keySet()) {
+			NeedWriteCount nwc = new NeedWriteCount();
+			nwc.setCode(code);
+			nwc.setCount(cMap.get(code));
+			nwc.setList(sMap.get(code));
+			nwcList.add(nwc);
+		}
+		return nwcList;
 	}
 }

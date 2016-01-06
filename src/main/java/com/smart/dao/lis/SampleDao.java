@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.Sample;
+import com.smart.model.util.NeedWriteCount;
 
 public interface SampleDao extends GenericDao<Sample, Long> {
 
@@ -41,4 +42,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	int getSampleCount(String text, String lab, int mark, int status, String code);
+
+	@Transactional
+	List<NeedWriteCount> getAllWriteBack(String date);
 }
