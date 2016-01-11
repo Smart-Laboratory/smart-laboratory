@@ -6,6 +6,7 @@
     <meta name="heading" content="<fmt:message key='invalidSamplesDetail.heading'/>"/>
     <meta name="menu" content="Quality" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     
     <script type="text/javascript">

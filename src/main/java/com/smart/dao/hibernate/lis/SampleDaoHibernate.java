@@ -230,7 +230,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
 			hql+="and s.receivetime between '"+ from+"' and '" + to + "' order by s.receivetime desc";
 		}
-		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 

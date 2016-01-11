@@ -56,7 +56,7 @@ public class CollectDialogController {
 		String collector = request.getParameter("collector");
 		String username = request.getRemoteUser();
 		User user = userManager.getUserByUsername(username);
-		String name = user.getLastName();
+		String name = user.getName();
 		
 		Evaluate e = new Evaluate();
 		e.setCollector(collector);
@@ -101,7 +101,7 @@ public class CollectDialogController {
 		String bamc = request.getParameter("bamc");
 		String username = request.getRemoteUser();
 		User user = userManager.getUserByUsername(username);
-		String name = user.getLastName();
+		String name = user.getName();
 		
 		if(!collectSampleManager.isSampleCollected(username, sampleno)) {
 			CollectSample cs = new CollectSample();

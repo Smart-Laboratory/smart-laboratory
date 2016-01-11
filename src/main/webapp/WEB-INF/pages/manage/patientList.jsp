@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
     
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
 	<!-- <script type="text/javascript" src="../scripts/bootstrap.min.js"></script> -->
@@ -33,7 +34,6 @@
 	<input type="text" id="from" name="from" class="form-control" />
 	<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
 	<input type="text" id="to" name="to" class="form-control">
-	
 	<label for="search_text" style="margin-left : 50px;"></label>
 	<input type="text" id="search_text" name="search_text" class="form-control" />
 	<select id="search_select" class="form-control select" >

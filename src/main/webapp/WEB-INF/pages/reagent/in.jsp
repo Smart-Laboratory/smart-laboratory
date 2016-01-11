@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
 	<script type="text/javascript" src="../scripts/reagent/in.js"></script>
 	
 	<style type="text/css">

@@ -32,10 +32,6 @@
 	table td {
 		height:20px;
 	}
-	span.pagelinks {
-		width:100%;	
-		margin-top: -5px;
-	}
 	</style>
 </head>
 <div class="col-sm-7">
