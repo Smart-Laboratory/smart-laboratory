@@ -439,7 +439,7 @@ public class AuditController extends BaseAuditController {
 		String bamc = request.getParameter("bamc");
 		String username = request.getRemoteUser();
 		User user = userManager.getUserByUsername(username);
-		String name = user.getLastName();
+		String name = user.getName();
 		
 		if(!collectSampleManager.isSampleCollected(username, sampleno)) {
 			CollectSample cs = new CollectSample();

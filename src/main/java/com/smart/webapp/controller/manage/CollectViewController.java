@@ -44,7 +44,7 @@ public class CollectViewController {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		List<String> typeList = collectSampleManager.getAllCollectType();
 		view.addObject("userid", userid);
-		view.addObject("username", user.getLastName());
+		view.addObject("username", user.getName());
 		view.addObject("evaluatenum", user.getEvaluatenum());
 		view.addObject("collectnum", user.getCollectNum());
 		view.addObject("checknum", user.getChecknum());

@@ -63,7 +63,7 @@ public class Patient extends BaseObject {
 	/**
 	 * 就诊卡号
 	 */
-	@Column(name = "PATIENTID", length = 50)
+	@Column(name = "PATIENTID")
 	public String getPatientId() {
 		return patientId;
 	}

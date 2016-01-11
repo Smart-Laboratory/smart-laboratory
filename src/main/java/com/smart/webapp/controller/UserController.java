@@ -5,8 +5,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
 import com.smart.dao.SearchException;
+import com.smart.model.user.User;
 import com.smart.service.UserManager;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
@@ -50,8 +52,12 @@ public class UserController {
     
     @RequestMapping(value="/ajax/hospital", method = RequestMethod.GET)
     public String getHospital(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	JSONObject obj = new JSONObject();
+    	User user = userManager.getUserByUsername(request.getRemoteUser());
+    	obj.put("username", user.getName());
+    	obj.put("hospital", user.getHospital().getName());
     	response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print(userManager.getUserByUsername(request.getRemoteUser()).getHospital().getName());
+		response.getWriter().print(obj.toString());
 		return null;
     }
 }

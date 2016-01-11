@@ -94,7 +94,7 @@
             | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
        	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
    		</span>
-   		<span class="right">
+   		<span class="col-sm-2" style="float:right">
        		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
         </span>
     </div>

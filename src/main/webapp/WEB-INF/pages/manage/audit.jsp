@@ -52,7 +52,7 @@
 
 
 <div id="footer2" class="">
-        <span class="col-sm-6 text-left">
+        <span class="col-sm-6">
         	<fmt:message key="project.name"/> | 
         	<fmt:message key="webapp.version"/>
             <c:if test="${pageContext.request.remoteUser != null}">
@@ -61,7 +61,7 @@
             | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
        	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
    		</span>
-   		<span class="col-sm-2 right">
+   		<span class="col-sm-2" style="float:right;">
        		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
         </span>
 </div>

@@ -48,7 +48,7 @@ public class UserFormController extends BaseFormController {
 
     public UserFormController() {
         setCancelView("redirect:/home");
-        setSuccessView("redirect:/admin/users");
+        setSuccessView("redirect:/users");
     }
 
     @Override
@@ -99,7 +99,7 @@ public class UserFormController extends BaseFormController {
 
         if (request.getParameter("delete") != null) {
             getUserManager().removeUser(user.getId().toString());
-            saveMessage(request, getText("user.deleted", user.getFullName(), locale));
+            saveMessage(request, getText("user.deleted", user.getName(), locale));
 
             return getSuccessView();
         } else {
@@ -152,13 +152,13 @@ public class UserFormController extends BaseFormController {
             }
 
             if (!StringUtils.equals(request.getParameter("from"), "list")) {
-                saveMessage(request, getText("user.saved", user.getFullName(), locale));
+                saveMessage(request, getText("user.saved", user.getName(), locale));
 
                 // return to main Menu
                 return getCancelView();
             } else {
                 if (StringUtils.isBlank(request.getParameter("version"))) {
-                    saveMessage(request, getText("user.added", user.getFullName(), locale));
+                    saveMessage(request, getText("user.added", user.getName(), locale));
 
                     // Send an account information e-mail
                     message.setSubject(getText("signup.email.subject", locale));
@@ -166,7 +166,7 @@ public class UserFormController extends BaseFormController {
                     try {
                         final String resetPasswordUrl = getUserManager().buildRecoveryPasswordUrl(user,
                                 UpdatePasswordController.RECOVERY_PASSWORD_TEMPLATE);
-                        sendUserMessage(user, getText("newuser.email.message", user.getFullName(), locale),
+                        sendUserMessage(user, getText("newuser.email.message", user.getName(), locale),
                                 RequestUtil.getAppURL(request) + resetPasswordUrl);
                     } catch (final MailException me) {
                         saveError(request, me.getCause().getLocalizedMessage());
@@ -174,7 +174,7 @@ public class UserFormController extends BaseFormController {
 
                     return getSuccessView();
                 } else {
-                    saveMessage(request, getText("user.updated.byAdmin", user.getFullName(), locale));
+                    saveMessage(request, getText("user.updated.byAdmin", user.getName(), locale));
                 }
             }
         }

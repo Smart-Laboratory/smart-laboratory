@@ -272,7 +272,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 				indata.setIndate(now);
 				indata.setIsqualified(1);
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
-				indata.setOperator(user.getLastName());
+				indata.setOperator(user.getName());
 				indata.setReagent(r);
 				indata.setLab(labMap.get(user.getLastLab()));
 				needSaveIn.add(indata);
@@ -319,7 +319,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 						Out outdata = new Out();
 						outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
 						outdata.setBatch((String)inmap.get(r.getId()).get("batch"));
-						outdata.setOperator(user.getLastName());
+						outdata.setOperator(user.getName());
 						outdata.setOutdate(new Date());
 						outdata.setReagent(r);
 						outdata.setLab(labMap.get(user.getLastLab()));

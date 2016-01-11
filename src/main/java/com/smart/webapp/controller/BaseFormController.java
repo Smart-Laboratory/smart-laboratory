@@ -182,7 +182,7 @@ public class BaseFormController implements ServletContextAware {
             log.debug("sending e-mail to user [" + user.getEmail() + "]...");
         }
 
-        message.setTo(user.getFullName() + "<" + user.getEmail() + ">");
+        message.setTo(user.getName() + "<" + user.getEmail() + ">");
 
         Map<String, Serializable> model = new HashMap<String, Serializable>();
         model.put("user", user);

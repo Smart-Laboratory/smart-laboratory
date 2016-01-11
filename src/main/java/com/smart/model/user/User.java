@@ -63,8 +63,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private String password;                    // required
     private String confirmPassword;
     private String passwordHint;
-    private String firstName;                   // required
-    private String lastName;                    // required
+    private String name;                   		// required
     private String email;                       // required; unique
     private String phoneNumber;
     private String website;
@@ -136,16 +135,10 @@ public class User extends BaseObject implements Serializable, UserDetails {
         return passwordHint;
     }
 
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     @Field
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @Column(name = "last_name", nullable = false, length = 50)
-    @Field
-    public String getLastName() {
-        return lastName;
+    public String getName() {
+        return name;
     }
 
     @Column(nullable = false, unique = true)
@@ -163,16 +156,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
     @Field
     public String getWebsite() {
         return website;
-    }
-
-    /**
-     * Returns the full name.
-     *
-     * @return firstName + ' ' + lastName
-     */
-    @Transient
-    public String getFullName() {
-        return firstName + ' ' + lastName;
     }
 
     @Embedded
@@ -303,12 +286,8 @@ public class User extends BaseObject implements Serializable, UserDetails {
         this.passwordHint = passwordHint;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setEmail(String email) {

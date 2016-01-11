@@ -81,7 +81,7 @@ public class InvalidSampleFormController {
 	public String saveInvalidSample(InvalidSample invalidSample,BindingResult errors, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
-		invalidSample.setRejectPerson(user.getFullName());
+		invalidSample.setRejectPerson(user.getName());
 		invalidSample.setRejectTime(new Date());
 		
 		if(invalidSample.getSample().getId()!=null){

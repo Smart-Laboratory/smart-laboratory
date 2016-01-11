@@ -235,7 +235,7 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
     }
 
     private void sendUserEmail(final User user, final String template, final String url) {
-        message.setTo(user.getFullName() + "<" + user.getEmail() + ">");
+        message.setTo(user.getName() + "<" + user.getEmail() + ">");
 
         final Map<String, Serializable> model = new HashMap<String, Serializable>();
         model.put("user", user);

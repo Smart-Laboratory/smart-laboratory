@@ -7,7 +7,10 @@ $(function() {
 	        type : "GET",
 	        url : "<c:url value='/users/ajax/hospital'/>",
 	        success : function(data) {
-	           $("#hospital").append(data);
+	           var json = jQuery.parseJSON(data);
+	           $("#userText").html(json.username);
+	           $("#hospital").append(json.hospital);
+	           $("#hospital").css("display","block");
 	        }
 	    });
 	}
@@ -51,10 +54,8 @@ $(function() {
 </ul>
 
 
-<div id="hospital" style="float:right;height:30px;padding-top:8px;">
-	<c:if test="${pageContext.request.remoteUser != null}">
-		${pageContext.request.remoteUser} |
-	</c:if>
+<div id="hospital" style="display:none;float:right;height:30px;padding-top:8px;">
+	<div id="userText" style="float:left;"></div>&nbsp;|
 </div>
 </div>
 </menu:useMenuDisplayer>

@@ -20,8 +20,8 @@
                    defaultsort="1" class="table table-condensed table-striped table-hover" pagesize="50" requestURI="">
         <display:column property="username" escapeXml="true" style="width: 30%" titleKey="user.username"
                         sortable="true"/>
-        <display:column titleKey="activeUsers.fullName" sortable="true">
-            <c:out value="${user.firstName} ${user.lastName}" escapeXml="true"/>
+        <display:column titleKey="user.name" sortable="true">
+            <c:out value="${user.name}" escapeXml="true"/>
             <c:if test="${not empty user.email}">
                 <a href="mailto:<c:out value="${user.email}"/>">
                     <img src="<c:url value="/images/iconEmail.gif"/>"

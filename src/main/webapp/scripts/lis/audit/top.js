@@ -32,5 +32,30 @@ $(function(){
  		$("#allNeedWriteBackDialog").dialog("open");
  	});
 	
-	
 });
+
+function writeBackOnce(code, lab, user) {
+		
+	$.getJSON("${catcherUrl}ajax/writeBack/once.htm?callback=?",{code:code, lib:lab, operator:user},function(data){
+		if (data.result == 0) {
+			alert("正在写回中...");
+		} else if (data.result == 1) {
+			$.get("。。/audit/count",{}, function(data) {
+	 			$("#today_info_unaudit").html(data.todayunaudit);
+	 			$("#today_info_unpass").html(data.todayunpass);
+	 			$("#need_write_back").html(data.needwriteback);
+	 			$("#info_dangerous_undeal").html(data.dangerous);
+	 			if (data.dangerous != 0) {
+	 				$("#div_dangerous").removeClass('alert-success');
+	 				$("#div_dangerous").addClass('alert-error');
+	 			} else {
+	 				$("#div_dangerous").removeClass('alert-error');
+	 				$("#div_dangerous").addClass('alert-success');
+	 			}
+	 		},'json');
+			alert("写回成功！");
+		 } else {
+			alert("写回失败！");
+		 }
+	});
+}

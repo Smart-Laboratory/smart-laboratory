@@ -60,19 +60,12 @@
             <form:errors path="passwordHint" cssClass="help-block"/>
         </div>
         <div class="row">
-            <spring:bind path="user.firstName">
-            <div class="col-sm-6 form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
+            <spring:bind path="user.name">
+            <div class="col-sm-12 form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
             </spring:bind>
-                <appfuse:label styleClass="control-label" key="user.firstName"/>
-                <form:input cssClass="form-control" path="firstName" id="firstName" maxlength="50"/>
-                <form:errors path="firstName" cssClass="help-block"/>
-            </div>
-            <spring:bind path="user.lastName">
-            <div class="col-sm-6 form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
-            </spring:bind>
-                <appfuse:label styleClass="control-label" key="user.lastName"/>
-                <form:input cssClass="form-control" path="lastName" id="lastName" maxlength="50"/>
-                <form:errors path="lastName" cssClass="help-block"/>
+                <appfuse:label styleClass="control-label" key="user.name"/>
+                <form:input cssClass="form-control" path="name" id="name" maxlength="50"/>
+                <form:errors path="name" cssClass="help-block"/>
             </div>
         </div>
         <div class="row">
@@ -121,6 +114,8 @@
                 </div>
             </div>
         </div>
+        
+        <c:if test="${param.from == 'list'}">
         <div>
             <legend class="accordion-heading">
                 <a data-toggle="collapse" href="#collapse-labset"><fmt:message key="user.lab.set"/></a>
@@ -136,6 +131,7 @@
                 </div>
             </div>
         </div>
+        </c:if>
         
 <c:choose>
     <c:when test="${param.from == 'list' or param.method == 'Add'}">
