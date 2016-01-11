@@ -32,7 +32,7 @@
 		</div>
 		<div class="col-sm-12 pinfo">
 			<div class="col-sm-4 pinfo">
-				<span class='col-sm-4'><fmt:message key="sample.id" />:</span><b id="doctadviseno"></b>
+				<span class='col-sm-4'><fmt:message key="sample.id" />:</span><b id="pId"></b>
 			</div>
 			<div class="col-sm-3 pinfo">
 				<span class='col-sm-6'><fmt:message key="sample.mode" />:</span><b id="stayhospitalmode"></b>

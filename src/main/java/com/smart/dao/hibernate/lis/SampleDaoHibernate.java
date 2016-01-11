@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.lis;
 import com.smart.dao.lis.SampleDao;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,10 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
 import com.smart.model.util.NeedWriteCount;
 
+import javafx.scene.input.DataFormat;
+
+import com.smart.model.lis.Process;
+
 
 @Repository("sampleDao")
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
@@ -30,6 +35,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
         super(Sample.class);
     }
 
+	private static SimpleDateFormat ldf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static String DATEFORMAT = "yyyy-MM-dd hh24:mi:ss";
 	
 	@SuppressWarnings("unchecked")
@@ -220,12 +226,11 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' and s.time between to_date('" + from + " 00:00:00','"
 //                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
 //                    + "') order by s.time desc";
-		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' ";
+		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
-			hql+="and s.time between to_date('" + from + " 00:00:00','"
-                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
-                    + "') order by s.time desc";
+			hql+="and s.receivetime between '"+ from+"' and '" + to + "' order by s.receivetime desc";
 		}
+		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 

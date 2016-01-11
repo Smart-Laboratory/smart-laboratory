@@ -44,7 +44,7 @@ public class AjaxController extends BaseAuditController{
 	
 	@Autowired
 	private OutManager outManager;
-	private final static String imageUrl_bak = "/home/images/upload/";
+	private final static String imageUrl_bak = "/mypic/";
 	private final static String imageUrl = "/lab/images/upload/";
 	
 	@RequestMapping(value = "/singleChart*", method = RequestMethod.GET)

@@ -15,6 +15,11 @@ import com.smart.model.BaseObject;
 public class UserLevel extends BaseObject{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6030878710666268515L;
+
 	private Long id;
 	
 	private int level;

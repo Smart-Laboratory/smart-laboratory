@@ -27,11 +27,11 @@
 			}
 	    }
 		$.ajaxFileUpload({
-			url:'/explain/audit/ajax/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
+			url:'../explain/audit/list/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
 			secureuri:false,
 			fileElementId: arrId,  
 			success: function (){
-				alert("<fmt:message key='display.title'/>");
+				alert("上传成功");
 				$("#uploadDialog").dialog("close");
 				jQuery("#s3list").trigger("reloadGrid");
 			},
@@ -43,7 +43,7 @@
 	
 	function getImages(sampleno){
 		$("#showGalleria").html("");
-		$.get("<c:url value='/explain/audit/ajax/getImage'/>",{sampleno:sampleno}, function(data) {
+		$.get("../explain/audit/list/getImage'/>",{sampleno:sampleno}, function(data) {
 			data = jQuery.parseJSON(data);
 			$('#showGalleria').css('height','600px');//#galleria{height:320px}
 			Galleria.loadTheme('../scripts/galleria.classic.min.js');
@@ -55,7 +55,7 @@
 	}
 	
 	function getPatient(sample) {
-		$.get("<c:url value='/collect/list/patient'/>",{sample:sample},function(data){
+		$.get("../collect/list/patient",{sample:sample},function(data){
 			$("#midContent").css('display','block');
 			$("#sampleTitle").html(data.examinaim);
 			$("#rowed3").jqGrid("setCaption", data.examinaim);
@@ -77,7 +77,7 @@
  	
  	function getChart(sample) {
  		
- 		$.get("<c:url value='/collect/list/chart'/>",{sample:sample},function(data){
+ 		$.get("../collect/list/chart",{sample:sample},function(data){
  			
  			$("#chartPanel").empty();
 	    	if (data != "") {
@@ -102,13 +102,14 @@
 
 	function getSample(sampleNo) {
 		jQuery("#rowed3").jqGrid({
-		   	url:"<c:url value='/collect/list/sample'/>?sample="+sampleNo,
+		   	url:"../collect/list/sample?sample="+sampleNo,
 			datatype: "json",
 			jsonReader : {repeatitems : false},  
-		   	colNames:['ID','COLOR','<fmt:message key="project"/>', '<fmt:message key="result"/>', '\u5386\u53f21', '\u5386\u53f22', '\u5386\u53f23', '\u5386\u53f24', '\u5386\u53f25', '<fmt:message key="scope"/>', '<fmt:message key="unit"/>','KNOWLEDGENAME','EDITMARK'],
+		   	colNames:['ID','COLOR','英文缩写','项目名称', '结果', '历史', '历史', '历史', '历史', '历史', '范围', '单位','KNOWLEDGENAME','EDITMARK'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'color',index:'color', hidden:true},
+		   		{name:'ab',index:'ab',width:135,hidden:true},
 		   		{name:'name',index:'name',width:135,sortable:false},
 		   		{name:'result',index:'result',width:75, sortable:false, editable:true},
 		   		{name:'last',index:'last',width:50, sortable:false},
@@ -252,10 +253,10 @@
 	
 	function getExplain(sample){
 		jQuery("#audit_information").jqGrid({
-			url:"<c:url value='/collect/list/explain'/>?sample="+sample,
+			url:"../collect/list/explain?sample="+sample,
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','OLDRESULT','<fmt:message key="addResult.result"/>','<fmt:message key="content"/>','RANK'],
+			colNames:['ID','OLDRESULT','解释','详细','RANK'],
 			colModel:[{name:'id',index:'id',sortable:false,hidden:true},
 		   		{name:'oldResult',index:'oldResult',sortable:false,hidden:true},
 		   		{name:'result',index:'result',width:190,sortable:false},
@@ -267,10 +268,10 @@
 	
 	function getEvaluate(sampleno, userid){
 		jQuery("#evaluatelist").jqGrid({
-			url:"<c:url value='/collect/list/evaluatedata'/>?sample="+sampleno +"&collector=" + userid,
+			url:"../collect/list/evaluatedata?sample="+sampleno +"&collector=" + userid,
 			datatype: "json",
 			width: 230, 
-			colNames:['ID','<fmt:message key="evaluate.evaluator"/>','<fmt:message key="evaluate.content"/>','<fmt:message key="evaluate.time"/>'],
+			colNames:['ID','评价者','内容','评价时间'],
 			colModel:[{name:'id',index:'id',sortable:false,hidden:true},
 		        {name:'evaluator',index:'evaluator',width:50},
 		   		{name:'content',index:'content',width:140},
@@ -289,10 +290,10 @@
 		var isFirstTime = true;
 		var isFirstTimeForResult = true;
 		var mygrid = jQuery("#s3list").jqGrid({
-        	url:"<c:url value='/collect/list/data'/>", 
+        	url:"../collect/list/data", 
         	datatype: "json", 
         	width: 230, 
-        	colNames:['ID', 'USERID', 'TYPE', '<fmt:message key="collect.bamc" />', '<fmt:message key="collect.name"/>', '<fmt:message key="collect.sampleno"/>'], 
+        	colNames:['ID', 'USERID', 'TYPE', '病案名称', '收藏者', '样本号'], 
         	colModel:[ 
         		{name:'id',index:'id', hidden:true},
         		{name:'userid',index:'userid', hidden:true},
@@ -321,15 +322,15 @@
     				getEvaluate(ret.sampleno, ret.userid);
     				isFirstTime = false;
         		} else {
-        			jQuery("#rowed3").jqGrid("setGridParam",{url:"<c:url value='/collect/list/sample'/>?sample="+ret.sampleno}).trigger("reloadGrid");
-        			jQuery("#evaluatelist").jqGrid("setGridParam",{url:"<c:url value='/collect/list/evaluatedata'/>?sample="+ret.sampleno+"&collector="+ret.userid}).trigger("reloadGrid");
+        			jQuery("#rowed3").jqGrid("setGridParam",{url:"../collect/list/sample?sample="+ret.sampleno}).trigger("reloadGrid");
+        			jQuery("#evaluatelist").jqGrid("setGridParam",{url:"../collect/list/evaluatedata?sample="+ret.sampleno+"&collector="+ret.userid}).trigger("reloadGrid");
         		}
         		
         		if ($("#historyTabs").tabs('option', 'selected') == 0) {
         			getChart(ret.sampleno);
         		} else if ($("#historyTabs").tabs('option', 'selected') == 1) {
         			jQuery("#audit_information").jqGrid("setGridParam",{
-       					url:"<c:url value='/collect/list/explain'/>?sample="+ret.sampleno
+       					url:"../collect/list/explain?sample="+ret.sampleno
        				}).trigger("reloadGrid");
         		} else {
     				jQuery("#rowed3").setGridParam().showCol("last2");
@@ -358,7 +359,7 @@
 	function dataChange(select) {
 		var value = select.value;
 		jQuery("#s3list").jqGrid("setGridParam",{
-			url:"<c:url value='/collect/list/data'/>?select="+value
+			url:"../collect/list/data?select="+value
 		}).trigger("reloadGrid"); 
 	}
 	$(function() {
@@ -432,11 +433,11 @@
 		$("#cancelBtn").click(function(){
 			var id = jQuery("#s3list").jqGrid('getGridParam','selrow');
 			var ret = jQuery("#s3list").jqGrid('getRowData',id);
-			$.post("<c:url value='/collect/list/cancel'/>",{userid:ret.userid, sampleno:ret.sampleno},function(data) {
+			$.post("../collect/list/cancel",{userid:ret.userid, sampleno:ret.sampleno},function(data) {
 				if (data == true) {
 					window.location.reload();
 				} else {
-					alert("\u4e0d\u80fd\u5220\u9664\u4ed6\u4eba\u7684\u6536\u85cf\uff01");
+					alert("不能刪除他人的收藏！");
 				}
 			});
 		});
@@ -447,11 +448,11 @@
 			var bamc = $("#collect_bamc").val();
 			var type = $("#collect_type").val();
 			
-			$.post("<c:url value='/collect/list/collect'/>",{sample:sample, text:text, type:type, bamc:bamc},function(data) {
+			$.post("../collect/list/collect",{sample:sample, text:text, type:type, bamc:bamc},function(data) {
 				if (data == true) {
-					alert("\u6536\u85cf\u6210\u529f");
+					alert("收藏成功");
 				} else {
-					alert("\u4f60\u5df2\u6536\u85cf\u8be5\u6837\u672c\uff0c\u4e0d\u7528\u518d\u6b21\u6536\u85cf");
+					alert("您已收藏过该样本-collect");
 				}
 				$("#collectDialog").dialog("close");
 			});
@@ -465,7 +466,7 @@
 				}
 			});
 			jQuery("#s3list").jqGrid("setGridParam",{
-				url:"<c:url value='/collect/list/data'/>?type="+checked
+				url:"../collect/list/data?type="+checked
 			}).trigger("reloadGrid"); 
 			$("#typeDialog").dialog("close");
 		});
@@ -493,8 +494,8 @@
 			var text = $("#evaluateText").val();
 			var collector = $("#hiddenCollectorId").val();
 			
-			$.post("<c:url value='/collect/list/evaluate'/>",{sample:sample, text:text, collector:collector},function() {
-				jQuery("#evaluatelist").jqGrid("setGridParam",{url:"<c:url value='/collect/list/evaluatedata'/>?sample="+sample+"&collector="+collector}).trigger("reloadGrid");
+			$.post("../collect/list/evaluate",{sample:sample, text:text, collector:collector},function() {
+				jQuery("#evaluatelist").jqGrid("setGridParam",{url:"../collect/list/evaluatedata?sample="+sample+"&collector="+collector}).trigger("reloadGrid");
 				$("#evaluateDialog").dialog("close");
 			});
 		});
@@ -523,7 +524,7 @@
 		$("#search_bamc").autocomplete({
 	        source: function( request, response ) {
 	            $.ajax({
-	            	url: "<c:url value='/collect/list/searchBAMC'/>",
+	            	url: "../collect/list/searchBAMC",
 	                dataType: "json",
 	                data: {
 	                    name : request.term
@@ -542,7 +543,7 @@
 	        minLength : 1,
 	        select : function(event, ui) {
 	        	jQuery("#s3list").jqGrid("setGridParam",{
-	    			url:"<c:url value='/collect/list/data'/>?bamc="+ui.item.value
+	    			url:"../collect/list/data?bamc="+ui.item.value
 	    		}).trigger("reloadGrid"); 
 	        }
 		});
@@ -594,8 +595,41 @@
 		});
 		
 		$("#show_history").click(function() {
-			window.open("<c:url value='/explain/patientList'/>?patientId=" + $("#pId").html() + "&blh=" + $("#blh").children().html());
+			window.open("../explain/patientList?patientId=" + $("#pId").html() + "&blh=" + $("#blh").children().html());
 		});
 		
 		getList();
 	});
+	
+	function ajaxFileUpload(){
+	    var uplist = $("input[name^=uploads]");
+		var arrId = [];
+		for (var i=0; i< uplist.length; i++){
+		    if(uplist[i].value){
+		    	arrId[i] = uplist[i].id;
+			}
+	    }
+		$.ajaxFileUpload({
+			url:'../audit/ajax/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
+			secureuri:false,
+			fileElementId: arrId,  
+			success: function (){
+				alert("上传成功");
+				$("#uploadDialog").dialog("close");
+				jQuery("#list").trigger("reloadGrid");
+			},
+			error: function(){
+				alert("error");
+			}
+		});
+	}
+
+	function removeInput(evt, parentId){
+		   var el = evt.target == null ? evt.srcElement : evt.target;
+		   var div = el.parentNode.parentNode;
+		   var cont = document.getElementById(parentId);       
+		   if(cont.removeChild(div) == null){
+		    return false;
+		   }
+		   return true;
+	}

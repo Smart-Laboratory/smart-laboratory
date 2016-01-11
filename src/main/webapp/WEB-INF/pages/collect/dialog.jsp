@@ -39,26 +39,20 @@
 </div>
 
 <div id="uploadDialog" title="<fmt:message key='upload.title' />" style="text-align:left;" >
-    <%-- <h5><fmt:message key='image.name'/></h5>
-	<input id="image_name" type="text" class="span4"/> --%>
-	<div>
-	    <button class="btn" onclick="createInput();"><fmt:message key='add.point'/></button>
-	    <button class="btn" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
-		<div id="more"></div>
-	</div>
-	<h5><fmt:message key='template.select'/></h5>
-	<button id="addCellTemplate" class="btn" style="width:40px;">+</button>
-	<select id="cellSelect" onchange="cellChange(this)">
-		<option value='0'></option>
-		<c:forEach var="cell" items="${cellList}">
-			<option value='<c:out value="${cell.id}" />'><c:out value="${cell.name}" /></option>
-		</c:forEach>
-	</select>
-	<select id="cellTemplateSelect" onchange="cellTemplateChange(this)" style="display:none;">
-	</select>
-    <h5><fmt:message key='image.description'/></h5>
-    <textarea id="image_note" class="span4" rows="4"></textarea>
-    <div id="galleria"></div>
+	    <%-- <h5><fmt:message key='image.name'/></h5>
+		<input id="image_name" type="text" class="span4"/> --%>
+		<fieldset style="width:95%; margin-left:4px;">
+		<legend style="margin-top:3px;"><fmt:message key='upload.picture' /></legend>
+			<div>
+		    <button class="btn btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
+		    <button class="btn btn-success" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
+			<div id="more" class="form-inline">
+			</div>
+			</div>
+		</fieldset>
+	    <h5><fmt:message key='image.description'/></h5>
+	    <textarea id="image_note" class="span4" rows="4"></textarea>
+	    <div id="galleria"></div>
 </div>
 
 	

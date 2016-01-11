@@ -1,4 +1,4 @@
-package com.smart.webapp.controller.manage;
+package com.smart.webapp.controller.individual;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import com.smart.service.UserManager;
 import com.smart.service.lis.CollectSampleManager;
 
 @Controller
-@RequestMapping("/manage/collect*")
+@RequestMapping("/user/collect*")
 public class CollectViewController {
 
 	@Autowired

@@ -7,7 +7,7 @@
 			<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
 		</c:forEach></span>
 	</select>
-	<button class="btn" id="AuditCodeSetting" style="width:80px;margin-bottom:5px;""><fmt:message key="code.setting"/></button>
+	<button class="btn btn-info" id="AuditCodeSetting" style="width:80px;margin-bottom:5px;""><fmt:message key="code.setting"/></button>
 	</div>
 	<div id="historyTabs"  >
 		<ul>
