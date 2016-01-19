@@ -20,6 +20,7 @@
 			<span id="info_dangerous_undeal"><c:out value="${dangerous_undeal}" /></span>
 		</div>
 		<div class="form-group" style="float: right; margin-right:10px;">
+			<button id="writeBackPartBtn" class="btn" style="width:100px;height:28px;"><fmt:message key="writebackpart" /></button>
 			<button id="writeBackBtn" class="btn btn-success" style="width:55px;height:28px;padding:4px 5px;"><fmt:message key="writeback" /></button>
 			<button id="pageRefreshBtn" class="btn btn-info" style="width:30px;height:28px;padding:3px;">
 				<span class="glyphicon glyphicon-refresh" style="margin:3px;"></span>
@@ -29,6 +30,9 @@
 			</button>
 			<input type="hidden" value="0" id="isfulltag">
 			<input type="hidden" id="lastDepLab" value="${lab}">
+			<input type="hidden" id="writebackurl" value="${catcherUrl}">
+			<input type="hidden" id="userLabCode" value="${userCode}">
+			<input type="hidden" id="checkOperator" value="${checkOperator}">
 		</div>
 	</div>
 </div>

@@ -146,6 +146,11 @@ $(function() {
 	});
 	
 	$("#AuditCodeSetting").click(function(){
+		if ($("#hiddenAuditConfirm").val() == 'true') {
+			$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
+ 		} else {
+			$("#codeSetDiv .input-ctl").removeAttr('disabled');
+ 		}
 		$("#codeSetDialog").dialog("open");
 	});
 	

@@ -169,6 +169,10 @@ $(function(){
 			}
 		});
 		$("#manualWriteBackBtn").click(function() {
+			if($("#hiddenAuditConfirm").val() == 'false') {
+				alert("写回未开启，请到写回配置中开启写回！");
+				return;
+			}
 			var s; 
 			s = jQuery("#list").jqGrid('getGridParam','selarrrow'); 
 			var samples = "";
@@ -179,17 +183,31 @@ $(function(){
 				}
 				samples += "'"+sample+"'";
 			}
-			if (s.length != 0 && confirm("确认写回这 "+s.length+" 条样本？")) {
-				$.getJSON("${catcherUrl}ajax/writeBack/batch.htm?callback=?",{samples:samples,lab:$("#lastDepLib").val(),user:"${checkOperator}"},function(data){
-	   				 if (data.result == 0) {
-	   					alert("正在写回中...");
-	   				 } else if (data.result == 1) {
-	   					alert("写回成功");
-	   				 } else {
-	   					alert("写回失败");
-	   				 }
-	   			});
-			}
+			var code = "";
+			$("#codeSetDiv  .codeItem").each(function(index,self) {
+				if ($(self).find(".codeCheck").attr("checked") == "checked"){
+					code += $(self).find(".codeText").html() + ",";
+				}
+			});
+			code = code.substring(0,code.length-1);
+			$.get("../audit/testset",{code:code},function(data){
+				if(data) {
+					if (s.length != 0 && confirm("确认写回这 "+s.length+" 条样本？")) {
+						$.getJSON($("#writebackurl").val() + "ajax/writeBack/batch.htm?callback=?",{samples:samples,lab:$("#lastDepLib").val(),user:$("#userText").html()},function(data){
+			   				 if (data.result == 0) {
+			   					alert("正在写回中...");
+			   				 } else if (data.result == 1) {
+			   					alert("写回成功");
+			   				 } else {
+			   					alert("写回失败");
+			   				 }
+			   			});
+					}
+				} else {
+					alert(code + "中有未设置的检验者，请先查看检验者设置！");
+				}
+				
+			});
 		});
 		$("#sampleDelete").click(function(){
 			

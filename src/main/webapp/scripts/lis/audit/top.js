@@ -32,11 +32,90 @@ $(function(){
  		$("#allNeedWriteBackDialog").dialog("open");
  	});
 	
+	$("#writeBackBtn").click(function() {
+		if($("#hiddenAuditConfirm").val() == "false") {
+			alert("写回未开启，请到写回配置中开启写回！");
+			return;
+		}
+		var code = "";
+		$("#codeSetDiv  .codeItem").each(function(index,self) {
+			if ($(self).find(".codeCheck").attr("checked") == "checked"){
+				code += $(self).find(".codeText").html() + ",";
+			}
+		});
+		code = code.substring(0,code.length-1);
+		$.get("../audit/testset",{code:code},function(data){
+			if(data) {
+				if ($("#need_write_back").html() != "0") {
+					if (confirm("确认写回"+$("#need_write_back").html()+"条样本")) {
+						writeBackOnce($("#userLabCode").val(), $("#lastDepLib").val(), $("#userText").html());
+					}
+				}
+			} else {
+				alert(code + "中有未设置的检验者，请先查看检验者设置！");
+			}
+		});
+		
+	});
+	
+	var isFirstCliclkPart = true;
+	$("#writeBackPartBtn").click(function() {
+		if($("#hiddenAuditConfirm").val() == "false") {
+			alert("写回未开启，请到写回配置中开启写回！");
+			return;
+		}
+		if ($("#need_write_back").html() != "0") {
+			if (isFirstCliclkPart) {
+				var isFirstChecked = true;
+				var code = "";
+				$("#codeSetDiv  .codeItem").each(function(index,self) {
+					if ($(self).find(".codeCheck").attr("checked") == "checked" && isFirstChecked){
+						isFirstChecked = false;
+						code = $(self).find(".codeText").html();
+					}
+				});
+				$("#writeBack_text").val(code + "001-999");
+				isFirstCliclkPart = false;
+			}
+			//getWriteBackList($("#lastDepLib").val(), "${checkOperator}");
+			$("#writeBackPartDialog").dialog("open");
+		}
+	});
+	
+	$("#writePartBtn").click(function() {
+		var code = "";
+		$("#codeSetDiv  .codeItem").each(function(index,self) {
+			if ($(self).find(".codeCheck").attr("checked") == "checked"){
+				code += $(self).find(".codeText").html() + ",";
+			}
+		});
+		code = code.substring(0,code.length-1);
+		$.get("../audit/testset",{code:code},function(data){
+			if(data) {
+				if ($("#writeBack_text").val() != "") {
+					writeBackPart($("#writeBack_text").val(), $("#lastDepLib").val(), $("#userText").html());
+				}
+			} else {
+				alert(code + "中有未设置的检验者，请先查看检验者设置！");
+			}
+		});
+	});
+	
+	$("#passAndwriteBackBtn").click(function() {
+	if ($("#writeBack_text").val() != "") {
+		$.post("<c:url value='/explain/audit/passAndWrite'/>",{text:$("#writeBack_text").val(),op:"pass"},function(data) {
+			if (data == true) {
+				writeBackPart($("#writeBack_text").val(), $("#lastDepLib").val(), $("#userText").html());
+			}
+		});
+		
+		}
+	});
+	
 });
 
 function writeBackOnce(code, lab, user) {
-		
-	$.getJSON("${catcherUrl}ajax/writeBack/once.htm?callback=?",{code:code, lib:lab, operator:user},function(data){
+	$.getJSON($("#writebackurl").val() + "ajax/writeBack/once.htm?callback=?",{code:code, lib:lab, operator:user},function(data){
 		if (data.result == 0) {
 			alert("正在写回中...");
 		} else if (data.result == 1) {
@@ -59,3 +138,43 @@ function writeBackOnce(code, lab, user) {
 		 }
 	});
 }
+
+function writeBackPart(text, lab, user) {
+		
+	$.getJSON($("#writebackurl").val() + "ajax/writeBack/part.htm?callback=?",{text:text.toUpperCase(), lib:lab, operator:user},function(data){
+		if (data.result == 0) {
+			alert("正在写回中...");
+		} else if (data.result == 1) {
+			$.get("../audit/count",{}, function(data) {
+	 			$("#today_info_unaudit").html(data.todayunaudit);
+	 			$("#today_info_unpass").html(data.todayunpass);
+	 			$("#need_write_back").html(data.needwriteback);
+	 			$("#info_dangerous_undeal").html(data.dangerous);
+	 			if (data.dangerous != 0) {
+	 				$("#div_dangerous").removeClass('alert-success');
+	 				$("#div_dangerous").addClass('alert-error');
+	 			} else {
+	 				$("#div_dangerous").removeClass('alert-error');
+	 				$("#div_dangerous").addClass('alert-success');
+	 			}
+	 		},'json');
+			alert("写回成功！");
+			$("#writeBackPartDialog").dialog("close");
+		 } else {
+			alert("写回失败！");
+		 }
+	 });
+}
+
+function getWriteBackList(lab, operator) {
+	$.getJSON("../audit/ajax/writeBackList",{lab:lab, operator:operator},function(data){
+		var array = data.sample.split(",");
+		var html = "";
+		for (var i=0; i<array.length; i++) {
+			html += "<div class='checkbox' style='float:left;'><input type='checkbox' name='writeBackSampleCheck' value='" + array[i] + "'/>" + array[i];
+			html += "</div>";
+		}
+		$("#writeBackList").append(html);
+	});
+}
+	 

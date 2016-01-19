@@ -363,6 +363,39 @@ public class AuditController extends BaseAuditController {
 	}
     
     /**
+	 * 判断检验者是否设置
+	 * 
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+    @RequestMapping(value = "/testset*", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean testSet(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String code = request.getParameter("code");
+		boolean returnFlag = true;
+		if (!StringUtils.isEmpty(code)) {
+			String[] codes = code.split(",");
+			for (String cd : codes) {
+				List<String> jyzList = rmiService.getProfileJYZ(cd, null);
+				boolean flag = false;
+				for (String jyz : jyzList) {
+					if (!StringUtils.isEmpty(jyz)) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					returnFlag = false;
+				}
+			}
+		}
+		return returnFlag;
+	}
+    
+    /**
 	 * 通过或未通过 标本
 	 * 
 	 * 
@@ -528,8 +561,7 @@ public class AuditController extends BaseAuditController {
 			json.put("todayunaudit", todayList.get(0));
 			json.put("todayunpass", todayList.get(1));
 			json.put("dangerous", todayList.get(2));
-//			json.put("needwriteback", todayList.get(3));
-			json.put("needwriteback", 0);
+			json.put("needwriteback", todayList.get(3));
 			
 //			long interval = new Date().getTime() - manager.getLastFinishTime(operator.getUsername());
 			// 0:不需要自动审核

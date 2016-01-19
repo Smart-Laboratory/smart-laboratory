@@ -202,19 +202,8 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		list.add(unpass);
 		list.add(danger);
 		
-		StringBuilder builder2 = new StringBuilder();
-		builder2.append("select count(s) from Sample s where s.section.code");
-		if (department.contains(",")) {
-			builder2.append(" in (");
-			builder2.append(department);
-			builder2.append(")");
-		} else {
-			builder2.append("=");
-			builder2.append(department);
-		}
-		
 		if (!date.equals("________")) {
-			int needwriteBack = ((Number)getSession().createQuery(builder2.toString() + " and s.writeback!=0").uniqueResult()).intValue(); 
+			int needwriteBack = ((Number)getSession().createQuery(builder.toString() + " and p.writeback!=0").uniqueResult()).intValue(); 
 			list.add(needwriteBack);
 		}
 		

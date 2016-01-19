@@ -118,7 +118,6 @@ public class AuditViewController {
 		request.setAttribute("lab", lab);
 		request.setAttribute("departList", depart);
 		request.setAttribute("codeList", codeList);
-		//request.setAttribute("checkOperator", operator.getUsername());
 		return new ModelAndView();
 	}
 	
