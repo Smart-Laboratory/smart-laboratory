@@ -39,5 +39,9 @@
         <mapping class="com.smart.model.lis.Task"/>
         <mapping class="com.smart.model.user.UserLevel"/>
         <mapping class="com.smart.model.user.Evaluate"/>
+        <mapping class="com.smart.model.pb.Arrange"/>
+        <mapping class="com.smart.model.pb.DayShift"/>
+        <mapping class="com.smart.model.pb.Shift"/>
+        <mapping class="com.smart.model.pb.WInfo"/>
     </session-factory>
 </hibernate-configuration>

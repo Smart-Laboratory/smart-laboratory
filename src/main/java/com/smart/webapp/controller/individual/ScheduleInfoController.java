@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/user/info*")
+@RequestMapping("/pb/pbbb*")
 public class ScheduleInfoController {
 	
 	@RequestMapping(method = RequestMethod.GET)

@@ -131,11 +131,11 @@
 					$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
 				}
 				var hisDate = jQuery("#rowed3").jqGrid("getGridParam", "userData").hisDate;
-				$("#jqgh_rowed3_last").html("\u5386\u53f2");
-				$("#jqgh_rowed3_last1").html("\u5386\u53f2");
-				$("#jqgh_rowed3_last2").html("\u5386\u53f2");
-				$("#jqgh_rowed3_last3").html("\u5386\u53f2");
-				$("#jqgh_rowed3_last4").html("\u5386\u53f2");
+				$("#jqgh_rowed3_last").html("历史");
+				$("#jqgh_rowed3_last1").html("历史");
+				$("#jqgh_rowed3_last2").html("历史");
+				$("#jqgh_rowed3_last3").html("历史");
+				$("#jqgh_rowed3_last4").html("历史");
 				if (hisDate != null && hisDate != "") {
 					var his = hisDate.split(",");
 					if (his.length == 1) {
@@ -199,49 +199,49 @@
         			if (!isNaN(h) && !isNaN(l)) {
         				if (!isNaN(va)) {
         					if (va < l) {
-	        					res = "<font color='red'>\u2193</font>";
+	        					res = "<font color='red'>↓</font>";
 	        				} else if (va > h) {
-	        					res = "<font color='red'>\u2191</font>";
+	        					res = "<font color='red'>↑</font>";
 	        				}
         				}
         				
         				if (!isNaN(la)) {
         					if (la < l) {
-	        					res1 = "<font color='red'>\u2193</font>";
+	        					res1 = "<font color='red'>↓</font>";
 	        				} else if (la > h) {
-	        					res1 = "<font color='red'>\u2191</font>";
+	        					res1 = "<font color='red'>↑</font>";
 	        				}
         				}
         				
         				if (!isNaN(la1)) {
         					if (la1 < l) {
-	        					res2 = "<font color='red'>\u2193</font>";
+	        					res2 = "<font color='red'>↓</font>";
 	        				} else if (la1 > h) {
-	        					res2 = "<font color='red'>\u2191</font>";
+	        					res2 = "<font color='red'>↑</font>";
 	        				}
         				}
         				
         				if (!isNaN(la2)) {
         					if (la2 < l) {
-	        					res3 = "<font color='red'>\u2193</font>";
+	        					res3 = "<font color='red'>↓</font>";
 	        				} else if (la2 > h) {
-	        					res3 = "<font color='red'>\u2191</font>";
+	        					res3 = "<font color='red'>↑</font>";
 	        				}
         				}
         				
         				if (!isNaN(la3)) {
         					if (la3 < l) {
-	        					res4 = "<font color='red'>\u2193</font>";
+	        					res4 = "<font color='red'>↓</font>";
 	        				} else if (la3 > h) {
-	        					res4 = "<font color='red'>\u2191</font>";
+	        					res4 = "<font color='red'>↑</font>";
 	        				}
         				}
         				
         				if (!isNaN(la4)) {
         					if (la4 < l) {
-	        					res5 = "<font color='red'>\u2193</font>";
+	        					res5 = "<font color='red'>↓</font>";
 	        				} else if (la4 > h) {
-	        					res5 = "<font color='red'>\u2191</font>";
+	        					res5 = "<font color='red'>↑</font>";
 	        				}
         				}
         			}

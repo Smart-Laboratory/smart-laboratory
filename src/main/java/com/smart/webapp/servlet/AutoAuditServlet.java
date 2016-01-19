@@ -150,7 +150,7 @@ public class AutoAuditServlet extends HttpServlet {
     	        				for (TestResult t : now) {
     	        					testIdSet.add(t.getTestId());
     	        				}
-    	        				System.out.println(info.getSampleNo()+" : " + now.size());
+//    	        				System.out.println(info.getSampleNo()+" : " + now.size());
     	        				try {
 	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
 	    	        				for (Sample p : list) {
