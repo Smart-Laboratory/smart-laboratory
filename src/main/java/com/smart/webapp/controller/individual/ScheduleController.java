@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +96,7 @@ public class ScheduleController {
 		List<WInfo> wiList = wInfoManager.getBySection(section, type);
 		
 		//获取科室排班选项表
-		Map<String, String> wshifts = new HashMap<String,String>();
+		Map<String, String> wshifts = new LinkedHashMap<String,String>();
 		List<Shift> ss = shiftManager.getShiftBySection(section);
 		for(Shift shift : ss){
 			wshifts.put(shift.getAb(), shift.getName());

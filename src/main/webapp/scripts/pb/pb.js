@@ -65,13 +65,16 @@ $(function() {
 	$("#head").html($("#test").val());
 	$("#pbdata").html($("#test1").val());
 	
-	getHoliday();
+//	getHoliday();
 	
 	$("#pbdata tr td").click(function(){
 		var id=this.id;
+		var name = this.name;
 		var shifts=$("#"+id).html();
 		$.each($("#shiftSelect input"),function(name,v){
 			if(v.checked){
+				
+				
 				if(shifts.indexOf(v.value)>=0){
 					shifts=shifts.replace(v.value+";","");
 				}else{

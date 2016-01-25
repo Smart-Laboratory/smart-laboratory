@@ -1,6 +1,5 @@
 function labChange(select){
 	var depart = select.value;
-	alert(depart);
 	$("#labSelect").val(depart);
 	jQuery("#witable").jqGrid("setGridParam",{
 			url:"../pb/sz/ajax/getWinfo?section="+depart}).trigger("reloadGrid");

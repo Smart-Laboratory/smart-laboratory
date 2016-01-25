@@ -128,10 +128,14 @@ $(function() {
 	
 	$("#kstable tr td").click(function(){
 		var id=this.id;
+		var name = $("#"+id).attr("name");
 		var shifts=$("#"+id).html();
-		$.each($("#shiftSelect input"),function(name,v){
+		$.each($("#shiftSelect input"),function(n,v){
 			if(v.checked){
-				if(shifts.indexOf(v.value)>=0){
+				if(v.value == "\u516C\u4F11"){
+					name = name.replace("td","");
+					$("td[name$='"+name+"']").css("background","#FDFF7F");
+				}else if(shifts.indexOf(v.value)>=0){
 					shifts=shifts.replace(v.value+";","");
 				}else{
 					shifts = shifts + v.value+";";

@@ -298,4 +298,15 @@ public class WInfo {
 		return 0;
 	}
 	
+	@Transient
+	public double getDefeHolidayNum(){
+		double num =0;
+		for(String MonthHoliday : this.defeHoliday.split(";")){
+			if(MonthHoliday !=null){
+				num += Integer.parseInt( MonthHoliday.split("-")[1] );
+			}
+		}
+		return num;
+	}
+	
 }

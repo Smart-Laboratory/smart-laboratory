@@ -150,7 +150,6 @@ public class PbController {
 			for(Arrange arrange : arranges){
 				shifts += arrange.getShift();
 			}
-			System.out.println(shifts);
 			double holiday = 0;
 			double worktime = 0;
 			double monthOff = 0;
@@ -226,5 +225,18 @@ public class PbController {
 		}
 	}
 	
-
+	@RequestMapping(method = RequestMethod.GET,value = "/getholiday*")
+	@ResponseBody
+	public List<Object> getHoliday(HttpServletRequest request, HttpServletResponse response) throws JSONException{
+		String section = request.getParameter("section");
+		List<WInfo> wiList = wInfoManager.getBySection(section, "0");
+		List<Object> objects = new ArrayList<Object>();
+		for(WInfo w : wiList){
+			JSONObject o = new JSONObject();
+			o.put("name", w.getName());
+			o.put("holiday", w.getHoliday());
+			objects.add(o);
+		}
+		return objects;
+	}
 }

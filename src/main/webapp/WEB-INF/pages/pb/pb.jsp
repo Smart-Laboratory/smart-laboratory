@@ -68,11 +68,12 @@ border: 0px solid #009933;
 			</select>
 		</div>
 		<div id="shiftSelect" class="checkbox" >
-			<c:forEach items="${wshifts }" var="shift">
+			<c:forEach items="${wshifts}" var="shift">
 				<label>
       				<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
     			</label>
 			</c:forEach>
+			
 		</div>
 		
 		

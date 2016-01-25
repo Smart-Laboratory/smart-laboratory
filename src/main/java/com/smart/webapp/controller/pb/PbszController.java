@@ -131,7 +131,7 @@ public class PbszController {
 			map.put("ismid", wi.getMidStr());
 			map.put("pmshift", wi.getPmshift());
 			map.put("holiday", wi.getHoliday());
-			map.put("defeHoliday", wi.getDefeHoliday());
+			map.put("defeHoliday", wi.getDefeHolidayNum());
 			dataRows.add(map);
 			index++;
 		}
