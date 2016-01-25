@@ -20,7 +20,7 @@ public class Arrange {
 	private String shift;
 	private String worker;
 	private String section;
-	private int type;
+	private int type;//员工、实习生
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

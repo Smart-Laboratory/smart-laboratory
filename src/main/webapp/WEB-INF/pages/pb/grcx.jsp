@@ -2,7 +2,6 @@
 
 <head>
 <title><fmt:message key="menu.pb" /></title>
-<script type="text/javascript" src="<c:url value='/scripts/grid.locale-cn.js'/> "></script>
 <script type="text/javascript" src="<c:url value='/scripts/moment.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/fullcalendar.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/lang-all.js'/>"></script>
@@ -46,6 +45,7 @@ $(function() {
 			eventLimit: true,
 			events: function() {
 				$("#calendar").fullCalendar('removeEvents');
+				var name = '${name}';
 			    $.get("<c:url value='/pb/grcx/data'/>",{name:name},function(data){
 		    		for (var i=0 ; i < data.length ; i++) {
 		    			$("#calendar").fullCalendar('renderEvent',data[i],true);

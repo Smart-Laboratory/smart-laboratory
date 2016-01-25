@@ -7,10 +7,14 @@ import com.smart.model.pb.Arrange;
 public interface ArrangeDao extends GenericDao<Arrange, Long> {
 
 	void saveAll(List<Arrange> list);
+	
+	Arrange getByUser(String name, String day);
 
 	List<Arrange> getArrangerd(String names, String month);
 
-	List<Arrange> getPersonalArrange(String name, String month);
+	List<Arrange> getPersonalArrange(String name, String day);
+	
+	List<Arrange> getMonthArrangeByName(String name, String month);
 
 	List<Arrange> getSxjxArrangerd(String yearAndMonth);
 
@@ -18,4 +22,5 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 
 	void removeAll(String name, String date);
 
+	
 }

@@ -32,7 +32,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 
 	public WInfo getByName(String name) {
 		@SuppressWarnings("unchecked")
-		List<WInfo> list = getSession().createQuery("from WInfo where name=?").list();
+		List<WInfo> list = getSession().createQuery("from WInfo where name='"+name+"'").list();
 		return list.get(0);
 	}
 

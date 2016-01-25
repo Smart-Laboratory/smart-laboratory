@@ -57,7 +57,7 @@ public class PbgrController {
 		if(name == null) {
 			name = user.getName();
 		}
-		WInfo wi = wInfoManager.getByName(name);
+//		WInfo wi = wInfoManager.getByName(name);
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH)+1; 
@@ -81,54 +81,20 @@ public class PbgrController {
 		
 		for(Arrange arr : arrList) {
 			if(arr.getType() == 0) {
-				Temp t = new Temp();
-				Temp t2 = new Temp();
-				String ab = arr.getShift();
-				if (ab.contains("中")) {
-					t.title = "上午" + map.get(ab.replace("上", "").replace("中", "")).getName() + "，中班";
-					t.start = arr.getDate();
-					t.color = "#87CEFA";
-					t.textColor = "black";
-					t2.title = map.get(ab.replace("上", "").replace("中", "")).getWorktime().replace("17:00", "14:00");
-					t2.start = arr.getDate();
-					t2.color = "#87CEFA";
-					t2.textColor = "black";
-				} else if (ab.contains("下")) {
-					if(ab.contains("上")) {
-						t.title = "上午" + map.get(ab.substring(1, ab.indexOf("下"))).getName() + "，" + ab.substring(ab.indexOf("下"), ab.length());
+				String abs = arr.getShift();
+				for(String ab : abs.split(";")){
+					String title = "";
+					if(!ab.isEmpty()){
+						Temp t = new Temp();
+						title = map.get(ab).getName();
+						title += " - "+map.get(ab).getWorktime();
+						t.title = title;
 						t.start = arr.getDate();
 						t.color = "#87CEFA";
 						t.textColor = "black";
-						t2.title = map.get(ab.substring(1, ab.indexOf("下"))).getWorktime();
-						if(ab.contains("下休")) {
-							t2.title = t2.title.replace("17:30", "12:00").replace("17:00", "12:00");
-						}
-						t2.start = arr.getDate();
-						t2.color = "#87CEFA";
-						t2.textColor = "black";
-					} else {
-						t.title = ab;
-						t.start = arr.getDate();
-						t.color = "#87CEFA";
-						t.textColor = "black";
-						t2.title = "14:00-17:00";
-						t2.start = arr.getDate();
-						t2.color = "#87CEFA";
-						t2.textColor = "black";
+						data.add(t);
 					}
-					
-				} else {
-					t.title = map.get(ab).getName();
-					t.start = arr.getDate();
-					t.color = "#87CEFA";
-					t.textColor = "black";
-					t2.title = map.get(ab).getWorktime();
-					t2.start = arr.getDate();
-					t2.color = "#87CEFA";
-					t2.textColor = "black";
 				}
-				data.add(t);
-				data.add(t2);
 			} else {
 				
 			}

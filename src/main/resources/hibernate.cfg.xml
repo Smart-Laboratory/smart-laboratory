@@ -43,5 +43,6 @@
         <mapping class="com.smart.model.pb.DayShift"/>
         <mapping class="com.smart.model.pb.Shift"/>
         <mapping class="com.smart.model.pb.WInfo"/>
+        <mapping class="com.smart.model.pb.WorkCount"/>
     </session-factory>
 </hibernate-configuration>

@@ -11,6 +11,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.drools.compiler.lang.dsl.DSLMapParser.mapping_file_return;
+import org.drools.core.common.IdentityAssertMapComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +26,14 @@ import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
+import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
+import com.smart.model.pb.WorkCount;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
+import com.smart.service.ShiftManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.WorkCountManager;
 
 
 @Controller
@@ -44,7 +52,16 @@ public class PbController {
 	@Autowired
 	private UserManager userManager;
 	
+	@Autowired
+	private ShiftManager shiftManager;
 	
+	@Autowired
+	private WorkCountManager workCountManager;
+	
+	private Map<String, Double> shiftTime = null;
+	
+	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
 	
 	
 	@RequestMapping(value = "/submit*", method = RequestMethod.POST)
@@ -52,28 +69,21 @@ public class PbController {
 	public boolean submit(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
 		String text = request.getParameter("text");
-		User user = userManager.getUserByUsername(request.getRemoteUser());
 		List<Arrange> list = new ArrayList<Arrange>();
-		String section = user.getLastLab();
+		String section = request.getParameter("section");
 		if(text != "") {
-			for(String str : text.split(";")) {
+			for(String str : text.split(",")) {
 				String[] arr = str.split(":");
-				Arrange a = new Arrange();
+				
+				Arrange a = arrangeManager.getByUser(arr[0], arr[1]);
+				if(a==null)
+					a=new Arrange();
 				a.setSection(section);
 				a.setWorker(arr[0]);
 				a.setDate(arr[1]);
 				a.setShift(arr[2]);
 				a.setType(0);
-				if(arr[3].equals("1")) {
-					a.setShift("上" + arr[2] + "中");
-				}
-				if(arr.length == 5) {
-					if(!arr[2].equals("")) {
-						a.setShift("上" + arr[2] + "下" + arr[4]);
-					} else {
-						a.setShift("下" + arr[4]);
-					}
-				}
+				
 				list.add(a);
 			}
 		}
@@ -89,11 +99,13 @@ public class PbController {
 		String type = request.getParameter("type");
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		List<Arrange> list = new ArrayList<Arrange>();
-		String section = user.getLastLab();
+		String section = "1300000";
 		if(text != "") {
-			for(String str : text.split(";")) {
+			for(String str : text.split(",")) {
 				String[] arr = str.split(":");
-				Arrange a = new Arrange();
+				Arrange a = arrangeManager.getByUser(arr[0], arr[1]);
+				if(a==null)
+					a=new Arrange();
 				a.setSection(section);
 				a.setWorker(arr[0]);
 				a.setDate(arr[1]);
@@ -108,21 +120,111 @@ public class PbController {
 		return true;
 	}
 	
-	@RequestMapping(value = "/resubmit*", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.GET,value = "/workCount*")
 	@ResponseBody
-	public boolean resubmit(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String date = request.getParameter("date");
-		String name = request.getParameter("name");
-		String shift = request.getParameter("shift");
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		String section = user.getLastLab();
-		Arrange a = new Arrange();
-		a.setSection(section);
-		a.setWorker(name);
-		a.setDate(date);
-		a.setShift(shift);
-		arrangeManager.save(a);
-		return true;
+	public List<WorkCount> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		List<WorkCount> wList = new ArrayList<WorkCount>();
+		if(shiftTime == null)
+			initMap();
+		
+		String section = request.getParameter("section");
+		String month = request.getParameter("month");
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, Integer.parseInt(month.substring(0,4)));
+		calendar.set(Calendar.MONTH, Integer.parseInt(month.substring(5,7))-1);
+		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
+		
+		List<WInfo> wInfos = wInfoManager.getBySection(section, "0");
+		
+		for(WInfo w : wInfos){
+			List<Arrange> arranges = arrangeManager.getMonthArrangeByName(w.getName(), month);
+			
+			WorkCount workCount = workCountManager.getPersonByMonth(w.getName(),month,section);
+			if(workCount==null){
+				workCount = new WorkCount();
+			}
+			
+			String shifts = "";
+			for(Arrange arrange : arranges){
+				shifts += arrange.getShift();
+			}
+			System.out.println(shifts);
+			double holiday = 0;
+			double worktime = 0;
+			double monthOff = 0;
+			for(String shift : shifts.split(";")){
+				if(shiftTime.containsKey(shift)){
+					worktime += shiftTime.get(shift);
+				}
+				if(shift=="年休"){
+					holiday +=1;
+				}
+				if(shift.contains("休"))
+					monthOff += 1;
+				
+			}
+			
+			workCount.setHoliday(holiday);
+			workCount.setWorkTime(worktime);
+			workCount.setWorker(w.getName());
+			workCount.setMonthOff(days-arranges.size()+monthOff);
+			workCount.setSection(section);
+			workCount.setWorkMonth(month);
+			wList.add(workCount);
+			
+			workCountManager.save(workCount);
+			//计算年休
+			
+			double nx = w.getHolidayNum()-workCountManager.getYearCount(month.substring(0, 4),w.getName());
+			w.setHoliday(w.getHolidayNum() - nx);
+			
+			//计算积修
+			double yjx = 0;
+			int j = 1;
+	        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
+	            try {
+	                Date date = sdf1.parse(month + "-" + j);
+	                if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
+	                	yjx+=1;
+	                }
+	            } catch (Exception e) {
+	            	e.printStackTrace();	
+	            }
+	        }
+	        yjx = yjx - (days - worktime);
+	        
+	        
+	        String defeholiday = w.getDefeHoliday();
+	        if(defeholiday == null){
+	        	defeholiday = month+":"+yjx+";";
+	        }
+	        else if(defeholiday.contains(month)){
+	        	for(String jx : defeholiday.split(";")){
+	        		if(jx.contains(month)){
+	        			defeholiday.replace(jx, month+":"+yjx);
+	        		}
+	        	}
+	        }
+	        else{
+	        	defeholiday += month+":"+yjx+";";
+	        }
+	        w.setDefeHoliday(defeholiday);
+	        wInfoManager.save(w);
+			
+		}
+		
+		return wList;
 	}
 	
+	public void initMap(){
+		shiftTime = new HashMap<String,Double>();
+		List<Shift> shifts = shiftManager.getAll();
+		for(Shift shift : shifts){
+			shiftTime.put(shift.getAb(), shift.getDays());
+		}
+	}
+	
+
 }

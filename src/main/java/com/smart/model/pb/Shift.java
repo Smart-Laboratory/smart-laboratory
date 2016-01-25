@@ -23,6 +23,8 @@ public class Shift {
 	private String worktime;
 	private int order;
 	
+	private double days;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SHIFT")
@@ -79,4 +81,15 @@ public class Shift {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+
+	@Column
+	public double getDays() {
+		return days;
+	}
+
+	public void setDays(double days) {
+		this.days = days;
+	}
+	
+	
 }

@@ -1,7 +1,10 @@
 package com.smart.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.solr.common.params.CommonParams.EchoParamStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +39,5 @@ public class WInfoManagerImpl extends GenericManagerImpl<WInfo, Long> implements
 		return wInfoDao.getBySection(section);
 	}
 
+	
 }

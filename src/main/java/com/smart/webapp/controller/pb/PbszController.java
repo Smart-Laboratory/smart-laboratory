@@ -2,6 +2,7 @@ package com.smart.webapp.controller.pb;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -281,7 +282,7 @@ public class PbszController {
 		int ismid = Integer.parseInt(request.getParameter("ismid"));
 		String pmshift = request.getParameter("pmshift");
 		int holiday = Integer.parseInt(request.getParameter("holiday"));
-		int defeHoliday = Integer.parseInt(request.getParameter("defeHoliday"));
+		String defeHoliday = request.getParameter("defeHoliday");
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -323,7 +324,7 @@ public class PbszController {
 			wi.setIsmid(ismid);
 			wi.setPmshift(pmshift);
 			wi.setHoliday(holiday);
-			wi.setDefeHoliday(defeHoliday);
+//			wi.setDefeHoliday(defeHoliday);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));
@@ -431,5 +432,29 @@ public class PbszController {
 			dayShiftManager.remove(Long.parseLong(id));
 		}
 		return true;
+	}
+	@RequestMapping(value = "/resetHoliday*", method = RequestMethod.GET)
+	public void resetHoliday(HttpServletRequest request, HttpServletResponse response){
+		List<WInfo> wList = wInfoManager.getAll();
+		for(WInfo wInfo : wList){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(wInfo.getWorktime());
+			int year = calendar.get(Calendar.YEAR);
+			calendar.setTime(new Date());
+			int yearNow = calendar.get(Calendar.YEAR);
+			int gl = yearNow - year;
+			if(gl == 0){
+				wInfo.setHoliday(2.5);
+			}
+			else if(gl<10){
+				wInfo.setHoliday(5);
+			} else if(gl<20){
+				wInfo.setHoliday(10);
+			} else if(gl>20){
+				wInfo.setHoliday(15);
+			}
+			wInfoManager.save(wInfo);
+		}
+		
 	}
 }

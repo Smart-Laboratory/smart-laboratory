@@ -172,4 +172,8 @@ $(function() {
 	});
 	
 	getWI();
+	
+	$("#resetHoliday").click(function(){
+		$.get("../pb/sz/resetHoliday");
+	});
 });

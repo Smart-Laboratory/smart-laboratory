@@ -1,5 +1,6 @@
 package com.smart.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -37,7 +38,17 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Shift> getShiftBySection(String section) {
-		return getSession().createQuery("from Shift where section='"+section+"'").list();
+		List<Shift> shifts = new ArrayList<Shift>();
+		if(section=="1300000"){
+			shifts = getSession().createQuery("from Shift where section='"+section+"' and showord>0 order by showord").list();
+		} else{
+		shifts = getSession().createQuery("from Shift where section='"+section+"' order by showord").list();
+		List<Shift> shifts2 = getSession().createQuery("from Shift where section='1300000' and showord = 0 order by showord").list();
+		for(Shift s : shifts2){
+			shifts.add(s);
+		}
+		}
+		return shifts;
 	}
 
 }

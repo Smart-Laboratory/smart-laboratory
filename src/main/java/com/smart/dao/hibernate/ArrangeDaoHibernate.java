@@ -25,8 +25,22 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	}
 
 	@SuppressWarnings("unchecked")
+	public Arrange getByUser(String name, String day){
+		List<Arrange> list = getSession().createQuery("from Arrange where worker = '"+ name +"' and date = '"+ day +"' and type=0 order by worker asc, date asc").list();
+		if(list !=null && list.size()>0)
+			return (Arrange)list.get(0);
+		else
+			return null;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Arrange> getPersonalArrange(String name, String day) {
-		return getSession().createQuery("from Arrange where worker='"+ name +"' and date>='"+ day +"' order by worker asc, date asc").list();
+		return getSession().createQuery("from Arrange where worker='"+ name +"' and date>='"+ day +"' order by date asc").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Arrange> getMonthArrangeByName(String name, String month){
+		return getSession().createQuery("from Arrange where worker='"+ name +"' and date like'"+ month +"%' order by date asc").list();
 	}
 
 	@SuppressWarnings("unchecked")

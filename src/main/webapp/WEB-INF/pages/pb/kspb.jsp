@@ -1,8 +1,16 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-<title><fmt:message key="menu.pb" /></title>
-<script type="text/javascript" src="<c:url value='/scripts/grid.locale-cn.js'/> "></script>
+	<title><fmt:message key="menu.pb" /></title>
+	<script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.min.js'/> "></script>
+	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+	
+	<script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 
 <style>
 .day{
@@ -30,12 +38,13 @@ width:auto;
 height: 480px; 
 border: 0px solid #009933; 
 } 
-input[type="checkbox"] {
-    margin: 0 0 0;
-}
+
 </style>
 
 <script type="text/javascript">
+function labChange(item){
+	window.location.href="../pb/pb?section=" + $(item).val();
+}
 
 function randomShift(day) {
 	var week = $("#day" + day).html().substr(-1);
@@ -64,10 +73,14 @@ function checkShift(day) {
 }
 
 function changeType(select) {
-	window.location.href="<c:url value='/pb/pb'/>?type=" + select.value;
+	window.location.href="../pb/pb?section=1300000&type=" + select.value;
 }
 
 $(function() {
+	$("#kstable").html($("#tabledata").val());
+	$("#labSelect").val($("#section").val());
+	
+	
 	$("#date").datepicker({
 		changeMonth: true,
 	    changeYear: true,
@@ -84,31 +97,14 @@ $(function() {
 	    height: 240
 	});
 	
-	$("#repeatBtn").click(function() {
-		$("#reDialog").dialog("open");
-	});
-	
-	$("#arrBtn").click(function() {
-		var date = $("#date").val();
-		var name = $("#name").val();
-		var shift = $("#shift").val();
-		$.post("<c:url value='/pb/pb/resubmit'/>",{date:date,name:name,shift:shift},function(data) {
-			$("#reDialog").dialog("close");
-		});
-	});
 	
 	$("#shiftBtn").click(function() {
 		var ischecked = true;
-		/* var dateSize = <c:out value="${dateSize}"/>;
-		for (var i = 1; i <= dateSize; i++) {
-			if(!checkShift(i)) {
-				ischecked = false;
-			}
-		} */
 		if (ischecked) {
-			var text = "";
 			var type = $("#typeSel").val();
-			$("select[name^='select']").each(function(i){
+			var text = "";
+			
+			$("td[name^='td']").each(function(i){
 				var array = $(this).attr("id").split("-");
 				var day = "";
 				if(array[1].length == 1) {
@@ -116,40 +112,74 @@ $(function() {
 				} else {
 					day = array[1];
 				}
-				var date = '${month}';
-				var value = $(this).val();
+				var date = $("#month").val();
+				var value = $(this).html();
 				if(value != "") {
-					text = text + array[0] + ":" + date + "-" + day + ":" + value +";";
+					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 				}
 			});
-			$.post("<c:url value='/pb/pb/kssubmit'/>",{text:text,type:type},function(data) {
-				window.location.href="<c:url value='/pb/pbcx'/>";
+			$.post("../pb/pb/kssubmit",{text:text,type:type},function(data) {
+				window.location.href="../pb/pbcx"; 
 			});
 		}
 	});
 	
 	$("#typeSel").val("${type}");
 	
+	$("#kstable tr td").click(function(){
+		var id=this.id;
+		var shifts=$("#"+id).html();
+		$.each($("#shiftSelect input"),function(name,v){
+			if(v.checked){
+				if(shifts.indexOf(v.value)>=0){
+					shifts=shifts.replace(v.value+";","");
+				}else{
+					shifts = shifts + v.value+";";
+				}
+			}
+		});
+		$("#"+id).html(shifts);
+		
+	});
+	
+	$("#date").val($("#month").val());
 });
 </script>
 </head>
-<button id="shiftBtn" class="btn btn-success" style="margin-left:20px;"><fmt:message key='button.submit' /></button>
+<input id="section" value="${section }" type="hidden"/>
+<input id="month" value="${month }" type="hidden"/>
 
-<button id="repeatBtn" class="btn btn-info" style="margin-left:5px;width:120px;"><fmt:message key='pb.repeat' /></button>
 
-<select id='typeSel' style="margin-bottom:5px;float:left;height:30px;width:100px;" onchange="changeType(this)">
-	<option value="1" ><fmt:message key="pb.yb"/></option>
-	<option value="2" ><fmt:message key="pb.lz"/></option>
-	<option value="3" ><fmt:message key="pb.wc"/></option>
-	<option value="4" ><fmt:message key="pb.ybb"/></option>
-</select>
+<div class="form-inline" style="width:1024x;">
+			<input type="text" id="date" class="form-control" sytle="width:50px;">
+			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
+			<select id='typeSel' class="form-control" style="margin-bottom:5px;margin-right:15px;float:left;width:100px;" onchange="changeType(this)">
+				<option value="1" ><fmt:message key="pb.yb"/></option>
+				<option value="2" ><fmt:message key="pb.lz"/></option>
+				<option value="3" ><fmt:message key="pb.wc"/></option>
+				<option value="4" ><fmt:message key="pb.ybb"/></option>
+				<option value="5" ><fmt:message key="pb.ry"/></option>
+				<option value="6" ><fmt:message key="pb.hcy"/></option>
+				<option value="7" ><fmt:message key="pb.jjr"/></option>
+			</select>
+			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
+			
+			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
+				<span ><c:forEach var="depart" items="${departList}">
+				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
+			</c:forEach></span>
+			</select>
+</div>
+<div id="shiftSelect" class="checkbox">
+			<c:forEach items="${wshifts }" var="shift">
+				<label>
+      				<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
+    			</label>
+			</c:forEach>
+</div>
+<input id="tabledata" value="${arrString }" type="hidden" />
+<table id="kstable" style="font-size:12px;text-align:center;margin-top:5px;" border="1px;">
 
-<table style="font-size:12px;text-align:center;margin-top:5px;" border="1px;">
-<c:forEach items="${arrArray}" var="arr" varStatus="status">
-	<tr>
-		<c:forEach items="${arr}" var="shift">${shift}</c:forEach>
-	</tr>
-</c:forEach>
 </table>
 
 <div style="display:none;">	
@@ -158,16 +188,3 @@ $(function() {
 	</c:forEach>
 </div>
 
-<div id="reDialog" title="<fmt:message key='pb.repeat' />" style="text-align:left;">
-	<div>
-		<span class="label label-info"><fmt:message key="current.dateTime" /></span>
-		<input type="text" style="height:20px;width:100px;" id="date"></input>
-		<span class="label label-info"><fmt:message key="patients.patientName" /></span>
-		<input type="text" style="height:20px;width:100px;" id="name"></input>
-		<span class="label label-info"><fmt:message key="pb.shift" /></span>
-		<input type="text" style="height:20px;width:100px;" id="shift"></input>
-	</div>
-	<div>
-		<button id="arrBtn" class="btn btn-success" style="margin-left:65px;"><fmt:message key='button.submit' /></button>
-	</div>
-</div>

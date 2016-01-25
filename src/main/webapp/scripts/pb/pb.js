@@ -1,9 +1,9 @@
-function unescape(str) {
-    var elem = document.createElement('div');
-    elem.innerHTML = str;
-    document.write("111111111");
-    return elem.innerText || elem.textContent;
+
+
+function labChange(item){
+	window.location.href="../pb/pb?section=" + $(item).val();
 }
+
 function randomShift(day) {
 	var week = $("#day" + day).html().substr(-1);
 	var shift = $("#" + week).html();
@@ -49,7 +49,39 @@ function changeType(select) {
 	window.location.href="../pb/pb?type=" + select.value;
 }
 
+function getHoliday(){
+	var section = $("#section").val();
+	$.get("../pb/pb/getholiday",{section:1300600},function(data){
+		alert(11);
+		for(var i=0;i<data.length;i++){
+			var name = data[i].name;
+			var holiday = data[i].holiday;
+			alert(name + holiday);
+		}
+	});
+}
 $(function() {
+	$("#labSelect").val($("#section").val());
+	$("#head").html($("#test").val());
+	$("#pbdata").html($("#test1").val());
+	
+	getHoliday();
+	
+	$("#pbdata tr td").click(function(){
+		var id=this.id;
+		var shifts=$("#"+id).html();
+		$.each($("#shiftSelect input"),function(name,v){
+			if(v.checked){
+				if(shifts.indexOf(v.value)>=0){
+					shifts=shifts.replace(v.value+";","");
+				}else{
+					shifts = shifts + v.value+";";
+				}
+			}
+		});
+		$("#"+id).html(shifts);
+		
+	});
 	
 	$("#date").datepicker({
 		changeMonth: true,
@@ -75,8 +107,10 @@ $(function() {
 	$("#shiftBtn").click(function() {
 		var ischecked = true;
 		if (ischecked) {
+			var section = $("#section").val();
 			var text = "";
-			$("select[name^='select']").each(function(i){
+			
+			$("td[name^='td']").each(function(i){
 				var array = $(this).attr("id").split("-");
 				var day = "";
 				if(array[1].length == 1) {
@@ -84,65 +118,37 @@ $(function() {
 				} else {
 					day = array[1];
 				}
-				var date = '${month}';
-				var value = $(this).val();
-				var ismid = '0';
-				var pm = "";
-				if ($("#check" + $(this).attr("id")).length>0) {
-					if ($("#check" + $(this).attr("id")).is(':checked')) {
-						ismid = '1';
-					}
-				}
-				if ($("#pm" + $(this).attr("id")).length>0) {
-					pm = $("#pm" + $(this).attr("id")).val();
-				}
-				if(value != "" || pm != "") {
-					text = text + array[0] + ":" + date + "-" + day + ":" + value + ":" + ismid + ":" + pm +";";
+				var date = $("#month").val();
+				var value = $(this).html();
+				if(value != "") {
+					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 				}
 			});
-			$.post("../pb/pb/submit",{text:text},function(data) {
-				window.location.href="../pb/pbcx";
+			
+			$.post("../pb/pb/submit",{text:text,section:section},function(data) {
+				window.location.href="../pb/pb?date=" + $("#date").val();
 			});
 		}
 	});
 	
 	$("#shiftBtn2").click(function() {
-		var ischecked = true;
-		if (ischecked) {
-			var text = "";
-			$("select[name^='select']").each(function(i){
-				var array = $(this).attr("id").split("-");
-				var day = "";
-				if(array[1].length == 1) {
-					day = '0' + array[1];
-				} else {
-					day = array[1];
-				}
-				var date = '${month}';
-				var value = $(this).val();
-				var ismid = '0';
-				var pm = "";
-				if ($("#check" + $(this).attr("id")).length>0) {
-					if ($("#check" + $(this).attr("id")).is(':checked')) {
-						ismid = '1';
-					}
-				}
-				if ($("#pm" + $(this).attr("id")).length>0) {
-					pm = $("#pm" + $(this).attr("id")).val();
-				}
-				if(value != "" || pm != "") {
-					text = text + array[0] + ":" + date + "-" + day + ":" + value + ":" + ismid + ":" + pm +";";
-				}
-			});
-			$.post("../pb/pb/submit",{text:text},function(data) {
-				window.location.href="../pb/pb?date=" + $("#date").val();
-			});
-		}
+		var section = $("#section").val();
+		var month = $("#month").val();
+		$.get("../pb/pb/workCount",{section:section,month:month},function(data){
+			for(var i=0;i<data.length;i++){
+				var worker = data[i];
+				var name = worker.worker; 
+				$("#nx"+name).html(worker.holiday);
+				$("#yx"+name).html(worker.monthOff);
+				$("#yb"+name).html(worker.workTime);
+			}
+		});
+
 	});
 	
 	$("#changeMonth").click(function() {
 		window.location.href="../pb/pb?date=" + $("#date").val();
 	});
 	
-	$("#date").val('${month}');
+	$("#date").val($("#month").val());
 });

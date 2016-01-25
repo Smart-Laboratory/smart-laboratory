@@ -1,6 +1,7 @@
 package com.smart.model.pb;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class WInfo {
 	private int ismid;
 	private String pmshift;
 	
-	private float holiday;
-	private float defeHoliday;
+	private double holiday;
+	private String defeHoliday;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -201,20 +202,21 @@ public class WInfo {
 	}
 
 	@Column
-	public float getHoliday() {
+	public double getHoliday() {
 		return holiday;
+		
 	}
 
-	public void setHoliday(float holiday) {
+	public void setHoliday(double holiday) {
 		this.holiday = holiday;
 	}
 
 	@Column
-	public float getDefeHoliday() {
+	public String getDefeHoliday() {
 		return defeHoliday;
 	}
 
-	public void setDefeHoliday(float defeHoliday) {
+	public void setDefeHoliday(String defeHoliday) {
 		this.defeHoliday = defeHoliday;
 	}
 
@@ -274,6 +276,26 @@ public class WInfo {
 			}
 		}
 		return list;
+	}
+	@Transient
+	public double getHolidayNum(){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(this.getWorktime());
+		int year = calendar.get(Calendar.YEAR);
+		calendar.setTime(new Date());
+		int yearNow = calendar.get(Calendar.YEAR);
+		int gl = yearNow - year;
+		if(gl == 0){
+			return 2.5;
+		}
+		else if(gl<10){
+			return 5;
+		} else if(gl<20){
+			return 10;
+		} else if(gl>20){
+			return 15;
+		}
+		return 0;
 	}
 	
 }

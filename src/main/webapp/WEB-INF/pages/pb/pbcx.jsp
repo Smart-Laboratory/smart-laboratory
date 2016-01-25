@@ -3,7 +3,15 @@
 <head>
 	<title><fmt:message key="menu.pb" /></title>
 	<script type="text/javascript" src="../scripts/pb/pbcx.js"></script>
-	<script type="text/javascript" src="<c:url value='/scripts/grid.locale-cn.js'/> "></script>
+	<script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.min.js'/> "></script>
+	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+	
+	<script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 </head>
 
 <style>
@@ -19,9 +27,13 @@ table tr th {
 }
 </style>
 
-<div>
-	<input type="text" id="date" style="margin-left:20px;float:left;">
-	<select id="section" style="margin-left:20px;float:left;">
+<input id="section" value="${section }" type="hidden"/>
+<input id="month" value="${month }" type="hidden"/>
+<input id="type" value="${type }" type="hidden"/>
+
+<div class="form-inline">
+	<input type="text" id="date" class="form-control" style="margin-left:20px;float:left;">
+	<select id="sectionSel" class="form-control" style="margin-left:20px;float:left;">
 		<option value="1300000"><fmt:message key="labDepartment.1300000"/></option>
 		<option value="1300100"><fmt:message key="labDepartment.1300100"/></option>
 		<option value="1300200"><fmt:message key="labDepartment.1300200"/></option>
@@ -32,16 +44,16 @@ table tr th {
 		<option value="1300700"><fmt:message key="labDepartment.1300700"/></option>
 		<option value="1300800"><fmt:message key="labDepartment.1300800"/></option>
 	</select>
-	<div id="type" style="display:none;">
-		<select id='typeSel' style="margin-left:20px;float:left;">
+		<select id='type' class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
 			<option value="2" ><fmt:message key="pb.lz"/></option>
 			<option value="3" ><fmt:message key="pb.wc"/></option>
 			<option value="4" ><fmt:message key="pb.ybb"/></option>
-			<option value="5" ><fmt:message key="pb.sxjxlg"/></option>
+			<option value="5" ><fmt:message key="pb.ry"/></option>
+			<option value="6" ><fmt:message key="pb.hcy"/></option>
+			<option value="7" ><fmt:message key="pb.jjr"/></option>
 		</select>
-	</div>
-	<button id="search" type="button" class="btn btn-success" style="margin-left:20px;float:left;height:30px;"><fmt:message key='search'/></button>
+	<button id="searchPB" type="button" class="btn btn-success" style="margin-left:20px;float:left;"><fmt:message key='search'/></button>
 </div>
 
 
@@ -52,15 +64,12 @@ table tr th {
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="margin-left:5px;height:30px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="margin-left:5px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
 		<div>
-			<h3 style="margin-left:320px;"><c:out value="${date}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
+			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
+			<input id="cxdata" value="${arrString }" type="hidden"/>
 			<table id="data" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
-				<c:forEach items="${arrArray}" var="arr" >
-				<tr>
-					<c:forEach items="${arr}" var="shift">${shift}</c:forEach>
-				</tr>
-				</c:forEach>
+				
 			</table>
 		</div>
 	</c:otherwise>

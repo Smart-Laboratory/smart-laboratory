@@ -39,6 +39,7 @@
 		<li><a href="#tabs-4"><fmt:message key="pb.kq"/></a></li>
 	</ul>
 	<div id="tabs-1">
+		<button id="resetHoliday" class="bth btn-success"  ><fmt:message key="pb.resetHoliday"/></button>
 		<table id="witable"></table>
 		<div id="wipager"></div>
 	</div>

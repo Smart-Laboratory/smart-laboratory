@@ -48,7 +48,7 @@ public class PbcxController {
 		String section = request.getParameter("section");
 		String type = request.getParameter("type");
 		
-		if(section == null) {
+		if(section == null || section == "") {
 			section = user.getLastLab();
 		}
 		if(type == null) {
@@ -129,11 +129,19 @@ public class PbcxController {
         		}
             }
         }
+        String arrString = "";
+        for(int k=0; k<i; k++) {
+        	arrString += "<tr>";
+        	for(int l=0; l<j; l++) {
+        		arrString += shifts[k][l];
+        	}
+        	arrString += "</tr>";
+        }
         ModelAndView view = new ModelAndView();
         view.addObject("section", section);
-        view.addObject("date", tomonth);
+        view.addObject("month", tomonth);
         view.addObject("type", type);
-        view.addObject("arrArray", shifts);
+        view.addObject("arrString", arrString);
         view.addObject("size", shifts.length);
 		return view;
 	}

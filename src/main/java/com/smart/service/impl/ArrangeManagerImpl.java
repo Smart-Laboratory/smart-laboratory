@@ -24,6 +24,10 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 		arrangeDao.saveAll(list);
 	}
 
+	public Arrange getByUser(String name, String day){
+		return arrangeDao.getByUser(name, day);
+	}
+	
 	public List<Arrange> getArrangerd(String names, String month) {
 		return arrangeDao.getArrangerd(names, month);
 	}
@@ -32,6 +36,10 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 		return arrangeDao.getPersonalArrange(name, month);
 	}
 
+	public List<Arrange> getMonthArrangeByName(String name, String month){
+		return arrangeDao.getMonthArrangeByName(name, month);
+	}
+	
 	public List<Arrange> getSxjxArrangerd(String yearAndMonth) {
 		return arrangeDao.getSxjxArrangerd(yearAndMonth);
 	}
