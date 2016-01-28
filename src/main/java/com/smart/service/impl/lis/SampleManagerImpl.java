@@ -39,8 +39,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		sampleDao.saveAll(updateSample);
 	}
 
-	public List<Sample> getHistorySample(String patientId, String blh) {
-		return sampleDao.getHistorySample(patientId, blh);
+	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
+		return sampleDao.getHistorySample(patientId, blh, lab);
 	}
 
 	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno) {

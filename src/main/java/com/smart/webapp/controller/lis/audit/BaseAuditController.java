@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.lis.Diagnostic;
+import com.smart.model.lis.LikeLab;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Index;
@@ -19,6 +20,7 @@ import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
+import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TaskManager;
@@ -86,11 +88,15 @@ public class BaseAuditController {
 	@Autowired
     protected ProcessManager processManager = null;
 	
+	@Autowired
+    protected LikeLabManager likeLabManager = null;
+	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();
     protected Map<String, String> diagMap = new HashMap<String, String>();
     protected Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
+    protected Map<String, String> likeLabMap = new HashMap<String, String>();
 
 	protected synchronized void initMap() {
 		List<Index> list = indexManager.getAll();
@@ -117,6 +123,13 @@ public class BaseAuditController {
 		List<Ylxh> list = ylxhManager.getAll();
 		for (Ylxh y : list) {
 			ylxhMap.put(y.getYlxh(), y);
+		}
+	}
+	
+	protected synchronized void initLikeLabMap() {
+		List<LikeLab> list = likeLabManager.getAll();
+		for (LikeLab ll : list) {
+			likeLabMap.put(ll.getLab(), ll.getLikeLab());
 		}
 	}
 	

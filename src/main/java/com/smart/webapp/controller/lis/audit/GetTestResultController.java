@@ -60,6 +60,10 @@ public class GetTestResultController extends BaseAuditController {
 		if (idMap.size() == 0)
 			initMap();
 		
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
+		
 		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
 
 		Map<String, String> resultMap1 = new HashMap<String, String>();
@@ -70,7 +74,11 @@ public class GetTestResultController extends BaseAuditController {
 		int isLastYear = 5;
 		int isLastTwoYear = 5;
 		if (info != null) {
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh());
+			String lab = info.getSection().getCode();
+			if(likeLabMap.containsKey(lab)) {
+				lab = likeLabMap.get(lab);
+			}
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh(), lab);
 			Date receivetime = null;
 			receivetime = info.getProcess().getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
@@ -259,15 +267,24 @@ public class GetTestResultController extends BaseAuditController {
 		if (sampleNo == null) {
 			throw new NullPointerException();
 		}
+		
 		if (idMap.size() == 0)
 			initMap();
+		
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
 
 		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		int isLastYear = 2;
 		if (info != null) {
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh());
+			String lab = info.getSection().getCode();
+			if(likeLabMap.containsKey(lab)) {
+				lab = likeLabMap.get(lab);
+			}
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh(), lab);
 			Date receivetime = null;
 			receivetime = info.getProcess().getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();

@@ -14,6 +14,7 @@ public class InvalidSampleDaoHibernate extends GenericDaoHibernate<InvalidSample
 	public InvalidSampleDaoHibernate(){
 		super(InvalidSample.class);
 	}
+	
 	@SuppressWarnings("unchecked")
 	public List<InvalidSample> getByEzh(Long id){
 		if (id==null) {

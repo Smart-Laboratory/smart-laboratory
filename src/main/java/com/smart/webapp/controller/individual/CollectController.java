@@ -241,7 +241,8 @@ public class CollectController {
 		Map<String, String> resultMap4 = new HashMap<String, String>();
 		Map<String, String> resultMap5 = new HashMap<String, String>();
 		if (info != null) {
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getSection().getCode());
+			String lab = info.getSection().getCode();
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getSection().getCode(), lab);
 			long curInfoReceiveTime = info.getProcess().getReceivetime().getTime();
 			int index = 0;
 			Map<String, String> rmap = null;

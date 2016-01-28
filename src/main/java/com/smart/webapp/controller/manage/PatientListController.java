@@ -330,7 +330,8 @@ public class PatientListController {
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		Map<String, String> resultMap3 = new HashMap<String, String>();
 		if (info != null) {
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getYlxh());
+			String lab = info.getSection().getCode();
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getYlxh(), lab);
 			if (list.size() >= 2) {
 				for (TestResult result : list.get(1).getResults()) {
 					resultMap1.put(result.getTestId(), result.getTestResult());
@@ -407,7 +408,7 @@ public class PatientListController {
 
 		List<Sample> list = new ArrayList<Sample>();
 		if (select == 1) {
-			list = sampleManager.getHistorySample(text,text);
+			list = sampleManager.getHistorySample(text,text,text);
 		} else if (select==2 && text != null && from != null && to != null) {
 			list = sampleManager.getSampleByPatientName(from, to, text);
 		} else if (select==3) {

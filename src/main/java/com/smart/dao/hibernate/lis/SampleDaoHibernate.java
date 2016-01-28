@@ -121,10 +121,10 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Sample> getHistorySample(String patientId, String blh) {
+	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
 		
 		if(blh != null){
-			return getSession().createQuery("from Sample s where s.patient.blh ='"+blh+"'  order by s.id desc").list();
+			return getSession().createQuery("from Sample s where s.patient.blh ='" + blh + "' and s.section.code in (" + lab + ")  order by s.id desc").list();
 		}
 		return null;
 	}

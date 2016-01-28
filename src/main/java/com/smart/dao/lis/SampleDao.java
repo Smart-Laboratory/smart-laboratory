@@ -23,7 +23,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	void saveAll(List<Sample> updateSample);
 	
 	@Transactional
-	List<Sample> getHistorySample(String patientId, String blh);
+	List<Sample> getHistorySample(String patientId, String blh, String lab);
 
 	@Transactional
 	List<Sample> getDiffCheck(String patientid, String blh, String sampleno);
