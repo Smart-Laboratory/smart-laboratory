@@ -49,7 +49,7 @@
 			<div id="pBedHtml" class="col-sm-3 pinfo">
 				<span class='col-sm-6'><fmt:message key="patient.departbed" />:</span><b id="pBed"></b>
 			</div>
-			<div class="col-sm-5 pinfo">
+			<div id="pDiaHtml" class="col-sm-5 pinfo">
 				<span class='col-sm-3'><fmt:message key="diagnostic" />:</span><b id="diagnostic"></b>
 			</div>
 		</div>

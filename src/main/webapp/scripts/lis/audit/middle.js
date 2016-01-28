@@ -125,7 +125,12 @@
         	$("#blh").html("<a href='http://192.168.17.102/ZWEMR/SysLogin.aspx?lcation=inside&ly=D&edt=N&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
         	$("#doctadviseno").html(data.id);
         	$("#pSex").html(data.sex);
-        	$("#pSection").html(data.section);
+        	if(data.section.length > 11) {
+        		$("#pSection").html(data.section.substr(0,8) + "...");
+        	} else {
+        		$("#pSection").html(data.section);
+        	}
+        	
         	$("#pType").html(data.type);
         	$("#stayhospitalmode").html(data.stayhospitalmode);
         	if(data.diagnosticKnow == "") {
@@ -143,11 +148,15 @@
         	}
         	
         	if(data.bed == null){
-        		$("#pBedText").css('display','none');
+        		$("#pBedHtml").css('display','none');
         		$("#pBedLabel").css('display','none');
+        		$("#pDiaHtml").attr('class','col-sm-8 pinfo');
+        		$("#pDiaHtml span").attr('class','col-sm-2');
         	}else{
         		$("#pBed").html(data.bed);
-        		$("#pBedText").css('display','inline');
+        		$("#pDiaHtml span").attr('class','col-sm-3');
+        		$("#pDiaHtml").attr('class','col-sm-5 pinfo');
+        		$("#pBedHtml").css('display','inline');
         		$("#pBedLabel").css('display','inline');
         	}
         	
