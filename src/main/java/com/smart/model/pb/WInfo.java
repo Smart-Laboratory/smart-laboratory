@@ -301,9 +301,12 @@ public class WInfo {
 	@Transient
 	public double getDefeHolidayNum(){
 		double num =0;
-		for(String MonthHoliday : this.defeHoliday.split(";")){
-			if(MonthHoliday !=null){
-				num += Integer.parseInt( MonthHoliday.split("-")[1] );
+		if(defeHoliday!=null && defeHoliday != ""){
+			for(String MonthHoliday : this.defeHoliday.split(";")){
+				if(MonthHoliday !=null){
+					if(MonthHoliday.split(":").length>=2)
+						num += Double.parseDouble( MonthHoliday.split(":")[1] );
+				}
 			}
 		}
 		return num;

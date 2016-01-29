@@ -15,7 +15,7 @@ function getWI() {
 			url:"../pb/sz/ajax/getWinfo",
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','中班','下午班次','年休','积休'],
+			colNames:['ID','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休'],
 		   	colModel:[
 				{name:'id',index:'id',hidden:true,editable:false},
 				{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10}},
@@ -36,10 +36,8 @@ function getWI() {
 		   		{name:'ord4',index:'ord4',width:40,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 		   		{name:'ord5',index:'ord5',width:40,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 		   		{name:'ord6',index:'ord6',width:40,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-		   		{name:'ismid',index:'ismid',width:40,editable:true,edittype:"checkbox",editoptions:{value : "1:0"}},
-		   		{name:'pmshift',index:'pmshift',width:100,editable:true,editoptions:{size:30}},
-		   		{name:'holiday',index:'holiday',width:40,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-		   		{name:'defeHoliday',index:'defeHoliday',width:40,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}}
+		   		{name:'holiday',index:'holiday',width:40,editable:false},
+		   		{name:'defeHoliday',index:'defeHoliday',width:40,editable:false}
 		   	],
 		   	rowNum:15,
 		   	pager: '#wipager',
@@ -64,7 +62,7 @@ function getBC() {
 			url:"../pb/sz/ajax/getShift",
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','姓名','缩写','工作时间段','科室','显示顺序'],
+			colNames:['ID','姓名','缩写','工作时间段','科室','显示顺序',"工作量"],
 		   	colModel:[
 				{name:'id',index:'id',hidden:true,editable:false},
 				{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
@@ -72,6 +70,7 @@ function getBC() {
 				{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},
 				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300500:\u7ec6\u83cc\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4"}},
 				{name:'order',index:'order',width:40,editable:true,editoptions:{size:10}},
+				{name:'days',index:'days',width:40,editable:true}
 		   	],
 		   	rowNum:15,
 		   	pager: '#bcpager',

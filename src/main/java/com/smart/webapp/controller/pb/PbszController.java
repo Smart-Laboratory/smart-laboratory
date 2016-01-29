@@ -128,8 +128,6 @@ public class PbszController {
 			map.put("ord4", wi.getOrd4());
 			map.put("ord5", wi.getOrd5());
 			map.put("ord6", wi.getOrd6());
-			map.put("ismid", wi.getMidStr());
-			map.put("pmshift", wi.getPmshift());
 			map.put("holiday", wi.getHoliday());
 			map.put("defeHoliday", wi.getDefeHolidayNum());
 			dataRows.add(map);
@@ -211,6 +209,7 @@ public class PbszController {
 			map.put("wtime", sh.getWorktime());
 			map.put("section", sectionutil.getValue(sh.getSection()));
 			map.put("order", sh.getOrder());
+			map.put("days", sh.getDays());
 			dataRows.add(map);
 			index++;
 		}
@@ -279,8 +278,6 @@ public class PbszController {
 		int ord6 = Integer.parseInt(request.getParameter("ord6"));
 		Date worktime = sdf.parse(request.getParameter("worktime"));
 		int type = Integer.parseInt(request.getParameter("type"));
-		int ismid = Integer.parseInt(request.getParameter("ismid"));
-		String pmshift = request.getParameter("pmshift");
 		int holiday = Integer.parseInt(request.getParameter("holiday"));
 		String defeHoliday = request.getParameter("defeHoliday");
 		
@@ -300,8 +297,6 @@ public class PbszController {
 			wi.setOrd4(ord4);
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
-			wi.setIsmid(ismid);
-			wi.setPmshift(pmshift);
 			wi.setHoliday(holiday);
 			wi.setDefeHoliday(defeHoliday);
 			wInfoManager.save(wi);
@@ -321,8 +316,6 @@ public class PbszController {
 			wi.setOrd4(ord4);
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
-			wi.setIsmid(ismid);
-			wi.setPmshift(pmshift);
 			wi.setHoliday(holiday);
 //			wi.setDefeHoliday(defeHoliday);
 			wInfoManager.save(wi);
@@ -382,6 +375,7 @@ public class PbszController {
 		String name = request.getParameter("name");
 		String ab = request.getParameter("ab");
 		String wtime = request.getParameter("wtime");
+		String days = request.getParameter("days");
 		String section = request.getParameter("section");
 		int order = Integer.parseInt(request.getParameter("order"));
 		
@@ -392,6 +386,7 @@ public class PbszController {
 			sh.setWorktime(wtime);
 			sh.setSection(section);
 			sh.setOrder(order);
+			sh.setDays(Double.parseDouble(days));
 			shiftManager.save(sh);
 		} else if (oper.equals("edit")) {
 			sh.setId(Long.parseLong(id));
@@ -400,6 +395,7 @@ public class PbszController {
 			sh.setWorktime(wtime);
 			sh.setSection(section);
 			sh.setOrder(order);
+			sh.setDays(Double.parseDouble(days));
 			shiftManager.save(sh);
 		} else {
 			shiftManager.remove(Long.parseLong(id));

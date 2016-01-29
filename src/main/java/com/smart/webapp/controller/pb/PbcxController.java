@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.user.User;
@@ -23,6 +25,16 @@ import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
+
+import jxl.*;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+
+import java.io.*;
+import java.net.MalformedURLException;
+
+
 
 @Controller
 @RequestMapping("/pb/pbcx*")
@@ -40,6 +52,7 @@ public class PbcxController {
 	@Autowired
 	private UserManager userManager;
 	
+	private final static String pbexcelUrl = "/lab/temporaty";
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -145,5 +158,108 @@ public class PbcxController {
         view.addObject("size", shifts.length);
 		return view;
 	}
+	
+	@RequestMapping(value = "/daochu*", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView daochu(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String date = request.getParameter("date");
+		String section = request.getParameter("section");
+		String type = request.getParameter("type");
+		
+		if(date == "" || date == null )
+			return null;
+		if(section == "" || section ==null){
+			section = "1300000";
+		}
+		if(type==null)
+			type="1";
+		
+		List<WInfo> wInfos = wInfoManager.getBySection(section,type);
+		String[][] data = new String[wInfos.size()][32];
+		int i=0;
+		for(WInfo wInfo : wInfos){
+			data[i][0] = wInfo.getName();
+			List<Arrange> arranges = arrangeManager.getPersonalArrange(wInfo.getName(), date);
+			for(Arrange a : arranges){
+				int day = Integer.parseInt(a.getDate().split("-")[2]);
+				data[i][day]=a.getShift(); 
+			}
+			i++;
+		}
+		
+		writeExcel(data,date);
+		
+		System.out.println("开始导出");
+		
+		ServletOutputStream out = response.getOutputStream();
+		response.setHeader("Content-disposition","attachment; " + "filename=newpb.xls");
+		response.setHeader("Content-Type", "application/vnd.ms-excel");   
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		try {
+			File file = new File(pbexcelUrl+"/pb.xls");
+			FileInputStream fin = new FileInputStream(file);
+			bis = new BufferedInputStream(fin);
+			bos = new BufferedOutputStream(out);
+			byte buff[] = new byte[1024];
+			int bytesRead;
+			while (-1 != (bytesRead = bis.read(buff, 0, buff.length)))
+				bos.write(buff, 0, bytesRead);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+			if (bis != null)
+				bis.close();
+			if (bos != null)
+				bos.close();
+			}   
+		
+		return new ModelAndView();
+	}
 
+	public boolean writeExcel(String[][] data,String date) throws FileNotFoundException{
+//		OutputStream os = new FileOutputStream("d:\\test.xls");
+		File dir = new File(pbexcelUrl);
+		dir.setWritable(true,false);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		File file = new File(pbexcelUrl+"/pb.xls");
+		OutputStream os = new FileOutputStream(file);
+		try
+        {
+           
+            WritableWorkbook wwb = Workbook.createWorkbook(os);
+            //创建Excel工作表 指定名称和位置
+            WritableSheet ws = wwb.createSheet("pb",0);
+ 
+            //**************往工作表中添加数据*****************
+            Label label = new Label(0, 0, "姓名");
+        	ws.addCell(label);
+            for(int i=1;i<=31;i++){
+            	String s = date+"-"+i;
+            	label = new Label(i, 0, s);
+            	ws.addCell(label);
+            }
+                     
+           for(int i=0;i<data.length;i++){
+              for(int j=0;j<=31;j++){
+              label = new Label(j,i+1,data[i][j]);
+              ws.addCell(label);
+              }
+           }
+                       //写入工作表
+            wwb.write();
+            wwb.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+		
+		
+		
+		return true;
+	}
 }

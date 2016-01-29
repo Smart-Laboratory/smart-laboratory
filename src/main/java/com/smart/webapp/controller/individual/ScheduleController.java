@@ -83,7 +83,7 @@ public class ScheduleController {
 		if(section==null && user.getLastLab() != null) {
 			section = user.getLastLab();
 		}
-		if(yearAndMonth != null){
+		if(yearAndMonth != null && yearAndMonth !=""){
 			calendar.set(Calendar.YEAR, Integer.parseInt(yearAndMonth.substring(0,4)));
 			calendar.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.substring(5,7))-1);
 			year = calendar.get(Calendar.YEAR);
@@ -166,9 +166,9 @@ public class ScheduleController {
         		}
             }
         	//月休、月班、年休
-        	shifts[j][k] = "<td class='nx' name='nx"+name+"' id='nx"+name + "' >"+map.get(k).getHoliday()+"</td>";
-        	shifts[j+1][k] = "<td class='yx' name='yx"+name+"' id='yx"+name + "' ></td>";
-        	shifts[j+2][k] = "<td class='yb' name='yb"+name+"' id='yb"+name + "' ></td>";
+        	shifts[j][k] = "<th class='nx' name='nx"+name+"' id='nx"+name + "' >"+map.get(k).getHoliday()+"</th>";
+        	shifts[j+1][k] = "<th class='yx' name='yx"+name+"' id='yx"+name + "' ></th>";
+        	shifts[j+2][k] = "<th class='yb' name='yb"+name+"' id='yb"+name + "' ></th>";
         }
         
         
@@ -182,15 +182,20 @@ public class ScheduleController {
         			shifts2[n][m]=shifts[m][n];  
         		}
         	}
+        	String arrTitle = "<tr>";
+        	for(int a=0;a<j;a++){
+        		arrTitle += shifts2[0][a]; 
+        	}
+        	arrTitle += "</tr>";
         	String arrString = "";
-        	for(int a=0;a<i+2;a++){
+        	for(int a=1;a<i+2;a++){
         		arrString += "<tr>";
         		for(int b=0;b<j;b++){
         			arrString += shifts2[a][b];
         		}
         		arrString += "</tr>";
         	}
-        	
+        	view.addObject("arrTitle",arrTitle);
         	view.addObject("arrString", arrString);
         	view.addObject("type", type);
             view.addObject("size", shifts2.length);

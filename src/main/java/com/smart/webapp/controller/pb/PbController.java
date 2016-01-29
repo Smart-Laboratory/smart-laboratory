@@ -13,14 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.compiler.lang.dsl.DSLMapParser.mapping_file_return;
-import org.drools.core.common.IdentityAssertMapComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
@@ -34,6 +31,8 @@ import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
+
+import javafx.scene.chart.PieChart.Data;
 
 
 @Controller
@@ -109,7 +108,10 @@ public class PbController {
 				a.setSection(section);
 				a.setWorker(arr[0]);
 				a.setDate(arr[1]);
-				a.setShift(arr[2]);
+				if(arr.length>=3)
+					a.setShift(arr[2]);
+				else 
+					a.setShift(null);
 				if(type.equals("5")) {
 					a.setType(1);
 				}
@@ -239,4 +241,6 @@ public class PbController {
 		}
 		return objects;
 	}
+	
+	
 }

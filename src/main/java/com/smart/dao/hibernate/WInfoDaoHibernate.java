@@ -23,9 +23,15 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 				return getSession().createQuery("from WInfo where ord3>0 order by ord3").list();
 			} else if (type.equals("3")) {
 				return getSession().createQuery("from WInfo where ord4>0 order by ord4").list();
-			} else {
+			}else if (type.equals("5")) {
+				return getSession().createQuery("from WInfo where ord4>0 order by ord6").list();
+			} else if (type.equals("6")) {
+				return getSession().createQuery("from WInfo where ord4>0 order by ord5").list();
+			}  else if (type.equals("4")) {
 				return getSession().createQuery("from WInfo where (type=1 or type=2) and ord2>0 order by ord2 asc").list();
-			}
+			} else {
+				return getSession().createQuery("from WInfo where type=0 order by ord2").list();
+			} 
 		}
 		return getSession().createQuery("from WInfo where section="+section+" and type=0 order by ord2").list();
 	}

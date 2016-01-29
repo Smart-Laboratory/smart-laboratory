@@ -13,32 +13,33 @@
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 
 <style>
-.day{
-border: solid 1px #cfcfcf;
-cursor: pointer;
-position: relative;
-font-size:12px;
-margin-bottom:1px;
-margin-top:1px;
-width: 50px;
-height: 25px;
-padding: 0;
-list-style-type: none;
-}
+
 table tr td {
-	width:50px;
+	width:30px;
+	height:30px;
 }
-table tr th {
-	width:50px;
+table tr th  {
+	width:40px ;
+	height:30px;
+	padding:0px 1px ;
 }
+#day0{
+	width:45px important; 
+}
+
+
 div .fixed{ 
 overflow-y: scroll; 
 overflow-x: hidden;
-width:auto;
-height: 480px; 
+height: 550px; 
 border: 0px solid #009933; 
 } 
-
+div .title{ 
+overflow-y: scroll; 
+overflow-x: hidden;
+height: auto; 
+border: 0px solid #009933; 
+} 
 </style>
 
 <script type="text/javascript">
@@ -80,11 +81,12 @@ $(function() {
 	$("#kstable").html($("#tabledata").val());
 	$("#labSelect").val($("#section").val());
 	
+	$("#ksTitle").html($("#tableTitle").val());
 	
 	$("#date").datepicker({
 		changeMonth: true,
 	    changeYear: true,
-		dateFormat: 'yy-mm-dd',
+		dateFormat: 'yy-mm',
 		monthNamesShort: ['1\u6708','2\u6708','3\u6708','4\u6708','5\u6708','6\u6708','7\u6708','8\u6708','9\u6708','10\u6708','11\u6708','12\u6708'],
 		dayNamesMin: ['\u65e5','\u4e00','\u4e8c','\u4e09','\u56db','\u4e94','\u516d']
 	});
@@ -114,13 +116,13 @@ $(function() {
 				}
 				var date = $("#month").val();
 				var value = $(this).html();
-				if(value != "") {
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
-				}
 			});
 			$.post("../pb/pb/kssubmit",{text:text,type:type},function(data) {
-				window.location.href="../pb/pbcx"; 
+				alert("success!");
+				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
 			});
+			
 		}
 	});
 	
@@ -145,6 +147,9 @@ $(function() {
 		$("#"+id).html(shifts);
 		
 	});
+	$("#changeMonth").click(function() {
+		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+	});
 	
 	$("#date").val($("#month").val());
 });
@@ -154,7 +159,7 @@ $(function() {
 <input id="month" value="${month }" type="hidden"/>
 
 
-<div class="form-inline" style="width:1024x;">
+<div class="form-inline" style="">
 			<input type="text" id="date" class="form-control" sytle="width:50px;">
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			<select id='typeSel' class="form-control" style="margin-bottom:5px;margin-right:15px;float:left;width:100px;" onchange="changeType(this)">
@@ -167,6 +172,7 @@ $(function() {
 				<option value="7" ><fmt:message key="pb.jjr"/></option>
 			</select>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
+			
 			
 			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
 				<span ><c:forEach var="depart" items="${departList}">
@@ -181,11 +187,18 @@ $(function() {
     			</label>
 			</c:forEach>
 </div>
-<input id="tabledata" value="${arrString }" type="hidden" />
-<table id="kstable" style="font-size:12px;text-align:center;margin-top:5px;" border="1px;">
+<div class="title">
+<input id="tableTitle" value="${arrTitle }" type="hidden" />
+<table id="ksTitle" class=" table-hover" style="margin-bottom:0px;font-size:12px;text-align:center;margin-top:5px;" border="1px;">
 
 </table>
+</div>
+<div class="fixed">
+<input id="tabledata" value="${arrString }" type="hidden" />
+<table id="kstable" class=" table-hover" style="font-size:12px;text-align:center;table-layout:fixed;;" border="1px;">
 
+</table>
+</div>
 <div style="display:none;">	
 	<c:forEach var="dsh" items="${dshList}">
 		<div id='<c:out value="${dsh.day}"/>'><c:out value="${dsh.shift}"/></div>
