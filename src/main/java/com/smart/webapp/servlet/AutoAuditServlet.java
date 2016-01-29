@@ -33,6 +33,7 @@ import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.LikeLab;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
@@ -42,6 +43,7 @@ import com.smart.model.lis.AuditTrace;
 import com.smart.service.DictionaryManager;
 import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CriticalRecordManager;
+import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
@@ -79,17 +81,17 @@ public class AutoAuditServlet extends HttpServlet {
         final CriticalRecordManager criticalRecordManager = (CriticalRecordManager) ctx.getBean("criticalRecordManager");
         final YlxhManager ylxhManager = (YlxhManager) ctx.getBean("ylxhManager");
         final AuditTraceManager auditTraceManager = (AuditTraceManager) ctx.getBean("auditTraceManager");
+        final LikeLabManager likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
         
-        log.info("Initializing context...");
         System.out.println("Initializing context...");
 
         try {
         	final Map<String, Describe> idMap = new HashMap<String, Describe>();
         	final Map<String, String> indexNameMap = new HashMap<String, String>();
         	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
+        	final Map<String, String> likeLabMap = new HashMap<String, String>();
         	Long start = System.currentTimeMillis();
         	List<Rule> ruleList = bagManager.getRuleByBag("1");
-        	log.info("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
         	System.out.println("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
         	if (!DroolsRunner.getInstance().isBaseInited()) {
         		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
@@ -113,9 +115,13 @@ public class AutoAuditServlet extends HttpServlet {
     		for (Ylxh y : ylxhList) {
     			ylxhMap.put(y.getYlxh(), y);
     		}
+    		
+    		List<LikeLab> list = likeLabManager.getAll();
+    		for (LikeLab ll : list) {
+    			likeLabMap.put(ll.getLab(), ll.getLikeLab());
+    		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
-            log.info("初始化常量完成");
             System.out.println("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				
@@ -127,7 +133,6 @@ public class AutoAuditServlet extends HttpServlet {
         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
         	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
         	            	autocount++;
-        	            	log.debug("开始第" + autocount + "次审核...");
         	            	System.out.println("开始第" + autocount + "次审核...");
         	            	Date today = new Date();
         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
@@ -150,9 +155,13 @@ public class AutoAuditServlet extends HttpServlet {
     	        				for (TestResult t : now) {
     	        					testIdSet.add(t.getTestId());
     	        				}
-//    	        				System.out.println(info.getSampleNo()+" : " + now.size());
+    	        				System.out.println(info.getSampleNo()+" : " + now.size());
     	        				try {
-	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
+    	        					String lab = info.getSection().getCode();
+    	        					if(likeLabMap.containsKey(lab)) {
+    	        						lab = likeLabMap.get(lab);
+    	        					}
+	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo(), lab);
 	    	        				for (Sample p : list) {
 	    	        					boolean isHis = false;
 	    	        					if (p.getSampleNo().equals(info.getSampleNo())) {
@@ -180,7 +189,6 @@ public class AutoAuditServlet extends HttpServlet {
          	        				e.printStackTrace();
          	        			}	
         	        		}
-        	                log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
         	        		DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
@@ -253,8 +261,7 @@ public class AutoAuditServlet extends HttpServlet {
         	        		sampleManager.saveAll(updateSample);
         					criticalRecordManager.saveAll(updateCriticalRecord);
         					auditTraceManager.saveAll(updateAuditTrace);
-        					log.debug("第" + autocount + "次审核结束！");
-        	            	System.out.println("第" + autocount + "次审核结束！");
+        					System.out.println("第" + autocount + "次审核结束！");
         	                Thread.sleep(120000);  
         	            } catch (Exception e) {
         	            	log.error(e.getMessage());

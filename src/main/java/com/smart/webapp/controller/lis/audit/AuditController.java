@@ -226,7 +226,11 @@ public class AuditController extends BaseAuditController {
     					testIdSet.add(t.getTestId());
     				}
     				System.out.println(info.getSampleNo()+" : " + now.size());
-    				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo());
+    				String lab = info.getSection().getCode();
+    				if(likeLabMap.containsKey(lab)) {
+    					lab = likeLabMap.get(lab);
+    				}
+    				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo(), lab);
     				for (Sample p : list) {
     					boolean isHis = false;
     					if (p.getSampleNo().equals(info.getSampleNo())) {

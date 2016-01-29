@@ -68,7 +68,6 @@ public class DroolsRunner {
 			            
 			            kbase = kbuilder.newKnowledgeBase();
 			            log.debug("规则库构造完成!");
-			            System.out.println("规则库构造完成!");
 					}
 				}
 			}

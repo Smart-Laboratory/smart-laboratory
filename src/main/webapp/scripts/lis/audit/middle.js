@@ -126,7 +126,8 @@
         	$("#doctadviseno").html(data.id);
         	$("#pSex").html(data.sex);
         	if(data.section.length > 11) {
-        		$("#pSection").html(data.section.substr(0,8) + "...");
+        		$("#pSection").html(data.section.substr(0,8).replace("(","") + "...");
+        		$("#pSection").attr("title",data.section);
         	} else {
         		$("#pSection").html(data.section);
         	}

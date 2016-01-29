@@ -26,7 +26,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<Sample> getHistorySample(String patientId, String blh, String lab);
 
 	@Transactional
-	List<Sample> getDiffCheck(String patientid, String blh, String sampleno);
+	List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab);
 	
 	@Transactional
 	Sample getBySampleNo(String sampleNo);

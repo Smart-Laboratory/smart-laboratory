@@ -130,7 +130,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno) {
+	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab) {
 		try {
 			String to = sampleno.substring(0, 8);
 			Date todate = Constants.DF3.parse(to);
@@ -141,7 +141,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	        String from = Constants.DF3.format(fromdate);
 	        List<Sample> infos = getSession().createQuery(
 	                "from Sample s where (s.patientId='" + patientid + "' or s.patientId='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
-	                        + sampleno + "' order by s.sampleNo desc").list();
+	                        + sampleno + "' and s.section.code in (" + lab + ") order by s.sampleNo desc").list();
 	        for(Sample s : infos) {
 	        	s.getResults().size();
 	        }
