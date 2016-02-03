@@ -69,7 +69,7 @@ table tr th {
 		<div>
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<input id="cxdata" value="${arrString }" type="hidden"/>
-			<table id="data" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+			<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
 				
 			</table>
 		</div>

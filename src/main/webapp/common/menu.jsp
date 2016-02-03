@@ -40,8 +40,9 @@ $(function() {
 <div class="collapse navbar-collapse" id="navbar">
 <ul class="nav navbar-nav">
     <c:if test="${empty pageContext.request.remoteUser}">
-        <li class="active">
-            <a href="<c:url value="/login"/>"><fmt:message key="login.title"/></a>
+        <li class="active form-inline">
+            <span class="form-control" style="width:55px;" ><a href="<c:url value="/login"/>"><fmt:message key="login.title"/></a></span>
+            <span class="form-control" style="width:100px;"><a href="<c:url value="/pb/pbcx"/>"><fmt:message key="menu.pb.pbcx"/></a></span>
         </li>
     </c:if>
     <menu:displayMenu name="SampleManage"/>

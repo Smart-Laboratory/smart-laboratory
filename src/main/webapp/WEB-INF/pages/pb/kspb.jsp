@@ -105,6 +105,7 @@ $(function() {
 		if (ischecked) {
 			var type = $("#typeSel").val();
 			var text = "";
+			var date = $("#month").val();
 			
 			$("td[name^='td']").each(function(i){
 				var array = $(this).attr("id").split("-");
@@ -114,13 +115,15 @@ $(function() {
 				} else {
 					day = array[1];
 				}
-				var date = $("#month").val();
+				
 				var value = $(this).html();
-					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
+				if($(this).attr("class").indexOf("gx")>=0)
+					value += "\u516C\u4F11;";
+				text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
-			$.post("../pb/pb/kssubmit",{text:text,type:type},function(data) {
+			$.post("../pb/pb/kssubmit",{text:text,type:type,date:date},function(data) {
 				alert("success!");
-				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val()+"&type=" + type;
 			});
 			
 		}
@@ -135,8 +138,14 @@ $(function() {
 		$.each($("#shiftSelect input"),function(n,v){
 			if(v.checked){
 				if(v.value == "\u516C\u4F11"){
-					name = name.replace("td","");
-					$("td[name$='"+name+"']").css("background","#FDFF7F");
+					if($("#"+id).attr("class").indexOf("gx")>=0){
+						$("td[name='"+name+"']").css("background","#FFF");
+						$("td[name='"+name+"']").removeClass("gx");
+					}else{
+						$("td[name='"+name+"']").css("background","#FDFF7F");
+						$("td[name='"+name+"']").addClass("gx");
+					}
+					
 				}else if(shifts.indexOf(v.value)>=0){
 					shifts=shifts.replace(v.value+";","");
 				}else{
@@ -148,7 +157,7 @@ $(function() {
 		
 	});
 	$("#changeMonth").click(function() {
-		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val()+"&type=" + $("#typeSel").val();
 	});
 	
 	$("#date").val($("#month").val());
@@ -167,8 +176,8 @@ $(function() {
 				<option value="2" ><fmt:message key="pb.lz"/></option>
 				<option value="3" ><fmt:message key="pb.wc"/></option>
 				<option value="4" ><fmt:message key="pb.ybb"/></option>
-				<option value="5" ><fmt:message key="pb.ry"/></option>
-				<option value="6" ><fmt:message key="pb.hcy"/></option>
+				<option value="5" ><fmt:message key="pb.hcy"/></option>
+				<option value="6" ><fmt:message key="pb.ry"/></option>
 				<option value="7" ><fmt:message key="pb.jjr"/></option>
 			</select>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>

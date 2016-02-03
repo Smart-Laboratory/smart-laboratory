@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.drools.compiler.lang.dsl.DSLMapParser.variable_definition_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
+import com.smart.webapp.util.SectionUtil;
+import com.zju.api.service.RMIService;
 
 import jxl.*;
 import jxl.write.Label;
@@ -52,6 +55,9 @@ public class PbcxController {
 	@Autowired
 	private UserManager userManager;
 	
+	@Autowired
+	private RMIService rmiService;
+	
 	private final static String pbexcelUrl = "/lab/temporaty";
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -64,6 +70,8 @@ public class PbcxController {
 		if(section == null || section == "") {
 			section = user.getLastLab();
 		}
+		
+		
 		if(type == null) {
 			type = "1"; 
 		}
@@ -83,7 +91,7 @@ public class PbcxController {
 		}
 		String tomonth = year + "-" + (month<10 ? "0" + month : month);
 		List<WInfo> wiList = wInfoManager.getBySection(section, type);
-		if(wiList.size() == 0) {
+		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
 		}
 		String wiNames = "";
@@ -174,24 +182,36 @@ public class PbcxController {
 		if(type==null)
 			type="1";
 		
+		Calendar calendar = Calendar.getInstance();
+		if(date != null && date !=""){
+			calendar.set(Calendar.YEAR, Integer.parseInt(date.substring(0,4)));
+			calendar.set(Calendar.MONTH, Integer.parseInt(date.substring(5,7))-1);
+		}
+		
 		List<WInfo> wInfos = wInfoManager.getBySection(section,type);
-		String[][] data = new String[wInfos.size()][32];
+		String[][] data = new String[wInfos.size()][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
+		String[] gh = new String[wInfos.size()];
+		String[] ks = new String[wInfos.size()];
 		int i=0;
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
 		for(WInfo wInfo : wInfos){
+			ks[i]= sectionUtil.getValue(wInfo.getSection());
+			gh[i]=wInfo.getWorkid();
 			data[i][0] = wInfo.getName();
 			List<Arrange> arranges = arrangeManager.getPersonalArrange(wInfo.getName(), date);
 			for(Arrange a : arranges){
+				System.out.println(a.getDate()+a.getWorker());
 				int day = Integer.parseInt(a.getDate().split("-")[2]);
 				data[i][day]=a.getShift(); 
 			}
 			i++;
 		}
 		
-		writeExcel(data,date);
+		writeExcel(data,date,gh,ks);
 		
 		System.out.println("开始导出");
 		
-		ServletOutputStream out = response.getOutputStream();
+		/*ServletOutputStream out = response.getOutputStream();
 		response.setHeader("Content-disposition","attachment; " + "filename=newpb.xls");
 		response.setHeader("Content-Type", "application/vnd.ms-excel");   
 		BufferedInputStream bis = null;
@@ -214,20 +234,20 @@ public class PbcxController {
 				bis.close();
 			if (bos != null)
 				bos.close();
-			}   
+			}   */
 		
 		return new ModelAndView();
 	}
 
-	public boolean writeExcel(String[][] data,String date) throws FileNotFoundException{
-//		OutputStream os = new FileOutputStream("d:\\test.xls");
-		File dir = new File(pbexcelUrl);
+	public boolean writeExcel(String[][] data,String date,String[] gh,String[] ks) throws FileNotFoundException{
+		OutputStream os = new FileOutputStream("d:\\test.xls");
+		/*File dir = new File(pbexcelUrl);
 		dir.setWritable(true,false);
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		File file = new File(pbexcelUrl+"/pb.xls");
-		OutputStream os = new FileOutputStream(file);
+		OutputStream os = new FileOutputStream(file);*/
 		try
         {
            
@@ -236,17 +256,33 @@ public class PbcxController {
             WritableSheet ws = wwb.createSheet("pb",0);
  
             //**************往工作表中添加数据*****************
-            Label label = new Label(0, 0, "姓名");
+            Label label = new Label(0, 0, "工号");
+            Label label1 = new Label(2, 0, "姓名");
+            Label label2 = new Label(1,0,"科室");
         	ws.addCell(label);
-            for(int i=1;i<=31;i++){
+        	ws.addCell(label1);
+        	ws.addCell(label2);
+        	
+        	int length = data[0].length -1;
+            for(int i=1;i<=length;i++){
             	String s = date+"-"+i;
-            	label = new Label(i, 0, s);
+            	label = new Label(i+2, 0, s);
+            	ws.addCell(label);
+            }
+            
+            for(int j=0;j<gh.length;j++){
+            	label = new Label(0, j+1, gh[j]);
+            	ws.addCell(label);
+            }
+            
+            for(int k=0;k<ks.length;k++){
+            	label = new Label(1,k+1,ks[k]);
             	ws.addCell(label);
             }
                      
            for(int i=0;i<data.length;i++){
-              for(int j=0;j<=31;j++){
-              label = new Label(j,i+1,data[i][j]);
+              for(int j=0;j<=length;j++){
+              label = new Label(j+2,i+1,data[i][j]);
               ws.addCell(label);
               }
            }

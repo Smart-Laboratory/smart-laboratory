@@ -43,12 +43,12 @@
             <Item name="Collect" title="individual.collect" page="/user/collect" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="Ranking" title="individual.ranking" page="/user/rank" roles="ROLE_ADMIN,ROLE_USER"/>
             <!-- <Item name="Schedule" title="individual.schedule" page="/user/schedule" roles="ROLE_ADMIN"/> -->
-            <Item name="ScheduleInfo" title="individual.schedule.info" page="/pb/pbcx" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="Attendance" title="individual.attendance" page="/user/attendance" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="DataInterface" title="individual.data.interface" page="/user/interface" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="ViewUsers" title="menu.admin.users" page="/users" roles="ROLE_ADMIN"/>
             <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" roles="ROLE_ADMIN"/>
-            <Item name="Schedule" title="individual.schedule" page="/pb/pb" roles="ROLE_ADMIN"/>
+            <Item name="ScheduleInfo" title="individual.schedule.info" page="/pb/pbcx" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Schedule" title="individual.schedule" page="/pb/pb" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
             <!-- <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>
             <Item name="FileUpload" title="menu.selectFile" page="/fileupload"/> -->

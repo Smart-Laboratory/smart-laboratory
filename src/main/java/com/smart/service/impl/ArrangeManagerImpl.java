@@ -51,4 +51,8 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 	public void removeAll(String name, String date) {
 		arrangeDao.removeAll(name, date);
 	}
+	
+	public List<String> getGXcount(String month){
+		return arrangeDao.getGXcount(month);
+	}
 }

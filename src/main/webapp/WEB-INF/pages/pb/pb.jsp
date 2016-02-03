@@ -70,7 +70,7 @@ display: none;
 		<div class="form-inline" style="width:1024x;">
 			<input type="text" id="date" class="form-control" sytle="width:50px;">
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.save' /></button>
+			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.count' /></button>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			
 			

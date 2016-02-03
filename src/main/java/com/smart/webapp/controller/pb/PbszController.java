@@ -66,7 +66,7 @@ public class PbszController {
 		section = user.getLastLab();
 		Map<String, String> departList = new HashMap<String, String>();
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
-		String department = user.getDepartment();
+		String department = user.getPbsection();
 		
 		if(department != null){
 			for(String depart : department.split(",")){
@@ -93,7 +93,7 @@ public class PbszController {
 			section = sec;
 		}
 		List<WInfo> list = wInfoManager.getBySection(section);
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+//		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		
@@ -117,7 +117,7 @@ public class PbszController {
 			map.put("workid", wi.getWorkid());
 			map.put("name", wi.getName());
 			map.put("sex", wi.getSexString());
-			map.put("section", sectionutil.getValue(wi.getSection()));
+			map.put("section", wi.getSection());
 			map.put("worktime", sdf.format(wi.getWorktime()));
 			map.put("type", wi.getTypeString());
 			map.put("phone", wi.getPhone());
@@ -277,9 +277,10 @@ public class PbszController {
 		int ord5 = Integer.parseInt(request.getParameter("ord5"));
 		int ord6 = Integer.parseInt(request.getParameter("ord6"));
 		Date worktime = sdf.parse(request.getParameter("worktime"));
+		System.out.println(worktime);
 		int type = Integer.parseInt(request.getParameter("type"));
 		int holiday = Integer.parseInt(request.getParameter("holiday"));
-		String defeHoliday = request.getParameter("defeHoliday");
+//		String defeHoliday = request.getParameter("defeHoliday");
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -298,7 +299,7 @@ public class PbszController {
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
-			wi.setDefeHoliday(defeHoliday);
+//			wi.setDefeHoliday(defeHoliday);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi.setId(Long.parseLong(id));
@@ -372,9 +373,15 @@ public class PbszController {
 	public boolean bcedit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String oper = request.getParameter("oper");
 		String id = request.getParameter("id");
+		
+		if(oper.equals("del")) {
+			shiftManager.remove(Long.parseLong(id));
+			return true;
+		}
+		
 		String name = request.getParameter("name");
 		String ab = request.getParameter("ab");
-		String wtime = request.getParameter("wtime");
+		String wtime = request.getParameter("worktime");
 		String days = request.getParameter("days");
 		String section = request.getParameter("section");
 		int order = Integer.parseInt(request.getParameter("order"));
@@ -397,9 +404,7 @@ public class PbszController {
 			sh.setOrder(order);
 			sh.setDays(Double.parseDouble(days));
 			shiftManager.save(sh);
-		} else {
-			shiftManager.remove(Long.parseLong(id));
-		}
+		} 
 		return true;
 	}
 	

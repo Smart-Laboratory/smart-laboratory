@@ -2,9 +2,15 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
+import javax.persistence.Table;
+
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.pb.Arrange;
+import com.smart.model.user.User;
 import com.smart.dao.ArrangeDao;
 
 @Repository("arrangeDao")
@@ -26,7 +32,10 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 
 	@SuppressWarnings("unchecked")
 	public Arrange getByUser(String name, String day){
+		
+		long start = System.currentTimeMillis();
 		List<Arrange> list = getSession().createQuery("from Arrange where worker = '"+ name +"' and date = '"+ day +"' and type=0 order by worker asc, date asc").list();
+		System.out.println((System.currentTimeMillis()-start)/1000);
 		if(list !=null && list.size()>0)
 			return (Arrange)list.get(0);
 		else
@@ -35,7 +44,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getPersonalArrange(String name, String day) {
-		return getSession().createQuery("from Arrange where worker='"+ name +"' and date>='"+ day +"' order by date asc").list();
+		return getSession().createQuery("from Arrange where worker='"+ name +"' and date like'"+ day +"%' order by date asc").list();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -57,5 +66,14 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	public void removeAll(String name, String date) {
 		List<Arrange> list = getSession().createQuery("from Arrange where worker='"+ name +"' and date like '"+ date +"%'").list();
 		getSession().delete(list);
+	}
+	
+	public List<String> getGXcount(String month){
+		JdbcTemplate jdbcTemplate =
+                new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
+		
+		List<String> gxList = jdbcTemplate.queryForList("select distinct(riqi) from workarrange where riqi like '"+month+"%' and shift like '%公休%'", String.class);
+        
+        return gxList;
 	}
 }

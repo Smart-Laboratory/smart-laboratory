@@ -22,4 +22,6 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 
 	void removeAll(String name, String date);
 	
+	List<String> getGXcount(String month);
+	
 }

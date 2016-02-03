@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.drools.compiler.lang.DRL5Expressions.instanceof_key_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,20 +70,26 @@ public class ScheduleController {
 		
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
-		String department = user.getDepartment();
+		String department = user.getPbsection();
 		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
-		if (department != null) {
-			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
-			}
-		}
-		
-		String type = request.getParameter("type");
-		
 		if(section==null && user.getLastLab() != null) {
 			section = user.getLastLab();
 		}
+		if (department != null) {
+			for (String s : department.split(",")) {
+				depart.put(s, sectionutil.getValue(s));
+				if(section==null)
+					section = s;
+			}
+		}
+		System.out.println(section+"--");
+		if(section == null || section.isEmpty())
+			return new ModelAndView();
+		
+		String type = request.getParameter("type");
+		
+		
 		if(yearAndMonth != null && yearAndMonth !=""){
 			calendar.set(Calendar.YEAR, Integer.parseInt(yearAndMonth.substring(0,4)));
 			calendar.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.substring(5,7))-1);
@@ -106,7 +113,7 @@ public class ScheduleController {
 		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
 		request.setAttribute("section", section);
-		if(wiList.size() == 0) {
+		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0);
 		}
 		String wiNames = "";
@@ -136,7 +143,7 @@ public class ScheduleController {
                 } else {
                 	shifts[j][0] = "<th style='background:#7FFFD4' id='day" + j + "'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
                 }
-                shifts[j][i] = "<th><a onclick='checkShift(" + j + ")'>验证</a></th>";
+                shifts[j][i] = "<th name='"+j+"-"+sdf2.format(date).replace("星期", "")+"'><a onclick='checkShift(" + j + ")'>验证</a></th>";
                 shifts[j][i+1] = "<th><a onclick='randomShift(" + j + ")'>随机</a></th>";
             } catch (Exception e) {
             	e.printStackTrace();	
@@ -155,14 +162,22 @@ public class ScheduleController {
         shifts[0][i+1] = "<th style='background:#7FFFD4'></th>";
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();
+        	
         	for(int l=1; l<j; l++) {
+        		String background = "";
+        		Date date = sdf1.parse(tomonth + "-" + l);
+        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
+        			background = "style='background:#7CFC00'";
+        		}
         		if (arrMap.get(name + "-" + l) == null) {
         			String td = "";
-        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "' >";
+        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">";
         			td += "</td>";
         			shifts[l][k] = td;
-        		} else {
-        			shifts[l][k] = "<td  class='day' name='td" + l + "' id='" + name + "-" + l + "' >" + arrMap.get(name + "-" + l) + "</td>";
+        		} else if(arrMap.get(name + "-" + l).contains("公休")){
+        			shifts[l][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l).replace("公休;", "")+"</td>";
+        		} else{
+        			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">" + arrMap.get(name + "-" + l) + "</td>";
         		}
             }
         	//月休、月班、年休
@@ -244,6 +259,8 @@ public class ScheduleController {
 				dMap.put("0", dayShift.getShift());
 		}
 	}
+	
+	
 	
 	
 }
