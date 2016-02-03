@@ -26,7 +26,6 @@
     <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
 	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
 
-
 <style>
 .ui-tabs-anchor {
 	padding: 0 10px;

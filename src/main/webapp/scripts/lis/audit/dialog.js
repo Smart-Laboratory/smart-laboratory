@@ -26,8 +26,8 @@ $(function(){
 		autoOpen: false,
 		resizable: false,
 		modal:true,
-	    width: 700,
-	    height: 500
+	    width: 750,
+	    height: 600
 	});
 	$("#chartDialog").dialog({
 		autoOpen: false,

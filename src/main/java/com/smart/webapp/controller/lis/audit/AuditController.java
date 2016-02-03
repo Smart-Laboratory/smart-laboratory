@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.check.Alarm2Check;
@@ -713,4 +714,5 @@ public class AuditController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
+	
 }

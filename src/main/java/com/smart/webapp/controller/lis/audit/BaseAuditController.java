@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.smart.model.lis.ContactInfor;
 import com.smart.model.lis.Diagnostic;
 import com.smart.model.lis.LikeLab;
 import com.smart.model.lis.Sample;
@@ -18,6 +19,7 @@ import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CollectSampleManager;
+import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.LikeLabManager;
@@ -91,12 +93,16 @@ public class BaseAuditController {
 	@Autowired
     protected LikeLabManager likeLabManager = null;
 	
+	@Autowired
+	protected ContactManager contactManager = null;
+	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();
     protected Map<String, String> diagMap = new HashMap<String, String>();
     protected Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
     protected Map<String, String> likeLabMap = new HashMap<String, String>();
+    protected Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
 
 	protected synchronized void initMap() {
 		List<Index> list = indexManager.getAll();
@@ -130,6 +136,13 @@ public class BaseAuditController {
 		List<LikeLab> list = likeLabManager.getAll();
 		for (LikeLab ll : list) {
 			likeLabMap.put(ll.getLab(), ll.getLikeLab());
+		}
+	}
+	
+	protected synchronized void initContactInforMap() {
+		List<ContactInfor> list = contactManager.getAll();
+		for(ContactInfor ci : list) {
+			contactMap.put(ci.getWORKID(), ci);
 		}
 	}
 	

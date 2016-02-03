@@ -307,15 +307,12 @@ $(function(){
 		var id = $("#hiddenDocId").val();
 		var sample = $("#hiddenSampleNo").val();
 		if ($("#hisLastResult").val() == 1) {
-			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"<c:url value='/explain/audit/print'/>?docId="+id+"&sampleNo="+sample+"&last=1\" />")
+			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId="+id+"&sampleNo="+sample+"&last=1\" />")
 		} else {
-			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"<c:url value='/explain/audit/print'/>?docId="+id+"&sampleNo="+sample+"&last=0\" />")
+			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId="+id+"&sampleNo="+sample+"&last=0\" />")
 		}
 		$("#auditPrint").dialog("open");
-		var height1 = $("#midContent").height();
-		var height2 = $("#chartPanel").height()/195/3 * 195 + 195;
-		
-		$("#iframe_print").height(height1 + height2 + $("#rowed3 tr").length * 5);
+		$("#iframe_print").height(450);
 		//alert($("#chartPanel").height());
 	});
 	

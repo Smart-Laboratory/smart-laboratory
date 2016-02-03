@@ -35,7 +35,7 @@ import com.smart.model.rule.Item;;
 
 @Controller
 @RequestMapping("/audit*")
-public class ExplainController extends BaseAuditController{
+public class ExplainController extends BaseAuditController {
 
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager = null;
