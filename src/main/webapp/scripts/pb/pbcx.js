@@ -16,16 +16,20 @@ $(function() {
 	});
 	
 	$("#searchPB").click(function() {
-		window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#type").val();
+		window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 		//$.get("<c:url value='/pb/pbcx'/>",{date:$("#date").val(),section:$("#section").val()},function() {});
 	});
 	
 	$("#sectionSel").change(function() {
+		$("#section").val($("#sectionSel").val());
 		if($("#sectionSel").val() == '1300000') {
-			$("#type").css("display","block");
+			$("#typeSel").css("display","block");
 		} else {
-			$("#type").css("display","none");
+			$("#typeSel").css("display","none");
 		}
+	});
+	$("#typeSel").change(function(){
+		window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 	});
 	
 	$("#typeSel").val($("#type").val());
@@ -34,6 +38,18 @@ $(function() {
 	
 	var section = $("#sectionSel").val();
 	if(section == '1300000') {
-		$("#type").css("display","block");
+		$("#typeSel").css("display","block");
 	}
+	
+	$("#daochu").click(function(){
+		/*$.post("../pb/pbcx/daochu",{date:$("#date").val(),section:$("#sectionSel").val(),type:$("#typeSel").val()},function(data){
+			if(data){
+				alert("success!");
+			}else{
+				alert("fail!");
+			}
+		});
+		*/
+		window.location.href = "../pb/pbcx/daochu?date="+$("#date").val()+"&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
+	});
 });

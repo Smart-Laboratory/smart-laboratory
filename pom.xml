@@ -810,6 +810,11 @@
 			<version>1.0.1</version>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>com.zju.jxl</groupId>
+			<artifactId>zju-jxl</artifactId>
+			<version>1.0.1</version>
+		</dependency>
     </dependencies>
 
     <reporting>
@@ -1142,7 +1147,7 @@
         <jdbc.artifactId>mariadb-java-client</jdbc.artifactId>
         <jdbc.version>1.3.0</jdbc.version>
         <jdbc.driverClassName>org.mariadb.jdbc.Driver</jdbc.driverClassName>
-        <jdbc.url>jdbc:mariadb://127.0.0.1:3306/lab?rewriteBatchedStatements=true&amp;amp;createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
+        <jdbc.url>jdbc:mariadb://192.168.15.74:3306/lab?rewriteBatchedStatements=true&amp;amp;createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
         <jdbc.username>root</jdbc.username>
         <jdbc.password>1234</jdbc.password>
         <jdbc.validationQuery>SELECT 1 + 1</jdbc.validationQuery>

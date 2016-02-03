@@ -44,7 +44,7 @@ table tr th {
 		<option value="1300700"><fmt:message key="labDepartment.1300700"/></option>
 		<option value="1300800"><fmt:message key="labDepartment.1300800"/></option>
 	</select>
-		<select id='type' class="form-control" style="margin-left:20px;float:left;display:none">
+		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
 			<option value="2" ><fmt:message key="pb.lz"/></option>
 			<option value="3" ><fmt:message key="pb.wc"/></option>
@@ -54,6 +54,7 @@ table tr th {
 			<option value="7" ><fmt:message key="pb.jjr"/></option>
 		</select>
 	<button id="searchPB" type="button" class="btn btn-success" style="margin-left:20px;float:left;"><fmt:message key='search'/></button>
+	<button id="daochu" class="btn btn-info" style="margin-left:20px;" ><fmt:message key='pb.daochu' /></button>
 </div>
 
 
@@ -64,11 +65,11 @@ table tr th {
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="margin-left:5px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
 		<div>
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<input id="cxdata" value="${arrString }" type="hidden"/>
-			<table id="data" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+			<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
 				
 			</table>
 		</div>

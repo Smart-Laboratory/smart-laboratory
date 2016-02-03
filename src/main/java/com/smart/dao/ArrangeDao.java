@@ -22,5 +22,6 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 
 	void removeAll(String name, String date);
 
+	List<String> getGXcount(String month);
 	
 }

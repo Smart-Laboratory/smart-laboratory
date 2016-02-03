@@ -1,7 +1,11 @@
 
 
 function labChange(item){
-	window.location.href="../pb/pb?section=" + $(item).val();
+	$.ajax({
+		  type: 'POST',
+		  url: "../audit/labChange?lab="+$(item).val()
+	});
+	window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(item).val();
 }
 
 function randomShift(day) {
@@ -29,9 +33,10 @@ function randomsort(a, b) {
 function checkShift(day) {
 	var date = $("#day0").html();
 	var week = $("#day" + day).html().substr(-1);
+	alert(week);
 	var shift = $("#" + week).html();
 	var array = shift.split(",");
-	$("select[name='select"+ day +"']").each(function(){
+	$("td[name='td"+ day +"']").each(function(){
 		for(var j = 0;j < array.length; j++) {
 			if(array[j] == $(this).val()) {
 				array.splice(j,1);
@@ -91,7 +96,13 @@ $(function() {
 	    changeYear: true,
 		dateFormat: 'yy-mm',
 		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-		dayNamesMin: ['一','二','三','四','五','六','日']
+		dayNamesMin: ['一','二','三','四','五','六','日'],
+		showButtonPanel: true, 
+		onClose: function(dateText, inst) { 
+		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+		var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+		$(this).datepicker('setDate', new Date(year, month, 1)); 
+		} 
 	});
 	
 	$("#dialog").dialog({
@@ -102,17 +113,14 @@ $(function() {
 	    height: 160
 	});
 	
-	$("#btn").click(function() {
-		$("#dialog").dialog("close");
-		window.location.href="../pb/pb?section=" + $("#section").val();
-	});
+	
 	
 	$("#shiftBtn").click(function() {
 		var ischecked = true;
 		if (ischecked) {
 			var section = $("#section").val();
 			var text = "";
-			
+			var date = $("#month").val();
 			$("td[name^='td']").each(function(i){
 				var array = $(this).attr("id").split("-");
 				var day = "";
@@ -121,16 +129,18 @@ $(function() {
 				} else {
 					day = array[1];
 				}
-				var date = $("#month").val();
+				
 				var value = $(this).html();
-				if(value != "") {
+				if($(this).attr("class").indexOf("gx")>=0)
+					value += "\u516C\u4F11;";
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
-				}
 			});
 			
-			$.post("../pb/pb/submit",{text:text,section:section},function(data) {
-				window.location.href="../pb/pb?date=" + $("#date").val();
+			$.post("../pb/pb/submit",{text:text,section:section,date:date},function(data) {
+				alert("success!");
+				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
 			});
+			
 		}
 	});
 	
@@ -150,7 +160,7 @@ $(function() {
 	});
 	
 	$("#changeMonth").click(function() {
-		window.location.href="../pb/pb?date=" + $("#date").val();
+		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
 	});
 	
 	$("#date").val($("#month").val());

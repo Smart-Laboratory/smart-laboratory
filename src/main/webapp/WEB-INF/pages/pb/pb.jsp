@@ -45,9 +45,21 @@ div .fixed{
 overflow-y: scroll; 
 overflow-x: hidden;
 width:auto;
+height: auto; 
+border: 0px solid #009933; 
+} 
+div .data{ 
+overflow-y: scroll; 
+overflow-x: hidden;
+width:auto;
 height: 480px; 
 border: 0px solid #009933; 
 } 
+
+.ui-datepicker-calendar { 
+display: none; 
+} 
+
 
 </style>
 </head>
@@ -58,8 +70,9 @@ border: 0px solid #009933;
 		<div class="form-inline" style="width:1024x;">
 			<input type="text" id="date" class="form-control" sytle="width:50px;">
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.save' /></button>
+			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.count' /></button>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
+			
 			
 			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
 				<span ><c:forEach var="depart" items="${departList}">
@@ -77,16 +90,16 @@ border: 0px solid #009933;
 		</div>
 		
 		
-		<div>
+		<div class="fixed">
 		<input id="test" value="${arrString}" type="hidden"/>
-		<table id="pbhead" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+		<table id="pbhead" class="table" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
 		<thead id="head">
 		</thead>
 		</table>
 		</div>
-		<div class="fixed">
+		<div class="fixed data">
 		<input id="test1" value="${arrBodyString}" type="hidden"/>
-		<table id="pbdata" style="font-size:12px;text-align:center;" border="1px;">
+		<table id="pbdata" class="table table-hover" style="font-size:12px;text-align:center;" border="1px;">
 		
 		</table>
 		</div>

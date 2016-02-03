@@ -34,8 +34,6 @@ public class WInfo {
 	private int ord4;
 	private int ord5;
 	private int ord6;
-	private int ismid;
-	private String pmshift;
 	
 	private double holiday;
 	private String defeHoliday;
@@ -160,23 +158,8 @@ public class WInfo {
 		this.ord4 = ord4;
 	}
 	
-	@Column
-	public int getIsmid() {
-		return ismid;
-	}
+	
 
-	public void setIsmid(int ismid) {
-		this.ismid = ismid;
-	}
-
-	@Column
-	public String getPmshift() {
-		return pmshift;
-	}
-
-	public void setPmshift(String pmshift) {
-		this.pmshift = pmshift;
-	}
 
 	@Transient
 	public String getSexString() {
@@ -262,21 +245,7 @@ public class WInfo {
 		return str.substring(0, str.length()-1);
 	}
 	
-	@Transient
-	public String getMidStr() {
-		return this.ismid==1?"是":"否";
-	}
 	
-	@Transient
-	public List<String> getPMShifts() {
-		List<String> list = new ArrayList<String>();
-		for(String s : this.pmshift.split(",")) {
-			if(!s.isEmpty()) {
-				list.add(s);
-			}
-		}
-		return list;
-	}
 	@Transient
 	public double getHolidayNum(){
 		Calendar calendar = Calendar.getInstance();
@@ -301,9 +270,12 @@ public class WInfo {
 	@Transient
 	public double getDefeHolidayNum(){
 		double num =0;
-		for(String MonthHoliday : this.defeHoliday.split(";")){
-			if(MonthHoliday !=null){
-				num += Integer.parseInt( MonthHoliday.split("-")[1] );
+		if(defeHoliday!=null && defeHoliday != ""){
+			for(String MonthHoliday : this.defeHoliday.split(";")){
+				if(MonthHoliday !=null){
+					if(MonthHoliday.split(":").length>=2)
+						num += Double.parseDouble( MonthHoliday.split(":")[1] );
+				}
 			}
 		}
 		return num;

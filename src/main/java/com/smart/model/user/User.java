@@ -85,6 +85,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private int collectNum;
 	private int evaluatenum;
 	private int checknum;
+	private String pbsection;
     /**
      * Default constructor - creates a new instance with no values set.
      */
@@ -412,7 +413,25 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	public void setEvaluatenum(int evaluatenum) {
 		this.evaluatenum = evaluatenum;
 	}
+	
+	@Column
+	public String getPbsection() {
+		return pbsection;
+	}
 
+	public void setPbsection(String pbsection) {
+		this.pbsection = pbsection;
+	}
+
+	/*@Column(name="pbsection")
+	public String getPbsection() {
+		return pbsection;
+	}
+
+	public void setPbsection(String pbsection) {
+		this.pbsection = pbsection;
+	}
+*/
 	@Transient
 	public double getIntegration() {
 		return (double)checknum/100 + collectNum + evaluatenum;
