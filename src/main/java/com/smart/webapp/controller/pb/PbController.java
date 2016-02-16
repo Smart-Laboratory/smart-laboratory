@@ -61,7 +61,7 @@ public class PbController {
 	@Autowired
 	private WorkCountManager workCountManager;
 	
-	private Map<String, Double> shiftTime = null;
+	private Map<String, Double> shiftTime = new HashMap<String,Double>();
 	
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
@@ -129,7 +129,6 @@ public class PbController {
 				list.add(a);
 			}
 		}
-		System.out.println(list.size());
 		arrangeManager.saveAll(list);
 		System.out.println(list.size()+"保存完成");
 		return true;
@@ -211,7 +210,7 @@ public class PbController {
 	@ResponseBody
 	public List<WorkCount> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		List<WorkCount> wList = new ArrayList<WorkCount>();
-		if(shiftTime == null)
+		if(shiftTime == null || shiftTime.isEmpty())
 			initMap();
 		
 		String section = request.getParameter("section");
@@ -239,11 +238,13 @@ public class PbController {
 			
 			String shifts = "";
 			for(Arrange arrange : arranges){
-				if(arrange.getShift()!="")
+				
+				if(!arrange.getShift().trim().isEmpty()){
 					workdate.add(arrange.getDate());
-				shifts += arrange.getShift();
-				if(arrange.getShift().contains("公休") && arrange.getShift().replace("公休", "")=="")
-					monthOff += 1;
+					shifts += arrange.getShift();
+					if(arrange.getShift().contains("公休") && arrange.getShift().replace("公休;", "").isEmpty())
+						monthOff += 1;
+				}
 			}
 			
 			for(String shift : shifts.split(";")){
@@ -253,25 +254,10 @@ public class PbController {
 				if(shift=="年休"){
 					holiday +=1;
 				}
-				if(shift.contains("休") && shift != "公休"){
+				if(shift.contains("休") && !shift.contains("公休")){
 					monthOff += 1;
 				}				
 			}
-			
-			workCount.setHoliday(holiday);
-			workCount.setWorkTime(worktime);
-			workCount.setWorker(w.getName());
-			workCount.setMonthOff(days-workdate.size()+monthOff);
-			workCount.setSection(section);
-			workCount.setWorkMonth(month);
-			wList.add(workCount);
-			
-			workCountManager.save(workCount);
-			//计算年休
-			
-			double nx = w.getHolidayNum()-workCountManager.getYearCount(month.substring(0, 4),w.getName());
-			w.setHoliday(w.getHolidayNum() - nx);
-			
 			//计算积修
 			double yjx = 0;
 			int j = 1;
@@ -279,14 +265,16 @@ public class PbController {
 			List<String> gxList = arrangeManager.getGXcount(month);
 			if(gxList != null && gxList.size()>0){
 				yjx += gxList.size();
-				System.out.println(gxList.size());
 			}
 			
 	        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
 	            try {
-	                Date date = sdf1.parse(month + "-" + j);
+	            	String day = j + "";
+	            	if(j<10)
+	            		day = "0"+day;
+	                Date date = sdf1.parse(month + "-" + day);
 	                if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
-	                	if(gxList != null && gxList.size()>0 && gxList.contains(month + "-" + j)){
+	                	if(gxList != null && gxList.size()>0 && gxList.contains(month + "-" + day)){
 	        				
 	        			}else{
 	        				yjx+=1;
@@ -297,7 +285,16 @@ public class PbController {
 	            }
 	        }
 	        yjx = yjx - (days - worktime);
-	        
+	        workCount.setHoliday(holiday);
+			workCount.setWorkTime(worktime);
+			workCount.setWorker(w.getName());
+			workCount.setMonthOff(days-workdate.size()+monthOff);
+			workCount.setYjx(yjx);
+			workCount.setSection(section);
+			workCount.setWorkMonth(month);
+			wList.add(workCount);
+			
+			workCountManager.save(workCount);
 	        
 	        String defeholiday = w.getDefeHoliday();
 	        if(defeholiday == null){
@@ -306,7 +303,7 @@ public class PbController {
 	        else if(defeholiday.contains(month)){
 	        	for(String jx : defeholiday.split(";")){
 	        		if(jx.contains(month)){
-	        			defeholiday.replace(jx, month+":"+yjx);
+	        			defeholiday = defeholiday.replace(jx, month+":"+yjx);
 	        		}
 	        	}
 	        }
@@ -314,6 +311,10 @@ public class PbController {
 	        	defeholiday += month+":"+yjx+";";
 	        }
 	        w.setDefeHoliday(defeholiday);
+	        
+	        //计算年休
+			double nx = w.getHolidayNum()-workCountManager.getYearCount(month.substring(0, 4),w.getName());
+			w.setHoliday(w.getHolidayNum() - nx);
 	        wInfoManager.save(w);
 			
 		}
@@ -322,7 +323,6 @@ public class PbController {
 	}
 	
 	public void initMap(){
-		shiftTime = new HashMap<String,Double>();
 		List<Shift> shifts = shiftManager.getAll();
 		for(Shift shift : shifts){
 			shiftTime.put(shift.getAb(), shift.getDays());

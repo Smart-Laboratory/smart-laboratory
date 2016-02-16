@@ -35,9 +35,16 @@ public class WInfoManagerImpl extends GenericManagerImpl<WInfo, Long> implements
 		return wInfoDao.getAll(sidx, sord);
 	}
 
-	public List<WInfo> getBySection(String section) {
-		return wInfoDao.getBySection(section);
+	public List<WInfo> getBySection(String section,String sidx,String sord) {
+		return wInfoDao.getBySection(section,sidx,sord);
+	}
+	
+	public List<WInfo> getBySearch(String field, String string){
+		return wInfoDao.getBySearch(field,string);
 	}
 
+	public List<WInfo> getBySection(String section){
+		return wInfoDao.getBySection(section);
+	}
 	
 }

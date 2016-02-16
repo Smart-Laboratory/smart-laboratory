@@ -74,8 +74,17 @@ $(function() {
 	
 	$("#pbdata tr td").click(function(){
 		var id=this.id;
+		
+		var month = new Date().getMonth()+1;
+		var date = new Date().getDate();
+		var day = id.split("-")[1];
+		var m = $("#date").val().split("-")[1];
+		
+		if(m>month ||(m==month && day>=date)){
+		
 		var name = this.name;
 		var shifts=$("#"+id).html();
+		
 		$.each($("#shiftSelect input"),function(name,v){
 			if(v.checked){
 				
@@ -88,7 +97,7 @@ $(function() {
 			}
 		});
 		$("#"+id).html(shifts);
-		
+		}
 	});
 	
 	$("#date").datepicker({
@@ -148,12 +157,14 @@ $(function() {
 		var section = $("#section").val();
 		var month = $("#month").val();
 		$.get("../pb/pb/workCount",{section:section,month:month},function(data){
+			alert("Success!");
 			for(var i=0;i<data.length;i++){
 				var worker = data[i];
 				var name = worker.worker; 
 				$("#nx"+name).html(worker.holiday);
 				$("#yx"+name).html(worker.monthOff);
 				$("#yb"+name).html(worker.workTime);
+				$("#yjx"+name).html(worker.yjx);
 			}
 		});
 

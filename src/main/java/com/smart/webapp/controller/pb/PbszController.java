@@ -88,11 +88,29 @@ public class PbszController {
 		
 		int page = Integer.parseInt(request.getParameter("page"));
 		int row = Integer.parseInt(request.getParameter("rows"));
+		String sidx = request.getParameter("sidx");
+		String sord = request.getParameter("sord");
 		String sec = request.getParameter("section");
+		String search = request.getParameter("_search");
 		if(sec!=null&&!sec.isEmpty()){
 			section = sec;
 		}
-		List<WInfo> list = wInfoManager.getBySection(section);
+		List<WInfo> list = null;
+		
+		if(search.equals("true")){
+			String searchField = request.getParameter("searchField");
+			String searchString = request.getParameter("searchString");
+			
+			list = wInfoManager.getBySearch(searchField,searchString);
+			
+		}else if(sidx != ""){
+			list = wInfoManager.getBySection(section, sidx, sord);
+		}else{
+			list = wInfoManager.getBySection(section);
+		}
+		
+		
+		
 //		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
@@ -110,28 +128,30 @@ public class PbszController {
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int index = 0;
-		while (index < row && (start + index) < listSize) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			WInfo wi = list.get(start + index);
-			map.put("id", wi.getId());
-			map.put("workid", wi.getWorkid());
-			map.put("name", wi.getName());
-			map.put("sex", wi.getSexString());
-			map.put("section", wi.getSection());
-			map.put("worktime", sdf.format(wi.getWorktime()));
-			map.put("type", wi.getTypeString());
-			map.put("phone", wi.getPhone());
-			map.put("shift", wi.getShift());
-			map.put("ord1", wi.getOrd1());
-			map.put("ord2", wi.getOrd2());
-			map.put("ord3", wi.getOrd3());
-			map.put("ord4", wi.getOrd4());
-			map.put("ord5", wi.getOrd5());
-			map.put("ord6", wi.getOrd6());
-			map.put("holiday", wi.getHoliday());
-			map.put("defeHoliday", wi.getDefeHolidayNum());
-			dataRows.add(map);
-			index++;
+		if(list!=null){
+			while (index < row && (start + index) < listSize) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				WInfo wi = list.get(start + index);
+				map.put("id", wi.getId());
+				map.put("workid", wi.getWorkid());
+				map.put("name", wi.getName());
+				map.put("sex", wi.getSexString());
+				map.put("section", wi.getSection());
+				map.put("worktime", sdf.format(wi.getWorktime()));
+				map.put("type", wi.getTypeString());
+				map.put("phone", wi.getPhone());
+				map.put("shift", wi.getShift());
+				map.put("ord1", wi.getOrd1());
+				map.put("ord2", wi.getOrd2());
+				map.put("ord3", wi.getOrd3());
+				map.put("ord4", wi.getOrd4());
+				map.put("ord5", wi.getOrd5());
+				map.put("ord6", wi.getOrd6());
+				map.put("holiday", wi.getHoliday());
+				map.put("defeHoliday", wi.getDefeHolidayNum());
+				dataRows.add(map);
+				index++;
+			}
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html;charset=UTF-8");
@@ -263,6 +283,7 @@ public class PbszController {
 		String id = request.getParameter("id");
 		if(oper.equals("del")){
 			wInfoManager.remove(Long.parseLong(id));
+			return true;
 		}
 		String name = request.getParameter("name");
 		int sex = Integer.parseInt(request.getParameter("sex"));
@@ -277,7 +298,7 @@ public class PbszController {
 		int ord5 = Integer.parseInt(request.getParameter("ord5"));
 		int ord6 = Integer.parseInt(request.getParameter("ord6"));
 		Date worktime = sdf.parse(request.getParameter("worktime"));
-		System.out.println(worktime);
+		System.out.println(worktime.getTime());
 		int type = Integer.parseInt(request.getParameter("type"));
 		int holiday = Integer.parseInt(request.getParameter("holiday"));
 //		String defeHoliday = request.getParameter("defeHoliday");

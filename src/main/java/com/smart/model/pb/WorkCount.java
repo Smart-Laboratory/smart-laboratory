@@ -23,6 +23,7 @@ public class WorkCount extends BaseObject{
 	private String worker;// 员工
 	private double workTime;//月工作班时
 	private double monthOff;//月休息 时间
+	private double yjx; //月积休
 	private String section;//科室
 	private double holiday;//年休
 	
@@ -66,6 +67,14 @@ public class WorkCount extends BaseObject{
 	}
 	public void setMonthOff(double monthOff) {
 		this.monthOff = monthOff;
+	}
+	
+	@Column
+	public double getYjx() {
+		return yjx;
+	}
+	public void setYjx(double yjx) {
+		this.yjx = yjx;
 	}
 	
 	@Column
