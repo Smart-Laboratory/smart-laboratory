@@ -56,3 +56,11 @@
 		<div id="kqpager"></div>
 	</div>
 </div>
+<div style="margin-top:10px;font-size:15px;">
+		<p>1300000-<fmt:message key="labDepartment.1300000"/>;  1300100-<fmt:message key="labDepartment.1300100"/>;
+			1300200-<fmt:message key="labDepartment.1300200"/>;  1300300-<fmt:message key="labDepartment.1300300"/>;
+			1300500-<fmt:message key="labDepartment.1300500"/>;  1300501-<fmt:message key="labDepartment.1300501"/>;
+			1300600-<fmt:message key="labDepartment.1300600"/>;  1300700-<fmt:message key="labDepartment.1300700"/>;
+			1300800-<fmt:message key="labDepartment.1300800"/>;
+		</p>
+</div>

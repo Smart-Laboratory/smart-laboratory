@@ -79,11 +79,10 @@ public class ScheduleController {
 		if (department != null) {
 			for (String s : department.split(",")) {
 				depart.put(s, sectionutil.getValue(s));
-				if(section==null)
+				if(section==null || section.isEmpty())
 					section = s;
 			}
 		}
-		System.out.println(section+"--");
 		if(section == null || section.isEmpty())
 			return new ModelAndView();
 		
@@ -128,7 +127,7 @@ public class ScheduleController {
 			i++;
 		}
 		List<DayShift> dshList = dayShiftManager.getBySection(section);
-		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+4][i+2];
+		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+5][i+2];
 
 		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
 		for(Arrange arr : arrList) {
@@ -153,6 +152,7 @@ public class ScheduleController {
         shifts[j][0] = "<th style='background:#7FFFD4' id='nx'>年休</th>";
         shifts[j+1][0] = "<th style='background:#7FFFD4' id='yx'>月休</th>";
         shifts[j+2][0] = "<th style='background:#7FFFD4' id='yb'>月班</th>";
+        shifts[j+3][0] = "<th style='background:#7FFFD4' id='yb'>月积休</th>";
         
         shifts[0][0] = "<th style='background:#7FFFD4' id='day0'>" + tomonth + "</th>";
         for(int m=1;m<i;m++) {
@@ -184,6 +184,7 @@ public class ScheduleController {
         	shifts[j][k] = "<th class='nx' name='nx"+name+"' id='nx"+name + "' >"+map.get(k).getHoliday()+"</th>";
         	shifts[j+1][k] = "<th class='yx' name='yx"+name+"' id='yx"+name + "' ></th>";
         	shifts[j+2][k] = "<th class='yb' name='yb"+name+"' id='yb"+name + "' ></th>";
+        	shifts[j+3][k] = "<th class='yjx' name='yjx"+name+"' id='yjx"+name + "' ></th>";
         }
         
         
@@ -220,7 +221,7 @@ public class ScheduleController {
         		arrString = arrString + shifts[0][a];
         	}
         	String arrBodyString = "";
-        	for(int a=1;a<j+3;a++){
+        	for(int a=1;a<j+4;a++){
         		arrBodyString += "<tr>";
         		for(int b=0;b<i+2;b++){
         			arrBodyString += shifts[a][b];

@@ -129,6 +129,10 @@
                     <appfuse:label styleClass="control-label" key="lab.code"/>
                     <form:input cssClass="form-control" path="labCode" id="labCode"/>
                 </div>
+                <div class="form-group">
+                    <appfuse:label styleClass="control-label" key="lab.pbcode"/>
+                    <form:input cssClass="form-control" path="pbsection" id="pbsection"/>
+                </div>
             </div>
         </div>
         </c:if>

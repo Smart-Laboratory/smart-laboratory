@@ -56,5 +56,20 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' order by ord2").list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<WInfo> getBySection(String section, String sidx, String sord) {
+		if(section.equals("1300000")){
+			return getSession().createQuery("from WInfo order by "+sidx+" "+sord).list();
+		}
+		return getSession().createQuery("from WInfo where section like '%"+section+"%' order by "+sidx+" "+sord).list();
+	}
 
+	@SuppressWarnings("unchecked")
+	public List<WInfo> getBySearch(String field, String string){
+		String hql = "from WInfo where "+field+" like '"+string+"%'";
+		System.out.println(hql);
+		return getSession().createQuery(hql).list();
+	}
+	
 }

@@ -28,17 +28,17 @@ padding: 0;
 list-style-type: none;
 }
 #head  th  {
-	width:60px;
+	width:40px;
 	height:24px;
 	text-align:center;
 }
 table tr th {
-	width:60px;
+	width:40px;
 	height:24px;
 	text-align:center;
 }
 table tr td {
-	width:60px;
+	width:40px;
 	height:24px;
 }
 div .fixed{ 
@@ -80,11 +80,11 @@ display: none;
 			</c:forEach></span>
 			</select>
 		</div>
-		<div id="shiftSelect" class="checkbox" >
+		<div id="shiftSelect" class="checkbox form-inline" >
 			<c:forEach items="${wshifts}" var="shift">
-				<label>
+				<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
       				<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
-    			</label>
+    			</label></div>
 			</c:forEach>
 			
 		</div>

@@ -29,10 +29,10 @@ import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
-/*import jxl.*;
+import jxl.*;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;*/
+import jxl.write.WritableWorkbook;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -62,12 +62,19 @@ public class PbcxController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		User user = userManager.getUserByUsername(request.getRemoteUser());
+		User user = null;
+		if(request.getRemoteUser() != null)
+			user = userManager.getUserByUsername(request.getRemoteUser());
 		String yearAndMonth = request.getParameter("date");
 		String section = request.getParameter("section");
 		String type = request.getParameter("type");
 		
 		if(section == null || section == "") {
+			if(user == null){
+				ModelAndView view = new ModelAndView();
+				view.addObject("size", 0);
+				return view;
+			}
 			section = user.getLastLab();
 		}
 		
@@ -211,7 +218,7 @@ public class PbcxController {
 		
 		System.out.println("开始导出");
 		
-		/*ServletOutputStream out = response.getOutputStream();
+		ServletOutputStream out = response.getOutputStream();
 		response.setHeader("Content-disposition","attachment; " + "filename=newpb.xls");
 		response.setHeader("Content-Type", "application/vnd.ms-excel");   
 		BufferedInputStream bis = null;
@@ -234,13 +241,15 @@ public class PbcxController {
 				bis.close();
 			if (bos != null)
 				bos.close();
-			}   */
-		
-		return new ModelAndView();
+			}   
+		return new ModelAndView("../pb/pbcx");
 	}
 
 	public boolean writeExcel(String[][] data,String date,String[] gh,String[] ks) throws FileNotFoundException{
-		/*OutputStream os = new FileOutputStream("d:\\test.xls");
+		/* win下
+		 * OutputStream os = new FileOutputStream("d:\\test.xls");*/
+		
+		
 		File dir = new File(pbexcelUrl);
 		dir.setWritable(true,false);
 		if (!dir.exists()) {
@@ -292,7 +301,7 @@ public class PbcxController {
         }
         catch(Exception e){
         	e.printStackTrace();
-        }*/
+        }
 		
 		
 		

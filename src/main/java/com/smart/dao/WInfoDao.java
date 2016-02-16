@@ -12,7 +12,10 @@ public interface WInfoDao extends GenericDao<WInfo, Long> {
 
 	List<WInfo> getAll(String sidx, String sord);
 
-	List<WInfo> getBySection(String section);
+	List<WInfo> getBySection(String section, String sidx,String sord);
 	
-
+	List<WInfo> getBySearch(String field, String string);
+	
+	List<WInfo> getBySection(String section);
 }
+

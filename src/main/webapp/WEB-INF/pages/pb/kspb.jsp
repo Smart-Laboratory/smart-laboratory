@@ -133,6 +133,13 @@ $(function() {
 	
 	$("#kstable tr td").click(function(){
 		var id=this.id;
+		
+		var month = new Date().getMonth()+1;
+		var date = new Date().getDate();
+		var day = id.split("-")[1];
+		var m = $("#date").val().split("-")[1];
+		
+		if(m>month ||(m==month && day>=date)){
 		var name = $("#"+id).attr("name");
 		var shifts=$("#"+id).html();
 		$.each($("#shiftSelect input"),function(n,v){
@@ -154,7 +161,7 @@ $(function() {
 			}
 		});
 		$("#"+id).html(shifts);
-		
+		}
 	});
 	$("#changeMonth").click(function() {
 		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val()+"&type=" + $("#typeSel").val();
@@ -189,11 +196,11 @@ $(function() {
 			</c:forEach></span>
 			</select>
 </div>
-<div id="shiftSelect" class="checkbox">
+<div id="shiftSelect" class="checkbox form-inline">
 			<c:forEach items="${wshifts }" var="shift">
-				<label>
+				<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
       				<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
-    			</label>
+    			</label></div>
 			</c:forEach>
 </div>
 <div class="title">
