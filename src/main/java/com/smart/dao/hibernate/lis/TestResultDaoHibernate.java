@@ -44,7 +44,7 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	public List<TestResult> getTestBySampleNo(String sampleNo){
 //		String sql = "select t.* from l_testResult t where  t.sampleno='"+ sampleNo + "' order by t.testid ";
 		
-		return getSession().createQuery("select t from TestResult as t, Index as i where t.testId=i.indexId and sampleNo='"+sampleNo+"' order by i.printord").list();
+		return getSession().createQuery("select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"+sampleNo+"' order by i.printord").list();
 		
 		
 	}
@@ -74,6 +74,11 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 				+ "' or s.patientId='" + blh + "') and t.sampleNo=s.sampleNo and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getPrintTestBySampleNo(String sampleno) {
+		return getSession().createQuery("select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"+sampleno+"' and t.isprint=1 order by i.printord").list();
 	}
 	
 }

@@ -284,10 +284,6 @@ $(function(){
 		getProValue();
 	});
 	
-	
-	
-	
-	
 	var isFirstCompare = true;
 	$("#compareBtn").click(function(){
 		var text = $("#sample_compare").val();

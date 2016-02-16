@@ -532,6 +532,7 @@
 				$("#jqgh_rowed3_last3").css('color','#000000');
 				$("#jqgh_rowed3_last4").css('color','#000000');
 				if (hisDate != null && hisDate != "") {
+					$("#hisLastResult").val(1);
 					var his = hisDate.split(",");
 					if (his.length == 1) {
 						$("#jqgh_rowed3_last").html(his[0].split(":")[0]);
@@ -613,13 +614,11 @@
 						$("#jqgh_rowed3_last3").css('color','#CFCFCF');
 						$("#jqgh_rowed3_last4").css('color','#CFCFCF');
 					}
+				} else {
+					$("#hisLastResult").val(0);
 				}
 				$.each(jQuery('#rowed3').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#rowed3").jqGrid('getRowData',v);
-        			if (ret.last != null && ret.last != "")
-        				$("#hisLastResult").val(1);
-        			else
-        				$("#hisLastResult").val(0);
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
@@ -857,6 +856,7 @@
 				$("#jqgh_sample0_last").css('color','#000000');
 				$("#jqgh_sample0_last1").css('color','#000000');
 				if (hisDate != null && hisDate != "") {
+					$("#hisLastResult").val(1);
 					var his = hisDate.split(",");
 					if (his.length == 1) {
 						$("#jqgh_sample0_last").html(his[0].split(":")[0]);
@@ -873,14 +873,11 @@
 						$("#jqgh_sample0_last").css('color','#8F8F8F');
 						$("#jqgh_sample0_last1").css('color','#8F8F8F');
 					}
-					
+				} else {
+					$("#hisLastResult").val(0);
 				}
 				$.each(jQuery('#sample0').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#sample0").jqGrid('getRowData',v);
-        			if (ret.last != null && ret.last != "")
-        				$("#hisLastResult").val(1);
-        			else
-        				$("#hisLastResult").val(0);
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
@@ -1062,6 +1059,7 @@
 				$("#jqgh_sample1_last").css('color','#000000');
 				$("#jqgh_sample1_last1").css('color','#000000');
 				if (hisDate != null && hisDate != "") {
+					$("#hisLastResult").val(1);
 					var his = hisDate.split(",");
 					if (his.length == 1) {
 						$("#jqgh_sample1_last").html(his[0].split(":")[0]);
@@ -1078,14 +1076,11 @@
 						$("#jqgh_sample1_last").css('color','#8F8F8F');
 						$("#jqgh_sample1_last1").css('color','#8F8F8F');
 					}
+				} else {
+					$("#hisLastResult").val(0);
 				}
 				$.each(jQuery('#sample1').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#sample1").jqGrid('getRowData',v);
-        			
-        			if (ret.last != null && ret.last != "")
-        				$("#hisLastResult").val(1);
-        			else
-        				$("#hisLastResult").val(0);
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
