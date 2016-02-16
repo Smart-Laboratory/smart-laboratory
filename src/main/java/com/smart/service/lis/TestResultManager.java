@@ -21,4 +21,6 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 			String patientid);
 
 	List<TestResult> getRelative(String patientId, String blh, String history);
+
+	List<TestResult> getPrintTestBySampleNo(String sampleno);
 }

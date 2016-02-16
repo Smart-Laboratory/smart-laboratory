@@ -60,7 +60,6 @@ function getList(text, lab) {
     		
     		
     		$("#sampleTitle").html("");
-    		$("#hisLastResult").val(null);
     		$("#span_sampleNo").html(ret.sample);
     		$("#test_sampleNo").val(ret.sample);
     		

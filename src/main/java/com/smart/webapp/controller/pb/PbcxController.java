@@ -29,10 +29,10 @@ import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
-import jxl.*;
+/*import jxl.*;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
+import jxl.write.WritableWorkbook;*/
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -240,14 +240,14 @@ public class PbcxController {
 	}
 
 	public boolean writeExcel(String[][] data,String date,String[] gh,String[] ks) throws FileNotFoundException{
-		OutputStream os = new FileOutputStream("d:\\test.xls");
-		/*File dir = new File(pbexcelUrl);
+		/*OutputStream os = new FileOutputStream("d:\\test.xls");
+		File dir = new File(pbexcelUrl);
 		dir.setWritable(true,false);
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		File file = new File(pbexcelUrl+"/pb.xls");
-		OutputStream os = new FileOutputStream(file);*/
+		OutputStream os = new FileOutputStream(file);
 		try
         {
            
@@ -292,7 +292,7 @@ public class PbcxController {
         }
         catch(Exception e){
         	e.printStackTrace();
-        }
+        }*/
 		
 		
 		
