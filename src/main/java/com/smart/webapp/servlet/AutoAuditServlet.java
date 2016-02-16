@@ -83,7 +83,7 @@ public class AutoAuditServlet extends HttpServlet {
         final AuditTraceManager auditTraceManager = (AuditTraceManager) ctx.getBean("auditTraceManager");
         final LikeLabManager likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
         
-        System.out.println("Initializing context...");
+        log.info("Initializing context...");
 
         try {
         	final Map<String, Describe> idMap = new HashMap<String, Describe>();
@@ -92,7 +92,7 @@ public class AutoAuditServlet extends HttpServlet {
         	final Map<String, String> likeLabMap = new HashMap<String, String>();
         	Long start = System.currentTimeMillis();
         	List<Rule> ruleList = bagManager.getRuleByBag("1");
-        	System.out.println("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
+        	log.info("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
         	if (!DroolsRunner.getInstance().isBaseInited()) {
         		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
         		Reader reader = analyticUtil.getReader(ruleList);
@@ -122,7 +122,7 @@ public class AutoAuditServlet extends HttpServlet {
     		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
-            System.out.println("初始化常量完成");
+            log.info("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				
         		public void run() {
@@ -133,7 +133,7 @@ public class AutoAuditServlet extends HttpServlet {
         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
         	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
         	            	autocount++;
-        	            	System.out.println("开始第" + autocount + "次审核...");
+        	            	log.info("开始第" + autocount + "次审核...");
         	            	Date today = new Date();
         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
         	            	Map<Long, Sample> diffData = new HashMap<Long, Sample>();
@@ -155,7 +155,7 @@ public class AutoAuditServlet extends HttpServlet {
     	        				for (TestResult t : now) {
     	        					testIdSet.add(t.getTestId());
     	        				}
-    	        				System.out.println(info.getSampleNo()+" : " + now.size());
+    	        				log.info(info.getSampleNo()+" : " + now.size());
     	        				try {
     	        					String lab = info.getSection().getCode();
     	        					if(likeLabMap.containsKey(lab)) {
@@ -189,7 +189,7 @@ public class AutoAuditServlet extends HttpServlet {
          	        				e.printStackTrace();
          	        			}	
         	        		}
-        	                System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
+        	                log.info("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         	                Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
         	        		DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
         	        		Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
@@ -261,7 +261,7 @@ public class AutoAuditServlet extends HttpServlet {
         	        		sampleManager.saveAll(updateSample);
         					criticalRecordManager.saveAll(updateCriticalRecord);
         					auditTraceManager.saveAll(updateAuditTrace);
-        					System.out.println("第" + autocount + "次审核结束！");
+        					log.info("第" + autocount + "次审核结束！");
         	                Thread.sleep(120000);  
         	            } catch (Exception e) {
         	            	log.error(e.getMessage());

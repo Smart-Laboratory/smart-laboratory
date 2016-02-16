@@ -13,7 +13,7 @@
 <html>
 	<div style="float:left;width:96%;margin-left:14px;margin-top:5px;">
 		<div style="height:30px;width:100%;">
-			<img src="/images/zy_logo.png" style="float:left;margin-left:130px;"/>
+			<img src="../images/zy_logo.png" style="float:left;margin-left:130px;"/>
 			<div style="float:right;font-size:10px;margin-top:20px;">No:${sampleNo}</div>
 		</div>
 		<hr style="height:2px;width:100%;margin-top:10px;margin-bottom:5px;background-color:#000000;color:#000000;"/>
