@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
@@ -140,9 +141,10 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 		if (log.isDebugEnabled()) {
             log.debug("user's id: " + rule.getId());
         }
-        getSession().saveOrUpdate(rule);
+        Session s = getSession();
+        s.saveOrUpdate(rule);
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
-        getSession().flush();
+        s.flush();
         return rule;
 		
 	}

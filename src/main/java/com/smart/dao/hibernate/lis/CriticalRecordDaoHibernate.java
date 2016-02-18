@@ -21,7 +21,7 @@ public class CriticalRecordDaoHibernate extends GenericDaoHibernate<CriticalReco
 		for(CriticalRecord cr : updateCriticalRecord) {
 			s.saveOrUpdate(cr);
 		}
-		s.flush();		
+		s.flush();
 	}
 
 }

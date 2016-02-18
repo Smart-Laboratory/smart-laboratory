@@ -17,7 +17,6 @@
 		</ul>
 		<div id="tabs-0" style="padding:5px;">
 			<div style="margin:5px;">
-				<!-- <span class="label label-info"><fmt:message key="sample.explain" /></span> -->
 				
 				<div style="margin-right:10px;float:right;" id="reasonBtn">	
 					<button id="reason_block" class="btn btn-info" style="font-size:15px;">

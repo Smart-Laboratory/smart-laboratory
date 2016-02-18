@@ -19,7 +19,7 @@
     </aop:config>
 
     <!-- Enable @Transactional support -->
-    <tx:annotation-driven/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- Enable @AspectJ support -->
     <aop:aspectj-autoproxy/>
