@@ -1,13 +1,10 @@
 package com.smart.model.lis;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -27,8 +24,7 @@ public class Section extends BaseObject {
 	private Long id;    //主键
 	private String code;
 	private String name;
-	
-	private Hospital hospital;
+	private long hospitalId;
 	
 	/**
 	 * 主键、自增
@@ -69,14 +65,13 @@ public class Section extends BaseObject {
 		this.name = name;
 	}
 
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital() {
-		return hospital;
+	@Column(name="hospital_id")
+	public long getHospitalId() {
+		return hospitalId;
 	}
 
-	public void setHospital(Hospital hospital) {
-		this.hospital = hospital;
+	public void setHospitalId(long hospitalId) {
+		this.hospitalId = hospitalId;
 	}
 	
 	public String toString() {

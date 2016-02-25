@@ -7,6 +7,7 @@ import com.smart.Constants;
 import com.smart.dao.SearchException;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.lis.HospitalManager;
 
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/users*")
 public class UserController {
+	
+	@Autowired
     private UserManager userManager = null;
+    
+	@Autowired
+	private HospitalManager hospitalManager = null;
 
-    @Autowired
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
         Model model = new ExtendedModelMap();
         try {
@@ -55,7 +56,7 @@ public class UserController {
     	JSONObject obj = new JSONObject();
     	User user = userManager.getUserByUsername(request.getRemoteUser());
     	obj.put("username", user.getName());
-    	obj.put("hospital", user.getHospital().getName());
+    	obj.put("hospital", hospitalManager.get(user.getHospitalId()).getName());
     	response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(obj.toString());
 		return null;

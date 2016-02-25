@@ -85,7 +85,7 @@ public class RuleViewController {
 		ruleList.setSortDirection(dir);
 
 		// 获取当前的规则包列表
-		List<Bag> bags = bagManager.getBagByHospital(user.getHospital().getId());
+		List<Bag> bags = bagManager.getBagByHospital(user.getHospitalId());
 		Map<String, String> map = new HashMap<String, String>();
 		for (Bag b : bags) {
 			map.put(b.getId().toString(), b.getName());

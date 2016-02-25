@@ -14,12 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 import com.smart.model.BaseObject;
-import com.smart.model.lis.Hospital;
 
 
 @Entity
@@ -36,7 +32,7 @@ public class Bag extends BaseObject implements Serializable{
 	private boolean isCore;
 	private Set<Rule> rules = new HashSet<Rule>();
 	
-	private Hospital hospital;
+	private long hospitalId;
 //	private Set<IDMap> idMap = new HashSet<IDMap>();
 
 	/**
@@ -112,13 +108,12 @@ public class Bag extends BaseObject implements Serializable{
 		this.rules = rules;
 	}
 	
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	public Hospital getHospital(){
-		return hospital;
+	@Column(name="hospital_id")
+	public long getHospitalId(){
+		return hospitalId;
 	}
-	public void setHospital(Hospital hospital){
-		this.hospital = hospital; 
+	public void setHospitalId(long hospitalId){
+		this.hospitalId = hospitalId; 
 	}
 
 	@Override

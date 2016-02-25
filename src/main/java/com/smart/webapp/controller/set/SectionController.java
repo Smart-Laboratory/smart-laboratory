@@ -21,15 +21,11 @@ import com.smart.service.lis.SectionManager;
 @RequestMapping("/set/section*")
 public class SectionController {
 	
-	private SectionManager sectionManager;
+	@Autowired
+	private SectionManager sectionManager = null;
 	
 	@Autowired
-	private UserManager userManager;
-	
-	@Autowired
-	public void setSectionManager(final SectionManager sectionManager){
-		this.sectionManager = sectionManager;
-	}
+	private UserManager userManager = null;
 	
 	public SectionController(){
 		
@@ -47,7 +43,7 @@ public class SectionController {
     	Section section = new Section();
     	if(id.equals("0")) {
     		User user = userManager.getUserByUsername(request.getRemoteUser());
-        	section.setHospital(user.getHospital());
+        	section.setHospitalId(user.getHospitalId());
     	} else {
     		section = sectionManager.get(Long.parseLong(id));
     	}

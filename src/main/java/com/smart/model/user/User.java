@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -40,7 +38,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
-import com.smart.model.lis.Hospital;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -67,7 +64,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
     private String email;                       // required; unique
     private String phoneNumber;
     private String website;
-    private Address address = new Address();
+    //private Address address = new Address();
     private Integer version;
     private Set<Role> roles = new HashSet<Role>();
     private boolean enabled;
@@ -81,7 +78,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	private String activeCode;
 	private String lastProfile;
     
-    private Hospital hospital;
+    //private long hospitalId;
     private int collectNum;
 	private int evaluatenum;
 	private int checknum;
@@ -159,13 +156,13 @@ public class User extends BaseObject implements Serializable, UserDetails {
         return website;
     }
 
-    @Embedded
+    /*@Embedded
     @IndexedEmbedded
     public Address getAddress() {
         return address;
-    }
+    }*/
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Fetch(FetchMode.SELECT)    
     @JoinTable(
             name = "lab_user_role",
@@ -303,9 +300,9 @@ public class User extends BaseObject implements Serializable, UserDetails {
         this.website = website;
     }
 
-    public void setAddress(Address address) {
+    /*public void setAddress(Address address) {
         this.address = address;
-    }
+    }*/
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
@@ -377,15 +374,20 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.lastProfile = lastProfile;
 	}
 
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
-    public Hospital getHospital() {
-		return hospital;
+	/*@Column(name="hospital_id")
+    public long getHospitalId() {
+		return hospitalId;
 	}
 
-	public void setHospital(Hospital hospital) {
-		this.hospital = hospital;
+	public void setHospitalId(long hospitalId) {
+		this.hospitalId = hospitalId;
+	}*/
+	@Transient
+	public long getHospitalId() {
+		return 1L;
 	}
+
+	
 	
 	@Column(name = "collectnum")
 	public int getCollectNum() {

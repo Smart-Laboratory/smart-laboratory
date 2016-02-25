@@ -13,8 +13,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -155,7 +153,7 @@ public class AutoAuditServlet extends HttpServlet {
                     	        				for (TestResult t : now) {
                     	        					testIdSet.add(t.getTestId());
                     	        				}
-                    	        				//System.out.println(info.getSampleNo()+" : " + now.size());
+                    	        				System.out.println(info.getSampleNo()+" : " + now.size());
                     	        				try {
                     	        					String lab = info.getSection().getCode();
                     	        					if(likeLabMap.containsKey(lab)) {
