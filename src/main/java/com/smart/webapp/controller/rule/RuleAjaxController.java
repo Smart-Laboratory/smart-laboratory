@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Dictionary;
-import com.smart.model.lis.Hospital;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Result;
@@ -61,7 +60,7 @@ public class RuleAjaxController {
 	@RequestMapping(value = "/getBag", method = { RequestMethod.GET })
 	@ResponseBody
 	public String getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		long hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospital().getId();
+		long hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
 		if (isChanged.get()) {
 			List<Bag> bags = bagManager.getBagByHospital(hospital);
 			JSONArray cell = new JSONArray();
@@ -109,17 +108,17 @@ public class RuleAjaxController {
 		String action = request.getParameter("action");
 		Long id = Long.parseLong(request.getParameter("id"));
 		String name = request.getParameter("name");
-		Hospital hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospital();
+		long hospital = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
 		Bag bag = new Bag();
 		if (action.equals("add")) {
 			bag.setParenetID(id);
 			bag.setName(name);
-			bag.setHospital(hospital);
+			bag.setHospitalId(hospital);
 			bagManager.save(bag);
 		} else if (action.equals("rename")) {
 			bag = bagManager.get(id);
 			bag.setName(name);
-			bag.setHospital(hospital);
+			bag.setHospitalId(hospital);
 			bagManager.save(bag);
 		} else if (action.equals("remove")) {
 			List<Bag> bags = bagManager.getBag(id);

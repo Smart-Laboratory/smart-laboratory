@@ -141,7 +141,6 @@
 	
 	<div id="opStatusDialog" title="<fmt:message key='pass.button' />/<fmt:message key='unpass.button' />" style="text-align:left;" >
 		<h5 id="passNotes"></h5>
-		<!-- <textarea id="noteText" rows="1" style="width:280px;"></textarea> -->
 		<div id="selectNoteDiv" class="clearfix"></div>
 		
 		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
@@ -271,8 +270,6 @@
 			<button id="writePartBtn" class="btn btn-info"><fmt:message key='writeback'/></button>
 		</div>
 		<%-- <label class='checkbox inline'><input type='checkbox' id='checkAll'/><fmt:message key='writebacklist.checkall'/></label> --%>
-		<!-- <div id="writeBackList">
-		</div> -->
 	</div>
 	
 	

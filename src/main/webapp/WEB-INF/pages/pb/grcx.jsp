@@ -52,7 +52,7 @@ $(function() {
 				var name = '${name}';
 				var moment=$('#calendar').fullCalendar('getDate');
 				var month = moment.format("YYYY-MM");
-			    $.get("<c:url value='/pb/grcx/data'/>",{name:name,month:month},function(data){
+			    $.get("../pb/grcx/getData",{name:name,month:month},function(data){
 		    		for (var i=0 ; i < data.length ; i++) {
 		    			$("#calendar").fullCalendar('renderEvent',data[i],true);
 		    		}

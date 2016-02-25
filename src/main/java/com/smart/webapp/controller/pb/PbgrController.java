@@ -62,7 +62,7 @@ public class PbgrController {
 		return new ModelAndView().addObject("name", name);
 	}
 
-	@RequestMapping(value = "/data*", method = RequestMethod.GET)
+	@RequestMapping(value = "/getData*", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Object> getPersonalPB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
@@ -72,6 +72,7 @@ public class PbgrController {
 			name = user.getName();
 		}
 		List<Arrange> arrList = arrangeManager.getPersonalArrange(name, month);
+		System.out.println(arrList.size());
 		System.out.println(month + arrList.size());
 		List<Shift> shList = shiftManager.getAll();
 		Map<String, Shift> map = new HashMap<String, Shift>();
@@ -140,7 +141,7 @@ public class PbgrController {
 		o.put("lnjx",wInfo.getDefeholidayhis() );
 		o.put("jx",wInfo.getDefeHolidayNum() );
 		String yjx = "";
-		if(wInfo!=null && !wInfo.getDefeHoliday().isEmpty()){
+		if(wInfo!=null && wInfo.getDefeHoliday()!=null && !wInfo.getDefeHoliday().isEmpty()){
 			for(String s : wInfo.getDefeHoliday().split(";")){
 				if(s.contains(moment)){
 					yjx = s.replace(moment+":", "");

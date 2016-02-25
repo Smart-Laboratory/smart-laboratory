@@ -26,7 +26,7 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 		for(Out o : needSaveOut) {
 			s.saveOrUpdate(o);
 		}
-		s.flush();	
+		s.flush();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,15 +1,17 @@
 <!-- NOTE: If you're working offline, you might have to change the DOCTYPE to the following:
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">-->
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">-->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
     <session-factory>
     	<mapping class="com.smart.Dictionary"/>
+    	<mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
-        <mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.lis.CriticalRecord"/>
         <mapping class="com.smart.model.lis.Patient"/>
         <mapping class="com.smart.model.lis.Sample"/>

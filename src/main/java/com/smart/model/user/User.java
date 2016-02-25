@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -81,7 +79,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	private String activeCode;
 	private String lastProfile;
     
-//    private Hospital hospital;
+    private long hospitalId;
     private int collectNum;
 	private int evaluatenum;
 	private int checknum;
@@ -383,9 +381,20 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		return new Hospital();
 	}
 
-//	public void setHospital(Hospital hospital) {
-//		this.hospital = hospital;
-//	}
+	/*@Column(name="hospital_id")
+    public long getHospitalId() {
+		return hospitalId;
+	}
+
+	public void setHospitalId(long hospitalId) {
+		this.hospitalId = hospitalId;
+	}*/
+	@Transient
+	public long getHospitalId() {
+		return hospitalId;
+	}
+
+	
 	
 	@Column(name = "collectnum")
 	public int getCollectNum() {

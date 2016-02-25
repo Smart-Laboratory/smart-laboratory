@@ -29,10 +29,10 @@ import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
-import jxl.*;
+/*import jxl.*;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
+import jxl.write.WritableWorkbook;*/
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -260,7 +260,7 @@ public class PbcxController {
 		try
         {
            
-            WritableWorkbook wwb = Workbook.createWorkbook(os);
+            /*WritableWorkbook wwb = Workbook.createWorkbook(os);
             //创建Excel工作表 指定名称和位置
             WritableSheet ws = wwb.createSheet("pb",0);
  
@@ -297,7 +297,7 @@ public class PbcxController {
            }
                        //写入工作表
             wwb.write();
-            wwb.close();
+            wwb.close();*/
         }
         catch(Exception e){
         	e.printStackTrace();

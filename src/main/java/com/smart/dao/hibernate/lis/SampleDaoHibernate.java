@@ -3,7 +3,6 @@ package com.smart.dao.hibernate.lis;
 import com.smart.dao.lis.SampleDao;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,27 +16,22 @@ import org.hibernate.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
 import com.smart.model.util.NeedWriteCount;
 
-import javafx.scene.input.DataFormat;
-
-import com.smart.model.lis.Process;
-
 
 @Repository("sampleDao")
+@Transactional
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
 
 	public SampleDaoHibernate() {
         super(Sample.class);
     }
 
-	private static SimpleDateFormat ldf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static String DATEFORMAT = "yyyy-MM-dd hh24:mi:ss";
-	
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
 		if (StringUtils.isEmpty(lab)) {
@@ -101,14 +95,13 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		Session session = getSession();
 		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by auditMark");
 		q.setFirstResult(0);
-		q.setMaxResults(500);  
+		q.setMaxResults(100);  
 		List<Sample> list = q.list();
 		for(Sample s : list) {
 			s.getPatient();
 			s.getResults().size();
 			s.getProcess();
 		}
-		session.flush();
 		return list;
 	}
 
@@ -132,8 +125,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab) {
 		try {
-			String to = sampleno.substring(0, 8);
-			Date todate = Constants.DF3.parse(to);
+			Date todate = Constants.DF3.parse(sampleno.substring(0, 8));
 			Calendar calendar = Calendar.getInstance(); 
 	        calendar.setTime(todate); 
 	        calendar.add(Calendar.DATE,-180); 

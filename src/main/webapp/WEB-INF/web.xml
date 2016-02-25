@@ -172,7 +172,7 @@
 	<!-- <servlet>   
 	    <servlet-name>autoaudit</servlet-name>   
 	    <servlet-class>com.smart.webapp.servlet.AutoAuditServlet</servlet-class>   
-	    <load-on-startup>2</load-on-startup>   
+	    <load-on-startup>5</load-on-startup>   
 	</servlet> -->
 
     <servlet>

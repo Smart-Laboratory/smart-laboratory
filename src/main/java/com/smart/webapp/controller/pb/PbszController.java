@@ -404,7 +404,7 @@ public class PbszController {
 		
 		String name = request.getParameter("name");
 		String ab = request.getParameter("ab");
-		String wtime = request.getParameter("worktime");
+		String wtime = request.getParameter("wtime");
 		String days = request.getParameter("days");
 		String section = request.getParameter("section");
 		int order = Integer.parseInt(request.getParameter("order"));

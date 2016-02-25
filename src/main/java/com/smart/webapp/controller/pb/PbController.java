@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.dao.hibernate.ShiftDaoHibernate;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.Shift;
@@ -251,16 +252,26 @@ public class PbController {
 						if(arrange.getShift().contains("公休")){
 							if(arrange.getShift().replace("公休;", "").isEmpty())
 								monthOff += 1;
-						}else if((sdf2.format(date).contains("六") || sdf2.format(date).contains("日") || arrange.getShift().contains("公休")) && !arrange.getShift().contains("值(补)")){
-						}else{
-							jxshifts+=arrange.getShift();
 						}
+						if((sdf2.format(date).contains("六") || sdf2.format(date).contains("日") || arrange.getShift().contains("公休"))) {
+							if(arrange.getShift().contains("值补")){
+//								System.out.println(sdf1.format(date)+arrange.getShift());
+								for(String shift : arrange.getShift().split(";")){
+									if(shift.contains("值补"))
+										jxworktime+=shiftTime.get(shift);
+								}
+							}
+						}else{
+							jxshifts+= arrange.getShift();
+						}
+						
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 				
 			}
+//			System.out.println(jxshifts);
 			
 			for(String shift : jxshifts.split(";")){
 				if(shiftTime.containsKey(shift)){
