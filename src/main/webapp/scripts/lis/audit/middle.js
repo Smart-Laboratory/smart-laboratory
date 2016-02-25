@@ -759,23 +759,22 @@
 				array[i] = data[i];
 			}
 		});
-		getSample0(sampleNo, array[0].userdata, array[0].rows);
+		getSample0(sampleNo, array[0].userdata, array[0]);
 		getSample1(sampleNo, array[0].userdata, array[1].rows);
 		
 		
 	}
 	
 	function getSample0(sampleNo, userdata, mydata) {
-		
 
         var lastsel;
         var cl = "";
         var isEdit = false;
 		jQuery("#sample0").jqGrid({
-		   	data:mydata,
+		   	data:mydata.rows,
 			datatype: "local",
 			width:'420',
-			jsonReader : {repeatitems : false, userdata : userdata},  
+			jsonReader : {repeatitems : false,  userdata : userdata},  
 		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
@@ -850,9 +849,13 @@
 				if ($("#sampleTitle").html() == "") {
 //					$("#sample0").jqGrid("setCaption", $("#sampleTitle").html());
 				}
-				var hisDate = jQuery("#sample0").jqGrid("getGridParam", "userData").hisDate;
-				var sameSample = jQuery("#sample0").jqGrid("getGridParam", "userData").sameSample;
-				var isLastYear = jQuery("#sample0").jqGrid("getGridParam", "userData").isLastYear;
+				var user = jQuery("#sample0").jqGrid("getGridParam", "userdata");
+				if(user == null) {
+					user = userdata;
+				}
+				var hisDate = user.hisDate;
+				var sameSample = user.sameSample;
+				var isLastYear = user.isLastYear;
 				$("#jqgh_sample0_last").css('color','#000000');
 				$("#jqgh_sample0_last1").css('color','#000000');
 				if (hisDate != null && hisDate != "") {
@@ -1054,8 +1057,12 @@
 				}
 			},
 			loadComplete: function() {
-				var hisDate = jQuery("#sample1").jqGrid("getGridParam", "userData").hisDate;
-				var isLastYear = jQuery("#sample1").jqGrid("getGridParam", "userData").isLastYear;
+				var user = jQuery("#sample1").jqGrid("getGridParam", "userdata");
+				if(user == null) {
+					user = userdata;
+				}
+				var hisDate = user.hisDate;
+				var isLastYear = user.isLastYear;
 				$("#jqgh_sample1_last").css('color','#000000');
 				$("#jqgh_sample1_last1").css('color','#000000');
 				if (hisDate != null && hisDate != "") {
