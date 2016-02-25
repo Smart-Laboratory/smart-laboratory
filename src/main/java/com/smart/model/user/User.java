@@ -374,24 +374,14 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.lastProfile = lastProfile;
 	}
 
-//	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-//	@JoinColumn(name="hospital_id",referencedColumnName="id")
-	@Transient
-    public Hospital getHospital() {
-		return new Hospital();
-	}
 
-	/*@Column(name="hospital_id")
+	@Column(name="hospital_id")
     public long getHospitalId() {
 		return hospitalId;
 	}
 
 	public void setHospitalId(long hospitalId) {
 		this.hospitalId = hospitalId;
-	}*/
-	@Transient
-	public long getHospitalId() {
-		return hospitalId;
 	}
 
 	
@@ -432,15 +422,8 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.pbsection = pbsection;
 	}
 
-	/*@Column(name="pbsection")
-	public String getPbsection() {
-		return pbsection;
-	}
+	
 
-	public void setPbsection(String pbsection) {
-		this.pbsection = pbsection;
-	}
-*/
 	@Transient
 	public double getIntegration() {
 		return (double)checknum/100 + collectNum + evaluatenum;

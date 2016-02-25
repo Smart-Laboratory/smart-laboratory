@@ -52,7 +52,7 @@ $(function() {
 				var name = '${name}';
 				var moment=$('#calendar').fullCalendar('getDate');
 				var month = moment.format("YYYY-MM");
-			    $.get("../pb/grcx/getData",{name:name,month:month},function(data){
+			    $.get("../pb/grcx/ajax/getData",{name:name,month:month},function(data){
 		    		for (var i=0 ; i < data.length ; i++) {
 		    			$("#calendar").fullCalendar('renderEvent',data[i],true);
 		    		}
@@ -75,7 +75,7 @@ $(function() {
 						$("#pWorkdays").html(data.worktime);
 					}
 					
-				});
+				}); 
 			}
 		});
 	}

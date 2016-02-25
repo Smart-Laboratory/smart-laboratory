@@ -62,18 +62,15 @@ public class PbgrController {
 		return new ModelAndView().addObject("name", name);
 	}
 
-	@RequestMapping(value = "/getData*", method = RequestMethod.GET)
+	@RequestMapping(value = "/ajax/getData*", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Object> getPersonalPB(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String month = request.getParameter("month");
 		String name = request.getParameter("name");
-		if(name == null) {
-			name = user.getName();
-		}
+		if(name == null || name.isEmpty() || month==null ||month.isEmpty())
+			return null;
+		
 		List<Arrange> arrList = arrangeManager.getPersonalArrange(name, month);
-		System.out.println(arrList.size());
-		System.out.println(month + arrList.size());
 		List<Shift> shList = shiftManager.getAll();
 		Map<String, Shift> map = new HashMap<String, Shift>();
 		for(Shift sh : shList) {
@@ -109,6 +106,7 @@ public class PbgrController {
 				
 			}
 		}
+		
 		return data;
 	}
 	
