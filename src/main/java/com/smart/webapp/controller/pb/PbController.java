@@ -231,19 +231,40 @@ public class PbController {
 			WorkCount workCount = workCountManager.getPersonByMonth(w.getName(),month,section);
 			if(workCount==null){
 				workCount = new WorkCount();
+				workCount.setSection(section);
+			}else if(!workCount.getSection().contains(section)){
+				workCount.setSection(workCount.getSection()+","+section);
 			}
 			double holiday = 0;
 			double worktime = 0;
 			double monthOff = 0;
 			
 			String shifts = "";
+			String jxshifts="";
+			double jxworktime = 0;
 			for(Arrange arrange : arranges){
+				try {
+					Date date = sdf1.parse(arrange.getDate());
+					if(!arrange.getShift().trim().isEmpty()){
+						workdate.add(arrange.getDate());
+						shifts += arrange.getShift();
+						if(arrange.getShift().contains("公休")){
+							if(arrange.getShift().replace("公休;", "").isEmpty())
+								monthOff += 1;
+						}else if((sdf2.format(date).contains("六") || sdf2.format(date).contains("日") || arrange.getShift().contains("公休")) && !arrange.getShift().contains("值(补)")){
+						}else{
+							jxshifts+=arrange.getShift();
+						}
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				
-				if(!arrange.getShift().trim().isEmpty()){
-					workdate.add(arrange.getDate());
-					shifts += arrange.getShift();
-					if(arrange.getShift().contains("公休") && arrange.getShift().replace("公休;", "").isEmpty())
-						monthOff += 1;
+			}
+			
+			for(String shift : jxshifts.split(";")){
+				if(shiftTime.containsKey(shift)){
+					jxworktime += shiftTime.get(shift);
 				}
 			}
 			
@@ -284,13 +305,12 @@ public class PbController {
 	            	e.printStackTrace();	
 	            }
 	        }
-	        yjx = yjx - (days - worktime);
+	        yjx = yjx - (days - jxworktime);
 	        workCount.setHoliday(holiday);
 			workCount.setWorkTime(worktime);
 			workCount.setWorker(w.getName());
 			workCount.setMonthOff(days-workdate.size()+monthOff);
 			workCount.setYjx(yjx);
-			workCount.setSection(section);
 			workCount.setWorkMonth(month);
 			wList.add(workCount);
 			
@@ -320,6 +340,19 @@ public class PbController {
 		}
 		
 		return wList;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET,value = "/getWorkCount*")
+	@ResponseBody
+	public List<WorkCount> getWorkCount(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		//统计信息
+		String section = request.getParameter("section");
+		String month = request.getParameter("month");
+        List<WorkCount> wList = new ArrayList<WorkCount>();
+        wList = workCountManager.getMonthBySection(section, month);
+        
+        return wList;
+        
 	}
 	
 	public void initMap(){

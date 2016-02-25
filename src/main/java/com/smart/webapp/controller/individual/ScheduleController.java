@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.individual;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,12 +24,14 @@ import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
+import com.smart.model.pb.WorkCount;
 import com.smart.model.user.User;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.WorkCountManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -105,7 +108,7 @@ public class ScheduleController {
 		Map<String, String> wshifts = new LinkedHashMap<String,String>();
 		List<Shift> ss = shiftManager.getShiftBySection(section);
 		for(Shift shift : ss){
-			wshifts.put(shift.getAb(), shift.getName());
+			wshifts.put(shift.getAb(), shift.getAb());
 		}
 		
 		request.setAttribute("wshifts", wshifts);
@@ -119,15 +122,13 @@ public class ScheduleController {
 		int i=1;
 		Map<Integer, WInfo> map = new HashMap<Integer, WInfo>();
 		Map<String, String> arrMap = new HashMap<String, String>();
-		Map<String, Double> holidays = new HashMap<String,Double>();
 		for(WInfo wi : wiList) {
 			map.put(i, wi);
-			holidays.put(wi.getName(), wi.getHoliday());
 			wiNames = wiNames + "'" + wi.getName() + "',"; 
 			i++;
 		}
 		List<DayShift> dshList = dayShiftManager.getBySection(section);
-		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+5][i+2];
+		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i+2];
 
 		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
 		for(Arrange arr : arrList) {
@@ -150,13 +151,14 @@ public class ScheduleController {
         }
         
         shifts[j][0] = "<th style='background:#7FFFD4' id='nx'>年休</th>";
-        shifts[j+1][0] = "<th style='background:#7FFFD4' id='yx'>月休</th>";
-        shifts[j+2][0] = "<th style='background:#7FFFD4' id='yb'>月班</th>";
-        shifts[j+3][0] = "<th style='background:#7FFFD4' id='yb'>月积休</th>";
+        shifts[j+1][0] = "<th style='background:#7FFFD4' id='nx'>积休</th>";
+        shifts[j+2][0] = "<th style='background:#7FFFD4' id='yx'>月休</th>";
+        shifts[j+3][0] = "<th style='background:#7FFFD4' id='yb'>月班</th>";
+        shifts[j+4][0] = "<th style='background:#7FFFD4' id='yb'>月积休</th>";
         
-        shifts[0][0] = "<th style='background:#7FFFD4' id='day0'>" + tomonth + "</th>";
+        shifts[0][0] = "<th style='background:#7FFFD4' id='nmshow'>" + (month<10 ? "0" + month : month) + "</th>";
         for(int m=1;m<i;m++) {
-        	shifts[0][m] = "<th name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
+        	shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
         }
         shifts[0][i] = "<th style='background:#7FFFD4'></th>";
         shifts[0][i+1] = "<th style='background:#7FFFD4'></th>";
@@ -182,31 +184,48 @@ public class ScheduleController {
             }
         	//月休、月班、年休
         	shifts[j][k] = "<th class='nx' name='nx"+name+"' id='nx"+name + "' >"+map.get(k).getHoliday()+"</th>";
-        	shifts[j+1][k] = "<th class='yx' name='yx"+name+"' id='yx"+name + "' ></th>";
-        	shifts[j+2][k] = "<th class='yb' name='yb"+name+"' id='yb"+name + "' ></th>";
-        	shifts[j+3][k] = "<th class='yjx' name='yjx"+name+"' id='yjx"+name + "' ></th>";
+        	shifts[j+1][k] = "<th class='jx' name='jx"+name+"' id='jx"+name + "' >"+map.get(k).getDefeHolidayNum()+"</th>";
+        	shifts[j+2][k] = "<th class='yx' name='yx"+name+"' id='yx"+name + "' ></th>";
+        	shifts[j+3][k] = "<th class='yb' name='yb"+name+"' id='yb"+name + "' ></th>";
+        	shifts[j+4][k] = "<th class='yjx' name='yjx"+name+"' id='yjx"+name + "' ></th>";
         }
+        
+        for(int l = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+6 ;l>0;l-- ){
+        	for(int k = i+1;k>=0;k-- ){
+        		shifts[l][k] = shifts[l-1][k];
+        	}
+        }
+        
+        shifts[0][0] = "<th style='background:#7FFFD4'>序号</th>";
+        for(int m=1;m<i;m++) {
+        	shifts[0][m] = "<th  style='background:#7FFFD4'>" + m + "</th>";
+        }
+        shifts[0][i] = "<th style='background:#7FFFD4'></th>";
+        shifts[0][i+1] = "<th style='background:#7FFFD4'></th>";
+        
         
         
         
         ModelAndView view = new ModelAndView();
         if(section.equals("1300000")) {
         	view = new ModelAndView("/pb/kspb");
-    		String[][] shifts2 = new String[i+2][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
-        	for(int m=0; m<calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1; m++){  
+    		String[][] shifts2 = new String[i+2][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2];
+        	for(int m=0; m<calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2; m++){  
         		for(int n=0; n<i+2; n++){  
         			shifts2[n][m]=shifts[m][n];  
         		}
         	}
         	String arrTitle = "<tr>";
-        	for(int a=0;a<j;a++){
+        	for(int a=0;a<j+1;a++){
         		arrTitle += shifts2[0][a]; 
         	}
+        	arrTitle += "</tr>";
+        	
         	arrTitle += "</tr>";
         	String arrString = "";
         	for(int a=1;a<i+2;a++){
         		arrString += "<tr>";
-        		for(int b=0;b<j;b++){
+        		for(int b=0;b<j+1;b++){
         			arrString += shifts2[a][b];
         		}
         		arrString += "</tr>";
@@ -216,12 +235,17 @@ public class ScheduleController {
         	view.addObject("type", type);
             view.addObject("size", shifts2.length);
         } else {
-        	String arrString = "";
+        	String arrString = "<tr>";
         	for(int a =0;a<i+2;a++){
         		arrString = arrString + shifts[0][a];
         	}
+        	arrString += "</tr><tr>";
+        	for(int a =0;a<i+2;a++){
+        		arrString = arrString + shifts[1][a];
+        	}
+        	arrString += "</tr>";
         	String arrBodyString = "";
-        	for(int a=1;a<j+4;a++){
+        	for(int a=2;a<j+6;a++){
         		arrBodyString += "<tr>";
         		for(int b=0;b<i+2;b++){
         			arrBodyString += shifts[a][b];
@@ -231,7 +255,9 @@ public class ScheduleController {
             view.addObject("arrString", arrString);
             view.addObject("arrBodyString", arrBodyString);
             view.addObject("size", shifts.length);
-            view.addObject("holidays", holidays);
+            
+            
+            
         }
 //        view.addObject("month", tomonth);
         view.addObject("dateSize", j-1);
@@ -261,7 +287,8 @@ public class ScheduleController {
 		}
 	}
 	
-	
+	@Autowired
+	private WorkCountManager workCountManager;
 	
 	
 }

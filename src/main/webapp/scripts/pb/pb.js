@@ -51,7 +51,7 @@ function checkShift(day) {
 }
 
 function changeType(select) {
-	window.location.href="../pb/pb?type=" + select.value;
+	window.location.href="../pb/pb?type=" + select.value+"&date=" + $("#date").val();
 }
 
 function getHoliday(){
@@ -67,7 +67,6 @@ function getHoliday(){
 }
 $(function() {
 	$("#labSelect").val($("#section").val());
-	$("#head").html($("#test").val());
 	$("#pbdata").html($("#test1").val());
 	
 //	getHoliday();
@@ -75,12 +74,12 @@ $(function() {
 	$("#pbdata tr td").click(function(){
 		var id=this.id;
 		
-		var month = new Date().getMonth()+1;
-		var date = new Date().getDate();
-		var day = id.split("-")[1];
-		var m = $("#date").val().split("-")[1];
-		
-		if(m>month ||(m==month && day>=date)){
+//		var month = new Date().getMonth()+1;
+//		var date = new Date().getDate();
+//		var day = id.split("-")[1];
+//		var m = $("#date").val().split("-")[1];
+//		
+//		if(m>month ||(m==month && day>=date)){
 		
 		var name = this.name;
 		var shifts=$("#"+id).html();
@@ -97,7 +96,7 @@ $(function() {
 			}
 		});
 		$("#"+id).html(shifts);
-		}
+//		}
 	});
 	
 	$("#date").datepicker({
@@ -175,4 +174,16 @@ $(function() {
 	});
 	
 	$("#date").val($("#month").val());
+	
+	$.get("../pb/pb/getWorkCount",{section:$("#section").val(),month:$("#month").val()},function(data){
+			for(var i=0;i<data.length;i++){
+				var worker = data[i];
+				var name = worker.worker; 
+				$("#nx"+name).html(worker.holiday);
+				$("#yx"+name).html(worker.monthOff);
+				$("#yb"+name).html(worker.workTime);
+				$("#yjx"+name).html(worker.yjx);
+			}
+		});
+	$("#pbhead").html($("#test").val());
 });

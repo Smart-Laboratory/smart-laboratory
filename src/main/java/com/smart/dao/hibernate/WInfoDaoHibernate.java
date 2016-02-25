@@ -17,7 +17,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section, String type) {
 		if(section=="" || section ==null)
-			return null;
+			return getSession().createQuery("from WInfo where type = '"+type+"' order by ord2").list();
 		if(section.equals("1300000")) {
 			if(type.equals("1")) {
 				return getSession().createQuery("from WInfo where ord1>0 order by ord1").list();

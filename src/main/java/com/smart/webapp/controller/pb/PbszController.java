@@ -149,6 +149,7 @@ public class PbszController {
 				map.put("ord6", wi.getOrd6());
 				map.put("holiday", wi.getHoliday());
 				map.put("defeHoliday", wi.getDefeHolidayNum());
+				map.put("defeHolidayhis", wi.getDefeholidayhis());
 				dataRows.add(map);
 				index++;
 			}
@@ -301,7 +302,7 @@ public class PbszController {
 		System.out.println(worktime.getTime());
 		int type = Integer.parseInt(request.getParameter("type"));
 		int holiday = Integer.parseInt(request.getParameter("holiday"));
-//		String defeHoliday = request.getParameter("defeHoliday");
+		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -320,10 +321,10 @@ public class PbszController {
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
-//			wi.setDefeHoliday(defeHoliday);
+			wi.setDefeholidayhis(defeHolidayhis);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
-			wi.setId(Long.parseLong(id));
+			wi = wInfoManager.get(Long.parseLong(id));
 			wi.setName(name);
 			wi.setSex(sex);
 			wi.setSection(section);
@@ -339,7 +340,8 @@ public class PbszController {
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
-//			wi.setDefeHoliday(defeHoliday);
+			wi.setDefeHoliday(wi.getDefeHoliday());
+			wi.setDefeholidayhis(defeHolidayhis);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));

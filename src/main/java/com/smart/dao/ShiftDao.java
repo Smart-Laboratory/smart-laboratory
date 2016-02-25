@@ -16,4 +16,5 @@ public interface ShiftDao extends GenericDao<Shift, Long> {
 
 	List<Shift> getShiftBySection(String section);
 
+	List<Shift> getSx();
 }

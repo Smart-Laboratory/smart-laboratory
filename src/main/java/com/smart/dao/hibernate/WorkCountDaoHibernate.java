@@ -18,9 +18,16 @@ public class WorkCountDaoHibernate extends GenericDaoHibernate<WorkCount, Long> 
 		List<WorkCount> workCounts = getSession().createQuery("from WorkCount where section = '"+section+"'").list();
 		return workCounts;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<WorkCount> getMonthBySection(String section, String month){
+		List<WorkCount> workCounts = getSession().createQuery("from WorkCount where section = '"+section+"' and workMonth = '"+month+"'").list();
+		return workCounts;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public WorkCount getPersonByMonth(String name,String month,String section){
-		String hql = "from WorkCount where worker='"+name+"' and workMonth='"+month+"' and section = '"+section+"'";
+		String hql = "from WorkCount where worker='"+name+"' and workMonth='"+month+"' and section like '%"+section+"%'";
 		List<WorkCount> workCounts = getSession().createQuery(hql).list();
 		if(workCounts!=null && workCounts.size()>0)
 			return workCounts.get(0);

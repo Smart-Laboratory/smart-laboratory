@@ -15,7 +15,7 @@ function getWI() {
 			url:"../pb/sz/ajax/getWinfo",
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休'],
+			colNames:['ID','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休'],
 		   	colModel:[
 				{name:'id',index:'id',hidden:true,editable:false},
 				{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10},search:true,sopt:'eq'},
@@ -37,7 +37,8 @@ function getWI() {
 		   		{name:'ord5',index:'ord5',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 		   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 		   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
-		   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false}
+		   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
+		   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true}
 		   	],
 		   	rowNum:15,
 		   	pager: '#wipager',

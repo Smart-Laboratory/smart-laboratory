@@ -13,6 +13,9 @@
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 
 <style>
+tr:hover{
+	background:#87cefa;
+}
 
 table tr td {
 	width:30px;
@@ -27,6 +30,9 @@ table tr th  {
 	width:45px important; 
 }
 
+#nmshow{
+	width: 60px;
+}
 
 div .fixed{ 
 overflow-y: scroll; 
@@ -44,7 +50,7 @@ border: 0px solid #009933;
 
 <script type="text/javascript">
 function labChange(item){
-	window.location.href="../pb/pb?section=" + $(item).val();
+	window.location.href="../pb/pb?section=" + $(item).val()+"&date=" + $("#date").val();
 }
 
 function randomShift(day) {
@@ -74,7 +80,7 @@ function checkShift(day) {
 }
 
 function changeType(select) {
-	window.location.href="../pb/pb?section=1300000&type=" + select.value;
+	window.location.href="../pb/pb?section=1300000&type=" + select.value+"&date=" + $("#date").val();
 }
 
 $(function() {
@@ -134,12 +140,7 @@ $(function() {
 	$("#kstable tr td").click(function(){
 		var id=this.id;
 		
-		var month = new Date().getMonth()+1;
-		var date = new Date().getDate();
-		var day = id.split("-")[1];
-		var m = $("#date").val().split("-")[1];
 		
-		if(m>month ||(m==month && day>=date)){
 		var name = $("#"+id).attr("name");
 		var shifts=$("#"+id).html();
 		$.each($("#shiftSelect input"),function(n,v){
@@ -161,7 +162,7 @@ $(function() {
 			}
 		});
 		$("#"+id).html(shifts);
-		}
+		
 	});
 	$("#changeMonth").click(function() {
 		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val()+"&type=" + $("#typeSel").val();
@@ -205,13 +206,13 @@ $(function() {
 </div>
 <div class="title">
 <input id="tableTitle" value="${arrTitle }" type="hidden" />
-<table id="ksTitle" class=" table-hover" style="margin-bottom:0px;font-size:12px;text-align:center;margin-top:5px;" border="1px;">
+<table id="ksTitle" class=" " style="margin-bottom:0px;font-size:12px;text-align:center;margin-top:5px;" border="1px;">
 
 </table>
 </div>
 <div class="fixed">
 <input id="tabledata" value="${arrString }" type="hidden" />
-<table id="kstable" class=" table-hover" style="font-size:12px;text-align:center;table-layout:fixed;;" border="1px;">
+<table id="kstable" class=" " style="font-size:12px;text-align:center;table-layout:fixed;;" border="1px;">
 
 </table>
 </div>

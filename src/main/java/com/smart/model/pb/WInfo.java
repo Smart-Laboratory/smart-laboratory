@@ -35,8 +35,9 @@ public class WInfo {
 	private int ord5;
 	private int ord6;
 	
-	private double holiday;
-	private String defeHoliday;
+	private double holiday;//年休
+	private String defeHoliday;//积休
+	private String defeholidayhis;//历年积休
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -203,6 +204,15 @@ public class WInfo {
 		this.defeHoliday = defeHoliday;
 	}
 
+	@Column
+	public String getDefeholidayhis() {
+		return defeholidayhis;
+	}
+
+	public void setDefeholidayhis(String defeholidayhis) {
+		this.defeholidayhis = defeholidayhis;
+	}
+
 	@Transient
 	public String getTypeString() {
 		String value = "";
@@ -218,6 +228,9 @@ public class WInfo {
 			break;
 		case 3:
 			value = "工人";
+			break;
+		case 4:
+			value = "住培";
 			break;
 		}
 		return value;

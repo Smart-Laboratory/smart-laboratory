@@ -25,6 +25,10 @@ public class WorkCountManagerImpl extends GenericManagerImpl<WorkCount, Long> im
 		return workCounts;
 	}
 	
+	public List<WorkCount> getMonthBySection(String section, String month){
+		return workCountDao.getMonthBySection(section, month);
+	}
+	
 	public WorkCount getPersonByMonth(String name,String month,String section){
 		return workCountDao.getPersonByMonth(name, month, section);
 	}

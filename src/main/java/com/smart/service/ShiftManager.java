@@ -16,4 +16,5 @@ public interface ShiftManager extends GenericManager<Shift, Long> {
 
 	List<Shift> getShiftBySection(String section);
 
+	List<Shift> getSx();
 }

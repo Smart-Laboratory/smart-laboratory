@@ -39,4 +39,8 @@ public class ShiftManagerImpl extends GenericManagerImpl<Shift, Long> implements
 	public List<Shift> getShiftBySection(String section) {
 		return shiftDao.getShiftBySection(section);
 	}
+	
+	public List<Shift> getSx(){
+		return shiftDao.getSx();
+	}
 }

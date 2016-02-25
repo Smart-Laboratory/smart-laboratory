@@ -11,4 +11,6 @@ public interface WorkCountDao extends GenericDao<WorkCount, Long> {
 	WorkCount getPersonByMonth(String name,String month,String section);
 	
 	double getYearCount(String year,String name);
+	
+	List<WorkCount> getMonthBySection(String section, String month);
 }

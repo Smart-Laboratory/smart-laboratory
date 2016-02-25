@@ -45,5 +45,6 @@
         <mapping class="com.smart.model.pb.Shift"/>
         <mapping class="com.smart.model.pb.WInfo"/>
         <mapping class="com.smart.model.pb.WorkCount"/>
+        <mapping class="com.smart.model.pb.SxArrange"/>
     </session-factory>
 </hibernate-configuration>

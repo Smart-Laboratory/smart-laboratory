@@ -41,6 +41,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
 import com.smart.model.lis.Hospital;
+import com.smart.webapp.controller.set.HospitalController;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -53,8 +54,7 @@ import com.smart.model.lis.Hospital;
  */
 @Entity
 @Table(name = "lab_user")
-@Indexed
-@XmlRootElement
+
 public class User extends BaseObject implements Serializable, UserDetails {
     private static final long serialVersionUID = 3832626162173359411L;
 
@@ -81,7 +81,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	private String activeCode;
 	private String lastProfile;
     
-    private Hospital hospital;
+//    private Hospital hospital;
     private int collectNum;
 	private int evaluatenum;
 	private int checknum;
@@ -105,7 +105,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USER")
 	@SequenceGenerator(name = "SEQ_USER", sequenceName = "user_sequence", allocationSize = 1)*/
-    @DocumentId
     public Long getId() {
         return id;
     }
@@ -377,15 +376,16 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.lastProfile = lastProfile;
 	}
 
-	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
-	@JoinColumn(name="hospital_id",referencedColumnName="id")
+//	@ManyToOne(optional=false,cascade=CascadeType.MERGE)
+//	@JoinColumn(name="hospital_id",referencedColumnName="id")
+	@Transient
     public Hospital getHospital() {
-		return hospital;
+		return new Hospital();
 	}
 
-	public void setHospital(Hospital hospital) {
-		this.hospital = hospital;
-	}
+//	public void setHospital(Hospital hospital) {
+//		this.hospital = hospital;
+//	}
 	
 	@Column(name = "collectnum")
 	public int getCollectNum() {

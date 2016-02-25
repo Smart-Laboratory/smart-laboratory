@@ -1,7 +1,9 @@
 package com.smart.webapp.controller.pb;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +24,17 @@ import com.smart.service.UserManager;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.WInfo;
+import com.smart.model.pb.WorkCount;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.WorkCountManager;
+import com.smart.webapp.util.SectionUtil;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
+import com.zju.api.service.RMIService;
+
+import javafx.scene.chart.PieChart.Data;
+
 import com.smart.model.pb.Shift;
 import com.smart.service.ShiftManager;
 
@@ -42,6 +53,8 @@ public class PbgrController {
 	
 	@Autowired
 	private ShiftManager shiftManager;
+	SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -53,17 +66,13 @@ public class PbgrController {
 	@ResponseBody
 	public List<Object> getPersonalPB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String month = request.getParameter("month");
 		String name = request.getParameter("name");
 		if(name == null) {
 			name = user.getName();
 		}
-//		WInfo wi = wInfoManager.getByName(name);
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH)+1; 
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		String today = year + "-" + (month<10 ? "0" + month : month) + "-" + (day<10 ? "0" + day : day);
-		List<Arrange> arrList = arrangeManager.getPersonalArrange(name, today);
+		List<Arrange> arrList = arrangeManager.getPersonalArrange(name, month);
+		System.out.println(month + arrList.size());
 		List<Shift> shList = shiftManager.getAll();
 		Map<String, Shift> map = new HashMap<String, Shift>();
 		for(Shift sh : shList) {
@@ -102,4 +111,58 @@ public class PbgrController {
 		return data;
 	}
 	
+	@RequestMapping(value = "/ajax/getWInfo*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getWInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String name = request.getParameter("name");
+		String moment = request.getParameter("moment");
+		Date date = null;
+		try {
+			date = ym.parse(moment);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		moment = ym.format(date);
+		if(name.isEmpty())
+			return null;
+		WInfo wInfo = wInfoManager.getByName(name);
+		JSONObject o = new JSONObject();
+		o.put("name",wInfo.getName() );
+		String section = wInfo.getSection();
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+		for(String s : section.split(",")){
+			section = section.replace(s, sectionUtil.getKey(s));
+		}
+		
+		o.put("section", section);
+		o.put("worktime",ymd.format( wInfo.getWorktime() ));
+		o.put("nx",wInfo.getHoliday() );
+		o.put("lnjx",wInfo.getDefeholidayhis() );
+		o.put("jx",wInfo.getDefeHolidayNum() );
+		String yjx = "";
+		if(wInfo!=null && !wInfo.getDefeHoliday().isEmpty()){
+			for(String s : wInfo.getDefeHoliday().split(";")){
+				if(s.contains(moment)){
+					yjx = s.replace(moment+":", "");
+				}
+			}
+		}
+		
+		o.put("yjx", yjx);
+		
+		WorkCount wCount = workCountManager.getPersonByMonth(name, moment, wInfo.getSection().split(",")[0]);
+		if(wCount!=null)
+			o.put("worktime", wCount.getWorkTime());
+		
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(o.toString());
+		return null;
+	}
+	
+	@Autowired
+	private RMIService rmiService;
+	@Autowired
+	private WorkCountManager workCountManager;
+	
 }
+
