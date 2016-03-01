@@ -76,4 +76,10 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
         
         return gxList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Arrange> getArrangeByType(String type, String month){
+		String hql = "from Arrange where date like '"+month+"%' and shift like '"+type+"%'";
+		return getSession().createQuery(hql).list();
+	}
 }

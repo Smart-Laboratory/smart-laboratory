@@ -134,7 +134,7 @@ public class PbgrController {
 		}
 		
 		o.put("section", section);
-		o.put("worktime",ymd.format( wInfo.getWorktime() ));
+		o.put("sworktime",ymd.format( wInfo.getWorktime() ));
 		o.put("nx",wInfo.getHoliday() );
 		o.put("lnjx",wInfo.getDefeholidayhis() );
 		o.put("jx",wInfo.getDefeHolidayNum() );

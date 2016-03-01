@@ -142,8 +142,8 @@ $(function() {
 					value += "\u516C\u4F11;";
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
-			
-			$.post("../pb/pb/submit",{text:text,section:section,date:date},function(data) {
+			var bz= $("#bz").val;
+			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz},function(data) {
 				alert("success!");
 				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
 			});

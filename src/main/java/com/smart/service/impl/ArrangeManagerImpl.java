@@ -55,4 +55,8 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 	public List<String> getGXcount(String month){
 		return arrangeDao.getGXcount(month);
 	}
+	
+	public List<Arrange> getArrangeByType(String type, String month){
+		return arrangeDao.getArrangeByType(type, month);
+	}
 }

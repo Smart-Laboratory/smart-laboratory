@@ -46,12 +46,13 @@ table tr th {
 	</select>
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
-			<option value="2" ><fmt:message key="pb.lz"/></option>
+			<option value="7" ><fmt:message key="pb.sy"/></option>
+			<%-- <option value="2" ><fmt:message key="pb.lz"/></option>
 			<option value="3" ><fmt:message key="pb.wc"/></option>
 			<option value="4" ><fmt:message key="pb.ybb"/></option>
 			<option value="5" ><fmt:message key="pb.ry"/></option>
-			<option value="6" ><fmt:message key="pb.hcy"/></option>
-			<option value="7" ><fmt:message key="pb.jjr"/></option>
+			<option value="6" ><fmt:message key="pb.hcy"/></option> --%>
+			
 		</select>
 	<button id="searchPB" type="button" class="btn btn-success" style="margin-left:20px;float:left;"><fmt:message key='search'/></button>
 	<button id="daochu" class="btn btn-info" style="margin-left:20px;" ><fmt:message key='pb.daochu' /></button>
@@ -75,3 +76,18 @@ table tr th {
 		</div>
 	</c:otherwise>
 </c:choose>
+
+<div id="footer2" class="">
+        <span class="col-sm-6">
+        	<fmt:message key="project.name"/> | 
+        	<fmt:message key="webapp.version"/>
+            <c:if test="${pageContext.request.remoteUser != null}">
+            | <fmt:message key="user.status"/> ${pageContext.request.remoteUser}
+            </c:if>
+            | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
+       	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
+   		</span>
+   		<span class="col-sm-2" style="float:right;">
+       		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
+        </span>
+</div>

@@ -67,7 +67,7 @@ $(function() {
 						data = jQuery.parseJSON(data);
 						$("#pName").html(data.name);
 						$("#pSection").html(data.section);
-						$("#pWorktime").html(data.worktime);
+						$("#pWorktime").html(data.sworktime);
 						$("#pNx").html(data.nx);
 						$("#pLnjx").html(data.lnjx);
 						$("#pJx").html(data.jx);

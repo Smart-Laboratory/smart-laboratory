@@ -105,6 +105,8 @@ display: none;
 		<table id="pbdata" class="table" style="font-size:12px;text-align:center;" border="1px;">
 		
 		</table>
+		<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
+		<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px;" value="${bz}">
 		</div>
 		<div style="display:none;">	
 			<c:forEach var="dsh" items="${dshList}">

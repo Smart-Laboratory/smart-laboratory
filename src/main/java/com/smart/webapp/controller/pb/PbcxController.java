@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.pb;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +12,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.drools.compiler.lang.dsl.DSLMapParser.variable_definition_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +29,10 @@ import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
-/*import jxl.*;
+import jxl.*;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;*/
+import jxl.write.WritableWorkbook;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -77,8 +77,6 @@ public class PbcxController {
 			}
 			section = user.getLastLab();
 		}
-		
-		
 		if(type == null) {
 			type = "1"; 
 		}
@@ -96,81 +94,180 @@ public class PbcxController {
 			year = calendar.get(Calendar.YEAR);
 			month = calendar.get(Calendar.MONTH)+1;
 		}
-		String tomonth = year + "-" + (month<10 ? "0" + month : month);
+		String tomonth = year + "-" + (month<10 ? "0" + month : month);		
 		List<WInfo> wiList = wInfoManager.getBySection(section, type);
 		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
 		}
-		String wiNames = "";
-		int i=1;
-		Map<Integer, String> map = new HashMap<Integer, String>();
-		Map<String, String> arrMap = new HashMap<String, String>();
-		for(WInfo wi : wiList) {
-			map.put(i, wi.getName());
-			wiNames = wiNames + "'" + wi.getName() + "',"; 
-			i++;
-		}
-		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
-		if(arrList.size() == 0) {
-			return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
-		}
-		String[][] shifts = new String[i][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
-		for(Arrange arr : arrList) {
-			if(arrMap.containsKey(arr.getKey2())) {
-				String s = arrMap.get(arr.getKey2());
-				arrMap.put(arr.getKey2(), s + "+" + arr.getShift());
-			} else {
+
+		String arrString = "";
+		int size;
+		if(section.equals("1300000") && !type.equals("7")){
+			List<Arrange> yArranges = arrangeManager.getArrangeByType("夜", tomonth);
+			List<Arrange> lArranges = arrangeManager.getArrangeByType("良", tomonth);
+			List<Arrange> wArranges = arrangeManager.getArrangeByType("外", tomonth);
+			List<Arrange> hArranges = arrangeManager.getArrangeByType("海", tomonth);
+			List<Arrange> rArranges = arrangeManager.getArrangeByType("入", tomonth);
+			List<Arrange> bArranges = arrangeManager.getArrangeByType("帮", tomonth);
+			
+			String[][] shifts = new String[8][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
+			size = shifts.length;
+			int j = 1;
+	        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
+	            try {
+	            	
+	                Date date = sdf1.parse(tomonth + "-" + j);
+	                if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
+	                	shifts[0][j] = "<th style='background:#7CFC00'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
+	                }else{
+	                	shifts[0][j] = "<th style='background:#7FFFD4'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
+	                }
+	            } catch (Exception e) {
+	            	e.printStackTrace();	
+	            }
+	        }
+	        shifts[0][0] = "<th style='background:#7FFFD4'>" + tomonth + "</th>";
+	        
+	        List<Arrange> arr = new ArrayList<Arrange>();
+	        
+	        for(int i = 1;i<8;i++){
+	        	Map<String, String> arrMap = new HashMap<String,String>();
+	        	String bc = "";
+	    		switch (i) {
+	    		case 1:
+	    			bc = "夜";
+	    			arr = yArranges;
+	    			break;
+	    		case 2:
+	    			bc = "良";
+	    			arr = lArranges;
+	    			break;
+	    		case 3:
+	    			bc = "外9";
+	    			arr = wArranges;
+	    			break;
+	    		case 4:
+	    			bc = "外9下";
+	    			arr = wArranges;
+	    			break;
+	    		case 5:
+	    			bc = "入";
+	    			arr = rArranges;
+	    			break;
+	    		case 6:
+	    			bc = "海";
+	    			arr = hArranges;
+	    			break;
+	    		case 7:
+	    			bc = "帮";
+	    			arr = bArranges;
+	    			break;
+	    		default:
+	    			bc = "";
+	    			break;
+	    		}
+	    		if(arr==null||arr.size()<=0)
+	    			continue;
+	    		for(Arrange a: arr){
+	    			if(a.getShift().contains("休"))
+	    				continue;
+	    			if(!a.getShift().contains(bc+";")){
+	    				continue;
+	    			}
+	    			if(arrMap.get(a.getDate().split("-")[2])!=null)
+	    				arrMap.put(a.getDate().split("-")[2], a.getWorker()+";  "+arrMap.get(a.getDate().split("-")[2]));
+	    			else
+	    				arrMap.put(a.getDate().split("-")[2], a.getWorker());
+	    		}
+	    		
+	    		shifts[i][0] = "<th style='background:#7FFFD4'>"+bc+"</th>";
+	    		for(int k =1; k<j;k++){
+	    			String m = k<10? "0"+k : k+"";
+	    			if(arrMap.containsKey(m))
+	    				shifts[i][k] = "<td>"+arrMap.get(m)+"</td>";
+	    			else
+	    				shifts[i][k] = "<td></td>";
+	    		}
+	        	
+	    		
+	        }
+	        for(int k=0; k<8; k++) {
+	        	arrString += "<tr>";
+	        	for(int l=0; l<j; l++) {
+	        		arrString += shifts[k][l];
+	        	}
+	        	arrString += "</tr>";
+	        }
+			
+		}else{
+			String wiNames = "";
+			int i=1;
+			Map<Integer, String> map = new HashMap<Integer, String>();
+			Map<String, String> arrMap = new HashMap<String, String>();
+			for(WInfo wi : wiList) {
+				map.put(i, wi.getName());
+				wiNames = wiNames + "'" + wi.getName() + "',"; 
+				i++;
+			}
+			List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
+			if(arrList.size() == 0) {
+				return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
+			}
+			for(Arrange arr : arrList) {
 				arrMap.put(arr.getKey2(), arr.getShift());
 			}
+			String[][] shifts = new String[i][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
+			size = shifts.length;
+			int j = 1;
+	        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
+	            try {
+	            	
+	                Date date = sdf1.parse(tomonth + "-" + j);
+	                shifts[0][j] = "<th style='background:#7FFFD4'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
+	            } catch (Exception e) {
+	            	e.printStackTrace();	
+	            }
+	        }
+	        shifts[0][0] = "<th style='background:#7FFFD4'>" + tomonth + "</th>";
+	        for(int m=1;m<i;m++) {
+	        	shifts[m][0] = "<th><a onclick=\"personal('"+ map.get(m) + "')\">" + map.get(m) + "</a></th>";
+	        }
+	        for(int k=1; k<i; k++) {
+	        	for(int l=1; l<j; l++) {
+	        		String name = map.get(k);
+	        		Date date = sdf1.parse(tomonth + "-" + l);
+	        		if (arrMap.get(name + "-" + l) == null) {
+	        			shifts[k][l] = ""; //<td style='background:#7CFC00'>休</td>
+	        		} else {
+	        			shifts[k][l] = arrMap.get(name + "-" + l);
+	        		}
+	        		if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
+	        			shifts[k][l] = "<td style='background:#7CFC00'>" + shifts[k][l] + "</td>";
+	        		} else {
+	        			shifts[k][l] = "<td>" + shifts[k][l] + "</td>";
+	        		}
+	        		if(shifts[k][l].contains("+")){
+	        			shifts[k][l] = shifts[k][l].replace("<td>", "<td style='background:#63B8FF'>");
+	        			shifts[k][l] = shifts[k][l].replace("<td style='background:#7CFC00'>", "<td style='background:#63B8FF'>");
+	        		}
+	            }
+	        }
+	        
+	        
+	        for(int k=0; k<i; k++) {
+	        	arrString += "<tr>";
+	        	for(int l=0; l<j; l++) {
+	        		arrString += shifts[k][l];
+	        	}
+	        	arrString += "</tr>";
+	        }
 		}
-		int j = 1;
-        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
-            try {
-            	
-                Date date = sdf1.parse(tomonth + "-" + j);
-                shifts[0][j] = "<th style='background:#7FFFD4'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
-            } catch (Exception e) {
-            	e.printStackTrace();	
-            }
-        }
-        shifts[0][0] = "<th style='background:#7FFFD4'>" + tomonth + "</th>";
-        for(int m=1;m<i;m++) {
-        	shifts[m][0] = "<th><a onclick=\"personal('"+ map.get(m) + "')\">" + map.get(m) + "</a></th>";
-        }
-        for(int k=1; k<i; k++) {
-        	for(int l=1; l<j; l++) {
-        		String name = map.get(k);
-        		Date date = sdf1.parse(tomonth + "-" + l);
-        		if (arrMap.get(name + "-" + l) == null) {
-        			shifts[k][l] = ""; //<td style='background:#7CFC00'>休</td>
-        		} else {
-        			shifts[k][l] = arrMap.get(name + "-" + l);
-        		}
-        		if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
-        			shifts[k][l] = "<td style='background:#7CFC00'>" + shifts[k][l] + "</td>";
-        		} else {
-        			shifts[k][l] = "<td>" + shifts[k][l] + "</td>";
-        		}
-        		if(shifts[k][l].contains("+")){
-        			shifts[k][l] = shifts[k][l].replace("<td>", "<td style='background:#63B8FF'>");
-        			shifts[k][l] = shifts[k][l].replace("<td style='background:#7CFC00'>", "<td style='background:#63B8FF'>");
-        		}
-            }
-        }
-        String arrString = "";
-        for(int k=0; k<i; k++) {
-        	arrString += "<tr>";
-        	for(int l=0; l<j; l++) {
-        		arrString += shifts[k][l];
-        	}
-        	arrString += "</tr>";
-        }
         ModelAndView view = new ModelAndView();
         view.addObject("section", section);
         view.addObject("month", tomonth);
         view.addObject("type", type);
         view.addObject("arrString", arrString);
-        view.addObject("size", shifts.length);
+        view.addObject("size", size);
 		return view;
 	}
 	
@@ -246,10 +343,10 @@ public class PbcxController {
 	}
 
 	public boolean writeExcel(String[][] data,String date,String[] gh,String[] ks) throws FileNotFoundException{
-		/* win下
-		 * OutputStream os = new FileOutputStream("d:\\test.xls");*/
+		// win下
+//		 OutputStream os = new FileOutputStream("d:\\test.xls");
 		
-		
+		//linux下
 		File dir = new File(pbexcelUrl);
 		dir.setWritable(true,false);
 		if (!dir.exists()) {
@@ -260,7 +357,7 @@ public class PbcxController {
 		try
         {
            
-            /*WritableWorkbook wwb = Workbook.createWorkbook(os);
+            WritableWorkbook wwb = Workbook.createWorkbook(os);
             //创建Excel工作表 指定名称和位置
             WritableSheet ws = wwb.createSheet("pb",0);
  
@@ -297,7 +394,7 @@ public class PbcxController {
            }
                        //写入工作表
             wwb.write();
-            wwb.close();*/
+            wwb.close();
         }
         catch(Exception e){
         	e.printStackTrace();

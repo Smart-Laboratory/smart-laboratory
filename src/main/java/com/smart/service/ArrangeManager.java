@@ -24,4 +24,6 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 	
 	List<String> getGXcount(String month);
 	
+	List<Arrange> getArrangeByType(String type, String month);
+	
 }

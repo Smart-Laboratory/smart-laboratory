@@ -24,4 +24,5 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 
 	List<String> getGXcount(String month);
 	
+	List<Arrange> getArrangeByType(String type, String month);
 }

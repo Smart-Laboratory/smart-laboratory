@@ -301,7 +301,7 @@ public class PbszController {
 		Date worktime = sdf.parse(request.getParameter("worktime"));
 		System.out.println(worktime.getTime());
 		int type = Integer.parseInt(request.getParameter("type"));
-		int holiday = Integer.parseInt(request.getParameter("holiday"));
+		double holiday = Double.parseDouble(request.getParameter("holiday"));
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		
 		WInfo wi = new WInfo();

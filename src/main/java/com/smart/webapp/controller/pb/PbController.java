@@ -76,22 +76,38 @@ public class PbController {
 		String month = request.getParameter("date");
 		List<Arrange> list = new ArrayList<Arrange>();
 		String section = request.getParameter("section");
+		String bz = request.getParameter("bz");
 		
 		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
 		
 		List<WInfo> wInfos = wInfoManager.getBySection(section);
+		
+		Arrange bzArrange = null;
 		
 		for(WInfo wInfo : wInfos){
 			
 			Map<String, Arrange> dateValue = new HashMap<String,Arrange>(); //map<日期，排班>
 			List<Arrange> monthArray = arrangeManager.getMonthArrangeByName(wInfo.getName(), month);
 			for(Arrange a: monthArray){
-				dateValue.put(a.getDate(), a);
+				if(a.getWorker().equals(section)){
+					bzArrange = a;
+				}else{
+					dateValue.put(a.getDate(), a);
+				}
+				
 			}
 			userShifts.put(wInfo.getName(), dateValue);
 		}
 		
 		System.out.println("数据获取完成");
+		
+		if(bzArrange == null)
+			bzArrange = new Arrange();
+		bzArrange.setDate(month);
+		bzArrange.setSection(section);
+		bzArrange.setWorker(section);
+		bzArrange.setShift(bz);
+		list.add(bzArrange);
 		
 		if(text != "") {
 			for(String str : text.split(",")) {

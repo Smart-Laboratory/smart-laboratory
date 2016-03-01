@@ -110,11 +110,14 @@ public class ScheduleController {
 		for(Shift shift : ss){
 			wshifts.put(shift.getAb(), shift.getAb());
 		}
+		//备注
+		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
 		
 		request.setAttribute("wshifts", wshifts);
 		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
 		request.setAttribute("section", section);
+		request.setAttribute("bz", bzArrange.getShift());
 		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0);
 		}
@@ -131,8 +134,21 @@ public class ScheduleController {
 		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i+2];
 
 		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
+		String bc = "";
+		
+		
+		
 		for(Arrange arr : arrList) {
-			arrMap.put(arr.getKey2(), arr.getShift());
+			if(bc.isEmpty()){
+				arrMap.put(arr.getKey2(), arr.getShift());
+			}else if(type.contains("7")){
+				if(arr.getShift().contains("良") || arr.getShift().contains("外") || arr.getShift().contains("海") || arr.getShift().contains("入") ){
+					arrMap.put(arr.getKey2(), arr.getShift());
+				}
+			}else if(arr.getShift().contains(bc)){
+				arrMap.put(arr.getKey2(), arr.getShift());
+			}
+			
 		}
 		int j = 1;
         for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
@@ -290,5 +306,32 @@ public class ScheduleController {
 	@Autowired
 	private WorkCountManager workCountManager;
 	
-	
+	/*if(section.equals("1300000")){
+	switch (type) {
+	case "1":
+		bc = "夜";
+		break;
+	case "2":
+		bc = "良";
+		break;
+	case "3":
+		bc = "外";
+		break;
+	case "4":
+		bc = "帮";
+		break;
+	case "5":
+		bc = "海";
+		break;
+	case "6":
+		bc = "入";
+		break;
+	case "7":
+		bc = "良外海入";
+		break;
+	default:
+		bc = "";
+		break;
+	}
+	}*/
 }

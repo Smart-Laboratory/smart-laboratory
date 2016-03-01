@@ -52,4 +52,6 @@ $(function() {
 		*/
 		window.location.href = "../pb/pbcx/daochu?date="+$("#date").val()+"&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 	});
+	
+	$("#footer").css('display','none');
 });
