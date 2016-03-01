@@ -115,7 +115,7 @@ public class FormulaUtil {
 						t.setIsprint(isprint);
 						t.setTestResult(testResultManager.getFormulaResult(fm));
 						fillUtil.fillResult(t, info);
-						testResultManager.save(t);
+						//testResultManager.save(t);
 						info.getResults().add(t);
 					}
 				}

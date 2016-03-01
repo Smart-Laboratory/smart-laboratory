@@ -139,7 +139,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	        }
 	        return infos;
 		} catch (ParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 	}
