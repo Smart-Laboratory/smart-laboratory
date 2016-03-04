@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.smart.model.lis.Distribute;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.service.lis.BayesService;
+import com.smart.service.lis.TestResultManager;
 
 public class BayesUtil {
 
@@ -156,4 +160,9 @@ public class BayesUtil {
 		}
 		return true;
 	}
+	
+	@Autowired
+	private TestResultManager testResultManager;
 }
+
+

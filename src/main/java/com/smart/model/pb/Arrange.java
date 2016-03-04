@@ -1,5 +1,7 @@
 package com.smart.model.pb;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,10 @@ public class Arrange {
 	private String worker;
 	private String section;
 	private int type;//员工、实习生
+	private int state;//1,管理员可见 2,排班人员可见 5,所有人可见
+	
+	private String operator;
+	private Date operatime;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +83,33 @@ public class Arrange {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	@Column
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	@Column
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	@Column
+	public Date getOperatime() {
+		return operatime;
+	}
+
+	public void setOperatime(Date operatime) {
+		this.operatime = operatime;
 	}
 
 	@Transient

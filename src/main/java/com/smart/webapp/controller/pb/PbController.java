@@ -71,6 +71,7 @@ public class PbController {
 	@RequestMapping(value = "/submit*", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean submit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
 		String text = request.getParameter("text");
 		String month = request.getParameter("date");
@@ -78,36 +79,37 @@ public class PbController {
 		String section = request.getParameter("section");
 		String bz = request.getParameter("bz");
 		
+		Arrange ksArrange = arrangeManager.getByUser(section, month);
+//		if(ksArrange!=null && ksArrange.getState()>1){
+//			return false;
+//		}
+		
 		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
 		
 		List<WInfo> wInfos = wInfoManager.getBySection(section);
-		
-		Arrange bzArrange = null;
 		
 		for(WInfo wInfo : wInfos){
 			
 			Map<String, Arrange> dateValue = new HashMap<String,Arrange>(); //map<日期，排班>
 			List<Arrange> monthArray = arrangeManager.getMonthArrangeByName(wInfo.getName(), month);
 			for(Arrange a: monthArray){
-				if(a.getWorker().equals(section)){
-					bzArrange = a;
-				}else{
 					dateValue.put(a.getDate(), a);
-				}
-				
 			}
 			userShifts.put(wInfo.getName(), dateValue);
 		}
 		
 		System.out.println("数据获取完成");
 		
-		if(bzArrange == null)
-			bzArrange = new Arrange();
-		bzArrange.setDate(month);
-		bzArrange.setSection(section);
-		bzArrange.setWorker(section);
-		bzArrange.setShift(bz);
-		list.add(bzArrange);
+		if(ksArrange == null)
+			ksArrange = new Arrange();
+		ksArrange.setDate(month);
+		ksArrange.setSection(section);
+		ksArrange.setWorker(section);
+		ksArrange.setShift(bz);
+		ksArrange.setState(2);
+		ksArrange.setOperator(user.getUsername());
+		ksArrange.setOperatime(new Date());
+		list.add(ksArrange);
 		
 		if(text != "") {
 			for(String str : text.split(",")) {
@@ -118,8 +120,15 @@ public class PbController {
 					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
 					if(dateValue.containsKey(arr[1]) ){
 						if(!dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:"")){
-							dateValue.get(arr[1]).setShift(arr.length>=3?arr[2]:"");
-							list.add(dateValue.get(arr[1]));
+							Arrange b = dateValue.get(arr[1]);
+							b.setShift(arr.length>=3?arr[2]:"");
+							b.setState(2);
+							b.setOperator(user.getUsername());
+							b.setOperatime(new Date());
+							if(!b.getSection().contains(section)){
+								b.setSection(b.getSection()+","+section);
+							}
+							list.add(b);
 							continue;
 						}
 						else{
@@ -139,6 +148,9 @@ public class PbController {
 				a.setSection(section);
 				a.setWorker(arr[0]);
 				a.setDate(arr[1]);
+				a.setOperator(user.getUsername());
+				a.setOperatime(new Date());
+				a.setState(2);
 				if(arr.length>=3)
 					a.setShift(arr[2]);
 				else 
@@ -154,6 +166,7 @@ public class PbController {
 	@RequestMapping(value = "/kssubmit*", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean kssubmit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
 		String text = request.getParameter("text");
 		String type = request.getParameter("type");
@@ -161,6 +174,11 @@ public class PbController {
 		List<Arrange> list = new ArrayList<Arrange>();
 		String section = "1300000";
 		System.out.println("开始");
+		
+		Arrange ksArrange = arrangeManager.getByUser(section, month);
+//		if(ksArrange!=null && ksArrange.getState()>0){
+//			return false;
+//		}
 		
 		
 		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
@@ -186,8 +204,15 @@ public class PbController {
 					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
 					if(dateValue.containsKey(arr[1]) ){
 						if(!dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:"")){
-							dateValue.get(arr[1]).setShift(arr.length>=3?arr[2]:"");
-							list.add(dateValue.get(arr[1]));
+							Arrange b = dateValue.get(arr[1]);
+							b.setShift(arr.length>=3?arr[2]:"");
+							b.setState(0);
+							b.setOperator(user.getUsername());
+							b.setOperatime(new Date());
+							if(!b.getSection().contains(section)){
+								b.setSection(b.getSection()+","+section);
+							}
+							list.add(b);
 							continue;
 						}
 						else{
@@ -207,6 +232,9 @@ public class PbController {
 				a.setSection(section);
 				a.setWorker(arr[0]);
 				a.setDate(arr[1]);
+				a.setOperator(user.getUsername());
+				a.setOperatime(new Date());
+				a.setState(0);
 				if(arr.length>=3)
 					a.setShift(arr[2]);
 				else 
@@ -217,7 +245,7 @@ public class PbController {
 				list.add(a);
 			}
 		}
-		System.out.println(list.size());
+		System.out.println("保存： "+list.size());
 		arrangeManager.saveAll(list);
 		System.out.println(list.size()+"保存完成");
 		return true;
@@ -404,5 +432,44 @@ public class PbController {
 		return objects;
 	}
 	
+	@RequestMapping(method = RequestMethod.POST,value = "/publish*")
+	@ResponseBody
+	public boolean pbPublish(HttpServletRequest request, HttpServletResponse response) throws JSONException{
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String section = request.getParameter("section");
+		String month = request.getParameter("month");
+		int state = Integer.parseInt(request.getParameter("state"));
+		
+		List<Arrange> arranges = arrangeManager.getPublish(section, month, state);
+		
+		List<Arrange> need = new ArrayList<Arrange>();
+		
+		for(Arrange a: arranges){
+			if(a.getState()==state){
+				a.setState(5);
+				need.add(a);
+			}
+		}
+		
+		Arrange a = arrangeManager.getByUser(section, month);
+		if(a == null){
+			a = new Arrange();
+			a.setDate(month);
+			a.setSection(section);
+			a.setWorker(section);
+			a.setOperator(user.getUsername());
+			a.setOperatime(new Date());
+			a.setState(state);
+			a.setType(0);
+		}else{
+			a.setState(state);
+			a.setOperator(user.getUsername());
+			a.setOperatime(new Date());
+		}
+		
+		arrangeManager.saveAll(need);
+		return true;
+		
+	}
 	
 }

@@ -209,7 +209,7 @@ public class PbcxController {
 				wiNames = wiNames + "'" + wi.getName() + "',"; 
 				i++;
 			}
-			List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
+			List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth,5);
 			if(arrList.size() == 0) {
 				return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
 			}

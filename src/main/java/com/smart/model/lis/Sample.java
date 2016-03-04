@@ -1,6 +1,7 @@
 package com.smart.model.lis;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -21,9 +22,11 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.search.annotations.DocumentId;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.BaseObject;
 import com.smart.model.lis.TestResult;
+import com.smart.service.lis.TestResultManager;
 
 //样本信息表
 /**
@@ -532,11 +535,14 @@ public class Sample extends BaseObject {
 	/**
 	 * 该样本所做的结果集
 	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
-			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
+//	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
+//			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
+	@Transient
 	public Set<TestResult> getResults() {
+		
+		
 		return results;
 	}
 
@@ -591,4 +597,5 @@ public class Sample extends BaseObject {
 	public int hashCode() {
 		return 0;
 	}
+	
 }

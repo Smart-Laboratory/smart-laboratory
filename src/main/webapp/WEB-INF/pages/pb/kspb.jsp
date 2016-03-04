@@ -169,6 +169,14 @@ $(function() {
 	});
 	
 	$("#date").val($("#month").val());
+	
+	$("#publish").click(function(){
+		$.post("../pb/pb/publish",{section:$("#section").val(), month:$("#date").val(),state:0},function(data){
+			if(data){
+				alert("Publish seccess!");
+			}
+		})
+	});
 });
 </script>
 </head>
@@ -189,7 +197,7 @@ $(function() {
 				<option value="7" ><fmt:message key="pb.jjr"/></option>
 			</select>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
-			
+			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
 			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
 				<span ><c:forEach var="depart" items="${departList}">

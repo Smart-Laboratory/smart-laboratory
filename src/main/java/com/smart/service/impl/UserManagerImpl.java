@@ -191,7 +191,8 @@ public class UserManagerImpl extends GenericManagerImpl<User, Long> implements U
      */
     @Override
     public List<User> search(final String searchTerm) {
-        return super.search(searchTerm, User.class);
+//        return super.search(searchTerm, User.class);
+    	  return userDao.getByUsername(searchTerm);
     }
 
     @Override

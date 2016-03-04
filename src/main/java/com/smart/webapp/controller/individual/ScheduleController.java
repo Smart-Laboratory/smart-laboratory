@@ -33,6 +33,7 @@ import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
 import com.smart.webapp.util.SectionUtil;
+import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.zju.api.service.RMIService;
 
 @Controller
@@ -117,7 +118,8 @@ public class ScheduleController {
 		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
 		request.setAttribute("section", section);
-		request.setAttribute("bz", bzArrange.getShift());
+		if(bzArrange!=null && bzArrange.getShift()!=null)
+			request.setAttribute("bz", bzArrange.getShift());
 		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0);
 		}
@@ -132,8 +134,12 @@ public class ScheduleController {
 		}
 		List<DayShift> dshList = dayShiftManager.getBySection(section);
 		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i+2];
-
-		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth);
+		int state = 0;
+		if(!user.getPbsection().contains("1300000")){
+				state=1;
+		}
+		
+		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth,state);
 		String bc = "";
 		
 		

@@ -10,7 +10,7 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 
 	Arrange getByUser(String name, String day);
 	
-	List<Arrange> getArrangerd(String names, String month);
+	List<Arrange> getArrangerd(String names, String month, int state);
 	
 	List<Arrange> getMonthArrangeByName(String name, String month);
 
@@ -25,5 +25,7 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 	List<String> getGXcount(String month);
 	
 	List<Arrange> getArrangeByType(String type, String month);
+	
+	List<Arrange> getPublish(String section,String month,int state);
 	
 }

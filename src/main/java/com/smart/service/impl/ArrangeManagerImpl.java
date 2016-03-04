@@ -28,8 +28,8 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 		return arrangeDao.getByUser(name, day);
 	}
 	
-	public List<Arrange> getArrangerd(String names, String month) {
-		return arrangeDao.getArrangerd(names, month);
+	public List<Arrange> getArrangerd(String names, String month, int state) {
+		return arrangeDao.getArrangerd(names, month, state);
 	}
 
 	public List<Arrange> getPersonalArrange(String name, String month) {
@@ -58,5 +58,9 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 	
 	public List<Arrange> getArrangeByType(String type, String month){
 		return arrangeDao.getArrangeByType(type, month);
+	}
+	
+	public List<Arrange> getPublish(String section,String month,int state){
+		return arrangeDao.getPublish(section,month,state);
 	}
 }

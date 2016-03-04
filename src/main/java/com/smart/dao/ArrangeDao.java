@@ -10,7 +10,7 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 	
 	Arrange getByUser(String name, String day);
 
-	List<Arrange> getArrangerd(String names, String month);
+	List<Arrange> getArrangerd(String names, String month, int state);
 
 	List<Arrange> getPersonalArrange(String name, String day);
 	
@@ -25,4 +25,6 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 	List<String> getGXcount(String month);
 	
 	List<Arrange> getArrangeByType(String type, String month);
+	
+	List<Arrange> getPublish(String section,String month,int state);
 }

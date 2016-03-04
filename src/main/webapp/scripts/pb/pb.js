@@ -144,8 +144,13 @@ $(function() {
 			});
 			var bz= $("#bz").val;
 			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz},function(data) {
-				alert("success!");
-				window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+				if(data){
+					alert("Success!");
+					window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+				}else{
+					alert("Fail!")
+				}
+				
 			});
 			
 		}
@@ -185,4 +190,12 @@ $(function() {
 			}
 		});
 	$("#pbhead").html($("#test").val());
+	
+	$("#publish").click(function(){
+		$.post("../pb/pb/publish",{section:$("#section").val(), month:$("#month").val(),state:1},function(data){
+			if(data){
+				alert("Publish seccess!");
+			}
+		})
+	});
 });

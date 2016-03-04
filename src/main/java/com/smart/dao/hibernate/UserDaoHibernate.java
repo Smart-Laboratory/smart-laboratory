@@ -100,4 +100,12 @@ public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements
         return jdbcTemplate.queryForObject(
                 "select password from " + table.name() + " where id=?", String.class, userId);
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<User> getByUsername(String name){
+    	List<User> users = getSession().createQuery("from User where username like '%"+name+"%'").list();
+    	if(users!=null && users.size()>0)
+    		return users;
+    	return null;
+    }
 }

@@ -31,12 +31,17 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public SampleDaoHibernate() {
         super(Sample.class);
     }
+	
+	private JdbcTemplate jdbcTemplate = new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
 		if (StringUtils.isEmpty(lab)) {
 			return null;
 		}
+		
+//		if(jdbcTemplate == null)
+//			jdbcTemplate = new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 		
 		if (StringUtils.isEmpty(date)) {
 			date = "________";
@@ -82,6 +87,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		builder.append("%' order by sampleNo");
 		Query query = getSession().createQuery(builder.toString());
 		List<Sample> list = query.list();
+		
+		
+		
 		return list;
 	}
 

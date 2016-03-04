@@ -76,7 +76,7 @@ display: none;
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.count' /></button>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
-			
+			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
 			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
 				<span ><c:forEach var="depart" items="${departList}">
@@ -98,6 +98,7 @@ display: none;
 		<input id="test" value="${arrString}" type="hidden"/>
 		<table id="pbhead" class="table" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
 		
+		
 		</table>
 		</div>
 		<div class="fixed data">
@@ -106,7 +107,7 @@ display: none;
 		
 		</table>
 		<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
-		<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px;" value="${bz}">
+		<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px; width:800px;" value="${bz}">
 		</div>
 		<div style="display:none;">	
 			<c:forEach var="dsh" items="${dshList}">
