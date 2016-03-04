@@ -23,12 +23,17 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	List<TestResult> getListByTestString (String sampleNo, String testString);
 	
 	@Transactional
-	List<TestResult> getSingleHistory(String testid, String patientName,
-			String birthday);
+	List<TestResult> getSingleHistory(String testid, String patientName);
 
 	@Transactional
 	List<TestResult> getRelative(String patientId, String blh, String history);
 
 	@Transactional
 	List<TestResult> getPrintTestBySampleNo(String sampleno);
+
+	@Transactional
+	void saveAll(List<TestResult> list);
+
+	@Transactional
+	List<TestResult> getHisTestResult(String samplenos);
 }

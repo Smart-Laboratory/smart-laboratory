@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -32,6 +33,7 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.LikeLab;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
@@ -42,6 +44,7 @@ import com.smart.service.DictionaryManager;
 import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.LikeLabManager;
+import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
@@ -68,6 +71,7 @@ public class AutoAuditServlet extends HttpServlet {
 		ServletContext context = getServletContext();
     	ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
     	final SampleManager sampleManager = (SampleManager) ctx.getBean("sampleManager");
+    	final PatientManager patientManager = (PatientManager) ctx.getBean("patientManager");
         final TestResultManager testResultManager = (TestResultManager) ctx.getBean("testResultManager");
         final DictionaryManager dictionaryManager = (DictionaryManager) ctx.getBean("dictionaryManager");
         final ItemManager itemManager = (ItemManager) ctx.getBean("itemManager");
@@ -119,6 +123,15 @@ public class AutoAuditServlet extends HttpServlet {
     		}
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+            final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
+            final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager);
+            final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
+            final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
+            final Check reTestCheck = new RetestCheck(ruleManager);
+            final DangerCheck dangerCheck = new DangerCheck(ruleManager);
+            final Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
+            final Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
+            final ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
             System.out.println("初始化常量完成");
             Thread autoAudit = new Thread(new Runnable(){
 				public void run() {
@@ -128,44 +141,85 @@ public class AutoAuditServlet extends HttpServlet {
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
+                    	String hisBlh = "";
+            			String hisSampleNo = "";
+            			for(Sample sample : needAuditSamples) {
+            				hisBlh += "'" + sample.getPatientblh() + "',";
+            				hisSampleNo += "'" + sample.getSampleNo() + "',";
+            			}
+            			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+            			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+            			final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
+            			final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+            			for(Patient p : patientList) {
+            				hisPatientMap.put(p.getBlh(), p);
+            			}
+            			for(TestResult tr : testList) {
+            				if(StringUtils.isNumeric(tr.getTestId())) {
+            					if(hisTestMap.containsKey(tr.getSampleNo())) {
+                					hisTestMap.get(tr.getSampleNo()).add(tr);
+                				} else {
+                					List<TestResult> tlist = new ArrayList<TestResult>();
+                					tlist.add(tr);
+                					hisTestMap.put(tr.getSampleNo(), tlist);
+                				}
+            				}
+            			}
+                    	
                     	if (needAuditSamples != null && needAuditSamples.size() > 0) {
-                    		for(int i = 0; i < 5; i++) {
+                    		for(int i = 0; i < 10; i++) {
                         		final int num = i;
                         		new Thread(new Runnable(){
-                    				
                             		public void run() {
                         	            try {
+                        	            	long nowtime = System.currentTimeMillis();
                         	            	List<Sample> updateSample = new ArrayList<Sample>();
                         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
                         	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
-                        	            	List<Sample> samples = needAuditSamples.subList(num*20, (num+1)*20);
+                        	            	List<Sample> samples = needAuditSamples.subList(num*10, (num+1)*10-1);
                         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
-                        	            	Map<Long, Sample> diffData = new HashMap<Long, Sample>();
+                        	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
+                        	                	Patient patient = hisPatientMap.get(info.getPatientblh());
+                        	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
                         	                	try {
-                        	        				formulaUtil.formula(info, "admin");
+                        	        				formulaUtil.formula(info, "admin", now, patient.getAge(), Integer.parseInt(patient.getSex()));
                         	                	} catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
                          	        			}
-                        	                	Set<TestResult> now = info.getResults();
                     	        				Set<String> testIdSet = new HashSet<String>();
                     	        				for (TestResult t : now) {
                     	        					testIdSet.add(t.getTestId());
                     	        				}
-                    	        				System.out.println(info.getSampleNo()+" : " + now.size());
+                    	        				System.out.println(info.getSampleNo() + " : " + now.size());
                     	        				try {
-                    	        					String lab = info.getSection().getCode();
+                    	        					String lab = info.getSectionId();
                     	        					if(likeLabMap.containsKey(lab)) {
                     	        						lab = likeLabMap.get(lab);
                     	        					}
-                	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo(), lab);
+                	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatientblh(), info.getSampleNo(), lab);
+                	    	        				String diffSampleNo = "";
+                	    	        				for(Sample s : list) {
+                	    	        					diffSampleNo += "'" + s.getSampleNo() + "',";
+                	    	        				}
+                	    	        				List<TestResult> hisTestList = testResultManager.getHisTestResult(diffSampleNo.substring(0, diffSampleNo.length()-1));
+                	    	        				Map<String, List<TestResult>> hisTest = new HashMap<String, List<TestResult>>();
+        	    	        						for(TestResult tr : hisTestList) {
+        	    	                    				if(hisTest.containsKey(tr.getSampleNo())) {
+        	    	                    					hisTest.get(tr.getSampleNo()).add(tr);
+        	    	                    				} else {
+        	    	                    					List<TestResult> tlist = new ArrayList<TestResult>();
+        	    	                    					tlist.add(tr);
+        	    	                    					hisTest.put(tr.getSampleNo(), tlist);
+        	    	                    				}
+        	    	                    			}
                 	    	        				for (Sample p : list) {
                 	    	        					boolean isHis = false;
-                	    	        					if (p.getSampleNo().equals(info.getSampleNo())) {
+                	    	        					List<TestResult> his = hisTest.get(p.getSampleNo());
+                	    	        					if (p.getSampleNo().equals(info.getSampleNo()) || his == null) {
                 	    	        						continue;
                 	    	        					}
-                	    	        					Set<TestResult> his = p.getResults();
                 	    	        					for (TestResult t : his) {
                 	    	        						String testid = t.getTestId();
                 	    	        						Set<String> sameTests = util.getKeySet(testid);
@@ -177,49 +231,46 @@ public class AutoAuditServlet extends HttpServlet {
                 	    	        					}
                 	    	        					
                 	    	        					if (isHis) {
-                	    	        						diffData.put(info.getId(), p);
+                	    	        						diffData.put(info.getId(), his);
                 	    	        						break;
                 	    	        					}
                 	    	        				}
-                    	        				} catch (Exception e) {
+                    	        				} catch (NumberFormatException e) {
+                    	        					samples.remove(info);
+                    	        					//e.printStackTrace();
+                                	            } catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
                          	        			}	
                         	        		}
-                        	                Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
-                        	        		DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
-                        	        		Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
-                        	        		Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
-                        	        		Check reTestCheck = new RetestCheck(ruleManager);
-                        	        		Check dangerCheck = new DangerCheck(ruleManager);
-                        	        		Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
-                        	        		Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
-                        	        		ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
                         	        		for (Sample info : samples) {
                         	        			try {
+                        	        				Patient patient = hisPatientMap.get(info.getPatientblh());
+                        	        				List<TestResult> now = hisTestMap.get(info.getSampleNo());
+                        	        				CriticalRecord cr = new CriticalRecord();
                 	        	        			info.setMarkTests("");
                 	        	        			info.setAuditStatus(Check.PASS);
                 	        	        			info.setAuditMark(Check.AUTO_MARK);
                 	        	        			info.setNotes("");
                 	        	        			info.setRuleIds("");
-                	        	        			if(!hasRuleCheck.doCheck(info)) {
+                	        	        			if(!hasRuleCheck.doCheck(info, now)) {
                 	        	        				updateSample.add(info);
                 	        	        				continue;
                 	        	        			}
-                	    							boolean lack = lackCheck.doCheck(info);
-                	    							diffCheck.doCheck(info);
-                	    							Map<String, Boolean> diffTests = diffCheck.doFiffTests(info);
-                	    							ratioCheck.doCheck(info);
-                	    							R r = droolsRunner.getResult(info.getResults(), info.getPatientId(), info.getPatient().getAge(), Integer.parseInt(info.getPatient().getSex()));
+                	    							boolean lack = lackCheck.doCheck(info, now);
+                	    							diffCheck.doCheck(info, now, diffData);
+                	    							Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
+                	    							ratioCheck.doCheck(info, now);
+                	    							R r = droolsRunner.getResult(now, info.getPatientId(), patient.getAge(), Integer.parseInt(patient.getSex()));
                 	    							if (r!= null && !r.getRuleIds().isEmpty()) {
-                	    								reTestCheck.doCheck(info, r);
-                	    								alarm2Check.doCheck(info, r, diffTests);
-                	    								alarm3Check.doCheck(info, r, diffTests);
-                	    								extremeCheck.doCheck(info, r, diffTests);
+                	    								reTestCheck.doCheck(info, r, now);
+                	    								alarm2Check.doCheck(info, r, diffTests, now);
+                	    								alarm3Check.doCheck(info, r, diffTests, now);
+                	    								extremeCheck.doCheck(info, r, diffTests, now);
                 	    								if (!lack && info.getAuditMark() != Check.LACK_MARK) {
                 	    									info.setAuditMark(Check.LACK_MARK);
                 	    								}
-                	    								dangerCheck.doCheck(info, r);
+                	    								dangerCheck.doCheck(info, r, now, cr);
                 	    							} else {
                 	    								
                 	    							}
@@ -239,7 +290,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    							info.setRuleIds(ruleId);
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
-                	    								updateCriticalRecord.add(info.getCriticalRecord());
+                	    								updateCriticalRecord.add(cr);
                 	    							}
                 	    							AuditTrace a = new AuditTrace();
                     								a.setSampleno(info.getSampleNo());
@@ -256,6 +307,7 @@ public class AutoAuditServlet extends HttpServlet {
                         	        		sampleManager.saveAll(updateSample);
                         					criticalRecordManager.saveAll(updateCriticalRecord);
                         					auditTraceManager.saveAll(updateAuditTrace);
+                        					System.out.println(System.currentTimeMillis()-nowtime);
                         	            } catch (Exception e) {
                         	                e.printStackTrace();
                         	            }
@@ -264,7 +316,7 @@ public class AutoAuditServlet extends HttpServlet {
                         	}
                 		}
                     	try {
-							Thread.sleep(30000);
+							Thread.sleep(60000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

@@ -45,10 +45,10 @@ public class FillFieldUtil {
 		return util;
 	}
 
-	public TestResult fillResult(TestResult result, Sample info) {
+	public TestResult fillResult(TestResult result, Sample info, int age, String sex) {
 
 		// 完善字段数据
-		int li_direct = fillReference(result, info.getPatient().getAge(), info.getCycle(), info.getPatient().getSex());
+		int li_direct = fillReference(result, age, info.getCycle(), sex);
 		filleResultFlag(result, li_direct);
 		return result;
 	}
@@ -198,18 +198,6 @@ public class FillFieldUtil {
 			}
 			
 		} 
-		/*else {
-			if (value.contains(".")) {
-				String[] array = value.split("[.]");
-				value = array[0] + "." + array[1].substring(0, 2);
-				char c = array[1].charAt(2);
-				if(c >= '5' && c <= '9') {
-					double f = Double.parseDouble(value);
-					f = f + 1/Math.pow(10, 2);
-					value = String.valueOf(f);
-				}
-			}
-		}*/
 		result.setTestResult(value);
 		return direct;
 	}

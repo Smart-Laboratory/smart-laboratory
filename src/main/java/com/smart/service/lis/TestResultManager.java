@@ -17,10 +17,13 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 	List<TestResult> getListByTestString(String sampleNo, String testString);
 	
 	//testresult右键表图
-	List<TestResult> getSingleHistory(String testid, String patientName,
-			String patientid);
+	List<TestResult> getSingleHistory(String testid, String patientName);
 
 	List<TestResult> getRelative(String patientId, String blh, String history);
 
 	List<TestResult> getPrintTestBySampleNo(String sampleno);
+
+	void saveAll(List<TestResult> list);
+
+	List<TestResult> getHisTestResult(String substring);
 }

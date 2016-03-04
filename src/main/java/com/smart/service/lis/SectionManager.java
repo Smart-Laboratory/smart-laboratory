@@ -7,4 +7,6 @@ import com.smart.service.GenericManager;
 
 public interface SectionManager extends GenericManager<Section, Long> {
 	List<Section> search(String searchTerm);
+
+	Section getByCode(String sectionId);
 }

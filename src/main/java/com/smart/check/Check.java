@@ -1,7 +1,10 @@
 package com.smart.check;
 
+import java.util.List;
+
 import com.smart.drools.R;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestResult;
 
 public interface Check {
 
@@ -39,7 +42,7 @@ public interface Check {
 	final String AUTO_AUDIT = "自动审核";
 	final String MANUAL_AUDIT = "人工审核";
 	
-	boolean doCheck(Sample info);
-	boolean doCheck(Sample info, R r);
+	boolean doCheck(Sample info, List<TestResult> list);
+	boolean doCheck(Sample info, R r, List<TestResult> list);
 	
 }

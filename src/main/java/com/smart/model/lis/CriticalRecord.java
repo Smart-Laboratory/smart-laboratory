@@ -7,10 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -29,15 +25,13 @@ public class CriticalRecord extends BaseObject{
 	private static final long serialVersionUID = -2303103818856661537L;
 	
 	private Long id; //主键 流水号
+	private Long sampleid;
 	private String criticalValues; //危机值
 	private int criticalDealFlag; // 危机值是否被处理的标记
 	private String criticalDeal; // 危机值处理信息
 	private Date criticalDealTime;
 	private String criticalContent;	//危急内容
 	private String criticalDealPerson;	//处理人员
-	
-	private Sample sample;
-//	private Patient patient;
 	
 	private String doctorName;
 	private Date doctorDealTime;
@@ -66,17 +60,13 @@ public class CriticalRecord extends BaseObject{
 		this.id = id;
 	}
 	
-	
-	@OneToOne(optional=false, cascade=CascadeType.MERGE)
-	@JoinColumn(name="sample_id",referencedColumnName="id")
-	public Sample getSample(){
-		return sample;
+	@Column(name = "sample_id")
+	public Long getSampleid() {
+		return sampleid;
 	}
-	public void setSample(Sample sample){
-		this.sample = sample;
+	public void setSampleid(Long sampleid) {
+		this.sampleid = sampleid;
 	}
-	
-
 	/**
 	 * 危急值
 	 */

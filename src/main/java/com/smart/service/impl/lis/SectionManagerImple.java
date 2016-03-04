@@ -13,7 +13,6 @@ import com.smart.service.lis.SectionManager;
 @Service("sectionManager")
 public class SectionManagerImple extends GenericManagerImpl<Section, Long> implements SectionManager {
 
-	@SuppressWarnings("unused")
 	private SectionDao sectionDao;
 	
 	@Autowired
@@ -25,4 +24,8 @@ public class SectionManagerImple extends GenericManagerImpl<Section, Long> imple
     public List<Section> search(final String searchTerm) {
         return super.search(searchTerm, Section.class);
     }
+
+	public Section getByCode(String sectionId) {
+		return sectionDao.getByCode(sectionId);
+	}
 }

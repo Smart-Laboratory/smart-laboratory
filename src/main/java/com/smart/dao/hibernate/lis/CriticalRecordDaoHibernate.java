@@ -24,4 +24,18 @@ public class CriticalRecordDaoHibernate extends GenericDaoHibernate<CriticalReco
 		s.flush();
 	}
 
+	@SuppressWarnings("unchecked")
+	public CriticalRecord getBySampleId(Long sampleid) {
+		List<CriticalRecord> list = getSession().createQuery("from CriticalRecord where sampleid=" + sampleid).list();
+		if(list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<CriticalRecord> getBySampleIds(String ids) {
+		return getSession().createQuery("from CriticalRecord where sampleid in (" + ids + ")").list();
+	}
+
 }

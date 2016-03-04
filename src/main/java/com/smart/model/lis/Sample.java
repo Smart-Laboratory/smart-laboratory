@@ -1,32 +1,30 @@
 package com.smart.model.lis;
 
+<<<<<<< HEAD
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+=======
+>>>>>>> origin/master
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.IndexColumn;
+<<<<<<< HEAD
 import org.hibernate.search.annotations.DocumentId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.BaseObject;
 import com.smart.model.lis.TestResult;
 import com.smart.service.lis.TestResultManager;
+=======
+
+import com.smart.model.BaseObject;
+>>>>>>> origin/master
 
 //样本信息表
 /**
@@ -76,13 +74,8 @@ public class Sample extends BaseObject {
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
 	private String checkerOpinion;
 	private String passReason;
-	
-	private Patient patient; //病人
-	private CriticalRecord criticalRecord;
-	private Section section;
-	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
-	private Process process = new Process(); //检验项目的结果集
-
+	private String sectionId;
+	private String patientblh;
 	
 	@Id
 	public Long getId(){
@@ -457,6 +450,24 @@ public class Sample extends BaseObject {
 		this.ruleIds = ruleIds;
 	}
 	
+	@Column(name = "section_id")
+	public String getSectionId() {
+		return sectionId;
+	}
+
+	public void setSectionId(String sectionId) {
+		this.sectionId = sectionId;
+	}
+	
+	@Column(name = "patientblh")
+	public String getPatientblh() {
+		return patientblh;
+	}
+
+	public void setPatientblh(String patientblh) {
+		this.patientblh = patientblh;
+	}
+
 	@Transient
 	public String getAuditMarkValue() {
 		String value = "";
@@ -520,6 +531,7 @@ public class Sample extends BaseObject {
 		return value;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * 该样本所做的结果集
 	 */
@@ -586,6 +598,8 @@ public class Sample extends BaseObject {
 		this.patient = patient; 
 	}
 	
+=======
+>>>>>>> origin/master
 	public String toString() {
 		return null;
 	}

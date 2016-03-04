@@ -71,5 +71,12 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public List<NeedWriteCount> getAllWriteBack(String date) {
 		return sampleDao.getAllWriteBack(date);
 	}
+<<<<<<< HEAD
 	
+=======
+
+	public List<Sample> getByIds(String ids) {
+		return sampleDao.getByIds(ids);
+	}
+>>>>>>> origin/master
 }

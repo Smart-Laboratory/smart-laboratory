@@ -1,5 +1,7 @@
 package com.smart.service.impl.lis;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,20 @@ import com.smart.service.lis.PatientManager;
 @Service("patientManager")
 public class PatientManagerImpl extends GenericManagerImpl<Patient, Long> implements PatientManager {
 
-	@SuppressWarnings("unused")
 	private PatientDao patientDao;
 
 	@Autowired
 	public void setPatientDao(PatientDao patientDao) {
 		this.dao = patientDao;
 		this.patientDao = patientDao;
+	}
+
+	public Patient getByBlh(String blh) {
+		return patientDao.getByBlh(blh);
+	}
+
+	public List<Patient> getHisPatient(String blhs) {
+		return patientDao.getHisPatient(blhs);
 	}
 	
 }

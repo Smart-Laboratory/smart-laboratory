@@ -1,5 +1,6 @@
 package com.smart.webapp.util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,6 @@ public class FormulaUtil {
 	private Map<String, List<FormulaItem>> formulaMap = new HashMap<String, List<FormulaItem>>();
 	private Map<String, Describe> idMap = null;
 	private TestResultManager testResultManager = null;
-	private SampleManager sampleManager = null;
 	private RMIService rmiService = null;
 	private FillFieldUtil fillUtil = null;
 	
@@ -30,14 +30,13 @@ public class FormulaUtil {
 	public static FormulaUtil getInstance(RMIService rmiService, TestResultManager testResultManager, SampleManager sampleManager, Map<String, Describe> idMap, FillFieldUtil fillUtil) {
 		util.rmiService = rmiService;
 		util.testResultManager = testResultManager;
-		util.sampleManager = sampleManager;
 		util.idMap = idMap;
 		util.fillUtil = fillUtil;
 		return util;
 	}
 	
-	public void formula(Sample info, String operator) {
-		String lab = info.getSection().getCode();
+	public void formula(Sample info, String operator, List<TestResult> list, int age, int sex) {
+		String lab = info.getSectionId();
 		
 		if (!formulaMap.containsKey(lab)) {
 			List<FormulaItem> items = rmiService.getFormulaItem(lab);
@@ -45,9 +44,10 @@ public class FormulaUtil {
 		}
 		
 		List<FormulaItem> items = formulaMap.get(lab);
+		List<TestResult> updatelist = new ArrayList<TestResult>();
 		if (items != null && items.size() != 0) {
 			Map<String, TestResult> testMap = new HashMap<String, TestResult>();
-			for (TestResult tr : info.getResults()) {
+			for (TestResult tr : list) {
 				String id = tr.getTestId();
 				if (idMap.containsKey(id)) {
 					Describe des = idMap.get(tr.getTestId());
@@ -81,10 +81,10 @@ public class FormulaUtil {
 						}
 					}
 					
-					fm = fm.replace("sex", String.valueOf(info.getPatient().getSex()));
-					fm = fm.replace("age", String.valueOf(info.getPatient().getAge()));
+					fm = fm.replace("sex", String.valueOf(sex));
+					fm = fm.replace("age", String.valueOf(age));
 					
-					if (info.getPatient().getAge() == 0) {
+					if (age == 0) {
 						isFloat = false;
 					}
 					
@@ -94,7 +94,7 @@ public class FormulaUtil {
 						Describe des = fillUtil.getDescribe(testid);
 						if (testMap.containsKey(k)) {
 							t = testMap.get(k);
-							info.getResults().remove(t);
+							list.remove(t);
 							t.setCorrectFlag("6");
 							if (t.getEditMark() != 0 && t.getEditMark() % Constants.EDIT_FLAG != 0){
 								t.setEditMark(t.getEditMark() * Constants.EDIT_FLAG);
@@ -114,14 +114,15 @@ public class FormulaUtil {
 						t.setOperator(operator);
 						t.setIsprint(isprint);
 						t.setTestResult(testResultManager.getFormulaResult(fm));
-						fillUtil.fillResult(t, info);
+						fillUtil.fillResult(t, info, age, sex == 2 ? "女" : "男" );
 						//testResultManager.save(t);
-						info.getResults().add(t);
+						list.add(t);
+						updatelist.add(t);
 					}
 				}
 			}
 		}
-		//sampleManager.save(info);
+		testResultManager.saveAll(updatelist);
 	}
 	
 	private boolean isDouble(String str) {

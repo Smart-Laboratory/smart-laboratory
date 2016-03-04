@@ -13,4 +13,8 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 		super(Section.class);
 	}
 
+	public Section getByCode(String sectionId) {
+		return (Section) getSession().createQuery("from Section where code=" + sectionId).uniqueResult();
+	}
+
 }

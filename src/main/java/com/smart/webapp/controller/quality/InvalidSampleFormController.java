@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.smart.Constants;
 import com.smart.model.lis.InvalidSample;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.InvalidSampleManager;
+import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
 
 @Controller
@@ -32,6 +34,9 @@ public class InvalidSampleFormController {
 	private UserManager userManager;
 	@Autowired
 	private SampleManager sampleManager;
+	@Autowired
+	private PatientManager patientManager;
+	
 	
 	/**
 	 *  不合格标本编辑页面
@@ -59,14 +64,13 @@ public class InvalidSampleFormController {
 		if(id!=null && !id.isEmpty()){
 			if(sampleManager.exists(Long.parseLong(id))){
 				Sample sample = sampleManager.get(Long.parseLong(id));
-				invalidSample.setSample(sample);
-				invalidSample.setSampleId(invalidSample.getSample().getId());
-				invalidSample.setPatientName(invalidSample.getSample().getPatient().getPatientName());
-				invalidSample.setSex(invalidSample.getSample().getPatient().getSex());
-				invalidSample.setAge(invalidSample.getSample().getPatient().getAge());
-				invalidSample.setSampleType(invalidSample.getSample().getSampleType());
-			}
-			else
+				Patient patient = patientManager.getByBlh(sample.getPatientblh());
+				invalidSample.setSampleId(sample.getId());
+				invalidSample.setPatientName(patient.getPatientName());
+				invalidSample.setSex(patient.getSex());
+				invalidSample.setAge(patient.getAge());
+				invalidSample.setSampleType(sample.getSampleType());
+			} else
 				msg="该医嘱号不存在";
 		}
 		
@@ -84,14 +88,7 @@ public class InvalidSampleFormController {
 		invalidSample.setRejectPerson(user.getName());
 		invalidSample.setRejectTime(new Date());
 		
-		if(invalidSample.getSample().getId()!=null){
-			Sample sample = sampleManager.get(invalidSample.getSample().getId());
-			invalidSample.setSample(sample);
-		}
-		else
-			invalidSample.setSample(null);
-		
-		if(invalidSample.getSampleId()!=null && invalidSample.getSampleId().SIZE!=0){
+		if(invalidSample.getSampleId()!=null){
 			invalidSampleManager.save(invalidSample);
 		}
 		else{

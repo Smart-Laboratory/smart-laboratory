@@ -2,15 +2,11 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
-import javax.persistence.Table;
-
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.pb.Arrange;
-import com.smart.model.user.User;
 import com.smart.dao.ArrangeDao;
 
 @Repository("arrangeDao")

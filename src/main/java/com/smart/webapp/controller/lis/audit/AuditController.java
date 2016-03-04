@@ -21,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.check.Alarm2Check;
@@ -38,7 +37,7 @@ import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.Process;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Task;
 import com.smart.model.lis.TestResult;
@@ -107,8 +106,10 @@ public class AuditController extends BaseAuditController {
 		manager.addOperatorName(currentUser);
 		manager.addTask(task);
 		final List<Sample> samples = new ArrayList<Sample>();
+		final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
+		final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
 		User operator = userManager.getUserByUsername(currentUser);
-		Map<Long, Sample> diffData = new HashMap<Long, Sample>();
+		final Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
 		final List<Sample> updateSample = new ArrayList<Sample>();
 		final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
     	log.debug("开始手工审核...");
@@ -166,7 +167,7 @@ public class AuditController extends BaseAuditController {
     			}
     		} else {
     			List<Sample> simpleInfo = sampleManager.getListBySampleNo(preText);
-    			if (simpleInfo != null && operator.getLastLab().indexOf(simpleInfo.get(0).getSection().getCode()) != -1) {
+    			if (simpleInfo != null && operator.getLastLab().indexOf(simpleInfo.get(0).getSectionId()) != -1) {
     				patientInfo = simpleInfo;
     			}
     		}
@@ -218,26 +219,64 @@ public class AuditController extends BaseAuditController {
     			}
     		}
     		task.setSampleCount(samples.size());
+    		
+    		String hisBlh = "";
+			String hisSampleNo = "";
+			for(Sample s : samples) {
+				hisBlh += "'" + s.getPatientblh() + "',";
+				hisSampleNo += "'" + s.getSampleNo() + "',";
+			}
+			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			for(Patient p : patientList) {
+				hisPatientMap.put(p.getBlh(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
+    		
     		for (Sample info : samples) {
     			try {
-    				formulaUtil.formula(info, "admin");
-    				Set<TestResult> now = info.getResults();
+    				Patient patient = hisPatientMap.get(info.getPatientblh());
+                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
+                	formulaUtil.formula(info, "admin", now, patient.getAge(), Integer.parseInt(patient.getSex()));
     				Set<String> testIdSet = new HashSet<String>();
     				for (TestResult t : now) {
     					testIdSet.add(t.getTestId());
     				}
     				System.out.println(info.getSampleNo()+" : " + now.size());
-    				String lab = info.getSection().getCode();
+    				String lab = info.getSectionId();
     				if(likeLabMap.containsKey(lab)) {
     					lab = likeLabMap.get(lab);
     				}
-    				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatient().getBlh(), info.getSampleNo(), lab);
+    				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatientblh(), info.getSampleNo(), lab);
+    				String diffSampleNo = "";
+    				for(Sample s : list) {
+    					diffSampleNo += "'" + s.getSampleNo() + "',";
+    				}
+    				List<TestResult> hisTestList = testResultManager.getHisTestResult(diffSampleNo.substring(0, diffSampleNo.length()-1));
+    				Map<String, List<TestResult>> hisTest = new HashMap<String, List<TestResult>>();
+					for(TestResult tr : hisTestList) {
+        				if(hisTestMap.containsKey(tr.getSampleNo())) {
+        					hisTestMap.get(tr.getSampleNo()).add(tr);
+        				} else {
+        					List<TestResult> tlist = new ArrayList<TestResult>();
+        					tlist.add(tr);
+        					hisTestMap.put(tr.getSampleNo(), tlist);
+        				}
+        			}
     				for (Sample p : list) {
     					boolean isHis = false;
     					if (p.getSampleNo().equals(info.getSampleNo())) {
     						continue;
     					}
-    					Set<TestResult> his = p.getResults();
+    					List<TestResult> his = hisTest.get(p.getSampleNo());
     					for (TestResult t : his) {
     						String testid = t.getTestId();
     						Set<String> sameTests = util.getKeySet(testid);
@@ -249,7 +288,7 @@ public class AuditController extends BaseAuditController {
     					}
     					
     					if (isHis) {
-    						diffData.put(info.getId(), p);
+    						diffData.put(info.getId(), his);
     						break;
     					}
     				}
@@ -270,11 +309,11 @@ public class AuditController extends BaseAuditController {
         log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
-        final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager, diffData);
+        final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager);
         final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
         final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
         final Check reTestCheck = new RetestCheck(ruleManager);
-        final Check dangerCheck = new DangerCheck(ruleManager);
+        final DangerCheck dangerCheck = new DangerCheck(ruleManager);
         final Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
         final Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
         final ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
@@ -285,29 +324,32 @@ public class AuditController extends BaseAuditController {
     			int index = 0;
         		for (Sample info : samples) {
         			try {
+        				Patient patient = hisPatientMap.get(info.getPatientblh());
+	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
+	                	CriticalRecord cr = new CriticalRecord();
 	        			info.setMarkTests("");
 	        			info.setAuditStatus(Check.PASS);
 	        			info.setAuditMark(Check.AUTO_MARK);
 	        			info.setNotes("");
 	        			info.setRuleIds("");
-	        			if(!hasRuleCheck.doCheck(info)) {
+	        			if(!hasRuleCheck.doCheck(info, now)) {
 	        				updateSample.add(info);
 	        				continue;
 	        			}
-						boolean lack = lackCheck.doCheck(info);
-						diffCheck.doCheck(info);
-						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info);
-						ratioCheck.doCheck(info);
-						R r = droolsRunner.getResult(info.getResults(), info.getPatientId(), info.getPatient().getAge(), Integer.parseInt(info.getPatient().getSex()));
+						boolean lack = lackCheck.doCheck(info, now);
+						diffCheck.doCheck(info, now, diffData);
+						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
+						ratioCheck.doCheck(info, now);
+						R r = droolsRunner.getResult(now, info.getPatientId(), patient.getAge(), Integer.parseInt(patient.getSex()));
 						if (!r.getRuleIds().isEmpty()) {
-							reTestCheck.doCheck(info, r);
-							alarm2Check.doCheck(info, r, diffTests);
-							alarm3Check.doCheck(info, r, diffTests);
-							extremeCheck.doCheck(info, r, diffTests);
+							reTestCheck.doCheck(info, r, now);
+							alarm2Check.doCheck(info, r, diffTests, now);
+							alarm3Check.doCheck(info, r, diffTests, now);
+							extremeCheck.doCheck(info, r, diffTests, now);
 							if (!lack && info.getAuditMark() != Check.LACK_MARK) {
 								info.setAuditMark(Check.LACK_MARK);
 							}
-							dangerCheck.doCheck(info, r);
+							dangerCheck.doCheck(info, r, now, cr);
 						}
 						//bayesCheck.doCheck(info); // Bayes审核及学习
 						
@@ -325,7 +367,7 @@ public class AuditController extends BaseAuditController {
 						info.setRuleIds(ruleId);
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
-							updateCriticalRecord.add(info.getCriticalRecord());
+							updateCriticalRecord.add(cr);
 						}
 						AuditTrace a = new AuditTrace();
 						a.setSampleno(info.getSampleNo());
@@ -428,30 +470,41 @@ public class AuditController extends BaseAuditController {
 		String note = request.getParameter("note");
 		String sampleNo = request.getParameter("sample");
 		String text = request.getParameter("text");
-		Sample sample = sampleManager.getBySampleNo(sampleNo);
+		List<Sample> sample = sampleManager.getListBySampleNo(sampleNo);
 		
+		List<Sample> updateP = new ArrayList<Sample>();
+		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
 		try {
-				sample.setPassReason(note);
+			for (Sample info : sample) {
+				info.setPassReason(note);
 				if ("pass".equals(op)) {
-					sample.setAuditStatus(1);
+					info.setAuditStatus(1);
 				} else if ("unpass".equals(op)) {
-					sample.setAuditStatus(2);
+					info.setAuditStatus(2);
 				}
-				sample.getProcess().setCheckoperator(request.getRemoteUser());;
-				sample.getProcess().setChecktime(new Date());
-				sample.setWriteback(1);
+				info.setWriteback(1);
 				if (StringUtils.isEmpty(text)) {
 					text = Check.MANUAL_AUDIT;
 				}
-				if (sample.getCheckerOpinion()!=null
-					&& !sample.getCheckerOpinion().contains(Check.MANUAL_AUDIT)
-						&& !sample.getCheckerOpinion().contains(Check.AUTO_AUDIT)) {
-					sample.setCheckerOpinion(sample.getCheckerOpinion() + "  " + text);
+				if (info.getCheckerOpinion()!=null
+					&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)
+						&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)) {
+					info.setCheckerOpinion(info.getCheckerOpinion() + "  " + text);
 				} else {
-					sample.setCheckerOpinion(text);
+					info.setCheckerOpinion(text);
 				}
+				updateP.add(info);
 				result = true;
-			sampleManager.save(sample);
+				AuditTrace a = new AuditTrace();
+				a.setSampleno(info.getSampleNo());
+				a.setChecktime(new Date());
+				a.setChecker(request.getRemoteUser());
+				a.setType(2);
+				a.setStatus(info.getAuditStatus());
+				updateA.add(a);
+			}
+			sampleManager.saveAll(updateP);
+			auditTraceManager.saveAll(updateA);
 		} catch (Exception e) {
 			log.error("通过或不通过出错！", e);
 		}
@@ -509,33 +562,28 @@ public class AuditController extends BaseAuditController {
 			status = Constants.STATUS_UNPASS;
 		}
 		
+		List<Sample> samples = sampleManager.getByIds(ids.substring(0, ids.length()-1));
 		List<Sample> updateP = new ArrayList<Sample>();
-
-		for (String id : ids.split(",")) {
-			Sample info = sampleManager.get(Long.parseLong(id));
-			//if (info.getAuditStatus() == Constants.STATUS_PASSED + Constants.STATUS_UNPASS - status) {
+		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
+		
+		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
-				info.getProcess().setCheckoperator(request.getRemoteUser());;
-				info.getProcess().setChecktime(new Date());
-				String profileName = info.getSampleNo().substring(8, 11);
-				String deviceId = null;
-				for (TestResult tr : info.getResults()) {
-					if (deviceId == null) {
-						deviceId = tr.getDeviceId();
-						break;
-					}
-				}
-				if (StringUtils.isEmpty(info.getChkoper2())) {
-					info.setChkoper2(FillFieldUtil.getJYZ(rmiService, profileName, deviceId));
-				}
 				info.setWriteback(1);
 				if (pass) {
 					info.setPassReason("批量通过");
+					AuditTrace a = new AuditTrace();
+					a.setSampleno(info.getSampleNo());
+					a.setChecktime(new Date());
+					a.setChecker(request.getRemoteUser());
+					a.setType(2);
+					a.setStatus(info.getAuditStatus());
+					updateA.add(a);
 				}
 				updateP.add(info);
 			}
 		}
+		auditTraceManager.saveAll(updateA);
 		sampleManager.saveAll(updateP);
 		return result;
 	}

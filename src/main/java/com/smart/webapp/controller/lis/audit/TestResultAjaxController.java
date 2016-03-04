@@ -1,18 +1,14 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
 import com.smart.service.lis.TestModifyManager;
 import com.smart.model.lis.TestModify;
-import com.smart.webapp.util.DataResponse;
-import com.smart.model.lis.Sample;
 import com.smart.webapp.util.FillFieldUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
@@ -106,7 +101,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date executeTime = new Date();
 		Date checkTime = new Date();
-		Process process = info.getProcess();
+		Process process = processManager.getBySampleId(info.getId());
 		json.put("request", process.getRequesttime() == null ? "" : sdf.format(process.getRequesttime()));
 		executeTime = process.getExecutetime();
 		json.put("execute", process.getExecutetime() == null ? "" : sdf.format(process.getExecutetime()));
@@ -118,7 +113,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		json.put("auditor", process.getCheckoperator());
 		
 		Date resultTime = new Date(0);
-		for (TestResult result : info.getResults()) {
+		for (TestResult result : testResultManager.getPrintTestBySampleNo(info.getSampleNo())) {
 			Date meaTime = result.getMeasureTime();
 			if (meaTime != null && meaTime.getTime() > resultTime.getTime()) {
 				resultTime = meaTime;
@@ -156,6 +151,7 @@ public class TestResultAjaxController extends BaseAuditController{
             
 
 			Sample info = sampleManager.getBySampleNo(sample);
+			Patient patient = patientManager.getByBlh(info.getPatientblh());
 
 			for (String test : testResult) {
 				String[] idValue = test.split(":");
@@ -178,8 +174,7 @@ public class TestResultAjaxController extends BaseAuditController{
 						nt.setSampleType(""+ des.getSAMPLETYPE());
 						nt.setUnit(des.getUNIT());
 					}
-					fillUtil.fillResult(nt, info);
-					info.getResults().add(nt);
+					fillUtil.fillResult(nt, info, patient.getAge(), patient.getSexValue());
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();
 					testModify.setModifyTime(new Date());
@@ -190,7 +185,6 @@ public class TestResultAjaxController extends BaseAuditController{
 					testModify.setType(Constants.ADD);
 					testModifyManager.save(testModify);
 					info.setModifyFlag(1);
-					// info.setWriteBack(1);
 					sampleManager.save(info);
 				}
 			}

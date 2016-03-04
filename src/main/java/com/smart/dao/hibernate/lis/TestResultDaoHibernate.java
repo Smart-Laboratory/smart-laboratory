@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.lis;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -60,10 +61,9 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<TestResult> getSingleHistory(String testid, String patientName,
-			String patientid) {
+	public List<TestResult> getSingleHistory(String testid, String patientid) {
 		String hql = "select t from Sample s, TestResult t where t.testId in (" + testid
-				+ ")  and s.patient.blh='" + patientid + "' and s.sampleNo=t.sampleNo order by t.measureTime desc";
+				+ ")  and s.patientblh='" + patientid + "' and s.sampleNo=t.sampleNo order by t.measureTime desc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}
@@ -79,6 +79,19 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getPrintTestBySampleNo(String sampleno) {
 		return getSession().createQuery("select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"+sampleno+"' and t.isprint=1 order by i.printord").list();
+	}
+
+	public void saveAll(List<TestResult> list) {
+		Session s = getSession();
+		for(TestResult tr : list) {
+			s.merge(tr);
+		}
+		s.flush();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getHisTestResult(String samplenos) {
+		return getSession().createQuery("from TestResult where sampleNo in (" + samplenos + ")").list();
 	}
 	
 }
