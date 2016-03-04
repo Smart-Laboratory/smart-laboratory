@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestResult;
 import com.smart.model.util.NeedWriteCount;
 
 public interface SampleDao extends GenericDao<Sample, Long> {
@@ -32,11 +31,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	int getSampleCount(String text, String lab, int mark, int status, String code);
 
 	List<NeedWriteCount> getAllWriteBack(String date);
-<<<<<<< HEAD
-	
-	
-=======
 
 	List<Sample> getByIds(String ids);
->>>>>>> origin/master
 }

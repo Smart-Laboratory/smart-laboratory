@@ -1,12 +1,5 @@
 package com.smart.model.lis;
 
-<<<<<<< HEAD
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-=======
->>>>>>> origin/master
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,17 +7,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.IndexColumn;
-<<<<<<< HEAD
-import org.hibernate.search.annotations.DocumentId;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.smart.model.BaseObject;
-import com.smart.model.lis.TestResult;
-import com.smart.service.lis.TestResultManager;
-=======
-
-import com.smart.model.BaseObject;
->>>>>>> origin/master
 
 //样本信息表
 /**
@@ -531,75 +514,6 @@ public class Sample extends BaseObject {
 		return value;
 	}
 	
-<<<<<<< HEAD
-	/**
-	 * 该样本所做的结果集
-	 */
-	@OneToOne(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
-	public Process getProcess() {
-		return process;
-	}
-	
-	public void setProcess(Process process) {
-		this.process = process;
-	}
-	
-	/**
-	 * 该样本所做的结果集
-	 */
-//	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
-//			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
-//			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
-	@Transient
-	public Set<TestResult> getResults() {
-		
-		
-		return results;
-	}
-
-	public void setResults(Set<TestResult> results) {
-		this.results = results;
-	}
-	
-	@ManyToOne(optional=true,cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JoinColumn(name="section_id",referencedColumnName="code")
-	public Section getSection(){
-		return section;
-	}
-	
-	public void setSection(Section section){
-		this.section = section; 
-	}
-	
-
-	/**
-	 * 危机值处理
-	 */
-	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample", fetch = FetchType.LAZY)
-	public CriticalRecord getCriticalRecord(){
-		return criticalRecord;
-	}
-	
-	public void setCriticalRecord(CriticalRecord cri){
-		this.criticalRecord = cri;
-	}
-	
-	/**
-	 * 检验病人
-	 */
-	@ManyToOne(optional=true, fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
-	@JoinColumn(name="patientblh",referencedColumnName="blh")
-	public Patient getPatient(){
-		return patient;
-	}
-	
-	public void setPatient(Patient patient){
-		this.patient = patient; 
-	}
-	
-=======
->>>>>>> origin/master
 	public String toString() {
 		return null;
 	}
