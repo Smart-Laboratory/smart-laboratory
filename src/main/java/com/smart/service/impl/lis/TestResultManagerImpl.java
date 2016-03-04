@@ -38,9 +38,8 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getListByTestString(sampleNo,testString);
 	}
 	
-	public List<TestResult> getSingleHistory(String testid, String patientName,
-			String patientid) {
-		return testResultDao.getSingleHistory(testid, patientName, patientid);
+	public List<TestResult> getSingleHistory(String testid, String patientid) {
+		return testResultDao.getSingleHistory(testid, patientid);
 	}
 
 	public List<TestResult> getRelative(String patientId, String blh, String history) {
@@ -49,5 +48,13 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 
 	public List<TestResult> getPrintTestBySampleNo(String sampleno) {
 		return testResultDao.getPrintTestBySampleNo(sampleno);
+	}
+
+	public void saveAll(List<TestResult> list) {
+		testResultDao.saveAll(list);
+	}
+
+	public List<TestResult> getHisTestResult(String samplenos) {
+		return testResultDao.getHisTestResult(samplenos);
 	}
 }

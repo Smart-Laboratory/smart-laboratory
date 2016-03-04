@@ -26,8 +26,6 @@ public class InvalidSample {
 	// Primary Key
 	private Long id;
 	
-	private Sample sample;
-
 	private Date rejectTime;
 	private int containerType; //容器类型
 	private int labelType;//标签形式
@@ -66,20 +64,25 @@ public class InvalidSample {
 	public Long getSampleId() {
 		return sampleId;
 	}
+	
 	public void setSampleId(Long sampleId) {
 		this.sampleId = sampleId;
 	}
+	
 	@Column(length=20)
 	public String getPatientName() {
 		return patientName;
 	}
+	
 	public void setPatientName(String patientName) {
 		this.patientName = patientName;
 	}
+	
 	@Column(length=10)
 	public String getSex() {
 		return sex;
 	}
+	
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
@@ -96,16 +99,9 @@ public class InvalidSample {
 	public String getSampleType() {
 		return sampleType;
 	}
+	
 	public void setSampleType(String sampleType) {
 		this.sampleType = sampleType;
-	}
-	@OneToOne( optional=true)
-	@JoinColumn(name = "sample_id",referencedColumnName="id")
-	public Sample getSample() {
-		return sample;
-	}
-	public void setSample(Sample sample) {
-		this.sample = sample;
 	}
 	
 	@Column

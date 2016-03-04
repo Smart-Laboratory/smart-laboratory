@@ -22,17 +22,17 @@ public class RetestCheck implements Check {
 		this.ruleManager = ruleManager;
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 		return false;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 
 		boolean result = true;
 		String ruleId = CheckUtil.toString(r.getRuleIds());
 		String markTests = info.getMarkTests();
 		Set<String> testIds = new HashSet<String>();
-		for(TestResult t : info.getResults()) {
+		for(TestResult t : list) {
 			testIds.add(t.getTestId());
 		}
 		

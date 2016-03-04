@@ -28,9 +28,9 @@ public class BayesUtil {
 		this.bayesService = bayesService;
 	}
 	
-	public void add(Sample info) {
+	public void add(Sample info, List<TestResult> results, int sex) {
 		
-		if (info == null || info.getResults() == null) {
+		if (info == null || results == null) {
 			return;
 		}
 		//System.out.println("Add");
@@ -46,12 +46,12 @@ public class BayesUtil {
 			System.out.println(disMap.size());
 		}*/
 		
-		for (TestResult tr : info.getResults()) {
+		for (TestResult tr : results) {
 			String testId = tr.getTestId();
 			String result = tr.getTestResult();
 			
 			if (!isFloat(result)) continue;
-			int sex = (info.getPatient().getSex() != "2") ? 1 : 2;
+			sex = (sex !=2) ? 1 : 2; 
 			float val = Float.parseFloat(result);
 			boolean isPass = info.getAuditStatus() == 1 ? true : false;
 			List<Distribute> disList = getDistributes(testId);
@@ -67,16 +67,16 @@ public class BayesUtil {
 		}
 	}
 	
-	public void move(Sample info) {
-		if (info == null || info.getResults() == null) {
+	public void move(Sample info, List<TestResult> results, int sex) {
+		if (info == null || results == null) {
 			return;
 		}
 		
-		for (TestResult tr : info.getResults()) {
+		for (TestResult tr : results) {
 			String testId = tr.getTestId();
 			String result = tr.getTestResult();
 			if (!isFloat(result)) continue;
-			int sex = (info.getPatient().getSex() != "2") ? 1 : 2;
+			sex = (sex !=2) ? 1 : 2; 
 			float val = Float.parseFloat(result);
 			boolean isPass = info.getAuditStatus() == 1 ? true : false;
 			List<Distribute> disList = getDistributes(testId);
@@ -95,11 +95,11 @@ public class BayesUtil {
 		}
 	}
 	
-	public double audit(Sample info) {
-		int sex = (info.getPatient().getSex() != "2") ? 1 : 2;
+	public double audit(Sample info, List<TestResult> results, int sex) {
+		sex = (sex !=2) ? 1 : 2; 
 		List<Float> rateList = new ArrayList<Float>();
 		
-		for (TestResult tr : info.getResults()) {
+		for (TestResult tr : results) {
 			String key = tr.getTestId();
 			String value = tr.getTestResult();
 			if (!isFloat(value)) continue;

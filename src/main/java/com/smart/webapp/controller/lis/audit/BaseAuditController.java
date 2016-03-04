@@ -23,6 +23,7 @@ import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.LikeLabManager;
+import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TaskManager;
@@ -44,6 +45,9 @@ public class BaseAuditController {
 	
 	@Autowired
     protected SampleManager sampleManager = null;
+	
+	@Autowired
+    protected PatientManager patientManager = null;
     
 	@Autowired
     protected TestResultManager testResultManager = null;

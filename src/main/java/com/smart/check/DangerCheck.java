@@ -26,20 +26,23 @@ public class DangerCheck implements Check {
 		this.ruleManager = ruleManager;
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
+		return false;
+	}
+	
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 		return false;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list, CriticalRecord cr) {
 
 		boolean result = true;
 		String ruleId = CheckUtil.toString(r.getRuleIds());
 
 		Set<String> criticalContent = new HashSet<String>();
 		String markTests = info.getMarkTests();
-		String note = info.getNotes();
 		Map<String, TestResult> trMap = new HashMap<String, TestResult>();
-		for (TestResult tr : info.getResults())
+		for (TestResult tr : list)
 			trMap.put(tr.getTestId(), tr);
 		
 		for (Rule rule : ruleManager.getRuleList(ruleId)) {
@@ -54,9 +57,6 @@ public class DangerCheck implements Check {
 							markTests += i.getIndexId() + DANGER_COLOR;
 							criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
 						}
-						/*if(markTests.contains(i.getIndexId() + DIFF_COLOR) || !note.contains("差值")) {
-							
-						}*/
 					} else {
 						for(String s : set) {
 							if (trMap.containsKey(s)) {
@@ -67,9 +67,6 @@ public class DangerCheck implements Check {
 									criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
 								
 								}
-								/*if(markTests.contains(s + DIFF_COLOR) || !note.contains("差值")) {
-									
-								}*/
 							}
 						}
 					}
@@ -79,24 +76,15 @@ public class DangerCheck implements Check {
 		
 		if (!result) {
 			info.setMarkTests(markTests);
-			if(info.getCriticalRecord() == null) {
-				CriticalRecord cr = new CriticalRecord();
+			if(cr == null) {
+				cr = new CriticalRecord();
 				cr.setCriticalContent(CheckUtil.toString(criticalContent));
-				cr.setSample(info);
-				info.setCriticalRecord(cr);
+				cr.setSampleid(info.getId());
 			} else {
-				info.getCriticalRecord().setCriticalContent(CheckUtil.toString(criticalContent));
+				cr.setCriticalContent(CheckUtil.toString(criticalContent));
 			}
 			info.setAuditStatus(UNPASS);
 			info.setAuditMark(DANGER_MARK);
-			/*cr.setSampleno(info.getSampleNo());
-			cr.setAge(info.getAge());
-			cr.setBlh(Long.parseLong(info.getBlh()));
-			cr.setCriticalContent(info.getCriticalContent());
-			cr.setSex(info.getSex());
-			if (!criticalRecordManager.exists(info.getSampleNo())) {
-				return cr;
-			}*/
 		}
 		
 		return result;

@@ -56,18 +56,18 @@ public class AjaxController extends BaseAuditController{
 		
 		Sample info = sampleManager.getBySampleNo(sample);
 		Date measuretime = new Date();
-		String patientid = info.getPatient().getBlh();
+		String patientid = info.getPatientblh();
 		Set<String> sameTests = new HashSet<String>();
 		sameTests.add(testid);
 		String tests = sameTests.toString().replace("[", "'").replace("]", "'");
 		tests = tests.replaceAll(", ", "','");
-		List<TestResult> list = testResultManager.getSingleHistory(tests, info.getPatient().getPatientName(), patientid);
+		List<TestResult> list = testResultManager.getSingleHistory(tests, patientid);
 		List<Double> loArr = new ArrayList<Double>(); 
 		List<Double> reArr = new ArrayList<Double>();
 		List<Double> hiArr = new ArrayList<Double>();
 		List<String> timeArr = new ArrayList<String>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		for(TestResult t: info.getResults()) {
+		for(TestResult t: testResultManager.getPrintTestBySampleNo(info.getSampleNo())) {
 			if (testid.equals(t.getTestId())) {
 				measuretime = t.getMeasureTime();
 			}
@@ -152,7 +152,7 @@ public class AjaxController extends BaseAuditController{
 			history = history.substring(0, history.length()-1);
 			history = "('" + history.replaceAll(",", "','") + "')";
 		}
-		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), info.getPatient().getBlh(), history);
+		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), info.getPatientblh(), history);
 		if(hisTests.size()>0) {
 			if (idMap.size() == 0)
 				initMap();

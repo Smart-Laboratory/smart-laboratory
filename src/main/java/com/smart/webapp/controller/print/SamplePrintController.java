@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.print;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
+import com.smart.model.lis.Patient;
+import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
@@ -45,10 +48,14 @@ public class SamplePrintController extends BaseAuditController {
 		JSONObject info = new JSONObject();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		Sample s = sampleManager.getBySampleNo(sampleno);
-		info.put("blh", s.getPatient().getBlh());
-		info.put("pName", s.getPatient().getPatientName());
-		info.put("sex", s.getPatient().getSexValue());
-		info.put("age", s.getPatient().getAge());
+		Patient patient = patientManager.getByBlh(s.getPatientblh());
+		Process process = processManager.getBySampleId(s.getId());
+		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
+		
+		info.put("blh", patient.getBlh());
+		info.put("pName", patient.getPatientName());
+		info.put("sex", patient.getSexValue());
+		info.put("age", patient.getAge());
 		info.put("pType", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(s.getSampleType())));
 		info.put("diagnostic", s.getDiagnostic());
 		if(s.getStayHospitalMode() == 2) {
@@ -68,12 +75,12 @@ public class SamplePrintController extends BaseAuditController {
 		if(idMap.size() == 0) {
 			initMap();
 		}
-		info.put("requester", s.getProcess().getRequester() == null ? " " : contactMap.get(s.getProcess().getRequester()).getNAME());
+		info.put("requester", process.getRequester() == null ? " " : contactMap.get(process.getRequester()).getNAME());
 		info.put("tester", s.getChkoper2());
-		info.put("auditor", s.getProcess().getCheckoperator());
-		info.put("receivetime", s.getProcess().getReceivetime() == null ? "" : Constants.SDF.format(s.getProcess().getReceivetime()));
-		info.put("checktime", Constants.SDF.format(s.getProcess().getChecktime()));
-		info.put("executetime", s.getProcess().getExecutetime() == null ? "" : Constants.SDF.format(s.getProcess().getExecutetime()));
+		info.put("auditor", process.getCheckoperator());
+		info.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
+		info.put("checktime", Constants.SDF.format(process.getChecktime()));
+		info.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
 		info.put("examinaim", s.getInspectionName());
 		info.put("date", sampleno.substring(0, 4) + "年" + sampleno.substring(4, 6) + "月" + sampleno.substring(6, 8) + "日");
 		
@@ -83,27 +90,48 @@ public class SamplePrintController extends BaseAuditController {
 		String hisTitle1 = "";
 		String hisTitle2 = "";
 		String hisTitle3 = "";
-		String lab = s.getSection().getCode();
+		String lab = s.getSectionId();
 		if(likeLabMap.containsKey(lab)) {
 			lab = likeLabMap.get(lab);
 		}
 		if(hasLast == 1) {
-			List<Sample> history = sampleManager.getHistorySample(s.getPatientId(), s.getPatient().getBlh(), lab);
+			List<Sample> history = sampleManager.getHistorySample(s.getPatientId(), s.getPatientblh(), lab);
+			String hisSampleId = "";
+			String hisSampleNo = "";
+			for(Sample sample : history) {
+				hisSampleId += sample.getId() + ",";
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
+			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			for(Process p : processList) {
+				hisProcessMap.put(p.getSampleid(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
 			Date receivetime = null;
-			receivetime = s.getProcess().getReceivetime();
+			receivetime = process.getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
 			int index = 0;
 			Map<String, TestResult> rmap = null;
-			Set<TestResult> now = s.getResults();
 			Set<String> testIdSet = new HashSet<String>();
-			for (TestResult t : now) {
+			for (TestResult t : list) {
 				testIdSet.add(t.getTestId());
 			}
 			if(history != null && history.size()>0){
 				for (Sample pinfo : history) {
 					String psampleno = pinfo.getSampleNo();
 					boolean isHis = false;
-					Set<TestResult> his = pinfo.getResults();
+					List<TestResult> his = hisTestMap.get(psampleno);
 					for (TestResult test: his) {
 						String testid = test.getTestId();
 						Set<String> sameTests = util.getKeySet(testid);
@@ -119,7 +147,7 @@ public class SamplePrintController extends BaseAuditController {
 						}
 					}
 					Date preceivetime = null;
-					preceivetime = pinfo.getProcess().getReceivetime();
+					preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
 					if (preceivetime == null || pinfo.getSampleNo() == null) {
 						continue;
 					}
@@ -140,7 +168,7 @@ public class SamplePrintController extends BaseAuditController {
 							hisTitle3 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
 							break;
 						}
-						for (TestResult tr : pinfo.getResults()) {
+						for (TestResult tr : hisTestMap.get(psampleno)) {
 							rmap.put(tr.getTestId(), tr);
 						}
 						index++;
@@ -153,7 +181,6 @@ public class SamplePrintController extends BaseAuditController {
 		info.put("hisTitle2", hisTitle2);
 		info.put("hisTitle3", hisTitle3);
 		
-		List<TestResult> list = testResultManager.getPrintTestBySampleNo(sampleno); 
 		JSONArray result = new JSONArray();
 		for(int i = 1; i<=list.size(); i++) {
 			TestResult re = list.get(i-1);

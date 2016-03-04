@@ -24,6 +24,8 @@ import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.EvaluateManager;
 import com.smart.service.lis.CollectSampleManager;
+import com.smart.service.lis.PatientManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.rule.IndexManager;
@@ -40,6 +42,7 @@ import com.smart.model.rule.Rule;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.smart.model.lis.Patient;
+import com.smart.model.lis.Process;
 import com.smart.model.user.Evaluate;
 
 
@@ -150,7 +153,8 @@ public class CollectController {
 		}
 
 		Sample info = sampleManager.getBySampleNo(sample);
-		Patient patient = info.getPatient();
+		Patient patient = patientManager.getByBlh(info.getPatientblh());
+		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		if (info != null) {
@@ -164,7 +168,7 @@ public class CollectController {
 			map.put("examinaim", ex);
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("stayhospitalmode", info.getStayHospitalMode()==1 ? "门诊":"住院");
-			map.put("section", sectionutil.getValue(info.getSection().getCode()));
+			map.put("section", sectionutil.getValue(info.getSectionId()));
 
 			String note = info.getNotes();
 			if (!StringUtils.isEmpty(info.getRuleIds())) {
@@ -198,7 +202,7 @@ public class CollectController {
 				map.put("blh", patient.getBlh());
 			}
 			map.put("patientId", info.getPatientId());
-			map.put("requester", info.getProcess().getRequester());
+			map.put("requester", process.getRequester());
 			map.put("type",
 					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
 			
@@ -234,38 +238,64 @@ public class CollectController {
 			initMap();
 		
 		Sample info = sampleManager.getBySampleNo(sampleNo);
+		if (info == null) {
+			return null;
+		}
 
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		Map<String, String> resultMap3 = new HashMap<String, String>();
 		Map<String, String> resultMap4 = new HashMap<String, String>();
 		Map<String, String> resultMap5 = new HashMap<String, String>();
-		if (info != null) {
-			String lab = info.getSection().getCode();
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getSection().getCode(), lab);
-			long curInfoReceiveTime = info.getProcess().getReceivetime().getTime();
-			int index = 0;
-			Map<String, String> rmap = null;
-			Set<TestResult> now = info.getResults();
-			Set<String> testIdSet = new HashSet<String>();
-			for (TestResult t : now) {
-				testIdSet.add(t.getTestId());
-			}
-			String day = mdf.format(info.getProcess().getReceivetime());
 			
+		Process process = processManager.getBySampleId(info.getId());
+		List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatientblh(), info.getSectionId());
+		String hisSampleId = "";
+		String hisSampleNo = "";
+		for(Sample sample : list) {
+			hisSampleId += sample.getId() + ",";
+			hisSampleNo += "'" + sample.getSampleNo() + "',";
+		}
+		List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+		List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+		Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+		Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+		for(Process p : processList) {
+			hisProcessMap.put(p.getSampleid(), p);
+		}
+		for(TestResult tr : testList) {
+			if(hisTestMap.containsKey(tr.getSampleNo())) {
+				hisTestMap.get(tr.getSampleNo()).add(tr);
+			} else {
+				List<TestResult> tlist = new ArrayList<TestResult>();
+				tlist.add(tr);
+				hisTestMap.put(tr.getSampleNo(), tlist);
+			}
+		}
+		long curInfoReceiveTime = process.getReceivetime().getTime();
+		int index = 0;
+		Map<String, String> rmap = null;
+		List<TestResult> now = testResultManager.getTestBySampleNo(info.getSampleNo());
+		Set<String> testIdSet = new HashSet<String>();
+		for (TestResult t : now) {
+			testIdSet.add(t.getTestId());
+		}
+		String day = mdf.format(process.getReceivetime());
+		
+		if(list.size() > 0) {
 			for (Sample pinfo : list) {
 				boolean isHis = false;
-				Set<TestResult> his = pinfo.getResults();
+				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
 				for (TestResult test: his) {
 					if (testIdSet.contains(test.getTestId())) {
 						isHis = true;
 						break;
 					}
 				}
-				if (pinfo.getProcess().getReceivetime() == null) {
+				if (hisProcessMap.get(pinfo.getId()).getReceivetime() == null) {
 					continue;
 				}
-				if (pinfo.getProcess().getReceivetime().getTime() < curInfoReceiveTime && isHis) {
+				if (hisProcessMap.get(pinfo.getId()).getReceivetime().getTime() < curInfoReceiveTime && isHis) {
 					if (index > 4)
 						break;
 					switch (index) {
@@ -285,13 +315,13 @@ public class CollectController {
 						rmap = resultMap5;
 						break;
 					}
-					for (TestResult result : pinfo.getResults()) {
+					for (TestResult result : hisTestMap.get(pinfo.getSampleNo())) {
 						rmap.put(result.getTestId(), result.getTestResult());
 					}
 					if (!"".equals(hisDate)) {
 						hisDate += ",";
 					}
-					String pDay = mdf.format(pinfo.getProcess().getReceivetime());
+					String pDay = mdf.format(hisProcessMap.get(pinfo.getId()).getReceivetime());
 					hisDate += pDay;
 					index++;
 					
@@ -310,42 +340,41 @@ public class CollectController {
 			 colorMap = StringToMap(info.getMarkTests());
 			
 		}
-		List<TestResult> list = testResultManager.getTestBySampleNo(sampleNo);
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getEditMark() == Constants.DELETE_FLAG)
+		for (int i = 0; i < now.size(); i++) {
+			if (now.get(i).getEditMark() == Constants.DELETE_FLAG)
 				continue;
 
 			color = 0;
-			String id = list.get(i).getTestId();
+			String id = now.get(i).getTestId();
 			if (colorMap!=null && colorMap.containsKey(id)) {
 				color = colorMap.get(id);
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			if (idMap.containsKey(id)) {
-				String testId = list.get(i).getTestId();
+				String testId = now.get(i).getTestId();
 				map.put("id", id);
 				map.put("color", color);
-				map.put("name", idMap.get(list.get(i).getTestId()).getName());
-				map.put("ab", idMap.get(list.get(i).getTestId()).getEnglish());
-				map.put("result", list.get(i).getTestResult());
+				map.put("name", idMap.get(now.get(i).getTestId()).getName());
+				map.put("ab", idMap.get(now.get(i).getTestId()).getEnglish());
+				map.put("result", now.get(i).getTestResult());
 				map.put("last", resultMap1.size() != 0 && resultMap1.containsKey(testId) ? resultMap1.get(testId) : "");
 				map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(testId) ? resultMap2.get(testId) : "");
 				map.put("last2", resultMap3.size() != 0 && resultMap3.containsKey(testId) ? resultMap3.get(testId) : "");
 				map.put("last3", resultMap4.size() != 0 && resultMap4.containsKey(testId) ? resultMap4.get(testId) : "");
 				map.put("last4", resultMap5.size() != 0 && resultMap5.containsKey(testId) ? resultMap5.get(testId) : "");
-				String lo = list.get(i).getRefLo();
-				String hi = list.get(i).getRefHi();
+				String lo = now.get(i).getRefLo();
+				String hi = now.get(i).getRefHi();
 				if (lo != null && hi != null) {
 					map.put("scope", lo + "-" + hi);
 				} else {
 					map.put("scope", "");
 				}
-				map.put("unit", list.get(i).getUnit());
-				map.put("knowledgeName", idMap.get(list.get(i).getTestId()).getKnowledgename());
-				map.put("editMark", list.get(i).getEditMark());
+				map.put("unit", now.get(i).getUnit());
+				map.put("knowledgeName", idMap.get(now.get(i).getTestId()).getKnowledgename());
+				map.put("editMark", now.get(i).getEditMark());
 				dataRows.add(map);
 			}
 
@@ -424,11 +453,6 @@ public class CollectController {
 		return dataResponse;
 	}
 	
-	
-	
-	
-	
-	
 	@Autowired
 	private IndexManager indexManager;
 	
@@ -437,6 +461,12 @@ public class CollectController {
 	
 	@Autowired
 	private SampleManager sampleManager;
+	
+	@Autowired
+	private PatientManager patientManager;
+	
+	@Autowired
+	private ProcessManager processManager;
 	
 	@Autowired
 	private TestResultManager testResultManager;

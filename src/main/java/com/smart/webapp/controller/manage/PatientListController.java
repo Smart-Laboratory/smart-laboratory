@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.manage;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,52 +23,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.zju.api.service.RMIService;
+import com.zju.api.model.SyncResult;
 import com.smart.Constants;
-import com.smart.model.rule.Index;
 import com.smart.model.rule.Item;
 import com.smart.Dictionary;
-import com.zju.api.model.Patient;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.Section;
+import com.smart.model.lis.Patient;
+import com.smart.model.lis.Process;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.model.lis.TestResult;
-import com.smart.model.user.User;
-import com.smart.service.rule.IndexManager;
-import com.smart.service.rule.ItemManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.TestResultManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.ReasoningModifyManager;
-import com.smart.service.rule.RuleManager;
-import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
+import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.PatientUtil;
 import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.SectionUtil;
 
 @Controller
 @RequestMapping("/manage/patientList*")
-public class PatientListController {
+public class PatientListController extends BaseAuditController {
 
 	private static Log log = LogFactory.getLog(PatientListController.class);
-	private RMIService rmiService = null;
-	private SampleManager sampleManager = null;
-	private IndexManager indexManager = null;
-	private ItemManager itemManager = null;
-	private RuleManager ruleManager = null;
-	private UserManager userManager = null;
-	private ReasoningModifyManager reasoningModifyManager = null;
-	private Map<String, Index> idMap = new HashMap<String, Index>();
 	private static IndexMapUtil util = IndexMapUtil.getInstance();
 	
 	@Autowired
-	private TestResultManager testResultManager = null;
+	private SectionManager sectionManager;
 	
 	@Autowired
-	private DictionaryManager dictionaryManager = null;
+	private ReasoningModifyManager reasoningModifyManager;
 	
 	/**
 	 * 获取样本中的病人信息
@@ -88,33 +75,24 @@ public class PatientListController {
 		}
 
 		Sample info = sampleManager.get(Long.parseLong(id));
+		Patient patient = patientManager.getByBlh(info.getPatientblh());
+		Section section = sectionManager.getByCode(info.getSectionId());
+		
 		Map<String, Object> map = new HashMap<String, Object>();
-//		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		if (info != null) {
 			map.put("id", info.getPatientId());
-			map.put("name", info.getPatient().getPatientName());
-			map.put("age", String.valueOf(info.getPatient().getAge()));
+			map.put("name", patient.getPatientName());
+			map.put("age", String.valueOf(patient.getAge()));
 			String ex = info.getInspectionName();
 			if (ex.length() > 16) {
 				ex = ex.substring(0, 16) + "...";
 			}
 			map.put("examinaim", ex);
 			map.put("diagnostic", info.getDiagnostic());
-			map.put("section", info.getSection().getName());
-			map.put("sex", info.getPatient().getSexValue());
-			if (StringUtils.isEmpty(info.getPatient().getBlh())) {
-				List<Patient> list = rmiService.getPatientList("'" + info.getPatientId() + "'");
-				if (list != null && list.size() != 0) {
-					map.put("blh", list.get(0).getBlh());
-				} else {
-					map.put("blh", "");
-				}
-			} else {
-				map.put("blh", info.getPatient().getBlh());
-			}
-			map.put("type",info.getSampleType());
-//			map.put("type",
-//					SampleUtil.getInstance().getSampleList(indexManager).get(String.valueOf(info.getSampleType())));
+			map.put("section", section.getName());
+			map.put("sex", patient.getSexValue());
+			map.put("blh", info.getPatientblh());
+			map.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
 		}
 		return map;
 	}
@@ -136,7 +114,6 @@ public class PatientListController {
 			throw new NullPointerException();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
-		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String ruleIds = info.getRuleIds();
 
 		DataResponse dataResponse = new DataResponse();
@@ -324,61 +301,168 @@ public class PatientListController {
 		}
 		if (idMap.size() == 0)
 			initMap();
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
 
-		Sample info = sampleManager.getBySampleNo(sampleNo);
+		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
+		Process process = processManager.getBySampleId(info.getId());
+		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
+		
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		Map<String, String> resultMap3 = new HashMap<String, String>();
 		if (info != null) {
-			String lab = info.getSection().getCode();
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getYlxh(), lab);
-			if (list.size() >= 2) {
-				for (TestResult result : list.get(1).getResults()) {
-					resultMap1.put(result.getTestId(), result.getTestResult());
+			String lab = info.getSectionId();
+			if(likeLabMap.containsKey(lab)) {
+				lab = likeLabMap.get(lab);
+			}
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatientblh(), lab);
+			String hisSampleId = "";
+			String hisSampleNo = "";
+			for(Sample sample : list) {
+				hisSampleId += sample.getId() + ",";
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
+			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			for(Process p : processList) {
+				hisProcessMap.put(p.getSampleid(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
 				}
 			}
-			if (list.size() >= 3) {
-				for (TestResult result : list.get(2).getResults()) {
-					resultMap2.put(result.getTestId(), result.getTestResult());
+			
+			Date receivetime = null;
+			receivetime = process.getReceivetime();
+			long curInfoReceiveTime = receivetime.getTime();
+			int index = 0;
+			Map<String, String> rmap = null;
+			Set<String> testIdSet = new HashSet<String>();
+			for (TestResult t : testResults) {
+				testIdSet.add(t.getTestId());
+			}
+			if(list!=null && list.size()>0){
+			for (Sample pinfo : list) {
+				boolean isHis = false;
+				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
+				for (TestResult test: his) {
+					String testid = test.getTestId();
+					Set<String> sameTests = util.getKeySet(testid);
+					sameTests.add(testid);
+					for (String id : sameTests) {
+						if (testIdSet.contains(id)) {
+							isHis = true;
+							break;
+						}
+					}
+					if (isHis) {
+						break;
+					}
+				}
+				Date preceivetime = null;
+				preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
+				if (preceivetime == null || pinfo.getSampleNo() == null) {
+					continue;
+				}
+				if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
+					if (index > 4)
+						break;
+					switch (index) {
+					case 0:
+						rmap = resultMap1;
+						break;
+					case 1:
+						rmap = resultMap2;
+						break;
+					case 2:
+						rmap = resultMap3;
+						break;
+					}
+					for (TestResult result : his) {
+						rmap.put(result.getTestId(), result.getTestResult());
+					}
+					index++;
 				}
 			}
-			if (list.size() >= 4) {
-				for (TestResult result : list.get(3).getResults()) {
-					resultMap3.put(result.getTestId(), result.getTestResult());
-				}
 			}
 		}
-		Set<String> tests = new HashSet<String>();
-		String ts = info.getMarkTests();
-		if (!StringUtils.isEmpty(ts)) {
-			for (String s : ts.split(",")) {
-				tests.add(s);
+		int color = 0;
+		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
+		List<SyncResult> editTests = rmiService.getEditTests(sampleNo);
+		Map<String, String> editMap = new HashMap<String, String>();
+		if (editTests.size() > 0) {
+			for (SyncResult sr : editTests) {
+				editMap.put(sr.getTESTID(), sr.getTESTRESULT());
 			}
 		}
-
-		List<TestResult> list = testResultManager.getTestBySampleNo(sampleNo);
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(list.size());
-		for (int i = 0; i < list.size(); i++) {
-			String id = list.get(i).getTestId();
+		
+		for (TestResult tr : testResults) {
+			if (tr.getEditMark() == Constants.DELETE_FLAG)
+				continue;
+
+			color = 0;
+			String id = tr.getTestId();
+			if (colorMap.containsKey(id)) {
+				color = colorMap.get(id);
+			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			if (idMap.containsKey(id)||idMap.containsKey(util.getValue(id))) {
-				String testId = list.get(i).getTestId();
+			if (idMap.containsKey(id)) {
+//			if(true){
+				String testId = tr.getTestId();
+				Set<String> sameTests = util.getKeySet(testId);
+				sameTests.add(testId);
 				map.put("id", id);
-				map.put("name", idMap.get(util.getValue(list.get(i).getTestId())).getName());
-				map.put("result", list.get(i).getTestResult());
-				map.put("last", resultMap1.size() != 0 && resultMap1.containsKey(testId) ? resultMap1.get(testId) : "");
-				map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(testId) ? resultMap2.get(testId) : "");
-				map.put("last2", resultMap3.size() != 0 && resultMap3.containsKey(testId) ? resultMap3.get(testId) : "");
-				map.put("scope", list.get(i).getRefLo() + "-" + list.get(i).getRefHi());
-				map.put("unit", list.get(i).getUnit());
-				map.put("knowledgeName", idMap.get(util.getValue(list.get(i).getTestId())).getKnowledgename());
+				map.put("color", color);
+				map.put("ab", idMap.get(tr.getTestId()).getEnglish());
+				map.put("name", idMap.get(tr.getTestId()).getName());
+				map.put("result", tr.getTestResult());
+				map.put("last","");
+				map.put("last1","");
+				map.put("last2","");
+				map.put("last3","");
+				map.put("last4","");
+				for(String tid : sameTests) {
+					if(map.get("last").equals("")) {
+						map.put("last", resultMap1.size() != 0 && resultMap1.containsKey(tid) ? resultMap1.get(tid) : "");
+					}
+					if(map.get("last1").equals("")) {
+						map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(tid) ? resultMap2.get(tid) : "");
+					}
+					if(map.get("last2").equals("")) {
+						map.put("last2", resultMap3.size() != 0 && resultMap3.containsKey(tid) ? resultMap3.get(tid) : "");
+					}
+				}
+				map.put("checktime", Constants.DF5.format(tr.getMeasureTime()));
+				map.put("device", tr.getOperator());
+				String lo = tr.getRefLo();
+				String hi = tr.getRefHi();
+				if (lo != null && hi != null) {
+					map.put("scope", lo + "-" + hi);
+				} else {
+					map.put("scope", "");
+				}
+				map.put("unit", tr.getUnit());
+				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+				map.put("editMark", tr.getEditMark());
+				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				dataRows.add(map);
 			}
+
 		}
 		dataResponse.setRows(dataRows);
-
+		dataResponse.setRecords(dataRows.size());
+		
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
@@ -472,47 +556,4 @@ public class PatientListController {
 		return view.addObject("patientId",patientId).addObject("blh", blh);
 	}
 
-	synchronized private void initMap() {
-		//List<TestDescribe> list = testDescribeManager.getAll();
-		List<Index> list = indexManager.getAll();
-		for (Index t : list) {
-			idMap.put(t.getIndexId(), t);
-		}
-	}
-
-	@Autowired
-	public void setSampleManager(SampleManager sampleManager) {
-		this.sampleManager = sampleManager;
-	}
-	
-	@Autowired
-	public void setIndexManager(IndexManager indexManager) {
-		this.indexManager = indexManager;
-	}
-	
-	@Autowired
-	public void setItemManager(ItemManager itemManager) {
-		this.itemManager = itemManager;
-	}
-	
-	@Autowired
-	public void setRuleManager(RuleManager ruleManager) {
-		this.ruleManager = ruleManager;
-	}
-	
-	@Autowired
-	public void setUserManager(UserManager userManager) {
-		this.userManager = userManager;
-	}
-	
-	@Autowired
-	public void setReasoningModifyManager(
-			ReasoningModifyManager reasoningModifyManager) {
-		this.reasoningModifyManager = reasoningModifyManager;
-	}
-	
-	@Autowired
-	public void setRmiService(RMIService rmiService) {
-		this.rmiService = rmiService;
-	}
 }

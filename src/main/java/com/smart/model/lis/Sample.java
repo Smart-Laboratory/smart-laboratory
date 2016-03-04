@@ -1,29 +1,14 @@
 package com.smart.model.lis;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.IndexColumn;
-import org.hibernate.search.annotations.DocumentId;
 
 import com.smart.model.BaseObject;
-import com.smart.model.lis.TestResult;
 
 //样本信息表
 /**
@@ -73,13 +58,8 @@ public class Sample extends BaseObject {
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
 	private String checkerOpinion;
 	private String passReason;
-	
-	private Patient patient; //病人
-	private CriticalRecord criticalRecord;
-	private Section section;
-	private Set<TestResult> results = new HashSet<TestResult>(); //检验项目的结果集
-	private Process process = new Process(); //检验项目的结果集
-
+	private String sectionId;
+	private String patientblh;
 	
 	@Id
 	public Long getId(){
@@ -454,6 +434,24 @@ public class Sample extends BaseObject {
 		this.ruleIds = ruleIds;
 	}
 	
+	@Column(name = "section_id")
+	public String getSectionId() {
+		return sectionId;
+	}
+
+	public void setSectionId(String sectionId) {
+		this.sectionId = sectionId;
+	}
+	
+	@Column(name = "patientblh")
+	public String getPatientblh() {
+		return patientblh;
+	}
+
+	public void setPatientblh(String patientblh) {
+		this.patientblh = patientblh;
+	}
+
 	@Transient
 	public String getAuditMarkValue() {
 		String value = "";
@@ -515,69 +513,6 @@ public class Sample extends BaseObject {
 			break;
 		}
 		return value;
-	}
-	
-	/**
-	 * 该样本所做的结果集
-	 */
-	@OneToOne(targetEntity = Process.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE,mappedBy="sample")
-	public Process getProcess() {
-		return process;
-	}
-	
-	public void setProcess(Process process) {
-		this.process = process;
-	}
-	
-	/**
-	 * 该样本所做的结果集
-	 */
-	@OneToMany(targetEntity = TestResult.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "lab_patient_result", joinColumns = { @JoinColumn(name = "sample_id", referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "sample_no", referencedColumnName = "sampleNo"),
-			@JoinColumn(name = "test_id", referencedColumnName = "testId") })
-	public Set<TestResult> getResults() {
-		return results;
-	}
-
-	public void setResults(Set<TestResult> results) {
-		this.results = results;
-	}
-	
-	@ManyToOne(optional=true,cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JoinColumn(name="section_id",referencedColumnName="code")
-	public Section getSection(){
-		return section;
-	}
-	
-	public void setSection(Section section){
-		this.section = section; 
-	}
-	
-
-	/**
-	 * 危机值处理
-	 */
-	@OneToOne(optional=true, cascade=CascadeType.ALL, mappedBy = "sample", fetch = FetchType.LAZY)
-	public CriticalRecord getCriticalRecord(){
-		return criticalRecord;
-	}
-	
-	public void setCriticalRecord(CriticalRecord cri){
-		this.criticalRecord = cri;
-	}
-	
-	/**
-	 * 检验病人
-	 */
-	@ManyToOne(optional=true, fetch = FetchType.LAZY, cascade=CascadeType.MERGE)
-	@JoinColumn(name="patientblh",referencedColumnName="blh")
-	public Patient getPatient(){
-		return patient;
-	}
-	
-	public void setPatient(Patient patient){
-		this.patient = patient; 
 	}
 	
 	public String toString() {

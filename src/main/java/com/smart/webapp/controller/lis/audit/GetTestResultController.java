@@ -65,7 +65,9 @@ public class GetTestResultController extends BaseAuditController {
 		}
 		
 		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
-
+		Process process = processManager.getBySampleId(info.getId());
+		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
+		
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		Map<String, String> resultMap3 = new HashMap<String, String>();
@@ -74,19 +76,41 @@ public class GetTestResultController extends BaseAuditController {
 		int isLastYear = 5;
 		int isLastTwoYear = 5;
 		if (info != null) {
-			String lab = info.getSection().getCode();
+			String lab = info.getSectionId();
 			if(likeLabMap.containsKey(lab)) {
 				lab = likeLabMap.get(lab);
 			}
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh(), lab);
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatientblh(), lab);
+			String hisSampleId = "";
+			String hisSampleNo = "";
+			for(Sample sample : list) {
+				hisSampleId += sample.getId() + ",";
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
+			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			for(Process p : processList) {
+				hisProcessMap.put(p.getSampleid(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
+			
 			Date receivetime = null;
-			receivetime = info.getProcess().getReceivetime();
+			receivetime = process.getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
 			int index = 0;
 			Map<String, String> rmap = null;
-			Set<TestResult> now = info.getResults();
 			Set<String> testIdSet = new HashSet<String>();
-			for (TestResult t : now) {
+			for (TestResult t : testResults) {
 				testIdSet.add(t.getTestId());
 			}
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
@@ -95,7 +119,7 @@ public class GetTestResultController extends BaseAuditController {
 			if(list!=null && list.size()>0){
 			for (Sample pinfo : list) {
 				boolean isHis = false;
-				Set<TestResult> his = pinfo.getResults();
+				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
 				for (TestResult test: his) {
 					String testid = test.getTestId();
 					Set<String> sameTests = util.getKeySet(testid);
@@ -111,7 +135,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				Date preceivetime = null;
-				preceivetime = pinfo.getProcess().getReceivetime();
+				preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
 				if (preceivetime == null || pinfo.getSampleNo() == null) {
 					continue;
 				}
@@ -137,7 +161,7 @@ public class GetTestResultController extends BaseAuditController {
 						rmap = resultMap5;
 						break;
 					}
-					for (TestResult result : pinfo.getResults()) {
+					for (TestResult result : his) {
 						rmap.put(result.getTestId(), result.getTestResult());
 					}
 					if (!"".equals(hisDate)) {
@@ -171,8 +195,6 @@ public class GetTestResultController extends BaseAuditController {
 			}
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		
-		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
 		
 		for (TestResult tr : testResults) {
 			if (tr.getEditMark() == Constants.DELETE_FLAG)
@@ -276,30 +298,54 @@ public class GetTestResultController extends BaseAuditController {
 		}
 
 		Sample info = sampleManager.getListBySampleNo(sampleNo).get(0);
+		Process process = processManager.getBySampleId(info.getId());
+		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
+		
 		Map<String, String> resultMap1 = new HashMap<String, String>();
 		Map<String, String> resultMap2 = new HashMap<String, String>();
 		int isLastYear = 2;
 		if (info != null) {
-			String lab = info.getSection().getCode();
+			String lab = info.getSectionId();
 			if(likeLabMap.containsKey(lab)) {
 				lab = likeLabMap.get(lab);
 			}
-			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatient().getBlh(), lab);
+			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatientblh(), lab);
+			String hisSampleId = "";
+			String hisSampleNo = "";
+			for(Sample sample : list) {
+				hisSampleId = sample.getId() + ",";
+				hisSampleNo = "'" + sample.getSampleNo() + "',";
+			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			for(Process p : processList) {
+				hisProcessMap.put(p.getSampleid(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
 			Date receivetime = null;
-			receivetime = info.getProcess().getReceivetime();
+			receivetime = process.getReceivetime();
 			long curInfoReceiveTime = receivetime.getTime();
 			int index = 0;
 			Map<String, String> rmap = null;
-			Set<TestResult> now = info.getResults();
 			Set<String> testIdSet = new HashSet<String>();
-			for (TestResult t : now) {
+			for (TestResult t : testResults) {
 				testIdSet.add(t.getTestId());
 			}
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
 			if(list!=null && list.size()>0){
 				for (Sample pinfo : list) {
 					boolean isHis = false;
-					Set<TestResult> his = pinfo.getResults();
+					List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
 					for (TestResult test: his) {
 						String testid = test.getTestId();
 						Set<String> sameTests = util.getKeySet(testid);
@@ -316,7 +362,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 					int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
 					Date preceivetime = null;
-					preceivetime = pinfo.getProcess().getReceivetime();
+					preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
 					if (preceivetime == null || pinfo.getSampleNo() == null) {
 						continue;
 					}
@@ -333,7 +379,7 @@ public class GetTestResultController extends BaseAuditController {
 							rmap = resultMap2;
 							break;
 						}
-						for (TestResult result : pinfo.getResults()) {
+						for (TestResult result : his) {
 							rmap.put(result.getTestId(), result.getTestResult());
 						}
 						if (!"".equals(hisDate)) {
@@ -366,7 +412,6 @@ public class GetTestResultController extends BaseAuditController {
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> dataRows2 = new ArrayList<Map<String, Object>>();
 		int i = 2;
-		List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
 		for (TestResult tr : testResults) {
 			if (tr.getEditMark() == Constants.DELETE_FLAG)
 				continue;

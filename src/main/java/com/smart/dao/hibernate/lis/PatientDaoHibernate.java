@@ -1,5 +1,7 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -11,6 +13,20 @@ public class PatientDaoHibernate extends GenericDaoHibernate<Patient, Long> impl
 
 	public PatientDaoHibernate() {
 		super(Patient.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Patient getByBlh(String blh) {
+		List<Patient> list = getSession().createQuery("from Patient where blh='" + blh + "'").list();
+		if(list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Patient> getHisPatient(String blhs) {
+		return getSession().createQuery("from Patient where blh in (" + blhs + ")").list();
 	}
 
 }

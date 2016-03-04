@@ -1,6 +1,7 @@
 package com.smart.check;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.drools.Ratio;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestResult;
 import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.AuditUtil;
 
@@ -23,10 +25,10 @@ public class RatioCheck implements Check {
 		this.ratioMap = AuditUtil.getDealRatio(ruleManager);
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 		
 		boolean result = true;
-		Set<String> ratioResult = droolsRunner.getRatioCheckResult(info.getResults(), ratioMap);
+		Set<String> ratioResult = droolsRunner.getRatioCheckResult(list, ratioMap);
 		if (ratioResult.size() != 0) {
 			String markTests = info.getMarkTests();
 			result = false;
@@ -54,7 +56,7 @@ public class RatioCheck implements Check {
 		return result;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 		return false;
 	}
 

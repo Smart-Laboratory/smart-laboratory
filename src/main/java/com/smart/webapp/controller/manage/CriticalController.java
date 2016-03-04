@@ -26,6 +26,7 @@ import com.smart.Constants;
 import com.smart.model.lis.ContactInfor;
 import com.smart.model.lis.Critical;
 import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ward;
 import com.smart.model.lis.Process;
@@ -33,10 +34,11 @@ import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
+import com.smart.service.lis.PatientManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.WardManager;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.model.Patient;
 
 
 @Controller
@@ -55,46 +57,37 @@ public class CriticalController {
 		String lab = operator.getLastLab();
 		List<Sample> samples = sampleManager.getSampleList(Constants.DF3.format(new Date()),
 				operator.getDepartment(), "", 6, -3);
+		String hisSampleId = "";
+		String hisBlh = "";
+		for(Sample sample : samples) {
+			hisSampleId += sample.getId() + ",";
+			hisBlh += "'" + sample.getPatientblh() + "',";
+		}
+		List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+		List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
+		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+		Map<Long, Process> processMap = new HashMap<Long, Process>();
+		Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
+		Map<String, Patient> pMap = new HashMap<String, Patient>();
+		for(Process p : processList) {
+			processMap.put(p.getSampleid(), p);
+		}
+		for(CriticalRecord cr : crList) {
+			crMap.put(cr.getSampleid(), cr);
+		}
+		for(Patient p : patientList) {
+			pMap.put(p.getBlh(), p);
+		}
 		List<Critical> criticals = new ArrayList<Critical>();
-		StringBuilder patientIds = new StringBuilder();
-		Iterator<Sample> It = samples.iterator();
-		while (It.hasNext()) {
-			Sample sample = It.next();
-			if (sample.getCriticalRecord().getCriticalDealFlag() == 1) {
-				It.remove();
-				continue;
-			}
-			if (sample.getPatientId() != null && StringUtils.isEmpty(sample.getPatient().getBlh())) {
-				patientIds.append("'");
-				patientIds.append(sample.getPatientId());
-				patientIds.append("',");
-			}
-		}
-		String pStr = patientIds.toString();
-		List<Patient> patients = new ArrayList<Patient>();
-		if (!StringUtils.isEmpty(pStr)) {
-			pStr = pStr.substring(0, pStr.length() - 1);
-			try {
-				//patients = syncManager.getPatientList(pStr);
-				patients = rmiService.getPatientList(pStr);
-			} catch (Exception e) {
-				log.error("病人信息获取失败", e);
-			}
-		}
-		Map<String, Patient> patientMap = new HashMap<String, Patient>();
-		for (Patient p : patients) {
-			patientMap.put(p.getPatientId(), p);
-		}
-
 		int index = 0;
 		for (Sample sample : samples) {
-			if (sample.getSection().getCode().equals(lab)) {
+			if (sample.getSectionId().equals(lab)) {
 				Critical ctl = new Critical();
 				ctl.setId(++index);
 				ctl.setDocId(sample.getId());
-				ctl.setBlh(sample.getPatient().getBlh());
+				ctl.setBlh(sample.getPatientblh());
 				ctl.setSampleNo(sample.getSampleNo());
-				ctl.setRequester(sample.getProcess().getRequester());
+				ctl.setRequester(processMap.get(sample.getId()).getRequester());
 				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
@@ -103,14 +96,8 @@ public class CriticalController {
 					ctl.setSection(section);
 				}
 				ctl.setPatientId(sample.getPatientId());
-				ctl.setPatientName(sample.getPatient().getPatientName());
-				ctl.setInfoValue(sample.getCriticalRecord().getCriticalContent());
-				if (patientMap.containsKey(sample.getPatientId())) {
-					Patient p = patientMap.get(sample.getPatientId());
-					//ctl.setPatientAddress(p.getAddress());
-					//ctl.setPatientPhone(p.getPhone());
-					ctl.setBlh(p.getBlh());
-				}
+				ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+				ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
 				criticals.add(ctl);
 			}
 		}
@@ -144,23 +131,44 @@ public class CriticalController {
 		
 		List<Sample> samples = sampleManager.getSampleList(date, operator.getDepartment(),
 				"", 6, -3);
+		String hisSampleId = "";
+		String hisBlh = "";
+		for(Sample sample : samples) {
+			hisSampleId += sample.getId() + ",";
+			hisBlh += "'" + sample.getPatientblh() + "',";
+		}
+		List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+		List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
+		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+		Map<Long, Process> processMap = new HashMap<Long, Process>();
+		Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
+		Map<String, Patient> pMap = new HashMap<String, Patient>();
+		for(Process p : processList) {
+			processMap.put(p.getSampleid(), p);
+		}
+		for(CriticalRecord cr : crList) {
+			crMap.put(cr.getSampleid(), cr);
+		}
+		for(Patient p : patientList) {
+			pMap.put(p.getBlh(), p);
+		}
 		List<Critical> criticals = new ArrayList<Critical>();
 		StringBuilder patientIds = new StringBuilder();
 		Iterator<Sample> It = samples.iterator();
 		while (It.hasNext()) {
 			Sample sample = It.next();
-			if (sample.getCriticalRecord().getCriticalDealFlag() != 1) {
+			if (crMap.get(sample.getId()).getCriticalDealFlag() != 1) {
 				It.remove();
 				continue;
 			}
-			if (sample.getPatientId() != null && StringUtils.isEmpty(sample.getPatient().getBlh())) {
+			if (sample.getPatientId() != null && StringUtils.isEmpty(sample.getPatientblh())) {
 				patientIds.append("'");
 				patientIds.append(sample.getPatientId());
 				patientIds.append("',");
 			}
 		}
 		String pStr = patientIds.toString();
-		List<Patient> patients = new ArrayList<Patient>();
+		List<com.zju.api.model.Patient> patients = new ArrayList<com.zju.api.model.Patient>();
 		if (!StringUtils.isEmpty(pStr)) {
 			pStr = pStr.substring(0, pStr.length() - 1);
 			try {
@@ -170,22 +178,22 @@ public class CriticalController {
 				log.error("病人信息获取失败", e);
 			}
 		}
-		Map<String, Patient> patientMap = new HashMap<String, Patient>();
-		for (Patient p : patients) {
+		Map<String, com.zju.api.model.Patient> patientMap = new HashMap<String, com.zju.api.model.Patient>();
+		for (com.zju.api.model.Patient p : patients) {
 			patientMap.put(p.getPatientId(), p);
 		}
 
 		int index = 0;
 		for (Sample sample : samples) {
-			if (sample.getSection().getCode().equals(lab)) {
+			if (sample.getSectionId().equals(lab)) {
 				Critical ctl = new Critical();
 				ctl.setId(++index);
-				ctl.setDealTime(sample.getCriticalRecord().getCriticalDealTime());
-				ctl.setDealPerson(sample.getCriticalRecord().getCriticalDealPerson());
+				ctl.setDealTime(crMap.get(sample.getId()).getCriticalDealTime());
+				ctl.setDealPerson(crMap.get(sample.getId()).getCriticalDealPerson());
 				ctl.setDocId(sample.getId());
-				ctl.setBlh(sample.getPatient().getBlh());
+				ctl.setBlh(sample.getPatientblh());
 				ctl.setSampleNo(sample.getSampleNo());
-				ctl.setRequester(sample.getProcess().getRequester());
+				ctl.setRequester(processMap.get(sample.getId()).getRequester());
 				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
@@ -194,10 +202,10 @@ public class CriticalController {
 					ctl.setSection(section);
 				}
 				ctl.setPatientId(sample.getPatientId());
-				ctl.setPatientName(sample.getPatient().getPatientName());
-				ctl.setInfoValue(sample.getCriticalRecord().getCriticalContent());
+				ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+				ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
 				if (patientMap.containsKey(sample.getPatientId())) {
-					Patient p = patientMap.get(sample.getPatientId());
+					com.zju.api.model.Patient p = patientMap.get(sample.getPatientId());
 					ctl.setPatientAddress(p.getAddress());
 					ctl.setPatientPhone(p.getPhone());
 					ctl.setBlh(p.getBlh());
@@ -222,9 +230,9 @@ public class CriticalController {
 			String success = request.getParameter("success");
 
 			Sample info = sampleManager.get(Long.parseLong(docId));
-			CriticalRecord cr = info.getCriticalRecord();
+			CriticalRecord cr = criticalRecordManager.getBySampleId(info.getId());
 			if (Integer.valueOf(success) == 1) {
-				info.getCriticalRecord().setCriticalDealFlag(1);
+				cr.setCriticalDealFlag(1);
 				cr.setIsTesterDealed(1);
 			}
 			switch (Integer.valueOf(role)) {
@@ -241,7 +249,7 @@ public class CriticalController {
 				role = DOCTOR;
 				break;
 			}
-			String orignal = info.getCriticalRecord().getCriticalDeal();
+			String orignal = cr.getCriticalDeal();
 			String curInfo = request.getRemoteUser() + "在"
 					+ Constants.DF.format(new Date()) + "联系" + role + target;
 			if (!"1".equals(success)) {
@@ -290,9 +298,9 @@ public class CriticalController {
 
 		String docId = request.getParameter("docId");
 		Sample info = sampleManager.get(Long.parseLong(docId));
-		String dealInfo = info.getCriticalRecord().getCriticalDeal();
+		String dealInfo = criticalRecordManager.getBySampleId(info.getId()).getCriticalDeal();
 		String requester = "";
-		requester = info.getProcess().getRequester();
+		requester = processManager.getBySampleId(info.getId()).getRequester();
 		ContactInfor contactInfor= contactManager.get(requester);
 		
 		JSONObject root = new JSONObject();
@@ -302,7 +310,7 @@ public class CriticalController {
 			root.put("history", dealInfo);
 		}
 		try {
-			List<Patient> patient = rmiService.getPatientList("'"
+			List<com.zju.api.model.Patient> patient = rmiService.getPatientList("'"
 					+ info.getPatientId() + "'");
 
 			if (patient.size() == 1) {
@@ -372,4 +380,10 @@ public class CriticalController {
 	
 	@Autowired
 	private CriticalRecordManager criticalRecordManager = null;
+	
+	@Autowired
+	private ProcessManager processManager = null;
+	
+	@Autowired
+	private PatientManager patientManager = null;
 }

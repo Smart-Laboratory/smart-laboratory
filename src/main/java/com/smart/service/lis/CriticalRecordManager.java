@@ -9,4 +9,8 @@ public interface CriticalRecordManager extends GenericManager<CriticalRecord, Lo
 
 	void saveAll(List<CriticalRecord> updateCriticalRecord);
 
+	CriticalRecord getBySampleId(Long id);
+
+	List<CriticalRecord> getBySampleIds(String ids);
+
 }

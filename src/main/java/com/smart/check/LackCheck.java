@@ -25,7 +25,7 @@ public class LackCheck implements Check {
 		this.idMap = idMap;
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 
 		boolean result = true;
 		Set<String> lackSet = new HashSet<String>();
@@ -58,10 +58,9 @@ public class LackCheck implements Check {
 			}
 
 			// 提取testId的set集
-			Set<TestResult> set = info.getResults();
 			Set<String> testIdSet = new HashSet<String>();
-			if (set != null) {
-				for (TestResult r : set)
+			if (list != null) {
+				for (TestResult r : list)
 					if(idMap.containsKey(r.getTestId())) {
 						testIdSet.add(r.getTestId());
 					}
@@ -113,7 +112,7 @@ public class LackCheck implements Check {
 		return result;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 		return false;
 	}
 

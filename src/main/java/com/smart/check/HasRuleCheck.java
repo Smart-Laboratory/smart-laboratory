@@ -1,5 +1,6 @@
 package com.smart.check;
 
+import java.util.List;
 import java.util.Set;
 
 import com.smart.drools.R;
@@ -15,10 +16,10 @@ public class HasRuleCheck implements Check {
 		this.hasRuleSet = hasRuleSet;
 	}
 
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 		
 		boolean result = false;
-		for(TestResult t : info.getResults()) {
+		for(TestResult t : list) {
 			String testid = t.getTestId();
 			if(hasRuleSet.contains(testid)) {
 				result = true;
@@ -41,7 +42,7 @@ public class HasRuleCheck implements Check {
 		return result;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 		return false;
 	}
 

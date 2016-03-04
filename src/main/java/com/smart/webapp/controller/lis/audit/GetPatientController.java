@@ -3,6 +3,7 @@ package com.smart.webapp.controller.lis.audit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smart.Constants;
 import com.smart.Dictionary;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Item;
@@ -63,7 +66,11 @@ public class GetPatientController extends BaseAuditController {
 			initDiagMap();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
-		if(info.getPatient()==null){
+		Patient patient = patientManager.getByBlh(info.getPatientblh());
+		Process process = processManager.getBySampleId(info.getId());
+		CriticalRecord cr = criticalRecordManager.getBySampleId(info.getId());
+		List<TestResult> list = testResultManager.getTestBySampleNo(info.getSampleNo());
+		if(patient == null){
 			return null;
 		}
 		
@@ -71,8 +78,8 @@ public class GetPatientController extends BaseAuditController {
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		if (info != null) {
 			map.put("id", info.getId());
-			map.put("name", info.getPatient().getPatientName());
-			map.put("age", String.valueOf(info.getPatient().getAge()));
+			map.put("name", patient.getPatientName());
+			map.put("age", String.valueOf(patient.getAge()));
 			if(info.getInspectionName() != null) {
 				map.put("examinaim", info.getInspectionName());
 			} else {
@@ -90,8 +97,8 @@ public class GetPatientController extends BaseAuditController {
 
 			String note = info.getNotes();
 			Set<String> testIds = new HashSet<String>();
-			int size = info.getResults().size();
-			for (TestResult t : info.getResults()) {
+			int size = list.size();
+			for (TestResult t : list) {
 				testIds.add(t.getTestId());
 				if (t.getEditMark() == 7) {
 					size--;
@@ -116,29 +123,29 @@ public class GetPatientController extends BaseAuditController {
 
 			map.put("reason", note);
 			map.put("mark", info.getAuditMark());
-			map.put("sex", info.getPatient().getSexValue());
+			map.put("sex", patient.getSexValue());
 			map.put("hasImages", info.getHasimages() == 0 ? false : true);
-			map.put("blh", info.getPatient().getBlh());
+			map.put("blh", info.getPatientblh());
 			
 			String code = info.getSampleNo().substring(8, 11);
 			map.put("requester", "");
 			map.put("isOverTime", false);
-			map.put("requester", info.getProcess().getRequester());
+			map.put("requester", process.getRequester());
 			if(slgiMap.containsKey(code)) {
 				long exceptTime = slgiMap.get(code) * 60 * 1000;
-				long df = new Date().getTime() - info.getProcess().getReceivetime().getTime();
+				long df = new Date().getTime() - process.getReceivetime().getTime();
 				if (info.getAuditStatus()<5 && df>exceptTime) {
 					map.put("isOverTime", true);
 				}
 			}
 			map.put("type",
 					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
-			if(info.getCriticalRecord() != null) {
-				map.put("dgFlag", info.getCriticalRecord().getCriticalDealFlag());
-				map.put("dgInfo", info.getCriticalRecord().getCriticalDeal());
+			if(cr != null) {
+				map.put("dgFlag", cr.getCriticalDealFlag());
+				map.put("dgInfo", cr.getCriticalDeal());
 				String dealTimeStr = "";
-				if (info.getCriticalRecord().getCriticalDealTime() != null) {
-					dealTimeStr = Constants.SDF.format(info.getCriticalRecord().getCriticalDealTime());
+				if (cr.getCriticalDealTime() != null) {
+					dealTimeStr = Constants.SDF.format(cr.getCriticalDealTime());
 				}
 				map.put("dgTime", dealTimeStr);
 			}

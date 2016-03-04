@@ -24,5 +24,13 @@ public class CriticalRecordManagerImpl extends GenericManagerImpl<CriticalRecord
 	public void saveAll(List<CriticalRecord> updateCriticalRecord) {
 		criticalRecordDao.saveAll(updateCriticalRecord);		
 	}
+
+	public CriticalRecord getBySampleId(Long sampleid) {
+		return criticalRecordDao.getBySampleId(sampleid);
+	}
+
+	public List<CriticalRecord> getBySampleIds(String ids) {
+		return criticalRecordDao.getBySampleIds(ids);
+	}
 	
 }

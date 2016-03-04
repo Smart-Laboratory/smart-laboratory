@@ -1,6 +1,7 @@
 package com.smart.check;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import com.zju.api.service.RMIService;
@@ -19,13 +20,13 @@ public class JyzCheck implements Check {
 		this.rmiService = rmiService;
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 		
 		boolean result = false;
 		String profileName = info.getSampleNo().substring(8, 11);
 		String deviceId = null;
 		
-		for (TestResult tr : info.getResults()) {
+		for (TestResult tr : list) {
 			deviceId = tr.getDeviceId();
 			break;
 		}
@@ -53,7 +54,7 @@ public class JyzCheck implements Check {
 		return result;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 		return false;
 	}
 

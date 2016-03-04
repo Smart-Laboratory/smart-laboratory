@@ -5,4 +5,6 @@ import com.smart.dao.GenericDao;
 
 public interface SectionDao extends GenericDao<Section,Long>{
 
+	Section getByCode(String sectionId);
+
 }

@@ -76,7 +76,7 @@ public class DroolsRunner {
 		}
 	}
 	
-	public Set<String> getDiffCheckResult(Set<TestResult> result, Set<TestResult> l_result, Map<String, Diff> diff) {
+	public Set<String> getDiffCheckResult(List<TestResult> result, List<TestResult> l_result, Map<String, Diff> diff) {
 		Set<String> diffRes = new HashSet<String>();
 		Map<String, TestResult> map = new HashMap<String, TestResult>();
 		for (TestResult t : result) {
@@ -138,7 +138,7 @@ public class DroolsRunner {
 		return diffRes;
 	}
 
-	public Set<String> getRatioCheckResult(Set<TestResult> results, Map<String, Ratio> ratio) {
+	public Set<String> getRatioCheckResult(List<TestResult> results, Map<String, Ratio> ratio) {
 		Set<String> ratioRes = new HashSet<String>();
 		Map<String, TestResult> map = new HashMap<String, TestResult>();
 		for (TestResult t : results) {

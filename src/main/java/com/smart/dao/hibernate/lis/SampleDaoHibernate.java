@@ -44,9 +44,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		
 		StringBuilder builder = new StringBuilder();
 		if(lab.contains(",")) {
-			builder.append("from Sample where section.code in (" + lab + ")");
+			builder.append("from Sample where sectionId in (" + lab + ")");
 		} else {
-			builder.append("from Sample where section.code=" + lab);
+			builder.append("from Sample where sectionId=" + lab);
 		}
 		if (status == -3) {
 			// all
@@ -97,11 +97,6 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		q.setFirstResult(0);
 		q.setMaxResults(100);  
 		List<Sample> list = q.list();
-		for(Sample s : list) {
-			s.getPatient();
-			s.getResults().size();
-			s.getProcess();
-		}
 		return list;
 	}
 
@@ -117,7 +112,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
 		
 		if(blh != null){
-			return getSession().createQuery("from Sample s where s.patient.blh ='" + blh + "' and s.section.code in (" + lab + ")  order by s.id desc").list();
+			return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId in (" + lab + ")  order by s.id desc").list();
 		}
 		return null;
 	}
@@ -132,11 +127,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	        Date fromdate = calendar.getTime();
 	        String from = Constants.DF3.format(fromdate);
 	        List<Sample> infos = getSession().createQuery(
-	                "from Sample s where (s.patientId='" + patientid + "' or s.patientId='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
-	                        + sampleno + "' and s.section.code in (" + lab + ") order by s.sampleNo desc").list();
-	        for(Sample s : infos) {
-	        	s.getResults().size();
-	        }
+	                "from Sample s where (s.patientblh='" + patientid + "' or s.patientblh='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
+	                        + sampleno + "' and s.sectionId in (" + lab + ") order by s.sampleNo desc").list();
 	        return infos;
 		} catch (ParseException e) {
 			//e.printStackTrace();
@@ -159,7 +151,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		
 		String[] cds = code.split(",");
 		StringBuilder builder = new StringBuilder();
-		builder.append("select count(p) from Sample p where p.section.code");
 		if (department.contains(",")) {
 			builder.append(" in (");
 			builder.append(department);
@@ -185,9 +176,12 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		builder.append(bld.toString());
 		
 		
-		int unaudit = ((Number)getSession().createQuery(builder.toString() + " and p.auditStatus=0").uniqueResult()).intValue();
-		int unpass = ((Number)getSession().createQuery(builder.toString() + " and p.auditStatus=2").uniqueResult()).intValue(); 
-		int danger = ((Number)getSession().createQuery(builder.toString() + " and p.auditMark=6 and p.criticalRecord.criticalDealFlag=0").uniqueResult()).intValue(); 
+		int unaudit = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
+				builder.toString() + " and p.auditStatus=0").uniqueResult()).intValue();
+		int unpass = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
+				builder.toString() + " and p.auditStatus=2").uniqueResult()).intValue();
+		int danger = ((Number)getSession().createQuery("select count(p) from Sample p, CriticalRecord c where c.sampleid = p.id and p.sectionId" + 
+				builder.toString() + " and p.auditMark=6 and c.criticalDealFlag=0").uniqueResult()).intValue(); 
 		
 		List<Integer> list = new ArrayList<Integer>();
 		list.add(unaudit);
@@ -207,16 +201,16 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' and s.time between to_date('" + from + " 00:00:00','"
 //                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
 //                    + "') order by s.time desc";
-		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' ";
+		String hql = "select s from Sample s,Patient p where s.patientblh=p.blh and p.patientName='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
-			hql+="and s.receivetime between '"+ from+"' and '" + to + "' order by s.receivetime desc";
+			hql+="and s.sampleNo>'"+ from+"' and s.sampleNo<'" + to + "Z' order by s.sampleNo desc";
 		}
 		return getSession().createQuery(hql).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end) {
-		String sql = "from Sample s where s.section.code in (" + lab + ") ";
+		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
 		String[] cds = code.split(",");
 		switch (text.length()) {
 		case 8:
@@ -283,7 +277,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	}
 
 	public int getSampleCount(String text, String lab, int mark, int status, String code) {
-		String sql = "select count(s.id) from Sample s where s.section.code in (" + lab + ") ";
+		String sql = "select count(s.id) from Sample s where s.sectionId in (" + lab + ") ";
 		String[] cds = code.split(",");
 		switch (text.length()) {
 		case 8:
@@ -376,5 +370,10 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			nwcList.add(nwc);
 		}
 		return nwcList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getByIds(String ids) {
+		return getSession().createQuery("from Sample where id in (" + ids + ")").list();
 	}
 }

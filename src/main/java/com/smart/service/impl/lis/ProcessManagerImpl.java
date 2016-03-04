@@ -1,5 +1,7 @@
 package com.smart.service.impl.lis;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,14 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 
 	public void removeBySampleId(long id) {
 		processDao.removeBySampleId(id);
+	}
+
+	public Process getBySampleId(Long sampleid) {
+		return processDao.getBySampleId(sampleid);
+	}
+
+	public List<Process> getHisProcess(String sampleids) {
+		return processDao.getHisProcess(sampleids);
 	}
 	
 }

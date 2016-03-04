@@ -23,11 +23,11 @@ public class Alarm3Check implements Check {
 		this.ruleManager = ruleManager;
 	}
 	
-	public boolean doCheck(Sample info) {
+	public boolean doCheck(Sample info, List<TestResult> list) {
 		return false;
 	}
 
-	public boolean doCheck(Sample info, R r) {
+	public boolean doCheck(Sample info, R r, List<TestResult> list) {
 
 		boolean result = true;
 		String ruleId = CheckUtil.toString(r.getRuleIds());
@@ -35,7 +35,7 @@ public class Alarm3Check implements Check {
 		String markTests = info.getMarkTests();
 		String note = info.getNotes();
 		Map<String, TestResult> trMap = new HashMap<String, TestResult>();
-		for (TestResult tr : info.getResults())
+		for (TestResult tr : list)
 			trMap.put(tr.getTestId(), tr);
 		
 		for (Rule rule : ruleManager.getRuleList(ruleId)) {
@@ -61,13 +61,13 @@ public class Alarm3Check implements Check {
 		return result;
 	}
 
-	public void doCheck(Sample info, R r, Map<String, Boolean> diffTests) {
+	public void doCheck(Sample info, R r, Map<String, Boolean> diffTests, List<TestResult> list) {
 		boolean result = true;
 		String ruleId = CheckUtil.toString(r.getRuleIds());
 
 		String markTests = info.getMarkTests();
 		Map<String, TestResult> trMap = new HashMap<String, TestResult>();
-		for (TestResult tr : info.getResults())
+		for (TestResult tr : list)
 			trMap.put(tr.getTestId(), tr);
 		
 		for (Rule rule : ruleManager.getRuleList(ruleId)) {
