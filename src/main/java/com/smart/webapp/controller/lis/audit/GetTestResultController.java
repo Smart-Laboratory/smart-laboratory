@@ -120,18 +120,20 @@ public class GetTestResultController extends BaseAuditController {
 			for (Sample pinfo : list) {
 				boolean isHis = false;
 				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
-				for (TestResult test: his) {
-					String testid = test.getTestId();
-					Set<String> sameTests = util.getKeySet(testid);
-					sameTests.add(testid);
-					for (String id : sameTests) {
-						if (testIdSet.contains(id)) {
-							isHis = true;
+				if(his != null) {
+					for (TestResult test: his) {
+						String testid = test.getTestId();
+						Set<String> sameTests = util.getKeySet(testid);
+						sameTests.add(testid);
+						for (String id : sameTests) {
+							if (testIdSet.contains(id)) {
+								isHis = true;
+								break;
+							}
+						}
+						if (isHis) {
 							break;
 						}
-					}
-					if (isHis) {
-						break;
 					}
 				}
 				Date preceivetime = null;
@@ -313,8 +315,8 @@ public class GetTestResultController extends BaseAuditController {
 			String hisSampleId = "";
 			String hisSampleNo = "";
 			for(Sample sample : list) {
-				hisSampleId = sample.getId() + ",";
-				hisSampleNo = "'" + sample.getSampleNo() + "',";
+				hisSampleId += sample.getId() + ",";
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
 			}
 			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
@@ -346,18 +348,20 @@ public class GetTestResultController extends BaseAuditController {
 				for (Sample pinfo : list) {
 					boolean isHis = false;
 					List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
-					for (TestResult test: his) {
-						String testid = test.getTestId();
-						Set<String> sameTests = util.getKeySet(testid);
-						sameTests.add(testid);
-						for (String id : sameTests) {
-							if (testIdSet.contains(id)) {
-								isHis = true;
+					if(his != null) {
+						for (TestResult test: his) {
+							String testid = test.getTestId();
+							Set<String> sameTests = util.getKeySet(testid);
+							sameTests.add(testid);
+							for (String id : sameTests) {
+								if (testIdSet.contains(id)) {
+									isHis = true;
+									break;
+								}
+							}
+							if (isHis) {
 								break;
 							}
-						}
-						if (isHis) {
-							break;
 						}
 					}
 					int year = Integer.parseInt(info.getSampleNo().substring(0, 4));

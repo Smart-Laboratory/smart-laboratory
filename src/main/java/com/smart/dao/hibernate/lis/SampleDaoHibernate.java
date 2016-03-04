@@ -13,8 +13,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,16 +30,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
         super(Sample.class);
     }
 	
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
-
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
 		if (StringUtils.isEmpty(lab)) {
 			return null;
 		}
-		
-//		if(jdbcTemplate == null)
-//			jdbcTemplate = new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 		
 		if (StringUtils.isEmpty(date)) {
 			date = "________";
@@ -197,7 +190,8 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		list.add(danger);
 		
 		if (!date.equals("________")) {
-			int needwriteBack = ((Number)getSession().createQuery(builder.toString() + " and p.writeback!=0").uniqueResult()).intValue(); 
+			int needwriteBack = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
+					builder.toString() + " and p.writeback!=0").uniqueResult()).intValue(); 
 			list.add(needwriteBack);
 		}
 		
@@ -350,11 +344,10 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		return new Integer(q.uniqueResult() + "");
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<NeedWriteCount> getAllWriteBack(String date) {
-		JdbcTemplate jdbcTemplate =
-                new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 		String sql = "select sampleno from l_sample where sampleno like '" + date + "%' and writeback=1";
-		List<String> list = jdbcTemplate.queryForList(sql, String.class);
+		List<String> list = getSession().createSQLQuery(sql).list();
 		Map<String, Integer> cMap = new HashMap<String, Integer>();
 		Map<String, String> sMap = new HashMap<String, String>();
 		for(String s : list) {

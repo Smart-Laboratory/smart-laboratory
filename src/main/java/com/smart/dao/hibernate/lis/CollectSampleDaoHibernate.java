@@ -4,8 +4,6 @@ import java.util.List;
 
 
 import org.hibernate.Query;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -58,11 +56,10 @@ public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample
 	    return q.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> getAllCollectType() {
-		JdbcTemplate jdbcTemplate =
-                new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
         String sql = "select distinct type from l_collectsample";
-        return jdbcTemplate.queryForList(sql, String.class);
+        return getSession().createSQLQuery(sql).list();
 	}
 
 	@SuppressWarnings("unchecked")

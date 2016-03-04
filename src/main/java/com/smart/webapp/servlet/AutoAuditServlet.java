@@ -132,7 +132,7 @@ public class AutoAuditServlet extends HttpServlet {
             final Alarm2Check alarm2Check = new Alarm2Check(ruleManager);
             final Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
             final ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
-            System.out.println("初始化常量完成");
+            System.out.println("初始化常量完成" + (System.currentTimeMillis()-start) + "毫秒");
             Thread autoAudit = new Thread(new Runnable(){
 				public void run() {
 					int autocount = 0;
@@ -141,32 +141,31 @@ public class AutoAuditServlet extends HttpServlet {
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
-                    	String hisBlh = "";
-            			String hisSampleNo = "";
-            			for(Sample sample : needAuditSamples) {
-            				hisBlh += "'" + sample.getPatientblh() + "',";
-            				hisSampleNo += "'" + sample.getSampleNo() + "',";
-            			}
-            			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
-            			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-            			final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
-            			final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
-            			for(Patient p : patientList) {
-            				hisPatientMap.put(p.getBlh(), p);
-            			}
-            			for(TestResult tr : testList) {
-            				if(StringUtils.isNumeric(tr.getTestId())) {
-            					if(hisTestMap.containsKey(tr.getSampleNo())) {
-                					hisTestMap.get(tr.getSampleNo()).add(tr);
-                				} else {
-                					List<TestResult> tlist = new ArrayList<TestResult>();
-                					tlist.add(tr);
-                					hisTestMap.put(tr.getSampleNo(), tlist);
-                				}
-            				}
-            			}
-                    	
                     	if (needAuditSamples != null && needAuditSamples.size() > 0) {
+                    		String hisBlh = "";
+                			String hisSampleNo = "";
+                			for(Sample sample : needAuditSamples) {
+                				hisBlh += "'" + sample.getPatientblh() + "',";
+                				hisSampleNo += "'" + sample.getSampleNo() + "',";
+                			}
+                			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+                			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+                			final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
+                			final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+                			for(Patient p : patientList) {
+                				hisPatientMap.put(p.getBlh(), p);
+                			}
+                			for(TestResult tr : testList) {
+                				if(StringUtils.isNumeric(tr.getTestId())) {
+                					if(hisTestMap.containsKey(tr.getSampleNo())) {
+                    					hisTestMap.get(tr.getSampleNo()).add(tr);
+                    				} else {
+                    					List<TestResult> tlist = new ArrayList<TestResult>();
+                    					tlist.add(tr);
+                    					hisTestMap.put(tr.getSampleNo(), tlist);
+                    				}
+                				}
+                			}
                     		for(int i = 0; i < 10; i++) {
                         		final int num = i;
                         		new Thread(new Runnable(){
@@ -199,41 +198,43 @@ public class AutoAuditServlet extends HttpServlet {
                     	        						lab = likeLabMap.get(lab);
                     	        					}
                 	    	        				List<Sample> list = sampleManager.getDiffCheck(info.getPatientId(), info.getPatientblh(), info.getSampleNo(), lab);
-                	    	        				String diffSampleNo = "";
-                	    	        				for(Sample s : list) {
-                	    	        					diffSampleNo += "'" + s.getSampleNo() + "',";
-                	    	        				}
-                	    	        				List<TestResult> hisTestList = testResultManager.getHisTestResult(diffSampleNo.substring(0, diffSampleNo.length()-1));
-                	    	        				Map<String, List<TestResult>> hisTest = new HashMap<String, List<TestResult>>();
-        	    	        						for(TestResult tr : hisTestList) {
-        	    	                    				if(hisTest.containsKey(tr.getSampleNo())) {
-        	    	                    					hisTest.get(tr.getSampleNo()).add(tr);
-        	    	                    				} else {
-        	    	                    					List<TestResult> tlist = new ArrayList<TestResult>();
-        	    	                    					tlist.add(tr);
-        	    	                    					hisTest.put(tr.getSampleNo(), tlist);
-        	    	                    				}
-        	    	                    			}
-                	    	        				for (Sample p : list) {
-                	    	        					boolean isHis = false;
-                	    	        					List<TestResult> his = hisTest.get(p.getSampleNo());
-                	    	        					if (p.getSampleNo().equals(info.getSampleNo()) || his == null) {
-                	    	        						continue;
-                	    	        					}
-                	    	        					for (TestResult t : his) {
-                	    	        						String testid = t.getTestId();
-                	    	        						Set<String> sameTests = util.getKeySet(testid);
-                	    	        						sameTests.add(testid);
-                	    	        						if (testIdSet.contains(t.getTestId())) {
-                	    	        							isHis = true;
-                	    	        							break;
-                	    	        						}
-                	    	        					}
-                	    	        					
-                	    	        					if (isHis) {
-                	    	        						diffData.put(info.getId(), his);
-                	    	        						break;
-                	    	        					}
+                	    	        				if(list.size() > 0) {
+                	    	        					String diffSampleNo = "";
+                    	    	        				for(Sample s : list) {
+                    	    	        					diffSampleNo += "'" + s.getSampleNo() + "',";
+                    	    	        				}
+                    	    	        				List<TestResult> hisTestList = testResultManager.getHisTestResult(diffSampleNo.substring(0, diffSampleNo.length()-1));
+                    	    	        				Map<String, List<TestResult>> hisTest = new HashMap<String, List<TestResult>>();
+            	    	        						for(TestResult tr : hisTestList) {
+            	    	                    				if(hisTest.containsKey(tr.getSampleNo())) {
+            	    	                    					hisTest.get(tr.getSampleNo()).add(tr);
+            	    	                    				} else {
+            	    	                    					List<TestResult> tlist = new ArrayList<TestResult>();
+            	    	                    					tlist.add(tr);
+            	    	                    					hisTest.put(tr.getSampleNo(), tlist);
+            	    	                    				}
+            	    	                    			}
+                    	    	        				for (Sample p : list) {
+                    	    	        					boolean isHis = false;
+                    	    	        					List<TestResult> his = hisTest.get(p.getSampleNo());
+                    	    	        					if (p.getSampleNo().equals(info.getSampleNo()) || his == null) {
+                    	    	        						continue;
+                    	    	        					}
+                    	    	        					for (TestResult t : his) {
+                    	    	        						String testid = t.getTestId();
+                    	    	        						Set<String> sameTests = util.getKeySet(testid);
+                    	    	        						sameTests.add(testid);
+                    	    	        						if (testIdSet.contains(t.getTestId())) {
+                    	    	        							isHis = true;
+                    	    	        							break;
+                    	    	        						}
+                    	    	        					}
+                    	    	        					
+                    	    	        					if (isHis) {
+                    	    	        						diffData.put(info.getId(), his);
+                    	    	        						break;
+                    	    	        					}
+                    	    	        				}
                 	    	        				}
                     	        				} catch (NumberFormatException e) {
                     	        					samples.remove(info);
@@ -290,6 +291,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    							info.setRuleIds(ruleId);
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
+                	    								cr.setSampleid(info.getId());
                 	    								updateCriticalRecord.add(cr);
                 	    							}
                 	    							AuditTrace a = new AuditTrace();
@@ -316,7 +318,7 @@ public class AutoAuditServlet extends HttpServlet {
                         	}
                 		}
                     	try {
-							Thread.sleep(60000);
+							Thread.sleep(30000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

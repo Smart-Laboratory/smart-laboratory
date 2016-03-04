@@ -56,7 +56,7 @@ public class Process extends BaseObject {
 		this.id = id;
 	}
 
-	@Column
+	@Column(name = "sample_id")
 	public long getSampleid() {
 		return sampleid;
 	}

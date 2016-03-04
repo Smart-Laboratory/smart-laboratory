@@ -16,16 +16,16 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 	}
 
 	public void removeBySampleId(long id) {
-		getSession().createSQLQuery("delete from l_process where sample_id=" + id).executeUpdate();
+		getSession().createSQLQuery("delete from Process where sampleid=" + id).executeUpdate();
 	}
 
 	public Process getBySampleId(Long sampleid) {
-		return (Process) getSession().createQuery("from l_process where sample_id=" + sampleid).uniqueResult();
+		return (Process) getSession().createQuery("from Process where sampleid=" + sampleid).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Process> getHisProcess(String sampleids) {
-		return getSession().createQuery("from l_process where sample_id in (" + sampleids + ")").list();
+		return getSession().createQuery("from Process where sampleid in (" + sampleids + ")").list();
 	}
 
 }
