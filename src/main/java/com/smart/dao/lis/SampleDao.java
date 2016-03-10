@@ -33,4 +33,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<NeedWriteCount> getAllWriteBack(String date);
 
 	List<Sample> getByIds(String ids);
+
+	List<Sample> getSampleByCode(String code);
 }

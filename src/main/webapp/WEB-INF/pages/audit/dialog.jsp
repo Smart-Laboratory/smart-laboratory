@@ -254,14 +254,17 @@
 	</div>
 	
 	<div id="statisticDialog" title="<fmt:message key='statistic.title' />" style="text-align:left;" >
-		<div class='form-inline'>
-			<input id="statistic_code" class="span2" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
-			<input id="statistic_from" class="span2" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
-			<input id="statistic_to" class="span2" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
-			<button id="statisticBtn" class="btn btn-info"><fmt:message key='button.statistic'/></button>
+		<div class='col-sm-12'>
+			<input id="statistic_code" class="form-control" style="float:left;width:150px;" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
+			<input id="statistic_from" class="form-control" style="float:left;width:150px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
+			<input id="statistic_to" class="form-control" style="float:left;width:150px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
+			<button id="statisticBtn" class="btn btn-info" style="margin-left:8px;"><fmt:message key='button.statistic'/></button>
 		</div>
 		
-		<table id="statistic_table" style="font-size: 14px;"></table>
+		<div style="font-size: 14px;margin-top:45px;">
+			<table id="statistic_table"></table>
+		</div>
+		
 	</div>
 	
 	<div id="writeBackPartDialog" title="<fmt:message key='writebackpart' />" style="text-align:left;" >

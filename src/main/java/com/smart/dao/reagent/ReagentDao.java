@@ -14,4 +14,6 @@ public interface ReagentDao extends GenericDao<Reagent, Long> {
 	List<Reagent> getByIds(String ids);
 
 	List<Reagent> getByLab(String lab);
+
+	Reagent getByTestId(String testid);
 }

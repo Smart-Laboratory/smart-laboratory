@@ -11,6 +11,7 @@ import com.smart.service.lis.DeviceManager;
 @Service("deviceManager")
 public class DeviceManagerImpl extends GenericManagerImpl<Device, Long> implements DeviceManager {
 	
+	@SuppressWarnings("unused")
 	private DeviceDao deviceDao;
 
 	@Autowired

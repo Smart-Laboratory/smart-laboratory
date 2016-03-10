@@ -24,4 +24,8 @@ public class BatchManagerImpl extends GenericManagerImpl<Batch, Long> implements
 	public void saveAll(List<Batch> needSaveBatch) {
 		batchDao.saveAll(needSaveBatch);
 	}
+
+	public List<Batch> getByRgId(Long id) {
+		return batchDao.getByRgId(id);
+	}
 }

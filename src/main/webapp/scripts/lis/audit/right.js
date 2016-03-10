@@ -55,7 +55,7 @@ function getExplain(docNo){
 var isFirstSop = true;
 var g1, g2, g3, g4;
 function getSopSchedule(lab) {
-	$.get("../sop/ajax/schedule",{lab:lab},function(data){
+	$.get("../sop/ajax/schedule",{lab:lab, sampleno:$("#hiddenSampleNo").val()},function(data){
 		data = jQuery.parseJSON(data);
 		if(isFirstSop) {
 			isFirstSop = false;
@@ -100,7 +100,7 @@ function getSopSchedule(lab) {
 	}
 
 function getDetailSop(type) {
-	$.get("../sop/ajax/detail",{type:type, lab:$("#labSelect").val()},function(data){
+	$.get("../sop/ajax/detail",{type:type, lab:$("#labSelect").val(), sampleno:$("#hiddenSampleNo").val()},function(data){
 		data = jQuery.parseJSON(data);
 		$("#sopDetailHtml").html(data.html);
 	});		

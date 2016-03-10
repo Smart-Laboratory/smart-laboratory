@@ -33,12 +33,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.smart.model.reagent.Reagent;
 import com.smart.model.util.NeedWriteCount;
 import com.smart.service.reagent.OutManager;
 
 @Controller
 @RequestMapping("/audit/ajax*")
-public class AjaxController extends BaseAuditController{
+public class AjaxController extends BaseAuditController {
 	
 	private static final Log log = LogFactory.getLog(AjaxController.class);
 	
@@ -72,7 +73,9 @@ public class AjaxController extends BaseAuditController{
 				measuretime = t.getMeasureTime();
 			}
 		}
-		map.put("hmList", outManager.getLastHMs(testid, measuretime));
+		Reagent r  = reagentManager.getByTestId(testid);
+		
+		map.put("hmList", outManager.getLastHMs(r.getId(), measuretime));
 		if (idMap.size() == 0)
 			initMap();
 		

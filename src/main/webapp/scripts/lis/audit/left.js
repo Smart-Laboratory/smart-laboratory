@@ -224,4 +224,5 @@ $(function(){
      	$("#pageRefreshBtn").click(function() {
      		window.location.reload();
 		});
+
 });

@@ -9,4 +9,6 @@ public interface BatchDao extends GenericDao<Batch, Long> {
 
 	void saveAll(List<Batch> needSaveBatch);
 
+	List<Batch> getByRgId(Long id);
+
 }

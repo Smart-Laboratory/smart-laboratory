@@ -93,5 +93,10 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 	public List<TestResult> getHisTestResult(String samplenos) {
 		return getSession().createQuery("from TestResult where sampleNo in (" + samplenos + ")").list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getSampleByCode(String code) {
+		return getSession().createQuery("from TestResult where sampleNo like '" + code + "%'").list();
+	}
 	
 }

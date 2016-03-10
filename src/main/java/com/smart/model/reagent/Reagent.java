@@ -1,17 +1,12 @@
 package com.smart.model.reagent;
 
 import java.io.Serializable;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -48,7 +43,6 @@ public class Reagent extends BaseObject implements Serializable {
 	private String temperature;			// 存储位置的温度
 	private int isselfmade;				// 是否为自制试剂
 	
-	private Set<Batch> batchs;			//按批号  分批储存试剂
 	private String lab;
 
 	/**
@@ -207,7 +201,7 @@ public class Reagent extends BaseObject implements Serializable {
 		this.testname = testname;
 	}
 
-	@Column(length=10)
+	@Column(length=20)
 	public String getFridge() {
 		return fridge;
 	}
@@ -283,17 +277,6 @@ public class Reagent extends BaseObject implements Serializable {
 		return this.unit + "[" + this.subtnum + this.subunit + "]";
 	}
 	
-
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Batch.class, mappedBy = "reagent")
-	@OrderBy("id asc")
-	public Set<Batch> getBatchs() {
-		return batchs;
-	}
-
-	public void setBatchs(Set<Batch> batchs) {
-		this.batchs = batchs;
-	}
-
 	public String toString() {
 		return null;
 	}

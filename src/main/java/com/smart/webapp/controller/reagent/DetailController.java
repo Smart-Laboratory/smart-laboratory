@@ -57,9 +57,18 @@ public class DetailController extends ReagentBaseController {
 			end = list.size();
 		}
 		int index = 0;
+		String rgIds = "";
+		for(In in : list) {
+			rgIds += in.getRgId() + ",";
+		}
+		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rglist) {
+			rMap.put(r.getId(), r);
+		}
 		for(In i : list) {
 			if(index >= start && index < end) {
-				Reagent r = i.getReagent();
+				Reagent r = rMap.get(i.getRgId());
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", i.getId());
 				map.put("name", r.getNameAndSpecification());
@@ -107,9 +116,18 @@ public class DetailController extends ReagentBaseController {
 			end = list.size();
 		}
 		int index = 0;
+		String rgIds = "";
+		for(Out o : list) {
+			rgIds += o.getRgId() + ",";
+		}
+		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rglist) {
+			rMap.put(r.getId(), r);
+		}
 		for(Out o: list) {
 			if(index >= start && index < end) {
-				Reagent r = o.getReagent();
+				Reagent r = rMap.get(o.getRgId());
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", o.getId());
 				map.put("name", r.getNameAndSpecification());

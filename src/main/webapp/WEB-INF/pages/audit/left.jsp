@@ -17,6 +17,7 @@
 					<li><a id="manualAuditPassBtn" href="#"><fmt:message key='batch.pass'/></a></li>
 					<li><a id="manualAuditUnPassBtn" href="#"><fmt:message key='batch.unpass'/></a></li>
 					<li><a id="manualWriteBackBtn" href="#"><fmt:message key='batch.writeback'/></a></li>
+					<li><a id="statisticDialogBtn" href="#"><fmt:message key='batch.statistic'/></a></li>
 					<li role="separator" class="divider"></li>
 					<li><a id="samplePrintBtn" href="#"><fmt:message key='audit.danger.print'/></a></li>
 				</ul>

@@ -177,7 +177,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			map.put("id", r.getId());
 			map.put("name", r.getNameAndSpecification());
 			String batch = "<select id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>";
-			for(Batch b : r.getBatchs()) {
+			for(Batch b : batchManager.getByRgId(r.getId())) {
 				if(b.getNum() > 0) {
 					if(r.getSubtnum() > 1) {
 						batch += "<option value='" + b.getBatch() + "'>" + b.getBatch() + "[库存:" + b.getNum() + r.getUnit() + "]</option>";
@@ -203,7 +203,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 				map.put("id", r.getId());
 				map.put("name", r.getNameAndSpecification());
 				String batch = "<select id='" + r.getId() + "_batch class='editable' style='height:18px;width:98%'>";
-				for(Batch b : r.getBatchs()) {
+				for(Batch b : batchManager.getByRgId(r.getId())) {
 					if(b.getNum() > 0) {
 						if(r.getSubtnum() > 1) {
 							batch += "<option>" + b.getBatch() + "[库存:" + b.getNum() + r.getUnit() + "]</option>";
@@ -250,7 +250,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			List<In> needSaveIn = new ArrayList<In>();
 			for(Reagent r : list) {
 				boolean needNew = true;
-				for(Batch b : r.getBatchs()) {
+				for(Batch b : batchManager.getByRgId(r.getId())) {
 					if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
 						b.setNum(b.getNum() + (Integer)inmap.get(r.getId()).get("num"));
 						needNew = false;
@@ -263,7 +263,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 					b.setExpdate((String)inmap.get(r.getId()).get("exedate"));
 					b.setNum((Integer)inmap.get(r.getId()).get("num"));
 					b.setSubnum(0);
-					b.setReagent(r);
+					b.setRgId(r.getId());
 					needSaveBatch.add(b);
 				}
 				In indata = new In();
@@ -273,7 +273,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 				indata.setIsqualified(1);
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
 				indata.setOperator(user.getName());
-				indata.setReagent(r);
+				indata.setRgId(r.getId());
 				indata.setLab(labMap.get(user.getLastLab()));
 				needSaveIn.add(indata);
 			}
@@ -305,7 +305,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			List<Batch> needSaveBatch = new ArrayList<Batch>();
 			List<Out> needSaveOut = new ArrayList<Out>();
 			for(Reagent r : list) {
-				for(Batch b : r.getBatchs()) {
+				for(Batch b : batchManager.getByRgId(r.getId())) {
 					if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
 						if(r.getSubtnum() > 1) {
 							int num = r.getSubtnum() * b.getNum() + b.getSubnum();
@@ -321,7 +321,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 						outdata.setBatch((String)inmap.get(r.getId()).get("batch"));
 						outdata.setOperator(user.getName());
 						outdata.setOutdate(new Date());
-						outdata.setReagent(r);
+						outdata.setRgId(r.getId());
 						outdata.setLab(labMap.get(user.getLastLab()));
 						needSaveOut.add(outdata);
 					}
@@ -342,8 +342,8 @@ public class ReagentAjaxController extends ReagentBaseController {
 		boolean success = true;
 		try {
 			Out out = outManager.get(Long.parseLong(request.getParameter("id")));
-			Reagent r = out.getReagent();
-			for(Batch b : r.getBatchs()) {
+			Reagent r = reagentManager.get(out.getRgId());
+			for(Batch b : batchManager.getByRgId(r.getId())) {
 				if(b.getBatch().equals(out.getBatch())) {
 					if(r.getSubtnum() > 1) {
 						int num = b.getNum() * r.getSubtnum() + b.getSubnum() + out.getNum();

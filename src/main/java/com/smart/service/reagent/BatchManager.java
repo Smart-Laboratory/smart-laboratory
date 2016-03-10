@@ -9,4 +9,6 @@ public interface BatchManager extends GenericManager<Batch, Long> {
 
 	void saveAll(List<Batch> needSaveBatch);
 
+	List<Batch> getByRgId(Long id);
+
 }

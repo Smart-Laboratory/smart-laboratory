@@ -135,8 +135,9 @@ public class StockController extends ReagentBaseController {
 		Reagent r = reagentManager.get(Long.parseLong(request.getParameter("id")));
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(r.getBatchs().size());
-		for(Batch b : r.getBatchs()) {
+		List<Batch> blist = batchManager.getByRgId(r.getId());
+		dataResponse.setRecords(blist.size());
+		for(Batch b : blist) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", b.getId());
 			map.put("batch", b.getBatch());

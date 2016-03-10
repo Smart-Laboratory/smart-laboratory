@@ -37,7 +37,7 @@ public class ComboController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		String labName = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
 		List<Combo> list = comboManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
