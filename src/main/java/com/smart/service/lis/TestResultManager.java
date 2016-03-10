@@ -26,4 +26,6 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 	void saveAll(List<TestResult> list);
 
 	List<TestResult> getHisTestResult(String substring);
+
+	List<TestResult> getSampleByCode(String string);
 }

@@ -30,7 +30,6 @@
 .ui-tabs-anchor {
 	padding: 0 10px;
 }
-.ui-jqgrid .ui-jqgrid-titlebar {height:30px;}
 </style>
 </head>
 

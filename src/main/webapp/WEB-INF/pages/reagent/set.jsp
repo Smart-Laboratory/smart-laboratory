@@ -1,4 +1,4 @@
-6<%@ include file="/common/taglibs.jsp" %>
+<%@ include file="/common/taglibs.jsp" %>
 
 <head>
     <title><fmt:message key="reagent.set"/></title>

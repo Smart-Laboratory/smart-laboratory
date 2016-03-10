@@ -2,6 +2,7 @@ package com.smart.webapp.controller.reagent;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.model.reagent.In;
+import com.smart.model.reagent.Reagent;
 import com.smart.model.util.InBarcode;
 import com.smart.service.reagent.InManager;
+import com.smart.service.reagent.ReagentManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -28,6 +31,9 @@ public class InController {
 	
 	@Autowired
 	private InManager inManager = null;
+	
+	@Autowired
+	private ReagentManager reagentManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/in*")
     public ModelAndView handleRequest() throws Exception {
@@ -55,15 +61,24 @@ public class InController {
 		} else {
 			inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));
 		}
+		String rgIds = "";
+		for(In in : inList) {
+			rgIds += in.getRgId() + ",";
+		}
+		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rglist) {
+			rMap.put(r.getId(), r);
+		}
 		for(In in : inList) {
 			for(int i=1; i<=in.getNum(); i++) {
 				InBarcode ib = new InBarcode();
 				ib.setBarcode(String.format("%07d", in.getId()) + String.format("%03d", i));
-				ib.setName(in.getReagent().getNameAndSpecification());
+				ib.setName(rMap.get(in.getRgId()).getNameAndSpecification());
 				ib.setBatch(in.getBatch());
 				ib.setExdate(in.getExdate());
 				ib.setIndate(Constants.DF2.format(in.getIndate()));
-				ib.setCondition(in.getReagent().getStorageCondition());
+				ib.setCondition(rMap.get(in.getRgId()).getStorageCondition());
 				ibList.add(ib);
 			}
 		}

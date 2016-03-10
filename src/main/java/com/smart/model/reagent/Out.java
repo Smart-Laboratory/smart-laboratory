@@ -3,15 +3,11 @@ package com.smart.model.reagent;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -35,7 +31,7 @@ public class Out extends BaseObject implements Serializable {
 	private String batch;
 	private int testnum;				// 试剂能用多少次检验
 	
-	private Reagent reagent;
+	private Long rgId;
 	private String lab;
 	
 	@Id
@@ -95,14 +91,13 @@ public class Out extends BaseObject implements Serializable {
 		this.testnum = testnum;
 	}
 
-	@ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "rg_id")
-	public Reagent getReagent() {
-		return reagent;
+	@Column(name = "rg_id")
+	public Long getRgId() {
+		return rgId;
 	}
 
-	public void setReagent(Reagent reagent) {
-		this.reagent = reagent;
+	public void setRgId(Long rgId) {
+		this.rgId = rgId;
 	}
 	
 	@Column

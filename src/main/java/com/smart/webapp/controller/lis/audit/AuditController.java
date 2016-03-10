@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ import com.zju.api.model.Reference;
 import com.smart.model.lis.AuditTrace;
 import com.smart.model.lis.CollectSample;
 import com.smart.model.user.User;
+import com.smart.model.util.Statistic;
 import com.smart.util.Config;
 
 @Controller
@@ -562,7 +564,10 @@ public class AuditController extends BaseAuditController {
 			status = Constants.STATUS_UNPASS;
 		}
 		
-		List<Sample> samples = sampleManager.getByIds(ids.substring(0, ids.length()-1));
+		if(ids.contains(",")) {
+			ids = ids.substring(0, ids.length()-1);
+		}
+		List<Sample> samples = sampleManager.getByIds(ids);
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
 		
@@ -759,6 +764,113 @@ public class AuditController extends BaseAuditController {
 		}
 		dataResponse.setRows(dataRows);
 
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
+	}
+	
+	@RequestMapping(value = "/statistic*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getStatistics(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String code = StringUtils.upperCase(request.getParameter("code"));
+		String fromNo = request.getParameter("from");
+		String toNo = request.getParameter("to");
+		String day = Constants.DF3.format(new Date());
+		DecimalFormat deFormat = new DecimalFormat("#.##");
+		
+		List<TestResult> testlist = testResultManager.getSampleByCode(day + code);
+		int start = Integer.parseInt(fromNo);
+		int end = Integer.parseInt(toNo);
+		
+		List<TestResult> list = new ArrayList<TestResult>();
+		// 过滤
+		for (TestResult tr : testlist) {
+			int index = Integer.parseInt(tr.getSampleNo().substring(11));
+			if (index >= start && index <= end) {
+				list.add(tr);
+			}
+		}
+		
+		Map<String, List<Double>> resultMap = new HashMap<String, List<Double>>();
+		List<Statistic> statisticList = new ArrayList<Statistic>();
+		
+		List<Double> resultList = null;
+		for (TestResult info : list) {
+			if(resultMap.containsKey(info.getTestId())){
+				resultList = resultMap.get(info.getTestId());
+			} else {
+				resultList = new ArrayList<Double>();
+				resultMap.put(info.getTestId(), resultList);
+			}
+			try { 
+				double b = Double.parseDouble(info.getTestResult()); 
+				resultList.add(b);
+			} catch (Exception e){
+				log.error(e.getMessage());
+			} 
+		}
+		
+		for (String tId : resultMap.keySet()) {
+			Statistic s = new Statistic();
+			int num = 0;
+			Double average;
+			Double max = 0.0;
+			Double min = 10000.0;
+			Double total = 0.0;
+			Double standardDeviation;
+			Double coefficientOfVariation;
+			s.setTestid(tId);
+			List<Double> result = resultMap.get(tId);
+			for (Double d : result) {
+				if(d > max){
+					max = d;
+				}
+				if(d < min){
+					min = d;
+				}
+				total = total + d;
+				num = num +1;
+			}
+			average = total/result.size();
+			s.setNum(num);
+			s.setAverage(average);
+			s.setMax(max);
+			s.setMin(min);
+			Double variance = 0.0;
+			for (Double d : result) {
+				variance = variance + Math.pow(d-average, 2);
+			}
+			standardDeviation = Math.sqrt(variance/result.size());
+			coefficientOfVariation = standardDeviation*100/average;
+			s.setStandardDeviation(standardDeviation);
+			s.setCoefficientOfVariation(coefficientOfVariation);
+			statisticList.add(s);
+		}
+		
+		DataResponse dataResponse = new DataResponse();
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		
+		if (idMap.size() == 0)
+			initMap();
+
+		for (Statistic s : statisticList) {
+			if(idMap.containsKey(s.getTestid())){
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", s.getTestid());
+				map.put("name", idMap.get(s.getTestid()).getName());
+				map.put("num", s.getNum());
+				map.put("average", deFormat.format(s.getAverage()));
+				map.put("max", s.getMax());
+				map.put("min", s.getMin());
+				map.put("standardDeviation", deFormat.format(s.getStandardDeviation()));
+				map.put("coefficientOfVariation", deFormat.format(s.getCoefficientOfVariation()));
+				dataRows.add(map);
+			}
+		}
+		
+		dataResponse.setRows(dataRows);
+		dataResponse.setRecords(dataRows.size());
+		
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}

@@ -437,6 +437,42 @@ $(function(){
  		$("#addTestList").html("");
 	});
 	
+ 	$("#statisticDialogBtn").click(function() {
+		$("#statisticDialog").dialog("open");
+	});
+	
+	var isFirstStatistic = true;
+	$("#statisticBtn").click(function() {
+		var code = $("#statistic_code").val();
+		var from = $("#statistic_from").val();
+		var to = $("#statistic_to").val();
+		
+		if (isFirstStatistic) {
+			jQuery("#statistic_table").jqGrid({
+				url:"../audit/statistic?code="+code+"&from="+from+"&to="+to,
+				datatype: "json",
+				jsonReader : {repeatitems : false}, 
+				colNames:['ID','项目','项目数','平均值','最大值','最小值','标准差','变异系数'],
+			   	colModel:[{name:'id',index:'id',hidden:true,sortable:false},
+			   	    {name:'name',index:'name',width:120,sortable:false},
+			   	 	{name:'num',index:'num',width:40,sortable:false},
+			   	 	{name:'average',index:'average',width:80,sortable:false},
+			   	 	{name:'max',index:'max',width:60,sortable:false},
+			   	 	{name:'min',index:'min',width:60,sortable:false},
+			   	 	{name:'standardDeviation',index:'standardDeviation',width:80,sortable:false},
+			   	 	{name:'coefficientOfVariation',index:'coefficientOfVariation',width:80,sortable:false}],
+			   	rowNum: 80,
+			   	rownumbers: true,
+			   	height:'100%'
+			});
+			isFirstStatistic = false;
+		} else {
+			jQuery("#statistic_table").jqGrid("setGridParam",{
+				url:"../audit/statistic?code="+code+"&from="+from+"&to="+to
+			}).trigger("reloadGrid"); 
+		}
+	});
+	
 });
 
 var isFirstTrace = true;

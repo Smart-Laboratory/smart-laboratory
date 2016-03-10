@@ -127,11 +127,10 @@
         	$("#pSex").html(data.sex);
         	if(data.section.length > 11) {
         		$("#pSection").html(data.section.substr(0,8).replace("(","") + "...");
-        		$("#pSection").attr("title",data.section);
         	} else {
         		$("#pSection").html(data.section);
         	}
-        	
+        	$("#pSection").attr("title",data.section);
         	$("#pType").html(data.type);
         	$("#stayhospitalmode").html(data.stayhospitalmode);
         	if(data.diagnosticKnow == "") {

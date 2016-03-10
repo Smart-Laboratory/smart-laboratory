@@ -5,11 +5,12 @@
 		   	colNames:['','名称','创建者','创建时间'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:440, sortable:true, editable:true},
-		   		{name:'creator',index:'creator', width:250, align:"center", sortable:false, editable:false},
+		   		{name:'name',index:'name', width:420, sortable:true, editable:true},
+		   		{name:'creator',index:'creator', width:245, align:"center", sortable:false, editable:false},
 		   		{name:'createtime',index:'createtime', width:250, align:"center", sortable:false, editable:false}
 		   	],
 		   	rowNum:10,
+		   	rownumbers:true,
 		   	rowList:[10,20,30],
 		   	pager: '#pager',
 		   	sortname: 'id',

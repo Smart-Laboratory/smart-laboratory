@@ -20,7 +20,7 @@
 <div class="col-sm-10">
 <ul class="nav nav-pills">
   <li role="presentation" class="active"><a href="#"><fmt:message key="reagent.in"/></a></li>
-  <li role="presentation"><a href="/reagent/out"><fmt:message key="reagent.out"/></a></li>
+  <li role="presentation"><a href="../reagent/out"><fmt:message key="reagent.out"/></a></li>
 </ul>
 
 <div class="form-inline" style="margin-top:10px;">

@@ -57,4 +57,8 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 	public List<TestResult> getHisTestResult(String samplenos) {
 		return testResultDao.getHisTestResult(samplenos);
 	}
+
+	public List<TestResult> getSampleByCode(String code) {
+		return testResultDao.getSampleByCode(code);
+	}
 }

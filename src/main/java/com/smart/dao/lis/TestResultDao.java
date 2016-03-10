@@ -36,4 +36,6 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 
 	@Transactional
 	List<TestResult> getHisTestResult(String samplenos);
+
+	List<TestResult> getSampleByCode(String code);
 }

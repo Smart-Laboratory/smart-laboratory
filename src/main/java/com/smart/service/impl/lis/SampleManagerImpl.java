@@ -78,4 +78,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public List<Sample> getByIds(String ids) {
 		return sampleDao.getByIds(ids);
 	}
+
+	public List<Sample> getSampleByCode(String code) {
+		return sampleDao.getSampleByCode(code);
+	}
 }

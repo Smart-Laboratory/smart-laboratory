@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.lis.ContactInfor;
+import com.smart.model.lis.Device;
 import com.smart.model.lis.Diagnostic;
 import com.smart.model.lis.LikeLab;
 import com.smart.model.lis.Sample;
@@ -21,6 +22,7 @@ import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
+import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.DiagnosticManager;
 import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.PatientManager;
@@ -29,6 +31,7 @@ import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TaskManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
+import com.smart.service.reagent.ReagentManager;
 import com.smart.service.rule.BagManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.ItemManager;
@@ -100,18 +103,32 @@ public class BaseAuditController {
 	@Autowired
 	protected ContactManager contactManager = null;
 	
+	@Autowired
+	protected ReagentManager reagentManager = null;
+
+	@Autowired
+	protected DeviceManager deviceManager = null;
+	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();
     protected Map<String, String> diagMap = new HashMap<String, String>();
     protected Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
     protected Map<String, String> likeLabMap = new HashMap<String, String>();
+    protected Map<String, String> deviceMap = new HashMap<String, String>();
     protected Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
 
 	protected synchronized void initMap() {
 		List<Index> list = indexManager.getAll();
 		for (Index t : list) {
 			idMap.put(t.getIndexId(), t);
+		}
+	}
+	
+	protected synchronized void initDeviceMap() {
+		List<Device> list = deviceManager.getAll();
+		for (Device d : list) {
+			deviceMap.put(d.getId(), d.getName());
 		}
 	}
 	

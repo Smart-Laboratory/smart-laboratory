@@ -19,7 +19,9 @@ button.btn {
 	font-weight:bold;
 }
 .ui-jqgrid-title {
-	font-size: 16px;
+	height:20px;
+	font-size:16px;
+	line-height:19px;
 }
 
 .ui-jqgrid .ui-jqgrid-htable th div {
@@ -152,10 +154,15 @@ h2 {
 .pagelinks {
 	line-height: 17px;
 }
-.ui-jqgrid-titlebar {
-	height:20px;
-	font-size:16px;
-	line-height:19px;
+
+.ui-jqgrid .ui-jqgrid-titlebar {
+    height: auto;
+    padding: .3em .2em .2em .3em;
+    position: relative;
+    font-size: 12px;
+    border-left: 0 none;
+    border-right: 0 none;
+    border-top: 0 none;
 }
 
 .ui-th-column {

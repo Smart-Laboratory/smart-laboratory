@@ -60,6 +60,9 @@ public class GetTestResultController extends BaseAuditController {
 		if (idMap.size() == 0)
 			initMap();
 		
+		if (deviceMap.size() == 0)
+			initDeviceMap();
+		
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
 		}
@@ -242,7 +245,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				map.put("checktime", Constants.DF5.format(tr.getMeasureTime()));
-				map.put("device", tr.getOperator());
+				map.put("device", deviceMap.get(tr.getOperator()) == null ? tr.getOperator() : deviceMap.get(tr.getOperator()));
 				String lo = tr.getRefLo();
 				String hi = tr.getRefHi();
 				if (lo != null && hi != null) {
@@ -294,6 +297,9 @@ public class GetTestResultController extends BaseAuditController {
 		
 		if (idMap.size() == 0)
 			initMap();
+
+		if (deviceMap.size() == 0)
+			initDeviceMap();
 		
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
@@ -446,7 +452,7 @@ public class GetTestResultController extends BaseAuditController {
 						map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(tid) ? resultMap2.get(tid) : "");
 					}
 				}
-				map.put("device", tr.getOperator());
+				map.put("device", deviceMap.get(tr.getOperator()) == null ? tr.getOperator() : deviceMap.get(tr.getOperator()));
 				String lo = tr.getRefLo();
 				String hi = tr.getRefHi();
 				if (lo != null && hi != null) {

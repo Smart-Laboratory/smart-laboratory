@@ -10,7 +10,7 @@ public interface OutDao extends GenericDao<Out, Long> {
 
 	void saveAll(List<Out> needSaveOut);
 	
-	List<Out> getLastHMs(String testid, Date measuretime);
+	List<Out> getLastHMs(Long rgId, Date measuretime);
 
 	List<Out> getByLab(String lab);
 }
