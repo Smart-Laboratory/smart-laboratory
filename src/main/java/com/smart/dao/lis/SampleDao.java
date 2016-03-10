@@ -25,6 +25,8 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<Integer> getAuditInfo(String date, String department, String code, String user);
 	
 	List<Sample> getSampleByPatientName(String fromDate, String toDate, String patientName);
+	
+	List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text);
 
 	List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end);
 

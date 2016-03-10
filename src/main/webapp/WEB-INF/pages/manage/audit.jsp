@@ -40,18 +40,21 @@
 <input type="hidden" id="lab" value="${lab}">
 <input type="hidden" id="sampletext" value="${today}">
 <input id="strTody" type="hidden" value="${today}" />
+<input type="hidden" value="0" id="isfulltag">
+<div id="header" class="col-sm-12">
+	<%@ include file="../audit/top.jsp" %>
+</div>
 
-<%@ include file="../audit/top.jsp" %>
 <div class="col-sm-12">
 	<%@ include file="../audit/left.jsp" %>
 	<%@ include file="../audit/middle.jsp" %>
 	<%@ include file="../audit/right.jsp" %>
 </div>
-<%@ include file="../audit/dialog.jsp" %>
 
 
-<div id="footer2" class="">
-        <span class="col-sm-6">
+<div id="footer2" class="col-sm-12" style="padding-top:20px;">
+		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555; "/>
+        <span class="col-sm-6" >
         	<fmt:message key="project.name"/> | 
         	<fmt:message key="webapp.version"/>
             <c:if test="${pageContext.request.remoteUser != null}">
@@ -63,5 +66,10 @@
    		<span class="col-sm-2" style="float:right;">
        		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
         </span>
+        
+        
 </div>
+
+
+<%@ include file="../audit/dialog.jsp" %>
 </body>

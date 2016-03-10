@@ -23,15 +23,13 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getArrangerd(String names, String month, int state) {
-		return getSession().createQuery("from Arrange where worker in ("+ names +") and date like '"+ month +"%' and type=0 and state>="+state+"  order by worker asc, date asc").list();
+		return getSession().createQuery("from Arrange where worker in ("+ names +") and date like '"+ month +"%' and type=0   order by worker asc, date asc").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public Arrange getByUser(String name, String day){
 		
-		long start = System.currentTimeMillis();
 		List<Arrange> list = getSession().createQuery("from Arrange where worker = '"+ name +"' and date = '"+ day +"' and type=0 order by worker asc, date asc").list();
-		System.out.println((System.currentTimeMillis()-start)/1000);
 		if(list !=null && list.size()>0)
 			return (Arrange)list.get(0);
 		else
@@ -75,7 +73,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getArrangeByType(String type, String month){
-		String hql = "from Arrange where date like '"+month+"%' and shift like '"+type+"%' and state>=5";
+		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' ";
 		return getSession().createQuery(hql).list();
 	}
 	

@@ -169,15 +169,22 @@ public class PbcxController {
 	    		if(arr==null||arr.size()<=0)
 	    			continue;
 	    		for(Arrange a: arr){
-	    			if(a.getShift().contains("休"))
-	    				continue;
+//	    			if(a.getShift().contains("休"))
+//	    				continue;
 	    			if(!a.getShift().contains(bc+";")){
 	    				continue;
 	    			}
-	    			if(arrMap.get(a.getDate().split("-")[2])!=null)
-	    				arrMap.put(a.getDate().split("-")[2], a.getWorker()+";  "+arrMap.get(a.getDate().split("-")[2]));
+	    			String worker = "";
+	    			if(a.getState()<5){
+	    				worker = "<font style='color:red'>"+a.getWorker()+"</font>";
+	    			}else {
+						worker = a.getWorker();
+					}
+	    			if(arrMap.get(a.getDate().split("-")[2])!=null){
+	    				arrMap.put(a.getDate().split("-")[2], worker+";  "+arrMap.get(a.getDate().split("-")[2]));
+	    			}
 	    			else
-	    				arrMap.put(a.getDate().split("-")[2], a.getWorker());
+	    				arrMap.put(a.getDate().split("-")[2], worker);
 	    		}
 	    		
 	    		shifts[i][0] = "<th style='background:#7FFFD4'>"+bc+"</th>";
@@ -203,7 +210,7 @@ public class PbcxController {
 			String wiNames = "";
 			int i=1;
 			Map<Integer, String> map = new HashMap<Integer, String>();
-			Map<String, String> arrMap = new HashMap<String, String>();
+			Map<String, Arrange> arrMap = new HashMap<String, Arrange>();
 			for(WInfo wi : wiList) {
 				map.put(i, wi.getName());
 				wiNames = wiNames + "'" + wi.getName() + "',"; 
@@ -211,10 +218,10 @@ public class PbcxController {
 			}
 			List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth,5);
 			if(arrList.size() == 0) {
-				return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
+				return new ModelAndView().addObject("size", 0).addObject("month", tomonth).addObject("section", section);
 			}
 			for(Arrange arr : arrList) {
-				arrMap.put(arr.getKey2(), arr.getShift());
+				arrMap.put(arr.getKey2(), arr);
 			}
 			String[][] shifts = new String[i][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
 			size = shifts.length;
@@ -239,14 +246,17 @@ public class PbcxController {
 	        		if (arrMap.get(name + "-" + l) == null) {
 	        			shifts[k][l] = ""; //<td style='background:#7CFC00'>休</td>
 	        		} else {
-	        			shifts[k][l] = arrMap.get(name + "-" + l);
+	        			shifts[k][l] = arrMap.get(name + "-" + l).getShift();
 	        		}
 	        		if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
 	        			shifts[k][l] = "<td style='background:#7CFC00'>" + shifts[k][l] + "</td>";
-	        		} else {
+	        		} else if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getShift().contains("公休")){
+	        			shifts[k][l] = "<td  style='background:#FDFF7F;'"+arrMap.get(name + "-" + l).getShift().replace("公休;", "")+"</td>";
+	        		}  
+	        		else {
 	        			shifts[k][l] = "<td>" + shifts[k][l] + "</td>";
 	        		}
-	        		if(shifts[k][l].contains("+")){
+	        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	        			shifts[k][l] = shifts[k][l].replace("<td>", "<td style='background:#63B8FF'>");
 	        			shifts[k][l] = shifts[k][l].replace("<td style='background:#7CFC00'>", "<td style='background:#63B8FF'>");
 	        		}

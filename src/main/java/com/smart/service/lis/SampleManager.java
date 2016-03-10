@@ -39,6 +39,16 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	 * @return
 	 */
 	List<Sample> getSampleByPatientName(String fromDate, String toDate, String patientName);
+	
+	/**
+	 *   获取某一时间段中某字段的样本
+	 * @param fromDate	起始日期 如：2013-08-13
+	 * @param toDate	结束日期
+	 * @param searchType  查询类型
+	 * @param text   查询条件
+	 * @return
+	 */
+	List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text);
 
 	List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end);
 

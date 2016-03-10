@@ -80,7 +80,12 @@ function checkShift(day) {
 }
 
 function changeType(select) {
-	window.location.href="../pb/pb?section=1300000&type=" + select.value+"&date=" + $("#date").val();
+	if(select.value == 8){
+		window.location.href="../pb/sxpb?month=" + $("#date").val();
+	}else{
+		window.location.href="../pb/pb?section=1300000&type=" + select.value+"&date=" + $("#date").val();
+	}
+	
 }
 
 $(function() {
@@ -195,6 +200,7 @@ $(function() {
 				<option value="5" ><fmt:message key="pb.hcy"/></option>
 				<option value="6" ><fmt:message key="pb.ry"/></option>
 				<option value="7" ><fmt:message key="pb.jjr"/></option>
+				<option value="8" ><fmt:message key="pb.ssx"/></option>
 			</select>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>

@@ -37,7 +37,7 @@ $(function() {
 </style>
 
 <menu:useMenuDisplayer name="Velocity" config="navbarMenu.vm" permissions="rolesAdapter">
-<div class="collapse navbar-collapse" id="navbar">
+<div id="menuheader" class="collapse navbar-collapse" id="navbar">
 <ul class="nav navbar-nav">
     <c:if test="${empty pageContext.request.remoteUser}">
         <li class="active form-inline">

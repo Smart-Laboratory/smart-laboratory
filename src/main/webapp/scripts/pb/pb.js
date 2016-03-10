@@ -9,6 +9,7 @@ function labChange(item){
 }
 
 function randomShift(day) {
+	
 	var week = $("#day" + day).html().substr(-1);
 	var shift = $("#" + week).html();
 	var array = shift.split(",");
@@ -142,7 +143,8 @@ $(function() {
 					value += "\u516C\u4F11;";
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
-			var bz= $("#bz").val;
+			var bz= $("#bz").val();
+			alert(bz);
 			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz},function(data) {
 				if(data){
 					alert("Success!");

@@ -514,6 +514,27 @@ public class Sample extends BaseObject {
 		return value;
 	}
 	
+	@Transient
+	public String getStayHospitalModelValue(){
+		String value = "";
+		switch (getStayHospitalMode()) {
+		case 1:
+			value = "门诊";
+			break;
+		case 2:
+			value = "病房";
+			break;
+		case 3:
+			value = "急诊";
+			break;
+			
+		default:
+			value = "";
+			break;
+		}
+		return value;
+	}
+	
 	public String toString() {
 		return null;
 	}

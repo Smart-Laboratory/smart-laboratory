@@ -20,6 +20,7 @@ import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
 import com.smart.model.util.NeedWriteCount;
+import com.sun.org.apache.xpath.internal.operations.And;
 
 
 @Repository("sampleDao")
@@ -113,7 +114,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
 		
 		if(blh != null){
-			return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId in (" + lab + ")  order by s.id desc").list();
+			return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "'   order by s.id desc").list();
 		}
 		return null;
 	}
@@ -205,8 +206,19 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //                    + "') order by s.time desc";
 		String hql = "select s from Sample s,Patient p where s.patientblh=p.blh and p.patientName='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
-			hql+="and s.sampleNo>'"+ from+"' and s.sampleNo<'" + to + "Z' order by s.sampleNo desc";
+			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + from + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + to + "') order by s.sampleNo desc";
 		}
+		System.out.println(hql);
+		return getSession().createQuery(hql).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text){
+		String hql = "select s from Sample s,Patient p where s.patientblh=p.blh and s."+searchType+"='" + text + "' ";
+		if(!StringUtils.isEmpty(fromDate) && fromDate!=null && toDate!=null &&!StringUtils.isEmpty(toDate)){
+			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + fromDate + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + toDate + "') order by s.sampleNo desc";
+		}
+		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 
@@ -273,8 +285,10 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		sql += " order by s.sampleNo";
 		Query q =  getSession().createQuery(sql);
-		q.setFirstResult(start);
-		q.setMaxResults(end); 
+		if( end != 0){
+			q.setFirstResult(start);
+			q.setMaxResults(end); 
+		}
 		return q.list();
 	}
 

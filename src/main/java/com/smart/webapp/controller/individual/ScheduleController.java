@@ -113,7 +113,6 @@ public class ScheduleController {
 		}
 		//备注
 		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
-		
 		request.setAttribute("wshifts", wshifts);
 		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
@@ -126,7 +125,7 @@ public class ScheduleController {
 		String wiNames = "";
 		int i=1;
 		Map<Integer, WInfo> map = new HashMap<Integer, WInfo>();
-		Map<String, String> arrMap = new HashMap<String, String>();
+		Map<String, Arrange> arrMap = new HashMap<String, Arrange>();
 		for(WInfo wi : wiList) {
 			map.put(i, wi);
 			wiNames = wiNames + "'" + wi.getName() + "',"; 
@@ -145,15 +144,15 @@ public class ScheduleController {
 		
 		
 		for(Arrange arr : arrList) {
-			if(bc.isEmpty()){
-				arrMap.put(arr.getKey2(), arr.getShift());
-			}else if(type.contains("7")){
-				if(arr.getShift().contains("良") || arr.getShift().contains("外") || arr.getShift().contains("海") || arr.getShift().contains("入") ){
-					arrMap.put(arr.getKey2(), arr.getShift());
-				}
-			}else if(arr.getShift().contains(bc)){
-				arrMap.put(arr.getKey2(), arr.getShift());
-			}
+//			if(bc.isEmpty()){
+				arrMap.put(arr.getKey2(), arr);
+//			}else if(type.contains("7")){
+//				if(arr.getShift().contains("良") || arr.getShift().contains("外") || arr.getShift().contains("海") || arr.getShift().contains("入") ){
+//					arrMap.put(arr.getKey2(), arr.getShift());
+//				}
+//			}else if(arr.getShift().contains(bc)){
+//				arrMap.put(arr.getKey2(), arr.getShift());
+//			}
 			
 		}
 		int j = 1;
@@ -198,10 +197,13 @@ public class ScheduleController {
         			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">";
         			td += "</td>";
         			shifts[l][k] = td;
-        		} else if(arrMap.get(name + "-" + l).contains("公休")){
-        			shifts[l][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l).replace("公休;", "")+"</td>";
+        		} else if(arrMap.get(name + "-" + l).getShift().contains("公休")){
+        			shifts[l][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l).getShift().replace("公休;", "")+"</td>";
         		} else{
-        			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">" + arrMap.get(name + "-" + l) + "</td>";
+        			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' >" + arrMap.get(name + "-" + l).getShift() + "</td>";
+        		}
+        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
+        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
         		}
             }
         	//月休、月班、年休

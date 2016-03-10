@@ -169,11 +169,11 @@
         <listener-class>net.sf.navigator.menu.MenuContextListener</listener-class>
     </listener>
 	
-	<servlet>   
+	<!-- <servlet>   
 	    <servlet-name>autoaudit</servlet-name>   
 	    <servlet-class>com.smart.webapp.servlet.AutoAuditServlet</servlet-class>   
 	    <load-on-startup>2</load-on-startup>   
-	</servlet>
+	</servlet> -->
 
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -249,7 +249,7 @@
     </jsp-config>
 
     <session-config>
-        <session-timeout>15</session-timeout>
+        <session-timeout>-1</session-timeout>
         <cookie-config>
             <http-only>true</http-only>
             <!--<secure>true</secure>-->

@@ -201,7 +201,7 @@ $(function(){
 					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
 					
-					
+					$("#needEdit").val(false);
 					$("#testAdd").css('display','none');
 	    			$("#testDelete").css('display','none');
 	    			$("#auditUnpassBtn").css('display','inline');
@@ -374,6 +374,21 @@ $(function(){
  			$("#audit_status_info").html("");
  		},'json');
  	}, 15000);
+// 	alert($("#menuheader").getAttribute("display"));
+ 	$("#fullScreen").click(function(){
+ 		if ($("#isfulltag").val() == 0) {
+ 			$("#head").css("display","none");
+     		$("#content").css("margin-top","3px");
+     		$("#fullScreen .glyphicon").removeClass("glyphicon-fullscreen");
+     		$("#fullScreen .glyphicon").addClass("glyphicon-resize-small");
+     		$("#isfulltag").val(1);
+ 		} else {
+ 			$("#head").css("display","block");
+     		$("#fullScreen .glyphicon").removeClass("glyphicon-resize-small");
+     		$("#fullScreen .glyphicon").addClass("glyphicon-fullscreen");
+     		$("#isfulltag").val(0);
+ 		}
+ 	});
  	
 });
 
