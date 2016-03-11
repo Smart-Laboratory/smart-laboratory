@@ -36,7 +36,7 @@
 								$(elem).autocomplete({
 							        source: function( request, response ) {
 							            $.ajax({
-							            	url: "../../ajax/reagent/getReagent",
+							            	url: "../ajax/reagent/getReagent",
 							                dataType: "json",
 							                data: {
 							                    name : request.term

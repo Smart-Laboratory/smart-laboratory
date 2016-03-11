@@ -1,7 +1,7 @@
 	function addRow(id, type) {
 		$.ajax({
 			type: "GET",
-            url: "../../ajax/reagent/indata",
+            url: "../ajax/reagent/indata",
             data: {id:id, type:type},
             dataType: "json",
             success: function(data){
@@ -52,7 +52,7 @@
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
-		    	$.post("../../ajax/reagent/savein",{text:str},function(data) {
+		    	$.post("../ajax/reagent/savein",{text:str},function(data) {
 		    		$('#printFrame').empty();
 			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"/reagent/print?time=" + data + "\"/>");
 					$("#printDialog").dialog("open");
@@ -63,7 +63,7 @@
 		$("#reagentdes").autocomplete({
 	        source: function( request, response ) {
 	            $.ajax({
-	            	url: "../../ajax/reagent/getByType",
+	            	url: "../ajax/reagent/getByType",
 	                dataType: "json",
 	                data: {
 	                	type : $("#reagent_select").val(),

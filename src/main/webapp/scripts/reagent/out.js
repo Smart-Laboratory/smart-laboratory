@@ -1,7 +1,7 @@
 	function addRow(id, type) {
 		$.ajax({
 			type: "GET",
-            url: "../../ajax/reagent/outdata",
+            url: "../ajax/reagent/outdata",
             data: {id:id, type:type},
             dataType: "json",
             success: function(data){
@@ -42,7 +42,7 @@
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
-		    	$.post("../../ajax/reagent/saveout",{text:str},function(data) {
+		    	$.post("../ajax/reagent/saveout",{text:str},function(data) {
 		    		alert("success");
 		    		//window.location.href="";
 				});
@@ -52,7 +52,7 @@
 		$("#reagentdes").autocomplete({
 	        source: function( request, response ) {
 	            $.ajax({
-	            	url: "../../ajax/reagent/getByType",
+	            	url: "../ajax/reagent/getByType",
 	                dataType: "json",
 	                data: {
 	                	type : $("#reagent_select").val(),

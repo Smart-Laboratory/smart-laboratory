@@ -21,7 +21,7 @@
 	}
 	
 	function cancel(id) {
-		$.post("../../ajax/reagent/cancelout",{id:id},function(data) {
+		$.post("../ajax/reagent/cancelout",{id:id},function(data) {
     		window.location.href="";
 		});
 	}
