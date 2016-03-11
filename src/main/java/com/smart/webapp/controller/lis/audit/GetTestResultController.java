@@ -245,7 +245,7 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				map.put("checktime", Constants.DF5.format(tr.getMeasureTime()));
-				map.put("device", deviceMap.get(tr.getOperator()) == null ? tr.getOperator() : deviceMap.get(tr.getOperator()));
+				map.put("device", deviceMap.get(tr.getDeviceId()) == null ? tr.getOperator() : deviceMap.get(tr.getDeviceId()));
 				String lo = tr.getRefLo();
 				String hi = tr.getRefHi();
 				if (lo != null && hi != null) {
@@ -347,7 +347,11 @@ public class GetTestResultController extends BaseAuditController {
 			Map<String, String> rmap = null;
 			Set<String> testIdSet = new HashSet<String>();
 			for (TestResult t : testResults) {
-				testIdSet.add(t.getTestId());
+				if (t.getEditMark() != Constants.DELETE_FLAG) {
+					testIdSet.add(t.getTestId());
+				} else {
+					testResults.remove(t);
+				}
 			}
 			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
 			if(list!=null && list.size()>0){
@@ -421,11 +425,14 @@ public class GetTestResultController extends BaseAuditController {
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> dataRows2 = new ArrayList<Map<String, Object>>();
-		int i = 2;
-		for (TestResult tr : testResults) {
-			if (tr.getEditMark() == Constants.DELETE_FLAG)
-				continue;
-
+		int size = 0;
+		if(testResults.size()/2 == 0) {
+			size = testResults.size()/2-1;
+		} else {
+			size = testResults.size()/2;
+		}
+		for (int i =0; i< testResults.size(); i++) {
+			TestResult tr  = testResults.get(i);
 			color = 0;
 			String id = tr.getTestId();
 			if (colorMap.containsKey(id)) {
@@ -452,7 +459,7 @@ public class GetTestResultController extends BaseAuditController {
 						map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(tid) ? resultMap2.get(tid) : "");
 					}
 				}
-				map.put("device", deviceMap.get(tr.getOperator()) == null ? tr.getOperator() : deviceMap.get(tr.getOperator()));
+				map.put("device", deviceMap.get(tr.getDeviceId()) == null ? tr.getOperator() : deviceMap.get(tr.getDeviceId()));
 				String lo = tr.getRefLo();
 				String hi = tr.getRefHi();
 				if (lo != null && hi != null) {
@@ -464,12 +471,11 @@ public class GetTestResultController extends BaseAuditController {
 				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
-				if(i%2 == 0) {
+				if(i<= size) {
 					dataRows.add(map);
 				} else {
 					dataRows2.add(map);
 				}
-				i++;
 			} else {
 				continue;
 			}

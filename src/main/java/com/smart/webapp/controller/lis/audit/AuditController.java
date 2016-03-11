@@ -564,9 +564,6 @@ public class AuditController extends BaseAuditController {
 			status = Constants.STATUS_UNPASS;
 		}
 		
-		if(ids.contains(",")) {
-			ids = ids.substring(0, ids.length()-1);
-		}
 		List<Sample> samples = sampleManager.getByIds(ids);
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
