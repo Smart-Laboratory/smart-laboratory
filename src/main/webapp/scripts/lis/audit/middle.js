@@ -23,11 +23,13 @@
 			
 		jQuery("#sample0").jqGrid("setGridParam",{
 			data:array[0].rows,
-			userdata:array[0].userdata
+			userdata:array[0].userdata,
+			editurl: "../audit/edit?sampleNo=" + sample
 		}).trigger("reloadGrid");
 		jQuery("#sample1").jqGrid("setGridParam",{
 			data:array[1].rows,
-			userdata:array[0].userdata
+			userdata:array[0].userdata,
+			editurl: "../audit/edit?sampleNo=" + sample
 		}).trigger("reloadGrid");
 	}
 	

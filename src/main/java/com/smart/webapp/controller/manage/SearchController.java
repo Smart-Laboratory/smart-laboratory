@@ -22,6 +22,7 @@ import com.smart.Constants;
 import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
+import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
@@ -101,8 +102,9 @@ public class SearchController {
 			if(text.length()<8)
 				break;
 			String code = operator.getLabCode();
-			size = sampleManager.getSampleCount(text, lab, 0, -3, code);
-			samples = sampleManager.getSampleList(text, lab, 0, -3, code, start, end);
+			if(!sectionId.equals("1300000"))
+				lab = sectionId;
+			samples = sampleManager.getSampleList(text, lab, 0, -3, code, 0, 0);
 			break;
 
 		case 2:
@@ -121,6 +123,7 @@ public class SearchController {
 		default:
 			break;
 		}
+		System.out.println(samples.size());
 		if(samples==null || samples.size()==0){
 			return null;
 		}
@@ -132,7 +135,7 @@ public class SearchController {
 				}
 			}
 		}
-		if(!sectionId.equals("1300000")){
+		if(type!=1 && !sectionId.equals("1300000")){
 			for(int i=0;i<samples.size();i++){
 				if(!samples.get(i).getSectionId().equals(sectionId)){
 					samples.remove(i);
@@ -148,6 +151,7 @@ public class SearchController {
 				}
 			}
 		}
+		System.out.println(samples.size());
 		size=samples.size();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
@@ -158,12 +162,31 @@ public class SearchController {
 		int totalPage = (size + x) / (row == 0 ? size : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
+		if(size-1>end)
+			samples = samples.subList(start, end);
+		else if(size>start)
+			samples = samples.subList(start, size-1);
+		else {
+			return null;
+		}
+		System.out.println(samples.size());
 		
+		String hisBlh = "";
+		for(Sample sample : samples) {
+			hisBlh += "'" + sample.getPatientblh() + "',";
+		}
+		Map<String, String> sMap = SampleUtil.getInstance().getSampleList(dictionaryManager);
+		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+		final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
+		for(Patient p : patientList) {
+			hisPatientMap.put(p.getBlh(), p);
+		}
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		
 		
 		for(Sample info :samples) {
-			Patient patient = patientManager.getByBlh(info.getPatientblh());
-			Section section = sectionManager.getByCode(info.getSectionId());
+			Patient patient = hisPatientMap.get(info.getPatientblh());
+			String section = sectionutil.getValue(info.getSectionId());
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
@@ -176,9 +199,9 @@ public class SearchController {
 			map.put("sex",patient.getSexValue());
 			map.put("birthday", yyyyMM.format(patient.getBirthday()));
 			map.put("stayHospitalMode",info.getStayHospitalModelValue());
-			map.put("section",section.getName());
+			map.put("section",section);
 			map.put("patientid",info.getPatientId());
-			map.put("sampleType", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+			map.put("sampleType", sMap.get(info.getSampleType()));
 			if (info.getSampleStatus()>=5) {
 				if (info.getIswriteback() == 1) {
 					map.put("lisPass", "<font color='red'>" + "已打印" + "</font>");
@@ -192,7 +215,7 @@ public class SearchController {
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html;charset=UTF-8");
-		
+		System.out.println(samples.size());
 		
 		return dataResponse;
 	}
