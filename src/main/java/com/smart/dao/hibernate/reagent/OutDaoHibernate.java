@@ -1,7 +1,10 @@
 package com.smart.dao.hibernate.reagent;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -27,8 +30,18 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Out> getLastHMs(Long rgId, Date measuretime) {
-		return getSession().createQuery("select o from Out o where o.rgId=" + rgId + " and o.outdate<'"+measuretime+"' order by o.outdate desc").list();
+	public List<Out> getLastHMs(String rgId, Date measuretime) {
+		List<Out> list = getSession().createQuery("from Out where rgId in (" + rgId + ") and outdate<'"+measuretime+"' order by outdate desc").list();
+	
+		Set<Long> ids = new HashSet<Long>();
+		List<Out> out = new ArrayList<Out>();
+		for(Out o : list) {
+			if(!ids.contains(o.getRgId())) {
+				ids.add(o.getRgId());
+				out.add(o);
+			}
+		}
+		return out;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -26,8 +26,8 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
 		outDao.saveAll(needSaveOut);
 	}
 	
-	public List<Out> getLastHMs(Long rgId, Date measuretime) {
-		return outDao.getLastHMs(rgId, measuretime);
+	public List<Out> getLastHMs(String ids, Date measuretime) {
+		return outDao.getLastHMs(ids, measuretime);
 	}
 
 	public List<Out> getByLab(String lab) {

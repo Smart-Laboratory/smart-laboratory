@@ -9,7 +9,7 @@
 	</select>
 	<button class="btn btn-info" id="AuditCodeSetting" style="width:80px;margin-bottom:5px;""><fmt:message key="code.setting"/></button>
 	</div>
-	<div id="historyTabs"  >
+	<div id="historyTabs">
 		<ul>
 			<li><a href="#tabs-0"><fmt:message key="sample.explain"/></a></li>
 			<li><a href="#tabs-1"><fmt:message key="result.history"/></a></li>
@@ -48,14 +48,14 @@
 			</div>
 		</div>
 		<div id="tabs-2" style="padding:5px;">
-				<div id="g1"></div>
-				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
-   				<div id="g2"></div>
-   				<span class="label label-info" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
-   				<div id="g3"></div>
-   				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
-				<div id="g4"></div>
-				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(3)"><fmt:message key="sop.detail.g4" /></a></span>
+			<div id="g1"></div>
+			<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
+			<div id="g2"></div>
+			<span class="label label-info" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
+			<div id="g3"></div>
+			<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
+			<div id="g4"></div>
+			<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(3)"><fmt:message key="sop.detail.g4" /></a></span>
 		</div>
 	</div>
 </div>

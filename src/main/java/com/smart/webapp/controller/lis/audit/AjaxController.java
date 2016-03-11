@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.util.NeedWriteCount;
 import com.smart.service.reagent.OutManager;
@@ -73,9 +74,34 @@ public class AjaxController extends BaseAuditController {
 				measuretime = t.getMeasureTime();
 			}
 		}
-		Reagent r  = reagentManager.getByTestId(testid);
+		List<Reagent> rlist  = reagentManager.getByTestId(testid);
+		if(rlist.size()>0) {
+			String rids = "";
+			Map<Long, Reagent> rm = new HashMap<Long, Reagent>();
+			for(Reagent r : rlist) {
+				rids += r.getId() + ",";
+				rm.put(r.getId(), r);
+			}
+			List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), measuretime);
+			List<String> html = new ArrayList<String>();
+			for(int i=0; i<out.size(); i++) {
+				Out o = out.get(i);
+				StringBuilder s = new StringBuilder("");
+				s.append("<p>");
+				s.append((i+1) + ". ");
+				s.append(rm.get(o.getRgId()).getName());
+				s.append(" 批号:");
+				s.append(" " + o.getBatch());
+				s.append(" 出库日期:");
+				s.append(" " + Constants.SDF.format(o.getOutdate()));
+				s.append("</p>");
+				html.add(s.toString());
+			}
+			map.put("hmList", html);
+		} else {
+			map.put("hmList", "");
+		}
 		
-		map.put("hmList", outManager.getLastHMs(r.getId(), measuretime));
 		if (idMap.size() == 0)
 			initMap();
 		

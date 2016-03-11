@@ -45,7 +45,7 @@
 </div>
 
 
-<div class="col-sm-12" style="margin-top: 50px;">
+<div class="col-sm-12" style="margin-top: 10px;">
 	<div class="col-sm-3" id="leftContent" style="float: left; ">
 		<div id="sampleListPanel">
 			<table id="list"></table>

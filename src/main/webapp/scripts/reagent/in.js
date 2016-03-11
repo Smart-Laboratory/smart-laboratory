@@ -54,7 +54,7 @@
 		    } else {
 		    	$.post("../ajax/reagent/savein",{text:str},function(data) {
 		    		$('#printFrame').empty();
-			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"/reagent/print?time=" + data + "\"/>");
+			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"../reagent/print?time=" + data + "\"/>");
 					$("#printDialog").dialog("open");
 				});
 		    }

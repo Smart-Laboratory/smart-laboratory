@@ -1,5 +1,6 @@
 package com.smart.model.reagent;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -30,7 +31,6 @@ public class Out extends BaseObject implements Serializable {
 	private int num;
 	private String batch;
 	private int testnum;				// 试剂能用多少次检验
-	
 	private Long rgId;
 	private String lab;
 	

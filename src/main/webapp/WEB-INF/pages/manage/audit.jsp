@@ -28,6 +28,7 @@
 
 <style>
 .ui-tabs-anchor {
+	width:60px;
 	padding: 0 10px;
 }
 </style>

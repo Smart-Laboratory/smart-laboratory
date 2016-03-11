@@ -83,11 +83,11 @@ public class PatientListController extends BaseAuditController {
 			map.put("id", info.getPatientId());
 			map.put("name", patient.getPatientName());
 			map.put("age", String.valueOf(patient.getAge()));
-			String ex = info.getInspectionName();
+			/*String ex = info.getInspectionName();
 			if (ex.length() > 16) {
 				ex = ex.substring(0, 16) + "...";
-			}
-			map.put("examinaim", ex);
+			}*/
+			map.put("examinaim", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("section", section.getName());
 			map.put("sex", patient.getSexValue());
@@ -532,7 +532,7 @@ public class PatientListController extends BaseAuditController {
 			if (info.getSampleStatus()>=6) {
 				map.put("type", "已打印");
 			}
-			map.put("examinaim", info.getDiagnostic());
+			map.put("examinaim", info.getInspectionName());
 			dataRows.add(map);
 			index++;
 		}

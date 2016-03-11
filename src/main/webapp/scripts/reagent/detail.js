@@ -16,7 +16,7 @@
 	
 	function reprint(id) {
 		$('#printFrame').empty();
-		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"/reagent/print?id=" + id + "\"/>");
+		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"../reagent/print?id=" + id + "\"/>");
 		$("#printDialog").dialog("open");
 	}
 	

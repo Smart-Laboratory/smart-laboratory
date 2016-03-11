@@ -205,7 +205,7 @@
 	
 	<div id="codeSetDialog" title="<fmt:message key='audit.code.setting' />" style="text-align:left;" >
 		<div style="margin:10px;">
-			<span><fmt:message key='auto.audit'/></span>
+			<span><fmt:message key='writeback'/></span>
 			<button id="controlAuditBtn" class="btn btn-info">
 			<c:choose>
 				<c:when test="${activeAuto}">

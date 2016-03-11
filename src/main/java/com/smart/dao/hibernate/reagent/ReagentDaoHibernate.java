@@ -36,12 +36,8 @@ public class ReagentDaoHibernate extends GenericDaoHibernate<Reagent, Long> impl
 	}
 
 	@SuppressWarnings("unchecked")
-	public Reagent getByTestId(String testid) {
-		List<Reagent> list = getSession().createQuery("from Reagent where testname='" + testid + "'").list();
-		if(list.size() > 0) {
-			return list.get(0);
-		}
-		return null;
+	public List<Reagent> getByTestId(String testid) {
+		return  getSession().createQuery("from Reagent where testname like '%" + testid + "%'").list();
 	}
 
 }

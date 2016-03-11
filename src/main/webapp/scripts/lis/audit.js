@@ -337,7 +337,7 @@ $(function(){
 	});
 	
 	$("#unaudit_reason_btn").hover(function(){
- 		$("#unaudit_reason_btn").popover({title:"未通过原因",html:true,content:$("#audit_reason").html(),trigger:'manual'});
+ 		$("#unaudit_reason_btn").popover({title:"未通过原因",html:true,content:$("#audit_reason").html(),trigger:'manual',placement:'bottom'});
  		$("#unaudit_reason_btn").popover("show");
  	},function(){
  		$("#unaudit_reason_btn").popover("destroy");

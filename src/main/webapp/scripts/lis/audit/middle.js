@@ -1,11 +1,11 @@
 	function getRelativeTests(sample){
 		$("#relative-tests").html(" ");
-		/*$.get("../audit/ajax/relativeTest",{sample:sample}, function(data) {
+		$.get("../audit/ajax/relativeTest",{sample:sample}, function(data) {
 			if(data != "") {
 				data = jQuery.parseJSON(data);
 				$("#relative-tests").html(data.html);
 			}
-		});*/
+		});
 	}
 	
 	function twsSampleReload(sample){
@@ -442,14 +442,7 @@
 					$("#chartDialog").dialog("open");
 					$("#hmInfo").empty();
 					for (var i=0; i< data.hmList.length; i++) {
-						$("#hmInfo").append("<p>");
-						$("#hmInfo").append((i+1) + ". ");
-						$("#hmInfo").append(data.hmList[i].hmName);
-						$("#hmInfo").append(" 批号:");
-						$("#hmInfo").append(" " + data.hmList[i].hmBatch);
-						$("#hmInfo").append(" 出库日期:");
-						$("#hmInfo").append(" " + data.hmList[i].outtime);
-						$("#hmInfo").append("</p>");
+						$("#hmInfo").append(data.hmList[i]);
 					}
 					
 					if (data.num > 1) {
