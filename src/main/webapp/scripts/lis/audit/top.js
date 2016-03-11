@@ -48,7 +48,7 @@ $(function(){
 			if(data) {
 				if ($("#need_write_back").html() != "0") {
 					if (confirm("确认写回"+$("#need_write_back").html()+"条样本")) {
-						writeBackOnce($("#userLabCode").val(), $("#lastDepLib").val(), $("#userText").html());
+						writeBackOnce($("#userLabCode").val(), $("#labSelect").val(), $("#userText").html());
 					}
 				}
 			} else {
@@ -93,7 +93,7 @@ $(function(){
 		$.get("../audit/testset",{code:code},function(data){
 			if(data) {
 				if ($("#writeBack_text").val() != "") {
-					writeBackPart($("#writeBack_text").val(), $("#lastDepLib").val(), $("#userText").html());
+					writeBackPart($("#writeBack_text").val(), $("#labSelect").val(), $("#userText").html());
 				}
 			} else {
 				alert(code + "中有未设置的检验者，请先查看检验者设置！");
@@ -105,7 +105,7 @@ $(function(){
 	if ($("#writeBack_text").val() != "") {
 		$.post("<c:url value='/explain/audit/passAndWrite'/>",{text:$("#writeBack_text").val(),op:"pass"},function(data) {
 			if (data == true) {
-				writeBackPart($("#writeBack_text").val(), $("#lastDepLib").val(), $("#userText").html());
+				writeBackPart($("#writeBack_text").val(), $("#labSelect").val(), $("#userText").html());
 			}
 		});
 		

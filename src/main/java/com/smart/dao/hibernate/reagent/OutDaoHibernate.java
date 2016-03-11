@@ -46,6 +46,6 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 
 	@SuppressWarnings("unchecked")
 	public List<Out> getByLab(String lab) {
-		return getSession().createCriteria(Out.class).add(Restrictions.eq("lab", lab)).list();
+		return getSession().createQuery("from Out where lab='" + lab + "'").list();
 	}
 }
