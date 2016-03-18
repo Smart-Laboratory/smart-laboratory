@@ -21,6 +21,6 @@ public class InvalidSampleDaoHibernate extends GenericDaoHibernate<InvalidSample
 			return null;
 		}
 		
-		return getSession().createQuery("from InvalidSample where (sample.id='" + id + "') or (sampleId='"+id+"') ").list();
+		return getSession().createQuery("from InvalidSample where sampleId='"+id+"' ").list();
 	}
 }

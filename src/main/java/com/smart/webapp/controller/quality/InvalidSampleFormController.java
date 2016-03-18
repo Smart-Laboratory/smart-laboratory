@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.quality;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.model.lis.InvalidSample;
@@ -23,6 +25,7 @@ import com.smart.service.UserManager;
 import com.smart.service.lis.InvalidSampleManager;
 import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
 
 @Controller
 @RequestMapping("/quality/invalidSampleForm*")
@@ -37,6 +40,7 @@ public class InvalidSampleFormController {
 	@Autowired
 	private PatientManager patientManager;
 	
+	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/**
 	 *  不合格标本编辑页面
@@ -49,6 +53,7 @@ public class InvalidSampleFormController {
 	@RequestMapping(method = RequestMethod.GET)
 	public InvalidSample getInvalidSample(HttpServletRequest request, HttpServletResponse response){
 		
+		System.out.println("开始");
 		String[] reasonList = Constants.INVALIDSAMPLE_REASON;
 		Map<String, String> reasonMap = new LinkedHashMap<String,String>();
 		for(int i=1;i< reasonList.length;i++){
@@ -70,14 +75,18 @@ public class InvalidSampleFormController {
 				invalidSample.setSex(patient.getSex());
 				invalidSample.setAge(patient.getAge());
 				invalidSample.setSampleType(sample.getSampleType());
+				request.setAttribute("hosSection",sample.getHosSection() );
+				request.setAttribute("sampleNo",sample.getSampleNo() );
+				request.setAttribute("inspectionName",sample.getInspectionName() );
+				request.setAttribute("description",sample.getDescription() );
 			} else
 				msg="该医嘱号不存在";
 		}
 		
-		
+		request.setAttribute("rejectTime",ymd.format(new Date()) );
 		invalidSample.setRejectTime(new Date());
 		request.setAttribute("msg", msg);
-		
+		System.out.println("end:"+invalidSample.getRejectTime());
 		return invalidSample;
 	}
 	

@@ -241,9 +241,7 @@ public class PbController {
 					a.setShift(arr[2]);
 				else 
 					a.setShift("");
-				if(type.equals("5")) {
-					a.setType(1);
-				}
+				
 				list.add(a);
 			}
 		}

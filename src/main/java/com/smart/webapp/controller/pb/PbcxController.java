@@ -108,7 +108,7 @@ public class PbcxController {
 			List<Arrange> wArranges = arrangeManager.getArrangeByType("外", tomonth);
 			List<Arrange> hArranges = arrangeManager.getArrangeByType("海", tomonth);
 			List<Arrange> rArranges = arrangeManager.getArrangeByType("入", tomonth);
-			List<Arrange> bArranges = arrangeManager.getArrangeByType("帮", tomonth);
+			List<Arrange> bArranges = arrangeManager.getArrangeByType("生帮", tomonth);
 			
 			String[][] shifts = new String[8][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
 			size = shifts.length;
@@ -159,7 +159,7 @@ public class PbcxController {
 	    			arr = hArranges;
 	    			break;
 	    		case 7:
-	    			bc = "帮";
+	    			bc = "生帮";
 	    			arr = bArranges;
 	    			break;
 	    		default:
@@ -171,7 +171,11 @@ public class PbcxController {
 	    		for(Arrange a: arr){
 //	    			if(a.getShift().contains("休"))
 //	    				continue;
-	    			if(!a.getShift().contains(bc+";")){
+	    			if(bc.equals("夜")){
+	    				if(!a.getShift().contains("夜;") && !a.getShift().contains("夜生;") && !a.getShift().contains("夜临;")){
+	    					continue;
+	    				}
+	    			}else if(!a.getShift().contains(bc+";")){
 	    				continue;
 	    			}
 	    			String worker = "";
@@ -181,7 +185,7 @@ public class PbcxController {
 						worker = a.getWorker();
 					}
 	    			if(arrMap.get(a.getDate().split("-")[2])!=null){
-	    				arrMap.put(a.getDate().split("-")[2], worker+";  "+arrMap.get(a.getDate().split("-")[2]));
+	    				arrMap.put(a.getDate().split("-")[2], worker+";<br>  "+arrMap.get(a.getDate().split("-")[2]));
 	    			}
 	    			else
 	    				arrMap.put(a.getDate().split("-")[2], worker);
@@ -246,12 +250,12 @@ public class PbcxController {
 	        		if (arrMap.get(name + "-" + l) == null) {
 	        			shifts[k][l] = ""; //<td style='background:#7CFC00'>休</td>
 	        		} else {
-	        			shifts[k][l] = arrMap.get(name + "-" + l).getShift();
+	        			shifts[k][l] = arrMap.get(name + "-" + l).getShift().replace(";", ";<br>");
 	        		}
 	        		if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
 	        			shifts[k][l] = "<td style='background:#7CFC00'>" + shifts[k][l] + "</td>";
 	        		} else if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getShift().contains("公休")){
-	        			shifts[k][l] = "<td  style='background:#FDFF7F;'"+arrMap.get(name + "-" + l).getShift().replace("公休;", "")+"</td>";
+	        			shifts[k][l] = "<td  style='background:#FDFF7F;'>"+arrMap.get(name + "-" + l).getShift().replace("公休;", "").replace(";", ";<br>")+"</td>";
 	        		}  
 	        		else {
 	        			shifts[k][l] = "<td>" + shifts[k][l] + "</td>";

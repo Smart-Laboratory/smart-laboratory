@@ -74,13 +74,16 @@ public class CriticalController {
 		}
 		for(CriticalRecord cr : crList) {
 			crMap.put(cr.getSampleid(), cr);
+			System.out.println(cr.getSampleid());
 		}
 		for(Patient p : patientList) {
 			pMap.put(p.getBlh(), p);
 		}
 		List<Critical> criticals = new ArrayList<Critical>();
 		int index = 0;
+		System.out.println("size="+crMap.size());
 		for (Sample sample : samples) {
+			System.out.println(sample.getId());
 			if (sample.getSectionId().equals(lab)) {
 				Critical ctl = new Critical();
 				ctl.setId(++index);

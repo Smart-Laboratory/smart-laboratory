@@ -177,7 +177,7 @@ public class TestResultAjaxController extends BaseAuditController{
 					fillUtil.fillResult(nt, info, patient.getAge(), patient.getSexValue());
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();
-					testModify.setModifyTime(new Date());
+//					testModify.setModifyTime(new Date());
 					testModify.setModifyUser(request.getRemoteUser());
 					testModify.setSampleNo(sample);
 					testModify.setTestId(idValue[0]);

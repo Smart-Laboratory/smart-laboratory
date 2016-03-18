@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.base.Function;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
 import com.smart.model.pb.WInfo;
@@ -31,28 +32,56 @@ import com.smart.service.WInfoManager;
 public class SxPbViewController {
 
 	SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat md = new SimpleDateFormat("MM-dd");
 	SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
+	
+	private int pageNum = 20;
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<WInfo> wInfos = wInfoManager.getBySection("", "2");
-		String month = request.getParameter("month");
+		String from = request.getParameter("from");
+		String to = request.getParameter("to");
+		if(from==null||to==null){
+			from = ym.format(new Date());
+			to = ym.format(new Date());
+		}
 		
+		List<WInfo> wInfos = wInfoManager.getBySection("", "2");
+//		String year = request.getParameter("year");
+		int size = wInfos.size();
+		
+		//分页
+		int pages = 0;
+		if(size >= pageNum)
+			pages = size/pageNum + (size%pageNum==0?0:1) ;
+		else if(size >0)
+			pages = 1;
+		String pg = request.getParameter("page");
+		int page = 1;
+		if(pg!=null && !pg.isEmpty())
+			page=Integer.parseInt(pg);
+		if(page<pages)
+			wInfos = wInfos.subList((page-1)*pageNum, page*pageNum);
+		else if(page == pages)
+			wInfos = wInfos.subList((page-1)*pageNum, size);
+		
+//		System.out.println(page+"--"+pages+"--"+wInfos.size());
+		
+		//计算日期
+		
+		
+		int maxWeek = getMaxWeek(from, to);
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		int m = cal.get(Calendar.MONDAY)+2;
-		if(month==null || month.isEmpty())
-			month = cal.get(Calendar.YEAR) +"-" + (m<10 ? "0"+m : m);
-		cal.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
-		cal.set(Calendar.MONTH, Integer.parseInt(month.split("-")[1])-1);
+		cal.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
+		cal.set(Calendar.MONTH, Integer.parseInt(from.split("-")[1])-1);
 		cal.set(Calendar.DATE, 1);
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
-		int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		int yearMaxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
 		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
 		System.out.println(ymd.format(cal.getTime()));
 		Calendar c = new GregorianCalendar();
 		c.setFirstDayOfWeek(Calendar.MONDAY);
-		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
+		c.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
 		System.out.println(ymd.format(c.getTime()));
@@ -61,37 +90,46 @@ public class SxPbViewController {
         
         System.out.println(ymd.format(c.getTime()));
 		
+        int year = Integer.parseInt(from.split("-")[0]);
+        System.out.println(wInfos.size()+":"+maxWeek);
 		String[][] shifts = new String[wInfos.size()+1][maxWeek+1];
-		shifts[0][0] = "<th>"+month+"</th>";
+		shifts[0][0] = "<th style='width:150px;'>"+year+"</th>";
 		for(int i=1;i<=maxWeek;i++){
 			int dweek = startweek+i-1;
+			if(dweek>yearMaxWeek)
+				dweek-=yearMaxWeek;
 			if(i>1)
 				c.add(GregorianCalendar.DATE, 1);
-			String startDate = ymd.format(c.getTime());
+			String startDate = md.format(c.getTime());
 			c.add(GregorianCalendar.DATE, 6);
-			String endDate = ymd.format(c.getTime());
-			shifts[0][i]="<th>第 "+dweek+" 周("+startDate+"-"+endDate+")</th>" ;
+			String endDate = md.format(c.getTime());
+			shifts[0][i]="<th name='"+startDate.split("-")[0]+"' style='width:150px;'>第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</th>" ;
 			
 		}
 		
 		Map<String, SxArrange> sxMap = new HashMap<String,SxArrange>();
 		
 		
-		List<SxArrange> sxArranges = sxArrangeManager.getByMonth(month);
+		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(year, startweek, maxWeek);
 		System.out.println(sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
+				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
 				sxMap.put(a.getWorker()+":"+a.getWeek(), a);
 			}
 		}
 		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td>"+wInfos.get(j).getName()+"</td>";
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getId()+")\">"+wInfos.get(j).getName()+"</a></td>";
 			for(int i=1;i<maxWeek+1;i++){
-				if(sxMap.containsKey(wInfos.get(j).getName()+":"+(startweek+i-1)) && sxMap.get(wInfos.get(j).getName()+":"+(startweek+i-1)).getSection()!=null){
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getName()+"-"+(startweek+i-1)+"'>"+sxMap.get(wInfos.get(j).getName()+":"+(startweek+i-1)).getSection()+"</td>";
+				int dweek = startweek+i-1;
+				if(dweek>yearMaxWeek)
+					dweek-=yearMaxWeek;
+				String month = shifts[0][i].substring(10,12);
+				if(sxMap.containsKey(wInfos.get(j).getId()+":"+dweek) && sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()!=null){
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()+"</td>";
 				}else{
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getName()+"-"+(startweek+i-1)+"'></td>";
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'></td>";
 				}
 				
 			}
@@ -99,13 +137,20 @@ public class SxPbViewController {
 		}
 		
 		String arrDate = "";
-		for(int j=0; j<wInfos.size()+1;j++){
-			arrDate += "<tr>";
-			for(int i=0;i<maxWeek+1;i++){
+		for(int i=0;i<maxWeek+1;i++){
+			if(i==0)
+				arrDate += "<thead class='fixedHeader'><tr>";
+			else
+				arrDate += "<tr>";
+			for(int j=0; j<wInfos.size()+1;j++){
 				arrDate += shifts[j][i];
 			}
-			arrDate += "</tr>";
+			if(i==0)
+				arrDate += "</tr></thead><tbody class='scrollContent'>";
+			else
+				arrDate += "</tr>";
 		}
+		arrDate += "</tbody>";
 		
 		//班次选择
 		Map<String, String> wshifts = new LinkedHashMap<String,String>();
@@ -113,20 +158,48 @@ public class SxPbViewController {
 		for(Shift shift : ss){
 			wshifts.put(shift.getAb(), shift.getName());
 		}
-		
+		request.setAttribute("pages", pages);
+		request.setAttribute("page", page);
 		request.setAttribute("wshifts", wshifts);
-		request.setAttribute("month", month);
+		request.setAttribute("year", year);
+		request.setAttribute("from", from);
+		request.setAttribute("to", to);
 		
 		
 		ModelAndView view = new ModelAndView();
 		view.addObject("pbdate", arrDate);
 		
-		
-		
-		
-		
         return view;
     }
+	
+	private int getMaxWeek(String  from,String to){
+		int[] fromdate = {Integer.parseInt(from.split("-")[0]),Integer.parseInt(from.split("-")[1])}; 
+		int[] todate = {Integer.parseInt(to.split("-")[0]),Integer.parseInt(to.split("-")[1])}; 
+		int startweek=0;
+		int toweek = 0;
+		int totleweek=0;
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
+			cal.set(Calendar.MONTH, Integer.parseInt(from.split("-")[1])-1);
+			cal.set(Calendar.DATE, 1);
+			cal.setFirstDayOfWeek(Calendar.MONDAY);
+			startweek = cal.get(Calendar.WEEK_OF_YEAR);
+			
+			cal.set(Calendar.YEAR, Integer.parseInt(to.split("-")[0]));
+			cal.set(Calendar.MONTH, Integer.parseInt(to.split("-")[1])-1);
+			int day = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+			cal.set(Calendar.DATE, day);
+			toweek = cal.get(Calendar.WEEK_OF_YEAR);
+		if(fromdate[0]==todate[0] && toweek>startweek){
+			totleweek = toweek - startweek+1;
+		} else {
+			cal.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
+			int weeks = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
+			totleweek  = weeks - startweek + 1 + toweek;
+		}
+		return totleweek;
+	}
+	
 	
 	@Autowired
 	private WInfoManager wInfoManager;

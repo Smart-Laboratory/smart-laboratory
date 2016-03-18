@@ -10,6 +10,13 @@ function searchSample(){
 	var text = $("#sampleSearch").val();
 	location.href="../quality/invalidSamples?text="+text;
 }
+$(function(){
+	$("#addInvalidSample").click(function(){
+		var id = $("#sampleSearch").val();
+		window.location.href="../quality/invalidSampleForm?id="+id;
+	});
+	
+})
 
 </script>
 </head>
@@ -26,7 +33,7 @@ function searchSample(){
 	<label for="sampleSearch"><fmt:message key="invalidSamplesList.search"/>:</label>
 	<input id="sampleSearch" type="text" class="form-control" placeholder="please enter id"/>
 	<button type="button" class="btn btn-info" onclick="searchSample();"><fmt:message key="button.search"/></button>
-	<button type="button" class="btn btn-primary"><fmt:message key="button.add"/></button>
+	<button type="button" id="addInvalidSample" class="btn btn-primary"><fmt:message key="button.add"/></button>
 </div>
 
 <display:table name="invalidSamples" cellspacing="0" cellpadding="0" requestURI="" 
@@ -36,10 +43,10 @@ function searchSample(){
 		paramProperty="id" titleKey="sample.id" />
 	<display:column property="sampleType" sortable="true" style="width:9%"
 		titleKey="sample.sampleType" />
-	<display:column property="sample.hosSection" sortable="true" style="width:5%"
+	<%-- <display:column property="sample.hosSection" sortable="true" style="width:5%"
 		titleKey="sample.hosSection" /> 
 	<display:column property="sample.section.name" sortable="true" style="width:9%"
-		titleKey="sample.section" /> 
+		titleKey="sample.section" />  --%>
 	<display:column  sortable="true" style="width:10%"
 		titleKey="invalidSamples.containerType" >
 		<c:choose>

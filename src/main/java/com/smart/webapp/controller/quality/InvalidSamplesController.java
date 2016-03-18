@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.lis.InvalidSample;
+import com.smart.model.lis.Sample;
 import com.smart.service.lis.InvalidSampleManager;
+import com.smart.service.lis.SampleManager;
 import com.smart.util.PageList;
 
 
@@ -64,11 +66,15 @@ public class InvalidSamplesController {
 		String id = request.getParameter("id");
 		
 		InvalidSample invalidSample = new InvalidSample();
+		Sample sample = new Sample();
 		if(id!=null){
 			invalidSample = invalidSampleManager.get(Long.parseLong(id));
+			long sampleId = invalidSample.getSampleId();
+			if(sampleId!=0)
+				sample = sampleManager.get(sampleId);
 		}
 		
-		return new ModelAndView("quality/invalidSampleView","invalidSample",invalidSample);
+		return new ModelAndView("quality/invalidSampleView","invalidSample",invalidSample).addObject("sample", sample);
 	}
 	
 	/**
@@ -87,4 +93,7 @@ public class InvalidSamplesController {
 		}
 		return new ModelAndView("/quality/invalidSamples");
 	}
+	
+	@Autowired
+	private SampleManager sampleManager;
 }

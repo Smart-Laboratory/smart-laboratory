@@ -1,6 +1,8 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import com.smart.model.lis.TestModify;
 import com.smart.model.lis.TestResult;
 import com.smart.service.lis.TestModifyManager;
 import com.smart.webapp.util.DataResponse;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
 import com.zju.api.model.SyncResult;
 
 
@@ -36,6 +39,8 @@ public class GetTestResultController extends BaseAuditController {
 	
 	@Autowired
 	private TestModifyManager testModifyManager;
+	
+	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/**
 	 * 获取某一样本的检验数据
@@ -594,7 +599,12 @@ public class GetTestResultController extends BaseAuditController {
 			sampleManager.save(info);
 			
 			TestModify testModify = new TestModify();
+			Date date = new Date();
+			System.out.println(date);
+//			testModify.setModifyTime(date);
+//			System.out.println(ymd.format(new Date()));
 			testModify.setModifyTime(new Date());
+			System.out.println(testModify.getModifyTime());
 			testModify.setModifyUser(request.getRemoteUser());
 			testModify.setSampleNo(sampleNo);
 			testModify.setTestId(testId);

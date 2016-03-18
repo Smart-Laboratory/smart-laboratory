@@ -67,12 +67,12 @@ table tr th {
 	</c:when>
 	<c:otherwise>
 		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
-		<div>
+		<div class="col-sm-12" style="overflow:auto;">
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<p><fmt:message key="pb.annotation"/></p>
 			
 			<input id="cxdata" value="${arrString }" type="hidden"/>
-			<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+			<table id="data" class="table-hover" style="width:1500px;margin-top:10px;font-size:12px;text-align:center;" border="1px;">
 				
 			</table>
 		</div>

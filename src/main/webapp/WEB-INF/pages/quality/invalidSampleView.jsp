@@ -4,7 +4,16 @@
     <title><fmt:message key="invalidSamplesDetail.title"/></title>
     <meta name="heading" content="<fmt:message key='invalidSamplesDetail.heading'/>"/>
     <meta name="menu" content="Quality" />
-    
+    <style>
+    .sinfo{
+    	width:100px;
+    	text-align:right;
+    }
+    .sinfo2{
+    	width:120px;
+    	text-align:right;
+    }
+    </style>
     <script type="text/javascript">
     function deleteConfirm() {
     	if (confirm('<fmt:message key="confirm.delete" />')) {
@@ -23,31 +32,31 @@
 <div class="col-sm-12" style="float:left">
 <table class="table table-striped table-hover" >
 	<tr>
-		<th><appfuse:label key="sample.id"/> :</th>
-		<td><span class="pText"> <c:out value="${invalidSample.sampleId}"/></span>  </td>
-		<th><appfuse:label key="patient.name"/>  :</th>
+		<th class="sinfo"><appfuse:label key="sample.id"/> :</th>
+		<td ><span class="pText"> <c:out value="${invalidSample.sampleId}"/></span>  </td>
+		<th class="sinfo"><appfuse:label key="patient.name"/>  :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.patientName}"/></span>   </td>
-		<th><appfuse:label key="patient.sex"/> :</th>
+		<th class="sinfo"><appfuse:label key="patient.sex"/> :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.sex}"/></span>   </td>
-		<th><appfuse:label key="patient.age"/> : </th>
+		<th class="sinfo"><appfuse:label key="patient.age"/> : </th>
 			<td><span class="pText"> <c:out value="${invalidSample.age}"/></span>   </td>
-		<th><appfuse:label key="sample.stayHospitalMode"/> : </th>
-			<td><span class="pText"> <c:out value="${invalidSample.sample.stayHospitalMode}"/></span>   </td>
+		<th class="sinfo"><appfuse:label key="sample.stayHospitalMode"/> : </th>
+			<td><span class="pText"> <c:out value="${sample.stayHospitalMode}"/></span>   </td>
 	</tr>
 	<tr>
-		<th><appfuse:label key="sample.hosSection"/> :</th>
-			<td><span class="pText"> <c:out value="${invalidSample.sample.hosSection}"/></span>  </td>
-		<th><appfuse:label key="sample.sampleNo"/> :</th>
-			<td><span class="pText"> <c:out value="${invalidSample.sample.sampleNo}"/></span> </td>
-		<th><appfuse:label key="sample.inspectionName"/> :</th>
-			<td><span class="pText"> <c:out value="${invalidSample.sample.inspectionName}"/></span>   </td>
-		<th><appfuse:label key="sample.sampleType"/> : </th>
+		<th class="sinfo"><appfuse:label key="sample.hosSection"/> :</th>
+			<td><span class="pText"> <c:out value="${sample.hosSection}"/></span>  </td>
+		<th class="sinfo"><appfuse:label key="sample.sampleNo"/> :</th>
+			<td><span class="pText"> <c:out value="${sample.sampleNo}"/></span> </td>
+		<th class="sinfo"><appfuse:label key="sample.inspectionName"/> :</th>
+			<td><span class="pText"> <c:out value="${sample.inspectionName}"/></span>   </td>
+		<th class="sinfo"><appfuse:label key="sample.sampleType"/> : </th>
 			<td><span class="pText"> <c:out value="${invalidSample.sampleType}"/></span>   </td>
-		<th><appfuse:label key="invalidSamples.rejectPerson"/> :</th>
+		<th class="sinfo"><appfuse:label key="invalidSamples.rejectPerson"/> :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.rejectPerson}"/></span>   </td>
 	</tr>
 	<tr>
-		<th><appfuse:label key="invalidSamples.rejectTime"/> :</th>
+		<th class="sinfo"><appfuse:label key="invalidSamples.rejectTime"/> :</th>
 			<td><span class="pText"> <c:out value="${invalidSample.rejectTime}"/></span>   </td>
 		<td></td><td></td><td></td><td></td>
 	</tr>
@@ -58,9 +67,9 @@
 <div class="col-sm-12" style="float:left">
 <table class="table table-striped table-hover">
 	<tr >
-    	<th><appfuse:label key="invalidSamples.rejectSampleReason"/> : </th>
+    	<th class="sinfo2"><appfuse:label key="invalidSamples.rejectSampleReason"/> : </th>
     		<td><span class="pText"> <c:out value="${invalidSample.rejectSampleReasonStr}"/></span>   </td>
-    	<th><appfuse:label key="invalidSamples.measureTaken"/> : </th>
+    	<th class="sinfo2"><appfuse:label key="invalidSamples.measureTaken"/> : </th>
     		<td><c:choose>
 				<c:when test="${invalidSample.measureTaken==1}"><fmt:message key="measureTaken.1"/></c:when>
 				<c:when test="${invalidSample.measureTaken==2}"><fmt:message key="measureTaken.2"/></c:when>
@@ -71,7 +80,7 @@
 		</td>
     </tr>    
 	<tr>
-		<th>
+		<th class="sinfo2">
 			<appfuse:label key="invalidSamples.requestionType"/> : </th>
 		<td>	<c:choose>
 			<c:when test="${invalidSample.requestionType==1}"><fmt:message key="requestionType.1"/></c:when>
@@ -79,7 +88,7 @@
 			<c:otherwise><fmt:message key="requestionType.3"/></c:otherwise>
 			</c:choose>
             </td>
-        <th>
+        <th class="sinfo2">
         	<appfuse:label key="invalidSamples.labelType"/> : </th>
         <td>   <c:choose>
 			<c:when test="${invalidSample.labelType==1}"><fmt:message key="labelType.1"/></c:when>
@@ -87,7 +96,7 @@
 			<c:when test="${invalidSample.labelType==3}"><fmt:message key="labelType.3"/></c:when>
 			<c:otherwise><fmt:message key="labelType.4"/></c:otherwise>
 			</c:choose>	</td>
-        <th>
+        <th class="sinfo2">
         	<appfuse:label key="invalidSamples.containerType"/> : </th>
          <td>   <c:choose>
 			<c:when test="${invalidSample.containerType==2}"><fmt:message key="containerType.2"/></c:when>
@@ -95,7 +104,7 @@
 			</c:choose>	</td>
     </tr>
 	<tr>
-		<th>
+		<th class="sinfo2">
 			<appfuse:label styleClass="desc2" key="invalidSamples.notes"/> : </th>
 	    <td>    <form:errors path="notes" cssClass="fieldError"/>
 	        <form:textarea path="notes" id="notes"  rows="4" cols="40" cssStyle="overflow:auto"/>
