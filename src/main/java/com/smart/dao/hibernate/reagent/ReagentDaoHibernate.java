@@ -18,7 +18,7 @@ public class ReagentDaoHibernate extends GenericDaoHibernate<Reagent, Long> impl
 
 	@SuppressWarnings("unchecked")
 	public List<Reagent> getReagents(String name, String lab) {
-		return getSession().createQuery("from Reagent r where lab=" + lab + " and (name like '" + name + "%' or pinyin like '" + name + "%') order by upper(r.id)").list();
+		return getSession().createQuery("from Reagent r where lab='" + lab + "' and (name like '" + name + "%' or pinyin like '" + name + "%') order by upper(r.id)").list();
 	}
 
 	public Reagent getByname(String name) {

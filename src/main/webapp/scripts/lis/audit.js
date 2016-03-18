@@ -14,14 +14,16 @@ $(function(){
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
 				jQuery("#rowed3").setGridParam().showCol("last4");
-//				jQuery("#rowed3").setGridParam().showCol("device");
-//				jQuery("#rowed3").setGridParam().showCol("checktime");
+				//jQuery("#rowed3").setGridParam().showCol("device");
+				jQuery("#rowed3").setGridParam().showCol("unit");
 			} else {
+				$("#patientRow").css('display','block');
+    			$("#twosampleTable").css('display','none');
 				jQuery("#rowed3").setGridParam().hideCol("last2");
 				jQuery("#rowed3").setGridParam().hideCol("last3");
 				jQuery("#rowed3").setGridParam().hideCol("last4");
-//				jQuery("#rowed3").setGridParam().hideCol("device");
-//				jQuery("#rowed3").setGridParam().hideCol("checktime");
+				//jQuery("#rowed3").setGridParam().hideCol("device");
+				jQuery("#rowed3").setGridParam().hideCol("unit");
 				var s = jQuery("#list").jqGrid('getGridParam','selrow');
 				if (id == "tabs-0") {
 					getExplain(s);
@@ -67,19 +69,19 @@ $(function(){
 	
 	$("#englishToChBtn").click(function(){
 		if($("#englishToChBtn").prop("checked") == true) {
-			jQuery("#rowed3").setGridParam().showCol("ab");
 			jQuery("#rowed3").setGridParam().hideCol("name");
-			jQuery("#sample0").setGridParam().showCol("ab");
+			jQuery("#rowed3").setGridParam().showCol("ab");
 			jQuery("#sample0").setGridParam().hideCol("name");
-			jQuery("#sample1").setGridParam().showCol("ab");
+			jQuery("#sample0").setGridParam().showCol("ab");
 			jQuery("#sample1").setGridParam().hideCol("name");
+			jQuery("#sample1").setGridParam().showCol("ab");
 		} else {
-			jQuery("#rowed3").setGridParam().showCol("name");
 			jQuery("#rowed3").setGridParam().hideCol("ab");
-			jQuery("#sample0").setGridParam().showCol("name");
+			jQuery("#rowed3").setGridParam().showCol("name");
 			jQuery("#sample0").setGridParam().hideCol("ab");
-			jQuery("#sample1").setGridParam().showCol("name");
+			jQuery("#sample0").setGridParam().showCol("name");
 			jQuery("#sample1").setGridParam().hideCol("ab");
+			jQuery("#sample1").setGridParam().showCol("name");
 		}
 	});
 	

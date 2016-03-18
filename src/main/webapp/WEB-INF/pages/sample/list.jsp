@@ -69,7 +69,7 @@ $(function() {
 	<label for="sampleno" style="margin-left: 20px;"><b><fmt:message key="patients.sampleNo" /></b></label>
 	<input type="text" id="sampleno" name="sampleno" class="span2"/>
 	
-	<label for="doctadviseno" style="margin-left: 270px;"><b><fmt:message key="patient.doctadviseno" /></b></label>
+	<label for="doctadviseno" style="margin-left: 270px;"><b><fmt:message key="sample.id" /></b></label>
 	<input type="text" id="doctadviseno" name="doctadviseno" class="span2"/>
 	
 	<button id="searchBtn" class="btn btn-info" style="margin-left: 160px;"><fmt:message key='search'/></button>
@@ -78,7 +78,7 @@ $(function() {
 <display:table name="list" class="table" requestURI=""
 	id="inlist" export="true" pagesize="30" style="margin-top:10px;width:200%;overflow:scroll;">
 	<display:column property="DOCTADVISENO" media="csv excel xml pdf"/>
-	<display:column property="DOCTADVISENO" sortable="true" titleKey="patient.doctadviseno"/>
+	<display:column property="DOCTADVISENO" sortable="true" titleKey="sample.id"/>
 	<display:column property="SAMPLENO" sortable="true" titleKey="patients.sampleNo"/>
 	<display:column property="PATIENTID" sortable="false" titleKey="patient.patientId"/>
 	<display:column property="PATIENTNAME" sortable="true" style="width:40px;" titleKey="patient.name"/>

@@ -71,6 +71,11 @@ public final class Constants {
     public static final String USER_ROLE = "ROLE_USER";
 
     /**
+     * The name of the Worker role"," as specified in web.xml
+     */
+    public static final String WORKER_ROLE = "ROLE_WORKER";
+
+    /**
      * The name of the user's role list"," a request-scoped attribute
      * when adding/editing a user.
      */

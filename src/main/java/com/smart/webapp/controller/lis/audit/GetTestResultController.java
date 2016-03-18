@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -140,10 +141,11 @@ public class GetTestResultController extends BaseAuditController {
 					}
 				}
 				Date preceivetime = null;
-				preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
-				if (preceivetime == null || pinfo.getSampleNo() == null) {
+				Process hisProcess = hisProcessMap.get(pinfo.getId());
+				if (hisProcess == null || pinfo.getSampleNo() == null || hisProcess.getReceivetime() == null) {
 					continue;
 				}
+				preceivetime = hisProcess.getReceivetime();
 				String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
 				int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
 				if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
@@ -376,10 +378,12 @@ public class GetTestResultController extends BaseAuditController {
 					}
 					int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
 					Date preceivetime = null;
-					preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
-					if (preceivetime == null || pinfo.getSampleNo() == null) {
+					Process hisProcess = hisProcessMap.get(pinfo.getId());
+					if (hisProcess == null || pinfo.getSampleNo() == null || hisProcess.getReceivetime() == null) {
 						continue;
 					}
+					preceivetime = hisProcess.getReceivetime();
+					
 					String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
 					int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
 					if (preceivetime.getTime() < curInfoReceiveTime && isHis) {

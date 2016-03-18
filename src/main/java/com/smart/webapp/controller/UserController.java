@@ -42,11 +42,10 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
         Model model = new ExtendedModelMap();
-        try {
-            model.addAttribute(Constants.USER_LIST, userManager.search(query));
-        } catch (SearchException se) {
-            model.addAttribute("searchError", se.getMessage());
-            model.addAttribute(userManager.getUsers());
+        if(query == null) {
+        	model.addAttribute(userManager.getUsers());
+        } else {
+        	model.addAttribute(Constants.USER_LIST, userManager.search(query));
         }
         return new ModelAndView("admin/userList", model.asMap());
     }

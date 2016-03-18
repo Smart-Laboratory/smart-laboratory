@@ -103,7 +103,7 @@ public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements
     
     @SuppressWarnings("unchecked")
     public List<User> getByUsername(String name){
-    	List<User> users = getSession().createQuery("from User where username like '%"+name+"%'").list();
+    	List<User> users = getSession().createQuery("from User where username like '%"+name+"%' or name like '%"+name+"%'").list();
     	if(users!=null && users.size()>0)
     		return users;
     	return null;

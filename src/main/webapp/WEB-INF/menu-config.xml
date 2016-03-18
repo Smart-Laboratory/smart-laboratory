@@ -5,13 +5,13 @@
     </Displayers>
     <Menus>
         <!-- <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER"/> -->
-        <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER">
-        	<Item name="Input" title="sample.manage.input" page="/manage/input"/>
-            <Item name="Receive" title="sample.manage.receive" page="/manage/receive"/>
-            <Item name="Audit" title="sample.manage.audit" page="/manage/audit"/>
-            <Item name="Search" title="sample.manage.search" page="/manage/sampleQuery"/>
-            <Item name="Critical" title="sample.manage.critical" page="/critical/undeal"/>
-            <Item name="Invalid" title="sample.manage.invalid" page="/manage/invalid"/>
+        <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
+        	<Item name="Input" title="sample.manage.input" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+            <Item name="Receive" title="sample.manage.receive" page="/manage/receive" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+            <Item name="Audit" title="sample.manage.audit" page="/manage/audit" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Search" title="sample.manage.search" page="/manage/sampleQuery" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Critical" title="sample.manage.critical" page="/critical/undeal" roles="ROLE_ADMIN,ROLE_USER"/>
+            <Item name="Invalid" title="sample.manage.invalid" page="/manage/invalid" roles="ROLE_ADMIN,ROLE_USER"/>
         </Menu>
         <Menu name="SampleSet" title="set.title" page="/rule/list" roles="ROLE_ADMIN,ROLE_USER">
         	<Item name="RuleManage" title="set.rule" page="/rule/list"/>
@@ -29,9 +29,9 @@
             <Item name="Set" title="reagent.set" page="/reagent/set"/>
             <Item name="Combo" title="reagent.combo" page="/reagent/combo"/>
         </Menu>
-        <Menu name="Statistic" title="statistic.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
+        <Menu name="Statistic" title="statistic.title" page="/home" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
         </Menu>
-        <Menu name="Quality" title="quality.title" page="/home" roles="ROLE_ADMIN,ROLE_USER">
+        <Menu name="Quality" title="quality.title" page="/home" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
         	<Item name="InvalidForm" title="menu.quality.form" page="/quality/invalidSampleForm" />
         	<Item name="InvalidList" title="menu.quality.list" page="/quality/invalidSamples" />
         	<Item name="SampleTrace" title="menu.quality.trace" page="/quality/sampleTrace" />
@@ -53,6 +53,6 @@
             <!-- <Item name="ReloadContext" title="menu.admin.reload" page="/admin/reload"/>
             <Item name="FileUpload" title="menu.selectFile" page="/fileupload"/> -->
         </Menu>
-        <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER"/>
+        <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
     </Menus>
 </MenuConfig>

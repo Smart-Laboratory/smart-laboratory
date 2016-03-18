@@ -109,7 +109,7 @@
 					<span class="pText"><b id="pType2"></b></span>
 					<span class="pLabel"><fmt:message key="patient.blh" /></span>
 					<span class="pText"><b id="blh2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.doctadviseno" /></span>
+					<span class="pLabel"><fmt:message key="sample.id" /></span>
 					<span class="pText"><b id="pId2"></b></span>
 					<span class="pLabel"><fmt:message key="patient.section"/>&nbsp;</span>
 					<span class="pText"><b id="pSection2"></b></span>

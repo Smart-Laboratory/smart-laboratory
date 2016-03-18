@@ -86,7 +86,9 @@
 			}
 			
     		if ($("#historyTabs").tabs('option', 'active') == 0) {
-   				jQuery("#audit_information").jqGrid("setGridParam",{
+    			$("#patientRow").css('display','block');
+    			$("#twosampleTable").css('display','none');
+    			jQuery("#audit_information").jqGrid("setGridParam",{
    					url:"../audit/explain?id="+ret.id,
    					editurl: "../audit/explain/edit?docNo=" + ret.id
    				}).trigger("reloadGrid");
@@ -94,9 +96,11 @@
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
 				jQuery("#rowed3").setGridParam().showCol("last4");
-				jQuery("#rowed3").setGridParam().showCol("device");
-				jQuery("#rowed3").setGridParam().showCol("checktime");
+				//jQuery("#rowed3").setGridParam().showCol("device");
+				jQuery("#rowed3").setGridParam().showCol("unit");
     		} else {
+    			$("#patientRow").css('display','block');
+    			$("#twosampleTable").css('display','none');
     			getSopSchedule($("#labSelect").val());
     		}
     		
@@ -127,12 +131,8 @@
         	$("#blh").html("<a href='http://192.168.17.102/ZWEMR/SysLogin.aspx?lcation=inside&ly=D&edt=N&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
         	$("#doctadviseno").html(data.id);
         	$("#pSex").html(data.sex);
-        	if(data.section.length > 11) {
-        		$("#pSection").html(data.section.substr(0,8).replace("(","") + "...");
-        	} else {
-        		$("#pSection").html(data.section);
-        	}
-        	$("#pSection").attr("title",data.section);
+        	$("#pSection").html(data.section);
+        	//$("#pSection").attr("title",data.section);
         	$("#pType").html(data.type);
         	$("#stayhospitalmode").html(data.stayhospitalmode);
         	if(data.diagnosticKnow == "") {
@@ -202,28 +202,28 @@
         var lastsel;
         var cl = "";
         var isEdit = false;
-        
+        var width = $("#mid").width();
         jQuery("#rowed3").jqGrid({
 		   	url:"../audit/sample?id="+sampleNo,
 			datatype: "json",
-			width:'820',
+			width:width,
 			jsonReader : {repeatitems : false, userdata : "userdata"},  
 		   	colNames:['ID','Color','英文缩写','项目', '结果', '历史', '历史', '历史', '历史', '历史', '测定时间', '机器号', '参考值', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true},
 		   		{name:'color',index:'color',hidden:true},
-		   		{name:'ab',index:'ab',width:"15%",hidden:true},
-		   		{name:'name',index:'name',width:"15%",sortable:false},
-		   		{name:'result',index:'result',width:"9%",sortable:false,editable:true},
-		   		{name:'last',index:'last',width:"9%",sortable:false},
-		   		{name:'last1',index:'last1',width:"9%",sortable:false},
-		   		{name:'last2',index:'last2',width:"9%",hidden:true,sortable:false},
-		   		{name:'last3',index:'last3',width:"9%",hidden:true,sortable:false},
-		   		{name:'last4',index:'last4',width:"9%",hidden:true,sortable:false},
-		   		{name:'checktime',index:'checktime',width:"8%",hidden:true,sortable:false},
-		   		{name:'device',index:'device',width:"6%",hidden:true,sortable:false},
-		   		{name:'scope',index:'scope',width:"9%",sortable:false},
-		   		{name:'unit', sortable:false, width:"8%",index:'unit'},
+		   		{name:'ab',index:'ab',width:width*0.15,hidden:true},
+		   		{name:'name',index:'name',width:width*0.15,sortable:false},
+		   		{name:'result',index:'result',width:width*0.09,sortable:false,editable:true},
+		   		{name:'last',index:'last',width:width*0.09,sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.09,sortable:false},
+		   		{name:'last2',index:'last2',width:width*0.09,sortable:false},
+		   		{name:'last3',index:'last3',width:width*0.09,sortable:false},
+		   		{name:'last4',index:'last4',width:width*0.09,sortable:false},
+		   		{name:'checktime',index:'checktime',width:width*0.08,sortable:false},
+		   		{name:'device',index:'device',width:width*0.06,sortable:false},
+		   		{name:'scope',index:'scope',width:width*0.09,sortable:false},
+		   		{name:'unit', sortable:false, width:width*0.08,index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName',hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
@@ -764,23 +764,24 @@
         var lastsel;
         var cl = "";
         var isEdit = false;
+        var width = $("#mid").width()*0.48;
 		jQuery("#sample0").jqGrid({
 		   	data:mydata.rows,
 			datatype: "local",
-			width:'420',
+			width:width,
 			jsonReader : {repeatitems : false,  userdata : userdata},  
 		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'color',index:'color', hidden:true},
-		   		{name:'ab',index:'ab',width:'25%',hidden:true},
-		   		{name:'name',index:'name',width:'25%',sortable:false},
-		   		{name:'result',index:'result',width:'15%', sortable:false, editable:true},
-		   		{name:'last',index:'last',width:'10%', sortable:false},
-		   		{name:'last1',index:'last1',width:'10%', sortable:false},
-		   		{name:'device',index:'device',width:'20%', hidden:true, sortable:false},
-		   		{name:'scope',index:'scope',width:'25%',sortable:false},
-		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
+		   		{name:'ab',index:'ab',width:width*0.25,hidden:true},
+		   		{name:'name',index:'name',width:width*0.25,sortable:false},
+		   		{name:'result',index:'result',width:width*0.15, sortable:false, editable:true},
+		   		{name:'last',index:'last',width:width*0.1, sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.1, sortable:false},
+		   		{name:'device',index:'device',width:width*0.2, hidden:true, sortable:false},
+		   		{name:'scope',index:'scope',width:width*0.25,sortable:false},
+		   		{name:'unit', sortable:false, width:width*0.15, index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName', hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
@@ -976,29 +977,29 @@
         var lastsel;
         var cl = "";
         var isEdit = false;
+        var width = $("#mid").width()*0.48;
 		jQuery("#sample1").jqGrid({
 		   	data: mydata,
 			datatype: "local",
-			width:'420',
+			width:width,
 			jsonReader : {repeatitems : false, userdata : userdata},  
 		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   	   	{name:'id',index:'id', hidden:true},
 		   		{name:'color',index:'color', hidden:true},
-		   		{name:'ab',index:'ab',width:'25%',hidden:true},
-		   		{name:'name',index:'name',width:'25%',sortable:false},
-		   		{name:'result',index:'result',width:'15%', sortable:false, editable:true},
-		   		{name:'last',index:'last',width:'10%', sortable:false},
-		   		{name:'last1',index:'last1',width:'10%', sortable:false},
-		   		{name:'device',index:'device',width:'20%', hidden:true, sortable:false},
-		   		{name:'scope',index:'scope',width:'25%',sortable:false},
-		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
+		   		{name:'ab',index:'ab',width:width*0.25,hidden:true},
+		   		{name:'name',index:'name',width:width*0.25,sortable:false},
+		   		{name:'result',index:'result',width:width*0.15, sortable:false, editable:true},
+		   		{name:'last',index:'last',width:width*0.1, sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.1, sortable:false},
+		   		{name:'device',index:'device',width:width*0.2, hidden:true, sortable:false},
+		   		{name:'scope',index:'scope',width:width*0.25,sortable:false},
+		   		{name:'unit', sortable:false, width:width*0.15, index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName', hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
 		   	],
 		   	height: "100%",
-		   	
 		   	rowNum: 50,
 		    caption: "",
 			onSelectRow: function(id) {
@@ -1239,7 +1240,206 @@
 		return result;
 	}
 	
-$(function(){
+	function labChange(select) {
+		$("#lastDepLab").val(select.value);
+		jQuery("#list").jqGrid("setGridParam",{
+			url:"../audit/data?lab="+select.value+"&text="+"${strToday}"}).trigger("reloadGrid");
+		
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+select.value
+		});
+		selectNoteAdd = true;
+		
+		getSopSchedule(select.value);
+}
+
+function getExplain(docNo){
+	var lastsel;
+    jQuery("#audit_information").tableDnD({
+        onDrop:function(table){
+        	var rows = $("tr",table);
+        	var content = rows[1].id;
+        	for(var i=2;i<rows.length;i++){
+        		content = content + "," + rows[i].id;
+        	}
+        	$.post("../audit/drag",{id:$("#hiddenDocId").val(), content:content},function(data) {
+			});
+        } 
+    });
+	jQuery("#audit_information").jqGrid({
+		url:"../audit/explain?id="+docNo,
+		datatype: "json",
+		jsonReader : {repeatitems : false}, 
+		colNames:['ID','OLDRESULT','解释','原因','RANK'],
+	   	colModel:[{name:'id',index:'id',sortable:false,hidden:true},
+	   		{name:'oldResult',index:'oldResult',sortable:false,hidden:true,editable:true},
+	   		{name:'result',index:'result',width:190,sortable:false,editable:true},
+	   		{name:'content',index:'content',width:190,sortable:false,hidden:true,editable:true},
+	   		{name:'rank',index:'rank',sortable:false,hidden:true,editable:false}],
+	    gridComplete: function() {
+	    	jQuery("#audit_information").tableDnDUpdate();
+	    }, 
+	   	onSelectRow: function(id){
+	   		if(id && id!==lastsel){
+				jQuery('#audit_information').jqGrid('restoreRow',lastsel);
+				jQuery('#audit_information').jqGrid('editRow',id,true);
+				lastsel=id;
+			}
+		},
+		editurl: "../audit/explain/edit?docNo=" + docNo,
+	   	height: '100%'
+	});
+	
+}
+
+
+var isFirstSop = true;
+var g1, g2, g3, g4;
+function getSopSchedule(lab) {
+	$.get("../sop/ajax/schedule",{lab:lab, sampleno:$("#hiddenSampleNo").val()},function(data){
+		data = jQuery.parseJSON(data);
+		if(isFirstSop) {
+			isFirstSop = false;
+			g1 = new JustGage({
+				id: "g1", 
+		        value: data.g1,
+		        width: 100,
+		        height: 100,
+		        min: 0,
+		        max: 100,
+		        title: "通用文档",
+			});
+				g2 = new JustGage({
+		            id: "g2", 
+		            value: data.g2,
+		            min: 0,
+		            max: 100,
+		            title: "专业文档",
+				});
+				g3 = new JustGage({
+		            id: "g3", 
+		            value: data.g3, 
+		            min: 0,
+		            max: 100,
+		            title: "仪器文档",
+				});
+				g4 = new JustGage({
+		        	id: "g4", 
+					value: data.g4, 
+					min: 0,
+					max: 100,
+					title: "项目文档",
+				});
+			} else {
+				g1.refresh(data.g1);
+				g2.refresh(data.g2);          
+				g3.refresh(data.g3);
+				g4.refresh(data.g4);
+			}
+			
+		});
+	}
+
+function getDetailSop(type) {
+	$.get("../sop/ajax/detail",{type:type, lab:$("#labSelect").val(), sampleno:$("#hiddenSampleNo").val()},function(data){
+		data = jQuery.parseJSON(data);
+		$("#sopDetailHtml").html(data.html);
+	});		
+	switch (type) {
+	case 0:
+		$('#sopDetailDialog').dialog("option","title", "通用文档熟悉度").dialog('open');
+		break;
+	case 1:
+		$('#sopDetailDialog').dialog("option","title", "专业文档熟悉度").dialog('open');
+		break;
+	case 2:
+		$('#sopDetailDialog').dialog("option","title", "仪器文档熟悉度").dialog('open');
+		break;
+	case 3:
+		$('#sopDetailDialog').dialog("option","title", "项目文档熟悉度").dialog('open');
+		break;
+	}
+}
+
+function validate(formData, jqForm, options) {
+	
+	for (var i=0; i < formData.length; i++) {
+        if (!formData[i].value) {
+            return false;  
+        }
+	}
+	return true;
+}
+
+$(function() {
+	
+	
+	$("#addResultForm").ajaxForm({
+		beforeSubmit: validate,
+		success: function(data) {
+			if (data == true) {
+				$("#addResultDialog").dialog("close");
+				jQuery("#audit_information").trigger("reloadGrid");
+			} else {
+				alert("Fail!!!")
+			}
+	    }
+	});
+	
+	$("#AuditCodeSetting").click(function(){
+		if ($("#hiddenAuditConfirm").val() == 'true') {
+			$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
+ 		} else {
+			$("#codeSetDiv .input-ctl").removeAttr('disabled');
+ 		}
+		$("#codeSetDialog").dialog("open");
+	});
+	
+	$("#controlAuditBtn").click(function() {
+ 		var btnText = $("#controlAuditBtn").html().trim();
+ 		var status = 0;
+ 		if (btnText == "启动") {
+ 			status = 1;
+ 		}
+ 		var flag = true;
+		var codeScope = "";
+		if (status == 1) {
+     		$("#codeSetDiv .codeItem").each(function(index,self) {
+    			if ($(self).find(".codeCheck").attr("checked") == "checked"){
+    				var code = $(self).find(".codeText").html();
+    				var lo = $(self).find(".val-lo").val();
+        			var hi = $(self).find(".val-hi").val();
+        			if (codeScope != "") codeScope += ";";
+        			if (lo.length == 0 && hi.length == 0) {
+        			} else if (lo.length == 3 && hi.length == 3) {
+        				codeScope += code + ":" + lo + "-" + hi;
+        			} else {
+        				flag = false;
+        			}
+    			}
+    		});
+		}
+ 		if (flag) {
+			$.get("../audit/autoAudit",{status:status, scope:codeScope},function(data){
+     			
+     			if (data) {
+     				if (status == 1) {
+     					$("#controlAuditBtn").html("停止");
+     					$("#hiddenAuditConfirm").val(true);
+     					$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
+     				} else {
+     					$("#controlAuditBtn").html("启动");
+     					$("#hiddenAuditConfirm").val(false);
+     					$("#codeSetDiv .input-ctl").removeAttr('disabled');
+     				}
+     			}
+     		});
+		} else {
+			alert("输入错误！");
+		}	
+ 	});
+	
 	var isTestModifyFirst = true;
 	$("#modifyBtn").click(function() {
 		if (isTestModifyFirst) {
@@ -1253,5 +1453,6 @@ $(function(){
 		$("#testModifyDialog").dialog("open");
 	});
 	$("#colorHelp").append("<span class='c_td diff_td'> </span>\u5dee\u503c <span class='c_td ratio_td'> </span>\u6bd4\u503c <span class='c_td re_td'> </span>\u590d\u68c0<span class='c_td dan_td'></span>\u5371\u6025 <span class='c_td al2_td'> </span>\u8b66\u62121 <span class='c_td al3_td'> </span>\u8b66\u62122 <span class='c_td ex_td'> </span>\u6781\u503c");
-		
+
+
 });

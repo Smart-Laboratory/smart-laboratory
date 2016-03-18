@@ -212,13 +212,17 @@ public class RMIServiceImpl implements RMIService {
 
 	public SyncPatient getSampleByDoct(long doct) {
 		String sql = "select * from l_patientinfo where doctadviseno=" + doct;
-		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
+		List<SyncPatient> list = jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
             public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
                 SyncPatient p = new SyncPatient();
                 setField(rs, p);
                 return p;
             }
-        }).get(0);
+        });
+		if(list != null) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	public List<SyncPatient> getSampleByPatientName(String from, String to, String pName) {
@@ -301,5 +305,9 @@ public class RMIServiceImpl implements RMIService {
         }
         return info;
     }
+
+	public void sampleReceive(long doct, String operator) {
+		jdbcTemplate.update("update l_patientinfo set ksreceivetime=sysdate, ksreceiver='" + operator + "' where doctadviseno=" + doct);
+	}
 
 }

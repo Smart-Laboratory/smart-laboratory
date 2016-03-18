@@ -279,7 +279,7 @@ $(function() {
 					<fmt:message key="stayhospitalmode.8" />
 				</option>
 			</select>
-			<label for="doctadviseno" style="margin-left:76px;"><fmt:message key="patient.doctadviseno"/></label>
+			<label for="doctadviseno" style="margin-left:76px;"><fmt:message key="sample.id"/></label>
 			<input type="text" id="doctadviseno" name="doctadviseno" class="span2" style="margin-left:24px;" onkeypress="getData(this,event);">
 			<label for="sampleno" style="margin-left:80px;"><fmt:message key="patients.sampleNo"/></label>
 			<input type="text" id="sampleno" name="sampleno" class="span2" style="margin-left:20px;">
@@ -354,7 +354,7 @@ $(function() {
 		<table style="margin-top:10px;text-align:center;">
 			<thead><tr style="background-color: #9FCEE0;">
 				<td width="30px"><fmt:message key='sample.sequence'/></td>
- 				<td width="80px"><fmt:message key='patient.doctadviseno'/></td>
+ 				<td width="80px"><fmt:message key='sample.id'/></td>
 				<td width="80px"><fmt:message key='patients.sampleNo'/></td>
 				<td width="70px"><fmt:message key='patient.sampleType'/></td>
 				<td width="100px"><fmt:message key='patient.section'/></td>

@@ -20,7 +20,6 @@ import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
 import com.smart.model.util.NeedWriteCount;
-import com.sun.org.apache.xpath.internal.operations.And;
 
 
 @Repository("sampleDao")
@@ -208,7 +207,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
 			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + from + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + to + "') order by s.sampleNo desc";
 		}
-		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 	
@@ -218,7 +216,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		if(!StringUtils.isEmpty(fromDate) && fromDate!=null && toDate!=null &&!StringUtils.isEmpty(toDate)){
 			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + fromDate + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + toDate + "') order by s.sampleNo desc";
 		}
-		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 
@@ -284,7 +281,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			sql += " and s.auditMark=" + mark;
 		}
 		sql += " order by s.sampleNo";
-		System.out.println(sql);
 		Query q =  getSession().createQuery(sql);
 		if( end != 0){
 			q.setFirstResult(start);

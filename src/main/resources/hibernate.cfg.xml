@@ -41,6 +41,7 @@
         <mapping class="com.smart.model.lis.Task"/>
         <mapping class="com.smart.model.lis.LikeLab"/>
         <mapping class="com.smart.model.lis.Device"/>
+        <mapping class="com.smart.model.lis.ReceivePoint"/>
         <mapping class="com.smart.model.user.UserLevel"/>
         <mapping class="com.smart.model.user.Evaluate"/>
         <mapping class="com.smart.model.pb.Arrange"/>

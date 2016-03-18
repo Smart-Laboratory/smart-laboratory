@@ -70,12 +70,14 @@ public class GetPatientController extends BaseAuditController {
 		Process process = processManager.getBySampleId(info.getId());
 		CriticalRecord cr = criticalRecordManager.getBySampleId(info.getId());
 		List<TestResult> list = testResultManager.getTestBySampleNo(info.getSampleNo());
+		
 		if(patient == null){
 			return null;
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		
 		if (info != null) {
 			map.put("id", info.getId());
 			map.put("name", patient.getPatientName());
@@ -120,7 +122,6 @@ public class GetPatientController extends BaseAuditController {
 					}
 				}
 			}
-
 			map.put("reason", note);
 			map.put("mark", info.getAuditMark());
 			map.put("sex", patient.getSexValue());

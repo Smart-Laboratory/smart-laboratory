@@ -11,7 +11,7 @@ import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.dao.lis.ReasoningModifyDao;;
 
 @Service("reasoningModifyManager")
-public class ReasoningModifyManagerImpl extends GenericManagerImpl<ReasoningModify, Long> implements ReasoningModifyManager{
+public class ReasoningModifyManagerImpl extends GenericManagerImpl<ReasoningModify, Long> implements ReasoningModifyManager {
 
 	private ReasoningModifyDao reasoningModifyDao;
 

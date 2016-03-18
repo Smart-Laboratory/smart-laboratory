@@ -46,4 +46,5 @@ public class RMIController {
 		response.getWriter().write(array.toString());
 		return null;
 	}
+	
 }

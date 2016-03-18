@@ -62,24 +62,26 @@
 		
 		$("#reagentdes").autocomplete({
 	        source: function( request, response ) {
-	            $.ajax({
-	            	url: "../ajax/reagent/getByType",
-	                dataType: "json",
-	                data: {
-	                	type : $("#reagent_select").val(),
-	                    name : request.term
-	                },
-	                success: function( data ) {$(this).children('option:selected').val()
-	                	response( $.map( data, function( result ) {
-	                		return {
-	                            label: result.name,
-	                            value: result.name,
-	                            id : result.id
-	                        }
-	                    }));
-	                    $("#reagentdes").removeClass("ui-autocomplete-loading");
-	                }
-	            });
+	        	if($("#reagent_select").val() > 1) {
+	        		$.ajax({
+		            	url: "../ajax/reagent/getByType",
+		                dataType: "json",
+		                data: {
+		                	type : $("#reagent_select").val(),
+		                    name : request.term
+		                },
+		                success: function( data ) {$(this).children('option:selected').val()
+		                	response( $.map( data, function( result ) {
+		                		return {
+		                            label: result.name,
+		                            value: result.name,
+		                            id : result.id
+		                        }
+		                    }));
+		                    $("#reagentdes").removeClass("ui-autocomplete-loading");
+		                }
+		            });
+	        	}
 	        },
 	        minLength: 1,
 	        select : function(event, ui) {

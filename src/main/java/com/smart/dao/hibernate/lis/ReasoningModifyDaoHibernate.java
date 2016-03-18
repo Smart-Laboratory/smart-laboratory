@@ -23,7 +23,6 @@ public class ReasoningModifyDaoHibernate extends GenericDaoHibernate<ReasoningMo
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ReasoningModify> getBySampleId(String sampleId) {
-		
 		return getSession().createQuery("from ReasoningModify r where r.sampleId='"+sampleId+"' order by r.modifyTime").list();
 	}
 

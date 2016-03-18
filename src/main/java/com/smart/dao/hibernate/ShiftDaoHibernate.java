@@ -57,7 +57,6 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<Shift> getSx(){
 		List<Shift> shifts = getSession().createQuery("from Shift where section = '1300000' and order = '99' ").list();
-		System.out.println(shifts.size());
 		if(shifts == null || shifts.isEmpty())
 			return null;
 		return shifts;
