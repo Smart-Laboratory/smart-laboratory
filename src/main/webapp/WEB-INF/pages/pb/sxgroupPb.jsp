@@ -2,8 +2,7 @@
 
 <head>
 	<title><fmt:message key="menu.pb" /></title>
-	<script type="text/javascript" src="<c:url value='../scripts/pb/pb.js'/> "></script>
-	
+	<script type="text/javascript" src="../scripts/pb/sxgroupPb.js"></script>
 	<script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.min.js'/> "></script>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
@@ -13,39 +12,37 @@
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    
+
 
 <style>
-tr:hover{
-	background:#87cefa;
+thead.fixedHeader tr {
+	position: relative;
+	display: block
+}
+html>body thead.fixedHeader {
+	overflow-y: scroll;	
+	display: block;
+}
+html>body tbody.scrollContent {
+	display: block;
+	height: 500px;
+	overflow-y: scroll;	
+	width: 100%
 }
 
-
-#head  th  {
-	width:40px;
-	height:24px;
-	text-align:center;
-}
 table tr th {
-	width:40px;
+	width:100px;
 	height:24px;
 	text-align:center;
 }
 table tr td {
-	width:40px;
+	width:100px;
 	height:24px;
 }
-div .fixed{ 
-overflow-y: scroll; 
-overflow-x: hidden;
-width:auto;
-height: auto; 
-border: 0px solid #009933; 
-} 
+
 div .data{ 
-overflow-y: scroll; 
-overflow-x: hidden;
-width:auto;
-height: 480px; 
+height:500px;
 border: 0px solid #009933; 
 } 
 
@@ -53,15 +50,16 @@ border: 0px solid #009933;
 display: none; 
 } 
 
-/* table .sx{
-	background:#00F1FF!important;
-} */
+table td.sx{
+	background: #00E6FF!important;
+}
 
-</style>
+</style>  
+    
 </head>
+
 <input id="section" value="${section }" type="hidden"/>
 <input id="month" value="${month }" type="hidden"/>
-
 
 		<div class="form-inline" style="width:1024x;">
 			<input type="text" id="date" class="form-control" sytle="width:50px;">
@@ -70,12 +68,15 @@ display: none;
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
-			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
+			
+			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
 				<span ><c:forEach var="depart" items="${departList}">
 				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
 			</c:forEach></span>
 			</select>
+			<button id="stuPb" class="btn btn-success btn-sm" style="margin-top:3px;margin-right:10px;float:right;" ><fmt:message key='pb.stuPb' /></button>
 		</div>
+
 		<div id="shiftSelect" class="checkbox form-inline" >
 			<c:forEach items="${wshifts}" var="shift">
 				<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
@@ -85,25 +86,24 @@ display: none;
 			
 		</div>
 		
-		
-		<div class="fixed">
-		<input id="test" value="${arrString}" type="hidden"/>
-		<table id="pbhead" class="table" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
-		
-		
-		</table>
+
+<c:choose>
+	<c:when test="${size == 0}">
+	<div style="margin-top:70px;font-size:25px;">
+		<p><b><fmt:message key="pb.nodata"/></b></p>
+	</div>
+	</c:when>
+	<c:otherwise>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+		<div class = "col-sm-12  data" style="margin-top:20px;">
+			<input id="pbtext" value="${pbdate}" type="hidden"/>
+			<table id="pbdata" class=" table-hover" style="font-size:12px;text-align:center;" border="1px;">
+			</table>
+			<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
+			<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px; width:800px;" value="${bz}">
 		</div>
-		<div class="fixed data">
-		<input id="test1" value="${arrBodyString}" type="hidden"/>
-		<table id="pbdata" class="table" style="font-size:12px;text-align:center;" border="1px;">
-		
-		</table>
-		<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
-		<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px; width:800px;" value="${bz}">
-		</div>
-		<div style="display:none;">	
-			<c:forEach var="dsh" items="${dshList}">
-				<div id='<c:out value="${dsh.day}"/>'><c:out value="${dsh.shift}"/></div>
-			</c:forEach>
-		</div>
+	</c:otherwise>
+</c:choose>
+
+
 

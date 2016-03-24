@@ -37,7 +37,8 @@ public class SxArrangeDaoHibernate extends GenericDaoHibernate<SxArrange, Long> 
 	
 	@SuppressWarnings("unchecked")
 	public List<SxArrange> getByWeek(int year, int startWeek, int maxWeek){
-		String hql = "from SxArrange where week >="+startWeek+" and week<="+(startWeek+maxWeek-1)+" and month like '%"+year+"%'";
+		String hql = "from SxArrange where week >="+startWeek+" and week<="+(startWeek+maxWeek-1)+" and month like '%"+year+"%' order by worker";
+//		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 }

@@ -1,8 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
-	<title><fmt:message key="menu.pb" /></title>
-	<script type="text/javascript" src="<c:url value='../scripts/pb/sxpb.js'/> "></script>
+	<title><fmt:message key="menu.pb.sxcx" /></title>
+	<script type="text/javascript" src="<c:url value='../scripts/pb/sxcx.js'/> "></script>
 	
 	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
@@ -72,38 +72,20 @@ display: none;
 			<input type="text" id="to" name="to" class="form-control" value="${to }">
 			
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			
 			<div class="form-inline" style="float:right;">
-			<button id="ksCount" class="btn btn-success btn-sm" ><fmt:message key='pb.kscount' /></button>
+			<button id="stuPb" class="btn btn-success btn-sm" style="margin-right:20px;" ><fmt:message key='pb.stuPb' /></button>
 			<button id="preBtn" class="btn btn-success btn-sm" ><fmt:message key='pb.pre' /></button>
 			<button id="nextBtn" class="btn btn-success btn-sm"><fmt:message key='pb.next' /></button>
 			<span  id="pagelist"></span>
-		</div>
-			
-		</div>
-		
-		<div id="shiftSelect" class="checkbox form-inline" >
-			<c:forEach items="${wshifts}" var="shift">
-				<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
-      				<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
-    			</label></div>
-			</c:forEach>
+			</div>
 			
 		</div>
 		
 		
-		<%-- div class="fixed">
-		<input id="test" value="${arrString}" type="hidden"/>
-		<table id="pbhead" class="table" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
-		<thead id="head">
-		</thead>
-		</table>
-		</div> --%>
-
 
 	
-<div class="col-sm-12">	
+<div class="col-sm-12" style="margin-top:20px;">	
 	<div class = "col-sm-2">
 		<div id="hisdataPanal">
 			<table id='hisList'></table>

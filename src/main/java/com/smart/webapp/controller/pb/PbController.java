@@ -13,10 +13,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.solr.common.params.CommonParams.EchoParamStyle;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.compiler.lang.dsl.DSLMapParser.mapping_file_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,19 +23,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
-import com.smart.dao.hibernate.ShiftDaoHibernate;
 import com.smart.model.pb.Arrange;
-import com.smart.model.pb.DayShift;
 import com.smart.model.pb.Shift;
+import com.smart.model.pb.SxArrange;
 import com.smart.model.pb.WInfo;
 import com.smart.model.pb.WorkCount;
 import com.smart.service.ArrangeManager;
-import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
+import com.smart.service.SxArrangeManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
+import com.smart.webapp.util.SectionUtil;
+import com.zju.api.service.RMIService;
 
-import javafx.scene.chart.PieChart.Data;
 
 
 @Controller
@@ -51,9 +49,6 @@ public class PbController {
 	private ArrangeManager arrangeManager;
 	
 	@Autowired
-	private DayShiftManager dayShiftManager;
-	
-	@Autowired
 	private UserManager userManager;
 	
 	@Autowired
@@ -61,6 +56,9 @@ public class PbController {
 	
 	@Autowired
 	private WorkCountManager workCountManager;
+	
+	@Autowired
+	private SxArrangeManager sxArrangeManager;
 	
 	private Map<String, Double> shiftTime = new HashMap<String,Double>();
 	
@@ -78,6 +76,7 @@ public class PbController {
 		List<Arrange> list = new ArrayList<Arrange>();
 		String section = request.getParameter("section");
 		String bz = request.getParameter("bz");
+		String isStudent = request.getParameter("isStu");
 		
 		Arrange ksArrange = arrangeManager.getByUser(section, month);
 //		if(ksArrange!=null && ksArrange.getState()>1){
@@ -85,8 +84,12 @@ public class PbController {
 //		}
 		
 		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
-		
-		List<WInfo> wInfos = wInfoManager.getBySection(section);
+		List<WInfo> wInfos = new ArrayList<WInfo>();
+		if(isStudent!=null && isStudent.equals("true")){
+			wInfos = getWinfoBySection(month,section);
+		}else{
+			wInfos = wInfoManager.getBySection(section);
+		}
 		
 		for(WInfo wInfo : wInfos){
 			
@@ -472,4 +475,41 @@ public class PbController {
 		
 	}
 	
+	
+	public List<WInfo> getWinfoBySection(String tomonth, String section){
+		section = SectionUtil.getInstance(rmiService).getValue(section);
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
+		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);
+		cal.set(Calendar.DATE, 1);
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
+		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
+		int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		
+		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(Integer.parseInt(tomonth.split("-")[0]), startweek, maxWeek);
+		System.out.println(sxArranges.size());
+		
+		List<Shift> pbsection = shiftManager.getSx();
+		Map<String, String> sectionMap = new HashMap<String,String>();
+		for(Shift shift:pbsection){
+			sectionMap.put(shift.getAb(), shift.getName());
+		}
+		
+		List<WInfo> wInfos = new ArrayList<WInfo>();
+		if(sxArranges != null && !sxArranges.isEmpty()){
+			for(SxArrange a: sxArranges){
+				if(sectionMap.get(a.getSection()).equals(section)){
+					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
+					
+					wInfos.add(wInfo);
+				}
+			}
+		}
+		
+		return wInfos;
+				
+	}
+	
+	@Autowired
+	private RMIService rmiService;
 }

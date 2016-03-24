@@ -9,15 +9,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.solr.common.params.CommonParams.EchoParamStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
 import com.smart.webapp.util.DataResponse;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 @Controller
 @RequestMapping("/pb/sxpb*")
@@ -33,6 +37,8 @@ public class SxPbController {
 		int yearto = Integer.parseInt(to.split("-")[0]);
 		if(text.isEmpty())
 			return true;
+		if(yearfrom>yearto || (yearfrom == yearto && Integer.parseInt(from.split("-")[1])>Integer.parseInt(to.split("-")[1])))
+			return false;
 		List<SxArrange> sList = new ArrayList<SxArrange>();//需要保存或更新的排班信息
 		Map<String, SxArrange> sxMap = new HashMap<String,SxArrange>();
 		
@@ -45,7 +51,7 @@ public class SxPbController {
 		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(yearfrom, startweek, maxWeek);
-		System.out.println(sxArranges.size());
+		System.out.println(startweek+"||"+maxWeek+"||"+sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
 				System.out.println(a.getWorker()+":"+a.getMonth().split("-")[0]+":"+a.getWeek());
@@ -58,18 +64,17 @@ public class SxPbController {
 			String arr=list[i];
 			String[] s = arr.split(":");
 			if(Integer.parseInt(s[2])==1&& i!=0){
-				year = yearto;
+				year = yearfrom+1;
 			}
 			
 			String nameweek = s[0]+":"+year+":"+s[2];
-			System.out.println(nameweek);
+//			System.out.println(nameweek);
 			SxArrange sxArrange = null;
 			
 			if(!sxMap.isEmpty() && sxMap.containsKey(nameweek)){
 				System.out.println("+++++++++++++"+nameweek);
 				sxArrange = sxMap.get(nameweek);
 				if(sxArrange.getSection().equals(s.length<4?"":s[3]))
-					
 					continue;
 			}else if(s.length>=4){
 				sxArrange = new SxArrange();
@@ -78,7 +83,7 @@ public class SxPbController {
 			}
 			sxArrange.setWorker(s[0]);
 			if(s[1].equals("12") && s[2].equals("1")){
-				sxArrange.setMonth((year+1)+"-01"+";"+year+"-"+s[1]);
+				sxArrange.setMonth(year+"-01"+";"+(year-1)+"-"+s[1]);
 			}else
 				sxArrange.setMonth(year+"-"+s[1]);
 			sxArrange.setWeek(s[2]);
@@ -113,8 +118,22 @@ public class SxPbController {
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByName(id);
 		
+		List<Shift> sections = shiftManager.getSx();
 		
-		int size = sxArranges.size();
+		Map<String, Integer> stuCount = new HashMap<String, Integer>();
+		
+		for(Shift shift: sections){
+			stuCount.put(shift.getAb(), 0);
+		}
+		
+		for(SxArrange arrange : sxArranges){
+			if(stuCount.containsKey(arrange.getSection()))
+				stuCount.put(arrange.getSection(), stuCount.get(arrange.getSection())+1);
+			else
+				System.out.println("不能理解的排班："+arrange.getSection());
+		}
+		
+		int size = sections.size();
 		int x = size % (row == 0 ? size : row);
 		if (x != 0) {
 			x = row - x;
@@ -124,24 +143,13 @@ public class SxPbController {
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		
-		if(size-1>end)
-			sxArranges = sxArranges.subList(start, end);
-		else if(size>start)
-			sxArranges = sxArranges.subList(start, size);
-		else {
-			return null;
-		}
 		
 		List<Map<String, Object>> datarows = new ArrayList<Map<String, Object>>();
-		for(SxArrange a : sxArranges){
+		for(Map.Entry<String, Integer> a : stuCount.entrySet()){
 			Map<String, Object> datarow = new HashMap<String, Object>();
-			if(!a.getSection().isEmpty()){
-				datarow.put("id", a.getId());
-				datarow.put("monthweek", a.getMonth());
-				datarow.put("week", a.getWeek());
-				datarow.put("section", a.getSection());
+				datarow.put("section", a.getKey());
+				datarow.put("num", a.getValue());
 				datarows.add(datarow);
-			}
 		}
 		
 		
@@ -171,7 +179,7 @@ public class SxPbController {
 			int day = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 			cal.set(Calendar.DATE, day);
 			toweek = cal.get(Calendar.WEEK_OF_YEAR);
-		if(fromdate[0]==todate[0]){
+		if(fromdate[0]==todate[0] && toweek>startweek){
 			totleweek = toweek - startweek+1;
 		} else {
 			cal.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
@@ -183,5 +191,6 @@ public class SxPbController {
 	
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
-	
+	@Autowired
+	private ShiftManager shiftManager;
 }

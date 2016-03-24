@@ -17,7 +17,10 @@ $(function() {
 	
 	
 	$("#searchPB").click(function() {
-		window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
+		if($("#typeSel").val()==2){
+			window.location.href="../pb/sxcx";
+		}else
+			window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 		//$.get("<c:url value='/pb/pbcx'/>",{date:$("#date").val(),section:$("#section").val()},function() {});
 	});
 	
@@ -30,7 +33,10 @@ $(function() {
 		}
 	});
 	$("#typeSel").change(function(){
-		window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
+		if($("#typeSel").val()==2){
+			window.location.href="../pb/sxcx";
+		}else
+			window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 	});
 	
 	$("#typeSel").val($("#type").val());

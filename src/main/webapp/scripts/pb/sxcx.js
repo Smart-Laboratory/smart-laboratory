@@ -1,4 +1,4 @@
-function stuInfo(id,name){
+function stuInfo(id){
 	jQuery("#hisList").jqGrid("clearGridData");
 	jQuery("#hisList").jqGrid("setGridParam",{url:"../pb/sxpb/hisdata?id="+id}).setCaption(name+"  排班信息").trigger("reloadGrid");
 }
@@ -8,10 +8,12 @@ function getHisList(id){
 	jQuery("#hisList").jqGrid({
 		url:"../pb/sxpb/hisdata?id="+id,
 		datatype:"json",
-		colNames:['科室','次数'],
+		colNames:['ID','月','周','科室'],
 		colModel:[
-		          {name:'section',index:'section',width:80,sortable:false},
-		          {name:'num',index:'num',width:40,sortable:false},
+		          {name:'id',index:'id',hidden:true},
+		          {name:'monthweek',index:'monthweek',width:80,sortable:false},
+		          {name:'week',index:'week',width:40,sortable:false},
+		          {name:'section',index:'section',width:40,sortable:false}
 		          ],
 		rowNum:20,
 		height:'100%',
@@ -86,12 +88,13 @@ $(function() {
 	
 	
 	$("#changeMonth").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val();
+		window.location.href="../pb/sxcx?from=" + $("#from").val()+"&to="+$("#to").val();
 	});
 	
-	$("#ksCount").click(function() {
-		window.open("../pb/kscount?from=" + $("#from").val()+"&to="+$("#to").val());
+	$("#stuPb").click(function() {
+		window.location.href="../pb/sxgroupPb?date=" + $("#from").val()+"@section="+$("#section").val();
 	});
+	
 	
 	var page = $("#page").val();
 	var pages = $("#pages").val();
@@ -102,10 +105,10 @@ $(function() {
 		$("#nextBtn").addClass("disabled");
 	}
 	$("#preBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page);
+		window.location.href="../pb/sxcx?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page);
 	});
 	$("#nextBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page);
+		window.location.href="../pb/sxcx?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page);
 	});
 	
 	
@@ -143,10 +146,7 @@ $(function() {
 				text = text + array[0] + ":" + month + ":" + day + ":" + value  +",";
 			});
 			
-			$.post("../pb/sxpb/submit",{text:text,from:from,to:to},function(data) {
-				alert("success!");
-				window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+page;
-			});
+			
 			
 		}
 	});

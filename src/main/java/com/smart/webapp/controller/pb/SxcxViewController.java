@@ -16,10 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.base.Function;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
 import com.smart.model.pb.WInfo;
@@ -28,9 +26,8 @@ import com.smart.service.SxArrangeManager;
 import com.smart.service.WInfoManager;
 
 @Controller
-@RequestMapping("/pb/sxpb*")
-public class SxPbViewController {
-
+@RequestMapping("/pb/sxcx*")
+public class SxcxViewController {
 	SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat md = new SimpleDateFormat("MM-dd");
 	SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
@@ -45,8 +42,6 @@ public class SxPbViewController {
 			from = ym.format(new Date());
 			to = ym.format(new Date());
 		}
-		if(Integer.parseInt(from.split("-")[0])>Integer.parseInt(to.split("-")[0]) || (Integer.parseInt(from.split("-")[0])==Integer.parseInt(to.split("-")[0])  && Integer.parseInt(from.split("-")[1])>Integer.parseInt(to.split("-")[1])))
-			return new ModelAndView();
 		
 		List<WInfo> wInfos = wInfoManager.getBySection("", "2");
 //		String year = request.getParameter("year");
@@ -116,22 +111,22 @@ public class SxPbViewController {
 		System.out.println(sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-//				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
+				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
 				sxMap.put(a.getWorker()+":"+a.getWeek(), a);
 			}
 		}
 		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"</a></td>";
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getId()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"</a></td>";
 			for(int i=1;i<maxWeek+1;i++){
 				int dweek = startweek+i-1;
 				if(dweek>yearMaxWeek)
 					dweek-=yearMaxWeek;
 				String month = shifts[0][i].substring(10,12);
-				if(sxMap.containsKey(wInfos.get(j).getWorkid()+":"+dweek) && sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()!=null){
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()+"</td>";
+				if(sxMap.containsKey(wInfos.get(j).getId()+":"+dweek) && sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()!=null){
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()+"</td>";
 				}else{
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'></td>";
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'></td>";
 				}
 				
 			}

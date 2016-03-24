@@ -92,6 +92,7 @@ public class PbgrController {
 				for(String ab : abs.split(";")){
 					String title = "";
 					if(!ab.isEmpty()){
+						System.out.println(ab);
 						Temp t = new Temp();
 						title = map.get(ab).getName();
 						title += " - "+map.get(ab).getWorktime();

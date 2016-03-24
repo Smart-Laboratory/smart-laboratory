@@ -17,5 +17,7 @@ public interface WInfoDao extends GenericDao<WInfo, Long> {
 	List<WInfo> getBySearch(String field, String string);
 	
 	List<WInfo> getBySection(String section);
+	
+	WInfo getByWorkId(String workid);
 }
 

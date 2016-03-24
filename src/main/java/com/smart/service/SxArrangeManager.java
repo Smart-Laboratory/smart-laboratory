@@ -3,6 +3,7 @@ package com.smart.service;
 import java.util.List;
 
 import com.smart.model.pb.SxArrange;
+import com.smart.model.pb.WInfo;
 
 public interface SxArrangeManager extends GenericManager<SxArrange, Long> {
 
@@ -14,4 +15,5 @@ public interface SxArrangeManager extends GenericManager<SxArrange, Long> {
 	List<SxArrange> getByName(String name);
 	
 	List<SxArrange> getByWeek(int year, int startWeek, int maxWeek);
+	
 }

@@ -71,4 +71,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 		return getSession().createQuery(hql).list();
 	}
 	
+	public WInfo getByWorkId(String workid){
+		return (WInfo)getSession().createQuery("from WInfo where workid = '"+workid+"'").uniqueResult();
+	}
 }

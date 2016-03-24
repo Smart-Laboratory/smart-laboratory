@@ -47,6 +47,7 @@ table tr th {
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
 			<option value="7" ><fmt:message key="pb.sy"/></option>
+			<option value="2" ><fmt:message key="menu.pb.sxcx"/></option>
 			<%-- <option value="2" ><fmt:message key="pb.lz"/></option>
 			<option value="3" ><fmt:message key="pb.wc"/></option>
 			<option value="4" ><fmt:message key="pb.ybb"/></option>

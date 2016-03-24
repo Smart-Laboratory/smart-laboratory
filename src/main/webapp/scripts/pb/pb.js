@@ -70,7 +70,7 @@ $(function() {
 	$("#labSelect").val($("#section").val());
 	$("#pbdata").html($("#test1").val());
 	
-//	getHoliday();
+
 	
 	$("#pbdata tr td").click(function(){
 		var id=this.id;
@@ -113,14 +113,7 @@ $(function() {
 		} 
 	});
 	
-	$("#dialog").dialog({
-		autoOpen: true,
-		resizable: false,
-		modal:true,
-	    width: 300,
-	    height: 160
-	});
-	
+
 	
 	
 	$("#shiftBtn").click(function() {
@@ -144,7 +137,6 @@ $(function() {
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
 			var bz= $("#bz").val();
-			alert(bz);
 			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz},function(data) {
 				if(data){
 					alert("Success!");

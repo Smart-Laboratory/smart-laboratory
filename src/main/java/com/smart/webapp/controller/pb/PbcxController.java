@@ -105,7 +105,7 @@ public class PbcxController {
 		if(section.equals("1300000") && !type.equals("7")){
 			List<Arrange> yArranges = arrangeManager.getArrangeByType("夜", tomonth);
 			List<Arrange> lArranges = arrangeManager.getArrangeByType("良", tomonth);
-			List<Arrange> wArranges = arrangeManager.getArrangeByType("外", tomonth);
+			List<Arrange> wArranges = arrangeManager.getArrangeByType("9", tomonth);
 			List<Arrange> hArranges = arrangeManager.getArrangeByType("海", tomonth);
 			List<Arrange> rArranges = arrangeManager.getArrangeByType("入", tomonth);
 			List<Arrange> bArranges = arrangeManager.getArrangeByType("生帮", tomonth);
@@ -147,7 +147,7 @@ public class PbcxController {
 	    			arr = wArranges;
 	    			break;
 	    		case 4:
-	    			bc = "外9下";
+	    			bc = "9下";
 	    			arr = wArranges;
 	    			break;
 	    		case 5:

@@ -47,4 +47,7 @@ public class WInfoManagerImpl extends GenericManagerImpl<WInfo, Long> implements
 		return wInfoDao.getBySection(section);
 	}
 	
+	public WInfo getByWorkId(String workid){
+		return wInfoDao.getByWorkId(workid);
+	}
 }
