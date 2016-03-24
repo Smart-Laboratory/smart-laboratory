@@ -126,9 +126,9 @@ function writeBackOnce(code, lab, user) {
 	 			$("#info_dangerous_undeal").html(data.dangerous);
 	 			if (data.dangerous != 0) {
 	 				$("#div_dangerous").removeClass('alert-success');
-	 				$("#div_dangerous").addClass('alert-error');
+	 				$("#div_dangerous").addClass('alert-danger');
 	 			} else {
-	 				$("#div_dangerous").removeClass('alert-error');
+	 				$("#div_dangerous").removeClass('alert-danger');
 	 				$("#div_dangerous").addClass('alert-success');
 	 			}
 	 		},'json');
@@ -152,9 +152,9 @@ function writeBackPart(text, lab, user) {
 	 			$("#info_dangerous_undeal").html(data.dangerous);
 	 			if (data.dangerous != 0) {
 	 				$("#div_dangerous").removeClass('alert-success');
-	 				$("#div_dangerous").addClass('alert-error');
+	 				$("#div_dangerous").addClass('alert-danger');
 	 			} else {
-	 				$("#div_dangerous").removeClass('alert-error');
+	 				$("#div_dangerous").removeClass('alert-danger');
 	 				$("#div_dangerous").addClass('alert-success');
 	 			}
 	 		},'json');

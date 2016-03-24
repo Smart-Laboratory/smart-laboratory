@@ -92,21 +92,23 @@
 	        }
 		});
 		
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getIn',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称[规格]','批号','产地', '品牌', '单位[包装]','单价','数量','验收是否合格','失效日期'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:200},
-		   		{name:'batch',index:'batch', width:100},
-		   		{name:'place',index:'place', width:100, sortable:false},
-		   		{name:'brand',index:'brand', width:80, sortable:false},
-		   		{name:'baozhuang',index:'baozhuang', width:100, align:"right", sortable:false},
-		   		{name:'price',index:'price', width:60, align:"right", sortable:false},		
-		   		{name:'num',index:'num', width:60, sortable:false},		
-		   		{name:'isqualified',index:'isqualified', width:80, align:"center", sortable:false},
-		   		{name:'exedate',index:'exedate', width:160, align:"center", sortable:false}
+		   		{name:'name',index:'name', width:"30%"},
+		   		{name:'batch',index:'batch', width:"10%"},
+		   		{name:'place',index:'place', width:"8%", sortable:false},
+		   		{name:'brand',index:'brand', width:"8%", sortable:false},
+		   		{name:'baozhuang',index:'baozhuang', width:"8%", align:"right", sortable:false},
+		   		{name:'price',index:'price', width:"6%", align:"right", sortable:false},		
+		   		{name:'num',index:'num', width:"6%", sortable:false},		
+		   		{name:'isqualified',index:'isqualified', width:"8%", align:"center", sortable:false},
+		   		{name:'exedate',index:'exedate', width:"16%", align:"center", sortable:false}
 		   	],
 		   	rowNum: 50,
 		   	sortname: 'id',

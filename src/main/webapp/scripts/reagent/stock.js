@@ -1,22 +1,22 @@
 	$(function() {
-		
-		
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getReagent?q=1',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称','规格','产地', '品牌', '单位','单价','存放位置','环境条件','当前温度','自制试剂'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:150},
-		   		{name:'specification',index:'specification', width:100},
-		   		{name:'place',index:'place', width:100, sortable:false},
-		   		{name:'brand',index:'brand', width:80, sortable:false},
-		   		{name:'baozhuang',index:'baozhuang', width:100, align:"right", sortable:false},
-		   		{name:'price',index:'price', width:60, align:"right", sortable:false},		
-		   		{name:'address',index:'address', width:120, sortable:false},		
-		   		{name:'condition',index:'condition', width:85, sortable:false},
-		   		{name:'temp',index:'temp', width:60, align:"center", sortable:false},
-		   		{name:'isself',index:'isself', width:60, align:"center", sortable:false}
+		   		{name:'name',index:'name', width:"20%"},
+		   		{name:'specification',index:'specification', width:"12%"},
+		   		{name:'place',index:'place', width:"8%", sortable:false},
+		   		{name:'brand',index:'brand', width:"8%", sortable:false},
+		   		{name:'baozhuang',index:'baozhuang', width:"8%", align:"right", sortable:false},
+		   		{name:'price',index:'price', width:"8%", align:"right", sortable:false},		
+		   		{name:'address',index:'address', width:"12%", sortable:false},		
+		   		{name:'condition',index:'condition', width:"8%", sortable:false},
+		   		{name:'temp',index:'temp', width:"8%", align:"center", sortable:false},
+		   		{name:'isself',index:'isself', width:"8%", align:"center", sortable:false}
 		   	],
 		   	rowNum:20,
 		   	rownumbers:true,

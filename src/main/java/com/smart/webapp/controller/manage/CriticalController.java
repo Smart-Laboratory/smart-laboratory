@@ -56,7 +56,7 @@ public class CriticalController {
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String lab = operator.getLastLab();
 		List<Sample> samples = sampleManager.getSampleList(Constants.DF3.format(new Date()),
-				operator.getDepartment(), "", 6, -3);
+				lab, "", 6, -3);
 		String hisSampleId = "";
 		String hisBlh = "";
 		for(Sample sample : samples) {
@@ -69,29 +69,27 @@ public class CriticalController {
 		Map<Long, Process> processMap = new HashMap<Long, Process>();
 		Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
 		Map<String, Patient> pMap = new HashMap<String, Patient>();
+		
 		for(Process p : processList) {
 			processMap.put(p.getSampleid(), p);
 		}
 		for(CriticalRecord cr : crList) {
 			crMap.put(cr.getSampleid(), cr);
-			System.out.println(cr.getSampleid());
 		}
 		for(Patient p : patientList) {
 			pMap.put(p.getBlh(), p);
 		}
 		List<Critical> criticals = new ArrayList<Critical>();
 		int index = 0;
-		System.out.println("size="+crMap.size());
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		for (Sample sample : samples) {
-			System.out.println(sample.getId());
-			if (sample.getSectionId().equals(lab)) {
+			if(crMap.get(sample.getId()) != null) {
 				Critical ctl = new Critical();
 				ctl.setId(++index);
 				ctl.setDocId(sample.getId());
 				ctl.setBlh(sample.getPatientblh());
 				ctl.setSampleNo(sample.getSampleNo());
 				ctl.setRequester(processMap.get(sample.getId()).getRequester());
-				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
 					ctl.setSection(section + " " + sample.getDepartBed());
@@ -103,6 +101,7 @@ public class CriticalController {
 				ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
 				criticals.add(ctl);
 			}
+			
 		}
 
 		return new ModelAndView("manage/critical", "criticals", criticals);
@@ -132,7 +131,7 @@ public class CriticalController {
 		}
 		request.setAttribute("date", dateText);
 		
-		List<Sample> samples = sampleManager.getSampleList(date, operator.getDepartment(),
+		List<Sample> samples = sampleManager.getSampleList(date, lab,
 				"", 6, -3);
 		String hisSampleId = "";
 		String hisBlh = "";
@@ -160,7 +159,7 @@ public class CriticalController {
 		Iterator<Sample> It = samples.iterator();
 		while (It.hasNext()) {
 			Sample sample = It.next();
-			if (crMap.get(sample.getId()).getCriticalDealFlag() != 1) {
+			if (crMap.get(sample.getId()) == null || crMap.get(sample.getId()).getCriticalDealFlag() != 1) {
 				It.remove();
 				continue;
 			}
@@ -185,10 +184,10 @@ public class CriticalController {
 		for (com.zju.api.model.Patient p : patients) {
 			patientMap.put(p.getPatientId(), p);
 		}
-
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		int index = 0;
 		for (Sample sample : samples) {
-			if (sample.getSectionId().equals(lab)) {
+			if (crMap.get(sample.getId()) != null) {
 				Critical ctl = new Critical();
 				ctl.setId(++index);
 				ctl.setDealTime(crMap.get(sample.getId()).getCriticalDealTime());
@@ -197,7 +196,6 @@ public class CriticalController {
 				ctl.setBlh(sample.getPatientblh());
 				ctl.setSampleNo(sample.getSampleNo());
 				ctl.setRequester(processMap.get(sample.getId()).getRequester());
-				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 				String section = sectionutil.getValue(sample.getHosSection());
 				if (sample.getDepartBed() != null) {
 					ctl.setSection(section + " " + sample.getDepartBed());

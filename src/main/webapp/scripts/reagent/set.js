@@ -1,23 +1,25 @@
 	$(function() {
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getReagent',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称','规格','产地', '品牌', '单位','子数量','子单位','单价','存放位置','环境条件','库存界值','商品码','自制试剂'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:145, editable:true},
-		   		{name:'specification',index:'specification', width:80, editable:true},
-		   		{name:'place',index:'place', width:80, sortable:false, editable:true},
-		   		{name:'brand',index:'brand', width:60, sortable:false, editable:true},
-		   		{name:'unit',index:'unit', width:40, align:"right", sortable:false, editable:true},
-		   		{name:'subnum',index:'subnum', width:50, align:"right", sortable:false, editable:true},
-		   		{name:'subunit',index:'subunit', width:50, align:"right", sortable:false, editable:true},
-		   		{name:'price',index:'price', width:60, align:"right", sortable:false, editable:true},		
-		   		{name:'address',index:'address', width:100, sortable:false, editable:true},		
-		   		{name:'condition',index:'condition', width:85, sortable:false, editable:true},
-		   		{name:'margin',index:'margin', width:60, align:"right", sortable:false, editable:true},
-		   		{name:'pcode',index:'pcode', width:70, sortable:false, editable:true},
-		   		{name:'isself',index:'isself', width:60, align:"center", sortable:false, editable:true,edittype:"select",editoptions:{value:"0:×;1:√"}}
+		   		{name:'name',index:'name', width:"20%", editable:true},
+		   		{name:'specification',index:'specification', width:"10%", editable:true},
+		   		{name:'place',index:'place', width:"8%", sortable:false, editable:true},
+		   		{name:'brand',index:'brand', width:"6%", sortable:false, editable:true},
+		   		{name:'unit',index:'unit', width:"4%", align:"right", sortable:false, editable:true},
+		   		{name:'subnum',index:'subnum', width:"5%", align:"right", sortable:false, editable:true},
+		   		{name:'subunit',index:'subunit', width:"5%", align:"right", sortable:false, editable:true},
+		   		{name:'price',index:'price', width:"6%", align:"right", sortable:false, editable:true},		
+		   		{name:'address',index:'address', width:"10%", sortable:false, editable:true},		
+		   		{name:'condition',index:'condition', width:"7%", sortable:false, editable:true},
+		   		{name:'margin',index:'margin', width:"6%", align:"right", sortable:false, editable:true},
+		   		{name:'pcode',index:'pcode', width:"7%", sortable:false, editable:true},
+		   		{name:'isself',index:'isself', width:"6%", align:"center", sortable:false, editable:true,edittype:"select",editoptions:{value:"0:×;1:√"}}
 		   	],
 		   	rowNum:20,
 		   	rownumbers:true,

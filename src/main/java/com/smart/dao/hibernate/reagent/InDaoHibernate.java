@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -28,12 +27,12 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 
 	@SuppressWarnings("unchecked")
 	public List<In> getByInDate(Date indate) {
-		return getSession().createCriteria(In.class).add(Restrictions.eq("indate", indate)).list();
+		return getSession().createQuery("from In where indate='" + indate + "'").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<In> getByLab(String lab) {
-		return getSession().createCriteria(In.class).add(Restrictions.eq("lab", lab)).list();
+		return getSession().createQuery("from In where lab='" + lab + "'").list();
 	}
 
 }

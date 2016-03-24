@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<div class="col-sm-10">
+<div id="mid" class="col-sm-10">
 <ul class="nav nav-pills">
   <li id="inpre" role="presentation" class="active"><a onclick="changeTab('in')"><fmt:message key="reagent.detail.in"/></a></li>
   <li id="outpre" role="presentation"><a onclick="changeTab('out')"><fmt:message key="reagent.detail.out"/></a></li>

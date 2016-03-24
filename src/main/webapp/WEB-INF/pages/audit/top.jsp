@@ -15,7 +15,7 @@
 			<b><fmt:message key="info.need.writeback" /> : </b><span id="need_write_back"><c:out value="${need_write_back}" /></span>
 		</div>
 		
-		<div style="padding:5px;margin-right: 15px;cursor:pointer;" class="form-group <c:if test="${dangerous_undeal != 0}">alert-error</c:if>" id="div_dangerous" >
+		<div style="padding:5px;margin-right: 15px;cursor:pointer;" class="form-group <c:if test="${dangerous_undeal != 0}">alert-danger</c:if>" id="div_dangerous" >
 			<b><fmt:message key="info.danger" /> : </b>
 			<span id="info_dangerous_undeal"><c:out value="${dangerous_undeal}" /></span>
 		</div>

@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.reagent;
 
 import java.util.List;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -23,7 +22,7 @@ public class ComboDaoHibernate extends GenericDaoHibernate<Combo, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Combo> getByLab(String lab) {
-		return getSession().createCriteria(Combo.class).add(Restrictions.eq("lab", lab)).list();
+		return getSession().createQuery("from Combo where lab='" + lab + "' order by upper(id)").list();
 	}
 
 }

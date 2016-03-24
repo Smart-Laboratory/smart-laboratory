@@ -2,8 +2,10 @@ package com.smart.webapp.controller.reagent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,8 +60,12 @@ public class DetailController extends ReagentBaseController {
 		}
 		int index = 0;
 		String rgIds = "";
+		Set<Long> ids = new HashSet<Long>(); 
 		for(In in : list) {
-			rgIds += in.getRgId() + ",";
+			if(!ids.contains(in.getRgId())) {
+				rgIds += in.getRgId() + ",";
+				ids.add(in.getRgId());
+			}
 		}
 		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
 		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
@@ -117,8 +123,12 @@ public class DetailController extends ReagentBaseController {
 		}
 		int index = 0;
 		String rgIds = "";
+		Set<Long> ids = new HashSet<Long>(); 
 		for(Out o : list) {
-			rgIds += o.getRgId() + ",";
+			if(!ids.contains(o.getRgId())) {
+				rgIds += o.getRgId() + ",";
+				ids.add(o.getRgId());
+			}
 		}
 		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
 		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();

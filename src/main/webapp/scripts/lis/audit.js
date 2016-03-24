@@ -352,9 +352,9 @@ $(function(){
 			$("#info_dangerous_undeal").html(data.dangerous);
 			if (data.dangerous != 0) {
 				$("#div_dangerous").removeClass('alert-success');
-				$("#div_dangerous").addClass('alert-error');
+				$("#div_dangerous").addClass('alert-danger');
 			} else {
-				$("#div_dangerous").removeClass('alert-error');
+				$("#div_dangerous").removeClass('alert-danger');
 				$("#div_dangerous").addClass('alert-success');
 			}
 		},'json');
@@ -368,9 +368,9 @@ $(function(){
  			$("#info_dangerous_undeal").html(data.dangerous);
  			if (data.dangerous != 0) {
  				$("#div_dangerous").removeClass('alert-success');
- 				$("#div_dangerous").addClass('alert-error');
+ 				$("#div_dangerous").addClass('alert-danger');
  			} else {
- 				$("#div_dangerous").removeClass('alert-error');
+ 				$("#div_dangerous").removeClass('alert-danger');
  				$("#div_dangerous").addClass('alert-success');
  			}
  			$("#audit_status_info").html("");
@@ -391,6 +391,10 @@ $(function(){
      		$("#isfulltag").val(0);
  		}
  	});
+ 	
+ 	$("#div_dangerous").click(function() {
+		window.open("../critical/undeal");
+	});
  	
 });
 

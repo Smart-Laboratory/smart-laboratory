@@ -1,13 +1,15 @@
 	$(function() {
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getCombo?q=1',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称','创建者','创建时间'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:420, sortable:true, editable:true},
-		   		{name:'creator',index:'creator', width:245, align:"center", sortable:false, editable:false},
-		   		{name:'createtime',index:'createtime', width:250, align:"center", sortable:false, editable:false}
+		   		{name:'name',index:'name', width:"40%", sortable:true, editable:true},
+		   		{name:'creator',index:'creator', width:"30%", align:"center", sortable:false, editable:false},
+		   		{name:'createtime',index:'createtime', width:"30%", align:"center", sortable:false, editable:false}
 		   	],
 		   	rowNum:10,
 		   	rownumbers:true,

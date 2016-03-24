@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.reagent;
 
 import java.util.List;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -32,7 +31,7 @@ public class ReagentDaoHibernate extends GenericDaoHibernate<Reagent, Long> impl
 
 	@SuppressWarnings("unchecked")
 	public List<Reagent> getByLab(String lab) {
-		return getSession().createCriteria(Reagent.class).add(Restrictions.eq("lab", lab)).list();
+		return getSession().createQuery("from Reagent r where lab='" + lab + "'").list();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -79,19 +79,21 @@
 	        }
 		});
 		
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getOut',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称[规格]','批号','产地', '品牌', '单位[包装]','单价','数量'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:240},
-		   		{name:'batch',index:'batch', width:180},
-		   		{name:'place',index:'place', width:100, sortable:false},
-		   		{name:'brand',index:'brand', width:100, sortable:false},
-		   		{name:'baozhuang',index:'baozhuang', width:120, align:"right", sortable:false},
-		   		{name:'price',index:'price', width:100, align:"right", sortable:false},		
-		   		{name:'num',index:'num', width:100, sortable:false}
+		   		{name:'name',index:'name', width:"30%"},
+		   		{name:'batch',index:'batch', width:"18%"},
+		   		{name:'place',index:'place', width:"10%", sortable:false},
+		   		{name:'brand',index:'brand', width:"10%", sortable:false},
+		   		{name:'baozhuang',index:'baozhuang', width:"12%", align:"right", sortable:false},
+		   		{name:'price',index:'price', width:"10%", align:"right", sortable:false},		
+		   		{name:'num',index:'num', width:"10%", sortable:false}
 		   	],
 		   	rowNum: 50,
 		   	sortname: 'id',

@@ -36,20 +36,22 @@
 		    height: 600
 		});
 		
+		var width = $("#mid").width();
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/detail/getIn',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称[规格]','批号','失效日期', '验收是否合格', '入库量','入库人','入库时间',''],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:240},
-		   		{name:'batch',index:'batch', width:100, sortable:false},
-		   		{name:'exdate',index:'exdate', width:100, sortable:false},
-		   		{name:'isqualified',index:'isqualified', width:100, align:"center", sortable:false},
-		   		{name:'num',index:'num', width:80, align:"center", sortable:false},		
-		   		{name:'operator',index:'operaator', width:100, align:"center", sortable:false},
-		   		{name:'indate',index:'indate', width:100, sortable:false},
-		   		{name:'reprint',index:'reprint', width:120, align:"center", sortable:false}
+		   		{name:'name',index:'name', width:"24%"},
+		   		{name:'batch',index:'batch', width:"8%", sortable:false},
+		   		{name:'exdate',index:'exdate', width:"8%", sortable:false},
+		   		{name:'isqualified',index:'isqualified', width:"10%", align:"center", sortable:false},
+		   		{name:'num',index:'num', width:"8%", align:"center", sortable:false},		
+		   		{name:'operator',index:'operaator', width:"10%", align:"center", sortable:false},
+		   		{name:'indate',index:'indate', width:"10%", sortable:false},
+		   		{name:'reprint',index:'reprint', width:"12%", align:"center", sortable:false}
 		   	],
 		   	rowNum: 15,
 		   	rownumbers:true,
@@ -65,16 +67,17 @@
 		jQuery("#list2").jqGrid({
 		   	url:'../reagent/detail/getOut',
 			datatype: "json",
+			width:width,
 		   	colNames:['','名称[规格]','批号', '出库量','出库人','出库时间', '完成试验项目数', ''],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:240},
-		   		{name:'batch',index:'batch', width:100},
-		   		{name:'num',index:'num', width:120, align:"center", sortable:false},
-		   		{name:'operator',index:'operator', align:"center", width:120, sortable:false},
-		   		{name:'outdate',index:'outdate', width:120, sortable:false},
-		   		{name:'testnum',index:'testnum', width:120, align:"center", sortable:false},		
-		   		{name:'cancel',index:'cancel', width:120, align:"center", sortable:false},		
+		   		{name:'name',index:'name', width:"28%"},
+		   		{name:'batch',index:'batch', width:"12%"},
+		   		{name:'num',index:'num', width:"12%", align:"center", sortable:false},
+		   		{name:'operator',index:'operator', align:"center", width:"12%", sortable:false},
+		   		{name:'outdate',index:'outdate', width:"12%", sortable:false},
+		   		{name:'testnum',index:'testnum', width:"12%", align:"center", sortable:false},		
+		   		{name:'cancel',index:'cancel', width:"12%", align:"center", sortable:false},		
 		   	],
 		   	rowNum: 15,
 		   	rownumbers:true,

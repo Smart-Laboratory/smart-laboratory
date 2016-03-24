@@ -161,7 +161,7 @@
 			<input type="hidden" id="hiddenIsPass"/>
 			<input type="hidden" id="hiddenAuditConfirm" value="${activeAuto}"/>
 		</div>
-		<div id="colorHelp" style="float:left;margin-top:3px;">
+		<div id="colorHelp" style="float:left;margin-top:3px;width:100%">
 		</div>
 		<div id="critical_div" style="float:left;margin-top:10px;">
 			<div id="critical_alert" class="alert">
