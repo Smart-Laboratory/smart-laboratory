@@ -51,10 +51,10 @@ public class SxPbController {
 		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(yearfrom, startweek, maxWeek);
-		System.out.println(startweek+"||"+maxWeek+"||"+sxArranges.size());
+//		System.out.println(startweek+"||"+maxWeek+"||"+sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-				System.out.println(a.getWorker()+":"+a.getMonth().split("-")[0]+":"+a.getWeek());
+//				System.out.println(a.getWorker()+":"+a.getMonth().split("-")[0]+":"+a.getWeek());
 				sxMap.put(a.getWorker()+":"+a.getMonth().split("-")[0]+":"+a.getWeek(), a);//姓名：年：周
 			}
 		}

@@ -1,4 +1,5 @@
 	var count = 1;
+	
 	function createInput(){
 	    count++;
 	    var str = '<div name="div" ><font style="font-size:12px;"></font>'+
@@ -18,37 +19,15 @@
 	   return true;
 	}
 	
-	function ajaxFileUpload(){
-	    var uplist = $("input[name^=uploads]");
-		var arrId = [];
-		for (var i=0; i< uplist.length; i++){
-		    if(uplist[i].value){
-		    	arrId[i] = uplist[i].id;
-			}
-	    }
-		$.ajaxFileUpload({
-			url:'../explain/audit/list/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
-			secureuri:false,
-			fileElementId: arrId,  
-			success: function (){
-				alert("上传成功");
-				$("#uploadDialog").dialog("close");
-				jQuery("#s3list").trigger("reloadGrid");
-			},
-			error: function(){
-				alert("error");
-			}
-		});
-	}
-	
 	function getImages(sampleno){
 		$("#showGalleria").html("");
-		$.get("../explain/audit/list/getImage'/>",{sampleno:sampleno}, function(data) {
+		$.get("../audit/ajax/getImage'/>",{sampleno:sampleno}, function(data) {
 			data = jQuery.parseJSON(data);
+			var html = data.html.split("fxg").join("/");
 			$('#showGalleria').css('height','600px');//#galleria{height:320px}
 			Galleria.loadTheme('../scripts/galleria.classic.min.js');
 		    Galleria.run('#showGalleria', {
-		        dataSource: data.html,
+		        dataSource: html,
 		        keepSource: false
 			});
 		});
@@ -62,14 +41,13 @@
         	$("#audit_reason").html(data.reason);
         	$("#pName").html("<a href='../explain/patientList?patientId=" + data.patientId + "&blh=" + data.blh + "'   target='_blank'>" + data.name + "</a>");
         	$("#pAge").html(data.age);
-        	$("#blh").html(data.blh);
         	$("#blh").html("<a href='http://192.168.17.102/ZWEMR/SysLogin.aspx?lcation=inside&ly=D&edt=N&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
-        	$("#pId").html(data.id);
         	$("#pSex").html(data.sex);
         	$("#pSection").html(data.section);
         	$("#pType").html(data.type);
         	$("#diagnostic").html(data.diagnostic);
         	$("#show_history").html(data.history);
+        	$("#doctadviseno").html(data.id);
         	
         }, "json");
 	}
@@ -99,29 +77,34 @@
 			}
  		});
  	}
-
+ 	
 	function getSample(sampleNo) {
+		var width = $("#mid").width();
 		jQuery("#rowed3").jqGrid({
 		   	url:"../collect/list/sample?sample="+sampleNo,
 			datatype: "json",
 			jsonReader : {repeatitems : false},  
-		   	colNames:['ID','COLOR','英文缩写','项目名称', '结果', '历史', '历史', '历史', '历史', '历史', '范围', '单位','KNOWLEDGENAME','EDITMARK'],
+			colNames:['ID','Color','英文缩写','项目', '结果', '历史', '历史', '历史', '历史', '历史', '测定时间', '机器号', '参考值', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
-		   		{name:'id',index:'id', hidden:true},
-		   		{name:'color',index:'color', hidden:true},
-		   		{name:'ab',index:'ab',width:135,hidden:true},
-		   		{name:'name',index:'name',width:135,sortable:false},
-		   		{name:'result',index:'result',width:75, sortable:false, editable:true},
-		   		{name:'last',index:'last',width:50, sortable:false},
-		   		{name:'last1',index:'last1',width:50, sortable:false},
-		   		{name:'last2',index:'last2',width:50, hidden:true, sortable:false},
-		   		{name:'last3',index:'last3',width:50, hidden:true, sortable:false},
-		   		{name:'last4',index:'last4',width:50, hidden:true, sortable:false},
-		   		{name:'scope',index:'scope',width:80,sortable:false},
-		   		{name:'unit', sortable:false, width:65, index:'unit'},
-		   		{name:'knowledgeName',index:'knowledgeName', hidden:true},
-		   		{name:'editMark',index:'editMark',hidden:true}
+		   		{name:'id',index:'id',hidden:true},
+		   		{name:'color',index:'color',hidden:true},
+		   		{name:'ab',index:'ab',width:width*0.15,hidden:true},
+		   		{name:'name',index:'name',width:width*0.15,sortable:false},
+		   		{name:'result',index:'result',width:width*0.09,sortable:false,editable:true},
+		   		{name:'last',index:'last',width:width*0.09,sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.09,sortable:false},
+		   		{name:'last2',index:'last2',width:width*0.09,sortable:false},
+		   		{name:'last3',index:'last3',width:width*0.09,sortable:false},
+		   		{name:'last4',index:'last4',width:width*0.09,sortable:false},
+		   		{name:'checktime',index:'checktime',width:width*0.08,sortable:false},
+		   		{name:'device',index:'device',width:width*0.06,sortable:false},
+		   		{name:'scope',index:'scope',width:width*0.09,sortable:false},
+		   		{name:'unit', sortable:false, width:width*0.08,index:'unit'},
+		   		{name:'knowledgeName',index:'knowledgeName',hidden:true},
+		   		{name:'editMark',index:'editMark',hidden:true},
+		   		{name:'lastEdit',index:'lastEdit',hidden:true}
 		   	],
+		   	width: width,
 		   	height: "100%",
 		   	rowNum: 100,
 		   	rownumbers: true,
@@ -262,7 +245,9 @@
 		   		{name:'result',index:'result',width:190,sortable:false},
 		   		{name:'content',index:'content',width:190,sortable:false,hidden:true},
 		   		{name:'rank',index:'rank',sortable:false,hidden:true}], 
+//		   	width: $("#left").width(),
 		   	height: '100%'
+		   		
 		});
 	}
 	
@@ -270,7 +255,7 @@
 		jQuery("#evaluatelist").jqGrid({
 			url:"../collect/list/evaluatedata?sample="+sampleno +"&collector=" + userid,
 			datatype: "json",
-			width: 230, 
+			width: $("#left").width(), 
 			colNames:['ID','评价者','内容','评价时间'],
 			colModel:[{name:'id',index:'id',sortable:false,hidden:true},
 		        {name:'evaluator',index:'evaluator',width:50},
@@ -292,7 +277,7 @@
 		var mygrid = jQuery("#s3list").jqGrid({
         	url:"../collect/list/data", 
         	datatype: "json", 
-        	width: 230, 
+        	width: $("#left").width(), 
         	colNames:['ID', 'USERID', 'TYPE', '病案名称', '收藏者', '样本号'], 
         	colModel:[ 
         		{name:'id',index:'id', hidden:true},
@@ -322,6 +307,7 @@
     				getEvaluate(ret.sampleno, ret.userid);
     				isFirstTime = false;
         		} else {
+        			jQuery("#rowed3").jqGrid("clearGridData");
         			jQuery("#rowed3").jqGrid("setGridParam",{url:"../collect/list/sample?sample="+ret.sampleno}).trigger("reloadGrid");
         			jQuery("#evaluatelist").jqGrid("setGridParam",{url:"../collect/list/evaluatedata?sample="+ret.sampleno+"&collector="+ret.userid}).trigger("reloadGrid");
         		}
@@ -363,7 +349,8 @@
 		}).trigger("reloadGrid"); 
 	}
 	$(function() {
-		
+		var left = $("#left").width();
+		var mid = $("#mid").width();
 		$("#evaluateDialog").dialog({
 			autoOpen: false,
 			resizable: false,
@@ -501,21 +488,26 @@
 		});
 		
 		$("#historyTabs").tabs({
-			selected: 2,
-			select: function(event, ui) { 
-				if(ui.index == 2) {
+			active : 1,
+			activate : function(event, ui) {
+				var id = ui.newPanel.attr("id");
+				if(id == "tabs-1") {
 					jQuery("#rowed3").setGridParam().showCol("last2");
 					jQuery("#rowed3").setGridParam().showCol("last3");
 					jQuery("#rowed3").setGridParam().showCol("last4");
+					//jQuery("#rowed3").setGridParam().showCol("device");
+					jQuery("#rowed3").setGridParam().showCol("unit");
 				} else {
+					$("#patientRow").css('display','block');
+	    			$("#twosampleTable").css('display','none');
 					jQuery("#rowed3").setGridParam().hideCol("last2");
 					jQuery("#rowed3").setGridParam().hideCol("last3");
 					jQuery("#rowed3").setGridParam().hideCol("last4");
-					var s = $("#hiddenSampleNo").val();
-					if (ui.index == 1) {
+					//jQuery("#rowed3").setGridParam().hideCol("device");
+					jQuery("#rowed3").setGridParam().hideCol("unit");
+					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+					if (id == "tabs-0") {
 						getExplain(s);
-					} else if (ui.index == 0) {
-	        			getChart(s);
 					}
 				}
 			}
@@ -595,7 +587,7 @@
 		});
 		
 		$("#show_history").click(function() {
-			window.open("../explain/patientList?patientId=" + $("#pId").html() + "&blh=" + $("#blh").children().html());
+			window.open("../manage/patientList?blh=" + $("#blh").children().html());
 		});
 		
 		getList();

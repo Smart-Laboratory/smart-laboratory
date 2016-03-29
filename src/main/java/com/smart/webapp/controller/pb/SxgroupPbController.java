@@ -66,6 +66,12 @@ public class SxgroupPbController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String yearAndMonth = request.getParameter("date");
+		String view = request.getParameter("view");
+		if(view!=null && Integer.parseInt(view)==0)
+			view = "0";
+		else
+			view = "1";
+			
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MONTH, 1);
 		int year = calendar.get(Calendar.YEAR);
@@ -104,12 +110,12 @@ public class SxgroupPbController {
 		Map<WInfo, String> sxList = getSxWinfoList(section,tomonth);//MAP<,{可以排班的日期，[1;2;3;...]}>
 		Map<String, Boolean> sxMap = new HashMap<String,Boolean>();
 		if(sxList!=null){
-			System.out.println("size="+sxList.size());
+//			System.out.println("size="+sxList.size());
 			wiList.addAll(sxList.keySet());
 			for(Map.Entry<WInfo, String> entry : sxList.entrySet()){
 				if(entry.getValue()==null || entry.getValue().isEmpty())
 					continue;
-				System.out.println(entry.getKey().getName()+entry.getValue());
+//				System.out.println(entry.getKey().getName()+entry.getValue());
 				for(String s : entry.getValue().split(";")){
 					if(StringUtils.isNumeric(s)){
 						sxMap.put(entry.getKey().getName()+"-"+s, true);
@@ -126,12 +132,15 @@ public class SxgroupPbController {
 		}
 		//备注
 		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
+		request.setAttribute("view", view);
 		request.setAttribute("wshifts", wshifts);
 		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
 		request.setAttribute("section", section);
 		if(bzArrange!=null && bzArrange.getShift()!=null)
 			request.setAttribute("bz", bzArrange.getShift());
+		else
+			request.setAttribute("bz", "");
 		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0);
 		}
@@ -293,7 +302,7 @@ public class SxgroupPbController {
 		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
-		System.out.println(ymd.format(c.getTime()));
+		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(week-1));
         String[] startDate = md.format(c.getTime()).split("-");

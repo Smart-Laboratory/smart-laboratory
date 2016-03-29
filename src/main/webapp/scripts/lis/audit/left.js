@@ -74,9 +74,9 @@ function getList(text, lab) {
     		
     		var firstDocId, firstSampleNo;
     		var length = jQuery('#list').jqGrid('getCol','id', false).length;
-    		if(length==0){
-    			$("#mid").css("display","none");
-    		}
+//    		if(length==0){
+//    			$("#mid").css("display","none");
+//    		}
     		$.each(jQuery('#list').jqGrid('getCol','id', false), function(k,v) {
     			var ret = jQuery("#list").jqGrid('getRowData',v);
     			if (k == 0) {

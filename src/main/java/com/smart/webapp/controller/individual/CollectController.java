@@ -31,6 +31,7 @@ import com.smart.service.lis.TestResultManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.model.lis.CollectSample;
+import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.DataResponse;
 import com.zju.api.service.RMIService;
 import com.smart.Constants;
@@ -50,7 +51,7 @@ import com.smart.model.user.Evaluate;
 
 @Controller
 @RequestMapping("/collect/list*")
-public class CollectController {
+public class CollectController extends BaseAuditController{
 	
 	private Map<String, Index> idMap = new HashMap<String, Index>();
 	
@@ -127,12 +128,6 @@ public class CollectController {
 		return dataResponse;
 	}
 	
-	synchronized private void initMap() {
-		List<Index> list = indexManager.getAll();
-		for (Index t : list) {
-			idMap.put(t.getIndexId(), t);
-		}
-	}
 	
 	/**
 	 * 获取样本中的病人信息
@@ -236,6 +231,12 @@ public class CollectController {
 		}
 		if (idMap.size() == 0)
 			initMap();
+		if (deviceMap.size() == 0)
+			initDeviceMap();
+		
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
 		
 		Sample info = sampleManager.getBySampleNo(sampleNo);
 		if (info == null) {
@@ -286,6 +287,8 @@ public class CollectController {
 			for (Sample pinfo : list) {
 				boolean isHis = false;
 				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
+				if(his == null)
+					continue;
 				for (TestResult test: his) {
 					if (testIdSet.contains(test.getTestId())) {
 						isHis = true;
@@ -387,17 +390,6 @@ public class CollectController {
 
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
-	}
-	
-	private Map<String, Integer> StringToMap(String ts) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (String s : ts.split(";")) {
-			if (!"".equals(s) && s.contains(":")) {
-				String[] array = s.split(":");
-				map.put(array[0], Integer.parseInt(array[1]));
-			}
-		}
-		return map;
 	}
 	
 	/**

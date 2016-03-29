@@ -523,7 +523,8 @@ function ajaxFileUpload(){
 		url:'../audit/ajax/uploadFile?sampleno=' + $("#hiddenSampleNo").val() + '&imgnote=' + $("#image_note").val(),
 		secureuri:false,
 		fileElementId: arrId,  
-		success: function (){
+		success: function (data){
+			alert(data.addr)
 			alert("上传成功");
 			$("#uploadDialog").dialog("close");
 			jQuery("#list").trigger("reloadGrid");

@@ -2,6 +2,15 @@ function personal(name){
 	window.location.href="../pb/grcx?name=" + name;
 }
 
+function preview1() {
+	bdhtml=window.document.body.innerHTML;
+	sprnstr="<!--startprint-->"; //开始打印的地方
+	eprnstr="<!--endprint-->";  //结束打印标记
+	prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);
+	prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+	window.document.body.innerHTML=prnhtml;
+	window.print();
+}
 
 $(function() {
 	
@@ -35,6 +44,8 @@ $(function() {
 	$("#typeSel").change(function(){
 		if($("#typeSel").val()==2){
 			window.location.href="../pb/sxcx";
+		}else if($("#typeSel").val()==3){
+			window.location.href="../pb/sxgroupPb?view=1&date=" + $("#date").val()+"&section="+$("#sectionSel").val();
 		}else
 			window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 	});

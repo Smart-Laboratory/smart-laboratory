@@ -485,10 +485,12 @@ function getImages(sampleno){
 	$("#showGalleria").html("");
 	$.get("../audit/ajax/getImage",{sampleno:sampleno}, function(data) {
 		data = jQuery.parseJSON(data);
+//		data=JSON.stringify(data);
+		var html = data.html.split("fxg").join("/");
 		$('#showGalleria').css('height','600px');//#galleria{height:320px}
-		Galleria.loadTheme('../../scripts/galleria.classic.min.js');
+		Galleria.loadTheme('../../lab/scripts/galleria.classic.min.js');
 	    Galleria.run('#showGalleria', {
-	        dataSource: data.html,
+	        dataSource: html,
 	        keepSource: false
 		});
 	});

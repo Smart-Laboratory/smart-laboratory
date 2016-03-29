@@ -60,11 +60,11 @@ table td.sx{
 
 <input id="section" value="${section }" type="hidden"/>
 <input id="month" value="${month }" type="hidden"/>
+<input id="view" value="${view }" type="hidden"/>
 
 		<div class="form-inline" style="width:1024x;">
 			<input type="text" id="date" class="form-control" sytle="width:50px;">
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-			<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.count' /></button>
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
@@ -74,7 +74,6 @@ table td.sx{
 				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
 			</c:forEach></span>
 			</select>
-			<button id="stuPb" class="btn btn-success btn-sm" style="margin-top:3px;margin-right:10px;float:right;" ><fmt:message key='pb.stuPb' /></button>
 		</div>
 
 		<div id="shiftSelect" class="checkbox form-inline" >

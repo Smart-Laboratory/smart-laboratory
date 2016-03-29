@@ -3,13 +3,18 @@ function labChange(item){
 		  type: 'POST',
 		  url: "../audit/labChange?lab="+$(item).val()
 	});
-	window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $(item).val();
+	window.location.href="../pb/sxgroupPb?view="+$("#view").val()+"&date=" + $("#date").val()+"&section=" + $(item).val();
 }
 
 $(function() {
 	$("#labSelect").val($("#section").val());
 	$("#pbdata").html($("#pbtext").val());
-
+	
+	if($("#view").val()==1){
+		$("#shiftBtn").css("display","none");
+		$("#publish").css("display","none");
+		$("#shiftSelect").css("display","none");
+	}
 	
 	$("#pbdata tr td").click(function(){
 		var id=this.id;
@@ -73,7 +78,7 @@ $(function() {
 			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz,isStu:"true"},function(data) {
 				if(data){
 					alert("Success!");
-					window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $("#section").val();
+					window.location.href="../pb/sxgroupPb?view="+$("#view").val()+"&date=" + $("#date").val()+"&section=" + $("#section").val();
 				}else{
 					alert("Fail!")
 				}
@@ -101,11 +106,9 @@ $(function() {
 	});
 	
 	$("#changeMonth").click(function() {
-		window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $("#section").val();
+		window.location.href="../pb/sxgroupPb?view="+$("#view").val()+"&date=" + $("#date").val()+"&section=" + $("#section").val();
 	});
-	$("#stuPb").click(function() {
-		window.location.href="../pb/sxgroupPb?date=" + $("#from").val()+"@section="+$("#section").val();
-	});
+	
 	$("#date").val($("#month").val());
 	
 		

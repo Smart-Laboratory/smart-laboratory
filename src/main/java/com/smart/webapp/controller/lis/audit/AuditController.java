@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,8 +55,10 @@ import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.smart.model.lis.AuditTrace;
 import com.smart.model.lis.CollectSample;
+import com.smart.model.user.Evaluate;
 import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
+import com.smart.service.EvaluateManager;
 import com.smart.util.Config;
 
 @Controller
@@ -543,6 +546,16 @@ public class AuditController extends BaseAuditController {
 			cs.setType(type);
 			cs.setCollecttime(new Date());
 			collectSampleManager.save(cs);
+			
+			Evaluate e = new Evaluate();
+			e.setCollector(username);
+			e.setContent(text);
+			e.setEvaluatetime(new Date());
+			e.setEvaluator(name);
+			e.setSampleno(sampleno);
+			evaluateManager.save(e);
+			user.setCollectNum(user.getCollectNum()+1);
+			userManager.save(user);
 			return true;
 		}
 		return false;
@@ -872,4 +885,6 @@ public class AuditController extends BaseAuditController {
 		return dataResponse;
 	}
 	
+	@Autowired
+	private EvaluateManager evaluateManager;
 }

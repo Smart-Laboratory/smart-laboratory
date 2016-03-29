@@ -48,6 +48,7 @@ table tr th {
 			<option value="1" ><fmt:message key="pb.yb"/></option>
 			<option value="7" ><fmt:message key="pb.sy"/></option>
 			<option value="2" ><fmt:message key="menu.pb.sxcx"/></option>
+			<option value="3" ><fmt:message key="pb.sxgroupcx"/></option>
 			<%-- <option value="2" ><fmt:message key="pb.lz"/></option>
 			<option value="3" ><fmt:message key="pb.wc"/></option>
 			<option value="4" ><fmt:message key="pb.ybb"/></option>
@@ -67,7 +68,8 @@ table tr th {
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:preview1()'><fmt:message key='audit.print'/></button>
+		<!--startprint-->
 		<div class="col-sm-12" style="overflow:auto;">
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<p><fmt:message key="pb.annotation"/></p>
@@ -77,6 +79,7 @@ table tr th {
 				
 			</table>
 		</div>
+		<!--endprint-->
 	</c:otherwise>
 </c:choose>
 

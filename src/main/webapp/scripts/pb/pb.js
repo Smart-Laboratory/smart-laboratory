@@ -186,7 +186,7 @@ $(function() {
 	$("#pbhead").html($("#test").val());
 	
 	$("#publish").click(function(){
-		$.post("../pb/pb/publish",{section:$("#section").val(), month:$("#month").val(),state:1},function(data){
+		$.post("../pb/pb/publish",{section:$("#section").val(), month:$("#month").val(),state:2},function(data){
 			if(data){
 				alert("Publish seccess!");
 			}

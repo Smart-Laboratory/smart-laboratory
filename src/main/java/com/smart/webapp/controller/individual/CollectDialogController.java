@@ -112,6 +112,7 @@ public class CollectDialogController {
 			cs.setType(type);
 			cs.setCollecttime(new Date());
 			collectSampleManager.collectSample(cs);
+			
 			Evaluate e = new Evaluate();
 			e.setCollector(username);
 			e.setContent(text);
@@ -119,6 +120,7 @@ public class CollectDialogController {
 			e.setEvaluator(name);
 			e.setSampleno(sampleno);
 			evaluateManager.save(e);
+			System.out.println(e.getId());
 			user.setCollectNum(user.getCollectNum()+1);
 			userManager.save(user);
 			return true;

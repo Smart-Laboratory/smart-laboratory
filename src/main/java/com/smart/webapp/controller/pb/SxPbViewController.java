@@ -80,20 +80,22 @@ public class SxPbViewController {
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		int yearMaxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
 		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
-		System.out.println(ymd.format(cal.getTime()));
+//		System.out.println(ymd.format(cal.getTime()));
+		Date date = cal.getTime();
 		Calendar c = new GregorianCalendar();
 		c.setFirstDayOfWeek(Calendar.MONDAY);
 		c.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
-		System.out.println(ymd.format(c.getTime()));
+//		System.out.println(ymd.format(c.getTime()));
+		date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(startweek-1));
         
-        System.out.println(ymd.format(c.getTime()));
-		
+//        System.out.println(ymd.format(c.getTime()));
+		date = c.getTime();
         int year = Integer.parseInt(from.split("-")[0]);
-        System.out.println(wInfos.size()+":"+maxWeek);
+//        System.out.println(wInfos.size()+":"+maxWeek);
 		String[][] shifts = new String[wInfos.size()+1][maxWeek+1];
 		shifts[0][0] = "<th style='width:120px;'>"+year+"</th>";
 		for(int i=1;i<=maxWeek;i++){
@@ -113,7 +115,7 @@ public class SxPbViewController {
 		
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(year, startweek, maxWeek);
-		System.out.println(sxArranges.size());
+//		System.out.println(sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
 //				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());

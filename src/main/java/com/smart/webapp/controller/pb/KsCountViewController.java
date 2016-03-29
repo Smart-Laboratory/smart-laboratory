@@ -63,6 +63,7 @@ public class KsCountViewController {
 		c.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
+		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(startweek-1));
         

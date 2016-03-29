@@ -10,6 +10,10 @@ function deleteConfirm() {
 		location.href='../index/delete?id=<c:out value="${index.id}" />';
 	}	
 }
+$(function(){
+	alert(11);
+	alert("${index.id}");
+})
 </script>
 </head>
 <style type="text/css">

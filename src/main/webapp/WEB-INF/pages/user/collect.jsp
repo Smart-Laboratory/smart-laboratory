@@ -20,12 +20,11 @@
     <script type="text/javascript" src="../scripts/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="../scripts/justgage.1.0.1.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="../scripts/lis/audit.js"></script>
     <script type="text/javascript" src="../scripts/highcharts.js"></script>
     <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
     <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
 	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
-
+	<script type="text/javascript" src="../scripts/manage/collect.js"></script>
 
 <style>
 .ui-tabs-anchor {
@@ -34,7 +33,7 @@
 </style>
 </head>
 
-<script type="text/javascript" src="../scripts/manage/collect.js"></script>
+
 
 <body>
 
@@ -46,7 +45,6 @@
 <div class="col-sm-12">
 	<%@ include file="../collect/left.jsp" %>
 	<%@ include file="../collect/middle.jsp" %>
-	<%@ include file="../collect/right.jsp" %>
 </div>
 <%@ include file="../collect/dialog.jsp" %>
 

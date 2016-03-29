@@ -8,12 +8,10 @@ function getHisList(id){
 	jQuery("#hisList").jqGrid({
 		url:"../pb/sxpb/hisdata?id="+id,
 		datatype:"json",
-		colNames:['ID','月','周','科室'],
+		colNames:['科室','次数'],
 		colModel:[
-		          {name:'id',index:'id',hidden:true},
-		          {name:'monthweek',index:'monthweek',width:80,sortable:false},
-		          {name:'week',index:'week',width:40,sortable:false},
-		          {name:'section',index:'section',width:40,sortable:false}
+		          {name:'section',index:'section',width:80,sortable:false},
+		          {name:'num',index:'num',width:40,sortable:false},
 		          ],
 		rowNum:20,
 		height:'100%',
@@ -92,7 +90,7 @@ $(function() {
 	});
 	
 	$("#stuPb").click(function() {
-		window.location.href="../pb/sxgroupPb?date=" + $("#from").val()+"@section="+$("#section").val();
+		window.location.href="../pb/sxgroupPb?view=1&date=" + $("#from").val()+"&section="+$("#section").val();
 	});
 	
 	

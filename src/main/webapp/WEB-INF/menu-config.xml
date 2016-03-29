@@ -46,7 +46,8 @@
             <Item name="ActiveUsers" title="home.activeUsers" page="/admin/activeUsers" roles="ROLE_ADMIN"/>
             <Item name="ScheduleInfo" title="individual.schedule.info" page="/pb/pbcx" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="Schedule" title="individual.schedule" page="/pb/pb" roles="ROLE_ADMIN,ROLE_USER"/>
-            <Item name="StuPb" title="individual.StuPb" page="/pb/sxgroupPb" roles="ROLE_ADMIN,ROLE_WORKER"/>
+            <Item name="StuPb" title="individual.StuPb" page="/pb/sxgroupPb?view=0" roles="ROLE_ADMIN,ROLE_WORKER"/>
+            <Item name="StuPbCx" title="pb.sxgroupcx" page="/pb/sxgroupPb" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
         </Menu>
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
