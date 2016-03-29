@@ -379,7 +379,7 @@
 	</div>
 	<div id="nav-search-panel" class="tag-panel" style="padding:10px 10px 0 10px;display:block;">
 		<p style="color:#777777;"><fmt:message key="nav.search" />
-		<input id="globalsearchbox" placeholder="<fmt:message key="rule" />,<fmt:message key="index" />,<fmt:message key="result" />" style="width: 180px;margin-top:10px;"/>
+		<input id="globalsearchbox" placeholder="<fmt:message key="rule"/>,<fmt:message key="index"/>,<fmt:message key="result"/>" style="width:100%;margin-top:10px;"/>
 	</div>
 	<div class="tag-section">
 		<a class="selbtn" href="<c:url value="/rule/list"/>;javascript:navRuleBtnClick();"><div class="tag-item">

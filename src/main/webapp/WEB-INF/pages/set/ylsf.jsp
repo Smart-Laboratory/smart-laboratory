@@ -20,7 +20,7 @@
 <body>
 <div class="col-sm-10">
 
-<div id="searchHeader" style="margin-left:50px;float: left; width: 450px;">
+<div id="searchHeader" class="col-sm-7">
 	<div class="form-inline" style="margin-bottom:15px;">
 	<label for="search_text" style=""><b></b></label>
 	<input type="text" id="search_text" name="search_text" class="form-control"  style="width:150px;" placeholder="<fmt:message key="placeholder1"></fmt:message>" />
@@ -37,7 +37,7 @@
 	</div>
 </div>
 
-<div id="testlist" style="float: left; margin-left: 50px; width: 320px;">
+<div id="testlist" class="col-sm-5">
 	<input id="addIndexId" type="hidden"></input>
 	<div style="float:left;" class="form-inline">
 		<input class="span4 form-control" id="searchProject" type="text" placeholder="<fmt:message key='add.single'/>">

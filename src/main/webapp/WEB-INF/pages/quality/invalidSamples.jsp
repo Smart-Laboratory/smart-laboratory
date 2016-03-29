@@ -29,9 +29,9 @@ $(function(){
 <div class="col-sm-10">
 <h1><fmt:message key='invalidSamples.title'/></h1>
 
-<div class="form-inline" style="margin-bottom: 50px; width:auto;">
-	<label for="sampleSearch"><fmt:message key="invalidSamplesList.search"/>:</label>
-	<input id="sampleSearch" type="text" class="form-control" placeholder="please enter id"/>
+<div class="col-sm-12 form-inline" style="margin-bottom:20px; width:auto;">
+	<div class="col-sm-2" style="margin-top:10px;"><b><fmt:message key="invalidSamplesList.search"/>:</b></div>
+	<div class="col-sm-6"><input id="sampleSearch" type="text" class="form-control" placeholder="please enter id"/></div>
 	<button type="button" class="btn btn-info" onclick="searchSample();"><fmt:message key="button.search"/></button>
 	<button type="button" id="addInvalidSample" class="btn btn-primary"><fmt:message key="button.add"/></button>
 </div>

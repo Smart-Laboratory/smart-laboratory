@@ -9,9 +9,7 @@
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
  <style>
-.sinfo {
-	width:140px!important;
-}
+
 </style>   
     <script type="text/javascript">
     $(function() {
@@ -51,27 +49,27 @@
 <div id="sampleInfo" class="clearfix alert alert-info " style="margin-bottom:50px;">
 	<div class="col-sm-12" style="margin-bottom:10px;">
 		<div class="col-sm-3 form-inline">
-			<appfuse:label key="sample.id" styleClass="control-label"/>  :
-			<form:input path="sampleId" class="text form-control input-group-sm sinfo" />
+			<div style="margin-top:10px;float:left;width:30%"><b><fmt:message key="sample.id"/>:</b></div>
+			<form:input path="sampleId" class="form-control" style="float:left;width:70%" />
 		</div>
 		<div class="col-sm-3 form-inline">
-			<appfuse:label key="patient.name"/>  :
-			<form:input path="patientName" class="text form-control input-group-sm sinfo" />
+			<div style="margin-top:10px;float:left;width:30%"><b><fmt:message key="patient.name"/>:</b></div>
+			<form:input path="patientName" class="form-control" style="float:left;width:70%" />
 		</div>
 		<div class="col-sm-3 form-inline">
 			<appfuse:label key="patient.sex"/> :
-			<form:input path="sex" class="text form-control input-group-sm sinfo" />
+			<form:input path="sex" class="text form-control input-group-sm" />
 		</div>
 		<div class="col-sm-3 form-inline">
 			<appfuse:label key="patient.age"/> : 
-			<form:input path="age" class="text form-control input-group-sm sinfo" />
+			<form:input path="age" class="text form-control input-group-sm" />
 		</div>
 		
 	</div>
 	<div class="col-sm-12">
 		<div class="col-sm-3 form-inline">
 			<appfuse:label key="sample.sampleType"/> : 
-			<form:input path="sampleType" class="text form-control input-group-sm sinfo" />
+			<form:input path="sampleType" class="text form-control input-group-sm" />
 		</div>
 		<div class="col-sm-3">
 			<appfuse:label key="sample.hosSection"/> :

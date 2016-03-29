@@ -97,7 +97,7 @@ div #contentright {
 }
 .selbtn, .selbtn:visited {
 	height: 31px;
-	width: 260px;
+	width: 100%;
     display: inline-block;
     color: #fff;
     text-decoration: none;

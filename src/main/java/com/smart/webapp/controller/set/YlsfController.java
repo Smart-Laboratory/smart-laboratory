@@ -176,7 +176,7 @@ public class YlsfController extends BaseAuditController {
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("id", s);
 					map.put("name", idMap.get(s) == null ? s : idMap.get(s).getName());
-					map.put("english", idMap.get(s).getEnglish()==null ? "":idMap.get(s).getEnglish());
+					map.put("english", (idMap.get(s) == null || idMap.get(s).getEnglish()==null) ? "":idMap.get(s).getEnglish());
 					dataRows.add(map);
 					size++;
 				}

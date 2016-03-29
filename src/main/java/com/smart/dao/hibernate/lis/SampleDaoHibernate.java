@@ -94,7 +94,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
 		Session session = getSession();
-		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by auditMark");
+		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by sampleNo,auditMark");
 		q.setFirstResult(0);
 		q.setMaxResults(100);  
 		List<Sample> list = q.list();

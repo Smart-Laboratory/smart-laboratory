@@ -272,6 +272,8 @@ public class AutoAuditServlet extends HttpServlet {
                 	    									info.setAuditMark(Check.LACK_MARK);
                 	    								}
                 	    								dangerCheck.doCheck(info, r, now, cr);
+                	    								String ruleId = CheckUtil.toString(r.getRuleIds());
+                    	    							info.setRuleIds(ruleId);
                 	    							} else {
                 	    								
                 	    							}
@@ -287,8 +289,6 @@ public class AutoAuditServlet extends HttpServlet {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
                 	    							}
-                	    							String ruleId = CheckUtil.toString(r.getRuleIds());
-                	    							info.setRuleIds(ruleId);
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
                 	    								cr.setSampleid(info.getId());

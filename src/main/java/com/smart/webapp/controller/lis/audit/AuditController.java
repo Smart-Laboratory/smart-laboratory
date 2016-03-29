@@ -237,12 +237,14 @@ public class AuditController extends BaseAuditController {
 				hisPatientMap.put(p.getBlh(), p);
 			}
 			for(TestResult tr : testList) {
-				if(hisTestMap.containsKey(tr.getSampleNo())) {
-					hisTestMap.get(tr.getSampleNo()).add(tr);
-				} else {
-					List<TestResult> tlist = new ArrayList<TestResult>();
-					tlist.add(tr);
-					hisTestMap.put(tr.getSampleNo(), tlist);
+				if(StringUtils.isNumeric(tr.getTestId())) {
+					if(hisTestMap.containsKey(tr.getSampleNo())) {
+    					hisTestMap.get(tr.getSampleNo()).add(tr);
+    				} else {
+    					List<TestResult> tlist = new ArrayList<TestResult>();
+    					tlist.add(tr);
+    					hisTestMap.put(tr.getSampleNo(), tlist);
+    				}
 				}
 			}
     		
@@ -278,10 +280,10 @@ public class AuditController extends BaseAuditController {
         			}
     				for (Sample p : list) {
     					boolean isHis = false;
-    					if (p.getSampleNo().equals(info.getSampleNo())) {
+    					List<TestResult> his = hisTest.get(p.getSampleNo());
+    					if (p.getSampleNo().equals(info.getSampleNo()) || his == null) {
     						continue;
     					}
-    					List<TestResult> his = hisTest.get(p.getSampleNo());
     					for (TestResult t : his) {
     						String testid = t.getTestId();
     						Set<String> sameTests = util.getKeySet(testid);
@@ -346,7 +348,7 @@ public class AuditController extends BaseAuditController {
 						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
 						ratioCheck.doCheck(info, now);
 						R r = droolsRunner.getResult(now, info.getPatientId(), patient.getAge(), Integer.parseInt(patient.getSex()));
-						if (!r.getRuleIds().isEmpty()) {
+						if (r!= null && !r.getRuleIds().isEmpty()) {
 							reTestCheck.doCheck(info, r, now);
 							alarm2Check.doCheck(info, r, diffTests, now);
 							alarm3Check.doCheck(info, r, diffTests, now);
@@ -355,6 +357,8 @@ public class AuditController extends BaseAuditController {
 								info.setAuditMark(Check.LACK_MARK);
 							}
 							dangerCheck.doCheck(info, r, now, cr);
+							String ruleId = CheckUtil.toString(r.getRuleIds());
+							info.setRuleIds(ruleId);
 						}
 						//bayesCheck.doCheck(info); // Bayes审核及学习
 						
@@ -368,8 +372,6 @@ public class AuditController extends BaseAuditController {
 								info.setCheckerOpinion(Check.AUTO_AUDIT);
 							}
 						}
-						String ruleId = CheckUtil.toString(r.getRuleIds());
-						info.setRuleIds(ruleId);
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
 							updateCriticalRecord.add(cr);
