@@ -8,7 +8,7 @@
 		});
 	}
 	
-	function twsSampleReload(sample){
+	function twoSampleReload(sample){
 		var array = new Array();
 		$.ajaxSetup({
 			async:false
@@ -44,7 +44,8 @@
 				$('#tatDialog').dialog("option","title", "TAT");
 				$("#tatBtn").html("<b>TAT</b>");
 			}
-    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false) {
+			
+    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false && $("#historyTabs").tabs('option', 'active') == 1) {
     			$("#twosampleTable").css('display','block');
         		$("#patientRow").css('display','none');
         		if(isFirst){
@@ -53,7 +54,7 @@
     				isFirst = false;
     			}
     			else{
-    				twsSampleReload(ret.sample);
+    				twoSampleReload(ret.sample);
     			}
 			} else {
 				$("#patientRow").css('display','block');

@@ -80,7 +80,7 @@
 		</div>
 	</div>
 	
-	<div id="right" class="col-sm-4" style="position:absolute;right:0px;">
+	<div id="right" class="col-sm-4" style="position:absolute;right:0px;z-index:1">
 		<div class="form-inline">
 		<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
 			<span ><c:forEach var="depart" items="${departList}">
