@@ -1,5 +1,4 @@
 <script type="text/javascript" src="../scripts/lis/audit/middle.js"></script>
-<script type="text/javascript" src="../jquery.easyui.min.js"></script>
 <style>
 #btnMenu button {
 	font-size:12px;
@@ -46,7 +45,7 @@
 					<span class='col-sm-2'><fmt:message key="patient.section" />:</span><b id="pSection"></b>
 				</div>
 				<div id="pBedHtml" class="col-sm-4 pinfo">
-					<span class='col-sm-8'><fmt:message key="patient.departbed" />:</span><b id="pBed"></b>
+					<span class='col-sm-4'><fmt:message key="patient.departbed" />:</span><b id="pBed"></b>
 				</div>
 			</div>
 			<div class="col-sm-12 pinfo">
@@ -141,7 +140,7 @@
 		</div>
 	</div>
 	
-	<div class="col-sm-12">
+	<div  class="col-sm-12" id="testresultDiv">
 		<div id="patientRow" style="width:100%">
 			<table id="rowed3" style="font-size: 14px;"></table>
 		</div>

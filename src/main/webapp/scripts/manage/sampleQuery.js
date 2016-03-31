@@ -1,8 +1,9 @@
 function getList(text) {
+	var width=$("#sampleListPanel").width();
 		var mygrid = jQuery("#list").jqGrid({
         	url:"../manage/sampleQuery/data?type=1&text="+text, 
         	datatype: "json", 
- //       	width: 250, 
+        	width:width,
         	colNames:['ID', '样本号', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','就诊方式','科室','就诊号','样本类型'], 
         	colModel:[ 
         		{name:'id',index:'id', hidden:true},
@@ -23,13 +24,11 @@ function getList(text) {
         	rownumbers:true,
         	rowNum:20,
         	height: '100%',
-        	width:'100%',
         	jsonReader : {repeatitems : false},
         	mtype: "GET", 
         	pager: '#pager',
         	shrinkToFit:false,   
         	autoScroll: false,
-        	width:1100,
         	onSelectRow: function(id) {    
         		
         	},

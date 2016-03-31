@@ -77,6 +77,8 @@
 	}
 	
 	function getExplain(docNo){
+		var width = $("#rightContent").width();
+		alert(width);
 		jQuery("#audit_information").jqGrid({
 			url:"../manage/patientList/explain?id="+docNo,
 			datatype: "json",
@@ -87,23 +89,25 @@
 		   		{name:'result',index:'result',width:90,sortable:false},
 		   		{name:'content',index:'content',width:100,sortable:false},
 		   		{name:'rank',index:'rank',sortable:false,hidden:true}], 
-		   	height: '100%'
+		   	height: '100%',
+		   	width:width
 		});
 	}
 	
 	function getList(patientId,blh) {
+		var width = $("#leftContent").width();
 		var isFirstTime = true;
 		var isFirstTimeForResult = true;
 		var mygrid = jQuery("#list").jqGrid({
         	url:"../manage/patientList/data?type=1&text=" + blh, 
         	datatype: "json", 
- //       	width: 250, 
+        	width: width, 
         	colNames:['ID', '样本号', '检验目的', '状态'], 
         	colModel:[ 
         		{name:'id',index:'id', hidden:true},
         		{name:'sample',index:'sample',width:120, sortable:false},
-        		{name:'examinaim',index:'examinaim',width:100, sortable:false}, 
-        		{name:'type',index:'type',width:50, sortable:false}], 
+        		{name:'examinaim',index:'examinaim',width:80, sortable:false}, 
+        		{name:'type',index:'type',width:40, sortable:false}], 
         	rowNum:12,
         	height: '100%',
         	jsonReader : {repeatitems : false},

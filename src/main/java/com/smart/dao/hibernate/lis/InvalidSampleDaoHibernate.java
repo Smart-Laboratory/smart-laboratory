@@ -16,11 +16,13 @@ public class InvalidSampleDaoHibernate extends GenericDaoHibernate<InvalidSample
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<InvalidSample> getByEzh(Long id){
+	public InvalidSample getByEzh(Long id){
 		if (id==null) {
 			return null;
 		}
-		
-		return getSession().createQuery("from InvalidSample where sampleId='"+id+"' ").list();
+		List<InvalidSample> samples = getSession().createQuery("from InvalidSample where sampleId='"+id+"' ").list();
+		if(samples==null || samples.size()==0)
+			return null;
+		return samples.get(0);
 	}
 }

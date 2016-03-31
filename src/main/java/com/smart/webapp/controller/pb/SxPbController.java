@@ -23,6 +23,8 @@ import com.smart.service.SxArrangeManager;
 import com.smart.webapp.util.DataResponse;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 
+import javafx.scene.chart.PieChart.Data;
+
 @Controller
 @RequestMapping("/pb/sxpb*")
 public class SxPbController {
@@ -187,6 +189,48 @@ public class SxPbController {
 			totleweek  = weeks - startweek + 1 + toweek;
 		}
 		return totleweek;
+	}
+	
+	@RequestMapping(value = "/sectionCount*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getSectionCount(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String week = request.getParameter("week");
+		String year = request.getParameter("year");
+		if(week == null || week.isEmpty())
+			return null;
+		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(Integer.parseInt(year), Integer.parseInt(week), 1);
+		
+		List<Shift> sections = shiftManager.getSx();
+		Map<String, Long> idMap = new HashMap<String,Long>();
+		Map<String, Integer> countMap = new HashMap<String,Integer>();
+		for(Shift shift : sections){
+			
+			countMap.put(shift.getAb(), 0);
+			idMap.put(shift.getAb(), shift.getId());
+		}
+		
+		for(SxArrange a : sxArranges){
+			if(countMap.containsKey(a.getSection())){
+				countMap.put(a.getSection(), countMap.get(a.getSection())+1);
+			}else{
+				countMap.put(a.getSection(), 1);
+			}
+		}
+		
+		DataResponse dataResponse = new DataResponse();
+		
+		List<Map<String, Object>> datarows = new ArrayList<Map<String, Object>>();
+		Map<String, Object> datarow = new HashMap<String, Object>();
+		for(Map.Entry<String, Integer> a : countMap.entrySet()){
+			System.out.print(a.getKey()+a.getValue());
+			datarow.put(idMap.get(a.getKey())+"", a.getValue());
+		}
+		datarows.add(datarow);
+		
+		dataResponse.setRows(datarows);
+		dataResponse.setRecords(1);
+		
+		return dataResponse;
 	}
 	
 	@Autowired

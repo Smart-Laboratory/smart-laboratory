@@ -3,6 +3,10 @@ function stuInfo(id,name){
 	jQuery("#hisList").jqGrid("setGridParam",{url:"../pb/sxpb/hisdata?id="+id}).setCaption(name+"  排班信息").trigger("reloadGrid");
 }
 
+function sectionInfo(week,year){
+	jQuery("#sectionCount").jqGrid("clearGridData");
+	jQuery("#sectionCount").jqGrid("setGridParam",{url:"../pb/sxpb/sectionCount?year="+year+"&week="+week}).setCaption("第"+week+"周  科室排班数量统计").trigger("reloadGrid");
+}
 
 function getHisList(id){
 	jQuery("#hisList").jqGrid({
@@ -27,7 +31,42 @@ function getHisList(id){
 }
 
 
-
+function getSectionCount(week){
+	jQuery("#sectionCount").jqGrid({
+		url:"../pb/sxpb/sectionCount?year=2016&week="+week,
+		datatype:"json",
+		colNames:['生化室','免疫室','分子诊断','急诊','病房','门诊','内分泌','细菌室','骨髓室','输血科','手工生化','病理','术前四项','血液科','感染科','科研论文','实习机动'],
+		colModel:[
+		          {name:'213',index:'sh',width:40,sortable:false},
+		          {name:'214',index:'my',width:40,sortable:false},
+		          {name:'215',index:'fz',width:40,sortable:false},
+		          {name:'216',index:'jz',width:40,sortable:false},
+		          {name:'217',index:'bf',width:40,sortable:false},
+		          {name:'218',index:'mz',width:40,sortable:false},
+		          {name:'220',index:'nfm',width:40,sortable:false},
+		          {name:'219',index:'xj',width:40,sortable:false},
+		          {name:'298',index:'gs',width:40,sortable:false},
+		          {name:'299',index:'sx',width:40,sortable:false},
+		          {name:'301',index:'sgsh',width:40,sortable:false},
+		          {name:'302',index:'bl',width:40,sortable:false},
+		          {name:'303',index:'sh',width:40,sortable:false},
+		          {name:'304',index:'sh',width:40,sortable:false},
+		          {name:'305',index:'sh',width:40,sortable:false},
+		          {name:'306',index:'sh',width:40,sortable:false},
+		          {name:'307',index:'sh',width:40,sortable:false},
+		          ],
+		rowNum:20,
+		width: $("#sectiondataPanal").width()*0.9,
+		height:'100%',
+		rownumbers:true,
+		caption : "科室排班数量统计",
+		jsonReader:{repeatitems:false},
+		mtype:"GET",
+//		pager:'#sectionPager',
+		
+	}).trigger("reloadGrid");
+//	jQuery("#sectionCount").jqGrid('navGrid','#sectionPager',{edit:false,add:false,del:false,search:false,refresh:false});
+}
 
 
 
@@ -126,6 +165,27 @@ $(function() {
 		$("#"+id).html(shifts);
 	});
 	
+	$("#pbdata tr th").click(function(){
+		var id=this.id;
+		var name = $(this).attr("name");
+		if(name.indexOf("week")>=0){
+			var item = $(this).parent();
+
+			if($(item).hasClass("yellow"))
+				$(item).removeClass("yellow");
+			else
+				$(item).addClass("yellow");
+//			var color = $(item).css("background-color");
+//			alert(color);
+			
+//			if(color=="rgb(135,206,250)")
+//				$(item).css("background-color","");
+//			else
+//				$(item).css("background-color","yellow");
+		}
+		
+	});
+	
 	
 	
 	$("#shiftBtn").click(function() {
@@ -152,6 +212,7 @@ $(function() {
 	});
 	
 	getHisList("");
+	getSectionCount("10");
 })
 
 Date.prototype.Format = function(fmt)   

@@ -354,6 +354,8 @@ public class PatientListController extends BaseAuditController {
 			for (Sample pinfo : list) {
 				boolean isHis = false;
 				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
+				if(his==null)
+					continue;
 				for (TestResult test: his) {
 					String testid = test.getTestId();
 					Set<String> sameTests = util.getKeySet(testid);

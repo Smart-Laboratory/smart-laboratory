@@ -40,7 +40,7 @@
 		<option value="2"><fmt:message key="patient.name" /></option>
 		<option value="3"><fmt:message key="sample.id"></fmt:message></option>
 	</select>
-	<button id="searchBtn" class="btn btn-info" style="margin-left:120px;"><fmt:message key="search" /></button>
+	<button id="searchBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
 	
 </div>
 
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="rightContent" class="col-sm-2" style="position:absolute;right:0px; width: 230px;">
+	<%-- <div id="rightContent" class="col-sm-2" style="position:absolute;right:0px;">
 		<div id="historyTabs" style="display:none;">
 			<ul>
 				<li><a href="#tabs-0"><fmt:message key="addResult.result"/></a></li>
@@ -121,7 +121,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 </div>
 
 </body>

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -64,17 +65,27 @@ public class InvalidSampleFormController {
 		String msg = null;
 		
 		String id = request.getParameter("id");
-		InvalidSample invalidSample = new InvalidSample();
+		InvalidSample invalidSample = invalidSampleManager.getByEzh(Long.parseLong(id));
+		if(invalidSample == null){
+			invalidSample = new InvalidSample();
+			if(id!=null && !id.isEmpty()){
+				if(sampleManager.exists(Long.parseLong(id))){
+					Sample sample = sampleManager.get(Long.parseLong(id));
+					Patient patient = patientManager.getByBlh(sample.getPatientblh());
+					invalidSample.setSampleId(sample.getId());
+					invalidSample.setPatientName(patient.getPatientName());
+					invalidSample.setSex(patient.getSex());
+					invalidSample.setAge(patient.getAge());
+					invalidSample.setSampleType(sample.getSampleType());
+				} else
+					msg="该医嘱号不存在";
+			}
+			invalidSample.setRejectTime(new Date());
 		
+		}
 		if(id!=null && !id.isEmpty()){
 			if(sampleManager.exists(Long.parseLong(id))){
 				Sample sample = sampleManager.get(Long.parseLong(id));
-				Patient patient = patientManager.getByBlh(sample.getPatientblh());
-				invalidSample.setSampleId(sample.getId());
-				invalidSample.setPatientName(patient.getPatientName());
-				invalidSample.setSex(patient.getSex());
-				invalidSample.setAge(patient.getAge());
-				invalidSample.setSampleType(sample.getSampleType());
 				request.setAttribute("hosSection",sample.getHosSection() );
 				request.setAttribute("sampleNo",sample.getSampleNo() );
 				request.setAttribute("inspectionName",sample.getInspectionName() );
@@ -82,16 +93,26 @@ public class InvalidSampleFormController {
 			} else
 				msg="该医嘱号不存在";
 		}
-		
-		request.setAttribute("rejectTime",ymd.format(new Date()) );
-		invalidSample.setRejectTime(new Date());
+		request.setAttribute("rejectTime",ymd.format(invalidSample.getRejectTime()) );
 		request.setAttribute("msg", msg);
 		System.out.println("end:"+invalidSample.getRejectTime());
 		return invalidSample;
 	}
 	
+	/*@ModelAttribute("invalidSample")
+    protected InvalidSample loadIvalidSample(final HttpServletRequest request) {
+        final String sampleId = request.getParameter("id");
+        System.out.println(sampleId);
+        if (request.getMethod().equalsIgnoreCase("post") && StringUtils.isNotBlank(sampleId)) {
+        	InvalidSample sample = invalidSampleManager.get(Long.parseLong(sampleId));
+        	System.out.println("数据库"+sampleId);
+            return sample;
+        }
+        return new InvalidSample();
+    }*/
+	
 	@RequestMapping(method=RequestMethod.POST)
-	public String saveInvalidSample(InvalidSample invalidSample,BindingResult errors, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String saveInvalidSample( InvalidSample invalidSample,BindingResult errors, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
 		invalidSample.setRejectPerson(user.getName());

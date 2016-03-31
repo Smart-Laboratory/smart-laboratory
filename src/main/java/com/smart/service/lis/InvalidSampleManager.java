@@ -8,5 +8,6 @@ import com.smart.service.GenericManager;
 public interface InvalidSampleManager extends GenericManager<InvalidSample, Long> {
 //	List<InvalidSample> search(String searchTerm);
 	//根据医嘱号获取不合格标本
-	List<InvalidSample> getByEzh(Long id);
+	InvalidSample getByEzh(Long id);
+	
 }

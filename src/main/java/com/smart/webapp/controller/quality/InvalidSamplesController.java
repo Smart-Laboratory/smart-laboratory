@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.quality;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +41,9 @@ public class InvalidSamplesController {
 		String searchText = request.getParameter("text");
 		
 		PageList<InvalidSample> invalidSampleList = null;
-		List<InvalidSample> invalidSamples = null;
+		List<InvalidSample> invalidSamples = new ArrayList<InvalidSample>();
 		if(!StringUtils.isEmpty(searchText)){
-			invalidSamples = invalidSampleManager.getByEzh(Long.parseLong(searchText));
+			invalidSamples.add(invalidSampleManager.getByEzh(Long.parseLong(searchText)));
 		}
 		else{
 			invalidSamples = invalidSampleManager.getAll();
@@ -84,14 +85,14 @@ public class InvalidSamplesController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(method = RequestMethod.GET,value="/delete*")
+	@RequestMapping(method = RequestMethod.GET,value="/invalidSample/delete*")
 	public ModelAndView deleteInvalidSample(HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		String id = request.getParameter("id");
-		
+		System.out.println(id);
 		if(id!=null){
 			invalidSampleManager.remove(Long.parseLong(id));
 		}
-		return new ModelAndView("/quality/invalidSamples");
+		return new ModelAndView("quality/invalidSamples");
 	}
 	
 	@Autowired

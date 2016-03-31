@@ -98,16 +98,19 @@ public class SxPbViewController {
 //        System.out.println(wInfos.size()+":"+maxWeek);
 		String[][] shifts = new String[wInfos.size()+1][maxWeek+1];
 		shifts[0][0] = "<th style='width:120px;'>"+year+"</th>";
+		int yeartemp = year;
 		for(int i=1;i<=maxWeek;i++){
 			int dweek = startweek+i-1;
-			if(dweek>yearMaxWeek)
+			if(dweek>yearMaxWeek){
 				dweek-=yearMaxWeek;
+				yeartemp+=1;
+			}
 			if(i>1)
 				c.add(GregorianCalendar.DATE, 1);
 			String startDate = md.format(c.getTime());
 			c.add(GregorianCalendar.DATE, 6);
 			String endDate = md.format(c.getTime());
-			shifts[0][i]="<th name='"+startDate.split("-")[0]+"' style='width:120px;'>第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</th>" ;
+			shifts[0][i]="<th name='"+startDate.split("-")[0]+"week' style='width:120px;'> <a onclick=\"sectionInfo("+dweek+","+yeartemp+")\">第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</a></th>" ;
 			
 		}
 		

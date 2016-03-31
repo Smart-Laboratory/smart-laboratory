@@ -288,8 +288,6 @@ public class PbController {
 			double monthOff = 0;
 			
 			String shifts = "";
-			String jxshifts="";
-//			double jxworktime = 0;
 			for(Arrange arrange : arranges){
 				try {
 					Date date = sdf1.parse(arrange.getDate());
@@ -300,31 +298,13 @@ public class PbController {
 							if(arrange.getShift().replace("公休;", "").isEmpty())
 								monthOff += 1;
 						}
-//						if((sdf2.format(date).contains("六") || sdf2.format(date).contains("日") || arrange.getShift().contains("公休"))) {
-//							if(arrange.getShift().contains("值补")){
-////								System.out.println(sdf1.format(date)+arrange.getShift());
-//								for(String shift : arrange.getShift().split(";")){
-//									if(shift.contains("值补"))
-//										jxworktime+=shiftTime.get(shift);
-//								}
-//							}
-//						}else{
-//							jxshifts+= arrange.getShift();
-//						}
-						
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
+					System.out.println("date trans error!");
 				}
 				
 			}
-//			System.out.println(jxshifts);
-			
-//			for(String shift : jxshifts.split(";")){
-//				if(shiftTime.containsKey(shift)){
-//					jxworktime += shiftTime.get(shift);
-//				}
-//			}
 			
 			for(String shift : shifts.split(";")){
 				if(shiftTime.containsKey(shift)){

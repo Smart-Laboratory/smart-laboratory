@@ -21,7 +21,7 @@ public class InvalidSampleManagerImpl extends GenericManagerImpl<InvalidSample, 
 		this.invalidSampleDao = invalidSampleDao;
 	}
 	
-	public List<InvalidSample> getByEzh(Long id){
+	public InvalidSample getByEzh(Long id){
 		return invalidSampleDao.getByEzh(id);
 	}
 

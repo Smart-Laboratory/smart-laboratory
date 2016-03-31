@@ -55,7 +55,12 @@ border: 0px solid #009933;
 .ui-datepicker-calendar { 
 display: none; 
 } 
-
+.yellow{
+	background:yellow!important;
+}
+tr:hover{
+	background:#87cefa;
+}
 
 </style>
 </head>
@@ -101,7 +106,12 @@ display: none;
 		</table>
 		</div> --%>
 
-
+<div class="col-sm-12">
+	<div id="sectiondataPanal" style="height:90px;margin-left:20px;margin-bottom:10px;">
+			<table id='sectionCount'></table>
+			<div id="sectionPager"></div>
+	</div>
+</div>
 	
 <div class="col-sm-12">	
 	<div class = "col-sm-2">
@@ -114,7 +124,7 @@ display: none;
 	<div class = "col-sm-10">
 		<div class="fixed data" style=" ">
 		<input id="test1" value="${pbdate}" type="hidden"/>
-		<table id="pbdata" class=" table-hover" style="font-size:12px;text-align:center;" border="1px;">
+		<table id="pbdata" class=" table" style="font-size:12px;text-align:center;" border="1px;">
 		
 		</table>
 		</div>
