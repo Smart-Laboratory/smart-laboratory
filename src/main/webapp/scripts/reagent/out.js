@@ -16,9 +16,31 @@
         		}
             }
         });
-		
 	}
 
+	function getData(obj,event) {
+		var e=e||event;
+		var key=event.keyCode;;
+		if(navigator.appName=="Netscape"){
+			key=e.which;
+		}else{
+			key=event.keyCode;
+		}
+		switch(key){
+			case 13 : 
+				var barcode = $("#reagentdes").val();
+				if(barcode.length>=10) {
+					barcode = barcode.substring(0,10);
+				}
+				$.ajax({
+					  type: 'POST',
+					  url: "../ajax/reagent/saveout?barcode=" + barcode
+				});
+				$("#alert").css("display","block");
+				$("#alert").html("条码为<b>" + barcode + "</b>的试剂已出库！");
+		}
+	}
+	
 	$(function() {
 		$('#reagent_select').change(function(){
 			if($(this).children('option:selected').val() == 3) {
@@ -42,10 +64,18 @@
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
-		    	$.post("../ajax/reagent/saveout",{text:str},function(data) {
-		    		alert("success");
-		    		//window.location.href="";
+		    	$.ajax({
+					  type: 'POST',
+					  url: "../ajax/reagent/saveout?text=" + str
 				});
+		    	$("#alert").css("display","block");
+		    	if($("#reagent_select").val() == 2) {
+		    		$("#alert").css("display","block");
+					$("#alert").html("单项试剂已出库！");
+		    	} else {
+		    		$("#alert").css("display","block");
+					$("#alert").html("套餐试剂已出库！");
+		    	}
 		    }
 		});
 		

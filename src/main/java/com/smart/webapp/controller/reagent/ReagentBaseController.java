@@ -14,6 +14,7 @@ import com.smart.service.reagent.ComboManager;
 import com.smart.service.reagent.InManager;
 import com.smart.service.reagent.OutManager;
 import com.smart.service.reagent.ReagentManager;
+import com.zju.api.service.RMIService;
 
 public class ReagentBaseController {
 	
@@ -37,6 +38,9 @@ public class ReagentBaseController {
 	
 	@Autowired
 	protected ReagentManager reagentManager = null;
+	
+	@Autowired
+	protected RMIService rmiService = null;
 	
 	protected Map<String, String> labMap = new HashMap<String, String>();
 	

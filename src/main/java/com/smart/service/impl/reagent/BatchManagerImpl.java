@@ -28,4 +28,8 @@ public class BatchManagerImpl extends GenericManagerImpl<Batch, Long> implements
 	public List<Batch> getByRgId(Long id) {
 		return batchDao.getByRgId(id);
 	}
+
+	public List<Batch> getByRgIds(String rids) {
+		return batchDao.getByRgIds(rids);
+	}
 }

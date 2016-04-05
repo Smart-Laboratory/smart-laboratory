@@ -3,8 +3,10 @@ package com.smart.webapp.controller.reagent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.user.User;
 import com.smart.webapp.util.DataResponse;
+import com.zju.api.model.SyncReagent;
 
 @Controller
 @RequestMapping("/ajax/reagent*")
@@ -71,7 +74,8 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());		JSONArray array = new JSONArray();
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());		
+		JSONArray array = new JSONArray();
 		if(type == 1) {
 			
 		} else if(type == 2) {
@@ -120,10 +124,42 @@ public class ReagentAjaxController extends ReagentBaseController {
 	public DataResponse getInData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Long id = Long.parseLong(request.getParameter("id"));
 		int type = Integer.parseInt(request.getParameter("type"));
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		if(type == 1) {
-	
+			List<SyncReagent> srList = rmiService.getSyncReagent(id+"");
+			String productcode = "";
+			Set<String> productSet = new HashSet<>();
+			Map<String, SyncReagent> srMap = new HashMap<String, SyncReagent>();
+			for(SyncReagent sr : srList) {
+				productSet.add(sr.getSpec_id());
+				productSet.add(sr.getWzbm());
+				srMap.put(sr.getSpec_id(), sr);
+				srMap.put(sr.getWzbm(), sr);
+			}
+			productcode = productSet.toString().replace(", ", "','");
+			productcode = "'" + productcode.substring(1, productcode.length()-1) + "'";
+			List<Reagent> list = reagentManager.getByProduct(productcode,labName);
+			dataResponse.setRecords(list.size());
+			for(Reagent r : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				SyncReagent sr = srMap.get(r.getProductcode());
+				map.put("id", r.getId());
+				map.put("name", r.getNameAndSpecification());
+				map.put("batch", "<input type='text' id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%' value='" + sr.getProduct_lot() + "'>" + "</input>");
+				map.put("place", r.getPlaceoforigin());
+				map.put("brand", r.getBrand());
+				map.put("baozhuang", r.getBaozhuang());
+				map.put("price", r.getPrice());
+				map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='" + sr.getQuantity() + "'>" + "</input>");
+				map.put("isqualified", "是");
+				map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' class='editable' style='height:18px;width:98%' value='" + sr.getExpired_date() + "'>" + "</input>");
+				dataRows.add(map);
+			}
 		} else if(type == 2) {
 			Reagent r = reagentManager.get(id);
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -291,39 +327,97 @@ public class ReagentAjaxController extends ReagentBaseController {
 		boolean success = true;
 		try {
 			String text = request.getParameter("text");
+			String barcode = request.getParameter("barcode");
+			String barcodeBatch = "";
 			User user = userManager.getUserByUsername(request.getRemoteUser());
-			Map<Long, Map<String, Object>> inmap = new HashMap<Long, Map<String, Object>>();
-			for(String s : text.split(";")) {
-				String[] idNum = s.split(":");
-				Map<String, Object> in = new HashMap<String, Object>();
-				in.put("batch", idNum[1]);
-				in.put("num", Integer.parseInt(idNum[2]));
-				inmap.put(Long.parseLong(idNum[0]), in);
-			}
-			String s = inmap.keySet().toString().replace("[", "").replace("]", "");
-			List<Reagent> list = reagentManager.getByIds(s);
 			List<Batch> needSaveBatch = new ArrayList<Batch>();
 			List<Out> needSaveOut = new ArrayList<Out>();
+			List<Reagent> list = new ArrayList<Reagent>();
+			Map<Long, Map<String, Object>> inmap = new HashMap<Long, Map<String, Object>>();
+			System.out.println(text + " " + barcode);
+			if(text != null) {
+				for(String s : text.split(";")) {
+					String[] idNum = s.split(":");
+					Map<String, Object> in = new HashMap<String, Object>();
+					in.put("batch", idNum[1]);
+					in.put("num", Integer.parseInt(idNum[2]));
+					inmap.put(Long.parseLong(idNum[0]), in);
+				}
+				String s = inmap.keySet().toString().replace("[", "").replace("]", "");
+				list = reagentManager.getByIds(s);
+			}
+			if(barcode != null) {
+				In i = inManager.get(Long.parseLong(barcode.substring(0, barcode.length()-3)));
+				System.out.println(i.getRgId());
+				barcodeBatch = i.getBatch();
+				list.add(reagentManager.get(i.getRgId()));
+			}
+			Set<String> rSet = new HashSet<String>();
 			for(Reagent r : list) {
-				for(Batch b : batchManager.getByRgId(r.getId())) {
-					if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
-						if(r.getSubtnum() > 1) {
-							int num = r.getSubtnum() * b.getNum() + b.getSubnum();
-							b.setNum((num- (Integer)inmap.get(r.getId()).get("num"))/r.getSubtnum());
-							b.setSubnum((num- (Integer)inmap.get(r.getId()).get("num"))%r.getSubtnum());
-						} else {
-							b.setNum(b.getNum() - (Integer)inmap.get(r.getId()).get("num"));
+				rSet.add(r.getId() + "");
+			}
+			String rids = rSet.toString();
+			rids = rids.substring(1, rids.length()-1);
+			List<Batch> bList = batchManager.getByRgIds(rids);
+			Map<Long, List<Batch>> batchMap = new HashMap<Long, List<Batch>>();
+			for(Batch b : bList) {
+				if(batchMap.containsKey(b.getRgId())) {
+					batchMap.get(b.getRgId()).add(b);
+				} else {
+					List<Batch> bl = new ArrayList<Batch>();
+					bl.add(b);
+					batchMap.put(b.getRgId(), bl);
+				}
+			}
+			Date now = new Date();
+			if(barcode != null) {
+				for(Reagent r : list) {
+					for(Batch b : batchMap.get(r.getId())) {
+						if(b.getBatch().equals(barcodeBatch)) {
+							Out outdata = new Out();
+							if(r.getSubtnum() > 1) {
+								int num = r.getSubtnum() * b.getNum() + b.getSubnum();
+								b.setNum((num- 1)/r.getSubtnum());
+								b.setSubnum((num- 1)%r.getSubtnum());
+							} else {
+								b.setNum(b.getNum() - 1);
+							}
+							outdata.setNum(1);
+							outdata.setBatch(b.getBatch());
+							outdata.setOperator(user.getName());
+							outdata.setOutdate(new Date());
+							outdata.setRgId(r.getId());
+							outdata.setLab(labMap.get(user.getLastLab()));
+							needSaveBatch.add(b);
+							needSaveOut.add(outdata);
+							
+							outManager.updateTestnum(labMap.get(user.getLastLab()),r.getTestname(),r.getId(),now);
 						}
-						needSaveBatch.add(b);
-						
-						Out outdata = new Out();
-						outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
-						outdata.setBatch((String)inmap.get(r.getId()).get("batch"));
-						outdata.setOperator(user.getName());
-						outdata.setOutdate(new Date());
-						outdata.setRgId(r.getId());
-						outdata.setLab(labMap.get(user.getLastLab()));
-						needSaveOut.add(outdata);
+					}
+				}
+			}
+			if(text != null) {
+				for(Reagent r : list) {
+					for(Batch b : batchMap.get(r.getId())) {
+						if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
+							Out outdata = new Out();
+							if(r.getSubtnum() > 1) {
+								int num = r.getSubtnum() * b.getNum() + b.getSubnum();
+								b.setNum((num- (Integer)inmap.get(r.getId()).get("num"))/r.getSubtnum());
+								b.setSubnum((num- (Integer)inmap.get(r.getId()).get("num"))%r.getSubtnum());
+							} else {
+								b.setNum(b.getNum() - (Integer)inmap.get(r.getId()).get("num"));
+							}
+							outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
+							outdata.setBatch(b.getBatch());
+							outdata.setOperator(user.getName());
+							outdata.setOutdate(new Date());
+							outdata.setRgId(r.getId());
+							outdata.setLab(labMap.get(user.getLastLab()));
+							needSaveBatch.add(b);
+							needSaveOut.add(outdata);
+							outManager.updateTestnum(labMap.get(user.getLastLab()),r.getTestname(),r.getId(),now);
+						}
 					}
 				}
 			}

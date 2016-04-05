@@ -54,7 +54,6 @@ public class InvalidSampleFormController {
 	@RequestMapping(method = RequestMethod.GET)
 	public InvalidSample getInvalidSample(HttpServletRequest request, HttpServletResponse response){
 		
-		System.out.println("开始");
 		String[] reasonList = Constants.INVALIDSAMPLE_REASON;
 		Map<String, String> reasonMap = new LinkedHashMap<String,String>();
 		for(int i=1;i< reasonList.length;i++){
@@ -63,12 +62,12 @@ public class InvalidSampleFormController {
 		request.setAttribute("rejectReason", reasonMap);
 		request.setAttribute("measureTaken", Constants.INVALIDSAMPLE_MEASURETAKEN);
 		String msg = null;
-		
+		InvalidSample invalidSample = new InvalidSample();
 		String id = request.getParameter("id");
-		InvalidSample invalidSample = invalidSampleManager.getByEzh(Long.parseLong(id));
-		if(invalidSample == null){
-			invalidSample = new InvalidSample();
-			if(id!=null && !id.isEmpty()){
+		if(id!=null && !id.isEmpty()){
+			invalidSample = invalidSampleManager.getByEzh(Long.parseLong(id));
+			if(invalidSample == null){
+				invalidSample = new InvalidSample();
 				if(sampleManager.exists(Long.parseLong(id))){
 					Sample sample = sampleManager.get(Long.parseLong(id));
 					Patient patient = patientManager.getByBlh(sample.getPatientblh());
@@ -79,11 +78,9 @@ public class InvalidSampleFormController {
 					invalidSample.setSampleType(sample.getSampleType());
 				} else
 					msg="该医嘱号不存在";
+				invalidSample.setRejectTime(new Date());
+			
 			}
-			invalidSample.setRejectTime(new Date());
-		
-		}
-		if(id!=null && !id.isEmpty()){
 			if(sampleManager.exists(Long.parseLong(id))){
 				Sample sample = sampleManager.get(Long.parseLong(id));
 				request.setAttribute("hosSection",sample.getHosSection() );
@@ -92,10 +89,11 @@ public class InvalidSampleFormController {
 				request.setAttribute("description",sample.getDescription() );
 			} else
 				msg="该医嘱号不存在";
+			
+			request.setAttribute("rejectTime",ymd.format(invalidSample.getRejectTime()) );
+			request.setAttribute("msg", msg);
+			System.out.println("end:"+invalidSample.getRejectTime());
 		}
-		request.setAttribute("rejectTime",ymd.format(invalidSample.getRejectTime()) );
-		request.setAttribute("msg", msg);
-		System.out.println("end:"+invalidSample.getRejectTime());
 		return invalidSample;
 	}
 	

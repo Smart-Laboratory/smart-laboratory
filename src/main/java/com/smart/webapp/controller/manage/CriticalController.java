@@ -57,53 +57,54 @@ public class CriticalController {
 		String lab = operator.getLastLab();
 		List<Sample> samples = sampleManager.getSampleList(Constants.DF3.format(new Date()),
 				lab, "", 6, -3);
-		String hisSampleId = "";
-		String hisBlh = "";
-		for(Sample sample : samples) {
-			hisSampleId += sample.getId() + ",";
-			hisBlh += "'" + sample.getPatientblh() + "',";
-		}
-		List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
-		List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
-		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
-		Map<Long, Process> processMap = new HashMap<Long, Process>();
-		Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
-		Map<String, Patient> pMap = new HashMap<String, Patient>();
-		
-		for(Process p : processList) {
-			processMap.put(p.getSampleid(), p);
-		}
-		for(CriticalRecord cr : crList) {
-			crMap.put(cr.getSampleid(), cr);
-		}
-		for(Patient p : patientList) {
-			pMap.put(p.getBlh(), p);
-		}
 		List<Critical> criticals = new ArrayList<Critical>();
-		int index = 0;
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
-		for (Sample sample : samples) {
-			if(crMap.get(sample.getId()) != null) {
-				Critical ctl = new Critical();
-				ctl.setId(++index);
-				ctl.setDocId(sample.getId());
-				ctl.setBlh(sample.getPatientblh());
-				ctl.setSampleNo(sample.getSampleNo());
-				ctl.setRequester(processMap.get(sample.getId()).getRequester());
-				String section = sectionutil.getValue(sample.getHosSection());
-				if (sample.getDepartBed() != null) {
-					ctl.setSection(section + " " + sample.getDepartBed());
-				} else {
-					ctl.setSection(section);
-				}
-				ctl.setPatientId(sample.getPatientId());
-				ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
-				ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
-				criticals.add(ctl);
+		if(samples.size() > 0){
+			String hisSampleId = "";
+			String hisBlh = "";
+			for(Sample sample : samples) {
+				hisSampleId += sample.getId() + ",";
+				hisBlh += "'" + sample.getPatientblh() + "',";
 			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+			Map<Long, Process> processMap = new HashMap<Long, Process>();
+			Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
+			Map<String, Patient> pMap = new HashMap<String, Patient>();
 			
+			for(Process p : processList) {
+				processMap.put(p.getSampleid(), p);
+			}
+			for(CriticalRecord cr : crList) {
+				crMap.put(cr.getSampleid(), cr);
+			}
+			for(Patient p : patientList) {
+				pMap.put(p.getBlh(), p);
+			}
+			int index = 0;
+			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+			for (Sample sample : samples) {
+				if(crMap.get(sample.getId()) != null) {
+					Critical ctl = new Critical();
+					ctl.setId(++index);
+					ctl.setDocId(sample.getId());
+					ctl.setBlh(sample.getPatientblh());
+					ctl.setSampleNo(sample.getSampleNo());
+					ctl.setRequester(processMap.get(sample.getId()).getRequester());
+					String section = sectionutil.getValue(sample.getHosSection());
+					if (sample.getDepartBed() != null) {
+						ctl.setSection(section + " " + sample.getDepartBed());
+					} else {
+						ctl.setSection(section);
+					}
+					ctl.setPatientId(sample.getPatientId());
+					ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+					ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
+					criticals.add(ctl);
+				}
+				
+			}
 		}
-
 		return new ModelAndView("manage/critical", "criticals", criticals);
 	}
 	
@@ -133,85 +134,87 @@ public class CriticalController {
 		
 		List<Sample> samples = sampleManager.getSampleList(date, lab,
 				"", 6, -3);
-		String hisSampleId = "";
-		String hisBlh = "";
-		for(Sample sample : samples) {
-			hisSampleId += sample.getId() + ",";
-			hisBlh += "'" + sample.getPatientblh() + "',";
-		}
-		List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
-		List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
-		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
-		Map<Long, Process> processMap = new HashMap<Long, Process>();
-		Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
-		Map<String, Patient> pMap = new HashMap<String, Patient>();
-		for(Process p : processList) {
-			processMap.put(p.getSampleid(), p);
-		}
-		for(CriticalRecord cr : crList) {
-			crMap.put(cr.getSampleid(), cr);
-		}
-		for(Patient p : patientList) {
-			pMap.put(p.getBlh(), p);
-		}
 		List<Critical> criticals = new ArrayList<Critical>();
-		StringBuilder patientIds = new StringBuilder();
-		Iterator<Sample> It = samples.iterator();
-		while (It.hasNext()) {
-			Sample sample = It.next();
-			if (crMap.get(sample.getId()) == null || crMap.get(sample.getId()).getCriticalDealFlag() != 1) {
-				It.remove();
-				continue;
+		if(samples.size() > 0) {
+			String hisSampleId = "";
+			String hisBlh = "";
+			for(Sample sample : samples) {
+				hisSampleId += sample.getId() + ",";
+				hisBlh += "'" + sample.getPatientblh() + "',";
 			}
-			if (sample.getPatientId() != null && StringUtils.isEmpty(sample.getPatientblh())) {
-				patientIds.append("'");
-				patientIds.append(sample.getPatientId());
-				patientIds.append("',");
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
+			Map<Long, Process> processMap = new HashMap<Long, Process>();
+			Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
+			Map<String, Patient> pMap = new HashMap<String, Patient>();
+			for(Process p : processList) {
+				processMap.put(p.getSampleid(), p);
 			}
-		}
-		String pStr = patientIds.toString();
-		List<com.zju.api.model.Patient> patients = new ArrayList<com.zju.api.model.Patient>();
-		if (!StringUtils.isEmpty(pStr)) {
-			pStr = pStr.substring(0, pStr.length() - 1);
-			try {
-				//patients = syncManager.getPatientList(pStr);
-				patients = rmiService.getPatientList(pStr);
-			} catch (Exception e) {
-				log.error("病人信息获取失败", e);
+			for(CriticalRecord cr : crList) {
+				crMap.put(cr.getSampleid(), cr);
 			}
-		}
-		Map<String, com.zju.api.model.Patient> patientMap = new HashMap<String, com.zju.api.model.Patient>();
-		for (com.zju.api.model.Patient p : patients) {
-			patientMap.put(p.getPatientId(), p);
-		}
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
-		int index = 0;
-		for (Sample sample : samples) {
-			if (crMap.get(sample.getId()) != null) {
-				Critical ctl = new Critical();
-				ctl.setId(++index);
-				ctl.setDealTime(crMap.get(sample.getId()).getCriticalDealTime());
-				ctl.setDealPerson(crMap.get(sample.getId()).getCriticalDealPerson());
-				ctl.setDocId(sample.getId());
-				ctl.setBlh(sample.getPatientblh());
-				ctl.setSampleNo(sample.getSampleNo());
-				ctl.setRequester(processMap.get(sample.getId()).getRequester());
-				String section = sectionutil.getValue(sample.getHosSection());
-				if (sample.getDepartBed() != null) {
-					ctl.setSection(section + " " + sample.getDepartBed());
-				} else {
-					ctl.setSection(section);
+			for(Patient p : patientList) {
+				pMap.put(p.getBlh(), p);
+			}
+			StringBuilder patientIds = new StringBuilder();
+			Iterator<Sample> It = samples.iterator();
+			while (It.hasNext()) {
+				Sample sample = It.next();
+				if (crMap.get(sample.getId()) == null || crMap.get(sample.getId()).getCriticalDealFlag() != 1) {
+					It.remove();
+					continue;
 				}
-				ctl.setPatientId(sample.getPatientId());
-				ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
-				ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
-				if (patientMap.containsKey(sample.getPatientId())) {
-					com.zju.api.model.Patient p = patientMap.get(sample.getPatientId());
-					ctl.setPatientAddress(p.getAddress());
-					ctl.setPatientPhone(p.getPhone());
-					ctl.setBlh(p.getBlh());
+				if (sample.getPatientId() != null && StringUtils.isEmpty(sample.getPatientblh())) {
+					patientIds.append("'");
+					patientIds.append(sample.getPatientId());
+					patientIds.append("',");
 				}
-				criticals.add(ctl);
+			}
+			String pStr = patientIds.toString();
+			List<com.zju.api.model.Patient> patients = new ArrayList<com.zju.api.model.Patient>();
+			if (!StringUtils.isEmpty(pStr)) {
+				pStr = pStr.substring(0, pStr.length() - 1);
+				try {
+					//patients = syncManager.getPatientList(pStr);
+					patients = rmiService.getPatientList(pStr);
+				} catch (Exception e) {
+					log.error("病人信息获取失败", e);
+				}
+			}
+			Map<String, com.zju.api.model.Patient> patientMap = new HashMap<String, com.zju.api.model.Patient>();
+			for (com.zju.api.model.Patient p : patients) {
+				patientMap.put(p.getPatientId(), p);
+			}
+			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+			int index = 0;
+			for (Sample sample : samples) {
+				if (crMap.get(sample.getId()) != null) {
+					Critical ctl = new Critical();
+					ctl.setId(++index);
+					ctl.setDealTime(crMap.get(sample.getId()).getCriticalDealTime());
+					ctl.setDealPerson(crMap.get(sample.getId()).getCriticalDealPerson());
+					ctl.setDocId(sample.getId());
+					ctl.setBlh(sample.getPatientblh());
+					ctl.setSampleNo(sample.getSampleNo());
+					ctl.setRequester(processMap.get(sample.getId()).getRequester());
+					String section = sectionutil.getValue(sample.getHosSection());
+					if (sample.getDepartBed() != null) {
+						ctl.setSection(section + " " + sample.getDepartBed());
+					} else {
+						ctl.setSection(section);
+					}
+					ctl.setPatientId(sample.getPatientId());
+					ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+					ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
+					if (patientMap.containsKey(sample.getPatientId())) {
+						com.zju.api.model.Patient p = patientMap.get(sample.getPatientId());
+						ctl.setPatientAddress(p.getAddress());
+						ctl.setPatientPhone(p.getPhone());
+						ctl.setBlh(p.getBlh());
+					}
+					criticals.add(ctl);
+				}
 			}
 		}
 		return new ModelAndView("manage/criticalDealed", "criticals", criticals);

@@ -19,6 +19,7 @@ import com.zju.api.model.LabGroupInfo;
 import com.zju.api.model.Patient;
 import com.zju.api.model.Reference;
 import com.zju.api.model.SyncPatient;
+import com.zju.api.model.SyncReagent;
 import com.zju.api.model.SyncResult;
 import com.zju.api.service.RMIService;
 
@@ -308,6 +309,21 @@ public class RMIServiceImpl implements RMIService {
 
 	public void sampleReceive(long doct, String operator) {
 		jdbcTemplate.update("update l_patientinfo set ksreceivetime=sysdate, ksreceiver='" + operator + "' where doctadviseno=" + doct);
+	}
+
+	public List<SyncReagent> getSyncReagent(String barcode) {
+		String sql = "select j.quantity,j.product_lot,j.expired_date,j.wzbm,j.spec_id from jyk_out_detail j where j.out_no=" + barcode;
+		return jdbcTemplate.query(sql, new RowMapper<SyncReagent>() {
+			public SyncReagent mapRow(ResultSet rs, int rowNum) throws SQLException {
+				SyncReagent sr = new SyncReagent();
+				sr.setWzbm(rs.getString("wzbm"));
+				sr.setSpec_id(rs.getString("spec_id"));
+				sr.setExpired_date(rs.getString("expired_date"));
+				sr.setQuantity(rs.getInt("quantity"));
+				sr.setProduct_lot(rs.getString("product_lot"));
+				return sr;
+			}
+	    });
 	}
 
 }

@@ -52,12 +52,12 @@
 	<div class="row">
 		<label class="spana"><fmt:message key="requester.name" /> : </label>
 		<label class="spanb" id="requesterNameText"></label>
-		<label class="spanb"><fmt:message key="requester.phone" /> : </label>
-		<label class="spanb" id="requesterPhoneText"></label>
+		<label class="spanb"><fmt:message key="requester.section" /> : </label>
+		<label class="spanb" id="requesterSectionText"></label>
 	</div>
 	<div class="row">
-		<label class="spana"><fmt:message key="requester.section" /> : </label>
-		<label class="spand" id="requesterSectionText"></label>
+		<label class="spana"><fmt:message key="requester.phone" /> : </label>
+		<label class="spand" id="requesterPhoneText"></label>
 	</div>
 	
 	<div id="ward" style="display:none;">

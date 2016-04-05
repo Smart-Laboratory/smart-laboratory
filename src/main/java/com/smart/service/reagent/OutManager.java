@@ -13,4 +13,6 @@ public interface OutManager extends GenericManager<Out, Long> {
 	List<Out> getLastHMs(String ids, Date measuretime);
 
 	List<Out> getByLab(String lab);
+
+	void updateTestnum(String lab, String testid, Long id, Date now);
 }

@@ -11,4 +11,6 @@ public interface BatchDao extends GenericDao<Batch, Long> {
 
 	List<Batch> getByRgId(Long id);
 
+	List<Batch> getByRgIds(String rids);
+
 }

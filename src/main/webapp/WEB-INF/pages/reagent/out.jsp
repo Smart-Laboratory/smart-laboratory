@@ -22,7 +22,7 @@
   <li role="presentation"><a href="../reagent/in"><fmt:message key="reagent.in"/></a></li>
   <li role="presentation" class="active"><a href="#"><fmt:message key="reagent.out"/></a></li>
 </ul>
-
+<div id="alert" class="alert alert-success alert-dismissable" style="display:none;margin-top:10px;margin-bottom:5px;"></div>
 <div class="form-inline" style="margin-top:10px;">
 	<label for="reagentdes"><fmt:message key="guanjianzi"/></label>
 	<input type="text" id="reagentdes" name="reagentdes" class="form-control" style="width:600px;" onkeypress="getData(this,event);" placeholder="<fmt:message key='reagent.tips'/>">

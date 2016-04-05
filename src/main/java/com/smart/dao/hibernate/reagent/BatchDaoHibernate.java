@@ -29,4 +29,9 @@ public class BatchDaoHibernate extends GenericDaoHibernate<Batch, Long> implemen
 		return getSession().createQuery("from Batch where rgId=" + id).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Batch> getByRgIds(String rids) {
+		return getSession().createQuery("from Batch where rgId in (" + rids + ")").list();
+	}
+
 }

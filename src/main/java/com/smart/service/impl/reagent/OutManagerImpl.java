@@ -33,4 +33,8 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
 	public List<Out> getByLab(String lab) {
 		return outDao.getByLab(lab);
 	}
+
+	public void updateTestnum(String lab, String testid, Long rgid, Date now) {
+		outDao.updateTestnum(lab,testid,rgid,now);
+	}
 }

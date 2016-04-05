@@ -18,6 +18,22 @@
         });
 		
 	}
+	
+	function getData(obj,event) {
+		var e=e||event;
+		var key=event.keyCode;;
+		if(navigator.appName=="Netscape"){
+			key=e.which;
+		}else{
+			key=event.keyCode;
+		}
+		switch(key){
+			case 13 : 
+				if($("#reagent_select").val()==1) {
+					addRow(obj.value, $("#reagent_select").val());
+				}
+		}
+	}
 
 	$(function() {
 		$("#printDialog").dialog({

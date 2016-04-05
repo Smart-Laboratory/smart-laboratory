@@ -40,4 +40,8 @@ public class ReagentManagerImpl extends GenericManagerImpl<Reagent, Long> implem
 	public List<Reagent> getByTestId(String testid) {
 		return reagentDao.getByTestId(testid);
 	}
+
+	public List<Reagent> getByProduct(String productcode, String lab) {
+		return reagentDao.getByProduct(productcode, lab);
+	}
 }

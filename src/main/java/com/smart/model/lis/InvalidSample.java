@@ -176,4 +176,14 @@ public class InvalidSample {
 	public void setRejectPerson(String rejectPerson) {
 		this.rejectPerson = rejectPerson;
 	}
+	
+	@Transient
+	public String getSexValue() {
+		if (sex.equals("1")) {
+			return "男";
+		} else if (sex.equals("2")) {
+			return "女";
+		}
+		return "未知";
+	}
 }

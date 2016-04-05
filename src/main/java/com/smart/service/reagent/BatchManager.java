@@ -11,4 +11,6 @@ public interface BatchManager extends GenericManager<Batch, Long> {
 
 	List<Batch> getByRgId(Long id);
 
+	List<Batch> getByRgIds(String rids);
+
 }
