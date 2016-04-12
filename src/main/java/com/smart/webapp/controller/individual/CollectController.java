@@ -53,7 +53,6 @@ import com.smart.model.user.Evaluate;
 @RequestMapping("/collect/list*")
 public class CollectController extends BaseAuditController{
 	
-	private Map<String, Index> idMap = new HashMap<String, Index>();
 	
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
 	private final static SimpleDateFormat mdf = new SimpleDateFormat("MM/dd");

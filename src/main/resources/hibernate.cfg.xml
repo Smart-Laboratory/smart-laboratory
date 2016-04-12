@@ -29,6 +29,8 @@
         <mapping class="com.smart.model.rule.Item"/>
         <mapping class="com.smart.model.rule.Result"/>
         <mapping class="com.smart.model.rule.Rule"/>
+        <mapping class="com.smart.model.rule.DesBag"/>
+        <mapping class="com.smart.model.rule.Description"/>
         <mapping class="com.smart.model.reagent.Reagent"/>
         <mapping class="com.smart.model.reagent.Batch"/>
         <mapping class="com.smart.model.reagent.Combo"/>
@@ -50,5 +52,6 @@
         <mapping class="com.smart.model.pb.WInfo"/>
         <mapping class="com.smart.model.pb.WorkCount"/>
         <mapping class="com.smart.model.pb.SxArrange"/>
+        
     </session-factory>
 </hibernate-configuration>

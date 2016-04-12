@@ -1,9 +1,5 @@
 function labChange(item){
-	$.ajax({
-		  type: 'POST',
-		  url: "../audit/labChange?lab="+$(item).val()
-	});
-	window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $(item).val();
+	window.location.href="../pb/sxgroupPbcx?date=" + $("#date").val()+"&section=" + $(item).val();
 }
 
 $(function() {
@@ -47,40 +43,6 @@ $(function() {
 
 	
 	
-	$("#shiftBtn").click(function() {
-		var ischecked = true;
-		if (ischecked) {
-			var section = $("#section").val();
-			var text = "";
-			var date = $("#month").val();
-			$("td[name^='td']").each(function(i){
-				var array = $(this).attr("id").split("-");
-				var day = "";
-				if(array[1].length == 1) {
-					day = '0' + array[1];
-				} else {
-					day = array[1];
-				}
-				
-				var value = $(this).html();
-//				value = value.replace("<span class=\"glyphicon glyphicon-ok\"></span> ","")
-				if($(this).attr("class").indexOf("gx")>=0)
-					value += "\u516C\u4F11;";
-					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
-			});
-			var bz= $("#bz").val();
-			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz,isStu:"true"},function(data) {
-				if(data){
-					alert("Success!");
-					window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $("#section").val();
-				}else{
-					alert("Fail!")
-				}
-				
-			});
-			
-		}
-	});
 	
 	$("#shiftBtn2").click(function() {
 		var section = $("#section").val();
@@ -100,19 +62,11 @@ $(function() {
 	});
 	
 	$("#changeMonth").click(function() {
-		window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $("#section").val();
+		window.location.href="../pb/sxgroupPbcx?date=" + $("#date").val()+"&section=" + $("#section").val();
 	});
 	
 	$("#date").val($("#month").val());
-	
 		
-	$("#publish").click(function(){
-		$.post("../pb/pb/publish",{section:$("#section").val(), month:$("#month").val(),state:2},function(data){
-			if(data){
-				alert("Publish seccess!");
-			}
-		})
-	});
 });
 
 Date.prototype.Format = function(fmt)   

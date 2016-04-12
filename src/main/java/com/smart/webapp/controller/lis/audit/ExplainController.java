@@ -58,8 +58,11 @@ public class ExplainController extends BaseAuditController {
 		if (StringUtils.isEmpty(id))
 			return null;
 //			throw new NullPointerException();
-
-		Sample info = sampleManager.get(Long.parseLong(id));
+		Sample info = new Sample();
+		if(StringUtils.isNumeric(id))
+			info = sampleManager.get(Long.parseLong(id));
+		else 
+			info = sampleManager.getBySampleNo(id);
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String ruleIds = info.getRuleIds();
 //		String customResult = user.getReasoningResult();

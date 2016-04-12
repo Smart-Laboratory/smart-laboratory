@@ -140,7 +140,7 @@ public class IndexAjaxController {
 			return null;
 		}
 
-		List<Index> desList = indexManager.getIndexs(name);
+		List<Index> desList =  indexManager.getIndexs(name);
 		if(desList.size()>10)
 			desList = desList.subList(0, 10);
 		JSONArray array = new JSONArray();

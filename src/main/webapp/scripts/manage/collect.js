@@ -236,7 +236,7 @@
 	
 	function getExplain(sample){
 		jQuery("#audit_information").jqGrid({
-			url:"../collect/list/explain?sample="+sample,
+			url:"../audit/explain?id="+sample,
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
 			colNames:['ID','OLDRESULT','解释','详细','RANK'],
@@ -505,9 +505,10 @@
 					jQuery("#rowed3").setGridParam().hideCol("last4");
 					//jQuery("#rowed3").setGridParam().hideCol("device");
 					jQuery("#rowed3").setGridParam().hideCol("unit");
-					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+//					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+//					var ret = jQuery("#s3list").jqGrid('getRowData',s);
 					if (id == "tabs-0") {
-						getExplain(s);
+						getExplain($("#hiddenSampleNo").val());
 					}
 				}
 			}

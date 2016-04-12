@@ -10,10 +10,6 @@ function deleteConfirm() {
 		location.href='../index/delete?id=<c:out value="${index.id}" />';
 	}	
 }
-$(function(){
-	alert(11);
-	alert("${index.id}");
-})
 </script>
 </head>
 <style type="text/css">
@@ -32,7 +28,7 @@ th {
 
 <div class="col-sm-7">
 	<h1><fmt:message key='index.view'/></h1>
-	<div class="col-sm-8" style="width:430px;float:left;">
+	<div class="col-sm-8" style="float:left;">
 		<table>
 			<tr>
 				<th class="left"><fmt:message key="index.indexId" /> :</th>
@@ -77,6 +73,10 @@ th {
 			<tr>
 				<th class="left"><fmt:message key="rule.modifyTime" /> :</th>
 				<td><c:out value="${index.modifyTime}" /></td>
+			</tr>
+			<tr>
+				<th class="left"><fmt:message key="rule.guide" /> :</th>
+				<td><c:out value="${index.guide}" /></td>
 			</tr>
 			<tr>
 				<th></th>

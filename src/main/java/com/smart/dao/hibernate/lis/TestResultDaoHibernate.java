@@ -10,6 +10,7 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.TestResultDao;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
+import com.smart.model.lis.Process;
 
 @Repository("testResultDao")
 public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, TestResultPK> implements TestResultDao {
@@ -70,8 +71,8 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getRelative(String patientId, String blh, String history) {
-		String hql = "select t from Sample s, TestResult t where (s.patientId='" + patientId
-				+ "' or s.patientId='" + blh + "') and t.sampleNo=s.sampleNo and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
+		String hql = "select t from Sample s, TestResult t,Process p where (s.patientId='" + patientId
+				+ "' or s.patientId='" + blh + "') and t.sampleNo=s.sampleNo and s.id=p.sampleid and t.testId in " + history + " and s.process.receivetime is not null order by s.process.receivetime desc,t.testId asc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}

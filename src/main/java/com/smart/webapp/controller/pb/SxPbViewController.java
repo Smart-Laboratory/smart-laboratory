@@ -41,6 +41,7 @@ public class SxPbViewController {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
+		String week = request.getParameter("week");
 		if(from==null||to==null){
 			from = ym.format(new Date());
 			to = ym.format(new Date());
@@ -165,6 +166,8 @@ public class SxPbViewController {
 		for(Shift shift : ss){
 			wshifts.put(shift.getAb(), shift.getName());
 		}
+		if(week!=null && !week.isEmpty())
+			request.setAttribute("week", week);
 		request.setAttribute("pages", pages);
 		request.setAttribute("page", page);
 		request.setAttribute("wshifts", wshifts);

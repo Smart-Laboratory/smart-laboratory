@@ -59,7 +59,7 @@ function getSectionCount(week){
 		width: $("#sectiondataPanal").width()*0.9,
 		height:'100%',
 		rownumbers:true,
-		caption : "科室排班数量统计",
+		caption : "第"+week+"周 科室排班数量统计",
 		jsonReader:{repeatitems:false},
 		mtype:"GET",
 //		pager:'#sectionPager',
@@ -74,6 +74,7 @@ $(function() {
 	$("#pbdata").html($("#test1").val());
 //	$("#date").val($("#month").val());
 	$("#pagelist").html("第 "+$("#page").val()+" 页，共 "+$("#pages").val()+" 页");
+	
 	
 	$("#date").datepicker({
 		changeMonth: true,
@@ -141,10 +142,10 @@ $(function() {
 		$("#nextBtn").addClass("disabled");
 	}
 	$("#preBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page);
+		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page)+"&week="+($("#week").val());
 	});
 	$("#nextBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page);
+		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page)+"&week="+($("#week").val());
 	});
 	
 	
@@ -212,7 +213,7 @@ $(function() {
 	});
 	
 	getHisList("");
-	getSectionCount("10");
+	getSectionCount($("#week").val());
 })
 
 Date.prototype.Format = function(fmt)   

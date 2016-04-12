@@ -86,9 +86,9 @@
         </div>
     </div>
 	<div class="control-group col-sm-8">
-        <appfuse:label styleClass="control-label" key="index.description"/>
+        <appfuse:label styleClass="control-label" key="index.guide"/>
         <div class="controls">
-        	<form:input path="description" id="description" cssClass="text form-control input-group-sm"/>
+        	<form:textarea path="guide" id="guide" cols="20" rows="3" cssClass="text form-control input-group-sm"/>
         </div>
     </div>
 

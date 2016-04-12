@@ -78,7 +78,6 @@ $(function(){
 	    		    		postStr += id + ":" + value;
     		    		}
     		    	});
-	    			alert(postStr);
 	    			if (postStr != "") {
 		    			$.post("../audit/add",{test:postStr,sample:sample},function(data){
 		    				if (data) {
@@ -299,7 +298,7 @@ $(function(){
 	    			result = false;
 	    	});
 			if(result){
-				$("#addTestList").append("<div><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2 form-control'/></div>")
+				$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2 form-control'/></div>")
 			}else{
 				alert("样本列表或者添加列表中已包含该检验项目!");
 			}

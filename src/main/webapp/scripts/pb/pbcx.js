@@ -45,7 +45,7 @@ $(function() {
 		if($("#typeSel").val()==2){
 			window.location.href="../pb/sxcx";
 		}else if($("#typeSel").val()==3){
-			window.location.href="../pb/sxgroupPb?view=1&date=" + $("#date").val()+"&section="+$("#sectionSel").val();
+			window.location.href="../pb/sxgroupPbcx?date=" + $("#date").val()+"&section="+$("#sectionSel").val();
 		}else
 			window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 	});
