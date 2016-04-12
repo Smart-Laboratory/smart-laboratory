@@ -128,7 +128,6 @@ public class SamplePrintController extends BaseAuditController {
 					String psampleno = pinfo.getSampleNo();
 					boolean isHis = false;
 					List<TestResult> his = hisTestMap.get(psampleno);
-<<<<<<< HEAD
 					if(his != null) {
 						for (TestResult test: his) {
 							String testid = test.getTestId();
@@ -141,17 +140,6 @@ public class SamplePrintController extends BaseAuditController {
 								}
 							}
 							if (isHis) {
-=======
-					if(his==null)
-						continue;
-					for (TestResult test: his) {
-						String testid = test.getTestId();
-						Set<String> sameTests = util.getKeySet(testid);
-						sameTests.add(testid);
-						for (String id : sameTests) {
-							if (testIdSet.contains(id)) {
-								isHis = true;
->>>>>>> origin/master
 								break;
 							}
 						}
