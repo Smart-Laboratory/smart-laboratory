@@ -190,7 +190,8 @@ $(function() {
 		}
 	});
 	
-	var today = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
+	var date = new Date();
+	var today = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
 	$("#from").val(today);
 	$("#to").val(today);
 });

@@ -209,7 +209,6 @@ $(function(){
 	    			$("#auditUnpassBtn").css('display','inline');
 	    			$("#auditPassBtn").css('display','none');
 	    			$("#collectBtn").css('display','inline');
-	    			$("#auditPrintBtn").css('display','inline');
 	    			$("#opStatusDialog").dialog("close");
 	    			$("#twoColumnDialog").dialog("close");
 				}
@@ -224,7 +223,6 @@ $(function(){
 	    			$("#auditUnpassBtn").css('display','none');
 	    			$("#auditPassBtn").css('display','inline');
 	    			$("#collectBtn").css('display','none');
-	    			$("#auditPrintBtn").css('display','none');
 	    			$("#opStatusDialog").dialog("close");
 	    			$("#twoColumnDialog").dialog("close");
 				}

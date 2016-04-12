@@ -154,7 +154,7 @@ public class DroolsRunner {
 					float value = Float.parseFloat(numerator.getTestResult())
 							/ Float.parseFloat(denominator.getTestResult());
 					if (ra.getReflo() == ra.getRefhi()) {
-						if (value / ra.getRefhi() < 0.9 || value / ra.getRefhi() > 1.1) {
+						if (value / ra.getRefhi() < 0.8 || value / ra.getRefhi() > 1.2) {
 							ratioRes.add(denominator.getTestId());
 							ratioRes.add(numerator.getTestId());
 						}

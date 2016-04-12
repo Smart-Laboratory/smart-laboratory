@@ -24,6 +24,11 @@ function getList(text, lab) {
     	onSelectRow: function(id) {
     		$("#rbcLabel").css('display','none');
     		var ret = jQuery("#list").jqGrid('getRowData',id);
+    		if(ret.lisPass != "") {
+    			$("#auditPrintBtn").css('display','inline');
+    		} else {
+    			$("#auditPrintBtn").css('display','none');
+    		}
     		$("#hiddenSampleNo").val(ret.sample);
     		getPatient(ret);
     		
@@ -32,7 +37,6 @@ function getList(text, lab) {
 			$("#testDelete").css('display','inline');
 			$("#auditUnpassBtn").css('display','inline');
 			$("#auditPassBtn").css('display','inline');
-			$("#auditPrintBtn").css('display','none');
 			
 			$("#needEdit").val(true);
     		if(ret.status == "未审核") {
@@ -41,14 +45,12 @@ function getList(text, lab) {
     			$("#unaudit_reason_btn").hide();
     			$("#testAdd").css('display','none');
     			$("#testDelete").css('display','none');
-    			$("#auditPrintBtn").css('display','inline');
     			$("#auditPassBtn").css('display','none');
     			$("#needEdit").val(false);
     		} else if (ret.status == "无结果"){
     			$("#unaudit_reason_btn").hide();
     			$("#testAdd").css('display','none');
     			$("#testDelete").css('display','none');
-    			$("#auditPrintBtn").css('display','none');
     			$("#auditUnpassBtn").css('display','none');
     			$("#auditPassBtn").css('display','none');
     			$("#collectBtn").css('display','none');

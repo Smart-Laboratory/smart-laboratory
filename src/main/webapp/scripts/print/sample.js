@@ -30,24 +30,14 @@ $(function(){
 		if(data.hisTitle1 != "") {
 			$("#hisTitle1").html(data.hisTitle1);
 		}
-		if(data.hisTitle2 != "") {
-			$("#hisTitle2").html(data.hisTitle2);
-		}
-		if(data.hisTitle3 != "") {
-			$("#hisTitle3").html(data.hisTitle3);
-		}
 		for (var i=0;i<data.testresult.length;i++) {
-			var s =  "<div style='height:20px;margin-left:20px;width:100%;'>";
+			var s =  "<div style='height:20px;margin-left:10px;width:100%;'>";
 			s += "<div style='float:left;width:5%;'>" + data.testresult[i].num + "</div>";
-			s += "<div style='float:left;width:25%;'>" + data.testresult[i].name + "</div>";
-			s += "<div style='float:left;width:6%;'>" + data.testresult[i].result + "</div>";
-			s += "<div style='float:left;width:4%;'>" + data.testresult[i].resultflag + "</div>";
-			s += "<div style='float:left;width:6%;'>" + data.testresult[i].last + "</div>";
-			s += "<div style='float:left;width:4%;'>" + data.testresult[i].lastflag + "</div>";
-			s += "<div style='float:left;width:6%;'>" + data.testresult[i].last1 + "</div>";
-			s += "<div style='float:left;width:4%;'>" + data.testresult[i].lastflag1 + "</div>";
-			s += "<div style='float:left;width:6%;'>" + data.testresult[i].last2 + "</div>";
-			s += "<div style='float:left;width:4%;'>" + data.testresult[i].lastflag2 + "</div>";
+			s += "<div style='float:left;width:35%;'>" + data.testresult[i].name + "</div>";
+			s += "<div style='float:left;width:10%;'>" + data.testresult[i].result + "</div>";
+			s += "<div style='float:left;width:5%;'>" + data.testresult[i].resultflag + "</div>";
+			s += "<div style='float:left;width:10%;'>" + data.testresult[i].last + "</div>";
+			s += "<div style='float:left;width:5%;'>" + data.testresult[i].lastflag + "</div>";
 			s += "<div style='float:left;width:20%;text-align:center;'>" + data.testresult[i].scope + "</div>";
 			s += "<div style='float:left;width:10%;text-align:center;'>" + data.testresult[i].unit + "</div>";
 			s += "</div>";

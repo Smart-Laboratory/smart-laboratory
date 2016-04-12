@@ -166,7 +166,7 @@ public class AutoAuditServlet extends HttpServlet {
                     				}
                 				}
                 			}
-                    		for(int i = 0; i < 10; i++) {
+                    		for(int i = 0; i < 50; i++) {
                         		final int num = i;
                         		new Thread(new Runnable(){
                             		public void run() {
@@ -318,7 +318,7 @@ public class AutoAuditServlet extends HttpServlet {
                         	}
                 		}
                     	try {
-							Thread.sleep(30000);
+							Thread.sleep(60000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

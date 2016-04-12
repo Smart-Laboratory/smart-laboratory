@@ -37,22 +37,48 @@ $(function(){
 			alert("写回未开启，请到写回配置中开启写回！");
 			return;
 		}
-		var code = "";
-		$("#codeSetDiv  .codeItem").each(function(index,self) {
-			if ($(self).find(".codeCheck").attr("checked") == "checked"){
-				code += $(self).find(".codeText").html() + ",";
-			}
-		});
+		var btnText = $("#controlAuditBtn").html().trim();
+ 		var status = 0;
+ 		if (btnText == "停止") {
+ 			status = 1;
+ 		}
+ 		var code = "";
+ 		var codeAll = "";
+		var codeScope = "";
+		if (status == 1) {
+     		$("#codeSetDiv .codeItem").each(function(index,self) {
+    			if ($(self).find(".codeCheck").attr("checked") == "checked"){
+    				var test = $(self).find(".codeText").html();
+    				var lo = $(self).find(".val-lo").val();
+        			var hi = $(self).find(".val-hi").val();
+        			if (codeScope != "") codeScope += ";";
+        			if (lo.length == 0 && hi.length == 0) {
+        				code += $(self).find(".codeText").html() + ",";
+        			} else if (lo.length == 3 && hi.length == 3) {
+        				codeScope += test + lo + "-" + hi;
+        			}
+        			codeAll += $(self).find(".codeText").html() + ",";
+    			}
+    		});
+		}
 		code = code.substring(0,code.length-1);
-		$.get("../audit/testset",{code:code},function(data){
+		codeAll = codeAll.substring(0,code.length-1);
+		$.get("../audit/testset",{code:codeAll},function(data){
 			if(data) {
 				if ($("#need_write_back").html() != "0") {
 					if (confirm("确认写回"+$("#need_write_back").html()+"条样本")) {
-						writeBackOnce($("#userLabCode").val(), $("#labSelect").val(), $("#userText").html());
+						writeBackOnce(code, $("#labSelect").val(), $("#userText").html());
+						if(codeScope != "") {
+							for(var i=0; i< codeScope.split(";").length; i++) {
+								if(codeScope.split(";")[i] != "") {
+									writeBackPart(scope, $("#labSelect").val(), $("#userText").html());
+								}
+							}
+						}
 					}
 				}
 			} else {
-				alert(code + "中有未设置的检验者，请先查看检验者设置！");
+				alert(codeAll + "中有未设置的检验者，请先查看检验者设置！");
 			}
 		});
 		

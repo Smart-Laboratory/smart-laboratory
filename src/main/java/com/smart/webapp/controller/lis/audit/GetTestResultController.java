@@ -1,8 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +26,6 @@ import com.smart.model.lis.TestModify;
 import com.smart.model.lis.TestResult;
 import com.smart.service.lis.TestModifyManager;
 import com.smart.webapp.util.DataResponse;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
 import com.zju.api.model.SyncResult;
 
 
@@ -39,8 +35,6 @@ public class GetTestResultController extends BaseAuditController {
 	
 	@Autowired
 	private TestModifyManager testModifyManager;
-	
-	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/**
 	 * 获取某一样本的检验数据
@@ -480,6 +474,7 @@ public class GetTestResultController extends BaseAuditController {
 				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
+				map.put("checktime", Constants.DF5.format(tr.getMeasureTime()));
 				if(i<= size) {
 					dataRows.add(map);
 				} else {

@@ -34,6 +34,9 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	@SuppressWarnings("unchecked")
 	public String getRelativeTest(String ylxh) {
 		List<String> list = new ArrayList<String>();
+		if(ylxh == null || ylxh.isEmpty()) {
+			return null;
+		}
 		if(ylxh.contains("+")) {
 			String sql = "select profiletest3 from Ylxh where ylxh in (";
 			for (String s : ylxh.split("[+]")) {

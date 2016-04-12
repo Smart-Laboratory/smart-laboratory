@@ -94,9 +94,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
 		Session session = getSession();
-		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) order by sampleNo,auditMark");
+		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) and sampleStatus<5 order by auditMark");
 		q.setFirstResult(0);
-		q.setMaxResults(100);  
+		q.setMaxResults(500);  
 		List<Sample> list = q.list();
 		return list;
 	}
@@ -113,7 +113,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
 		
 		if(blh != null){
-			return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "'   order by s.id desc").list();
+			if(lab.contains(",")) {
+				return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId in (" + lab + ")   order by s.id desc").list();
+			} else {
+				return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId=" + lab + " order by s.id desc").list();
+			}
 		}
 		return null;
 	}
@@ -256,6 +260,17 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
 			}
 			break;
+		default:
+			String date = Constants.DF3.format(new Date());
+			sql += "and (";
+			for (int i=0; i<cds.length; i++) {
+				sql += "s.sampleNo like '" + date + cds[i] + "%'";
+				if (cds.length != i+1) {
+					sql += " or ";
+				}
+			}
+			sql += ")";
+			break;
 		}
 		
 		switch (status) {
@@ -324,6 +339,17 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 				sql += "and s.sampleNo>='" + text.substring(0, 14) 
 					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
 			}
+			break;
+		default:
+			String date = Constants.DF3.format(new Date());
+			sql += "and (";
+			for (int i=0; i<cds.length; i++) {
+				sql += "s.sampleNo like '" + date + cds[i] + "%'";
+				if (cds.length != i+1) {
+					sql += " or ";
+				}
+			}
+			sql += ")";
 			break;
 		}
 		

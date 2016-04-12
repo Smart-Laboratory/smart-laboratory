@@ -771,7 +771,7 @@
 			datatype: "local",
 			width:width,
 			jsonReader : {repeatitems : false,  userdata : userdata},  
-		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
+		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '测定时间', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'color',index:'color', hidden:true},
@@ -782,7 +782,8 @@
 		   		{name:'last1',index:'last1',width:width*0.1, sortable:false},
 		   		{name:'device',index:'device',width:width*0.2, hidden:true, sortable:false},
 		   		{name:'scope',index:'scope',width:width*0.25,sortable:false},
-		   		{name:'unit', sortable:false, width:width*0.15, index:'unit'},
+		   		{name:'checktime',index:'checktime',width:width*0.15,sortable:false},
+		   		{name:'unit', index:'unit', width:width*0.15, sortable:false, hidden:true},
 		   		{name:'knowledgeName',index:'knowledgeName', hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
@@ -984,7 +985,7 @@
 			datatype: "local",
 			width:width,
 			jsonReader : {repeatitems : false, userdata : userdata},  
-		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
+		   	colNames:['ID','Color','缩写','项目', '结果', '历史', '历史', '仪器号', '参考范围', '测定时间', '单位','KNOWLEDGE','EDITMARK','LASTEDIT'],
 		   	colModel:[
 		   	   	{name:'id',index:'id', hidden:true},
 		   		{name:'color',index:'color', hidden:true},
@@ -995,7 +996,8 @@
 		   		{name:'last1',index:'last1',width:width*0.1, sortable:false},
 		   		{name:'device',index:'device',width:width*0.2, hidden:true, sortable:false},
 		   		{name:'scope',index:'scope',width:width*0.25,sortable:false},
-		   		{name:'unit', sortable:false, width:width*0.15, index:'unit'},
+		   		{name:'checktime',index:'checktime',width:width*0.15,sortable:false},
+		   		{name:'unit', sortable:false, width:width*0.15, index:'unit', hidden:true},
 		   		{name:'knowledgeName',index:'knowledgeName', hidden:true},
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
@@ -1423,7 +1425,6 @@ $(function() {
 		}
  		if (flag) {
 			$.get("../audit/autoAudit",{status:status, scope:codeScope},function(data){
-     			
      			if (data) {
      				if (status == 1) {
      					$("#controlAuditBtn").html("停止");

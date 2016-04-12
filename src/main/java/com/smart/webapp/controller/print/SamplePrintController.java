@@ -85,11 +85,7 @@ public class SamplePrintController extends BaseAuditController {
 		info.put("date", sampleno.substring(0, 4) + "年" + sampleno.substring(4, 6) + "月" + sampleno.substring(6, 8) + "日");
 		
 		Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
-		Map<String, TestResult> resultMap2 = new HashMap<String, TestResult>();
-		Map<String, TestResult> resultMap3 = new HashMap<String, TestResult>();
 		String hisTitle1 = "";
-		String hisTitle2 = "";
-		String hisTitle3 = "";
 		String lab = s.getSectionId();
 		if(likeLabMap.containsKey(lab)) {
 			lab = likeLabMap.get(lab);
@@ -132,18 +128,20 @@ public class SamplePrintController extends BaseAuditController {
 					String psampleno = pinfo.getSampleNo();
 					boolean isHis = false;
 					List<TestResult> his = hisTestMap.get(psampleno);
-					for (TestResult test: his) {
-						String testid = test.getTestId();
-						Set<String> sameTests = util.getKeySet(testid);
-						sameTests.add(testid);
-						for (String id : sameTests) {
-							if (testIdSet.contains(id)) {
-								isHis = true;
+					if(his != null) {
+						for (TestResult test: his) {
+							String testid = test.getTestId();
+							Set<String> sameTests = util.getKeySet(testid);
+							sameTests.add(testid);
+							for (String id : sameTests) {
+								if (testIdSet.contains(id)) {
+									isHis = true;
+									break;
+								}
+							}
+							if (isHis) {
 								break;
 							}
-						}
-						if (isHis) {
-							break;
 						}
 					}
 					Date preceivetime = null;
@@ -159,14 +157,6 @@ public class SamplePrintController extends BaseAuditController {
 							rmap = resultMap1;
 							hisTitle1 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
 							break;
-						case 1:
-							rmap = resultMap2;
-							hisTitle2 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
-							break;
-						case 2:
-							rmap = resultMap3;
-							hisTitle3 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
-							break;
 						}
 						for (TestResult tr : hisTestMap.get(psampleno)) {
 							rmap.put(tr.getTestId(), tr);
@@ -178,8 +168,6 @@ public class SamplePrintController extends BaseAuditController {
 		}
 		
 		info.put("hisTitle1", hisTitle1);
-		info.put("hisTitle2", hisTitle2);
-		info.put("hisTitle3", hisTitle3);
 		
 		JSONArray result = new JSONArray();
 		for(int i = 1; i<=list.size(); i++) {
@@ -191,12 +179,8 @@ public class SamplePrintController extends BaseAuditController {
 			o.put("num", i);
 			o.put("name", idMap.get(re.getTestId()).getName());
 			o.put("last","&nbsp;");
-			o.put("last1","&nbsp;");
-			o.put("last2","&nbsp;");
 			o.put("result", re.getTestResult());
 			o.put("lastflag","&nbsp;");
-			o.put("lastflag1","&nbsp;");
-			o.put("lastflag2","&nbsp;");
 			o.put("resultflag", "&nbsp;");
 			String lo = re.getRefLo();
 			String hi = re.getRefHi();
@@ -226,33 +210,9 @@ public class SamplePrintController extends BaseAuditController {
 							}
 						}
 					}
-					if(o.get("last1").equals("&nbsp;")) {
-						if(resultMap2.size() != 0 && resultMap2.containsKey(tid)) {
-							o.put("last1", resultMap2.get(tid).getTestResult());
-							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
-								if(resultMap2.get(tid).getResultFlag().charAt(0) == 'C') {
-									o.put("lastflag1", "↓");
-								} else if(resultMap2.get(tid).getResultFlag().charAt(0) == 'B') {
-									o.put("lastflag1", "↑");
-								}
-							}
-						}
-					}
-					if(o.get("last2").equals("&nbsp;")) {
-						if(resultMap3.size() != 0 && resultMap3.containsKey(tid)) {
-							o.put("last2", resultMap3.get(tid).getTestResult());
-							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
-								if(resultMap3.get(tid).getResultFlag().charAt(0) == 'C') {
-									o.put("lastflag2", "↓");
-								} else if(resultMap3.get(tid).getResultFlag().charAt(0) == 'B') {
-									o.put("lastflag2", "↑");
-								}
-							}
-						}
-					}
 				}
 			}
-			o.put("unit", re.getUnit());
+			o.put("unit", re.getUnit() == null ? "" : re.getUnit());
 			result.put(o);
 		}
 		info.put("testresult", result);

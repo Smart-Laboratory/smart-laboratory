@@ -42,7 +42,7 @@ public class RMIServiceImpl implements RMIService {
 
 	public List<FormulaItem> getFormulaItem(String labdepartment) {
 		String sql = "select c.formulatype, c.testid, c.sampletype, c.formuladescribe, c.formula, " +
-				"c.formulaitem, c.excludeitem, t.isprint from l_calculateformula c, l_testdescribe t where c.testid=t.testid and t.labdepartment like '%" + labdepartment + "%'";
+				"c.formulaitem, c.excludeitem, t.isprint from l_calculateformula c, l_testdescribe t where c.testid=t.testid and t.labdepartment like '%" + labdepartment + "%' and t.testid!='4831'";
 		return jdbcTemplate.query(sql, new RowMapper<FormulaItem>() {
 
 			public FormulaItem mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -181,12 +181,13 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<String> getProfileJYZ(String profileName, String deviceId) {
+		String time = Constants.DF3.format(new Date());
 		if (StringUtils.isEmpty(deviceId)) {
-			String sql = "select JYZ from l_profiletest where PROFILENAME=?";
-			return jdbcTemplate.queryForList(sql, new Object[] { profileName }, String.class);
+			String sql = "select JYZ from l_profiletest where PROFILENAME=? and JYZTIME>=(?,'yyyyMMdd')";
+			return jdbcTemplate.queryForList(sql, new Object[] { profileName, time }, String.class);
 		} else {
-			String sql = "select JYZ from l_profiletest where PROFILENAME=? and DEVICEID=?";
-			return jdbcTemplate.queryForList(sql, new Object[] { profileName, deviceId }, String.class);
+			String sql = "select JYZ from l_profiletest where PROFILENAME=? and DEVICEID=? and JYZTIME>=(?,'yyyyMMdd')";
+			return jdbcTemplate.queryForList(sql, new Object[] { profileName, deviceId, time }, String.class);
 		}
 	}
 
