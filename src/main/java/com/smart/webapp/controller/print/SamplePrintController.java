@@ -132,6 +132,8 @@ public class SamplePrintController extends BaseAuditController {
 					String psampleno = pinfo.getSampleNo();
 					boolean isHis = false;
 					List<TestResult> his = hisTestMap.get(psampleno);
+					if(his==null)
+						continue;
 					for (TestResult test: his) {
 						String testid = test.getTestId();
 						Set<String> sameTests = util.getKeySet(testid);

@@ -90,7 +90,7 @@ $(function() {
 	});
 	
 	$("#stuPb").click(function() {
-		window.location.href="../pb/sxgroupPb?view=1&date=" + $("#from").val()+"&section="+$("#section").val();
+		window.location.href="../pb/sxgroupPbcx?date=" + $("#from").val()+"&section="+$("#section").val();
 	});
 	
 	

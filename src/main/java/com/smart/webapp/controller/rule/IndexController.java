@@ -70,7 +70,7 @@ public class IndexController {
 		index.setModifyTime(date);	
 		index.setCreateTime(date);
 		
-		System.out.println(index.getIndexId());
+//		System.out.println(index.getIndexId());
 		
 		try {
 			index = indexManager.save(index);

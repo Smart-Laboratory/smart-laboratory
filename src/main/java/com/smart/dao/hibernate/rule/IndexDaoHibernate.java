@@ -50,7 +50,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexs(String indexName) {
-		List<Index> indexs = getSession().createQuery("from Index where name like '" + indexName + "%' order by name,sampleFrom").list();
+		List<Index> indexs = getSession().createQuery("from Index where name like '" + indexName + "%'  or english like '"+indexName+"%' order by name,sampleFrom").list();
 		return indexs;
 	}
 

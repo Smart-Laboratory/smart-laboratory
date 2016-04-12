@@ -90,12 +90,15 @@ public class PbcxController {
 		
 		if(yearAndMonth != null){
 			calendar.set(Calendar.YEAR, Integer.parseInt(yearAndMonth.substring(0,4)));
-			calendar.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.substring(5,7))-1);
+			month=Integer.parseInt(yearAndMonth.split("-")[1])-1;
+			calendar.set(Calendar.MONTH, month);
+			System.out.println(calendar.get(Calendar.MONTH));
 			year = calendar.get(Calendar.YEAR);
-			month = calendar.get(Calendar.MONTH)+1;
+			month = month+1;
 		}
 		String tomonth = year + "-" + (month<10 ? "0" + month : month);		
 		List<WInfo> wiList = wInfoManager.getBySection(section, type);
+		System.out.println(tomonth+"size="+wiList.size());
 		if(wiList==null || wiList.size() == 0) {
 			return new ModelAndView().addObject("size", 0).addObject("date", tomonth);
 		}

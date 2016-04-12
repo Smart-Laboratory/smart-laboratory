@@ -54,6 +54,8 @@ public class Index extends BaseObject implements Serializable {
 	private String knowledgename;
 	private int isprint;
 	private String printord;
+	
+	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 	
 	public Index() {
@@ -294,6 +296,16 @@ public class Index extends BaseObject implements Serializable {
 		this.item = item;
 	}
 	
+	@Column
+	public String getGuide() {
+		return guide;
+	}
+
+	public void setGuide(String guide) {
+		this.guide = guide;
+	}
+	
+	
 	@Transient
 	public int getRuleCount() {
 		HashMap<Long, Rule> map = new HashMap<Long, Rule>();
@@ -305,8 +317,10 @@ public class Index extends BaseObject implements Serializable {
 			}
 		}
 		return map.size();
+		
 	}
 	
+
 	@Transient
 	public int getAuditRuleCount() {
 		HashMap<Long, Rule> map = new HashMap<Long, Rule>();

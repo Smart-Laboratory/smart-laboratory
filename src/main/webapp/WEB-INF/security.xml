@@ -17,7 +17,8 @@
         <intercept-url pattern="/app/updatePassword*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
         <intercept-url pattern="/app/signup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
         <intercept-url pattern="/app/pb/pbcx*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
-        <intercept-url pattern="/app/pb/sxgroupPb*" access="ROLE_ADMIN,ROLE_WORKER"/>
+        <intercept-url pattern="/app/pb/sxgroupPbcx*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
+        <intercept-url pattern="/app/pb/sxcx*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/pb/grcx/ajax/getData*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
         <intercept-url pattern="/app/pb/grcx/ajax/getWInfo*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/> 
         <intercept-url pattern="/app/pb/grcx*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>

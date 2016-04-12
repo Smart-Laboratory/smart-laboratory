@@ -74,7 +74,7 @@ public class SxPbController {
 			SxArrange sxArrange = null;
 			
 			if(!sxMap.isEmpty() && sxMap.containsKey(nameweek)){
-				System.out.println("+++++++++++++"+nameweek);
+//				System.out.println("+++++++++++++"+nameweek);
 				sxArrange = sxMap.get(nameweek);
 				if(sxArrange.getSection().equals(s.length<4?"":s[3]))
 					continue;
@@ -222,7 +222,7 @@ public class SxPbController {
 		List<Map<String, Object>> datarows = new ArrayList<Map<String, Object>>();
 		Map<String, Object> datarow = new HashMap<String, Object>();
 		for(Map.Entry<String, Integer> a : countMap.entrySet()){
-			System.out.print(a.getKey()+a.getValue());
+//			System.out.print(a.getKey()+a.getValue());
 			datarow.put(idMap.get(a.getKey())+"", a.getValue());
 		}
 		datarows.add(datarow);

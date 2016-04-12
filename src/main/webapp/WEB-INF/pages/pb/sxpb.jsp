@@ -68,6 +68,7 @@ tr:hover{
 <input id="month" value="${month }" type="hidden"/>
 <input id="page" value="${page }" type="hidden"/>
 <input id="pages" value="${pages }" type="hidden"/>
+<input id="week" value="${week }" type="hidden"/>
 
 
 		<div class="form-inline" style="width:1024x;">

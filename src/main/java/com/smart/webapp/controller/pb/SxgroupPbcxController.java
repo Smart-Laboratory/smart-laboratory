@@ -24,19 +24,16 @@ import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
 import com.smart.model.pb.WInfo;
-import com.smart.model.user.User;
 import com.smart.service.ArrangeManager;
-import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
-import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
 @Controller
-@RequestMapping("/pb/sxgroupPb*")
-public class SxgroupPbController {
+@RequestMapping("/pb/sxgroupPbcx*")
+public class SxgroupPbcxController {
 
 	@Autowired
 	private WInfoManager wInfoManager;
@@ -46,9 +43,6 @@ public class SxgroupPbController {
 	
 	@Autowired
 	private ShiftManager shiftManager;
-	
-	@Autowired
-	private UserManager userManager;
 	
 	@Autowired
 	private RMIService rmiService;
@@ -70,21 +64,7 @@ public class SxgroupPbController {
         SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
 		
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
-		String department = user.getPbsection();
-		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
-		if(section==null && user.getLastLab() != null) {
-			section = user.getLastLab();
-		}
-		if (department != null) {
-			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
-				if(section==null || section.isEmpty())
-					section = s;
-			}
-		}
 		if(section == null || section.isEmpty())
 			return new ModelAndView();
 		
@@ -123,7 +103,6 @@ public class SxgroupPbController {
 		//备注
 		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
 		request.setAttribute("wshifts", wshifts);
-		request.setAttribute("departList", depart);
 		request.setAttribute("month", tomonth);
 		request.setAttribute("section", section);
 		if(bzArrange!=null && bzArrange.getShift()!=null)
@@ -138,6 +117,7 @@ public class SxgroupPbController {
 		int i=1;
 		Map<Integer, WInfo> map = new HashMap<Integer, WInfo>();
 		Map<String, Arrange> arrMap = new HashMap<String, Arrange>();
+		
 		for(int m=0;m<wiList.size();m++){
 			for(int n=m;n<wiList.size();n++){
 				if(wiList.get(n).getOrd2()<wiList.get(m).getOrd2()){
@@ -157,6 +137,7 @@ public class SxgroupPbController {
 		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2][i];
 		int state = 0;
 		List<Arrange> arrList = arrangeManager.getArrangerd(wiNames.substring(0, wiNames.length()-1), tomonth,state);
+		
 		for(Arrange arr : arrList) {
 				arrMap.put(arr.getKey2(), arr);
 		}
@@ -232,6 +213,7 @@ public class SxgroupPbController {
 				arrDate += "</tr>";
 		}
 		arrDate += "</tbody>";
+		
 		ModelAndView v = new ModelAndView();
 		v.addObject("pbdate", arrDate);
 		

@@ -87,7 +87,7 @@ public class SxcxViewController {
         date = c.getTime();
 		
         int year = Integer.parseInt(from.split("-")[0]);
-        System.out.println(wInfos.size()+":"+maxWeek);
+//        System.out.println(wInfos.size()+":"+maxWeek);
 		String[][] shifts = new String[wInfos.size()+1][maxWeek+1];
 		shifts[0][0] = "<th style='width:120px;'>"+year+"</th>";
 		for(int i=1;i<=maxWeek;i++){
@@ -107,10 +107,10 @@ public class SxcxViewController {
 		
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByWeek(year, startweek, maxWeek);
-		System.out.println(sxArranges.size());
+//		System.out.println(sxArranges.size());
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
+//				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
 				sxMap.put(a.getWorker()+":"+a.getWeek(), a);
 			}
 		}
