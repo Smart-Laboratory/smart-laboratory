@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.solr.common.params.CommonParams.EchoParamStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +20,6 @@ import com.smart.model.pb.SxArrange;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
 import com.smart.webapp.util.DataResponse;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
-import javafx.scene.chart.PieChart.Data;
 
 @Controller
 @RequestMapping("/pb/sxpb*")

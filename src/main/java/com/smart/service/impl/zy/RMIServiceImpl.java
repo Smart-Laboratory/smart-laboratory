@@ -183,10 +183,10 @@ public class RMIServiceImpl implements RMIService {
 	public List<String> getProfileJYZ(String profileName, String deviceId) {
 		String time = Constants.DF3.format(new Date());
 		if (StringUtils.isEmpty(deviceId)) {
-			String sql = "select JYZ from l_profiletest where PROFILENAME=? and JYZTIME>=(?,'yyyyMMdd')";
+			String sql = "select JYZ from l_profiletest where PROFILENAME=? and JYZTIME>=to_date(?,'yyyyMMdd')";
 			return jdbcTemplate.queryForList(sql, new Object[] { profileName, time }, String.class);
 		} else {
-			String sql = "select JYZ from l_profiletest where PROFILENAME=? and DEVICEID=? and JYZTIME>=(?,'yyyyMMdd')";
+			String sql = "select JYZ from l_profiletest where PROFILENAME=? and DEVICEID=? and JYZTIME>=to_date(?,'yyyyMMdd')";
 			return jdbcTemplate.queryForList(sql, new Object[] { profileName, deviceId, time }, String.class);
 		}
 	}
@@ -327,4 +327,26 @@ public class RMIServiceImpl implements RMIService {
 	    });
 	}
 
+	public List<SyncResult> getWSWResult(String sampleNo) {
+		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO=" + sampleNo;
+		return jdbcTemplate.query(sql, new RowMapper<SyncResult>() {
+			public SyncResult mapRow(ResultSet rs, int rowNum) throws SQLException {
+				SyncResult sr = new SyncResult();
+				sr.setSAMPLENO(rs.getString("SAMPLENO"));
+				sr.setTESTID(rs.getString("DESCRIBE") == null ? rs.getString("CHINESENAME") : rs.getString("DESCRIBE"));
+				sr.setSAMPLETYPE(rs.getString("SPECIMEN").charAt(0));
+				sr.setTESTRESULT(rs.getString("RESULT"));
+				sr.setUNIT(rs.getString("UNIT"));
+				sr.setRESULTFLAG(rs.getString("RESULTFLAG"));
+				sr.setDEVICEID(rs.getString("DEVICEID"));
+				sr.setREFLO(rs.getString("REFLOW"));
+				sr.setREFLO(rs.getString("REFHIGH"));
+				sr.setOPERATOR(rs.getString("OPERATOR") == null ? rs.getString("OPERATOR1") : rs.getString("OPERATOR"));
+				sr.setMEASURETIME(rs.getDate("DOTIME") == null ? rs.getDate("DOTIME1") : rs.getDate("DOTIME"));
+				sr.setHINT(rs.getString("HINT"));
+				//select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO like '20160412BAA%'
+				return sr;
+			}
+		});
+	}
 }

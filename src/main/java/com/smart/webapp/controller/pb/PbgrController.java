@@ -2,7 +2,6 @@ package com.smart.webapp.controller.pb;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,21 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.model.user.User;
-import com.smart.service.UserManager;
 import com.smart.model.pb.Arrange;
-import com.smart.model.pb.DayShift;
 import com.smart.model.pb.WInfo;
 import com.smart.model.pb.WorkCount;
 import com.smart.service.ArrangeManager;
-import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
 import com.smart.webapp.util.SectionUtil;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
 import com.zju.api.service.RMIService;
-
-import javafx.scene.chart.PieChart.Data;
 
 import com.smart.model.pb.Shift;
 import com.smart.service.ShiftManager;
@@ -41,9 +33,6 @@ import com.smart.service.ShiftManager;
 @Controller
 @RequestMapping("/pb/grcx*")
 public class PbgrController {
-	
-	@Autowired
-	private UserManager userManager;
 	
 	@Autowired
 	private WInfoManager wInfoManager;

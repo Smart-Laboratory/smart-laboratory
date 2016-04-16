@@ -21,6 +21,7 @@ import com.smart.Constants;
 import com.smart.check.Alarm2Check;
 import com.smart.check.Alarm3Check;
 import com.smart.check.Check;
+import com.smart.check.JyzCheck;
 import com.smart.check.CheckUtil;
 import com.smart.check.DangerCheck;
 import com.smart.check.DiffCheck;
@@ -124,6 +125,7 @@ public class AutoAuditServlet extends HttpServlet {
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
             final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
+            final Check jyzCheck = new JyzCheck(rmiService);
             final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager);
             final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
             final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
@@ -168,6 +170,9 @@ public class AutoAuditServlet extends HttpServlet {
                 			}
                     		for(int i = 0; i < 50; i++) {
                         		final int num = i;
+                        		if(num*10 > needAuditSamples.size()) {
+            	            		continue;
+            	            	}
                         		new Thread(new Runnable(){
                             		public void run() {
                         	            try {
@@ -175,7 +180,12 @@ public class AutoAuditServlet extends HttpServlet {
                         	            	List<Sample> updateSample = new ArrayList<Sample>();
                         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
                         	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
-                        	            	List<Sample> samples = needAuditSamples.subList(num*10, (num+1)*10-1);
+                        	            	int begin  = num*10;
+                                    		int end = num*10 + 9;
+                                    		if(end > needAuditSamples.size()-1) {
+                                    			end = needAuditSamples.size() - 1;
+                                    		}
+                        	            	List<Sample> samples = needAuditSamples.subList(begin, end);
                         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
                         	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
@@ -255,6 +265,10 @@ public class AutoAuditServlet extends HttpServlet {
                 	        	        			info.setNotes("");
                 	        	        			info.setRuleIds("");
                 	        	        			if(!hasRuleCheck.doCheck(info, now)) {
+                	        	        				updateSample.add(info);
+                	        	        				continue;
+                	        	        			}
+                	        	        			if(!jyzCheck.doCheck(info, now)) {
                 	        	        				updateSample.add(info);
                 	        	        				continue;
                 	        	        			}

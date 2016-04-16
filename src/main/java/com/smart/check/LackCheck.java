@@ -81,9 +81,9 @@ public class LackCheck implements Check {
 			for (String testid : testIdSet) {
 				if(!xhList.contains(testid) && !xhList2.contains(testid)) {
 					if(idMap.containsKey(testid)) {
-						lackSet.add(idMap.get(testid));
+						overSet.add(idMap.get(testid));
 					} else {
-						lackSet.add(testid);
+						overSet.add(testid);
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 $(function(){
-	$.get("../print/sampleData",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hasLast").val()}, function(data) {
+	$.get("../print/sampleData",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hasLast").val(), type:$("#type").val()}, function(data) {
 		data = jQuery.parseJSON(data);
 		$("#blh").html(data.blh);
 		$("#pName").html(data.pName);
@@ -26,22 +26,6 @@ $(function(){
 			$("#pBed").css("display","none");
 		}
 		$("#examinaim").html(data.examinaim);
-		
-		if(data.hisTitle1 != "") {
-			$("#hisTitle1").html(data.hisTitle1);
-		}
-		for (var i=0;i<data.testresult.length;i++) {
-			var s =  "<div style='height:20px;margin-left:10px;width:100%;'>";
-			s += "<div style='float:left;width:5%;'>" + data.testresult[i].num + "</div>";
-			s += "<div style='float:left;width:35%;'>" + data.testresult[i].name + "</div>";
-			s += "<div style='float:left;width:10%;'>" + data.testresult[i].result + "</div>";
-			s += "<div style='float:left;width:5%;'>" + data.testresult[i].resultflag + "</div>";
-			s += "<div style='float:left;width:10%;'>" + data.testresult[i].last + "</div>";
-			s += "<div style='float:left;width:5%;'>" + data.testresult[i].lastflag + "</div>";
-			s += "<div style='float:left;width:20%;text-align:center;'>" + data.testresult[i].scope + "</div>";
-			s += "<div style='float:left;width:10%;text-align:center;'>" + data.testresult[i].unit + "</div>";
-			s += "</div>";
-			$("#resultDiv").append(s);
-		}
+		$("#resultDiv").html(data.html);
 	});
 });

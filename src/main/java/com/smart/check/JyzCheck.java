@@ -47,6 +47,7 @@ public class JyzCheck implements Check {
 		if (!result) {
 			// -----------------------------------
 			info.setAuditStatus(UNPASS);
+			info.setAuditMark(LACK_MARK);
 			info.setNotes(LACK_CHECKER_ERROR);
 			// -----------------------------------
 		}

@@ -494,7 +494,7 @@ public class PatientListController extends BaseAuditController {
 
 		List<Sample> list = new ArrayList<Sample>();
 		if (select == 1) {
-			list = sampleManager.getHistorySample(text,text,text);
+			list = sampleManager.getHistorySample(text,text,"");
 		} else if (select==2 && text != null && from != null && to != null) {
 			list = sampleManager.getSampleByPatientName(from, to, text);
 		} else if (select==3) {

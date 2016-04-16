@@ -302,11 +302,11 @@ $(function(){
 		$('#printFrame').empty();
 		var id = $("#hiddenDocId").val();
 		var sample = $("#hiddenSampleNo").val();
+		var last = 0;
 		if ($("#hisLastResult").val() == 1) {
-			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId="+id+"&sampleNo="+sample+"&last=1\" />")
-		} else {
-			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId="+id+"&sampleNo="+sample+"&last=0\" />")
+			last = 1;
 		}
+		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>")
 		$("#auditPrint").dialog("open");
 		$("#iframe_print").height(450);
 		//alert($("#chartPanel").height());

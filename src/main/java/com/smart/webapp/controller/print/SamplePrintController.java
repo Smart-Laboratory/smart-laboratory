@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +25,7 @@ import com.smart.model.lis.TestResult;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.zju.api.model.SyncResult;
 
 @Controller
 @RequestMapping("/print*")
@@ -40,18 +40,35 @@ public class SamplePrintController extends BaseAuditController {
 		return new ModelAndView("print/sample");
 	}
 	
+	//打印类型：1-单栏正常；2-双栏正常；3-乙肝MYC；4-微生物培养和鉴定；5-微生物药敏
 	@RequestMapping(value = "/sampleData*", method = RequestMethod.GET)
 	public String printData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String sampleno = request.getParameter("sampleno");
 		int hasLast = Integer.parseInt(request.getParameter("haslast"));
+		int type = 1;
 		JSONObject info = new JSONObject();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		Sample s = sampleManager.getBySampleNo(sampleno);
 		Patient patient = patientManager.getByBlh(s.getPatientblh());
 		Process process = processManager.getBySampleId(s.getId());
 		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
-		
+		List<SyncResult> wswlist = null;
+		if(sampleno.substring(8, 11).equals("BAA")) {
+			wswlist = rmiService.getWSWResult(s.getSampleNo());
+			if(wswlist.size()>1) {
+				type = 5;
+			} else {
+				type = 4;
+			}
+		} else {
+			if(sampleno.substring(8, 11).equals("MYC")) {
+				type = 3;
+			}
+			if(list.size() > 22) {
+				type = 2;
+			}
+		}
 		info.put("blh", patient.getBlh());
 		info.put("pName", patient.getPatientName());
 		info.put("sex", patient.getSexValue());
@@ -83,14 +100,13 @@ public class SamplePrintController extends BaseAuditController {
 		info.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
 		info.put("examinaim", s.getInspectionName());
 		info.put("date", sampleno.substring(0, 4) + "年" + sampleno.substring(4, 6) + "月" + sampleno.substring(6, 8) + "日");
-		
 		Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
 		String hisTitle1 = "";
 		String lab = s.getSectionId();
 		if(likeLabMap.containsKey(lab)) {
 			lab = likeLabMap.get(lab);
 		}
-		if(hasLast == 1) {
+		if(hasLast == 1 && type<4) {
 			List<Sample> history = sampleManager.getHistorySample(s.getPatientId(), s.getPatientblh(), lab);
 			String hisSampleId = "";
 			String hisSampleNo = "";
@@ -166,58 +182,272 @@ public class SamplePrintController extends BaseAuditController {
 				}
 			}
 		}
-		
-		info.put("hisTitle1", hisTitle1);
-		
-		JSONArray result = new JSONArray();
-		for(int i = 1; i<=list.size(); i++) {
-			TestResult re = list.get(i-1);
-			String testId = re.getTestId();
-			Set<String> sameTests = util.getKeySet(testId);
-			sameTests.add(testId);
-			JSONObject o = new JSONObject();
-			o.put("num", i);
-			o.put("name", idMap.get(re.getTestId()).getName());
-			o.put("last","&nbsp;");
-			o.put("result", re.getTestResult());
-			o.put("lastflag","&nbsp;");
-			o.put("resultflag", "&nbsp;");
-			String lo = re.getRefLo();
-			String hi = re.getRefHi();
-			if (lo != null && hi != null) {
-				o.put("scope", lo + "-" + hi);
+		String html = "";
+		if(type > 3) {
+			html = getWSWHTML(type,wswlist);
+		} else {
+			html = getHTML(type,hasLast,list,hisTitle1,resultMap1);
+		}
+		info.put("html", html);
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(info.toString());
+		return null;
+	}
+
+	private String getHTML(int type, int hasLast, List<TestResult> list, String hisTitle,
+			Map<String, TestResult> resultMap) {
+		StringBuilder html = new StringBuilder("");
+		if(type == 3) {
+			html.append("<div style='height:25px;margin-left:2%;width:96%;font-size:14px;'><b>");
+			html.append("<div style='float:left;width:5%;'>No.</div>");
+			html.append("<div style='float:left;width:30%;'>项目</div>");
+			html.append("<div style='float:left;width:15%;'>当次结果</div>");
+			html.append("<div style='float:left;width:15%;'>");
+			if(hisTitle.isEmpty()) {
+				html.append("上次结果");
 			} else {
-				o.put("scope", "");
+				html.append(hisTitle);
 			}
-			if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
-				if(re.getResultFlag().charAt(0) == 'C') {
-					o.put("resultflag", "↓");
-				} else if(re.getResultFlag().charAt(0) == 'B') {
-					o.put("resultflag", "↑");
+			html.append("</div>");
+			html.append("<div style='float:left;width:10%;text-align:center;'>单位</div>");
+			html.append("<div style='float:left;width:25%;text-align:center;'>注释</div>");
+			html.append("</b></div>");
+			for(int i = 1; i<=list.size(); i++) {
+				TestResult re = list.get(i-1); 
+				String testId = re.getTestId();
+				Set<String> sameTests = util.getKeySet(testId);
+				sameTests.add(testId);
+				if(i == 1) {
+					html.append("<div style='height:25px;margin-left:2%;width:96%;padding-top:5px;border-top:2px solid #000000;'>");
+				} else {
+					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
-			}
-			if(hasLast == 1) {
-				for(String tid : sameTests) {
-					if(o.get("last").equals("&nbsp;")) {
-						if(resultMap1.size() != 0 && resultMap1.containsKey(tid)) {
-							o.put("last", resultMap1.get(tid).getTestResult());
+				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
+				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
+				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
+				} else {
+					html.append("<div style='float:left;width:12%;'>" + re.getTestResult() + "</div>");
+				}
+				String resultflag = "&nbsp;";
+				String last = "&nbsp;";
+				String lastflag = "&nbsp;";
+				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+					if(re.getResultFlag().charAt(0) == 'C') {
+						resultflag = "↓";
+					} else if(re.getResultFlag().charAt(0) == 'B') {
+						resultflag = "↑";
+					}
+				}
+				html.append("<div style='float:left;width:3%;'>" + resultflag + "</div>");
+				if(hasLast == 1) {
+					for(String tid : sameTests) {
+						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
+							last = resultMap.get(tid).getTestResult();
 							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
-								if(resultMap1.get(tid).getResultFlag().charAt(0) == 'C') {
-									o.put("lastflag", "↓");
-								} else if(resultMap1.get(tid).getResultFlag().charAt(0) == 'B') {
-									o.put("lastflag", "↑");
+								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
+									lastflag = "↓";
+								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
+									lastflag = "↑";
 								}
 							}
 						}
 					}
 				}
+				if(last.indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + last + "</div>");
+				} else {
+					html.append("<div style='float:left;width:12%;'>" + last + "</div>");
+				}
+				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
+				html.append("<div style='float:left;width:10%;text-align:center;'>" + re.getUnit() + "</div>");
+				html.append("<div style='float:left;width:25%;text-align:center;'>" + idMap.get(re.getTestId()).getDescription() + "</div>");
+				html.append("</div>");
 			}
-			o.put("unit", re.getUnit() == null ? "" : re.getUnit());
-			result.put(o);
+		} else if(type == 2) {
+			html.append("<div style='height:25px;margin-left:2%;width:96%;font-size:12px;'><b>");
+			html.append("<div style='float:left;width:17%;'>项目</div>");
+			html.append("<div style='float:left;width:8%;'>结果</div>");
+			html.append("<div style='float:left;width:8%;'>");
+			if(hisTitle.isEmpty()) {
+				html.append("历史");
+			} else {
+				html.append(hisTitle);
+			}
+			html.append("</div>");
+			html.append("<div style='float:left;width:12%;text-align:center;'>参考范围</div>");
+			html.append("<div style='float:left;width:5%;text-align:center;'>单位</div>");
+			html.append("<div style='float:left;width:17%;border-left:1px solid #000000;'>项目</div>");
+			html.append("<div style='float:left;width:8%;'>结果</div>");
+			html.append("<div style='float:left;width:8%;'>");
+			if(hisTitle.isEmpty()) {
+				html.append("历史");
+			} else {
+				html.append(hisTitle);
+			}
+			html.append("</div>");
+			html.append("<div style='float:left;width:12%;text-align:center;'>参考范围</div>");
+			html.append("<div style='float:left;width:5%;'>单位</div>");
+			html.append("</b></div>");
+			int num = 0;
+			if(list.size() % 2 == 0) {
+				num = list.size()/2;
+			} else {
+				num = list.size()/2 + 1;
+			}
+			for(int i = 1; i<=list.size(); i++) {
+				TestResult re = list.get(i-1); 
+				String testId = re.getTestId();
+				Set<String> sameTests = util.getKeySet(testId);
+				sameTests.add(testId);
+				if(i == 1) {
+					html.append("<div style='float:left;width:50%;border-top:2px solid #000000;font-size:10px;'>");
+				}
+				if(i == num + 1) {
+					html.append("<div style='float:left;width:50%;border-left:1px solid #000000;border-top:2px solid #000000;font-size:10px;'>");
+				}
+				html.append("<div style='float:left;width:100%;'>");
+				html.append("<div style='float:left;width:34%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
+				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:13%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
+				} else {
+					html.append("<div style='float:left;width:13%;'>" + re.getTestResult() + "</div>");
+				}
+				String lo = re.getRefLo();
+				String hi = re.getRefHi();
+				String scope = "&nbsp;";
+				String resultflag = "&nbsp;";
+				String last = "&nbsp;";
+				String lastflag = "&nbsp;";
+				if (lo != null && hi != null && !lo.isEmpty() && !hi.isEmpty()) {
+					scope = lo + "-" + hi;
+				}
+				if(lo != null && !lo.isEmpty() && (hi.isEmpty() || hi == null)) {
+					scope = lo;
+				}
+				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+					if(re.getResultFlag().charAt(0) == 'C') {
+						resultflag = "↓";
+					} else if(re.getResultFlag().charAt(0) == 'B') {
+						resultflag = "↑";
+					}
+				}
+				html.append("<div style='float:left;width:3%;'>" + resultflag + "</div>");
+				if(hasLast == 1) {
+					for(String tid : sameTests) {
+						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
+							last = resultMap.get(tid).getTestResult();
+							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
+									lastflag = "↓";
+								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
+									lastflag = "↑";
+								}
+							}
+						}
+					}
+				}
+				if(last.indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:13%;background:#C0C0C0;'>" + last + "</div>");
+				} else {
+					html.append("<div style='float:left;width:13%;'>" + last + "</div>");
+				}
+				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
+				html.append("<div style='float:left;width:24%;text-align:center;'>" + scope + "</div>");
+				html.append("<div style='float:left;width:10%;'>" + re.getUnit() + "</div>");
+				html.append("</div>");
+				
+				if(i == num || i == list.size()) {
+					html.append("</div>");
+				}
+			}
+		} else {
+			html.append("<div style='height:25px;margin-left:2%;width:96%;font-size:14px;'><b>");
+			html.append("<div style='float:left;width:5%;'>No.</div>");
+			html.append("<div style='float:left;width:35%;'>项目</div>");
+			html.append("<div style='float:left;width:15%;'>当次结果</div>");
+			html.append("<div style='float:left;width:15%;'>");
+			if(hisTitle.isEmpty()) {
+				html.append("上次结果");
+			} else {
+				html.append(hisTitle);
+			}
+			html.append("</div>");
+			html.append("<div style='float:left;width:20%;text-align:center;'>参考范围</div>");
+			html.append("<div style='float:left;width:10%;text-align:center;'>单位</div>");
+			html.append("</b></div>");
+			for(int i = 1; i<=list.size(); i++) {
+				TestResult re = list.get(i-1); 
+				String testId = re.getTestId();
+				Set<String> sameTests = util.getKeySet(testId);
+				sameTests.add(testId);
+				if(i == 1) {
+					html.append("<div style='height:25px;margin-left:2%;width:96%;padding-top:5px;border-top:2px solid #000000;'>");
+				} else {
+					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
+				}
+				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
+				html.append("<div style='float:left;width:35%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
+				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
+				} else {
+					html.append("<div style='float:left;width:12%;'>" + re.getTestResult() + "</div>");
+				}
+				String lo = re.getRefLo();
+				String hi = re.getRefHi();
+				String scope = "&nbsp;";
+				String resultflag = "&nbsp;";
+				String last = "&nbsp;";
+				String lastflag = "&nbsp;";
+				if (lo != null && hi != null && !lo.isEmpty() && !hi.isEmpty()) {
+					scope = lo + "-" + hi;
+				}
+				if(lo != null && !lo.isEmpty() && (hi.isEmpty() || hi == null)) {
+					scope = lo;
+				}
+				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+					if(re.getResultFlag().charAt(0) == 'C') {
+						resultflag = "↓";
+					} else if(re.getResultFlag().charAt(0) == 'B') {
+						resultflag = "↑";
+					}
+				}
+				html.append("<div style='float:left;width:3%;'>" + resultflag + "</div>");
+				if(hasLast == 1) {
+					for(String tid : sameTests) {
+						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
+							last = resultMap.get(tid).getTestResult();
+							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
+									lastflag = "↓";
+								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
+									lastflag = "↑";
+								}
+							}
+						}
+					}
+				}
+				if(last.indexOf(Constants.YANG) > 0) {
+					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + last + "</div>");
+				} else {
+					html.append("<div style='float:left;width:12%;'>" + last + "</div>");
+				}
+				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
+				html.append("<div style='float:left;width:20%;text-align:center;'>" + scope + "</div>");
+				html.append("<div style='float:left;width:10%;text-align:center;'>" + re.getUnit() + "</div>");
+				html.append("</div>");
+			}
 		}
-		info.put("testresult", result);
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(info.toString());
-		return null;
+		return html.toString();
+	}
+
+	private String getWSWHTML(int type, List<SyncResult> wswlist) {
+		StringBuilder html = new StringBuilder("");
+		if(type == 4) {
+			
+		} else {
+			
+		}
+		return html.toString();
 	}
 }

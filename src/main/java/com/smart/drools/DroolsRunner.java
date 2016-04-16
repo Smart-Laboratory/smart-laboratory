@@ -108,28 +108,30 @@ public class DroolsRunner {
 						if (l_value < fenmu) {
 							fenmu = l_value;
 						}
-						if (n_value != 0) {
+						if (fenmu != 0) {
 							switch (algorithm) {
-							case 1: {
-								value = n_value - l_value;
-								break;
-							}
-							case 2: {
-								value = (n_value - l_value) / fenmu * 100;
-								break;
-							}
-							case 3: {
-								value = (n_value - l_value) / interval;
-								break;
-							}
-							case 4: {
-								value = (n_value - l_value) / n_value * 100 / interval;
-								break;
-							}
+								case 1: {
+									value = n_value - l_value;
+									break;
+								}
+								case 2: {
+									value = (n_value - l_value) / fenmu * 100;
+									break;
+								}
+								case 3: {
+									value = (n_value - l_value) / interval;
+									break;
+								}
+								case 4: {
+									value = (n_value - l_value) / fenmu * 100 / interval;
+									break;
+								}
 							}
 							if (value > refhi || value < reflo) {
 								diffRes.add(testid);
 							}
+						} else {
+							diffRes.add(testid);
 						}
 					}
 				}

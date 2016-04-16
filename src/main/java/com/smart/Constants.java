@@ -249,5 +249,12 @@ public final class Constants {
 	 * 任务管理流程——停止
 	 */
 	public final static int THREAD_STOPPED = 3;
-
+	/**
+	 * 阳性
+	 */
+	public final static String YANG = "阳性";
+	/**
+	 * 阴性
+	 */
+	public final static String YIN = "阴性";
 }

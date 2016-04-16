@@ -170,17 +170,16 @@ public class AjaxController extends BaseAuditController {
 		String html = "";
 		Sample info = sampleManager.getBySampleNo(sample);
 		String history = ylxhManager.getRelativeTest(info.getYlxh());
+		if(history == null || history.isEmpty()) {
+			return "";
+		}
 		String[] tests = history.split(",");
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		for(String s : tests) {
 			map.put(s, 0);
 		}
-		if(history == null || history.isEmpty()) {
-			return "";
-		} else {
-			history = history.substring(0, history.length()-1);
-			history = "('" + history.replaceAll(",", "','") + "')";
-		}
+		history = history.substring(0, history.length()-1);
+		history = "('" + history.replaceAll(",", "','") + "')";
 		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), info.getPatientblh(), history);
 		if(hisTests.size()>0) {
 			if (idMap.size() == 0)
