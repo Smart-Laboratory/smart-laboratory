@@ -14,8 +14,9 @@ public class ContactInfor {
 	
 	private String WORKID;
 	private String NAME;
+	private String MOBILEPHONE;
+	private String VIRTUALPHONE;
 	private String SECTION;
-	private String PHONE;
 	
 	/**
 	 * 医生工号
@@ -52,16 +53,29 @@ public class ContactInfor {
 	public void setSECTION(String sECTION) {
 		SECTION = sECTION;
 	}
-	
+
 	/**
-	 * 医生电话
+	 * 医生长号
 	 */
-	@Column
-	public String getPHONE() {
-		return PHONE;
+	@Column(name = "MOBILE_PHONE")
+	public String getMOBILEPHONE() {
+		return MOBILEPHONE;
+	}
+
+	public void setMOBILEPHONE(String mOBILEPHONE) {
+		MOBILEPHONE = mOBILEPHONE;
+	}
+
+	/**
+	 * 医生短号
+	 */
+	@Column(name = "VIRTUAL_PHONE")
+	public String getVIRTUALPHONE() {
+		return VIRTUALPHONE;
+	}
+
+	public void setVIRTUALPHONE(String vIRTUALPHONE) {
+		VIRTUALPHONE = vIRTUALPHONE;
 	}
 	
-	public void setPHONE(String pHONE) {
-		PHONE = pHONE;
-	}
 }

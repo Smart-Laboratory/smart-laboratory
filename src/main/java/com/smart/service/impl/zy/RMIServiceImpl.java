@@ -328,22 +328,23 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncResult> getWSWResult(String sampleNo) {
-		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO=" + sampleNo;
+		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
+		System.out.println(sql);
 		return jdbcTemplate.query(sql, new RowMapper<SyncResult>() {
 			public SyncResult mapRow(ResultSet rs, int rowNum) throws SQLException {
 				SyncResult sr = new SyncResult();
-				sr.setSAMPLENO(rs.getString("SAMPLENO"));
-				sr.setTESTID(rs.getString("DESCRIBE") == null ? rs.getString("CHINESENAME") : rs.getString("DESCRIBE"));
-				sr.setSAMPLETYPE(rs.getString("SPECIMEN").charAt(0));
-				sr.setTESTRESULT(rs.getString("RESULT"));
-				sr.setUNIT(rs.getString("UNIT"));
-				sr.setRESULTFLAG(rs.getString("RESULTFLAG"));
-				sr.setDEVICEID(rs.getString("DEVICEID"));
-				sr.setREFLO(rs.getString("REFLOW"));
-				sr.setREFLO(rs.getString("REFHIGH"));
-				sr.setOPERATOR(rs.getString("OPERATOR") == null ? rs.getString("OPERATOR1") : rs.getString("OPERATOR"));
-				sr.setMEASURETIME(rs.getDate("DOTIME") == null ? rs.getDate("DOTIME1") : rs.getDate("DOTIME"));
-				sr.setHINT(rs.getString("HINT"));
+				sr.setSAMPLENO(rs.getString(7));
+				sr.setTESTID(rs.getString(3) == null ? rs.getString(1) : rs.getString(3));
+				sr.setSAMPLETYPE(rs.getString(9).charAt(0));
+				sr.setTESTRESULT(rs.getString(10));
+				sr.setUNIT(rs.getString(12));
+				sr.setRESULTFLAG(rs.getString(13));
+				sr.setDEVICEID(rs.getString(14));
+				sr.setREFLO(rs.getString(15));
+				sr.setREFHI(rs.getString(16));
+				sr.setOPERATOR(rs.getString(17));
+				sr.setMEASURETIME(rs.getDate(18));
+				sr.setHINT(rs.getString(11));
 				//select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO like '20160412BAA%'
 				return sr;
 			}

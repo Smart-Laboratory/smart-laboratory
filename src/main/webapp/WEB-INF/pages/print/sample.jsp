@@ -11,19 +11,19 @@
 </head>
 
 <html>
-	<div style="float:left;width:96%;margin-left:2%;margin-top:6mm;">
-		<div style="height:13mm;width:100%;">
+	<div style="float:left;width:96%;margin-left:2%;margin-top:20px;">
+		<div style="height:50px;width:100%;">
 			<img src="../images/zy_logo.png" style="float:left;margin-left:10%;"/>
-			<b style="float:left;font-size:10px;margin-top:8mm;margin-left:5%">No:${sampleNo}</b>
+			<b style="float:left;font-size:10px;margin-top:25px;margin-left:5%">No:${sampleNo}</b>
 		</div>
 		<div style="border-top:1px solid #000000;">
-			<div style="height:7mm;margin-left:10px;width:100%;">
+			<div style="margin-left:10px;width:100%;">
 				<div style="float:left;width:10%"><fmt:message key="patientInfo.examinaim"/></div>
 				<div style="float:left;width:58%"><b id="examinaim">ceshi</b></div>
 				<div style="float:left;width:10%"><fmt:message key="sample.type"/></div>
 				<div style="float:left;width:22%"><b id="pType">naojiye</b></div>
 			</div>
-			<div style="height:7mm;margin-left:10px;width:100%;">
+			<div style="margin-left:10px;width:100%;">
 				<div style="float:left;width:10%"><fmt:message key="patientInfo.patientName"/></div>
 				<div style="float:left;width:10%"><b id="pName">ceshiyuan</b></div>
 				<div style="float:left;width:5%"><fmt:message key="patient.sex"/></div>
@@ -35,7 +35,7 @@
 				<div style="float:left;width:5%"><fmt:message key="diagnostic"/></div>
 				<div style="float:left;width:27%"><b id="diagnostic">xiaohuadao</b></div>
 			</div>
-			<div style="height:7mm;margin-left:10px;width:100%;">
+			<div style="margin-left:10px;width:100%;">
 				<div style="float:left;width:10%;" id="staymodetitle">jiuzhen</div>
 				<div style="float:left;width:23%"><b id="patientId">990190010005089661</b></div>
 				<div style="float:left;width:5%" id="staymodesection">bqu</div>
@@ -45,13 +45,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="resultDiv" style="float:left;width:96%;margin-left:2%;padding:2mm;font-size:12px;height:105mm;border-top:1px solid #000000;">
-	</div>
-	<div style="float:left;width:92%;margin-left:4%;margin-top:3mm;font-size:12px;height:65mm;">
-		<div style="float:left;width:10%;margin-left:10px;"><b><fmt:message key="sample.diagadvise"/>:</b></div>
-	</div>
-	<div style="float:left;width:92%;margin-left:4%;margin-top:2mm;font-size:12px;height:10mm;border-top:1px solid #000000;">
-		<div style="height:5mm;margin-left:10px;width:100%;">
+	<div style="float:left;width:96%;margin-left:2%;padding-top:5px;font-size:12px;border-top:1px solid #000000;">
+		<div style="margin-left:10px;width:100%;">
 			<div style="float:left;width:5%;">&nbsp;</div>
 			<div style="float:left;width:10%;"><fmt:message key="requester.name"/></div>
 			<div style="float:left;width:20%;"><b id="requester">&nbsp;</b></div>
@@ -61,7 +56,7 @@
 			<div style="float:left;width:20%;"><b id="auditor">&nbsp;</b></div>
 			<div style="float:left;width:5%;">&nbsp;</div>
 		</div>
-		<div style="height:5mm;margin-left:10px;width:100%;">
+		<div style="margin-left:10px;width:100%;">
 			<div style="float:left;width:5%;">&nbsp;</div>
 			<div style="float:left;width:10%;"><fmt:message key="tat.receive"/></div>
 			<div style="float:left;width:20%;"><b id="receivetime">&nbsp;</b></div>
@@ -72,7 +67,12 @@
 			<div style="float:left;width:5%;">&nbsp;</div>
 		</div>
 	</div>
-	<div style="float:left;width:92%;padding-top:1mm;height:5mm;font-size:10px;text-align:center;margin-left:4%;"><fmt:message key="sample.print.tip"/></div>
+	<div id="resultDiv" style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;">
+	</div>
+	<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;">
+		<div style="float:left;width:10%;margin-left:10px;"><b><fmt:message key="sample.diagadvise"/>:</b></div>
+	</div>
+	<div style="float:left;width:92%;padding-top:10px;font-size:10px;text-align:center;margin-left:4%;border-top:1px solid #000000;"><fmt:message key="sample.print.tip"/></div>
 	<input type="hidden" id="hiddenDocId" value="${docId}"/>
 	<input type="hidden" id="hiddenSampleNo" value="${sampleNo}"/>
 	<input type="hidden" id="hasLast" value="${showLast}"/>

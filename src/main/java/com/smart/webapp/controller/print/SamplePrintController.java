@@ -56,7 +56,7 @@ public class SamplePrintController extends BaseAuditController {
 		List<SyncResult> wswlist = null;
 		if(sampleno.substring(8, 11).equals("BAA")) {
 			wswlist = rmiService.getWSWResult(s.getSampleNo());
-			if(wswlist.size()>1) {
+			if(wswlist.size() > 8) {
 				type = 5;
 			} else {
 				type = 4;
@@ -65,9 +65,9 @@ public class SamplePrintController extends BaseAuditController {
 			if(sampleno.substring(8, 11).equals("MYC")) {
 				type = 3;
 			}
-			if(list.size() > 22) {
+			/*if(list.size() > 22) {
 				type = 2;
-			}
+			}*/
 		}
 		info.put("blh", patient.getBlh());
 		info.put("pName", patient.getPatientName());
@@ -92,7 +92,7 @@ public class SamplePrintController extends BaseAuditController {
 		if(idMap.size() == 0) {
 			initMap();
 		}
-		info.put("requester", process.getRequester() == null ? " " : contactMap.get(process.getRequester()).getNAME());
+		info.put("requester", process.getRequester() == null ? " " : (contactMap.containsKey(process.getRequester()) ? contactMap.get(process.getRequester()).getNAME() : process.getRequester()));
 		info.put("tester", s.getChkoper2());
 		info.put("auditor", process.getCheckoperator());
 		info.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
@@ -443,7 +443,26 @@ public class SamplePrintController extends BaseAuditController {
 
 	private String getWSWHTML(int type, List<SyncResult> wswlist) {
 		StringBuilder html = new StringBuilder("");
+		SyncResult tr = null;
 		if(type == 4) {
+			if(wswlist.size() == 1) {
+				tr = wswlist.get(0);
+				html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
+				if(tr.getRESULTFLAG().charAt(0) == 'N' || tr.getRESULTFLAG().charAt(0) == 'O') {
+					html.append("<div style='float:left;height:20px;margin-left:20%;width:60%;font-size:16px;'>" + tr.getTESTID() + "</div>");
+				} else {
+					html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + tr.getTESTID() + "</div>");
+					html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>" + tr.getHINT() + "</div>");
+				}
+			} else {
+				html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
+				for(int i=0; i<wswlist.size(); i++) {
+					tr = wswlist.get(i);
+					html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + tr.getTESTID() + "</div>");
+					html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>" + tr.getHINT() + "</div>");
+				}
+				
+			}
 			
 		} else {
 			
