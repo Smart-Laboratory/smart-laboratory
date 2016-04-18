@@ -15,8 +15,17 @@ public class DiagnosisDaoHibernate extends GenericDaoHibernate<Diagnosis, Long> 
 		super(Diagnosis.class);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Diagnosis> getByDid(String dId){
 		String hql = "from Diagnosis where descriptionId = "+dId;
 		return getSession().createQuery(hql).list();
+	}
+	@SuppressWarnings("unchecked")
+	public Diagnosis getByDiagnosisName(String dName){
+		String hql = "from Diagnosis where diagnosisName = '"+dName+"'";
+		List<Diagnosis> diagnosis = getSession().createQuery(hql).list();
+		if(diagnosis == null || diagnosis.size()<=0)
+			return null;
+		return diagnosis.get(0);
 	}
 }

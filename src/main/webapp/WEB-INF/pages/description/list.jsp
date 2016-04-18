@@ -22,7 +22,7 @@
        	$(function() {
        		var width=$("#right").width();
        		jQuery("#diagnosis").jqGrid({
-       			url:"../diagosis/getInfo",
+       			url:"../diagnosis/getInfo?id="+$("#desBag").val(),
        			datatype:"json",
        			width:width,
        			colNames:['','\u8BCA\u65AD\u540D\u79F0'],
@@ -35,7 +35,7 @@
        			pager:'#pager',
        			sortname:'id',
        			height:'100%',
-       			editurl:'../diagnosis/edit?desId='+${bag},
+       			editurl:'../diagnosis/edit?desId='+$("#desBag").val(),
        			viewrecords: true,
        			caption:'<h5><b>\u8BCA\u65AD\u4FE1\u606F</b></h5>' 
        		});
@@ -46,7 +46,7 @@
        			location.href="../description/list?bag="+v;
        		});
        		
-       		$("#bag-select").val(${category});
+       		$("#bag-select").val($("#desBag").val());
        		
        		$(".activate").click(function(name,v) {
        			var id = $(this).next().html();
@@ -76,6 +76,7 @@
 	</script>
 </head>
 <body>
+<input type="hidden" id="desBag" value="${category }" />
 <div class="col-sm-6">
 <h1><fmt:message key='des.title'/></h1>
 <div class="form-inline" style="margin-bottom: 50px;">
@@ -112,7 +113,7 @@
 </display:table>
 </div>
 
-<div id="right" class="col-sm-3">
+<div id="right" class="col-sm-3" style="margin-top:10px;">
 	<div>
 		<table id="diagnosis" class="table table-condensed table-striped"></table>
 		<div id="pager"></div>

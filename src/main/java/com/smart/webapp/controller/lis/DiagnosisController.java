@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONObject;
+import org.drools.compiler.rule.builder.dialect.java.parser.JavaParser.parExpression_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smart.model.lis.Diagnosis;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.rule.DesBag;
+import com.smart.model.rule.Description;
 import com.smart.service.lis.DiagnosisManager;
+import com.smart.service.rule.DesBagManager;
+import com.smart.service.rule.DescriptionManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -68,7 +74,7 @@ public class DiagnosisController {
 	
 	@RequestMapping(value = "/edit*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean bcedit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public boolean edit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String oper = request.getParameter("oper");
 		String id = request.getParameter("id");
 		
@@ -83,7 +89,9 @@ public class DiagnosisController {
 		Diagnosis sh = new Diagnosis();
 		if(oper.equals("add")) {
 			sh.setDescriptionId(Long.parseLong(desId));
+			String desName = desBagManager.get(Long.parseLong(desId)).getName();
 			sh.setDiagnosisName(diagnosisName);
+			sh.setKnowledgeName(desName);
 			diagnosisManager.save(sh);
 		} else if (oper.equals("edit")) {
 			sh = diagnosisManager.get(Long.parseLong(id));
@@ -94,10 +102,41 @@ public class DiagnosisController {
 		return true;
 	}
 	
-	
-	
+	@RequestMapping(value = "/getDes*", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getDes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String diagnosisName = request.getParameter("diagnosis");
+		String id = request.getParameter("id");
+		if(diagnosisName==null && id==null)
+			return null;
+		long bId=0;
+		Diagnosis diagnosis = new Diagnosis();
+		if(diagnosisName!=null){
+			diagnosis = diagnosisManager.getByDiagnosisName(diagnosisName);
+			if(diagnosis==null)
+				return null;
+			bId=diagnosis.getDescriptionId();
+		}else if(id!=null){
+			bId = Long.parseLong(id);
+			diagnosis = diagnosisManager.get(bId);
+			
+		}
+		
+		
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("disease", diagnosis.getKnowledgeName());
+		List<Description> dList = descriptionManager.getDescriptionsByBagID(bId);
+		
+		map.put("dlist", dList);
+		
+		return map;
+	}
 	
 	
 	@Autowired
 	private DiagnosisManager diagnosisManager;
+	@Autowired
+	private DesBagManager desBagManager;
+	@Autowired
+	private DescriptionManager descriptionManager;
 }

@@ -51,6 +51,7 @@
 			<div class="col-sm-12 pinfo">
 				<div id="pDiaHtml" class="col-sm-5 pinfo">
 					<span class='col-sm-3'><fmt:message key="diagnostic" />:</span><b id="diagnostic"></b>
+					<input type="hidden" id="diagnosisValue" /> 
 				</div>
 				<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
 					<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>

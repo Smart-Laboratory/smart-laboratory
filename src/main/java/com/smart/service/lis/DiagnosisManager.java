@@ -8,4 +8,6 @@ import com.smart.service.GenericManager;
 public interface DiagnosisManager extends GenericManager<Diagnosis, Long> {
 
 	List<Diagnosis> getByDid(String dId);
+	
+	Diagnosis getByDiagnosisName(String dName);
 }

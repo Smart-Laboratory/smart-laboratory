@@ -141,7 +141,7 @@
         	} else {
         		$("#diagnostic").html("<a href='#' onclick='javascript:show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
         	}
-        	
+        	$("#diagnosisValue").val(data.diagnostic);
         	var reason = data.passReason;
         	$("#passreason").html(reason);
         	if (reason != null) {

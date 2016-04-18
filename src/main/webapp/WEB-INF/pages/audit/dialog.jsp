@@ -143,28 +143,17 @@
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
 		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
-		<div>
+		<div class="form-inline">
 			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
-			<input type="text" id="diseaseSelect" placeholder="123"/>
-			<label for="disease"><fmt:message key='des.disease' /></label>
+			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='szm'/>"/>
+			<label for="disease" style="margin-left:20px;"><fmt:message key='des.disease' /></label>
 			<span type="text" id="disease" />
 		</div>
 		<div id="descriptionDiv">
-			<div class="checkbox">
- 		 		<label>
-    				<input type="checkbox" value="">
-    					Option one is this and that&mdash;be sure to include why it's great
- 		 		</label>
-				</div>
-			<div class="checkbox disabled">
-  				<label>
-    				<input type="checkbox" value="" disabled>
-    				Option two is disabled
-  				</label>
-			</div>
+			
 		</div>
 		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
-		<textarea id="noteText" rows="3" style="width:600px;"></textarea>
+		<textarea id="noteText" rows="3" class="form-control" style="width:600px;"></textarea>
 		
 	</div>
 	

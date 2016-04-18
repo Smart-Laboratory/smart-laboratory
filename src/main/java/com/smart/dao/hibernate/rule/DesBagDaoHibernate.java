@@ -45,6 +45,6 @@ public class DesBagDaoHibernate extends GenericDaoHibernate<DesBag, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<DesBag> getBag(String name) {
-		return getSession().createQuery("from DesBag where name = '"+name+"'").list();
+		return getSession().createQuery("from DesBag where name like '"+name+"%'").list();
 	}
 }

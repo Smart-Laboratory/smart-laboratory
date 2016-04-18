@@ -95,8 +95,8 @@
     <div class="control-group col-sm-8">
     	<label class="control-label" ></label>
  		<div class="controls">
-        	<input type="submit" class="btn" style="width:80px;" name="save"  value="<fmt:message key="button.save"/>"/>
-        	<input type="button" class="btn" style="width:80px;" name="cancel" onclick="location.href='<c:url value="/index/list"/>'" value="<fmt:message key="button.cancel"/>"/>
+        	<input type="submit" class="btn btn-success" style="width:80px;" name="save"  value="<fmt:message key="button.save"/>"/>
+        	<input type="button" class="btn btn-info" style="width:80px;" name="cancel" onclick="location.href='<c:url value="/index/list"/>'" value="<fmt:message key="button.cancel"/>"/>
    		</div>
     </div>
 </form:form>

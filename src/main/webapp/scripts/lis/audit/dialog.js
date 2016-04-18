@@ -1,3 +1,6 @@
+function ddd(item){
+	$("#noteText").html($(item).html());
+};
 $(function(){
 	$("#opStatusDialog").dialog({
 		autoOpen: false,
@@ -47,8 +50,23 @@ $(function(){
 	    	"取消":function() {
 	    		$(this).dialog("close");
 	    	}
-	    }
+	    },
+	    open:function(){
+	    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val()},function(data){
+	    		$("#disease").html(data.disease);
+	    		var dlist = data.dlist;
+	    		$("#descriptionDiv").html("");
+	    		for(var i=0; i<dlist.length; i++){
+	    			var item = dlist[i];
+	    			$("#descriptionDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=ddd(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+                }
+	    	});
+	    },
+	    
+	
 	});
+	
+	
 	
 	$("#tatDialog").dialog({
 		autoOpen: false,
@@ -271,6 +289,45 @@ $(function(){
 	    width: 400
 	});
 	
+	$("#diseaseSelect").autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+            	url: "../ajax/description/searchBag",
+                dataType: "json",
+                data: {
+                	maxRows : 12,
+                    name : request.term
+                },
+                success: function( data ) {
+  					
+                	response( $.map( data, function( item ) {
+                        return {
+                            label: item.id + " : "  + item.name,
+                            value: item.name,
+                            id : item.id
+                        }
+                    }));
+
+                    $("#diseaseSelect").removeClass("ui-autocomplete-loading");
+                }
+            });
+        },
+        minLength: 1,
+        delay : 500,
+        select : function(event, ui) {
+        	$.get("../diagnosis/getDes",{id:ui.item.id},function(data){
+	    		$("#disease").html(data.disease);
+	    		var dlist = data.dlist;
+	    		$("#descriptionDiv").html("");
+	    		for(var i=0; i<dlist.length; i++){
+	    			var item = dlist[i];
+	    			$("#descriptionDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=ddd(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+                }
+	    	});
+        	
+        }
+	});
+	
 	$("#addCancel").click(function() {
 		$("#addResultDialog").dialog("close");
 	});
@@ -348,6 +405,8 @@ $(function(){
         	
         }
 	});
+	
+	
 	
 	$("#testDelete").click(function() {
 		var ii = jQuery("#rowed3").jqGrid('getGridParam','selrow');

@@ -58,13 +58,13 @@
         </div>
     </div>
     <div class="control-group col-sm-8">
-        <appfuse:label styleClass="control-label" key="index.description"/>
+        <appfuse:label styleClass="control-label" key="des.description"/>
         <div class="controls">
-        	<form:input path="description" id="description" cssClass="text form-control input-group-sm" />
+        	<form:textarea path="description" id="description" rows="3" cols="20" cssClass="text form-control input-group-sm" />
         </div>
     </div>
     <div class="control-group col-sm-8">
-        <appfuse:label styleClass="control-label" key="index.type"/>
+        <appfuse:label styleClass="control-label" key="des.type"/>
         <div class="controls">
         	<form:select path="type" id="type" cssClass="selects form-control input-group-sm">
 	        	<form:options items="${typeList}"  />
