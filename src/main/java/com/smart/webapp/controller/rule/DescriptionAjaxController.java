@@ -1,6 +1,8 @@
 package com.smart.webapp.controller.rule;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.DesBag;
+import com.smart.model.rule.Description;
+import com.smart.model.rule.Index;
+import com.smart.model.rule.Result;
+import com.smart.model.rule.Rule;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.rule.BagManager;
 import com.smart.service.rule.DesBagManager;
+import com.smart.service.rule.DescriptionManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.ResultManager;
 import com.smart.service.rule.RuleManager;
@@ -118,7 +125,33 @@ public class DescriptionAjaxController {
 		isChanged.set(true);
 	}
 	
-	
+	@RequestMapping(value = "/getInfo*", method = RequestMethod.GET)
+	@ResponseBody
+	public String searchAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Description> descriptions = descriptionManager.getDescriptionsByName(name);
+		
+		JSONArray array = new JSONArray();
+		
+		for (Description rule : descriptions) {
+			JSONObject r = new JSONObject();
+			r.put("id", rule.getId());
+			r.put("name", rule.getName());
+			r.put("category", "D");
+			array.put(r);
+		}
+		
+		
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(array.toString());
+		
+		return null;
+	}
 	
 	
 	
@@ -136,7 +169,9 @@ public class DescriptionAjaxController {
 	@Autowired
 	private UserManager userManager = null;
 	
-	
 	@Autowired
 	private DictionaryManager dictionaryManager = null;
+	
+	@Autowired
+	private DescriptionManager descriptionManager = null;
 }

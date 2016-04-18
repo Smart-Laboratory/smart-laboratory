@@ -15,4 +15,7 @@
         <pattern>/result/*</pattern>
         <pattern>/index/*</pattern>
     </decorator>
+    <decorator name="description" page="description.jsp">
+        <pattern>/description/*</pattern>
+    </decorator>
 </decorators>

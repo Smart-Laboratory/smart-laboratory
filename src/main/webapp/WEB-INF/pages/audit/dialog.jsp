@@ -142,14 +142,30 @@
 	<div id="opStatusDialog" title="<fmt:message key='pass.button' />/<fmt:message key='unpass.button' />" style="text-align:left;" >
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
-		
-		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
-		<textarea id="noteText" rows="3" style="width:280px;"></textarea>
-		
-		<div style="margin-top:20px;margin-left:20px;">
-			<button id="opConfirm" class="btn btn-success" ><fmt:message key='button.confirm' /></button>
-			<button id="opCancel" class="btn btn-info" ><fmt:message key='button.cancel' /></button>
+		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
+		<div>
+			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
+			<input type="text" id="diseaseSelect" placeholder="123"/>
+			<label for="disease"><fmt:message key='des.disease' /></label>
+			<span type="text" id="disease" />
 		</div>
+		<div id="descriptionDiv">
+			<div class="checkbox">
+ 		 		<label>
+    				<input type="checkbox" value="">
+    					Option one is this and that&mdash;be sure to include why it's great
+ 		 		</label>
+				</div>
+			<div class="checkbox disabled">
+  				<label>
+    				<input type="checkbox" value="" disabled>
+    				Option two is disabled
+  				</label>
+			</div>
+		</div>
+		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
+		<textarea id="noteText" rows="3" style="width:600px;"></textarea>
+		
 	</div>
 	
 	<div id="collectDialog" title="<fmt:message key='collect.button' />" style="text-align:left;" >

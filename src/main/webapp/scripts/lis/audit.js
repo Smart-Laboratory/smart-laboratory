@@ -174,65 +174,24 @@ $(function(){
 		
 		if (selectNoteAdd) {
 			if ($("#lastDepLab").val() == '1300101' || $("#lastDepLab").val() == '1300200' || $("#lastDepLab").val() == '1300100' || $("#lastDepLab").val() == '1300201') {
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason' checked><span class='label selectLabel'>标本重新检测</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>推片显微镜检查</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>手工分类</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason' checked><span class='label selectLabel'>标本重新检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>推片显微镜检查</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>手工分类</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
 			} else if ($("#lastDepLab").val() == '1300600') {
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>重新检测</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>稀释或加量检测</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>查看标本</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
-				$("#selectNoteDiv").append("<label class='radio span'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>重新检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>稀释或加量检测</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>查看标本</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>符合逻辑规则</span></label>");
+				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
 			}
 			selectNoteAdd = false;
 		}
 		$("#opStatusDialog").dialog("open");
 	});
 	
-	$("#opConfirm").click(function() {
-		var sample = $("#hiddenSampleNo").val();
-		var id = $("#hiddenDocId").val();
-		
-		if ($("#hiddenIsPass").val() == "true") {
-			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
-			var text = $("#noteText").val();
-			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text},function(data) {
-				if (data == true) {
-					var s = jQuery("#list").jqGrid('getGridParam','selrow');
-					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
-					
-					$("#needEdit").val(false);
-					$("#testAdd").css('display','none');
-	    			$("#testDelete").css('display','none');
-	    			$("#auditUnpassBtn").css('display','inline');
-	    			$("#auditPassBtn").css('display','none');
-	    			$("#collectBtn").css('display','inline');
-	    			$("#opStatusDialog").dialog("close");
-	    			$("#twoColumnDialog").dialog("close");
-				}
-			});
-		} else {
-			$.post("../audit/manual",{sample:sample, operate:"unpass", note:""},function(data) {
-				if (data == true) {
-					var s = jQuery("#list").jqGrid('getGridParam','selrow');
-					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
-					$("#testAdd").css('display','inline');
-	    			$("#testDelete").css('display','inline');
-	    			$("#auditUnpassBtn").css('display','none');
-	    			$("#auditPassBtn").css('display','inline');
-	    			$("#collectBtn").css('display','none');
-	    			$("#opStatusDialog").dialog("close");
-	    			$("#twoColumnDialog").dialog("close");
-				}
-			});
-		}
-	});
 	
-	$("#opCancel").click(function() {
-		$("#opStatusDialog").dialog("close");
-	});
 	
 	$("#auditUnpassBtn").click(function(){
 		$("#hiddenIsPass").val(false);

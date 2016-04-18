@@ -2,7 +2,6 @@
 <head>
 	
     <link rel="stylesheet" href="../styles/ztree/zTreeStyle.css" type="text/css">
-    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.ztree.all-3.5.js"></script>
     <link rel="stylesheet" href="../styles/jquery-ui.min.css" type="text/css">
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
@@ -55,7 +54,7 @@
 	    $("#globalsearchbox").catcomplete({
 		    source : function(request, response) {
 		        $.ajax({
-		            url : "../ajax/getInfo",
+		            url : "../ajax/description/getInfo",
 		            dataType : "json",
 		            data : {
 		                maxRows : 12,
@@ -80,14 +79,7 @@
 		    minLength : 2,
 		    select : function(event, ui) {
 		        var id = ui.item.id;
-		
-		        if (ui.item.category == "T") {
-		            location.href = "../result/view?id=" + id;
-		        } else if (ui.item.category == "I") {
-		            location.href = "../index/view?id=" + id;
-		        } else if (ui.item.category == "R") {
-		            location.href = "../rule/view?id=" + id;
-		        }
+		        location.href = "../description/view?id=" + id;
 		    }
 		});
 	});
@@ -144,7 +136,7 @@
 	    }
 	};
 	function onClick(event, treeId, treeNode) {
-	    location.href = "../rule/list?bag=" + treeNode.id;
+	    location.href = "../description/list?bag=" + treeNode.id;
 	}
 	function dropPrev(treeId, nodes, targetNode) {
 	    var pNode = targetNode.getParentNode();
@@ -315,7 +307,7 @@
 	            });
 	            dataToController("add", treeNode.id, "new" + newCount);
 	            newCount++;
-	            getData();
+	            
 	            return false;
 	        });
 	};
@@ -334,11 +326,12 @@
 	function dataToController(action, id, name) {
 	    $.ajax({
 	        type : "POST",
-	        url : "../ajax/editBag",
+	        url : "../ajax/description/editBag",
 	        data : "action=" + action + "&id=" + id + "&name=" + name,
 	        dataType : "html",
 	        success : function() {
 	            /*alert(action + " success!");*/
+	        	getData();
 	        }
 	    });
 	}
@@ -347,7 +340,7 @@
 			async : true,
 			cache : false,
 			type : 'GET',
-			url : "<c:url value='../ajax/getBag'/>",
+			url : "<c:url value='../ajax/description/getDesBag'/>",
 			datatype : "json",
 			error : function() {
 				alert('data false');
@@ -367,6 +360,7 @@
 	$(function(){
 		getData();
 	});
+	
 	
 </script>
 <style>
@@ -399,18 +393,6 @@
 			</div>
        	</div>
 	</div>
-	<div class="tag-section">
-	<a class="selbtn" href="<c:url value="/index/list"/>">
-		<div class="tag-item">
-			<b class="tag-name" style="letter-spacing:5px; "><fmt:message key="index" /></b>
-		</div>
-	</a>
-	</div>
-	<div class="tag-section">
-	<a class="selbtn" href="<c:url value="/result/list"/>">
-		<div class="tag-item">
-			<b class="tag-name" style="letter-spacing:5px; "><fmt:message key="result" /></b>
-		</div>
-	</a>
-	</div>
+	
+	
 </div>

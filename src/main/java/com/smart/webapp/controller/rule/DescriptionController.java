@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.rule;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.model.rule.Bag;
 import com.smart.model.rule.DesBag;
 import com.smart.model.rule.Description;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
-import com.smart.service.rule.BagManager;
 import com.smart.service.rule.DesBagManager;
 import com.smart.service.rule.DescriptionManager;
 import com.smart.util.PageList;
@@ -43,6 +45,7 @@ public class DescriptionController {
 		int pageNumber = 1;
 		boolean isAll = true; // 0为所有
 		String criterion = "modifyTime"; // 排序字段
+		long bag = 0;
 		boolean isAsc = false;
 		String page = request.getParameter("page");
 		String sbag = request.getParameter("bag");
@@ -55,8 +58,9 @@ public class DescriptionController {
 		}
 		if (!StringUtils.isEmpty(sbag) && !"0".equals(sbag) && StringUtils.isNumeric(sbag)) {
 			isAll = false;
+			bag = Long.parseLong(sbag);
 		}
-		Long bag = Long.parseLong(sbag);
+		
 		if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(dir)) {
 			criterion = sort;
 			isAsc = "asc".equals(dir) ? true : false;
@@ -101,20 +105,21 @@ public class DescriptionController {
 		}
 		request.setAttribute("category", bag);
 		request.setAttribute("bagList", map);
-		return new ModelAndView("rule/list", "ruleList", ruleList);
+		return new ModelAndView("description/list", "ruleList", ruleList);
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value="/view*")
     public ModelAndView DescriptionView(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("id")==null||request.getParameter("id").isEmpty()){
-			return new ModelAndView("redirect:/rule/list");
+			return new ModelAndView("redirect:/description/list");
 		}
 		String id = request.getParameter("id");
-		Description rule = descriptionManager.get(Long.parseLong(id));
+		Description description = descriptionManager.get(Long.parseLong(id));
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-//		request.setAttribute("canEdit", CheckAllow.allow(rule, user));
+		request.setAttribute("canEdit", CheckAllow.allow(description, user));
 //		request.setAttribute("itemsList", rule.getItems());
-		return new ModelAndView("rule/view","rule", rule);
+		request.setAttribute("bag", bagManager.get(Long.parseLong(description.getBagId())).getName() );
+		return new ModelAndView("description/view","description", description);
     }
 
 	@RequestMapping(method = RequestMethod.GET, value="/delete*")
@@ -124,12 +129,84 @@ public class DescriptionController {
 		Description rule = descriptionManager.get(Long.parseLong(id));
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		// 是否有访问权限
-//		if (!CheckAllow.allow(rule, user)) {
-//			response.sendError(403);
-//			return null;
-//		}
+		if (!CheckAllow.allow(rule, user)) {
+			response.sendError(403);
+			return null;
+		}
 
 		descriptionManager.remove(Long.parseLong(id));
-		return new ModelAndView("redirect:/rule/list");
+		return new ModelAndView("redirect:/description/list");
 	}
+	
+	@ModelAttribute
+	@RequestMapping(method = RequestMethod.GET, value="/edit*")
+	public Description showForm(HttpServletRequest request, HttpServletResponse response) {
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		/*Map<String, String> type = new HashMap<String, String>();
+		type.put("N", "数值型");
+		type.put("S", "字符型");
+		type.put("E", "枚举型");
+		request.setAttribute("typeList", type);*/
+		String bag = request.getParameter("bag");
+		
+		
+		Description des =  new Description();
+		if(request.getParameter("id")!=null){
+			Long id = Long.parseLong(request.getParameter("id"));
+			if(id != null) {
+			des = descriptionManager.get(id);
+			}
+		}
+		
+		List<DesBag> bags = bagManager.getBagByHospital(user.getHospitalId());
+		Map<String, String> map = new HashMap<String, String>();
+		for (DesBag b : bags) {
+			map.put(b.getId().toString(), b.getName());
+		}
+		if(bag!=null && !bag.equals("0"))
+			des.setBagId(bag);
+		request.setAttribute("bags", map);
+		request.setAttribute("bag", bag);
+		
+		return des;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value="/edit*")
+	public String onSubmit(Description des, BindingResult errors, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		Date date = new Date();
+		des.setModifyUser(user.getUsername());
+		des.setCreateUser(user.getUsername());
+		des.setModifyTime(date);	
+		des.setCreateTime(date);
+		
+//		System.out.println(index.getIndexId());
+		
+		try {
+			des = descriptionManager.save(des);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/description/view?id="+des.getId().toString();
+	}
+	
+	@RequestMapping(value = "/ajax/activate*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean activate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		try {
+			String id = request.getParameter("id");
+			String state = request.getParameter("state");		
+			Description	description = descriptionManager.get(Long.parseLong(id));
+			description.setActivate(Boolean.parseBoolean(state));
+			descriptionManager.save(description);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 }

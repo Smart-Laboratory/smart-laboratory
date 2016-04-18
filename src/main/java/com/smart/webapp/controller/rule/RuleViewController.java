@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.rule.Bag;
@@ -129,5 +130,21 @@ public class RuleViewController {
 
 		ruleManager.remove(Long.parseLong(id));
 		return new ModelAndView("redirect:/rule/list");
+	}
+	
+	@RequestMapping(value = "/ajax/activate*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean activate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		try {
+			String id = request.getParameter("id");
+			String state = request.getParameter("state");		
+			Rule rule = ruleManager.get(Long.parseLong(id));
+			rule.setActivate(Boolean.parseBoolean(state));
+			ruleManager.updateRule(rule);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

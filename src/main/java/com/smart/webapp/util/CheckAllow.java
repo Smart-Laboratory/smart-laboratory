@@ -1,5 +1,6 @@
 package com.smart.webapp.util;
 
+import com.smart.model.rule.Description;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
@@ -70,4 +71,20 @@ public class CheckAllow {
 		return false;
 	}
 
+	static public boolean allow(Description index, User user) {
+
+		boolean flag = false;
+		for (Role role : user.getRoles()) {
+			if ("ROLE_ADMIN".equals(role.getName())) {
+				flag = true;
+			}
+		}
+		if (index.getCreateUser() != null) {
+			if (index.getCreateUser() == user.getUsername()) {
+				flag = true;
+			}
+		}
+
+		return flag;
+	}
 }

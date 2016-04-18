@@ -122,10 +122,10 @@ public class SxcxViewController {
 				if(dweek>yearMaxWeek)
 					dweek-=yearMaxWeek;
 				String month = shifts[0][i].substring(10,12);
-				if(sxMap.containsKey(wInfos.get(j).getId()+":"+dweek) && sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()!=null){
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getId()+":"+dweek).getSection()+"</td>";
+				if(sxMap.containsKey(wInfos.get(j).getWorkid()+":"+dweek) && sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()!=null){
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()+"</td>";
 				}else{
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getId()+"-"+dweek+"-"+month+"'></td>";
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'></td>";
 				}
 				
 			}

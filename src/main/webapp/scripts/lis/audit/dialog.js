@@ -3,8 +3,51 @@ $(function(){
 		autoOpen: false,
 		resizable: false,
 		modal:true,
-	    width: 340,
-	    height: 430,
+	    width: 680,
+	    height: 460,
+	    buttons:{
+	    	"添加":function() {
+	    		var sample = $("#hiddenSampleNo").val();
+	    		var id = $("#hiddenDocId").val();
+	    		
+	    		if ($("#hiddenIsPass").val() == "true") {
+	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
+	    			var text = $("#noteText").val();
+	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text},function(data) {
+	    				if (data == true) {
+	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
+	    					
+	    					$("#needEdit").val(false);
+	    					$("#testAdd").css('display','none');
+	    	    			$("#testDelete").css('display','none');
+	    	    			$("#auditUnpassBtn").css('display','inline');
+	    	    			$("#auditPassBtn").css('display','none');
+	    	    			$("#collectBtn").css('display','inline');
+	    	    			$("#opStatusDialog").dialog("close");
+	    	    			$("#twoColumnDialog").dialog("close");
+	    				}
+	    			});
+	    		} else {
+	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:""},function(data) {
+	    				if (data == true) {
+	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
+	    					$("#testAdd").css('display','inline');
+	    	    			$("#testDelete").css('display','inline');
+	    	    			$("#auditUnpassBtn").css('display','none');
+	    	    			$("#auditPassBtn").css('display','inline');
+	    	    			$("#collectBtn").css('display','none');
+	    	    			$("#opStatusDialog").dialog("close");
+	    	    			$("#twoColumnDialog").dialog("close");
+	    				}
+	    			});
+	    		}
+	    	},
+	    	"取消":function() {
+	    		$(this).dialog("close");
+	    	}
+	    }
 	});
 	
 	$("#tatDialog").dialog({

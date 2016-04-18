@@ -161,6 +161,7 @@ public class PbController {
 				else 
 					a.setShift("");
 				list.add(a);
+				userShifts.get(arr[0]).put(arr[1], a);
 			}
 		}
 		arrangeManager.saveAll(list);
@@ -225,7 +226,7 @@ public class PbController {
 						}
 						
 					}
-					else if((arr.length>=3?arr[2]:"")!="" ){
+					else if(!(arr.length>=3?arr[2]:"").isEmpty() ){
 						a  = new Arrange();
 					}
 					else{
@@ -244,8 +245,8 @@ public class PbController {
 					a.setShift(arr[2]);
 				else 
 					a.setShift("");
-				
 				list.add(a);
+				userShifts.get(arr[0]).put(arr[1], a);
 			}
 		}
 		System.out.println("保存： "+list.size());

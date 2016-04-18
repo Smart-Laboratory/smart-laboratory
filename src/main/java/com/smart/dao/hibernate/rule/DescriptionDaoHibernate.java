@@ -9,6 +9,7 @@ import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.rule.DescriptionDao;
 import com.smart.model.rule.Description;
+import com.smart.model.rule.DesBag;;
 
 @Repository("descriptionDao")
 public class DescriptionDaoHibernate extends GenericDaoHibernate<Description, Long> implements DescriptionDao{
@@ -48,7 +49,7 @@ public class DescriptionDaoHibernate extends GenericDaoHibernate<Description, Lo
 		String dir = "";
 		if (isAsc) { dir = " asc"; } 
 		else {dir = " desc";}
-		String sql = "select r from Rule r inner join r.bags b where b.id=" + bagId +" order by r." + field + dir;
+		String sql = "select r from Description r ,DesBag b where b.id=" + bagId +" and r.bagId = b.id order by r." + field + dir;
 		Query q = getSession().createQuery(sql);
 		q.setFirstResult(Constants.PAGE_SIZE * (pageNum - 1));
 		q.setMaxResults(Constants.PAGE_SIZE);
