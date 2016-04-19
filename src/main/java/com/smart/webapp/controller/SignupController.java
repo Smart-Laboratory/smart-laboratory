@@ -1,14 +1,19 @@
 package com.smart.webapp.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
+import com.smart.model.lis.Hospital;
 import com.smart.model.user.User;
 import com.smart.service.RoleManager;
 import com.smart.service.UserExistsException;
+import com.smart.service.lis.HospitalManager;
 import com.smart.webapp.util.RequestUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +50,13 @@ public class SignupController extends BaseFormController {
 
     @ModelAttribute
     @RequestMapping(method = RequestMethod.GET)
-    public User showForm() {
+    public User showForm(HttpServletRequest request, final HttpServletResponse response) {
+    	Map<Long, String> hospitals = new HashMap<Long,String>();
+    	List<Hospital> hList = hospitalManager.getAll();
+    	for(Hospital h: hList){
+    		hospitals.put(h.getId(), h.getName());
+    	}
+    	request.setAttribute("hospitals", hospitals);
         return new User();
     }
 
@@ -57,6 +68,7 @@ public class SignupController extends BaseFormController {
         }
 
         if (validator != null) { // validator is null during testing
+        	System.out.println("find error!");
             validator.validate(user, errors);
 
             if (StringUtils.isBlank(user.getPassword())) {
@@ -113,9 +125,12 @@ public class SignupController extends BaseFormController {
         try {
             sendUserMessage(user, getText("signup.email.message", locale), RequestUtil.getAppURL(request));
         } catch (final MailException me) {
-            saveError(request, me.getMostSpecificCause().getMessage());
+//            saveError(request, me.getMostSpecificCause().getMessage());
         }
 
         return getSuccessView();
     }
+    
+    @Autowired
+    private HospitalManager hospitalManager;
 }

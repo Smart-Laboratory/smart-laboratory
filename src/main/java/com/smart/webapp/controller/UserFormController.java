@@ -1,19 +1,25 @@
 package com.smart.webapp.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.ReusableAnalyzerBase;
 
 import com.smart.Constants;
+import com.smart.model.lis.Hospital;
 import com.smart.model.user.Role;
 import com.smart.model.user.User;
 import com.smart.service.RoleManager;
 import com.smart.service.UserExistsException;
 import com.smart.service.UserManager;
+import com.smart.service.lis.HospitalManager;
 import com.smart.webapp.util.RequestUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,6 +192,13 @@ public class UserFormController extends BaseFormController {
     @RequestMapping(method = RequestMethod.GET)
     protected User showForm(final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
+    	
+    	Map<Long, String> hospitals = new HashMap<Long,String>();
+    	List<Hospital> hList = hospitalManager.getAll();
+    	for(Hospital h: hList){
+    		hospitals.put(h.getId(), h.getName());
+    	}
+    	request.setAttribute("hospitals", hospitals);
         // If not an administrator, make sure user is not trying to add or edit another user
         if (!request.isUserInRole(Constants.ADMIN_ROLE) && !isFormSubmission(request)) {
             if (isAdd(request) || request.getParameter("id") != null) {
@@ -225,4 +238,7 @@ public class UserFormController extends BaseFormController {
         final String method = request.getParameter("method");
         return (method != null && method.equalsIgnoreCase("add"));
     }
+    
+    @Autowired
+    private HospitalManager hospitalManager;
 }

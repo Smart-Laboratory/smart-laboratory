@@ -55,6 +55,14 @@
                 <form:input cssClass="form-control" path="name" id="name" maxlength="50"/>
                 <form:errors path="name" cssClass="help-block"/>
             </div>
+            <div class="col-sm-6 form-group">
+                <appfuse:label styleClass="control-label" key="user.hospitalId"/>
+                <div class="controls">
+					<form:select path="hospitalId" id="hospitalId" cssClass="selects form-control input-group-sm">
+						<form:options items="${hospitals}" />
+	       		 	</form:select>
+      			 </div>
+            </div>
         </div>
         <div class="row">
             <spring:bind path="user.email">
