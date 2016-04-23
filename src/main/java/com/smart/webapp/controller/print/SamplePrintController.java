@@ -22,6 +22,7 @@ import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.smart.model.util.TestChart;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -56,11 +57,7 @@ public class SamplePrintController extends BaseAuditController {
 		List<SyncResult> wswlist = null;
 		if(sampleno.substring(8, 11).equals("BAA")) {
 			wswlist = rmiService.getWSWResult(s.getSampleNo());
-			if(wswlist.size() > 8) {
-				type = 5;
-			} else {
-				type = 4;
-			}
+			type = 4;
 		} else {
 			if(sampleno.substring(8, 11).equals("MYC")) {
 				type = 3;
@@ -92,6 +89,9 @@ public class SamplePrintController extends BaseAuditController {
 		if(idMap.size() == 0) {
 			initMap();
 		}
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
 		info.put("requester", process.getRequester() == null ? " " : (contactMap.containsKey(process.getRequester()) ? contactMap.get(process.getRequester()).getNAME() : process.getRequester()));
 		info.put("tester", s.getChkoper2());
 		info.put("auditor", process.getCheckoperator());
@@ -118,10 +118,20 @@ public class SamplePrintController extends BaseAuditController {
 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
 			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
 			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			Map<String, List<TestResult>> chartTestMap = new HashMap<String, List<TestResult>>();
 			for(Process p : processList) {
 				hisProcessMap.put(p.getSampleid(), p);
 			}
 			for(TestResult tr : testList) {
+				if(idMap.get(tr.getTestId()).getNeedhistory() == 1) {
+					if(chartTestMap.containsKey(tr.getTestId())) {
+						chartTestMap.get(tr.getTestId()).add(tr);
+					} else {
+						List<TestResult> tlist = new ArrayList<TestResult>();
+						tlist.add(tr);
+						chartTestMap.put(tr.getTestId(), tlist);
+					}
+				}
 				if(hisTestMap.containsKey(tr.getSampleNo())) {
 					hisTestMap.get(tr.getSampleNo()).add(tr);
 				} else {
@@ -142,6 +152,9 @@ public class SamplePrintController extends BaseAuditController {
 			if(history != null && history.size()>0){
 				for (Sample pinfo : history) {
 					String psampleno = pinfo.getSampleNo();
+					if(psampleno.equals(sampleno)) {
+						continue;
+					}
 					boolean isHis = false;
 					List<TestResult> his = hisTestMap.get(psampleno);
 					if(his != null) {
@@ -181,6 +194,19 @@ public class SamplePrintController extends BaseAuditController {
 					}
 				}
 			}
+			List<TestChart> chartlist = new ArrayList<TestChart>();
+			for(String testid : chartTestMap.keySet()) {
+				List<TestResult> tl = chartTestMap.get(testid);
+				TestChart tc = new TestChart();
+				tc.setTitle(idMap.get(testid).getName());
+				for(TestResult tr : tl) {
+					tc.getReArr().add(Double.parseDouble(tr.getTestResult()));
+					tc.getHiArr().add(Double.parseDouble(tr.getRefHi()));
+					tc.getLoArr().add(Double.parseDouble(tr.getRefLo()));
+				}
+				chartlist.add(tc);
+			}
+			info.put("chartlist", chartlist);
 		}
 		String html = "";
 		if(type > 3) {
@@ -223,8 +249,12 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
-				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName());
+				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
+					html.append("[" + re.getMethod() + "]");
+				}
+				html.append("</div>");
+				if(re.getTestResult().indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
 				} else {
 					html.append("<div style='float:left;width:12%;'>" + re.getTestResult() + "</div>");
@@ -254,13 +284,13 @@ public class SamplePrintController extends BaseAuditController {
 						}
 					}
 				}
-				if(last.indexOf(Constants.YANG) > 0) {
+				if(last.indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + last + "</div>");
 				} else {
 					html.append("<div style='float:left;width:12%;'>" + last + "</div>");
 				}
 				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
-				html.append("<div style='float:left;width:10%;text-align:center;'>" + re.getUnit() + "</div>");
+				html.append("<div style='float:left;width:10%;text-align:center;'>" + (re.getUnit() == null ? "&nbsp;" : re.getUnit()) + "</div>");
 				html.append("<div style='float:left;width:25%;text-align:center;'>" + idMap.get(re.getTestId()).getDescription() + "</div>");
 				html.append("</div>");
 			}
@@ -308,7 +338,7 @@ public class SamplePrintController extends BaseAuditController {
 				}
 				html.append("<div style='float:left;width:100%;'>");
 				html.append("<div style='float:left;width:34%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
-				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+				if(re.getTestResult().indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:13%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
 				} else {
 					html.append("<div style='float:left;width:13%;'>" + re.getTestResult() + "</div>");
@@ -347,14 +377,14 @@ public class SamplePrintController extends BaseAuditController {
 						}
 					}
 				}
-				if(last.indexOf(Constants.YANG) > 0) {
+				if(last.indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:13%;background:#C0C0C0;'>" + last + "</div>");
 				} else {
 					html.append("<div style='float:left;width:13%;'>" + last + "</div>");
 				}
 				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
 				html.append("<div style='float:left;width:24%;text-align:center;'>" + scope + "</div>");
-				html.append("<div style='float:left;width:10%;'>" + re.getUnit() + "</div>");
+				html.append("<div style='float:left;width:10%;'>" + (re.getUnit() == null ? "&nbsp;" : re.getUnit()) + "</div>");
 				html.append("</div>");
 				
 				if(i == num || i == list.size()) {
@@ -387,8 +417,12 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:35%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
-				if(re.getTestResult().indexOf(Constants.YANG) > 0) {
+				html.append("<div style='float:left;width:35%;'>" + idMap.get(re.getTestId()).getName());
+				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
+					html.append("[" + re.getMethod() + "]");
+				}
+				html.append("</div>");
+				if(re.getTestResult().indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
 				} else {
 					html.append("<div style='float:left;width:12%;'>" + re.getTestResult() + "</div>");
@@ -427,14 +461,14 @@ public class SamplePrintController extends BaseAuditController {
 						}
 					}
 				}
-				if(last.indexOf(Constants.YANG) > 0) {
+				if(last.indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:12%;background:#C0C0C0;'>" + last + "</div>");
 				} else {
 					html.append("<div style='float:left;width:12%;'>" + last + "</div>");
 				}
 				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
 				html.append("<div style='float:left;width:20%;text-align:center;'>" + scope + "</div>");
-				html.append("<div style='float:left;width:10%;text-align:center;'>" + re.getUnit() + "</div>");
+				html.append("<div style='float:left;width:10%;text-align:center;'>" + (re.getUnit() == null ? "&nbsp;" : re.getUnit()) + "</div>");
 				html.append("</div>");
 			}
 		}
@@ -443,29 +477,144 @@ public class SamplePrintController extends BaseAuditController {
 
 	private String getWSWHTML(int type, List<SyncResult> wswlist) {
 		StringBuilder html = new StringBuilder("");
-		SyncResult tr = null;
-		if(type == 4) {
-			if(wswlist.size() == 1) {
-				tr = wswlist.get(0);
-				html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
-				if(tr.getRESULTFLAG().charAt(0) == 'N' || tr.getRESULTFLAG().charAt(0) == 'O') {
-					html.append("<div style='float:left;height:20px;margin-left:20%;width:60%;font-size:16px;'>" + tr.getTESTID() + "</div>");
+		Map<String, List<SyncResult>> wswMap = new HashMap<String, List<SyncResult>>();
+		for(SyncResult sr : wswlist) {
+			if(sr.getRESULTFLAG().charAt(0) == 'N') {
+				if(wswMap.containsKey("N")) {
+					wswMap.get("N").add(sr);
 				} else {
-					html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + tr.getTESTID() + "</div>");
-					html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>" + tr.getHINT() + "</div>");
+					List<SyncResult> list = new ArrayList<SyncResult>();
+					list.add(sr);
+					wswMap.put("N", list);
+				}
+			} else if(sr.getRESULTFLAG().charAt(0) == 'O') {
+				if(wswMap.containsKey("O")) {
+					wswMap.get("O").add(sr);
+				} else {
+					List<SyncResult> list = new ArrayList<SyncResult>();
+					list.add(sr);
+					wswMap.put("O", list);
+				}
+			} else if(sr.getRESULTFLAG().charAt(0) == 'B') {
+				if(wswMap.containsKey("B")) {
+					wswMap.get("B").add(sr);
+				} else {
+					List<SyncResult> list = new ArrayList<SyncResult>();
+					list.add(sr);
+					wswMap.put("B", list);
 				}
 			} else {
-				html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
-				for(int i=0; i<wswlist.size(); i++) {
-					tr = wswlist.get(i);
-					html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + tr.getTESTID() + "</div>");
-					html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>" + tr.getHINT() + "</div>");
+				if(wswMap.containsKey("A")) {
+					wswMap.get("A").add(sr);
+				} else {
+					List<SyncResult> list = new ArrayList<SyncResult>();
+					list.add(sr);
+					wswMap.put("A", list);
 				}
-				
 			}
-			
-		} else {
-			
+		}
+		
+		if(wswMap.containsKey("N")) {
+			html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
+			List<SyncResult> list = wswMap.get("N");
+			for(SyncResult sr : list) {
+				html.append("<div style='float:left;height:20px;margin-left:20%;width:60%;font-size:16px;'>" + sr.getTESTID() + "</div>");
+			}
+		} else if (wswMap.containsKey("O")) {
+			html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>检验结果</b></div>");
+			List<SyncResult> list = wswMap.get("O");
+			for(SyncResult sr : list) {
+				html.append("<div style='float:left;height:20px;margin-left:20%;width:60%;font-size:16px;'>" + sr.getTESTID() + "</div>");
+			}
+		} else if (wswMap.containsKey("B")){
+			List<SyncResult> list = wswMap.get("B");
+			List<SyncResult> ymlist = wswMap.get("A");
+			if(list.size() == 1) {
+				html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>细菌名</b></div>");
+				html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + list.get(0).getTESTID() + "</div>");
+				html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>");
+				html.append(list.get(0).getHINT() != null ? list.get(0).getHINT() : "&nbsp;");
+				html.append("</div>");
+				boolean isFirst = true;
+				if(ymlist != null) {
+					for(SyncResult sr2 : ymlist) {
+						if(isFirst) {
+							isFirst = false;
+							html.append("<div style='float:left;height:25px;margin-left:20%;width:20%;font-size:14px;'><b>抗生素名</b></div>");
+							html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>结果</b></div>");
+							html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>解释</b></div>");
+							html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>折点</b></div>");
+							html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>单位</b></div>");
+							
+							html.append("<div style='float:left;height:20px;margin-left:20%;width:20%;font-size:14px;'>" + sr2.getTESTID() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getTESTRESULT() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getHINT() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+							html.append(sr2.getREFHI()!=null && sr2.getREFLO()!= null ? sr2.getREFLO() + "~" + sr2.getREFHI() : "&nbsp;");
+							html.append("</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+							html.append(sr2.getUNIT() != null ? sr2.getUNIT() : "&nbsp;");
+							html.append("</div>");
+						} else {
+							html.append("<div style='float:left;height:20px;margin-left:20%;width:20%;font-size:14px;'>" + sr2.getTESTID() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getTESTRESULT() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getHINT() + "</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+							html.append(sr2.getREFHI()!=null && sr2.getREFLO()!= null ? sr2.getREFLO() + "~" + sr2.getREFHI() : "&nbsp;");
+							html.append("</div>");
+							html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+							html.append(sr2.getUNIT() != null ? sr2.getUNIT() : "&nbsp;");
+							html.append("</div>");
+						}
+					}
+				}
+			} else {
+				int count = 0;
+				for(SyncResult sr : list) {
+					count++;
+					html.append("<div style='float:left;height:25px;margin-left:10%;width:90%;font-size:14px;'><b>细菌名" + count + "</b></div>");
+					html.append("<div style='float:left;height:20px;margin-left:20%;width:50%;font-size:16px;'>" + sr.getTESTID() + "</div>");
+					html.append("<div style='float:left;height:20px;width:10%;font-size:16px;'>");
+					html.append(list.get(0).getHINT() != null ? list.get(0).getHINT() : "&nbsp;");
+					html.append("</div>");
+					char num = sr.getRESULTFLAG().charAt(sr.getRESULTFLAG().length()-1);
+					boolean isFirst = true;
+					if(ymlist != null) {
+						for(SyncResult sr2 : ymlist) {
+							if(sr2.getRESULTFLAG().charAt(sr.getRESULTFLAG().length()-1) == num) {
+								if(isFirst) {
+									isFirst = false;
+									html.append("<div style='float:left;height:25px;margin-left:20%;width:20%;font-size:14px;'><b>抗生素名</b></div>");
+									html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>结果</b></div>");
+									html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>解释</b></div>");
+									html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>折点</b></div>");
+									html.append("<div style='float:left;height:25px;width:10%;font-size:14px;'><b>单位</b></div>");
+									html.append("<div style='float:left;height:20px;margin-left:20%;width:20%;font-size:14px;'>" + sr2.getTESTID() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getTESTRESULT() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getHINT() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+									html.append(sr2.getREFHI()!=null && sr2.getREFLO()!= null ? sr2.getREFLO() + "~" + sr2.getREFHI() : "&nbsp;");
+									html.append("</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+									html.append(sr2.getUNIT() != null ? sr2.getUNIT() : "&nbsp;");
+									html.append("</div>");
+								} else {
+									html.append("<div style='float:left;height:20px;margin-left:20%;width:20%;font-size:14px;'>" + sr2.getTESTID() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getTESTRESULT() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>" + sr2.getHINT() + "</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+									html.append(sr2.getREFHI()!=null && sr2.getREFLO()!= null ? sr2.getREFLO() + "~" + sr2.getREFHI() : "&nbsp;");
+									html.append("</div>");
+									html.append("<div style='float:left;height:20px;width:10%;font-size:14px;'>");
+									html.append(sr2.getUNIT() != null ? sr2.getUNIT() : "&nbsp;");
+									html.append("</div>");
+								}
+							}
+							
+						}
+					}
+				}
+			}
 		}
 		return html.toString();
 	}

@@ -16,7 +16,7 @@
 		   		{name:'address',index:'address', width:"12%", sortable:false},		
 		   		{name:'condition',index:'condition', width:"8%", sortable:false},
 		   		{name:'temp',index:'temp', width:"8%", align:"center", sortable:false},
-		   		{name:'isself',index:'isself', width:"8%", align:"center", sortable:false}
+		   		{name:'totalnum',index:'totalnum', width:"8%", align:"center", sortable:false}
 		   	],
 		   	rowNum:20,
 		   	rownumbers:true,

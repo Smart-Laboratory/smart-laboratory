@@ -27,5 +27,6 @@ $(function(){
 		}
 		$("#examinaim").html(data.examinaim);
 		$("#resultDiv").html(data.html);
+		alert($("#resultDiv").height());
 	});
 });

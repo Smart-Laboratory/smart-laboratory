@@ -621,9 +621,8 @@ function getAuditHistory() {
 var count=0;
 function createInput(){
     count++;
-    var str = '<div class="form-group" >'+
-    '   '+ '<input type="file" contentEditable="false" id="uploads' + count + '' +
-    '" name="uploads'+ count +'" style="margin-top:5px;width:230px"/></div><div class="form-group" ><button onclick="removeInput(event,\'more\')">'+'删除</button></div>';
+    var str = '<div class="col-sm-12" style="margin-top:5px;"><input type="file" contentEditable="false" id="uploads' + count + '' +
+    '" name="uploads'+ count +'" class="col-sm-10"/><button onclick="removeInput(event,\'more\')" class="col-sm-2">'+'删除</button></div>';
     //document.getElementById(parentId).insertAdjacentHTML("beforeEnd",str);
     $("#more").append(str);
 }
@@ -641,7 +640,6 @@ function ajaxFileUpload(){
 		secureuri:false,
 		fileElementId: arrId,  
 		success: function (data){
-			alert(data.addr)
 			alert("上传成功");
 			$("#uploadDialog").dialog("close");
 			jQuery("#list").trigger("reloadGrid");
@@ -654,19 +652,10 @@ function ajaxFileUpload(){
 
 function removeInput(evt, parentId){
 	   var el = evt.target == null ? evt.srcElement : evt.target;
-	   var div = el.parentNode.parentNode;
+	   var div = el.parentNode;
 	   var cont = document.getElementById(parentId);       
 	   if(cont.removeChild(div) == null){
 	    return false;
 	   }
 	   return true;
 }
-
-
-
-
-
-
-
-
-

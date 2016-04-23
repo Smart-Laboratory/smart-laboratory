@@ -214,7 +214,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			map.put("name", r.getNameAndSpecification());
 			String batch = "<select id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>";
 			for(Batch b : batchManager.getByRgId(r.getId())) {
-				if(b.getNum() > 0) {
+				if(b.getNum() > 0 || b.getSubnum() > 0) {
 					if(r.getSubtnum() > 1) {
 						batch += "<option value='" + b.getBatch() + "'>" + b.getBatch() + "[库存:" + b.getNum() + r.getUnit() + "]</option>";
 					} else {

@@ -40,6 +40,7 @@ public class TestResult extends BaseObject{
     private String chineseName;
     private int isprint;
     private int editMark;
+    private String method;
     
     /**
 	 * 主键、检验样本号
@@ -232,9 +233,17 @@ public class TestResult extends BaseObject{
 	public void setEditMark(int editMark) {
 		this.editMark = editMark;
 	}
+	
+	@Column(name = "METHOD")
+    public String getMethod() {
+		return method;
+	}
 
+	public void setMethod(String method) {
+		this.method = method;
+	}
 
-    /**
+	/**
      * Returns the reference.
      * 
      * @return refLo +" -- " + refHi

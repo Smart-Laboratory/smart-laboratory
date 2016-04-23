@@ -17,13 +17,13 @@
 			<b style="float:left;font-size:10px;margin-top:25px;margin-left:5%">No:${sampleNo}</b>
 		</div>
 		<div style="border-top:1px solid #000000;">
-			<div style="margin-left:10px;width:100%;">
+			<div style="float:left;margin-left:10px;width:100%;">
 				<div style="float:left;width:10%"><fmt:message key="patientInfo.examinaim"/></div>
 				<div style="float:left;width:58%"><b id="examinaim">ceshi</b></div>
 				<div style="float:left;width:10%"><fmt:message key="sample.type"/></div>
 				<div style="float:left;width:22%"><b id="pType">naojiye</b></div>
 			</div>
-			<div style="margin-left:10px;width:100%;">
+			<div style="float:left;margin-left:10px;width:100%;">
 				<div style="float:left;width:10%"><fmt:message key="patientInfo.patientName"/></div>
 				<div style="float:left;width:10%"><b id="pName">ceshiyuan</b></div>
 				<div style="float:left;width:5%"><fmt:message key="patient.sex"/></div>
@@ -35,7 +35,7 @@
 				<div style="float:left;width:5%"><fmt:message key="diagnostic"/></div>
 				<div style="float:left;width:27%"><b id="diagnostic">xiaohuadao</b></div>
 			</div>
-			<div style="margin-left:10px;width:100%;">
+			<div style="float:left;margin-left:10px;width:100%;">
 				<div style="float:left;width:10%;" id="staymodetitle">jiuzhen</div>
 				<div style="float:left;width:23%"><b id="patientId">990190010005089661</b></div>
 				<div style="float:left;width:5%" id="staymodesection">bqu</div>
@@ -68,6 +68,10 @@
 		</div>
 	</div>
 	<div id="resultDiv" style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;">
+	</div>
+	<div id="historyChart" style="float:left;width:96%;margin-left:2%;padding:10px;border-top:1px solid #000000;">
+	<p><fmt:message key="sample.history.chart"/></p>
+	
 	</div>
 	<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;">
 		<div style="float:left;width:10%;margin-left:10px;"><b><fmt:message key="sample.diagadvise"/>:</b></div>

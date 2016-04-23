@@ -54,6 +54,8 @@ public class Index extends BaseObject implements Serializable {
 	private String knowledgename;
 	private int isprint;
 	private String printord;
+	private int needhistory;
+	private String method;
 	
 	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
@@ -284,6 +286,24 @@ public class Index extends BaseObject implements Serializable {
 		this.printord = printord;
 	}
 
+	@Column
+	public int getNeedhistory() {
+		return needhistory;
+	}
+
+	public void setNeedhistory(int needhistory) {
+		this.needhistory = needhistory;
+	}
+
+	@Column
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
 	/**
 	 * 使用该指标的规则集合
 	 */
@@ -387,5 +407,10 @@ public class Index extends BaseObject implements Serializable {
 			break;
 		}
 		return algorithm;
+	}
+	
+	@Transient
+	public String getHistory() {
+		return this.needhistory == 1 ? "是" : "否"; 
 	}
 }

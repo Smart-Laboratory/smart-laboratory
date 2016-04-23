@@ -43,6 +43,11 @@ public class IndexController {
 		type.put("E", "枚举型");
 		request.setAttribute("typeList", type);
 		
+		Map<Integer, String> ishistory = new HashMap<Integer, String>();
+		ishistory.put(1, "是");
+		ishistory.put(0, "否");
+		request.setAttribute("ishistory", ishistory);
+		
 		Map<Integer, String> algorithm = new HashMap<Integer, String>();
 		algorithm.put(1, "差值");
 		algorithm.put(2, "差值百分率");

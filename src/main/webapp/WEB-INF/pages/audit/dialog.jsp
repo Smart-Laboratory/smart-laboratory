@@ -183,8 +183,7 @@
 			<div>
 		    <button class="btn btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
 		    <button class="btn btn-success" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
-			<div id="more" class="form-inline">
-			</div>
+			<div id="more" style="float:left;"></div>
 			</div>
 		</fieldset>
 	    <h5><fmt:message key='image.description'/></h5>

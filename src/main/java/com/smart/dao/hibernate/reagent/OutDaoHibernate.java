@@ -30,7 +30,7 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Out> getLastHMs(String rgId, Date measuretime) {
+	public List<Out> getLastHMs(String rgId, String measuretime) {
 		List<Out> list = getSession().createQuery("from Out where rgId in (" + rgId + ") and outdate<'"+measuretime+"' order by outdate desc").list();
 	
 		Set<Long> ids = new HashSet<Long>();

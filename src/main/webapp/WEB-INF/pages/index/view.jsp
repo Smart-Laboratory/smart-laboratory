@@ -55,8 +55,20 @@ th {
 				<td><c:out value="${index.algorithm}" /></td>
 			</tr>
 			<tr>
+				<th class="left"><fmt:message key="index.history" /> :</th>
+				<td><c:out value="${index.history}" /></td>
+			</tr>
+			<tr>
+				<th class="left"><fmt:message key="index.method" /> :</th>
+				<td><c:out value="${index.method}" /></td>
+			</tr>
+			<tr>
 				<th class="left"  valign="top"><fmt:message key="index.description" /> :</th>
 				<td><p style="line-height:150%;"><c:out value="${index.description}" /></p></td>
+			</tr>
+			<tr>
+				<th class="left"><fmt:message key="rule.guide" /> :</th>
+				<td><c:out value="${index.guide}" /></td>
 			</tr>
 			<tr>
 				<th class="left"><span style="letter-spacing:6px;"><fmt:message key="rule.createBy" /></span>:</th>
@@ -73,10 +85,6 @@ th {
 			<tr>
 				<th class="left"><fmt:message key="rule.modifyTime" /> :</th>
 				<td><c:out value="${index.modifyTime}" /></td>
-			</tr>
-			<tr>
-				<th class="left"><fmt:message key="rule.guide" /> :</th>
-				<td><c:out value="${index.guide}" /></td>
 			</tr>
 			<tr>
 				<th></th>

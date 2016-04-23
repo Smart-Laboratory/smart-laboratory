@@ -22,6 +22,7 @@
         <intercept-url pattern="/app/pb/grcx/ajax/getData*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
         <intercept-url pattern="/app/pb/grcx/ajax/getWInfo*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/> 
         <intercept-url pattern="/app/pb/grcx*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
+        <intercept-url pattern="/app/print/sample*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
         <intercept-url pattern="/app/manage/receive*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/manage/input*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/quality/invalid*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>

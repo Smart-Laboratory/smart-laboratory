@@ -329,7 +329,6 @@ public class RMIServiceImpl implements RMIService {
 
 	public List<SyncResult> getWSWResult(String sampleNo) {
 		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
-		System.out.println(sql);
 		return jdbcTemplate.query(sql, new RowMapper<SyncResult>() {
 			public SyncResult mapRow(ResultSet rs, int rowNum) throws SQLException {
 				SyncResult sr = new SyncResult();

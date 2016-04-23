@@ -38,6 +38,8 @@ import com.smart.model.reagent.Reagent;
 import com.smart.model.util.NeedWriteCount;
 import com.smart.service.reagent.OutManager;
 
+import net.coobird.thumbnailator.Thumbnails;
+
 @Controller
 @RequestMapping("/audit/ajax*")
 public class AjaxController extends BaseAuditController {
@@ -82,7 +84,7 @@ public class AjaxController extends BaseAuditController {
 				rids += r.getId() + ",";
 				rm.put(r.getId(), r);
 			}
-			List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), measuretime);
+			List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), Constants.SDF.format(measuretime));
 			List<String> html = new ArrayList<String>();
 			for(int i=0; i<out.size(); i++) {
 				Out o = out.get(i);
@@ -247,6 +249,7 @@ public class AjaxController extends BaseAuditController {
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
 			String key = (String) it.next();
 			MultipartFile imgFile = multipartRequest.getFile(key);
+			Thumbnails.of(imgFile.getInputStream()).size(150, 150);
 			if (imgFile.getOriginalFilename().length() > 0) {
 				String fileName = imgFile.getOriginalFilename();
 				String newFileName = (count + 1) + fileName.substring(fileName.lastIndexOf("."), fileName.length());

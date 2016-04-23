@@ -51,6 +51,8 @@ public class FormulaUtil {
 				String id = tr.getTestId();
 				if (idMap.containsKey(id)) {
 					Describe des = idMap.get(tr.getTestId());
+					tr.setMethod(des.getMETHODNAME());
+					updatelist.add(tr);
 					testMap.put(id + "[" + des.getSAMPLETYPE(), tr);
 				}
 			}

@@ -83,7 +83,7 @@ public class ComboController extends ReagentBaseController {
 			c.setName(request.getParameter("name"));
 			c.setCreatetime(new Date());
 			c.setCreator(user.getName());
-			c.setLab(labMap.get(user.getLastLab()));
+			c.setLab(user.getLastLab());
 			comboManager.save(c);
 		} else if(request.getParameter("oper").equals("edit")) {
 			Combo c = comboManager.get(Long.parseLong(request.getParameter("id")));

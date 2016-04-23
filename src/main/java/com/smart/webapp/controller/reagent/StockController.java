@@ -81,6 +81,33 @@ public class StockController extends ReagentBaseController {
 		}
 		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
 		List<Reagent> set = reagentManager.getByLab(labName);
+		Map<Long,Reagent> rMap = new HashMap<Long,Reagent>();
+		String ids = "";
+		for(Reagent r : set) {
+			ids += r.getId() + ",";
+			rMap.put(r.getId(), r);
+		}
+		if(ids.length() > 0) {
+			ids = ids.substring(0, ids.length()-1);
+		}
+		List<Batch> bset = batchManager.getByRgIds(ids);
+		Map<Long,Integer> numMap = new HashMap<Long,Integer>();
+		for(Batch b : bset) {
+			int tnum = rMap.get(b.getRgId()).getSubtnum();
+			if(numMap.containsKey(b.getRgId())) {
+				if(tnum > 1) {
+					numMap.put(b.getRgId(), b.getNum()*tnum + b.getSubnum() + numMap.get(b.getRgId()));
+				} else {
+					numMap.put(b.getRgId(), b.getNum() + numMap.get(b.getRgId()));
+				}
+			} else {
+				if(tnum > 1) {
+					numMap.put(b.getRgId(), b.getNum()*tnum + b.getSubnum());
+				} else {
+					numMap.put(b.getRgId(), b.getNum());
+				}
+			}
+		}
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
@@ -119,6 +146,23 @@ public class StockController extends ReagentBaseController {
 				map.put("condition", r.getStorageCondition());
 				map.put("pcode", r.getProductcode());
 				map.put("temp", r.getTemperature());
+				if(numMap.containsKey(r.getId())) {
+					if(r.getSubtnum()>1) {
+						if(numMap.get(r.getId()) <= r.getMargin()*r.getSubtnum()) {
+							map.put("totalnum", "<red>" + numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit() + "</red>");
+						} else {
+							map.put("totalnum", numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit());
+						}
+					} else {
+						if(numMap.get(r.getId()) <= r.getMargin()) {
+							map.put("totalnum", "<red>" +numMap.get(r.getId()) + r.getUnit() + "</red>");
+						} else {
+							map.put("totalnum", numMap.get(r.getId()) + r.getUnit());
+						}
+					}
+				} else {
+					map.put("totalnum", "<red>0</red>");
+				}
 				map.put("isself", r.getIsselfmade() == 1 ? Constants.TRUE : Constants.FALSE);
 				dataRows.add(map);
 			}

@@ -85,6 +85,20 @@
 	        </form:select>
         </div>
     </div>
+    <div class="control-group col-sm-8">
+        <appfuse:label styleClass="control-label" key="index.history"/>
+        <div class="controls">
+        	<form:select path="needhistory" id="needhistory" cssClass="selects form-control input-group-sm">
+	        	<form:options items="${ishistory}"  />
+	        </form:select>
+        </div>
+    </div>
+    <div class="control-group col-sm-8">
+        <appfuse:label styleClass="control-label" key="index.method"/>
+        <div class="controls">
+        	<form:input path="method" id="method" cssClass="text form-control input-group-sm" />
+        </div>
+    </div>
 	<div class="control-group col-sm-8">
         <appfuse:label styleClass="control-label" key="index.guide"/>
         <div class="controls">

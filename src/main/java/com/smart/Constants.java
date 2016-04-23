@@ -173,12 +173,12 @@ public final class Constants {
 	/**
 	 * 日期格式:yyyy-MM-dd hh:mm:ss
 	 */
-	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/**
 	 * 日期格式:yyyy-MM-dd hh:mm
 	 */
-	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+	public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	
 	/**
 	 * 日期格式:yyyy-MM-dd

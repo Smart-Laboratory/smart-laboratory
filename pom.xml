@@ -805,6 +805,11 @@
 			<version>6.2.0.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+		<dependency>
 			<groupId>com.zju.api</groupId>
 			<artifactId>zju-api</artifactId>
 			<version>1.0.1</version>
