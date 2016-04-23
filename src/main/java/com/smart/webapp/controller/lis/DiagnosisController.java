@@ -17,13 +17,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.lis.Diagnosis;
+import com.smart.model.lis.Sample;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
 import com.smart.model.rule.DesBag;
 import com.smart.model.rule.Description;
+import com.smart.model.rule.Result;
+import com.smart.model.rule.Rule;
 import com.smart.service.lis.DiagnosisManager;
+import com.smart.service.lis.SampleManager;
 import com.smart.service.rule.DesBagManager;
 import com.smart.service.rule.DescriptionManager;
+import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -129,6 +134,20 @@ public class DiagnosisController {
 		
 		map.put("dlist", dList);
 		
+		List<Result> results = null;
+		String sampleNo = request.getParameter("sampleNo");
+		if(sampleNo!=null && !sampleNo.isEmpty()){
+			Sample sample = sampleManager.getBySampleNo(sampleNo);
+			String ruleIds = sample.getRuleIds();
+			List<Rule> rules = ruleManager.getRuleList(ruleIds);
+			for(Rule rule : rules){
+				if(rule.getType() == 8){
+					results.addAll(rule.getResults());
+				}
+			}
+		}
+		map.put("guides", results);
+		
 		return map;
 	}
 	
@@ -139,4 +158,8 @@ public class DiagnosisController {
 	private DesBagManager desBagManager;
 	@Autowired
 	private DescriptionManager descriptionManager;
+	@Autowired
+	private SampleManager sampleManager;
+	@Autowired
+	private RuleManager ruleManager;
 }

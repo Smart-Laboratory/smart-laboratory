@@ -69,6 +69,7 @@ public class RuleController {
 		typeList.put(5, "二级报警");
 		typeList.put(6, "三级报警");
 		typeList.put(7, "极值");
+		typeList.put(8, "指南");
 		typeList.put(10, "临时");
 		
 		Map<Integer, String> algorithmList = new HashMap<Integer, String>();

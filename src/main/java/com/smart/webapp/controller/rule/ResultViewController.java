@@ -48,7 +48,7 @@ public class ResultViewController {
 		}
 		
 		List<Result> results = resultManager.getResults(pageNumber, criterion, isAsc);
-		int totalNum = resultManager.getResultsCount();;
+		int totalNum = resultManager.getResultsCount();
 
 		PageList<Result> resultList = new PageList<Result>(pageNumber, totalNum);
 		resultList.setList(results);

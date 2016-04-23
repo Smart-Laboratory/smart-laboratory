@@ -505,6 +505,9 @@ public class Rule extends BaseObject implements Serializable {
 		case 7:
 			name = "极值";
 			break;
+		case 8:
+			name = "指南";
+			break;
 		case 10:
 			name = "临时";
 			break;

@@ -143,6 +143,11 @@
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
 		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
+		<h5 id="guide"><fmt:message key='guide' /></h5>
+		<div id="guideDiv">
+		</div>
+		
+		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
 		<div class="form-inline">
 			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
 			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='szm'/>"/>

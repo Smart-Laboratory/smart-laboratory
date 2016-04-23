@@ -339,6 +339,7 @@
 	        dataType : "html",
 	        success : function() {
 	            /*alert(action + " success!");*/
+	        	getData();
 	        }
 	    });
 	}
