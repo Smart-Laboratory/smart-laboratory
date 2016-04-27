@@ -46,6 +46,12 @@
         <appfuse:label styleClass="control-label" key="index.indexId"/>
         <div class="control">
 	        <form:hidden path="id"/>
+	        <form:hidden path="english"/>
+	        <form:hidden path="enum_data"/>
+	        <form:hidden path="importance"/>
+	        <form:hidden path="isprint"/>
+	        <form:hidden path="knowledgename"/>
+	        <form:hidden path="printord"/>
 	        <form:input path="indexId" id="indexId" cssClass="text form-control input-group-sm"/>
         </div>
 	</div>

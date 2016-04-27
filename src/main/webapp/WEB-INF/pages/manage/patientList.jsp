@@ -85,8 +85,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="height:20px"></div>
-		<div class="col-sm-11">
+		<div class="col-sm-11" style="margin-top:10px;">
 		<div id="patientRow" style="font-size: 13px;">
 			<table id="rowed3"></table>
 		</div>

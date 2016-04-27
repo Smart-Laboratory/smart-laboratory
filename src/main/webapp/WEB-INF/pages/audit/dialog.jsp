@@ -143,7 +143,7 @@
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
 		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
-		<h5 id="guide"><fmt:message key='guide' /></h5>
+		<h5 id="guide"><fmt:message key='rule.guide' /></h5>
 		<div id="guideDiv">
 		</div>
 		

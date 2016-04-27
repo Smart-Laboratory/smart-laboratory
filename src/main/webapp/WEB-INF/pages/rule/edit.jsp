@@ -368,7 +368,7 @@ $(function() {
 			var c = ui.item.category;
 			$("#exsitItemPanel").css('display', 'block');
 			$("#itemPanel").dialog({
-				width : 600
+				width : 650
 			});
 			if (c == "I") {
 				showAddItemPanel(ui);
@@ -622,7 +622,7 @@ function result_create_href() {
 	$("#createResultPanel").css('display', 'block');
 	$("#result_content").val($("#searchResult").val());
 	$("#resultPanel").dialog({
-		width : 500,
+		width : 800,
 		height : 300
 	});
 }
@@ -788,9 +788,9 @@ th {
 			<th></th>
 			<td>
 				<div>
-					<input type="submit" style="width: 80px;" class="btn" name="save"
+					<input type="submit" style="width: 80px;" class="btn btn-info" name="save"
 						value="<fmt:message key="button.save"/>" /> <input type="button"
-						style="width: 80px;" class="btn" name="cancel"
+						style="width: 80px;" class="btn btn-info" name="cancel"
 						onclick="history.back(-1)"
 						value="<fmt:message key="button.cancel"/>" />
 				</div>
@@ -801,13 +801,13 @@ th {
 
 <div id="panel">
 
-	<div id="itemPanel" title="<fmt:message key="item.add.dialog"/>">
+	<div id="itemPanel" style="width:650px;" title="<fmt:message key="item.add.dialog"/>">
 		<div id="searchIndexPanel" style="width: 230px; text-align: left; float: left; display: block;">
 			<div>
 				<label><fmt:message key="input.search.name" /></label>
 			</div>
 			<div>
-				<input id="searchIndex" style="width: 200px"
+				<input id="searchIndex" class="form-control" style="width: 200px"
 					placeholder="input search text" />
 			</div>
 			<div id="indexPanel" style="width: 220px; text-align: left; display: none;">
@@ -862,7 +862,7 @@ th {
 						style="width: 120px;" type="text" id="string_value" /></label>
 				</div>
 				<div>
-					<input type="button" class="btn" id="createItemBtn"
+					<input type="button" class="btn btn-info btn-sm" id="createItemBtn"
 						style="margin-left: 60px; width: 80px;"
 						value="<fmt:message key="item.create"/>" />
 				</div>
@@ -900,27 +900,25 @@ th {
 					type="hidden" id="result_id" />
 			</div>
 			<div>
-				<input type="button" id="addResultBtn" class="btn"
+				<input type="button" id="addResultBtn" class="btn btn-info btn-info"
 					value="<fmt:message key="result.add"/>" /> <a
 					href='javascript:result_create_href();' style="margin-left: 20px;"><fmt:message
 						key="result.create" /></a>
 			</div>
 		</div>
-		<div id="createResultPanel" style="float: right; display: none;">
-			<div class="input-prepend">
-				<label class="add-on"><fmt:message key="result.content" /></label><input
-					id="result_content" type="text" style="width: 160px" />
+		<div id="createResultPanel" style="width:500px;float: right; display: none;"  class="form-inline">
+			<div class="input-prepend" style="margin-top:10px;">
+				<label class="col-sm-2 add-on" for="result_content" style="margin:8px 2px;"><fmt:message key="result.content" /></label><textarea
+					id="result_content" type="text" class="col-sm-10 form-control " style="width: 360px" ></textarea>
 			</div>
-			<div class="input-prepend">
-				<label class="add-on"><fmt:message key="result.category" /></label><input
-					id="result_category" type="text" style="width: 160px" />
+			<div class="input-prepend" style="margin-top:10px;">
+				<label class="col-sm-2 add-on" style="margin:8px 2px;"><fmt:message key="result.category" /></label><input
+					id="result_category" type="text" class="col-sm-4 form-control " style="width: 80px" />
+				<label class="col-sm-2 add-on" style="margin:8px 2px;"><fmt:message key="result.percent" /></label><input
+					id="result_percent" type="text" class="col-sm-4 form-control " style="width: 80px" />
 			</div>
-			<div class="input-prepend">
-				<label class="add-on"><fmt:message key="result.percent" /></label><input
-					id="result_percent" type="text" style="width: 140px" />
-			</div>
-			<div>
-				<button class="btn span2" id="createResultBtn">
+			<div class="col-sm-12" style="margin-top:10px;">
+				<button class="btn btn-info btn-sm" id="createResultBtn">
 					<b><fmt:message key="result.create.add" /></b>
 				</button>
 			</div>
@@ -936,7 +934,7 @@ th {
 					id="bag_id" />
 			</div>
 			<div>
-				<input type="button" class="btn" id="addBagBtn"
+				<input type="button" class="btn btn-info btn-sm" id="addBagBtn"
 					value="<fmt:message key="bag.add"/>" />
 			</div>
 		</div>

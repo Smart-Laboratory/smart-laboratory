@@ -134,7 +134,7 @@ public class DiagnosisController {
 		
 		map.put("dlist", dList);
 		
-		List<Result> results = null;
+		List<String> results = new ArrayList<String>();
 		String sampleNo = request.getParameter("sampleNo");
 		if(sampleNo!=null && !sampleNo.isEmpty()){
 			Sample sample = sampleManager.getBySampleNo(sampleNo);
@@ -142,7 +142,9 @@ public class DiagnosisController {
 			List<Rule> rules = ruleManager.getRuleList(ruleIds);
 			for(Rule rule : rules){
 				if(rule.getType() == 8){
-					results.addAll(rule.getResults());
+					for(Result result:rule.getResults()){
+						results.add(result.getContent());
+					}
 				}
 			}
 		}

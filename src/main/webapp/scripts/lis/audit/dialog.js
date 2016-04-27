@@ -3,10 +3,8 @@ function addtotext(item){
 	if(!$(i).prop("checked")){
 		if($("#noteText").html().indexOf($(item).html())<0){
 			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
-			alert($("#noteText").html());
 		}
 	}else{
-		
 		$("#noteText").html($("#noteText").html().replace($(item).html(),""));
 		
 	}
@@ -71,10 +69,10 @@ $(function(){
 	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
                 }
 	    		var glist = data.guides;
-	    		var item;
-	    		for(var j=0; j<glist.size; j++){
-	    			item = glist[i];
-	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+item.content+"</span>  </label></div>");
+	    		var guide;
+	    		for(var j=0; j<glist.length; j++){
+	    			guide = glist[j];
+	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    	});
 	    },

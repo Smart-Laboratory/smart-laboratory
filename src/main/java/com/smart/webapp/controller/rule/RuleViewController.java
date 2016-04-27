@@ -140,8 +140,10 @@ public class RuleViewController {
 			String id = request.getParameter("id");
 			String state = request.getParameter("state");		
 			Rule rule = ruleManager.get(Long.parseLong(id));
+			System.out.println(rule.isActivate());
 			rule.setActivate(Boolean.parseBoolean(state));
-			ruleManager.updateRule(rule);
+			ruleManager.save(rule);
+			System.out.println(rule.isActivate());
 			return true;
 		} catch (Exception e) {
 			return false;

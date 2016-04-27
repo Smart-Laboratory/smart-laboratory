@@ -23,7 +23,7 @@
        		$(".activate").click(function() {
        			var id = $(this).next().html();
        			var value;
-       			if($(this).attr("checked")) {
+       			if($(this).prop("checked")) {
        				value = true;
        			} else {
        				value = false;

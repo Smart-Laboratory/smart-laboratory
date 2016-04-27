@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.io.Reader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,7 @@ import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
+import com.smart.webapp.util.AnalyticUtil;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
@@ -82,12 +84,21 @@ public class AuditController extends BaseAuditController {
 		Set<Long> have = new HashSet<Long>();
 		for(Bag b : bags) {
 			for(Rule r : b.getRules()) {
-				if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
+//				if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
+				if(r.getType()==8){
 					ruleList.add(r);
 					have.add(r.getId());
 				}
 			}
 		}
+		
+		if (!DroolsRunner.getInstance().isBaseInited()) {
+    		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
+    		Reader reader = analyticUtil.getReader(ruleList);
+			DroolsRunner.getInstance().buildKnowledgeBase(reader);
+			reader.close();
+		}
+		System.out.println("规则库创建完成！");
 		final DroolsRunner droolsRunner = DroolsRunner.getInstance();
 		final Set<String> hasRuleSet = new HashSet<String>();
 		for (Item i : itemManager.getAll()) {
@@ -889,4 +900,6 @@ public class AuditController extends BaseAuditController {
 	
 	@Autowired
 	private EvaluateManager evaluateManager;
+	
+	
 }
