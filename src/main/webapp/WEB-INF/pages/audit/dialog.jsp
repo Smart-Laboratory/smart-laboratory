@@ -290,7 +290,7 @@
 	</div>
 	
 	<div id="chartDialog" title="<fmt:message key='result.info' />" style="text-align:left;" >
-		<div id="singleChartPanel" style="width:640px;height:320px">></div>
+		<div id="singleChartPanel" style="width:640px;height:320px"></div>
 		<table id="chartTongji" class="table">
 			<tbody>
 			<tr><th><fmt:message key='tongji.min' /></th><td><span id="tongji_min"></span></td><th><fmt:message key='tongji.max'/></th><td><span id="tongji_max"></span></td><th><fmt:message key='tongji.mid' /></th><td><span id="tongji_mid"></span></td></tr>

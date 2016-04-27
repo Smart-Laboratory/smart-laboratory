@@ -10,7 +10,6 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.TestResultDao;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
-import com.smart.model.lis.Process;
 
 @Repository("testResultDao")
 public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, TestResultPK> implements TestResultDao {
@@ -92,7 +91,7 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getHisTestResult(String samplenos) {
-		return getSession().createQuery("from TestResult where sampleNo in (" + samplenos + ")").list();
+		return getSession().createQuery("from TestResult where sampleNo in (" + samplenos + ") order by sampleNo desc").list();
 	}
 
 	@SuppressWarnings("unchecked")

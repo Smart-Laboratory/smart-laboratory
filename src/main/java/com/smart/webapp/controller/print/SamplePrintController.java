@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,6 @@ import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
-import com.smart.model.util.TestChart;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -123,7 +123,7 @@ public class SamplePrintController extends BaseAuditController {
 				hisProcessMap.put(p.getSampleid(), p);
 			}
 			for(TestResult tr : testList) {
-				if(idMap.get(tr.getTestId()).getNeedhistory() == 1) {
+				if(idMap.containsKey(tr.getTestId()) && idMap.get(tr.getTestId()).getNeedhistory() == 1) {
 					if(chartTestMap.containsKey(tr.getTestId())) {
 						chartTestMap.get(tr.getTestId()).add(tr);
 					} else {
@@ -194,17 +194,37 @@ public class SamplePrintController extends BaseAuditController {
 					}
 				}
 			}
-			List<TestChart> chartlist = new ArrayList<TestChart>();
+			JSONArray chartlist = new JSONArray();
+			int count = 0;
 			for(String testid : chartTestMap.keySet()) {
-				List<TestResult> tl = chartTestMap.get(testid);
-				TestChart tc = new TestChart();
-				tc.setTitle(idMap.get(testid).getName());
-				for(TestResult tr : tl) {
-					tc.getReArr().add(Double.parseDouble(tr.getTestResult()));
-					tc.getHiArr().add(Double.parseDouble(tr.getRefHi()));
-					tc.getLoArr().add(Double.parseDouble(tr.getRefLo()));
+				if(testIdSet.contains(testid)) {
+					System.out.println(testid);
+					List<TestResult> tl = chartTestMap.get(testid);
+					List<Double> loArr = new ArrayList<Double>(); 
+					List<Double> reArr = new ArrayList<Double>();
+					List<Double> hiArr = new ArrayList<Double>();
+					List<String> timeArr = new ArrayList<String>();
+					JSONObject testchart = new JSONObject();
+					testchart.put("title", idMap.get(testid).getName());
+					for(TestResult tr : tl) {
+						reArr.add(Double.parseDouble(tr.getTestResult()));
+						hiArr.add(Double.parseDouble(tr.getRefHi()));
+						loArr.add(Double.parseDouble(tr.getRefLo()));
+						timeArr.add(Constants.DF7.format(tr.getMeasureTime()));
+					}
+					if(timeArr.size()>5) {
+						timeArr = timeArr.subList(0, 5);
+						reArr = reArr.subList(0, 5);
+						hiArr = hiArr.subList(0, 5);
+						loArr = loArr.subList(0, 5);
+					}
+					testchart.put("time", timeArr);
+					testchart.put("result", reArr);
+					testchart.put("high", hiArr);
+					testchart.put("low", loArr);
+					chartlist.put(count, testchart);
+					count++;
 				}
-				chartlist.add(tc);
 			}
 			info.put("chartlist", chartlist);
 		}

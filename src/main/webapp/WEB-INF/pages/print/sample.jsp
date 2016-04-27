@@ -7,6 +7,8 @@
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../scripts/print/sample.js"></script>
+	<script type="text/javascript" src="../scripts/highcharts.js"></script>
+	
 	
 </head>
 

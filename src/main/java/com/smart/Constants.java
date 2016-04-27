@@ -201,9 +201,14 @@ public final class Constants {
 	public final static SimpleDateFormat DF5 = new SimpleDateFormat("HH:mm");
 
 	/**
-	 * 日期格式:HH:mm
+	 * 日期格式:HH:mm:ss
 	 */
 	public final static SimpleDateFormat DF6 = new SimpleDateFormat("HH:mm:ss");
+	
+	/**
+	 * 日期格式:HH:mm:ss
+	 */
+	public final static SimpleDateFormat DF7 = new SimpleDateFormat("yyMMdd");
 	
 	/**
 	 * 检验流程——申请
