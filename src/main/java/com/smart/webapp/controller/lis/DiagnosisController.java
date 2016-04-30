@@ -147,8 +147,12 @@ public class DiagnosisController {
 					}
 				}
 			}
+			
+			map.put("sample", sample);
 		}
 		map.put("guides", results);
+		
+		
 		
 		return map;
 	}

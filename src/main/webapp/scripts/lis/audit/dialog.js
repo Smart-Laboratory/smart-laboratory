@@ -1,11 +1,13 @@
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
-		if($("#noteText").html().indexOf($(item).html())<0){
-			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
+		if($("#noteText").val().indexOf($(item).html())<0){
+//			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
+			
+			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
 		}
 	}else{
-		$("#noteText").html($("#noteText").html().replace($(item).html(),""));
+		$("#noteText").val($("#noteText").val().replace($(item).html(),""));
 		
 	}
 };
@@ -61,7 +63,7 @@ $(function(){
 	    },
 	    open:function(){
 	    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val(),sampleNo:$("#hiddenSampleNo").val()},function(data){
-	    		$("#disease").html(data.disease);
+	    		$("#disease").val(data.disease);
 	    		var dlist = data.dlist;
 	    		$("#descriptionDiv").html("");
 	    		for(var i=0; i<dlist.length; i++){
@@ -74,8 +76,17 @@ $(function(){
 	    			guide = glist[j];
 	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
+	    		var sample = data.sample;
+	    		$("#checkSample").html(sample.description);
 	    	});
-	    },
+	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val()},function(data){
+	    		var rows = data.rows;
+	    		for(var i=0;i<rows.length;i++){
+	    			row = rows[i];
+	    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+	    		}
+	    	});
+	    }
 	    
 	
 	});

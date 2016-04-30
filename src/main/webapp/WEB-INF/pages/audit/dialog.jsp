@@ -155,10 +155,16 @@
 			<span type="text" id="disease" />
 		</div>
 		<div id="descriptionDiv">
-			
 		</div>
-		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
-		<textarea id="noteText" rows="3" class="form-control" style="width:600px;"></textarea>
+		
+		<div style="border-top:1px solid #000000;margin-top:10px;">
+			<h5 id="explainSelect"><b><fmt:message key='audit.infomation'/></b></h5>
+			<div id="explainDiv"></div>
+		</div>
+		
+		<h5 id="passNotes"><b><fmt:message key='audit.checkerOpinion'/></b></h5>
+		<textarea id="noteText" rows="8" class="form-control" style="width:600px;"></textarea>
+		<div id="checkSample" type="margin-top:15px;"></div>
 		
 	</div>
 	
