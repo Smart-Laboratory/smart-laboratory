@@ -62,8 +62,7 @@ public class UserDaoTest extends BaseDaoTestCase {
         user2.setAddress(user.getAddress());
         user2.setConfirmPassword(user.getConfirmPassword());
         user2.setEmail(user.getEmail());
-        user2.setFirstName(user.getFirstName());
-        user2.setLastName(user.getLastName());
+        user2.setName(user.getName());
         user2.setPassword(user.getPassword());
         user2.setPasswordHint(user.getPasswordHint());
         user2.setRoles(user.getRoles());
@@ -107,8 +106,7 @@ public class UserDaoTest extends BaseDaoTestCase {
     public void testAddAndRemoveUser() throws Exception {
         User user = new User("testuser");
         user.setPassword("testpass");
-        user.setFirstName("Test");
-        user.setLastName("Last");
+        user.setName("Test");
         Address address = new Address();
         address.setCity("Denver");
         address.setProvince("CO");
@@ -156,11 +154,11 @@ public class UserDaoTest extends BaseDaoTestCase {
         List<User> found = dao.search("Matt");
         assertEquals(1, found.size());
         User user = found.get(0);
-        assertEquals("Matt", user.getFirstName());
+        assertEquals("Matt", user.getName());
 
         // test mirroring
         user = dao.get(-2L);
-        user.setFirstName("MattX");
+        user.setName("MattX");
         dao.saveUser(user);
         flush();
         flushSearchIndexes();
@@ -169,6 +167,6 @@ public class UserDaoTest extends BaseDaoTestCase {
         found = dao.search("MattX");
         assertEquals(1, found.size());
         user = found.get(0);
-        assertEquals("MattX", user.getFirstName());
+        assertEquals("MattX", user.getName());
     }
 }

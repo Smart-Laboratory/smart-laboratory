@@ -142,24 +142,21 @@
 	<div id="opStatusDialog" title="<fmt:message key='pass.button' />/<fmt:message key='unpass.button' />" style="text-align:left;" >
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
-		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
-		<h5 id="guide"><fmt:message key='rule.guide' /></h5>
-		<div id="guideDiv">
-		</div>
-		
-		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555;margin:2px 1px; ">
-		<div class="form-inline">
+		<h5 id="guide" style="border-top:1px solid #000000;padding-top:5px;"><b><fmt:message key='rule.guide'/></b></h5>
+		<div id="guideDiv"></div>
+		<div class="form-inline" style="border-top:1px solid #000000;padding-top:5px;">
 			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
 			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='szm'/>"/>
 			<label for="disease" style="margin-left:20px;"><fmt:message key='des.disease' /></label>
 			<span type="text" id="disease" />
 		</div>
-		<div id="descriptionDiv">
-			
-		</div>
+		<div id="descriptionDiv"></div>
 		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
-		<textarea id="noteText" rows="3" class="form-control" style="width:600px;"></textarea>
-		
+		<textarea id="noteText" rows="3" class="form-control" style="width:100%;"></textarea>
+		<div id="historyChart" style="float:left;width:100%;margin-top:5px;padding-top:5px;border-top:1px solid #000000;">
+		<p><b><fmt:message key="sample.history.chart"/></b></p>
+		<div id="chartList"></div>
+		</div>
 	</div>
 	
 	<div id="collectDialog" title="<fmt:message key='collect.button' />" style="text-align:left;" >

@@ -69,8 +69,7 @@
 			<div style="float:left;width:5%;">&nbsp;</div>
 		</div>
 	</div>
-	<div id="resultDiv" style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;">
-	</div>
+	<div id="resultDiv" style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;"></div>
 	<div id="historyChart" style="float:left;width:96%;margin-left:2%;padding:10px;border-top:1px solid #000000;">
 	<p><fmt:message key="sample.history.chart"/></p>
 	

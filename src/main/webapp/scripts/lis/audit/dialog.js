@@ -2,7 +2,7 @@ function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
 		if($("#noteText").html().indexOf($(item).html())<0){
-			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
+			$("#noteText").append($(item).html()+"\r\n");
 		}
 	}else{
 		$("#noteText").html($("#noteText").html().replace($(item).html(),""));
@@ -75,9 +75,77 @@ $(function(){
 	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    	});
+	    	if($("#hisLastResult").val() == 1) {
+	    		$("#historyChart").css("display", "block");
+	    		$.get("../print/historyChart",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hisLastResult").val()}, function(data) {
+	    			$("#chartList").html("");
+	    			data = jQuery.parseJSON(data);
+					if(data.chartlist.length > 0) {
+						for(var i = 0; i< data.chartlist.length; i++) {
+							var check = data.chartlist[i].check;
+							if(i > 1) {
+								if(check == 1) {
+									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%' checked></input>");
+								} else {
+									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%'></input>");
+								}
+								$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:45%;height:200px'></div>");
+							} else {
+								if(check == 1) {
+									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%' checked></input>");
+								} else {
+									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%'></input>");
+								}
+								$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='float:left;width:45%;height:200px'></div>");
+							}
+							var xset = data.chartlist[i].time;
+							var yset1 = data.chartlist[i].low;
+							var yset2 = data.chartlist[i].result;
+							var yset3 = data.chartlist[i].high;
+							var chart = new Highcharts.Chart({ 
+								title: {
+									text: data.chartlist[i].title
+								},
+								credits: {
+							          enabled:false
+								},
+								plotOptions: {
+						            line: {
+						                dataLabels: {
+						                    enabled: true
+						                },
+						                enableMouseTracking: false
+						            }
+						        },
+					            chart: {  
+					                renderTo: 'chart' + data.chartlist[i].id,  
+					                type: 'line',  
+					            },
+					            xAxis: {
+					                categories: xset  
+					            },  
+					            yAxis: {
+					                title: {
+					                    text: '结果'
+					                },
+					                plotLines: [{
+					                    value: 0,
+					                    width: 1,
+					                    color: '#808080'
+					                }]
+					            },
+					            series: [{
+					            	name: '检验结果',
+					            	data: yset2 
+					            }]  
+					        });
+						}
+					}
+				});
+	    	} else {
+				$("#historyChart").css("display", "none");
+			}
 	    },
-	    
-	
 	});
 	
 	

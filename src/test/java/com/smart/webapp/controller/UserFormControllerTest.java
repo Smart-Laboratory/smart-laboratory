@@ -65,7 +65,7 @@ public class UserFormControllerTest extends BaseControllerTestCase {
         request.addUserRole(Constants.ADMIN_ROLE);
 
         User user = c.showForm(request, new MockHttpServletResponse());
-        assertEquals("Tomcat User", user.getFullName());
+        assertEquals("Tomcat User", user.getName());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class UserFormControllerTest extends BaseControllerTestCase {
         request.setRemoteUser("user");
 
         user = c.showForm(request, new MockHttpServletResponse());
-        assertEquals("Tomcat User", user.getFullName());
+        assertEquals("Tomcat User", user.getName());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class UserFormControllerTest extends BaseControllerTestCase {
         // result in multiple parameters with the same name getting sent
         User user = ((UserManager) applicationContext.getBean("userManager")).getUser("-1");
         user.setConfirmPassword(user.getPassword());
-        user.setLastName("Updated Last Name");
+        user.setName("Updated Last Name");
 
         request.setRemoteUser(user.getUsername());
 
@@ -114,7 +114,7 @@ public class UserFormControllerTest extends BaseControllerTestCase {
     public void testAddWithMissingFields() throws Exception {
         request = newPost("/userform.html");
         user = new User();
-        user.setFirstName("Jack");
+        user.setName("Jack");
         request.setRemoteUser("user");
 
         BindingResult errors = new DataBinder(user).getBindingResult();
