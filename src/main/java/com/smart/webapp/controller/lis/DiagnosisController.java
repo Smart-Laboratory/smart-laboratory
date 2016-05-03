@@ -115,11 +115,32 @@ public class DiagnosisController {
 		if(diagnosisName==null && id==null)
 			return null;
 		long bId=0;
+		
+		Map<String, Object> map = new HashMap<String,Object>();
+		List<String> results = new ArrayList<String>();
+		String sampleNo = request.getParameter("sampleNo");
+		if(sampleNo!=null && !sampleNo.isEmpty()){
+			Sample sample = sampleManager.getBySampleNo(sampleNo);
+			String ruleIds = sample.getRuleIds();
+			if(!ruleIds.isEmpty()){
+				List<Rule> rules = ruleManager.getRuleList(ruleIds);
+				for(Rule rule : rules){
+					if(rule.getType() == 8){
+						for(Result result:rule.getResults()){
+							results.add(result.getContent());
+						}
+					}
+				}
+			}
+			map.put("sample", sample);
+		}
+		map.put("guides", results);
+		
 		Diagnosis diagnosis = new Diagnosis();
 		if(diagnosisName!=null){
 			diagnosis = diagnosisManager.getByDiagnosisName(diagnosisName);
 			if(diagnosis==null)
-				return null;
+				return map;
 			bId=diagnosis.getDescriptionId();
 		}else if(id!=null){
 			bId = Long.parseLong(id);
@@ -127,30 +148,12 @@ public class DiagnosisController {
 			
 		}
 		
-		
-		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("disease", diagnosis.getKnowledgeName());
 		List<Description> dList = descriptionManager.getDescriptionsByBagID(bId);
 		
 		map.put("dlist", dList);
 		
-		List<String> results = new ArrayList<String>();
-		String sampleNo = request.getParameter("sampleNo");
-		if(sampleNo!=null && !sampleNo.isEmpty()){
-			Sample sample = sampleManager.getBySampleNo(sampleNo);
-			String ruleIds = sample.getRuleIds();
-			List<Rule> rules = ruleManager.getRuleList(ruleIds);
-			for(Rule rule : rules){
-				if(rule.getType() == 8){
-					for(Result result:rule.getResults()){
-						results.add(result.getContent());
-					}
-				}
-			}
-			
-			map.put("sample", sample);
-		}
-		map.put("guides", results);
+		
 		
 		
 		

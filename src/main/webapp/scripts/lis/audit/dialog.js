@@ -12,7 +12,7 @@ function addtotext(item){
 >>>>>>> origin/master
 		}
 	}else{
-		$("#noteText").val($("#noteText").val().replace($(item).html(),""));
+		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
 		
 	}
 };
@@ -47,7 +47,8 @@ $(function(){
 	    				}
 	    			});
 	    		} else {
-	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:""},function(data) {
+	    			var text = $("#noteText").val();
+	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text},function(data) {
 	    				if (data == true) {
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
@@ -69,12 +70,7 @@ $(function(){
 	    open:function(){
 	    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val(),sampleNo:$("#hiddenSampleNo").val()},function(data){
 	    		$("#disease").val(data.disease);
-	    		var dlist = data.dlist;
 	    		$("#descriptionDiv").html("");
-	    		for(var i=0; i<dlist.length; i++){
-	    			var item = dlist[i];
-	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
-                }
 	    		var glist = data.guides;
 	    		var guide;
 	    		for(var j=0; j<glist.length; j++){
@@ -82,7 +78,14 @@ $(function(){
 	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    		var sample = data.sample;
-	    		$("#checkSample").html(sample.description);
+	    		var description = sample.description.replace(/<p>/g,"").replace(/<\/p>/g,"");
+	    		$("#noteText").html(description);
+	    		
+	    		var dlist = data.dlist;
+	    		for(var i=0; i<dlist.length; i++){
+	    			var item = dlist[i];
+	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+                }
 	    	});
 	    	if($("#hisLastResult").val() == 1) {
 	    		$("#historyChart").css("display", "block");
@@ -156,6 +159,7 @@ $(function(){
 			}
 	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val()},function(data){
 	    		var rows = data.rows;
+	    		$("#explainDiv").html("");
 	    		for(var i=0;i<rows.length;i++){
 	    			row = rows[i];
 	    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");

@@ -505,17 +505,11 @@ public class AuditController extends BaseAuditController {
 				info.setWriteback(1);
 				String text = Check.MANUAL_AUDIT;
 				if (!StringUtils.isEmpty(textHtml)) {
-					if(textHtml.contains("\r"))
-						System.out.println("\r");
-					if(textHtml.contains("\n"))
-						System.out.println("\n");
-					if(textHtml.contains("\r\n"))
-						System.out.println("\r\n");
 					String[] t = textHtml.split(";");
 					String description="";
-					for(String s: t){
-						if(!s.isEmpty())
-							description+="<p>"+s+"</p>";
+					for(int i=0; i<t.length-1 ;i++){
+						if(!t[i].isEmpty())
+							description+="<p>"+t[i]+"</p>";
 					}
 					info.setDescription(description);
 				}
