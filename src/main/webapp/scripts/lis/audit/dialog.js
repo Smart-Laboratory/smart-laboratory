@@ -84,7 +84,6 @@ $(function(){
 	    		var sample = data.sample;
 	    		$("#checkSample").html(sample.description);
 	    	});
-<<<<<<< HEAD
 	    	if($("#hisLastResult").val() == 1) {
 	    		$("#historyChart").css("display", "block");
 	    		$.get("../print/historyChart",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hisLastResult").val()}, function(data) {
@@ -155,8 +154,6 @@ $(function(){
 	    	} else {
 				$("#historyChart").css("display", "none");
 			}
-	    },
-=======
 	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val()},function(data){
 	    		var rows = data.rows;
 	    		for(var i=0;i<rows.length;i++){
@@ -165,12 +162,7 @@ $(function(){
 	    		}
 	    	});
 	    }
-	    
-	
->>>>>>> origin/master
 	});
-	
-	
 	
 	$("#tatDialog").dialog({
 		autoOpen: false,
