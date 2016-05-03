@@ -31,6 +31,9 @@
 	width:60px;
 	padding: 0 10px;
 }
+p{
+	margin-bottom:1px;
+}
 </style>
 </head>
 

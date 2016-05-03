@@ -85,9 +85,11 @@ public class AuditController extends BaseAuditController {
 		for(Bag b : bags) {
 			for(Rule r : b.getRules()) {
 //				if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
-				if(r.getType()==8){
-					ruleList.add(r);
-					have.add(r.getId());
+				if(r.getType()==8||r.getType()==0){
+					if(!have.contains(r.getId())){
+						ruleList.add(r);
+						have.add(r.getId());
+					}
 				}
 			}
 		}
@@ -487,7 +489,7 @@ public class AuditController extends BaseAuditController {
 		String op = request.getParameter("operate");
 		String note = request.getParameter("note");
 		String sampleNo = request.getParameter("sample");
-		String text = request.getParameter("text");
+		String textHtml = request.getParameter("text");
 		List<Sample> sample = sampleManager.getListBySampleNo(sampleNo);
 		
 		List<Sample> updateP = new ArrayList<Sample>();
@@ -501,9 +503,25 @@ public class AuditController extends BaseAuditController {
 					info.setAuditStatus(2);
 				}
 				info.setWriteback(1);
-				if (StringUtils.isEmpty(text)) {
-					text = Check.MANUAL_AUDIT;
+				String text = Check.MANUAL_AUDIT;
+				if (!StringUtils.isEmpty(textHtml)) {
+					if(textHtml.contains("\r"))
+						System.out.println("\r");
+					if(textHtml.contains("\n"))
+						System.out.println("\n");
+					if(textHtml.contains("\r\n"))
+						System.out.println("\r\n");
+					String[] t = textHtml.split(";");
+					String description="";
+					for(String s: t){
+						if(!s.isEmpty())
+							description+="<p>"+s+"</p>";
+					}
+					info.setDescription(description);
 				}
+				
+				
+				
 				if (info.getCheckerOpinion()!=null
 					&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)
 						&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)) {
