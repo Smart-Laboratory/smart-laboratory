@@ -1,15 +1,9 @@
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
-<<<<<<< HEAD
 		if($("#noteText").val().indexOf($(item).html())<0){
 //			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
-			
 			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
-=======
-		if($("#noteText").html().indexOf($(item).html())<0){
-			$("#noteText").append($(item).html()+"\r\n");
->>>>>>> origin/master
 		}
 	}else{
 		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
@@ -28,10 +22,22 @@ $(function(){
 	    		var sample = $("#hiddenSampleNo").val();
 	    		var id = $("#hiddenDocId").val();
 	    		
+	    		var checktest="";
+    			$("#chartList :checkbox").each(function(){
+    				if($(this).prop("checked")==true){
+    					if(checktest=="")
+    						checktest=$(this).attr("id");
+    					else
+    						checktest = checktest + ";" + $(this).attr("id");
+    				}
+    			});
+    			
 	    		if ($("#hiddenIsPass").val() == "true") {
+	    			
+	    			
 	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
 	    			var text = $("#noteText").val();
-	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text},function(data) {
+	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
@@ -48,7 +54,7 @@ $(function(){
 	    			});
 	    		} else {
 	    			var text = $("#noteText").val();
-	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text},function(data) {
+	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
