@@ -59,6 +59,7 @@ public class Sample extends BaseObject {
 	private String passReason;
 	private String sectionId;
 	private String patientblh;
+	private String charttest;
 	
 	@Id
 	public Long getId(){
@@ -449,6 +450,15 @@ public class Sample extends BaseObject {
 
 	public void setPatientblh(String patientblh) {
 		this.patientblh = patientblh;
+	}
+	
+	@Column(name = "charttest")
+	public String getCharttest() {
+		return charttest;
+	}
+
+	public void setCharttest(String charttest) {
+		this.charttest = charttest;
 	}
 
 	@Transient
