@@ -1,15 +1,10 @@
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
-<<<<<<< HEAD
-		if($("#noteText").html().indexOf($(item).html())<0){
-			$("#noteText").append($(item).html()+"\r\n");
-=======
 		if($("#noteText").val().indexOf($(item).html())<0){
 //			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
 			
 			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
->>>>>>> origin/master
 		}
 	}else{
 		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
@@ -158,11 +153,13 @@ $(function(){
 				$("#historyChart").css("display", "none");
 			}
 	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val()},function(data){
-	    		var rows = data.rows;
 	    		$("#explainDiv").html("");
-	    		for(var i=0;i<rows.length;i++){
-	    			row = rows[i];
-	    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+	    		var rows = data.rows;
+	    		if(!(rows==null || rows == undefined)){
+	    			for(var i=0;i<rows.length;i++){
+		    			row = rows[i];
+		    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+		    		}
 	    		}
 	    	});
 	    }

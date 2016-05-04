@@ -122,7 +122,7 @@ public class DiagnosisController {
 		if(sampleNo!=null && !sampleNo.isEmpty()){
 			Sample sample = sampleManager.getBySampleNo(sampleNo);
 			String ruleIds = sample.getRuleIds();
-			if(!ruleIds.isEmpty()){
+			if(ruleIds!=null && !ruleIds.isEmpty()){
 				List<Rule> rules = ruleManager.getRuleList(ruleIds);
 				for(Rule rule : rules){
 					if(rule.getType() == 8){
