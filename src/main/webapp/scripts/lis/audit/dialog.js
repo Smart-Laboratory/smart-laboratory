@@ -1,15 +1,8 @@
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
-<<<<<<< HEAD
 		if($("#noteText").html().indexOf($(item).html())<0){
 			$("#noteText").append($(item).html()+"\r\n");
-=======
-		if($("#noteText").val().indexOf($(item).html())<0){
-//			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
-			
-			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
->>>>>>> origin/master
 		}
 	}else{
 		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
