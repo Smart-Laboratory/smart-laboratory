@@ -1,12 +1,17 @@
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
-		if($("#noteText").html().indexOf($(item).html())<0){
-			$("#noteText").append($(item).html()+"\r\n");
+		if($("#noteText").val().indexOf($(item).html())<0){
+			$("#noteText").val($("#noteText").val() + $(item).html() + "\n");
 		}
 	}else{
-		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
-		
+		var text = $("#noteText").val().replace($(item).html(),"");
+		text = text.replace(/[\r\n]/g, "&").replace("&&","&");
+		if(text.indexOf("&") == 0) {
+			text = text.replace("&","");
+		}
+		text = text.replace(/[&]/g, "\r\n");
+		$("#noteText").val(text);
 	}
 };
 $(function(){
@@ -71,14 +76,19 @@ $(function(){
 	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    		var sample = data.sample;
-	    		var description = sample.description.replace(/<p>/g,"").replace(/<\/p>/g,"");
+	    		var description = sample.description;
+	    		if(description !=null && description != "") {
+	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,"");
+	    		}
 	    		$("#noteText").html(description);
 	    		
-	    		var dlist = data.dlist;
-	    		for(var i=0; i<dlist.length; i++){
-	    			var item = dlist[i];
-	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
-                }
+	    		if(data.dlist != null) {
+	    			for(var i=0; i<data.dlist.length; i++){
+		    			var item = dlist[i];
+		    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+	                }
+	    		}
+	    		
 	    	});
 	    	if($("#hisLastResult").val() == 1) {
 	    		$("#historyChart").css("display", "block");

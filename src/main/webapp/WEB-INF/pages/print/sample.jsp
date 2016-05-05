@@ -74,8 +74,9 @@
 	<p><fmt:message key="sample.history.chart"/></p>
 	
 	</div>
-	<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;">
-		<div style="float:left;width:10%;margin-left:10px;"><b><fmt:message key="sample.diagadvise"/>:</b></div>
+	<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;" id="advise">
+		<h4><b><fmt:message key="sample.diagadvise"/>:</b></h4>
+		<div id="adviseHtml"></div>
 	</div>
 	<div style="float:left;width:92%;padding-top:10px;font-size:10px;text-align:center;margin-left:4%;border-top:1px solid #000000;"><fmt:message key="sample.print.tip"/></div>
 	<input type="hidden" id="hiddenDocId" value="${docId}"/>

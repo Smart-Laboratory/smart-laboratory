@@ -192,6 +192,7 @@ public class SamplePrintController extends BaseAuditController {
 			html = getHTML(type,hasLast,list,hisTitle1,resultMap1);
 		}
 		info.put("html", html);
+		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(info.toString());
 		return null;
@@ -297,6 +298,94 @@ public class SamplePrintController extends BaseAuditController {
 		return null;
 	}
 	
+	//获取样本的历史曲线图
+		@RequestMapping(value = "/chart*", method = RequestMethod.GET)
+		public String getCHart(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+			String sampleno = request.getParameter("sampleno");
+			JSONObject info = new JSONObject();
+			Sample s = sampleManager.getBySampleNo(sampleno);
+			if(s.getCharttest() == null || s.getCharttest().isEmpty()) {
+				return null;
+			}
+			List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
+			if(contactMap.size() == 0) {
+				initContactInforMap();
+			}
+			if(idMap.size() == 0) {
+				initMap();
+			}
+			if(likeLabMap.size() == 0) {
+				initLikeLabMap();
+			}
+			String lab = s.getSectionId();
+			if(likeLabMap.containsKey(lab)) {
+				lab = likeLabMap.get(lab);
+			}
+			Set<String> testIdSet = new HashSet<String>();
+			for (TestResult t : list) {
+				testIdSet.add(t.getTestId());
+			}
+			List<Sample> history = sampleManager.getHistorySample(s.getPatientId(), s.getPatientblh(), lab);
+			String hisSampleNo = "";
+			for(Sample sample : history) {
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
+			}
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<String, List<TestResult>> chartTestMap = new HashMap<String, List<TestResult>>();
+			for(TestResult tr : testList) {
+				if(s.getCharttest().indexOf(tr.getTestId()) >= 0) {
+					if(chartTestMap.containsKey(tr.getTestId())) {
+						chartTestMap.get(tr.getTestId()).add(tr);
+					} else {
+						List<TestResult> tlist = new ArrayList<TestResult>();
+						tlist.add(tr);
+						chartTestMap.put(tr.getTestId(), tlist);
+					}
+				}
+			}
+			JSONArray chartlist = new JSONArray();
+			int count = 0;
+			for(String testid : chartTestMap.keySet()) {
+				if(testIdSet.contains(testid)) {
+					List<TestResult> tl = chartTestMap.get(testid);
+					List<Double> loArr = new ArrayList<Double>(); 
+					List<Double> reArr = new ArrayList<Double>();
+					List<Double> hiArr = new ArrayList<Double>();
+					List<String> timeArr = new ArrayList<String>();
+					JSONObject testchart = new JSONObject();
+					testchart.put("title", idMap.get(testid).getName());
+					int isneed = 0;
+					for(TestResult tr : tl) {
+						if(tr.getResultFlag().charAt(0) != 'A') {
+							isneed = 1;
+						}
+						reArr.add(Double.parseDouble(tr.getTestResult()));
+						hiArr.add(Double.parseDouble(tr.getRefHi()));
+						loArr.add(Double.parseDouble(tr.getRefLo()));
+						timeArr.add(Constants.DF7.format(tr.getMeasureTime()));
+					}
+					if(timeArr.size()>5) {
+						timeArr = timeArr.subList(0, 5);
+						reArr = reArr.subList(0, 5);
+						hiArr = hiArr.subList(0, 5);
+						loArr = loArr.subList(0, 5);
+					}
+					testchart.put("id", testid);
+					testchart.put("check", isneed);
+					testchart.put("time", timeArr);
+					testchart.put("result", reArr);
+					testchart.put("high", hiArr);
+					testchart.put("low", loArr);
+					chartlist.put(count, testchart);
+					count++;
+				}
+			}
+			info.put("chartlist", chartlist);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(info.toString());
+			return null;
+		}
 
 	private String getHTML(int type, int hasLast, List<TestResult> list, String hisTitle,
 			Map<String, TestResult> resultMap) {
