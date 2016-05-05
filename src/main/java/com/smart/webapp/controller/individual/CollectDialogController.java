@@ -193,14 +193,14 @@ public class CollectDialogController {
 		dataResponse.setRecords(rules.size());
 
 		for (Rule rule : rules) {
-			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
+//			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
 					double rank = getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());
-						map.put("content", reason);
+//						map.put("content", reason);
 						map.put("rank", rank);
 						map.put("oldResult", re.getContent());
 						map.put("result", re.getContent());

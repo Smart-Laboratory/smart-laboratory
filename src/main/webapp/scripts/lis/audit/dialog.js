@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function addtotext(item){
 	var i = $(item).parent().find("input");
 	if(!$(i).prop("checked")){
@@ -12,6 +13,17 @@ function addtotext(item){
 		}
 		text = text.replace(/[&]/g, "\r\n");
 		$("#noteText").val(text);
+=======
+function addtotext(i){
+	var item = $(i).parent().find("span");
+	if($(i).prop("checked")){
+		if($("#noteText").val().indexOf($(item).html())<0){
+//			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
+			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
+		}
+	}else{
+		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
+>>>>>>> origin/master
 	}
 };
 $(function(){
@@ -26,10 +38,22 @@ $(function(){
 	    		var sample = $("#hiddenSampleNo").val();
 	    		var id = $("#hiddenDocId").val();
 	    		
+	    		var checktest="";
+    			$("#chartList :checkbox").each(function(){
+    				if($(this).prop("checked")==true){
+    					if(checktest=="")
+    						checktest=$(this).attr("id");
+    					else
+    						checktest = checktest + ";" + $(this).attr("id");
+    				}
+    			});
+    			
 	    		if ($("#hiddenIsPass").val() == "true") {
+	    			
+	    			
 	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
 	    			var text = $("#noteText").val();
-	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text},function(data) {
+	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
@@ -46,7 +70,7 @@ $(function(){
 	    			});
 	    		} else {
 	    			var text = $("#noteText").val();
-	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text},function(data) {
+	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
@@ -73,9 +97,10 @@ $(function(){
 	    		var guide;
 	    		for(var j=0; j<glist.length; j++){
 	    			guide = glist[j];
-	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
+	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    		var sample = data.sample;
+<<<<<<< HEAD
 	    		var description = sample.description;
 	    		if(description !=null && description != "") {
 	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,"");
@@ -89,6 +114,19 @@ $(function(){
 	                }
 	    		}
 	    		
+=======
+	    		if(description!=null && description !=""){
+	    			var description = sample.description.replace(/<p>/g,"").replace(/<\/p>/g,"");
+	    			$("#noteText").html(description);
+	    		}
+	    		
+	    		
+	    		var dlist = data.dlist;
+	    		for(var i=0; i<dlist.length; i++){
+	    			var item = dlist[i];
+	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+                }
+>>>>>>> origin/master
 	    	});
 	    	if($("#hisLastResult").val() == 1) {
 	    		$("#historyChart").css("display", "block");
@@ -161,11 +199,13 @@ $(function(){
 				$("#historyChart").css("display", "none");
 			}
 	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val()},function(data){
-	    		var rows = data.rows;
 	    		$("#explainDiv").html("");
-	    		for(var i=0;i<rows.length;i++){
-	    			row = rows[i];
-	    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+	    		var rows = data.rows;
+	    		if(!(rows==null || rows == undefined)){
+	    			for(var i=0;i<rows.length;i++){
+		    			row = rows[i];
+		    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+		    		}
 	    		}
 	    	});
 	    }

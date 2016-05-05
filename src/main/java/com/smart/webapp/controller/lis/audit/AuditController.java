@@ -490,12 +490,14 @@ public class AuditController extends BaseAuditController {
 		String note = request.getParameter("note");
 		String sampleNo = request.getParameter("sample");
 		String textHtml = request.getParameter("text");
+		String charttest = request.getParameter("checktest");
 		List<Sample> sample = sampleManager.getListBySampleNo(sampleNo);
 		
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
 		try {
 			for (Sample info : sample) {
+				info.setCharttest(charttest);
 				info.setPassReason(note);
 				if ("pass".equals(op)) {
 					info.setAuditStatus(1);

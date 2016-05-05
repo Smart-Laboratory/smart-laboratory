@@ -155,7 +155,7 @@
 			<h5 id="explainSelect"><b><fmt:message key='audit.infomation'/></b></h5>
 			<div id="explainDiv"></div>
 		</div>
-		<h5 id="passNotes"><b><fmt:message key='audit.infomation'/></b></h5>
+		<h5 id="passNotes"><b><fmt:message key='audit.checkerOpinion'/></b></h5>
 		<textarea id="noteText" rows="3" class="form-control" style="width:100%;"></textarea>
 		<div id="historyChart" style="float:left;width:100%;margin-top:5px;padding-top:5px;border-top:1px solid #000000;">
 		<p><b><fmt:message key="sample.history.chart"/></b></p>
