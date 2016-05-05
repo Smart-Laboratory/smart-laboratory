@@ -1,13 +1,12 @@
-function addtotext(item){
-	var i = $(item).parent().find("input");
-	if(!$(i).prop("checked")){
+function addtotext(i){
+	var item = $(i).parent().find("span");
+	if($(i).prop("checked")){
 		if($("#noteText").val().indexOf($(item).html())<0){
 //			$("#noteText").html($("#noteText").html()+$(item).html()+"\r\n");
 			$("#noteText").val($("#noteText").val()+$(item).html()+";\r\n");
 		}
 	}else{
 		$("#noteText").val($("#noteText").val().replace($(item).html()+";",""));
-		
 	}
 };
 $(function(){
@@ -81,16 +80,19 @@ $(function(){
 	    		var guide;
 	    		for(var j=0; j<glist.length; j++){
 	    			guide = glist[j];
-	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+guide+"</span>  </label></div>");
+	    			$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
 	    		}
 	    		var sample = data.sample;
-	    		var description = sample.description.replace(/<p>/g,"").replace(/<\/p>/g,"");
-	    		$("#noteText").html(description);
+	    		if(description!=null && description !=""){
+	    			var description = sample.description.replace(/<p>/g,"").replace(/<\/p>/g,"");
+	    			$("#noteText").html(description);
+	    		}
+	    		
 	    		
 	    		var dlist = data.dlist;
 	    		for(var i=0; i<dlist.length; i++){
 	    			var item = dlist[i];
-	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' id='div2'><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+	    			$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
                 }
 	    	});
 	    	if($("#hisLastResult").val() == 1) {
@@ -169,7 +171,7 @@ $(function(){
 	    		if(!(rows==null || rows == undefined)){
 	    			for(var i=0;i<rows.length;i++){
 		    			row = rows[i];
-		    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+		    			$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
 		    		}
 	    		}
 	    	});
