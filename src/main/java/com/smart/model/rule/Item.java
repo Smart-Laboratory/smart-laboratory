@@ -16,17 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-
-
-
-
-
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
 import com.smart.model.rule.Index;
-import com.smart.model.user.User;
 
 
 /**
@@ -47,7 +40,7 @@ public class Item extends BaseObject implements Serializable{
 	private String unit;	//单位
 	private int isStr;
 	private Set<Rule> rules = new HashSet<Rule>();
-	private User createUser;
+	private Long createUserId;
 	private Date createTime;
 	
 	public Item() {}
@@ -135,14 +128,13 @@ public class Item extends BaseObject implements Serializable{
 	/**
 	 * 条目的创建者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "create_user_id", nullable = true)
-	public User getCreateUser() {
-		return createUser;
+	@Column(name = "create_user_id", nullable = true)
+	public Long getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	/**

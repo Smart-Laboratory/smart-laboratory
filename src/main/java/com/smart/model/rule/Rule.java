@@ -16,10 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-
-
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,7 +24,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.model.BaseObject;
-import com.smart.model.user.User;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 
@@ -63,9 +58,9 @@ public class Rule extends BaseObject implements Serializable {
 	private boolean isActivate = false; // 是否激活
 	private boolean isSelfCreate = false;
 	private String reReasoning;
-	private User createUser;
+	private Long createUserId;
 	private Date createTime;
-	private User modifyUser;
+	private Long modifyUserId;
 	private Date modifyTime;
 	
 	private int hospitalmode;	//规则使用的对象，包括门诊、病房
@@ -261,14 +256,13 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则创建者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "create_user_id", nullable = true)
-	public User getCreateUser() {
-		return createUser;
+	@Column(name = "create_user_id", nullable = true)
+	public Long getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	/**
@@ -286,14 +280,13 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则修改者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "modify_user_id")
-	public User getModifyUser() {
-		return modifyUser;
+	@Column(name = "modify_user_id")
+	public Long getModifyUserId() {
+		return modifyUserId;
 	}
 
-	public void setModifyUser(User modifyUser) {
-		this.modifyUser = modifyUser;
+	public void setModifyUserId(Long modifyUserId) {
+		this.modifyUserId = modifyUserId;
 	}
 
 	/**

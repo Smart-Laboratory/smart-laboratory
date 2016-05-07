@@ -1,7 +1,6 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -48,8 +47,6 @@ public class AjaxController extends BaseAuditController {
 	
 	@Autowired
 	private OutManager outManager;
-	private final static String imageUrl_bak = "/mypic/";
-	private final static String imageUrl = "/home/tomcat/webapps/lab/images/upload/";
 	
 	@RequestMapping(value = "/singleChart*", method = RequestMethod.GET)
 	@ResponseBody
@@ -229,8 +226,8 @@ public class AjaxController extends BaseAuditController {
 	public void uploadImg(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
         String sampleno = multipartRequest.getParameter("sampleno");
         String imgDescription = multipartRequest.getParameter("imgnote");
-        String uploadFileUrl = imageUrl + sampleno;
-        String uploadFileUrl_bak = imageUrl_bak + sampleno;
+        String uploadFileUrl = Constants.imageUrl + sampleno;
+        String uploadFileUrl_bak = Constants.imageUrl_bak + sampleno;
         int count = 0;
 
         String realPath = multipartRequest.getServletContext().getRealPath("/");
@@ -238,7 +235,12 @@ public class AjaxController extends BaseAuditController {
         multipartRequest.setAttribute("addr", realPath);
         System.out.println(uploadFileUrl);
         File dir = new File(uploadFileUrl);
-		dir.setWritable(true,false);
+        File backdir = new File(uploadFileUrl_bak);
+		if (!backdir.exists()) {
+			backdir.mkdirs();
+			backdir.setWritable(true);
+			System.out.println("创建目录1");
+		}
 		if (!dir.exists()) {
 			dir.mkdirs();
 			System.out.println("创建目录1");
@@ -249,12 +251,11 @@ public class AjaxController extends BaseAuditController {
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
 			String key = (String) it.next();
 			MultipartFile imgFile = multipartRequest.getFile(key);
-			Thumbnails.of(imgFile.getInputStream()).size(150, 150);
 			if (imgFile.getOriginalFilename().length() > 0) {
 				String fileName = imgFile.getOriginalFilename();
 				String newFileName = (count + 1) + fileName.substring(fileName.lastIndexOf("."), fileName.length());
 				try {
-					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, newFileName);
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, uploadFileUrl_bak, newFileName);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -294,18 +295,9 @@ public class AjaxController extends BaseAuditController {
 	}
 
     //保存文件
-	private File saveFileFromInputStream(InputStream stream, String path, String filename) throws IOException {
-		File file = new File(path + "/" + filename);
-		FileOutputStream fs = new FileOutputStream(file);
-		byte[] buffer = new byte[1024 * 1024];
-		int byteread = 0;
-		while ((byteread = stream.read(buffer)) != -1) {
-			fs.write(buffer, 0, byteread);
-			fs.flush();
-		}
-		fs.close();
-		stream.close();
-		return file;
+	private void saveFileFromInputStream(InputStream stream, String path, String backpath, String filename) throws IOException {
+		Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(path + "/" + filename);
+		Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(backpath + "/" + filename);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/getImage")
@@ -315,7 +307,7 @@ public class AjaxController extends BaseAuditController {
 		String html = "";
         String sampleno = request.getParameter("sampleno");
         Sample info = sampleManager.getBySampleNo(sampleno);
-        String uploadFileUrl = imageUrl + sampleno;
+        String uploadFileUrl = Constants.imageUrl + sampleno;
         String imgUrl = "fxglabfxgimagesfxguploadfxg" + sampleno + "fxg";
         //String imgUrl = "/images/upload/" + sampleno + "/";
 		File dir = new File(uploadFileUrl);

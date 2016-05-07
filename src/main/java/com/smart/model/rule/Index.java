@@ -14,8 +14,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -23,7 +21,6 @@ import javax.persistence.Transient;
 import org.hibernate.search.annotations.DocumentId;
 
 import com.smart.model.BaseObject;
-import com.smart.model.user.User;
 
 /**
 	 * Index对象表示最基本的检验项目
@@ -46,9 +43,9 @@ public class Index extends BaseObject implements Serializable {
 	private int diffAlgo;
 	private String description;
 	private String enumData;
-	private User createUser;
+	private Long createUserId;
 	private Date createTime;
-	private User modifyUser;
+	private Long modifyUserId;
 	private Date modifyTime;
 	private String importance;
 	private String knowledgename;
@@ -190,14 +187,13 @@ public class Index extends BaseObject implements Serializable {
 	/**
 	 * 指标创建者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "create_user_id", nullable = true)
-	public User getCreateUser() {
-		return createUser;
+	@Column(name = "create_user_id", nullable = true)
+	public Long getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	/**
@@ -215,14 +211,13 @@ public class Index extends BaseObject implements Serializable {
 	/**
 	 * 指标修改者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "modify_user_id")
-	public User getModifyUser() {
-		return modifyUser;
+	@Column(name = "modify_user_id")
+	public Long getModifyUserId() {
+		return modifyUserId;
 	}
 
-	public void setModifyUser(User modifyUser) {
-		this.modifyUser = modifyUser;
+	public void setModifyUserId(Long modifyUserId) {
+		this.modifyUserId = modifyUserId;
 	}
 
 	/**

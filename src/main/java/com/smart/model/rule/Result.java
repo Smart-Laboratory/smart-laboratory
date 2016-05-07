@@ -15,12 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
-import com.smart.model.user.User;
 /**
  * 规则的结果
  */
@@ -37,9 +34,9 @@ public class Result extends BaseObject implements Serializable{
 	private String level;
 	private String reject;  //与该结果同属一个规则的 其他结果
 	private String category;
-	private User createUser;
+	private Long createUserId;
 	private Date createTime;
-	private User modifyUser;
+	private Long modifyUserId;
 	private Date modifyTime;
 	private String percent;
 	private String modifyContent;
@@ -114,14 +111,13 @@ public class Result extends BaseObject implements Serializable{
 	/**
 	 * 结果创建者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "create_user_id")
-	public User getCreateUser() {
-		return createUser;
+	@Column(name = "create_user_id", nullable = true)
+	public Long getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	/**
@@ -139,14 +135,13 @@ public class Result extends BaseObject implements Serializable{
 	/**
 	 * 结果修改者
 	 */
-	@ManyToOne
-	@JoinColumn(name = "modify_user_id")
-	public User getModifyUser() {
-		return modifyUser;
+	@Column(name = "modify_user_id")
+	public Long getModifyUserId() {
+		return modifyUserId;
 	}
 
-	public void setModifyUser(User modifyUser) {
-		this.modifyUser = modifyUser;
+	public void setModifyUserId(Long modifyUserId) {
+		this.modifyUserId = modifyUserId;
 	}
 
 	/**

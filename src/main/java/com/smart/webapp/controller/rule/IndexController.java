@@ -70,8 +70,8 @@ public class IndexController {
 
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		Date date = new Date();
-		index.setModifyUser(user);
-		index.setCreateUser(user);
+		index.setModifyUserId(user.getId());
+		index.setCreateUserId(user.getId());
 		index.setModifyTime(date);	
 		index.setCreateTime(date);
 		

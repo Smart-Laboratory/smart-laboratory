@@ -129,14 +129,11 @@ public class RuleController {
 		}
 		// 编辑者信息保存
 		if(rule.getId()==null || StringUtils.isEmpty(rule.getId().toString())){
-			rule.setCreateUser(user);
+			rule.setCreateUserId(user.getId());
 			rule.setCreateTime(new Date());
 		}
 		else{
-			Rule oldrule = ruleManager.get(rule.getId());
-			rule.setCreateUser(oldrule.getCreateUser());
-			rule.setCreateTime(oldrule.getCreateTime());
-			rule.setModifyUser(user);
+			rule.setModifyUserId(user.getId());
 			rule.setModifyTime(new Date());
 		}
 		

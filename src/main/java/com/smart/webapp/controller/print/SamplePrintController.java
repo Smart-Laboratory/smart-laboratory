@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.print;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -193,6 +194,19 @@ public class SamplePrintController extends BaseAuditController {
 		}
 		info.put("html", html);
 		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
+		String imghtml = "";
+		if(s.getHasimages() == 1) {
+			String filepath = Constants.imageUrl + sampleno;
+			File dir = new File(filepath);
+			if (dir.exists()) {
+				for (File f : dir.listFiles()) {
+					if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+						imghtml += "<img src='../images/upload/" + sampleno + "/" + f.getName() + "' style='float:left;margin-left:5%;width:45%'>";
+					}
+				}
+			}
+		}
+		info.put("imghtml", imghtml);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(info.toString());
 		return null;

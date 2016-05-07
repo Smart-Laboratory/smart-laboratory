@@ -62,14 +62,14 @@ public class ResultController {
 		}
 		
 		if(result.getId()==null || StringUtils.isEmpty(result.getId().toString())){
-			result.setCreateUser(user);
+			result.setCreateUserId(user.getId());
 			result.setCreateTime(new Date());
 		}
 		else{
-			result.setCreateUser(old.getCreateUser());
+			result.setCreateUserId(old.getCreateUserId());
 			result.setCreateTime(old.getCreateTime());
 			result.setModifyTime(new Date());
-			result.setModifyUser(user);
+			result.setModifyUserId(user.getId());
 			result.setRules(old.getRules());
 		}
 		

@@ -18,8 +18,8 @@ public class CheckAllow {
 				flag = true;
 			}
 		}
-		if (!rule.isCore() && rule.getCreateUser() != null) {
-			if (rule.getCreateUser().getId() == user.getId()) {
+		if (!rule.isCore() && rule.getCreateUserId() != null) {
+			if (rule.getCreateUserId() == user.getId()) {
 				flag = true;
 			}
 		}
@@ -35,8 +35,8 @@ public class CheckAllow {
 				flag = true;
 			}
 		}
-		if (index.getCreateUser() != null) {
-			if (index.getCreateUser().getId() == user.getId()) {
+		if (index.getCreateUserId() != null) {
+			if (index.getCreateUserId()== user.getId()) {
 				flag = true;
 			}
 		}
@@ -52,8 +52,8 @@ public class CheckAllow {
 				flag = true;
 			}
 		}
-		if (result.getCreateUser() != null) {
-			if (result.getCreateUser().getId() == user.getId()) {
+		if (result.getCreateUserId() != null) {
+			if (result.getCreateUserId() == user.getId()) {
 				flag = true;
 			}
 		}

@@ -262,4 +262,12 @@ public final class Constants {
 	 * 阴性
 	 */
 	public final static String YIN = "阴性";
+	/**
+	 * 图片上传备份路径
+	 */
+	public final static String imageUrl_bak = "/home/imagebak/";
+	/**
+	 * 图片上传路径
+	 */
+	public final static String imageUrl = "/home/tomcat/webapps/lab/images/upload/";
 }

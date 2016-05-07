@@ -27,6 +27,12 @@ $(function(){
 		}
 		$("#examinaim").html(data.examinaim);
 		$("#resultDiv").html(data.html);
+		if(data.imghtml == "") {
+			$("#imageDiv").css("display", "none");
+		} else {
+			$("#imageDiv").css("display", "block");
+			$("#imageDiv").html(data.imghtml);
+		}
 		if(data.advise == "") {
 			$("#advise").css("display", "none");
 		} else {
