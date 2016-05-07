@@ -172,7 +172,7 @@ public class YlsfController extends BaseAuditController {
 		if(y.getProfiletest2() != null) {
 			for (String s : y.getProfiletest2().trim().split(",")) {
 				if (s != null) {
-					System.out.println(y.getYlxh()+" : "+s);
+//					System.out.println(y.getYlxh()+" : "+s);
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("id", s);
 					map.put("name", idMap.get(s) == null ? s : idMap.get(s).getName());

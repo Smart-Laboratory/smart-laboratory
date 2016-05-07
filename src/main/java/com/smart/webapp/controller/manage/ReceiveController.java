@@ -109,7 +109,7 @@ public class ReceiveController {
 				} else {
 					obj.put("type", 3);
 				}
-				System.out.println(lab);
+//				System.out.println(lab);
 				if(sp.getLABDEPARTMENT() == null || !lab.contains(sp.getLABDEPARTMENT())) {
 					obj.put("type", 4);
 				}

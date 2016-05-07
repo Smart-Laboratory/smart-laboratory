@@ -78,35 +78,45 @@ $(function(){
 	    	}
 	    },
 	    open:function(){
+	    	$("#noteText").val("");
 	    	var description;
 	    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val(),sampleNo:$("#hiddenSampleNo").val()},function(data){
 	    		$("#disease").val(data.disease);
 	    		$("#descriptionDiv").html("");
+	    		$("#guideDiv").html("");
 	    		
 	    		var sample = data.sample;
 	    		description = sample.description;
 	    		if(description !=null && description != "") {
-	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,"");
-	    			$("#noteText").html(description);
+	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,";");
+	    			$("#noteText").val(description);
+	    			$("#passreason").html(description);
 	    		}
 	    		
 	    		var glist = data.guides;
-	    		var guide;
-	    		for(var j=0; j<glist.length; j++){
-	    			guide = glist[j];
-	    			if(description !=null && description != "" && description.indexOf(guide)>=0)
-	    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
-	    			else
-	    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
+	    		if(glist !=null && glist!="undefined"){
+	    			var guide;
+		    		for(var j=0; j<glist.length; j++){
+		    			guide = glist[j];
+		    			if(description !=null && description != "" && description.indexOf(guide)>=0)
+		    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
+		    			else
+		    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
+		    		}
 	    		}
-	    		
 	    		if(data.dlist != null) {
+<<<<<<< HEAD
 	    			for(var i=0; i<data.dlist.length; i++){
 		    			var item = data.dlist[i];
+=======
+	    			var dlist = data.dlist;
+	    			for(var i=0; i<dlist.length; i++){
+		    			var item = dlist[i];
+>>>>>>> origin/master
 		    			if(description !=null && description != "" && description.indexOf(item.description)>=0)
-		    				$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' checked><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+		    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
 		    			else
-		    				$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+		    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
 	                }
 	    		}
 	    	});
@@ -180,7 +190,7 @@ $(function(){
 	    	} else {
 				$("#historyChart").css("display", "none");
 			}
-	    	$.get("/audit/explain",{id:$("#hiddenSampleNo").val(),needReason:false},function(data){
+	    	$.get("../audit/explain",{id:$("#hiddenSampleNo").val(),needReason:false},function(data){
 	    		$("#explainDiv").html("");
 	    		var rows = data.rows;
 	    		if(!(rows==null || rows == undefined)){

@@ -444,11 +444,13 @@ function getImages(sampleno){
 		data = jQuery.parseJSON(data);
 //		data=JSON.stringify(data);
 		var html = data.html.split("fxg").join("/");
+		alert(html);
 		$('#showGalleria').css('height','600px');//#galleria{height:320px}
 		Galleria.loadTheme('../scripts/galleria.classic.min.js');
 	    Galleria.run('#showGalleria', {
 	        dataSource: html,
-	        keepSource: false
+	        keepSource: false,
+//	        imageCrop: false
 		});
 	});
 }

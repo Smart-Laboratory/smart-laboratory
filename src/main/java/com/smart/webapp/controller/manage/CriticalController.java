@@ -334,7 +334,7 @@ public class CriticalController {
 				section = array[1];
 				section = section.replace(")", "");
 				section = section.replace("楼", "");
-				System.out.println(section);
+//				System.out.println(section);
 				List<Ward> list = wardManager.getByWard(section);
 				String type = "";
 				String phone = "";

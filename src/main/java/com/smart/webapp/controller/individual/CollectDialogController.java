@@ -120,7 +120,7 @@ public class CollectDialogController {
 			e.setEvaluator(name);
 			e.setSampleno(sampleno);
 			evaluateManager.save(e);
-			System.out.println(e.getId());
+//			System.out.println(e.getId());
 			user.setCollectNum(user.getCollectNum()+1);
 			userManager.save(user);
 			return true;

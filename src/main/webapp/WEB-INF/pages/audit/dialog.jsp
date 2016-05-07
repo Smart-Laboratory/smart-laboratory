@@ -146,7 +146,7 @@
 		<div id="guideDiv"></div>
 		<div class="form-inline" style="border-top:1px solid #000000;padding-top:5px;">
 			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
-			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='szm'/>"/>
+			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='placeholder.szm'/>"/>
 			<label for="disease" style="margin-left:20px;"><fmt:message key='des.disease' /></label>
 			<span type="text" id="disease" />
 		</div>

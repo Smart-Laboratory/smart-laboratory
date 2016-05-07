@@ -62,7 +62,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		String test = request.getParameter("test");
 		User operator =	userManager.getUserByUsername(request.getRemoteUser());
 //		operator.setLastProfile(test);
-		System.out.println("test:"+test);
+//		System.out.println("test:"+test);
 		userManager.saveUser(operator);
 		if (test.endsWith(","))
 			test = test.substring(0, test.length() - 1);
