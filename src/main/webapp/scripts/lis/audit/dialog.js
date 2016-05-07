@@ -30,9 +30,9 @@ $(function(){
     			$("#chartList :checkbox").each(function(){
     				if($(this).prop("checked")==true){
     					if(checktest=="")
-    						checktest=$(this).attr("id");
+    						checktest=$(this).attr("id").replace("check","");
     					else
-    						checktest = checktest + ";" + $(this).attr("id");
+    						checktest = checktest + ";" + $(this).attr("id").replace("check","");
     				}
     			});
     			
@@ -102,7 +102,7 @@ $(function(){
 	    		
 	    		if(data.dlist != null) {
 	    			for(var i=0; i<data.dlist.length; i++){
-		    			var item = dlist[i];
+		    			var item = data.dlist[i];
 		    			if(description !=null && description != "" && description.indexOf(item.description)>=0)
 		    				$("#descriptionDiv").append("<div class='checkbox' id='div1'><label><input type='checkbox' checked><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
 		    			else

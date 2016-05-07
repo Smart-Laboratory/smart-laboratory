@@ -187,10 +187,18 @@ public class SamplePrintController extends BaseAuditController {
 			}
 		}
 		String html = "";
+		String dangerTest = "";
+		if(s.getAuditMark() == 6) {
+			for(String str : s.getMarkTests().split(";")) {
+				if(Integer.parseInt(str.split(":")[1]) == 4) {
+					dangerTest += str.split(":")[0] + ",";
+				}
+			}
+		}
 		if(type > 3) {
 			html = getWSWHTML(type,wswlist);
 		} else {
-			html = getHTML(type,hasLast,list,hisTitle1,resultMap1);
+			html = getHTML(type,hasLast,list,hisTitle1,resultMap1,dangerTest);
 		}
 		info.put("html", html);
 		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
@@ -280,6 +288,9 @@ public class SamplePrintController extends BaseAuditController {
 					JSONObject testchart = new JSONObject();
 					testchart.put("title", idMap.get(testid).getName());
 					int isneed = 0;
+					if(s.getCharttest() != null && s.getCharttest().indexOf(testid) >= 0) {
+						isneed = 1;
+					}
 					for(TestResult tr : tl) {
 						if(tr.getResultFlag().charAt(0) != 'A') {
 							isneed = 1;
@@ -402,7 +413,7 @@ public class SamplePrintController extends BaseAuditController {
 		}
 
 	private String getHTML(int type, int hasLast, List<TestResult> list, String hisTitle,
-			Map<String, TestResult> resultMap) {
+			Map<String, TestResult> resultMap, String dangerTest) {
 		StringBuilder html = new StringBuilder("");
 		if(type == 3) {
 			html.append("<div style='height:25px;margin-left:2%;width:96%;font-size:14px;'><b>");
@@ -430,7 +441,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName());
+				html.append("<div style='float:left;width:25%;'>" + idMap.get(re.getTestId()).getName());
 				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
 					html.append("[" + re.getMethod() + "]");
 				}
@@ -574,8 +585,9 @@ public class SamplePrintController extends BaseAuditController {
 			}
 		} else {
 			html.append("<div style='height:25px;margin-left:2%;width:96%;font-size:14px;'><b>");
+			html.append("<div style='float:left;width:5%;'>&nbsp;</div>");
 			html.append("<div style='float:left;width:5%;'>No.</div>");
-			html.append("<div style='float:left;width:35%;'>项目</div>");
+			html.append("<div style='float:left;width:30%;'>项目</div>");
 			html.append("<div style='float:left;width:15%;'>当次结果</div>");
 			html.append("<div style='float:left;width:15%;'>");
 			if(hisTitle.isEmpty()) {
@@ -597,8 +609,13 @@ public class SamplePrintController extends BaseAuditController {
 				} else {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
+				if(dangerTest.indexOf(testId) >= 0) {
+					html.append("<div style='float:left;width:5%;'>★</div>");
+				} else {
+					html.append("<div style='float:left;width:5%;'>&nbsp;</div>");
+				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:35%;'>" + idMap.get(re.getTestId()).getName());
+				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName());
 				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
 					html.append("[" + re.getMethod() + "]");
 				}
