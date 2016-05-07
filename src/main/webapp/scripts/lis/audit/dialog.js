@@ -37,8 +37,6 @@ $(function(){
     			});
     			
 	    		if ($("#hiddenIsPass").val() == "true") {
-	    			
-	    			
 	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
 	    			var text = $("#noteText").val();
 	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest},function(data) {
@@ -105,14 +103,8 @@ $(function(){
 		    		}
 	    		}
 	    		if(data.dlist != null) {
-<<<<<<< HEAD
 	    			for(var i=0; i<data.dlist.length; i++){
 		    			var item = data.dlist[i];
-=======
-	    			var dlist = data.dlist;
-	    			for(var i=0; i<dlist.length; i++){
-		    			var item = dlist[i];
->>>>>>> origin/master
 		    			if(description !=null && description != "" && description.indexOf(item.description)>=0)
 		    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
 		    			else
