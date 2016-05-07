@@ -119,7 +119,6 @@ public class SearchController {
 		default:
 			break;
 		}
-		System.out.println(samples.size());
 		if(samples==null || samples.size()==0){
 			return null;
 		}
@@ -147,7 +146,6 @@ public class SearchController {
 				}
 			}
 		}
-		System.out.println(samples.size());
 		size=samples.size();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
@@ -165,7 +163,6 @@ public class SearchController {
 		else {
 			return null;
 		}
-		System.out.println(samples.size());
 		
 		String hisBlh = "";
 		for(Sample sample : samples) {
@@ -211,7 +208,6 @@ public class SearchController {
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html;charset=UTF-8");
-		System.out.println(samples.size());
 		
 		return dataResponse;
 	}

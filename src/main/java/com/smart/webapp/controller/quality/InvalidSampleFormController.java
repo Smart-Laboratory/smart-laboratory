@@ -92,7 +92,7 @@ public class InvalidSampleFormController {
 			
 			request.setAttribute("rejectTime",ymd.format(invalidSample.getRejectTime()) );
 			request.setAttribute("msg", msg);
-			System.out.println("end:"+invalidSample.getRejectTime());
+//			System.out.println("end:"+invalidSample.getRejectTime());
 		}
 		return invalidSample;
 	}

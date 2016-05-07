@@ -290,7 +290,7 @@ public class ExplainController extends BaseAuditController {
 		String docNo = request.getParameter("docNo");
 		String content = request.getParameter("content");
 		
-		System.out.println(modifyId+result+oldResult+content);
+//		System.out.println(modifyId+result+oldResult+content);
 
 		if (!StringUtils.isEmpty(modifyId) && !StringUtils.isEmpty(docNo)) {
 			ReasoningModify reasoningModify = new ReasoningModify();
