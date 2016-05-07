@@ -509,7 +509,7 @@ public class AuditController extends BaseAuditController {
 				if (!StringUtils.isEmpty(textHtml)) {
 					String[] t = textHtml.split(";");
 					String description="";
-					for(int i=0; i<t.length-1 ;i++){
+					for(int i=0; i<t.length ;i++){
 						if(!t[i].isEmpty())
 							description+="<p>"+t[i]+"</p>";
 					}

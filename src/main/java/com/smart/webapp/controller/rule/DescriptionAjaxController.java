@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.rule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,11 @@ public class DescriptionAjaxController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		List<DesBag> bags = bagManager.getBag(name);
+		List<DesBag> bags = new ArrayList<DesBag>();
+		if(name.equals(" "))
+			bags = bagManager.getAll();
+		else
+			bags = bagManager.getBag(name);
 		JSONArray array = new JSONArray();
 		if (bags != null) {
 			for (DesBag b : bags) {

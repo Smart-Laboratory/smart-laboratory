@@ -142,7 +142,7 @@
         		$("#diagnostic").html("<a href='#' onclick='javascript:show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
         	}
         	$("#diagnosisValue").val(data.diagnostic);
-        	var reason = data.description;
+        	var reason = data.description.replace(/<p>/g,"").replace(/<\/p>/g,";");
         	$("#passreason").html(reason);
         	if (reason != null) {
         		$("#passLabel").css('display','block');

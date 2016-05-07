@@ -22,7 +22,7 @@ $(function(){
 	    width: 680,
 	    height: 460,
 	    buttons:{
-	    	"添加":function() {
+	    	"审核":function() {
 	    		var sample = $("#hiddenSampleNo").val();
 	    		var id = $("#hiddenDocId").val();
 	    		
@@ -38,9 +38,10 @@ $(function(){
     			
 	    		if ($("#hiddenIsPass").val() == "true") {
 	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
-	    			var text = $("#noteText").val();
+	    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
 	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
+	    					$("#passreason").html(text);
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
 	    					
@@ -56,8 +57,10 @@ $(function(){
 	    			});
 	    		} else {
 	    			var text = $("#noteText").val();
+	    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
 	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest},function(data) {
 	    				if (data == true) {
+	    					$("#passreason").html(text);
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
 	    					$("#testAdd").css('display','inline');
@@ -86,7 +89,7 @@ $(function(){
 	    		var sample = data.sample;
 	    		description = sample.description;
 	    		if(description !=null && description != "") {
-	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,";");
+	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,";\n");
 	    			$("#noteText").val(description);
 	    			$("#passreason").html(description);
 	    		}
@@ -451,7 +454,7 @@ $(function(){
 	    		$("#descriptionDiv").html("");
 	    		for(var i=0; i<dlist.length; i++){
 	    			var item = dlist[i];
-	    			$("#descriptionDiv").append("<div class='checkbox'><label><input type='checkbox' ><span onclick=addtotext(this) id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+	    			$("#descriptionDiv").append("<div class='checkbox'><label><input type='checkbox' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
                 }
 	    	});
         	
