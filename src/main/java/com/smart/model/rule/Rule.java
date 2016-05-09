@@ -58,9 +58,9 @@ public class Rule extends BaseObject implements Serializable {
 	private boolean isActivate = false; // 是否激活
 	private boolean isSelfCreate = false;
 	private String reReasoning;
-	private Long createUserId;
+	private String createUser;
 	private Date createTime;
-	private Long modifyUserId;
+	private String modifyUser;
 	private Date modifyTime;
 	
 	private int hospitalmode;	//规则使用的对象，包括门诊、病房
@@ -256,13 +256,13 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则创建者
 	 */
-	@Column(name = "create_user_id", nullable = true)
-	public Long getCreateUserId() {
-		return createUserId;
+	@Column(name = "create_user", nullable = true)
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 	/**
@@ -280,13 +280,13 @@ public class Rule extends BaseObject implements Serializable {
 	/**
 	 * 规则修改者
 	 */
-	@Column(name = "modify_user_id")
-	public Long getModifyUserId() {
-		return modifyUserId;
+	@Column(name = "modify_user")
+	public String getModifyUser() {
+		return modifyUser;
 	}
 
-	public void setModifyUserId(Long modifyUserId) {
-		this.modifyUserId = modifyUserId;
+	public void setModifyUser(String modifyUser) {
+		this.modifyUser = modifyUser;
 	}
 
 	/**

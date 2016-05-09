@@ -159,9 +159,9 @@ public class RuleAjaxController {
 		String userName = request.getRemoteUser();
 		User user = userManager.getUserByUsername(userName);
 		Date now = new Date();
-		result.setCreateUserId(user.getId());
+		result.setCreateUser(user.getName());
 		result.setCreateTime(now);
-		result.setModifyUserId(user.getId());
+		result.setModifyUser(user.getName());
 		result.setModifyTime(now);
 		
 		Result newResult = resultManager.save(result);

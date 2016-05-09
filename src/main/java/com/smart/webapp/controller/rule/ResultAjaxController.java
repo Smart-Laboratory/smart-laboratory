@@ -75,7 +75,7 @@ public class ResultAjaxController {
 		String userName = request.getRemoteUser();
 		User user = userManager.getUserByUsername(userName);
 		Date now = new Date();
-		result.setCreateUserId(user.getId());
+		result.setCreateUser(user.getName());
 		result.setCreateTime(now);
 		
 		Result newResult = resultManager.save(result);

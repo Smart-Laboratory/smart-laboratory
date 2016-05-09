@@ -47,7 +47,6 @@ import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Task;
 import com.smart.model.lis.TestResult;
-import com.smart.model.rule.Bag;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.webapp.util.AnalyticUtil;
@@ -83,20 +82,7 @@ public class AuditController extends BaseAuditController {
     	
 		final Map<String, Describe> idMap = new HashMap<String, Describe>();
     	final Map<String, String> indexNameMap = new HashMap<String, String>();
-    	List<Bag> bags = bagManager.getBagByHospital(1L);
     	List<Rule> ruleList = new ArrayList<Rule>();
-		Set<Long> have = new HashSet<Long>();
-		for(Bag b : bags) {
-			for(Rule r : b.getRules()) {
-//				if(r.getType() != 1 && r.getType() != 2 && !have.contains(r.getId())) {
-				if(r.getType()==8||r.getType()==0){
-					if(!have.contains(r.getId())){
-						ruleList.add(r);
-						have.add(r.getId());
-					}
-				}
-			}
-		}
 		
 		if (!DroolsRunner.getInstance().isBaseInited()) {
     		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);

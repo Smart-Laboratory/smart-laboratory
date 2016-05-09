@@ -43,9 +43,9 @@ public class Index extends BaseObject implements Serializable {
 	private int diffAlgo;
 	private String description;
 	private String enumData;
-	private Long createUserId;
+	private String createUser;
 	private Date createTime;
-	private Long modifyUserId;
+	private String modifyUser;
 	private Date modifyTime;
 	private String importance;
 	private String knowledgename;
@@ -187,13 +187,13 @@ public class Index extends BaseObject implements Serializable {
 	/**
 	 * 指标创建者
 	 */
-	@Column(name = "create_user_id", nullable = true)
-	public Long getCreateUserId() {
-		return createUserId;
+	@Column(name = "create_user", nullable = true)
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 	/**
@@ -211,13 +211,13 @@ public class Index extends BaseObject implements Serializable {
 	/**
 	 * 指标修改者
 	 */
-	@Column(name = "modify_user_id")
-	public Long getModifyUserId() {
-		return modifyUserId;
+	@Column(name = "modify_user")
+	public String getModifyUser() {
+		return modifyUser;
 	}
 
-	public void setModifyUserId(Long modifyUserId) {
-		this.modifyUserId = modifyUserId;
+	public void setModifyUser(String modifyUser) {
+		this.modifyUser = modifyUser;
 	}
 
 	/**

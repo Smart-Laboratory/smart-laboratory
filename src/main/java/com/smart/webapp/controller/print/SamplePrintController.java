@@ -190,7 +190,7 @@ public class SamplePrintController extends BaseAuditController {
 		String dangerTest = "";
 		if(s.getAuditMark() == 6) {
 			for(String str : s.getMarkTests().split(";")) {
-				if(Integer.parseInt(str.split(":")[1]) == 4) {
+				if(Integer.parseInt(str.split(":")[1]) == 3) {
 					dangerTest += str.split(":")[0] + ",";
 				}
 			}
@@ -291,20 +291,22 @@ public class SamplePrintController extends BaseAuditController {
 					if(s.getCharttest() != null && s.getCharttest().indexOf(testid) >= 0) {
 						isneed = 1;
 					}
+					int hisnum = 0;
 					for(TestResult tr : tl) {
 						if(tr.getResultFlag().charAt(0) != 'A') {
 							isneed = 1;
 						}
-						reArr.add(Double.parseDouble(tr.getTestResult()));
-						hiArr.add(Double.parseDouble(tr.getRefHi()));
-						loArr.add(Double.parseDouble(tr.getRefLo()));
-						timeArr.add(Constants.DF7.format(tr.getMeasureTime()));
-					}
-					if(timeArr.size()>5) {
-						timeArr = timeArr.subList(0, 5);
-						reArr = reArr.subList(0, 5);
-						hiArr = hiArr.subList(0, 5);
-						loArr = loArr.subList(0, 5);
+						if(hisnum < 5) {
+							try {
+								reArr.add(Double.parseDouble(tr.getTestResult()));
+								hiArr.add(Double.parseDouble(tr.getRefHi()));
+								loArr.add(Double.parseDouble(tr.getRefLo()));
+								timeArr.add(Constants.DF7.format(tr.getMeasureTime()));
+							} catch(NumberFormatException nfe) {
+								continue;
+							}
+						}
+						hisnum++;
 					}
 					testchart.put("id", testid);
 					testchart.put("check", isneed);
@@ -610,7 +612,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				if(dangerTest.indexOf(testId) >= 0) {
-					html.append("<div style='float:left;width:5%;'>★</div>");
+					html.append("<div style='float:left;width:5%;'><red>危急</red></div>");
 				} else {
 					html.append("<div style='float:left;width:5%;'>&nbsp;</div>");
 				}

@@ -88,7 +88,7 @@ public class ItemAjaxController {
 
 		// 创建者信息保存
 		User createUser = userManager.getUserByUsername(request.getRemoteUser());
-		item.setCreateUserId(createUser.getId());
+		item.setCreateUser(createUser.getName());
 		item.setCreateTime(new Date());
 		
 		Item newItem = itemManager.save(item);

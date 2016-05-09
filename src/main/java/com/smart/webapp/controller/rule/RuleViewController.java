@@ -75,7 +75,7 @@ public class RuleViewController {
 			}
 			ruleList = new PageList<Rule>(pageNumber, totalNum);
 			for (Rule _r : rules) {
-				if (!user.getUsername().equals("admin") && _r.getCreateUserId() != null && _r.getCreateUserId() == user.getId()) {
+				if (!user.getUsername().equals("admin") && _r.getCreateUser() != null && _r.getCreateUser().equals(user.getName())) {
 					_r.setSelfCreate(true);
 				}
 			}

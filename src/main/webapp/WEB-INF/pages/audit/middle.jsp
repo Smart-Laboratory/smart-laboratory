@@ -163,8 +163,8 @@
 		</div>
 		<div id="colorHelp" style="float:left;margin-top:3px;width:100%">
 		</div>
-		<div id="critical_div" style="float:left;margin-top:10px;">
-			<div id="critical_alert" class="alert">
+		<div id="critical_div" style="float:left;width:100%">
+			<div id="critical_alert" class="alert" style="margin-bottom:0px;">
 				<b id="critical_title" style="font-size:18px;margin-right:20px;"></b>
 				<span id="critical_time"></span>
 				<div id="critical_info"></div>

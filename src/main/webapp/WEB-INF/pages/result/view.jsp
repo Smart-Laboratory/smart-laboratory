@@ -52,7 +52,7 @@ th {
 	</tr>
 	<tr>
 		<th><span style="word-spacing:3px;"><fmt:message key='result.createBy'/></span> :</th>
-		<td><c:out value="${result.createUser.username}"/></td>
+		<td><c:out value="${result.createUser}"/></td>
 	</tr>
 	<tr>
 		<th><fmt:message key='result.createTime'/> :</th>
@@ -60,7 +60,7 @@ th {
 	</tr>
 	<tr>
 		<th><span style="word-spacing:3px;"><fmt:message key='result.modifyBy'/></span> :</th>
-		<td><c:out value="${result.modifyUser.username}"/></td>
+		<td><c:out value="${result.modifyUser}"/></td>
 	</tr>
 	<tr>
 		<th><fmt:message key='result.modifyTime'/> :</th>

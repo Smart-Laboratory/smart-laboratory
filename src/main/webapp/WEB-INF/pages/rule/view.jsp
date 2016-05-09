@@ -131,7 +131,7 @@
 		</tr>
 		<tr>
 			<th class="left"><span ><fmt:message key="rule.createBy" /></span>:</th>
-			<td><c:out value="${rule.createUser.username}" /></td>
+			<td><c:out value="${rule.createUser}" /></td>
 		</tr>
 		<tr>
 			<th class="left"><fmt:message key="rule.createTime" /> :</th>
@@ -139,7 +139,7 @@
 		</tr>
 		<tr>
 			<th class="left"><span ><fmt:message key="rule.modifyBy" /></span>:</th>
-			<td><c:out value="${rule.modifyUser.username}" /></td>
+			<td><c:out value="${rule.modifyUser}" /></td>
 		</tr>
 		<tr>
 			<th class="left"><fmt:message key="rule.modifyTime" /> :</th>

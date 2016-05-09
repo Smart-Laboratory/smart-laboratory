@@ -85,7 +85,7 @@
     <display:column property="name" maxLength="10" sortable="true" titleKey="rule.name"  escapeXml="false"
     	url="/rule/view" paramId="id" paramProperty="id" />
     <display:column property="resultName" maxLength="20" titleKey="rule.result" />
-    <display:column property="createUser.username" sortable="true" titleKey="rule.createBy" />
+    <display:column property="createUser" sortable="true" titleKey="rule.createBy" />
     <display:column property="modifyTime" format="{0,date,yyyy-MM-dd hh:mm:ss}" sortable="true" titleKey="rule.modifyTime"  />
 </display:table>
 </div>

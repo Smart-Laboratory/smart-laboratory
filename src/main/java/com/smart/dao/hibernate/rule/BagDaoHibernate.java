@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -22,7 +21,7 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 
 	@SuppressWarnings("unchecked")
 	public List<Bag> getByParentId(Long parentId) {
-		return getSession().createQuery("from Bag b where parent_id=" + parentId + " order by upper(b.id)").list();
+		return getSession().createQuery("from Bag where parent_id=" + parentId + " order by upper(id)").list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -32,7 +31,7 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 	
 	@SuppressWarnings("unchecked")
 	public List<Rule> getRuleByBag(String hospital) {
-		List<Bag> bags = getSession().createQuery("from Bag b where hospital_id=" + hospital + " order by upper(b.id)").list();
+		List<Bag> bags = getSession().createQuery("from Bag where hospital_id=" + hospital + " order by upper(id)").list();
 		List<Rule> ruleList = new ArrayList<Rule>();
 		Set<Long> have = new HashSet<Long>();
 		for(Bag b : bags) {
@@ -50,6 +49,6 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 
 	@SuppressWarnings("unchecked")
 	public List<Bag> getBag(String name) {
-		return getSession().createCriteria(Bag.class).add(Restrictions.eq("name", name)).list();
+		return getSession().createQuery("from Bag where name='" + name + "' order by upper(id)").list();
 	}
 }

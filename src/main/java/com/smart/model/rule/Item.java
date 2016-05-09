@@ -40,7 +40,7 @@ public class Item extends BaseObject implements Serializable{
 	private String unit;	//单位
 	private int isStr;
 	private Set<Rule> rules = new HashSet<Rule>();
-	private Long createUserId;
+	private String createUser;
 	private Date createTime;
 	
 	public Item() {}
@@ -128,13 +128,13 @@ public class Item extends BaseObject implements Serializable{
 	/**
 	 * 条目的创建者
 	 */
-	@Column(name = "create_user_id", nullable = true)
-	public Long getCreateUserId() {
-		return createUserId;
+	@Column(name = "create_user", nullable = true)
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 	/**
