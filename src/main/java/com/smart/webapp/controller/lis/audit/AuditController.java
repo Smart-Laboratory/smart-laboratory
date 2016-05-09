@@ -18,7 +18,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.TTCCLayout;
 import org.codehaus.jettison.json.JSONObject;
+import org.hibernate.search.indexes.serialization.javaserialization.impl.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +42,7 @@ import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
+import com.smart.model.lis.PassTrace;
 import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Task;
@@ -61,6 +64,7 @@ import com.smart.model.user.Evaluate;
 import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
 import com.smart.service.EvaluateManager;
+import com.smart.service.lis.PassTraceManager;
 import com.smart.util.Config;
 
 @Controller
@@ -491,6 +495,7 @@ public class AuditController extends BaseAuditController {
 		String sampleNo = request.getParameter("sample");
 		String textHtml = request.getParameter("text");
 		String charttest = request.getParameter("checktest");
+		String ids = request.getParameter("ids");
 		List<Sample> sample = sampleManager.getListBySampleNo(sampleNo);
 		
 		List<Sample> updateP = new ArrayList<Sample>();
@@ -534,6 +539,8 @@ public class AuditController extends BaseAuditController {
 				a.setType(2);
 				a.setStatus(info.getAuditStatus());
 				updateA.add(a);
+				
+				updatePasstrace(request,info.getSampleNo(),ids);
 			}
 			sampleManager.saveAll(updateP);
 			auditTraceManager.saveAll(updateA);
@@ -543,6 +550,43 @@ public class AuditController extends BaseAuditController {
 		return result;
 	}
     
+    private void updatePasstrace(HttpServletRequest request,String sampleno,String ids){
+    	if(ids ==null || ids.isEmpty())
+    		return;
+    	
+    	Sample sample = sampleManager.getBySampleNo(sampleno);
+    	Patient patient = patientManager.getByBlh(sample.getPatientblh());
+    	List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleno);
+    	String information="";
+    	for(TestResult t : testResults){
+    		if(!t.getResultFlag().startsWith("A"))
+    			information += t.getTestId()+":"+t.getTestResult()+";";
+    	}
+    	
+    	String username = request.getRemoteUser();
+    	List<PassTrace> pTraces = new ArrayList<PassTrace>();
+    	for(String id: ids.split(";")){
+    		if(!id.isEmpty()){
+    			PassTrace p = new PassTrace();
+    			p.setChecker(username);
+    			p.setChecktime(new Date());
+    			p.setCheckerOpinion(id.substring(1));
+    			p.setType(id.substring(0, 1));
+    			p.setDiagnostic(sample.getDiagnostic());
+    			p.setSampleNo(sampleno);
+    			
+    			
+    			p.setAge(patient.getAge());
+    			p.setSex(patient.getSex());
+    			
+    			
+    			p.setInformation(information);
+    			pTraces.add(p);
+    		}
+    	}
+    	for(PassTrace p: pTraces)
+    		passTraceManager.save(p);
+    }
     /**
 	 * 样本收藏
 	 * 
@@ -914,6 +958,7 @@ public class AuditController extends BaseAuditController {
 	
 	@Autowired
 	private EvaluateManager evaluateManager;
-	
+	@Autowired
+	private PassTraceManager passTraceManager;
 	
 }

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.smart.model.BaseObject;
 
 @Entity
-@Table(name="description_bag")
+@Table(name="lab_description_bag")
 public class DesBag extends BaseObject implements Serializable{
 
 

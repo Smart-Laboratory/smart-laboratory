@@ -156,6 +156,7 @@
 			<div id="explainDiv"></div>
 		</div>
 		<h5 id="passNotes"><b><fmt:message key='audit.checkerOpinion'/></b></h5>
+		<input type="hidden" id="checkId" />
 		<textarea id="noteText" rows="3" class="form-control" style="width:100%;"></textarea>
 		<input type="hidden" id="noteHidden" />
 		<div id="historyChart" style="float:left;width:100%;margin-top:5px;padding-top:5px;border-top:1px solid #000000;">

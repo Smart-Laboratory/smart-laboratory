@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import com.smart.model.user.User;
 
 @Entity
-@Table(name="description")
+@Table(name="lab_description")
 public class Description {
 
 private Long id;
