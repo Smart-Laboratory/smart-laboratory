@@ -72,7 +72,7 @@ th {
 			</tr>
 			<tr>
 				<th class="left"><span style="letter-spacing:6px;"><fmt:message key="rule.createBy" /></span>:</th>
-				<td><c:out value="${index.createUser.username}" /></td>
+				<td><c:out value="${index.createUser}" /></td>
 			</tr>
 			<tr>
 				<th class="left"><fmt:message key="rule.createTime" /> :</th>
@@ -80,7 +80,7 @@ th {
 			</tr>
 			<tr>
 				<th class="left" ><span style="letter-spacing:6px;"><fmt:message key="rule.modifyBy" /></span>:</th>
-				<td><c:out value="${index.modifyUser.username}" /></td>
+				<td><c:out value="${index.modifyUser}" /></td>
 			</tr>
 			<tr>
 				<th class="left"><fmt:message key="rule.modifyTime" /> :</th>

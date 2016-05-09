@@ -18,7 +18,7 @@
     <display:column property="content" maxLength="25" sortable="true" titleKey="result.content" style="width: 50%"
     	url="/result/view" paramId="id" paramProperty="id"/>
     <display:column property="category" sortable="true" titleKey="result.category" />
-    <display:column property="createUser.username" sortable="true" titleKey="result.createBy" />
+    <display:column property="createUser" sortable="true" titleKey="result.createBy" />
     <display:column property="modifyTime" format="{0,date,yyyy-MM-dd hh:mm:ss}" sortable="true" titleKey="result.modifyTime" style="width: 23%;" />
 </display:table>
 </div>

@@ -34,9 +34,9 @@ public class Result extends BaseObject implements Serializable{
 	private String level;
 	private String reject;  //与该结果同属一个规则的 其他结果
 	private String category;
-	private Long createUserId;
+	private String createUser;
 	private Date createTime;
-	private Long modifyUserId;
+	private String modifyUser;
 	private Date modifyTime;
 	private String percent;
 	private String modifyContent;
@@ -111,13 +111,13 @@ public class Result extends BaseObject implements Serializable{
 	/**
 	 * 结果创建者
 	 */
-	@Column(name = "create_user_id", nullable = true)
-	public Long getCreateUserId() {
-		return createUserId;
+	@Column(name = "create_user", nullable = true)
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 	/**
@@ -135,13 +135,13 @@ public class Result extends BaseObject implements Serializable{
 	/**
 	 * 结果修改者
 	 */
-	@Column(name = "modify_user_id")
-	public Long getModifyUserId() {
-		return modifyUserId;
+	@Column(name = "modify_user")
+	public String getModifyUser() {
+		return modifyUser;
 	}
 
-	public void setModifyUserId(Long modifyUserId) {
-		this.modifyUserId = modifyUserId;
+	public void setModifyUser(String modifyUser) {
+		this.modifyUser = modifyUser;
 	}
 
 	/**

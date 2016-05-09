@@ -142,10 +142,10 @@
         		$("#diagnostic").html("<a href='#' onclick='javascript:show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
         	}
         	$("#diagnosisValue").val(data.diagnostic);
-        	var reason = data.description.replace(/<p>/g,"").replace(/<\/p>/g,";");
-        	$("#passreason").html(reason);
-        	if (reason != null) {
-        		$("#passLabel").css('display','block');
+        	if(data.description != null) {
+        		var reason = data.description.replace(/<p>/g,"").replace(/<\/p>/g,";");
+            	$("#passreason").html(reason);
+            	$("#passLabel").css('display','block');
         	} else {
         		$("#passLabel").css('display','none');
         	}

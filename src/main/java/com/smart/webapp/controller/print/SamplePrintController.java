@@ -612,7 +612,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				if(dangerTest.indexOf(testId) >= 0) {
-					html.append("<div style='float:left;width:5%;'>★</div>");
+					html.append("<div style='float:left;width:5%;'><red>危急</red></div>");
 				} else {
 					html.append("<div style='float:left;width:5%;'>&nbsp;</div>");
 				}
