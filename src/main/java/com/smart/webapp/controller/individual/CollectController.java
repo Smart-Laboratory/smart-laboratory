@@ -20,15 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.EvaluateManager;
 import com.smart.service.lis.CollectSampleManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
-import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.model.lis.CollectSample;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
@@ -42,7 +39,6 @@ import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.user.Evaluate;
 
@@ -144,14 +140,13 @@ public class CollectController extends BaseAuditController{
 		}
 
 		Sample info = sampleManager.getBySampleNo(sample);
-		Patient patient = patientManager.getByBlh(info.getPatientblh());
 		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		if (info != null) {
 			map.put("id", info.getId());
-			map.put("name", patient.getPatientName());
-			map.put("age", String.valueOf(patient.getAge()));
+			map.put("name", info.getPatientname());
+			map.put("age", info.getAge());
 			String ex = info.getInspectionName().trim();
 			if (ex.length() > 16) {
 				ex = ex.substring(0, 16) + "...";
@@ -181,8 +176,8 @@ public class CollectController extends BaseAuditController{
 
 			map.put("reason", note);
 			map.put("mark", info.getAuditMark());
-			map.put("sex", patient.getSexValue());
-			if (StringUtils.isEmpty(patient.getBlh())) {
+			map.put("sex", info.getSexValue());
+			if (StringUtils.isEmpty(info.getPatientblh())) {
 				List<com.zju.api.model.Patient> list = rmiService.getPatientList("'" + info.getPatientId() + "'");
 				if (list != null && list.size() != 0) {
 					map.put("blh", list.get(0).getBlh());
@@ -190,7 +185,7 @@ public class CollectController extends BaseAuditController{
 					map.put("blh", "");
 				}
 			} else {
-				map.put("blh", patient.getBlh());
+				map.put("blh", info.getPatientblh());
 			}
 			map.put("patientId", info.getPatientId());
 			map.put("requester", process.getRequester());
@@ -199,7 +194,7 @@ public class CollectController extends BaseAuditController{
 			
 			Calendar c = Calendar.getInstance(); 
 			c.add(Calendar.DAY_OF_MONTH,-7);
-			map.put("history", patient.getPatientName() + "最近7天共做检查" + sampleManager.getSampleByPatientName(df.format(c.getTime()), df.format(new Date()), patient.getPatientName()).size() + "次，点击查看详情。");
+			map.put("history", info.getPatientname() + "最近7天共做检查" + sampleManager.getSampleByPatientName(df.format(c.getTime()), df.format(new Date()), info.getPatientname()).size() + "次，点击查看详情。");
 		}
 		return map;
 	}
@@ -442,16 +437,10 @@ public class CollectController extends BaseAuditController{
 	}
 	
 	@Autowired
-	private IndexManager indexManager;
-	
-	@Autowired
 	private CollectSampleManager collectSampleManager;
 	
 	@Autowired
 	private SampleManager sampleManager;
-	
-	@Autowired
-	private PatientManager patientManager;
 	
 	@Autowired
 	private ProcessManager processManager;

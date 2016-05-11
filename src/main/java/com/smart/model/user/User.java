@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -94,9 +95,9 @@ public class User extends BaseObject implements Serializable, UserDetails {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USER")
-	@SequenceGenerator(name = "SEQ_USER", sequenceName = "user_sequence", allocationSize = 1)*/
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USER")
+	@SequenceGenerator(name = "SEQ_USER", sequenceName = "user_sequence", allocationSize = 1)
     public Long getId() {
         return id;
     }

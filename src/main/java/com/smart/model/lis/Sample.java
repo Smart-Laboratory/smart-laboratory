@@ -1,8 +1,14 @@
 package com.smart.model.lis;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -25,6 +31,10 @@ public class Sample extends BaseObject {
 	private Long id;//主键，流水号
 	
 	private String patientId; // 病人 就诊号
+	private String patientname;
+	private Date birthday;
+	private String sex;
+	private String age;
 	private String departBed; //病床号
 	private String sampleNo;//样本编号， 手动生成
 	private Integer stayHospitalMode; //就诊方式（门诊、住院、急诊）
@@ -49,6 +59,7 @@ public class Sample extends BaseObject {
 	private Integer iswriteback;//写回标识
 	private Integer hasimages;//是否包含图片
 	private int cycle;
+	private int invoiceNum; //发票号
 	
 	private int auditStatus; //样本审核的状态
 	private int auditMark; //审核标记
@@ -60,8 +71,12 @@ public class Sample extends BaseObject {
 	private String sectionId;
 	private String patientblh;
 	private String charttest;
+	private String ageunit;
 	
 	@Id
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
+	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize=1)
 	public Long getId(){
 		return this.id;
 	}
@@ -350,6 +365,57 @@ public class Sample extends BaseObject {
 		this.cycle = cycle;
 	}
 	
+	@Column(name = "PATIENTNAME")
+	public String getPatientname() {
+		return patientname;
+	}
+
+	public void setPatientname(String patientname) {
+		this.patientname = patientname;
+	}
+
+	@Column(name = "BIRTHDAY")
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	@Column(name = "SEX")
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	
+	@Column(name = "AGEUNIT")
+	public String getAgeunit() {
+		return ageunit;
+	}
+
+	public void setAgeunit(String ageunit) {
+		this.ageunit = ageunit;
+	}
+
+	@Column(name = "AGE")
+	public String getAge() {
+		if (birthday != null) {
+			Calendar now = Calendar.getInstance();
+			Calendar previous = Calendar.getInstance();
+			previous.setTime(birthday);
+			setAge((now.get(Calendar.YEAR) - previous.get(Calendar.YEAR)+1) + "");
+		}
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
 	/**
 	 * 审核状态
 	 */
@@ -460,6 +526,15 @@ public class Sample extends BaseObject {
 	public void setCharttest(String charttest) {
 		this.charttest = charttest;
 	}
+	
+	@Column(name="invoicenum")
+	public int getInvoiceNum() {
+		return invoiceNum;
+	}
+
+	public void setInvoiceNum(int invoiceNum) {
+		this.invoiceNum = invoiceNum;
+	}
 
 	@Transient
 	public String getAuditMarkValue() {
@@ -543,6 +618,16 @@ public class Sample extends BaseObject {
 			break;
 		}
 		return value;
+	}
+	
+	@Transient
+	public String getSexValue() {
+		if (sex.equals("1")) {
+			return "男";
+		} else if (sex.equals("2")) {
+			return "女";
+		}
+		return "未知";
 	}
 	
 	public String toString() {

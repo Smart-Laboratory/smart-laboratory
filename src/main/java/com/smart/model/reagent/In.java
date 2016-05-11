@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -37,9 +38,9 @@ public class In extends BaseObject implements Serializable {
 	private String lab;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HMI")
-	@SequenceGenerator(name = "SEQ_HMI", sequenceName = "hmi_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HMI")
+	@SequenceGenerator(name = "SEQ_HMI", sequenceName = "hmi_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

@@ -37,7 +37,6 @@ public class TestResult extends BaseObject{
     private Date measureTime; // 检验时间
     private String operator; // 操作者
     private String unit;
-    private String chineseName;
     private int isprint;
     private int editMark;
     private String method;
@@ -278,19 +277,6 @@ public class TestResult extends BaseObject{
         } else {
             return testResult;
         }
-    }
-
-    /**
-     * Return the chineseName of the testId
-     * 
-     */
-    @Transient
-    public String getChineseName() {
-        return chineseName;
-    }
-
-    public void setChineseName(String chineseName) {
-        this.chineseName = chineseName;
     }
 
     @Override

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -29,7 +30,9 @@ public class WorkCount extends BaseObject{
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WORK_COUNT")
+	@SequenceGenerator(name = "SEQ_WORK_COUNT", sequenceName = "work_count_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

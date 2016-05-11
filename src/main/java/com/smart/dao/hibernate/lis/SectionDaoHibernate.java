@@ -27,7 +27,7 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	public int getSectionCount(String query, String hospitalId) {
 		String sql = "select count(1) cnt from l_depart where 1=1";
 		if(query != null && !query.equals(""))
-			sql += " and concat(code,name)  like '%" +query +"%'";
+			sql += " and code||name like '%" +query +"%'";
 		if(hospitalId != null && hospitalId.equals(""))
 			sql += " and hospital_id = " +hospitalId;
 		Query q =  getSession().createSQLQuery(sql);
@@ -46,7 +46,7 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	public List<Section> getSectionList(String query, String hospitalId, int start, int end,String sidx,String sord)  {
 		String sql = "from Section s where 1=1 ";
 		if(query != null && !query.equals(""))
-			sql += " and concat(s.code,s.name)  like '%" +query +"%'";
+			sql += " and s.code||s.name  like '%" +query +"%'";
 		if(hospitalId != null && hospitalId.equals(""))
 			sql += " and s.hospital_id = " +hospitalId;
 

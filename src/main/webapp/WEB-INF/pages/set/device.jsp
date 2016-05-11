@@ -87,7 +87,13 @@
 <div style="clear: both"></div>
 <div id="addDialog" style="display: none;width: 500px;overflow: hidden" class="row">
     <form id="addForm" class="form-horizontal" action="<c:url value='../set/device/saveDevice'/>" method="post">
-        <input type="hidden" name="id" id="id" value="0"/>
+        <div class="form-group">
+            <div class="space-4"></div>
+            <label class="col-xs-3 control-label no-padding-right" for="name"> 编号 </label>
+            <div class="col-xs-8">
+                <input type="text" id="id" name="id" placeholder="编号" class="col-xs-8"/>
+            </div>
+        </div>
         <div class="form-group">
             <div class="space-4"></div>
             <label class="col-xs-3 control-label no-padding-right" for="name"> 名称 </label>
@@ -99,7 +105,6 @@
             <label class="col-xs-3 control-label no-padding-right" for="type">类型</label>
             <div class="col-xs-8">
                 <select id="type" name="type">
-                    <option value="">无</option>
                     <c:forEach var="item" items="${typeList}">
                         <option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
                     </c:forEach>
@@ -110,7 +115,6 @@
             <label class="col-xs-3 control-label no-padding-right" for="lab"> 所属科室 </label>
             <div class="col-xs-8">
                 <select id="lab" name="lab">
-                    <option value="">无</option>
                     <c:forEach var="item" items="${departList}">
                         <option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
                     </c:forEach>
@@ -125,30 +129,38 @@
                     <option value="2">COM2</option>
                     <option value="3">COM3</option>
                     <option value="4">COM4</option>
+                    <option value="5">COM5</option>
+                    <option value="6">COM6</option>
+                    <option value="7">COM7</option>
+                    <option value="8">COM8</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
-        <label class="col-xs-3 control-label no-padding-right" for="baudrate"> 波特率 </label>
-        <div class="col-xs-8">
-            <select class="col-xs-8" id="baudrate" name="baudrate">
-                <option value="2400">2400</option>
-                <option value="4800">4800</option>
-                <option value="7200">7200</option>
-                <option value="9600">9600</option>
-                <option value="14400">14400</option>
-                <option value="19200">19200</option>
-                <option value="28800">28800</option>
-            </select>
+            <label class="col-xs-3 control-label no-padding-right" for="baudrate"> 波特率 </label>
+            <div class="col-xs-8">
+                <select class="col-xs-8" id="baudrate" name="baudrate">
+                    <option value="300">300</option>
+                    <option value="600">600</option>
+                    <option value="1200">1200</option>
+                    <option value="1800">1800</option>
+                    <option value="2400">2400</option>
+                    <option value="4800">4800</option>
+                    <option value="7200">7200</option>
+                    <option value="9600">9600</option>
+                    <option value="14400">14400</option>
+                    <option value="19200">19200</option>
+                    <option value="28800">28800</option>
+                </select>
+            </div>
         </div>
-    </div>
         <div class="form-group">
             <label class="col-xs-3 control-label no-padding-right" for="parity"> 校验位 </label>
             <div class="col-xs-8">
                 <select class="col-xs-8" id="parity" name="parity">
-                    <option value="N">NONE</option>
-                    <option value="O">ODD</option>
-                    <option value="E">EVEN</option>
+                    <option value="N">无</option>
+                    <option value="O">奇校验</option>
+                    <option value="E">偶校验</option>
                 </select>
             </div>
         </div>
@@ -172,19 +184,19 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="handshark"> handshark </label>
+            <label class="col-xs-3 control-label no-padding-right" for="handshark"> 协议 </label>
             <div class="col-xs-8">
                 <select class="col-xs-8" id="handshark" name="handshark">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option value="0">无</option>
+                    <option value="1">XonXof</option>
+                    <option value="2">RTS OR CTS</option>
+                    <option value="3">ASTM</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <div class="space-4"></div>
-            <label class="col-xs-3 control-label no-padding-right" for="datawind">datawind</label>
+            <label class="col-xs-3 control-label no-padding-right" for="datawind">数据窗口</label>
             <div class="col-xs-8">
                 <input type="text" id="datawind" name= "datawind" placeholder="datawind" class="col-xs-8"/>
             </div>

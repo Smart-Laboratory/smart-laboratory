@@ -13,4 +13,6 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 
 	List<Process> getHisProcess(String substring);
 
+	List<Process> getBySampleCondition(String text, String lab);
+
 }

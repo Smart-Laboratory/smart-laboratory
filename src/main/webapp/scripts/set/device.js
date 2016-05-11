@@ -15,7 +15,21 @@ function  Add(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("#addForm").submit();
+			//$("#addForm").submit();
+			$.ajax({
+				url:'../set/device/saveDevice',
+				type:"POST",
+				dataType:"json",
+				data:$('#addForm').serialize()+"&method=add",
+				success:function(data){
+					console.log(data);
+					if(parseInt(data.success)==0){
+						layer.close(index);
+					}else{
+						layer.alert(data.success);
+					}
+				}
+			})
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -32,7 +46,8 @@ function Delete(){
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post('../set/device/deleteDevie',{id:id},function(data) {
+		$.post('../set/device/deleteDevice',{id:id},function(data) {
+			console.log("id-->"+id)
 			jQuery("#tableList").jqGrid('delRowData',id);
 		});
 		layer.close(index);
@@ -64,7 +79,9 @@ function Edit(){
 		return false;
 	}
 	//设置数据
+
 	$('#id').val(rowData.id);
+	$('#id').attr("disabled","false");
 	$('#type').val(rowData.type);
 	$('#name').val(rowData.name);
 	$('#lab').val(rowData.lab);
@@ -85,7 +102,21 @@ function Edit(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("form").submit();
+			$("#id").removeAttr("disabled");
+			$.ajax({
+				url:'../set/device/saveDevice',
+				type:"POST",
+				dataType:"json",
+				data:$('#addForm').serialize(),
+				success:function(data){
+					console.log(data);
+					if(parseInt(data.success)==0){
+						layer.close(index);
+					}else{
+						layer.alert(data.success);
+					}
+				}
+			})
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -115,7 +146,10 @@ $(function(){
 })
 
 function  clearData(){
-
+	$("#id").removeAttr("disabled");
+	$("#addDialog").find("input,textarea").each(function(){
+		this.value = "";
+	});
 }
 
 /**
@@ -166,7 +200,7 @@ function initGrid(typeid){
 			}, 0);
 		},
 		viewrecords: true,
-		multiselect: true,
+		//multiselect: true,
 		shrinkToFit: true,
 		altRows:true,
 		autowidth:true,

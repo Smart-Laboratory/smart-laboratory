@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
@@ -45,10 +44,10 @@ public class FillFieldUtil {
 		return util;
 	}
 
-	public TestResult fillResult(TestResult result, Sample info, int age, String sex) {
+	public TestResult fillResult(TestResult result, int cycle, int age, String sex) {
 
 		// 完善字段数据
-		int li_direct = fillReference(result, age, info.getCycle(), sex);
+		int li_direct = fillReference(result, age, cycle, sex);
 		filleResultFlag(result, li_direct);
 		return result;
 	}

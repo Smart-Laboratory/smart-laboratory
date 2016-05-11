@@ -11,8 +11,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.search.annotations.DocumentId;
-
 import com.smart.model.BaseObject;
 
 
@@ -35,10 +33,9 @@ public class SOPIndex extends BaseObject implements Serializable{
 	private String lab;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SOP")
-	@SequenceGenerator(name = "SEQ_SOP", sequenceName = "sop_sequence", allocationSize = 1)*/
-	@DocumentId
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SOP")
+	@SequenceGenerator(name = "SEQ_SOP", sequenceName = "sop_sequence", allocationSize = 1)
 	public long getId() {
 		return id;
 	}

@@ -5,10 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
-import org.springmodules.validation.bean.conf.loader.annotation.handler.NotNull;
 
 /**
  * 科室内部 部门分类
@@ -31,9 +31,9 @@ public class Section extends BaseObject {
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_DEPART")
-	@SequenceGenerator(name = "SEQ_DEPART", sequenceName = "depart_sequence", allocationSize=1)*/	
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_DEPART")
+	@SequenceGenerator(name = "SEQ_DEPART", sequenceName = "depart_sequence", allocationSize=1)	
 	public Long getId() {
 		return id;
 	}

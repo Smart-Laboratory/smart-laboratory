@@ -14,7 +14,9 @@ import javax.persistence.*;
 @Table(name = "lab_dictionarytype")
 public class DictionaryType {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    //@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DICT_TYPE")
+	@SequenceGenerator(name = "SEQ_DICT_TYPE", sequenceName = "dict_type_sequence", allocationSize = 1)
     public Long getId() {
         return id;
     }

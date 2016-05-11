@@ -44,9 +44,9 @@ public class ReasoningModify extends BaseObject implements Serializable {
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ReasoningModify")
-	@SequenceGenerator(name = "SEQ_ReasoningModify", sequenceName = "reasoningmodify_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_REASON_MODIFY")
+	@SequenceGenerator(name = "SEQ_REASON_MODIFY", sequenceName = "reason_modify_sequence", allocationSize = 1)
 	@DocumentId
 	public Long getId() {
 		return id;

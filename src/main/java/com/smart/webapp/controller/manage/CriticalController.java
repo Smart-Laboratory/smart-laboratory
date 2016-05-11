@@ -24,17 +24,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.zju.api.service.RMIService;
 import com.smart.Constants;
 import com.smart.model.lis.ContactInfor;
-import com.smart.model.lis.Critical;
 import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ward;
 import com.smart.model.lis.Process;
 import com.smart.model.user.User;
+import com.smart.model.util.Critical;
 import com.smart.service.UserManager;
 import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.WardManager;
@@ -60,26 +58,19 @@ public class CriticalController {
 		List<Critical> criticals = new ArrayList<Critical>();
 		if(samples.size() > 0){
 			String hisSampleId = "";
-			String hisBlh = "";
 			for(Sample sample : samples) {
 				hisSampleId += sample.getId() + ",";
-				hisBlh += "'" + sample.getPatientblh() + "',";
 			}
 			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
 			List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
-			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
 			Map<Long, Process> processMap = new HashMap<Long, Process>();
 			Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
-			Map<String, Patient> pMap = new HashMap<String, Patient>();
 			
 			for(Process p : processList) {
 				processMap.put(p.getSampleid(), p);
 			}
 			for(CriticalRecord cr : crList) {
 				crMap.put(cr.getSampleid(), cr);
-			}
-			for(Patient p : patientList) {
-				pMap.put(p.getBlh(), p);
 			}
 			int index = 0;
 			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
@@ -98,7 +89,7 @@ public class CriticalController {
 						ctl.setSection(section);
 					}
 					ctl.setPatientId(sample.getPatientId());
-					ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+					ctl.setPatientName(sample.getPatientname());
 					ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
 					criticals.add(ctl);
 				}
@@ -137,25 +128,18 @@ public class CriticalController {
 		List<Critical> criticals = new ArrayList<Critical>();
 		if(samples.size() > 0) {
 			String hisSampleId = "";
-			String hisBlh = "";
 			for(Sample sample : samples) {
 				hisSampleId += sample.getId() + ",";
-				hisBlh += "'" + sample.getPatientblh() + "',";
 			}
 			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
 			List<CriticalRecord> crList = criticalRecordManager.getBySampleIds(hisSampleId.substring(0, hisSampleId.length()-1));
-			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
 			Map<Long, Process> processMap = new HashMap<Long, Process>();
 			Map<Long, CriticalRecord> crMap = new HashMap<Long, CriticalRecord>();
-			Map<String, Patient> pMap = new HashMap<String, Patient>();
 			for(Process p : processList) {
 				processMap.put(p.getSampleid(), p);
 			}
 			for(CriticalRecord cr : crList) {
 				crMap.put(cr.getSampleid(), cr);
-			}
-			for(Patient p : patientList) {
-				pMap.put(p.getBlh(), p);
 			}
 			StringBuilder patientIds = new StringBuilder();
 			Iterator<Sample> It = samples.iterator();
@@ -205,7 +189,7 @@ public class CriticalController {
 						ctl.setSection(section);
 					}
 					ctl.setPatientId(sample.getPatientId());
-					ctl.setPatientName(pMap.get(sample.getPatientblh()).getPatientName());
+					ctl.setPatientName(sample.getPatientname());
 					ctl.setInfoValue(crMap.get(sample.getId()).getCriticalContent());
 					if (patientMap.containsKey(sample.getPatientId())) {
 						com.zju.api.model.Patient p = patientMap.get(sample.getPatientId());
@@ -387,7 +371,4 @@ public class CriticalController {
 	
 	@Autowired
 	private ProcessManager processManager = null;
-	
-	@Autowired
-	private PatientManager patientManager = null;
 }

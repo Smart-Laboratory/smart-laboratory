@@ -116,7 +116,7 @@ public class FormulaUtil {
 						t.setOperator(operator);
 						t.setIsprint(isprint);
 						t.setTestResult(testResultManager.getFormulaResult(fm));
-						fillUtil.fillResult(t, info, age, sex == 2 ? "女" : "男" );
+						fillUtil.fillResult(t, info.getCycle(), age, sex == 2 ? "女" : "男" );
 						//testResultManager.save(t);
 						list.add(t);
 						updatelist.add(t);

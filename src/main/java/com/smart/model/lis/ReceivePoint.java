@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +19,9 @@ public class ReceivePoint {
 	private String lab;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_RECEIVE_POINT")
+	@SequenceGenerator(name = "SEQ_RECEIVE_POINT", sequenceName = "receive_point_sequence", allocationSize=1)	
 	public long getId() {
 		return id;
 	}

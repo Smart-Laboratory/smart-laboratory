@@ -57,9 +57,9 @@ public class Role extends BaseObject implements Serializable, GrantedAuthority {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ROLE")
-	@SequenceGenerator(name = "SEQ_ROLE", sequenceName = "role_sequence", allocationSize = 1)*/
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ROLE")
+	@SequenceGenerator(name = "SEQ_ROLE", sequenceName = "role_sequence", allocationSize = 1)
     public Long getId() {
         return id;
     }

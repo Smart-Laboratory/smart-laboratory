@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /*
@@ -40,9 +41,9 @@ public class JFMX {
 	private long hospitalid;		//医院ID
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_JFMX")
-	@SequenceGenerator(name = "SEQ_JFMX", sequenceName = "jfmx_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_JFMX")
+	@SequenceGenerator(name = "SEQ_JFMX", sequenceName = "jfmx_sequence", allocationSize = 1)
 	public long getId() {
 		return id;
 	}

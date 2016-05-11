@@ -34,7 +34,6 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.LikeLab;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.Ylxh;
@@ -45,7 +44,6 @@ import com.smart.service.DictionaryManager;
 import com.smart.service.lis.AuditTraceManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.LikeLabManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
@@ -72,7 +70,6 @@ public class AutoAuditServlet extends HttpServlet {
 		ServletContext context = getServletContext();
     	ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
     	final SampleManager sampleManager = (SampleManager) ctx.getBean("sampleManager");
-    	final PatientManager patientManager = (PatientManager) ctx.getBean("patientManager");
         final TestResultManager testResultManager = (TestResultManager) ctx.getBean("testResultManager");
         final DictionaryManager dictionaryManager = (DictionaryManager) ctx.getBean("dictionaryManager");
         final ItemManager itemManager = (ItemManager) ctx.getBean("itemManager");
@@ -143,19 +140,12 @@ public class AutoAuditServlet extends HttpServlet {
                     	Date today = new Date();
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
                     	if (needAuditSamples != null && needAuditSamples.size() > 0) {
-                    		String hisBlh = "";
                 			String hisSampleNo = "";
                 			for(Sample sample : needAuditSamples) {
-                				hisBlh += "'" + sample.getPatientblh() + "',";
                 				hisSampleNo += "'" + sample.getSampleNo() + "',";
                 			}
-                			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
                 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-                			final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
                 			final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
-                			for(Patient p : patientList) {
-                				hisPatientMap.put(p.getBlh(), p);
-                			}
                 			for(TestResult tr : testList) {
                 				if(StringUtils.isNumeric(tr.getTestId())) {
                 					if(hisTestMap.containsKey(tr.getSampleNo())) {
@@ -188,10 +178,9 @@ public class AutoAuditServlet extends HttpServlet {
                         	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
                         	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
-                        	                	Patient patient = hisPatientMap.get(info.getPatientblh());
                         	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
                         	                	try {
-                        	        				formulaUtil.formula(info, "admin", now, patient.getAge(), Integer.parseInt(patient.getSex()));
+                        	        				formulaUtil.formula(info, "admin", now, Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
                         	                	} catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
@@ -255,7 +244,6 @@ public class AutoAuditServlet extends HttpServlet {
                         	        		}
                         	        		for (Sample info : samples) {
                         	        			try {
-                        	        				Patient patient = hisPatientMap.get(info.getPatientblh());
                         	        				List<TestResult> now = hisTestMap.get(info.getSampleNo());
                         	        				CriticalRecord cr = new CriticalRecord();
                 	        	        			info.setMarkTests("");
@@ -275,7 +263,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    							diffCheck.doCheck(info, now, diffData);
                 	    							Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
                 	    							ratioCheck.doCheck(info, now);
-                	    							R r = droolsRunner.getResult(now, info.getPatientId(), patient.getAge(), Integer.parseInt(patient.getSex()));
+                	    							R r = droolsRunner.getResult(now, info.getPatientId(), Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
                 	    							if (r!= null && !r.getRuleIds().isEmpty()) {
                 	    								reTestCheck.doCheck(info, r, now);
                 	    								alarm2Check.doCheck(info, r, diffTests, now);

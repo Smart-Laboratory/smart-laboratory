@@ -86,4 +86,12 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public List<Sample> getSampleByCode(String code) {
 		return sampleDao.getSampleByCode(code);
 	}
+	
+	public boolean existSampleNo(String sampleno){
+		return sampleDao.existSampleNo(sampleno);
+	}
+	
+	public Sample getBySfsb(String patientid, String ylxh, String sfsb){
+		return sampleDao.getBySfsb(patientid, ylxh, sfsb);
+	}
 }

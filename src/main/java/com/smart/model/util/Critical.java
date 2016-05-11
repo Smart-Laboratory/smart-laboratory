@@ -1,4 +1,4 @@
-package com.smart.model.lis;
+package com.smart.model.util;
 
 import java.util.Date;
 

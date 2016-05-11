@@ -57,7 +57,7 @@ public class InController {
 		List<In> inList = new ArrayList<In>();
 		if(request.getParameter("id") == null) {
 			Date indate = new Date(Long.parseLong(request.getParameter("time")));
-			inList = inManager.getByInDate(Constants.SDF.format(indate));
+			inList = inManager.getByInDate(indate);
 			System.out.println(inList.size());
 		} else {
 			inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));

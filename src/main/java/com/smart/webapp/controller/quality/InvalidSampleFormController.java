@@ -8,25 +8,20 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.model.lis.InvalidSample;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.InvalidSampleManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.YearMonthDV;
 
 @Controller
 @RequestMapping("/quality/invalidSampleForm*")
@@ -38,8 +33,6 @@ public class InvalidSampleFormController {
 	private UserManager userManager;
 	@Autowired
 	private SampleManager sampleManager;
-	@Autowired
-	private PatientManager patientManager;
 	
 	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
@@ -70,11 +63,10 @@ public class InvalidSampleFormController {
 				invalidSample = new InvalidSample();
 				if(sampleManager.exists(Long.parseLong(id))){
 					Sample sample = sampleManager.get(Long.parseLong(id));
-					Patient patient = patientManager.getByBlh(sample.getPatientblh());
 					invalidSample.setSampleId(sample.getId());
-					invalidSample.setPatientName(patient.getPatientName());
-					invalidSample.setSex(patient.getSex());
-					invalidSample.setAge(patient.getAge());
+					invalidSample.setPatientName(sample.getPatientname());
+					invalidSample.setSex(sample.getSex());
+					invalidSample.setAge(Integer.parseInt(sample.getAge()));
 					invalidSample.setSampleType(sample.getSampleType());
 				} else
 					msg="该医嘱号不存在";
