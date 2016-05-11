@@ -36,7 +36,7 @@ import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/manage/modify*")
-public class modifyController {
+public class ModifyController {
 	
 	@Autowired
 	private UserManager userManager = null;

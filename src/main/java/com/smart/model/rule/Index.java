@@ -57,11 +57,8 @@ public class Index extends BaseObject implements Serializable {
 	private String printord;
 	private int needhistory;
 	private String method;
-<<<<<<< HEAD
 	private String defaultvalue;
 	
-=======
->>>>>>> origin/master
 	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 
