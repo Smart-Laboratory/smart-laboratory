@@ -444,6 +444,12 @@ $(function(){
 	    height: 500
 	});
 	
+	$("#batchAddResultsDialog").dialog({
+		autoOpen: false,
+	    width: 600,
+	    height: 500
+	});
+	
 	$("#sopDetailDialog").dialog({
 		autoOpen: false,
 	    width: 400
@@ -500,11 +506,9 @@ $(function(){
 		$.get("../set/ylsf/ajax/ylsfList",{lab:$("#labSelect").val()},function(data){
 			var array = jQuery.parseJSON(data);
 			for (var i=0 ; i < array.length ; i++) {
-				var html = array[i].ksdm+","+array[i].ylmc;
-				if(lastProfile == array[i].profiletest) {
-					//此处添加显示的套餐
+				//var html = array[i].ksdm+","+array[i].ylmc;
+					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>");
 				}
-			}
 		 });
 		$("#addTestResultDialog").dialog("open");
 //		
@@ -761,7 +765,60 @@ $(function(){
  	$("#statisticDialogBtn").click(function() {
 		$("#statisticDialog").dialog("open");
 	});
-	
+ 	
+ 	/**
+ 	 * 张晋南2016-06-02
+ 	 * 标本批量添加默认值
+ 	 */
+ 	$("#batchAddResultsBtn").click(function(){
+ 		$("#batchAddResultsDialog").dialog("open");
+ 	});
+ 	/**
+ 	 * 张晋南2016-06-02
+ 	 * 标本批量添加默认值
+ 	 */
+ 	$("#batchAddResults_statisticBtn_get").click(function() {
+ 		var bsc = $("#batchAddResults_statistic_code").val();
+ 		var bsb = $("#batchAddResults_statistic_begin").val();
+ 		var bse = $("#batchAddResults_statistic_end").val();
+ 		if(""==bsc){
+ 			alert("请输入检验段！");
+ 			return ;
+ 		}
+ 		if(""==bsb){
+ 			alert("请输入开始编号！");
+ 			return ;
+ 		}
+ 		if(""==bse){
+ 			alert("请输入结束编号！");
+ 			return ;
+ 		}
+ 		jQuery("#batchAddResults_statistic_table").jqGrid({
+ 			url:"../audit/batchAddResults_statistic_get?bsc="+bsc+"&bsb="+bsb+"&bse="+bse,
+			datatype: "json",
+			jsonReader : {repeatitems : false}, 
+			colNames:['ID','项目','默认值'],
+		   	colModel:[
+		   	    {name:'id',index:'id',hidden:true,sortable:false},
+		   	    {name:'name',index:'name',width:120,sortable:false},
+		   	 	{name:'value',index:'value',width:140,sortable:false},
+		   	],
+			rowNum: 80,
+		   	rownumbers: true,
+		   	height:'100%',
+		   	width:'260'
+ 		});
+ 	});
+ 	$("#batchAddResults_statisticBtn_save").click(function() {
+	 	$.post("../audit/batchAddResults_statistic_save",{sampleNo:$("#hiddenSampleNo").val(),id:ii0}, function(data) {
+			if (data == true) {
+				alert("Success!!!");
+			} else {
+				alert("Fail!!!");
+			}
+		});
+ 	});
+ 	
 	var isFirstStatistic = true;
 	$("#statisticBtn").click(function() {
 		var code = $("#statistic_code").val();
@@ -784,7 +841,7 @@ $(function(){
 			   	 	{name:'coefficientOfVariation',index:'coefficientOfVariation',width:80,sortable:false}],
 			   	rowNum: 80,
 			   	rownumbers: true,
-			   	height:'100%'
+			   	height:'100%',
 			});
 			isFirstStatistic = false;
 		} else {

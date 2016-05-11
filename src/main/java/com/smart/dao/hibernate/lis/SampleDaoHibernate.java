@@ -422,6 +422,11 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getByIds(String ids) {
 		return getSession().createQuery("from Sample where id in (" + ids + ")").list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sample> getBysampleNos(String ids) {
+		return getSession().createQuery("from Sample where sampleNo in (" + ids + ")").list();
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleByCode(String code) {

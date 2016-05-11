@@ -3,6 +3,7 @@ package com.smart.webapp.controller.set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -101,7 +102,7 @@ public class YlsfController extends BaseAuditController {
 	 * 修改
 	 * 新增getLabofYlmcBylike方法
 	 * lab 科室代码
-	 * name 输入需要查询的套餐
+	 * ylmc 输入需要查询的套餐
 	 * @param request
 	 * @param response
 	 * @return
@@ -113,18 +114,32 @@ public class YlsfController extends BaseAuditController {
 		
 		String lab = request.getParameter("lab");
 		String ylmc = request.getParameter("ylmc");
-		List<Ylxh> list = ylxhManager.getLabofYlmcBylike(lab,ylmc);
-		for(Ylxh y : list){
-			if(y.getProfiletest()==null)
-				list.remove(y);
+		List<Ylxh> list =  ylxhManager.getLabofYlmcBylike(lab,ylmc);
+		for(Iterator it = list.iterator(); it.hasNext();){
+			Ylxh y = (Ylxh) it.next();
+			if(y.getProfiletest()==null||"".equals(y.getProfiletest()))
+				it.remove();
 		};
+		
 		JSONArray array = new JSONArray();
-		for (Ylxh y : list) {
-			JSONObject obj = new JSONObject();
-			obj.put("ylxh", y.getYlxh());
-			obj.put("ylmc", y.getYlmc());
-			obj.put("profiletest", y.getProfiletest());
-			array.put(obj);
+		if(null == ylmc){
+			User user =	userManager.getUserByUsername(request.getRemoteUser());
+			String lastProfile = user.getLastProfile();
+			
+		    	for(String lpf:lastProfile.split(",")){
+    				JSONObject obj = new JSONObject();
+    				obj.put("test", lpf);
+    				obj.put("name", idMap.get(lpf).getName());
+    				array.put(obj);
+			 }
+		}else{
+			for (Ylxh y : list) {
+				JSONObject obj = new JSONObject();
+				obj.put("ylxh", y.getYlxh());
+				obj.put("ylmc", y.getYlmc());
+				obj.put("profiletest", y.getProfiletest());
+				array.put(obj);
+			}
 		}
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
