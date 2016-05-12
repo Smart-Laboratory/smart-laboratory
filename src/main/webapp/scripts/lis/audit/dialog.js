@@ -25,7 +25,7 @@ function addtotext(i){
 			$("#checkId").val(ids);
 		}
 	}
-	alert(ids);
+	
 };
 $(function(){
 	$("#opStatusDialog").dialog({
@@ -38,7 +38,7 @@ $(function(){
 	    	"审核":function() {
 	    		var sample = $("#hiddenSampleNo").val();
 	    		var id = $("#hiddenDocId").val();
-	    		var ids = $("checkId").val();
+	    		var ids = $("#checkId").val();
 	    		var checktest="";
     			$("#chartList :checkbox").each(function(){
     				if($(this).prop("checked")==true){
@@ -220,7 +220,6 @@ $(function(){
 	    		}
 	    	});
 	    	$("#checkId").val(ids);
-	    	alert(ids);
 	    }
 	});
 	

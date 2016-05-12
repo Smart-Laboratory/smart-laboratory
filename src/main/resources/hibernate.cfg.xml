@@ -20,7 +20,6 @@
         <mapping class="com.smart.model.lis.TestModify"/>
         <mapping class="com.smart.model.lis.Section"/>
         <mapping class="com.smart.model.lis.InvalidSample"/>
-        <mapping class="com.smart.model.lis.Diagnostic"/>
         <mapping class="com.smart.model.lis.Ylxh"/>
         <mapping class="com.smart.model.lis.ContactInfor"/>
         <mapping class="com.smart.model.lis.Ward"/>

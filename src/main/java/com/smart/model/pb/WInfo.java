@@ -34,6 +34,7 @@ public class WInfo {
 	private int ord4;
 	private int ord5;
 	private int ord6;
+	private boolean isActive;
 	
 	private double holiday;//年休
 	private String defeHoliday;//积休
@@ -211,6 +212,15 @@ public class WInfo {
 
 	public void setDefeholidayhis(String defeholidayhis) {
 		this.defeholidayhis = defeholidayhis;
+	}
+
+	@Column(name="isactive")
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Transient

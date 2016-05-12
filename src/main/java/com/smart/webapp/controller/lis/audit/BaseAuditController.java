@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.lis.ContactInfor;
 import com.smart.model.lis.Device;
-import com.smart.model.lis.Diagnostic;
+import com.smart.model.lis.Diagnosis;
 import com.smart.model.lis.LikeLab;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
@@ -23,7 +23,7 @@ import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.DeviceManager;
-import com.smart.service.lis.DiagnosticManager;
+import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.ProcessManager;
@@ -80,7 +80,7 @@ public class BaseAuditController {
     protected CriticalRecordManager criticalRecordManager = null;
 
 	@Autowired
-    protected DiagnosticManager diagnosticManager = null;
+    protected DiagnosisManager diagnosisManager = null;
 	
 	@Autowired
     protected YlxhManager ylxhManager = null;
@@ -140,9 +140,9 @@ public class BaseAuditController {
 	}
 	
 	protected synchronized void initDiagMap() {
-		List<Diagnostic> list = diagnosticManager.getAll();
-		for (Diagnostic d : list) {
-			diagMap.put(d.getDiagnostic(), d.getKnowledgename());
+		List<Diagnosis> list = diagnosisManager.getAll();
+		for (Diagnosis d : list) {
+			diagMap.put(d.getDiagnosisName(), d.getKnowledgeName());
 		}
 	}
 	

@@ -486,7 +486,7 @@ public class AuditController extends BaseAuditController {
 		
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
-		try {
+//		try {
 			for (Sample info : sample) {
 				info.setCharttest(charttest);
 				info.setPassReason(note);
@@ -530,13 +530,14 @@ public class AuditController extends BaseAuditController {
 			}
 			sampleManager.saveAll(updateP);
 			auditTraceManager.saveAll(updateA);
-		} catch (Exception e) {
-			log.error("通过或不通过出错！", e);
-		}
+//		} catch (Exception e) {
+//			log.error("通过或不通过出错！", e);
+//		}
 		return result;
 	}
     
     private void updatePasstrace(HttpServletRequest request,String sampleno,String ids){
+    	
     	if(ids ==null || ids.isEmpty())
     		return;
     	
@@ -550,6 +551,8 @@ public class AuditController extends BaseAuditController {
     	}
     	
     	String username = request.getRemoteUser();
+    	
+    	System.out.println(username+ids);
     	List<PassTrace> pTraces = new ArrayList<PassTrace>();
     	for(String id: ids.split(";")){
     		if(!id.isEmpty()){
@@ -570,8 +573,9 @@ public class AuditController extends BaseAuditController {
     			pTraces.add(p);
     		}
     	}
-    	for(PassTrace p: pTraces)
+    	for(PassTrace p: pTraces){
     		passTraceManager.save(p);
+    	}
     }
     /**
 	 * 样本收藏
