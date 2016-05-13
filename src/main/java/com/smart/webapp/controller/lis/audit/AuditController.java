@@ -18,9 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.TTCCLayout;
 import org.codehaus.jettison.json.JSONObject;
-import org.hibernate.search.indexes.serialization.javaserialization.impl.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +76,9 @@ public class AuditController extends BaseAuditController {
     	
     	if(ylxhMap.size() == 0) {
     		initYLXHMap();
+    	}
+    	if(likeLabMap.size() == 0) {
+    		initLikeLabMap();
     	}
     	
 		final Map<String, Describe> idMap = new HashMap<String, Describe>();

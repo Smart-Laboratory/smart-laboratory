@@ -117,7 +117,6 @@ public class AutoAuditServlet extends HttpServlet {
     		for (Ylxh y : ylxhList) {
     			ylxhMap.put(y.getYlxh(), y);
     		}
-    		
     		List<LikeLab> list = likeLabManager.getAll();
     		for (LikeLab ll : list) {
     			likeLabMap.put(ll.getLab(), ll.getLikeLab());

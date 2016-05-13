@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -155,6 +156,10 @@ public class AjaxController extends BaseAuditController {
 			map.put("sd", deFormat.format(sd));
 			map.put("cov", deFormat.format(sd*100/average));
         }
+        Collections.reverse(timeArr);
+		Collections.reverse(reArr);
+		Collections.reverse(hiArr);
+		Collections.reverse(loArr);
         map.put("lo", loArr);
         map.put("re", reArr);
         map.put("hi", hiArr);
