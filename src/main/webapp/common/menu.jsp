@@ -1,11 +1,12 @@
 <%@ include file="/common/taglibs.jsp"%>
-
+<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
+<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
 <script type="text/javascript">
 $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
 		$.ajax({
 	        type : "GET",
-	        url : "<c:url value='/users/ajax/hospital'/>",
+	        url : "../users/ajax/hospital",
 	        success : function(data) {
 	           var json = jQuery.parseJSON(data);
 	           $("#userText").html(json.username);
@@ -41,10 +42,11 @@ $(function() {
 <ul class="nav navbar-nav">
     <c:if test="${empty pageContext.request.remoteUser}">
         <li class="active form-inline">
-            <span class="form-control" style="width:55px;" ><a href="<c:url value="/login"/>"><fmt:message key="login.title"/></a></span>
-            <span class="form-control" style="width:100px;"><a href="<c:url value="/pb/pbcx"/>"><fmt:message key="menu.pb.pbcx"/></a></span>
+            <span class="form-control" style="width:55px;" ><a href="../login"><fmt:message key="login.title"/></a></span>
+            <span class="form-control" style="width:100px;"><a href="../pb/pbcx"><fmt:message key="menu.pb.pbcx"/></a></span>
         </li>
     </c:if>
+
     <menu:displayMenu name="SampleManage"/>
     <menu:displayMenu name="SampleSet"/>
     <menu:displayMenu name="Reagent"/>

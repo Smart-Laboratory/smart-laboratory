@@ -11,7 +11,7 @@ import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.lis.SectionManager;
 
 @Service("sectionManager")
-public class SectionManagerImple extends GenericManagerImpl<Section, Long> implements SectionManager {
+public class SectionManagerImpl extends GenericManagerImpl<Section, Long> implements SectionManager {
 
 	private SectionDao sectionDao;
 	
@@ -28,4 +28,16 @@ public class SectionManagerImple extends GenericManagerImpl<Section, Long> imple
 	public Section getByCode(String sectionId) {
 		return sectionDao.getByCode(sectionId);
 	}
+
+	@Override
+	public int getSectionCount(String code, String name, String hospitalId) {
+		return sectionDao.getSectionCount(code,name,hospitalId);
+	}
+
+	@Override
+	public List<Section> getSectionList(String code, String name, String hospitalId, int start, int end) {
+		return sectionDao.getSectionList(code,name,hospitalId,start,end);
+	}
+
+
 }
