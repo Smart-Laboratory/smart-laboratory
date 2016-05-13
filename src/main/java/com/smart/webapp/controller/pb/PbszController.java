@@ -150,6 +150,7 @@ public class PbszController {
 				map.put("holiday", wi.getHoliday());
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
+				map.put("isactive", wi.isActive()?"使用":"不使用");
 				dataRows.add(map);
 				index++;
 			}
@@ -303,6 +304,7 @@ public class PbszController {
 		int type = Integer.parseInt(request.getParameter("type"));
 		double holiday = Double.parseDouble(request.getParameter("holiday"));
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
+		boolean isActive = Boolean.parseBoolean(request.getParameter("isactive"));
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -322,6 +324,7 @@ public class PbszController {
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
 			wi.setDefeholidayhis(defeHolidayhis);
+			wi.setActive(isActive);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi = wInfoManager.get(Long.parseLong(id));
@@ -342,6 +345,7 @@ public class PbszController {
 			wi.setHoliday(holiday);
 			wi.setDefeHoliday(wi.getDefeHoliday());
 			wi.setDefeholidayhis(defeHolidayhis);
+			wi.setActive(isActive);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));

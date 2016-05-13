@@ -67,7 +67,11 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySearch(String field, String string){
-		String hql = "from WInfo where "+field+" like '"+string+"%'";
+		String hql = "";
+		if(field.equals("isactive"))
+			hql = "from WInfo where "+field+" ="+string;
+		else
+			hql = "from WInfo where "+field+" like '"+string+"%'";
 		return getSession().createQuery(hql).list();
 	}
 	
