@@ -88,10 +88,10 @@
                         </component>
                     </components>
                     <componentProperties>
-                        <drop>true</drop>
+                        <drop>false</drop>
                         <jdk5>true</jdk5>
                         <propertyfile>${project.build.outputDirectory}/jdbc.properties</propertyfile>
-                        <skip>${skipTests}</skip>
+                        <skip>true</skip>
                     </componentProperties>
                 </configuration>
                 <executions>
@@ -123,7 +123,7 @@
                     <src>src/test/resources/sample-data.xml</src>
                     <type>${dbunit.operation.type}</type>
                     <schema>${dbunit.schema}</schema>
-                    <skip>${skipTests}</skip>
+                    <skip>true</skip>
                     <transaction>true</transaction>
                 </configuration>
                 <executions>
