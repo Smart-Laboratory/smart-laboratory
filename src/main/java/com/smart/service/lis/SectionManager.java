@@ -9,4 +9,9 @@ public interface SectionManager extends GenericManager<Section, Long> {
 	List<Section> search(String searchTerm);
 
 	Section getByCode(String sectionId);
+
+	int getSectionCount(String code,String name,String hospitalId);
+
+	List<Section> getSectionList(String code,String name,String hospitalId,int start,int end);
+
 }

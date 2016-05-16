@@ -243,6 +243,7 @@ public class DroolsRunner {
 	}
 	
 	public KieSession rebuildKbase (Reader reader) throws Exception {
+		//System.out.println(reader.toString());
 		KieServices ks = KieServices.Factory.get(); 
 		
 		KieFileSystem kfs = ks.newKieFileSystem();

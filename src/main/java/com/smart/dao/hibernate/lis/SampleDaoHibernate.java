@@ -79,6 +79,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		builder.append("%' order by sampleNo");
 		Query query = getSession().createQuery(builder.toString());
+
+		System.out.println(query.getQueryString());
 		List<Sample> list = query.list();
 		
 		
@@ -301,6 +303,8 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		sql += " order by s.sampleNo";
 		Query q =  getSession().createQuery(sql);
+
+		System.out.print(q.getQueryString());
 		if( end != 0){
 			q.setFirstResult(start);
 			q.setMaxResults(end); 

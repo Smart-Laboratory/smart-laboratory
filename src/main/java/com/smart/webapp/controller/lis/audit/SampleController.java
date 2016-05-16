@@ -44,7 +44,6 @@ public class SampleController {
 	@RequestMapping(value = "/data*", method = RequestMethod.GET)
 	@ResponseBody
 	public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		String text = request.getParameter("text");

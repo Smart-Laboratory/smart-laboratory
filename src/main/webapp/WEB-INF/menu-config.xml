@@ -23,7 +23,7 @@
             <Item name="SOP" title="set.sop" page="/set/sop"/>
         </Menu>
         <Menu name="Reagent" title="reagent.title" page="/reagent/stock" roles="ROLE_ADMIN,ROLE_USER">
-        	<Item name="Stock" title="reagent.stock" page="/reagent/stock"/>
+        	<Item name="Stock" title="reagent.stock" page="/reagent/stock" />
             <Item name="In" title="reagent.in" page="/reagent/in"/>
             <Item name="Out" title="reagent.out" page="/reagent/out"/>
             <Item name="Detail" title="reagent.detail" page="/reagent/detail"/>

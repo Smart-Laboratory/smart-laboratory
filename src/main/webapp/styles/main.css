@@ -6787,7 +6787,7 @@ th.visible-print,td.visible-print {
 .btn {
     text-shadow: 0 -1px 0 rgba(0,0,0,0.3)
 }
-
+/*
 .btn-default,.btn-default:hover {
     background-image: -webkit-gradient(linear,0 0,0 100%,from(#6d7070),color-stop(50%,#474949),to(#3d3f3f));
     background-image: -webkit-linear-gradient(#6d7070,#474949 50%,#3d3f3f);
@@ -6847,7 +6847,7 @@ th.visible-print,td.visible-print {
     border: 1px solid #9a0200;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff1d1b',endColorstr='#ffb90200',GradientType=0)
 }
-
+*/
 h1,h2,h3,h4,h5,h6 {
     color: #2d2d2d
 }
