@@ -42,13 +42,8 @@ $(function() {
 <ul class="nav navbar-nav">
     <c:if test="${empty pageContext.request.remoteUser}">
         <li class="active form-inline">
-<<<<<<< HEAD
-            <span class="form-control" style="width:55px;" ><a href="<c:url value="/login"/>"><fmt:message key="login.title"/></a></span>
-            <span class="form-control" style="width:100px;"><a href="<c:url value="../pb/pbcx"/>"><fmt:message key="menu.pb.pbcx"/></a></span>
-=======
             <span class="form-control" style="width:55px;" ><a href="../login"><fmt:message key="login.title"/></a></span>
             <span class="form-control" style="width:100px;"><a href="../pb/pbcx"><fmt:message key="menu.pb.pbcx"/></a></span>
->>>>>>> origin/master
         </li>
     </c:if>
 
