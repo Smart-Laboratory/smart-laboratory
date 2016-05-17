@@ -2,6 +2,9 @@
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
 <script type="text/javascript">
+function labChange() {
+}
+
 $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
 		$.ajax({
@@ -10,7 +13,11 @@ $(function() {
 	        success : function(data) {
 	           var json = jQuery.parseJSON(data);
 	           $("#userText").html(json.username);
-	           $("#hospital").append(json.hospital);
+	           for(var key in json.labMap) {
+	        	   $("#labSelect").append("<li onclick='labChange(this)'><a title='" + key + "'>" + json.labMap[key] + "</a></li>");
+	           }
+	           $("#labText").html(json.lab);
+	           $("#hospitalText").append(json.hospital);
 	           $("#hospital").css("display","block");
 	        }
 	    });
@@ -57,8 +64,21 @@ $(function() {
 </ul>
 
 
-<div id="hospital" style="display:none;float:right;height:30px;padding-top:8px;">
-	<div id="userText" style="float:left;"></div>&nbsp;|
+<!-- <div id="hospital" style="display:none;float:right;height:30px;padding-top:8px;" class="col-sm-3">
+	<div id="userText" class="col-sm-3" style="padding-top: 8px;"></div>
+	<ul id="labSelect" style="float:left;" onchange="labChange(this)" class="col-sm-5 dropdown"></ul>
+	
+	<div id="hospitalText" class="col-sm-4" style="padding-top: 8px;"></div>
+</div> -->
+<ul id="hospital" class="nav navbar-nav" style="display:none;float:right;">
+	<li><a href="#" id="userText"></a></li>
+	<li class="dropdown">
+		<a href="#" id="labText" class="dropdown-toggle" data-toggle="dropdown"></a>
+		<ul class="dropdown-menu" id="labSelect" style="height:200px;overflow:auto;">
+		</ul>
+	</li>
+	<li><a href="#" id="hospitalText"></a></li>
+</ul>
 </div>
-</div>
+
 </menu:useMenuDisplayer>

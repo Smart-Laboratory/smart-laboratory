@@ -1243,18 +1243,18 @@
 		return result;
 	}
 	
-	function labChange(select) {
-		$("#lastDepLab").val(select.value);
+	labChange = function(select) {
+		$("#lastDepLab").val($(select).children().attr("title"));
 		jQuery("#list").jqGrid("setGridParam",{
-			url:"../audit/data?lab="+select.value+"&text="+"${strToday}"}).trigger("reloadGrid");
+			url:"../audit/data?lab="+$(select).children().attr("title")+"&text="+"${strToday}"}).trigger("reloadGrid");
 		
 		$.ajax({
 			  type: 'POST',
-			  url: "../audit/labChange?lab="+select.value
+			  url: "../audit/labChange?lab="+$(select).children().attr("title")
 		});
 		selectNoteAdd = true;
-		
-		getSopSchedule(select.value);
+		$("#labText").html($(select).children().html());
+		getSopSchedule($(select).children().attr("title"));
 }
 
 function getExplain(docNo){

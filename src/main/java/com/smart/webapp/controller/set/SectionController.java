@@ -5,11 +5,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.smart.Constants;
-import com.smart.model.lis.Sample;
 import com.smart.webapp.util.DataResponse;
-import org.apache.commons.lang.StringUtils;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,18 +44,12 @@ public class SectionController {
 		int end = row * page;
 
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-
 		DataResponse dataResponse = new DataResponse();
-
 		List<Section> list = new ArrayList<Section>();
 
 		int size = sectionManager.getSectionCount(code,name,hospitalId);
-
 		System.out.println("size===>"+size);
-
 		list =sectionManager.getSectionList(code,name,hospitalId,start,end);
-
-
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);

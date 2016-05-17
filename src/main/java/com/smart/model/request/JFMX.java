@@ -17,9 +17,10 @@ import javax.persistence.Table;
 public class JFMX {
 	
 	private long id;
-	private String brid;				//病人ID
-	private int infantFlag;				//婴儿标识
-	private long ylxh;			//计费项目ID
+	private long jfid;				//发票ID
+	private String brid;			//病人ID
+	private int infantFlag;			//婴儿标识
+	private long ylxh;				//计费项目ID
 	private String ylmc;			//计费项目名称
 	private double je;				//总金额
 	private double zlje;			//自理金额
@@ -31,16 +32,17 @@ public class JFMX {
 	private int status;				//计费状态
 	private Date createtime;		//收费产生时间
 	private Date chargetime;		//计费时间
-	private double selfpercent;			//自费比率
-	private String currentsection;			//当前科室
-	private String currentbed;			//当前床号
-	private String chargesection;			//执行科室
-	private String charger;				//执行人
+	private double selfpercent;		//自费比率
+	private String currentsection;	//当前科室
+	private String currentbed;		//当前床号
+	private String chargesection;	//执行科室
+	private String charger;			//执行人
+	private long hospitalid;		//医院ID
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_JFXM")
-	@SequenceGenerator(name = "SEQ_JFXM", sequenceName = "jfxm_sequence", allocationSize = 1)*/
+	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_JFMX")
+	@SequenceGenerator(name = "SEQ_JFMX", sequenceName = "jfmx_sequence", allocationSize = 1)*/
 	public long getId() {
 		return id;
 	}
@@ -49,6 +51,15 @@ public class JFMX {
 		this.id = id;
 	}
 	
+	@Column
+	public long getJfid() {
+		return jfid;
+	}
+
+	public void setJfid(long jfid) {
+		this.jfid = jfid;
+	}
+
 	@Column
 	public String getBrid() {
 		return brid;
@@ -218,5 +229,14 @@ public class JFMX {
 
 	public void setCharger(String charger) {
 		this.charger = charger;
+	}
+
+	@Column
+	public long getHospitalid() {
+		return hospitalid;
+	}
+
+	public void setHospitalid(long hospitalid) {
+		this.hospitalid = hospitalid;
 	}
 }

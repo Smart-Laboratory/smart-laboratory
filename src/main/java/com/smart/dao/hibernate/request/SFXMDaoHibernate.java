@@ -1,5 +1,8 @@
 package com.smart.dao.hibernate.request;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -11,6 +14,29 @@ public class SFXMDaoHibernate extends GenericDaoHibernate<SFXM, Long> implements
 
 	public SFXMDaoHibernate() {
 		super(SFXM.class);
+	}
+
+	public int getSFXMCount(String search, String hospitalId) {
+		String sql = "select count(*) from gy_sfxm where hospitalid=" + hospitalId;
+		if(search != null && !search.isEmpty()) {
+			sql = sql + "and (name like '" + search + "%' or english like '" + search + "%' or pinyin like '" + search + "%' or wubi like '" + search + "%'";
+		}
+		return new Integer(getSession().createSQLQuery(sql).uniqueResult() + "");
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SFXM> getPageLIst(String search, String hospitalId, int start, int end) {
+		String sql = "from SFXM where hospitalid=" + hospitalId;
+		if(search != null && !search.isEmpty()) {
+			sql = sql + "and (name like '" + search + "%' or english like '" + search + "%' or pinyin like '" + search + "%' or wubi like '" + search + "%'";
+		}
+		Query q =  getSession().createQuery(sql);
+
+		if(end != 0){
+			q.setFirstResult(start);
+			q.setMaxResults(end);
+		}
+		return  q.list();
 	}
 
 }
