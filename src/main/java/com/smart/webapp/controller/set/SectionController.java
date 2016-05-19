@@ -14,7 +14,6 @@ import com.smart.model.lis.Section;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.SectionManager;
-import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
 @Controller
 @RequestMapping("/set/section*")
@@ -47,24 +46,12 @@ public class SectionController {
 		int row = Integer.parseInt(rows);
 		int start = row * (page - 1);
 		int end = row * page;
-		System.out.println("query--->"+query);
-		User user = userManager.getUserByUsername(request.getRemoteUser());
+
 		DataResponse dataResponse = new DataResponse();
 		List<Section> list = new ArrayList<Section>();
-
-<<<<<<< HEAD
 		int size = sectionManager.getSectionCount(query,hospitalId);
-
-		System.out.println("size===>"+size);
-
 		list =sectionManager.getSectionList(query,hospitalId,start,end,sidx,sord);
 
-
-=======
-		int size = sectionManager.getSectionCount(code,name,hospitalId);
-		System.out.println("size===>"+size);
-		list =sectionManager.getSectionList(code,name,hospitalId,start,end);
->>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);
@@ -128,12 +115,10 @@ public class SectionController {
      */
 	@RequestMapping(value = "/bathremove")
 	public ModelAndView bathRemove(@RequestParam(value = "ids[]") long[] ids,HttpServletRequest request, HttpServletResponse response)throws Exception{
-		Map map=new HashMap();
 		if(sectionManager.batchRemove(ids)){
-			map.put("result", "success");
+			return new ModelAndView().addObject("resulut", "success");
 		}else{
-			map.put("result", "error");
+			return new ModelAndView().addObject("resulut", "error");
 		}
-		return new ModelAndView(new MappingJacksonJsonView(),map);
 	}
 }
