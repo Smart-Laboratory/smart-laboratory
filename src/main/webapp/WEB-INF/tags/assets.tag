@@ -19,7 +19,9 @@
         <script type="text/javascript" src="${base}/scripts/script.js"></script>
     </c:when>
     <c:otherwise>
-        <link rel="stylesheet" type="text/css" href="${base}/styles/main.css"/>
+        <!--link rel="stylesheet" type="text/css" href="${base}/styles/main.css"/-->
+        <link rel="stylesheet" type="text/css" href="${base}/styles/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="${base}/styles/ace.min.css"/>
         <script type="text/javascript" src="${base}/scripts/main.js"></script>
     </c:otherwise>
 </c:choose>

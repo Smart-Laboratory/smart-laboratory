@@ -1,13 +1,16 @@
 package com.smart.dao.hibernate.lis;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Transaction;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.lis.Section;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.SectionDao;
 
-import java.util.List;
+import java.util.*;
 
 @Repository("sectionDao")
 public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> implements SectionDao {
@@ -21,31 +24,35 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	}
 
 	@Override
-	public int getSectionCount(String code, String name, String hospitalId) {
+	public int getSectionCount(String query, String hospitalId) {
 		String sql = "select count(1) cnt from l_depart where 1=1";
-		if(code != null && !code.equals(""))
-			sql += " and  code like  '%" +code +"%'";
-		if(name != null && name.equals(""))
-			sql += " and name like  '%" +name +"%'";
+		if(query != null && !query.equals(""))
+			sql += " and concat(code,name)  like '%" +query +"%'";
 		if(hospitalId != null && hospitalId.equals(""))
 			sql += " and hospital_id = " +hospitalId;
-		System.out.println("sql1==>" +sql);
 		Query q =  getSession().createSQLQuery(sql);
-		System.out.println("===1"+q.uniqueResult() + "");
 		return new Integer(q.uniqueResult() + "");
 	}
 
+	/**
+	 * 获取科室分页列表
+	 * @param query 查询值:编号或名称
+	 * @param hospitalId
+	 * @param start
+	 * @param end
+     * @return
+     */
 	@Override
-	public List<Section> getSectionList(String code, String name, String hospitalId, int start, int end) {
+	public List<Section> getSectionList(String query, String hospitalId, int start, int end,String sidx,String sord)  {
 		String sql = "from Section s where 1=1 ";
-		if(code != null && !code.equals(""))
-			sql += " and  s.code like  '%" +code +"%'";
-		if(name != null && name.equals(""))
-			sql += " and s.name like  '%" +name +"%'";
+		if(query != null && !query.equals(""))
+			sql += " and concat(s.code,s.name)  like '%" +query +"%'";
 		if(hospitalId != null && hospitalId.equals(""))
 			sql += " and s.hospital_id = " +hospitalId;
 
-		sql +=" order by id asc";
+		sidx = sidx.equals("")?"code":sidx;
+		sql +=" order by  " +sidx + " " + sord;
+
 		Query q =  getSession().createQuery(sql);
 
 		if(end != 0){
@@ -53,6 +60,35 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 			q.setMaxResults(end);
 		}
 		return  q.list();
+	}
+
+	/**
+	 * 批量删除科室
+	 * @param ids 科室ID
+     * @return
+     */
+	@Override
+	public boolean batchRemove(long[] ids) {
+		StringBuilder  sql = new StringBuilder(" delete from Section p where p.id in (?");
+		Transaction tx = getSession().beginTransaction();
+		try {
+
+			for(int i=1;i <ids.length;i++){
+				sql.append( ",?");
+			}
+			sql.append(")");
+			Query q = getSession().createQuery(sql.toString());
+			for(int i=0;i<ids.length;i++) {
+				q.setLong(i, ids[i]);
+			}
+			q.executeUpdate();
+			tx.commit();
+		}catch (HibernateException e){
+			tx.rollback();
+			System.out.print(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return true;
 	}
 
 

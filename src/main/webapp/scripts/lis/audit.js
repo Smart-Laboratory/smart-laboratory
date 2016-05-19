@@ -256,7 +256,7 @@ $(function(){
 		} 
 		$("#sampleCompareDialog").dialog("open");
 	});
-	
+	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		$('#printFrame').empty();
 		var id = $("#hiddenDocId").val();

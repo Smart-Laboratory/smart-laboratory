@@ -1,34 +1,158 @@
-function addSection(){
-	var html = $('#tbody').html();
-	html += "<tr id=0><td>新增</td><td id='code'><input id='codein' type='text'/></td><td id='name'><input id='namein' type='text'/></td>";
-	html += "<td><button id='saveButton' type='button' class='btn btn-info btn-sm' onclick='saveSection(0)'>保存</button> " +
-			"<button id='deleteButton' type='button' class='btn btn-danger btn-sm' onclick='deleteSection(0)'>删除</button></td></tr>";
-	$('#tbody').html(html);
+
+/************************************
+ *  添加科室
+ *  add by zcw 2015-05-16
+ * **********************************/
+function  AddSection(){
+	clearData();
+	layer.open({
+		type: 1,
+		area: ['500px','250px'],
+		fix: false, //不固定
+		maxmin: false,
+		shade:0.6,
+		title: "添加科室",
+		content: $("#addDialog"),
+		btn:["保存","取消"],
+		yes: function(index, layero){
+			$("form").submit();
+			//layer.close(index); //如果设定了yes回调，需进行手工关闭
+		}
+	});
+}
+/************************************
+ *  删除科室
+ *  add by zcw 2015-05-16
+ * **********************************/
+function deleteSection(){
+	var ids = [];
+	ids=$('#sectionList').jqGrid('getGridParam','selarrrow');
+	if(ids==null || ids.length==0){
+		layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
+		return false;
+	}
+	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
+		$.post('section/bathremove',{ids:ids},function(data) {
+			if(data && data.result=='success'){
+				var len = ids.length;
+				for(var i = 0;i < len ;i ++) {
+					$("#sectionList").jqGrid("delRowData", ids[0]);
+				}
+			}
+		});
+		layer.close(index);
+	});
+}
+/**
+ * 查询科室
+ */
+function search(){
+	var query = $('#query').val()||'';
+	jQuery("#sectionList").jqGrid('setGridParam',{
+		url: "../set/section/data",
+		datatype : 'json',
+		//发送数据
+		postData : {"query":query },
+		page : 1
+	}).trigger('reloadGrid');//重新载入
 }
 
-function editSection(id){
-	var curCode = $('#' + id).children('#code');
-    curCode.html("<input id='codein' type='text' value='" + curCode.html() + "'/>");
-    var curName = $('#' + id).children('#name');
-    curName.html("<input id='namein' type='text' value='" + curName.html() + "'/>");
-    $('#' + id).children().eq(3).find('#editButton').css('display','none');
-    $('#' + id).children().eq(3).find('#saveButton').css('display','inline');
-}
-
-function saveSection(id){
-	var code=$('#' + id).children('#code').children().eq(0).val();
-	var name = $('#' + id).children('#name').children().eq(0).val();
-	$.post('section/edit',{id:id,code:code,name:name},function(data) {
-		if(data){
-			location.reload();
+/**
+ * 编辑科室
+ */
+function editSection(){
+	var rowId = $("#sectionList").jqGrid('getGridParam','selrow');
+	var rowData = $("#sectionList").jqGrid('getRowData',rowId);
+	if(!rowId || rowId =='' || rowId==null){
+		layer.alert("请先选择要编辑的数据",{icon:1,title:"提示"});
+		return false;
+	}
+	//设置数据
+	$('#id').val(rowData.id);
+	$('#code').val(rowData.code);
+	$('#name').val(rowData.name);
+	layer.open({
+		type: 1,
+		area: ['500px','250px'],
+		fix: false, //不固定
+		maxmin: false,
+		shade:0.6,
+		title: "编辑科室",
+		content: $("#addDialog"),
+		btn:["保存","取消"],
+		yes: function(index, layero){
+			$("form").submit();
+			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
 }
 
-function deleteSection(id){
-	$.post('section/delete',{id:id},function(data) {
-		if(data){
-			$('#' + id).remove();
+$(function(){
+	//表单校验
+	$("#addResultForm").Validform({
+		tiptype:4
+	});
+	//keyPress 回车检索
+	$("#query").keypress(function(e){
+		if (e.keyCode == 13){
+			search();
 		}
 	});
+	//$(window).on('resize.jqGrid', function () {
+	//	$("#sectionList").jqGrid('setGridWidth', $("#mainTable").width());
+	//	$("#sectionList").jqGrid( 'setGridHeight', $("#mainTable").height() );
+	//})
+	$("#sectionList").jqGrid({
+		caption: "科室设置",
+		url: "../set/section/data",
+		mtype: "GET",
+		datatype: "json",
+		colNames: ['ID', '编号', '名称'],
+		colModel: [
+			{ name: 'id', index: 'id', width: 60, hidden: true },
+			{ name: 'code', index: 'code', width: 60},
+			{ name: 'name', index: 'name', width: 100 }
+		],
+		loadComplete : function() {
+			var table = this;
+			setTimeout(function(){
+				updatePagerIcons(table);
+			}, 0);
+		},
+		viewrecords: true,
+		multiselect: true,
+		shrinkToFit: true,
+		altRows:true,
+		autowidth:true,
+		height: 350,
+		//height: "100%",
+		rowNum: 10,
+		rowList:[10,30,50],
+		rownumbers: true, // 显示行号
+		rownumWidth: 35, // the width of the row numbers columns
+		pager: "#pager",//分页控件的id
+		subGrid: false//是否启用子表格
+	});
+	//$(window).triggerHandler('resize.jqGrid');
+
+})
+function  clearData(){
+	$('#id').val('0');
+	$('#code').val('');
+	$('#name').val('');
+
+}
+function updatePagerIcons(table) {
+	var replacement =
+	{
+		'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+		'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+		'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+		'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+	};
+	$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+		var icon = $(this);
+		var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+		if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+	})
 }

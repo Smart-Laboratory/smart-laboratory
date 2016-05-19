@@ -4,19 +4,18 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 
 public interface DictionaryDao extends GenericDao<Dictionary, Long> {
-	
-//	List<Dictionary> saveAll(List<Dictionary> dic);
-	
-	@Transactional
-	List<Dictionary> getByType(int type);
-	
-	@Transactional
-	List<Dictionary> getPatientInfo(String name);
-
-	@Transactional
-	List<Dictionary> getSampleType();
+	/**
+	 * 获取字典分页数据
+	 * @param dictionary
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	List<Dictionary> getDictionaryList(Dictionary dictionary,int start,int end,String sidx,String sord);
 
 }

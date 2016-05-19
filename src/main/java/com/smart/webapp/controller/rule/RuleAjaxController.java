@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Result;

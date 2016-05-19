@@ -82,7 +82,7 @@
  		
 		
 		<label style="margin-left : 10px;"><fmt:message key="sample.section" /></label>
-		<select id="labSelect"  class="form-control" style="">
+		<select id="labSelect_seach"  class="form-control" style="">
 			<span ><c:forEach var="depart" items="${departList}">
 			<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
 			</c:forEach></span>
@@ -102,10 +102,22 @@
 <div style="font-size: 13px; display:none;margin-top: 10px;">
 	<div style="margin-left:60px;">
 		<input type="hidden" id="hiddenDocId"/>
-		<input type="hidden" id="hiddenSampleNo"/>
+		<input type="text" id="hiddenSampleNo"/>
 		<input type="hidden" id="hisLastResult"/>
 	</div>
 </div>
-
+	<!-- 2016-5-19  张晋南 查询详细信息打印 -->
+		<div id="searchPrint" align="left"
+			title='<fmt:message key="audit.preview" />'>
+			<button class="btn btn-success"
+				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				<fmt:message key="audit.print" />
+			</button>
+			<div id="printFrame"></div>
+			<button class="btn btn-success"
+				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				<fmt:message key="audit.print" />
+			</button>
+		</div>
 
 </body>

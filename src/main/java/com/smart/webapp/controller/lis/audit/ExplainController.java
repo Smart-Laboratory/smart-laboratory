@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.model.lis.Sample;
 import com.smart.model.rule.Result;

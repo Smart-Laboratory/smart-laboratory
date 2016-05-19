@@ -4,7 +4,7 @@ function getList(text) {
         	url:"../manage/sampleQuery/data?type=1&text="+text, 
         	datatype: "json", 
         	width:width,
-        	colNames:['ID', '样本号', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','就诊方式','科室','就诊号','样本类型'], 
+        	colNames:['ID', '样本号', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','就诊方式','科室','就诊号','样本类型','操作'], 
         	colModel:[ 
         		{name:'id',index:'id', hidden:true},
         		{name:'sample',index:'sample',width:120, sortable:false},
@@ -20,6 +20,7 @@ function getList(text) {
         		{name:'section',index:'section',width:100, sortable:false},
         		{name:'patientid',index:'patientid',width:100, sortable:false},
         		{name:'sampleType',index:'sampleType',width:60, sortable:false},
+        		{name:'operation',index:'operation',width:120, sortable:false},
         		],
         	rownumbers:true,
         	rowNum:20,
@@ -73,7 +74,13 @@ $(function() {
 	});
 	$( "#from" ).val(new Date().Format("yyyy-MM-dd"));
 	$( "#to" ).val(new Date().Format("yyyy-MM-dd"));
-	
+	$("#searchPrint").dialog({
+		autoOpen: false,
+		resizable: false,
+		modal:true,
+	    width: 750,
+	    height: 600
+	});
 	
 	$("#searchBtn").click(function(){
 		var text = $("#search_text").val();
@@ -81,7 +88,8 @@ $(function() {
 		var stayhospitalmode = $("#search_select").val();
 		var from = $( "#from" ).val();
 		var to = $( "#to" ).val();
-		var PostData = {from:from,to:to,section:$("#labSelect").val(),sampleType:$("#sampleTypeSelect").val()};
+		
+		var PostData = {from:from,to:to,section:$("#labSelect_seach").val(),sampleType:$("#sampleTypeSelect").val()};
 		if(text!=null){
 			jQuery("#list").clearGridData();
     		jQuery("#list").jqGrid("setGridParam",{url:"../manage/sampleQuery/data?text="+text+"&type="+type+"&stayhospitalmode="+stayhospitalmode,postData:PostData}).trigger("reloadGrid");
@@ -96,7 +104,21 @@ $(function() {
 	
 });
 
+//张晋南 2016-5-19 查询结果详细信息打印报告----------
+function search_printBtn(SampleNo) {
+	$('#printFrame').empty();
+	var id = $("#hiddenDocId").val();
+	
+	var last = 0;
+	if ($("#hisLastResult").val() == 1) {
+		last = 1;
+	}
+	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + SampleNo + "&last=" + last + "\"/>")
+	$("#searchPrint").dialog("open");
+	$("#iframe_print").height(450);
+};
 
+//------------------------------------------
 Date.prototype.Format = function(fmt)   
 { //author: meizz   
   var o = {   

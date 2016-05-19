@@ -41,7 +41,7 @@
 		<option value="3"><fmt:message key="sample.id"></fmt:message></option>
 	</select>
 	<button id="searchBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
-	
+	<button id="search_detailed_printBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="print" /></button>
 </div>
 
 
@@ -98,7 +98,20 @@
 			</div>
 		</div>
 	</div>
-	<%-- <div id="rightContent" class="col-sm-2" style="position:absolute;right:0px;">
+	<!-- 2016-5-19  张晋南 查询详细信息打印 -->
+		<div id="auditPrint" align="left"
+			title='<fmt:message key="audit.preview" />'>
+			<button class="btn btn-success"
+				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				<fmt:message key="audit.print" />
+			</button>
+			<div id="printFrame"></div>
+			<button class="btn btn-success"
+				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				<fmt:message key="audit.print" />
+			</button>
+		</div>
+		<%-- <div id="rightContent" class="col-sm-2" style="position:absolute;right:0px;">
 		<div id="historyTabs" style="display:none;">
 			<ul>
 				<li><a href="#tabs-0"><fmt:message key="addResult.result"/></a></li>

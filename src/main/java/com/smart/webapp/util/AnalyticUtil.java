@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;

@@ -8,7 +8,7 @@
 
 <hibernate-configuration>
     <session-factory>
-    	<mapping class="com.smart.Dictionary"/>
+    	<mapping class="com.smart.model.Dictionary"/>
     	<mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
@@ -53,6 +53,7 @@
         <mapping class="com.smart.model.pb.WorkCount"/>
         <mapping class="com.smart.model.pb.SxArrange"/>
         <mapping class="com.smart.model.lis.PassTrace"/>
+        <mapping class="com.smart.model.DictionaryType"/>
         <mapping class="com.smart.model.request.SFXM"/>
         <mapping class="com.smart.model.request.SFXMTC"/>
         <mapping class="com.smart.model.request.JFMX"/>

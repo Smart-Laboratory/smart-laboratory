@@ -13,3 +13,5 @@ pom.xml
 pom.xml
 pom.xml
 *.1
+.idea/.name
+lab.iml

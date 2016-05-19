@@ -10,8 +10,9 @@ public interface SectionManager extends GenericManager<Section, Long> {
 
 	Section getByCode(String sectionId);
 
-	int getSectionCount(String code,String name,String hospitalId);
+	int getSectionCount(String query,String hospitalId);
 
-	List<Section> getSectionList(String code,String name,String hospitalId,int start,int end);
+	List<Section> getSectionList(String query,String hospitalId,int start,int end,String sidx,String sord);
 
+	boolean batchRemove(long[] ids);
 }

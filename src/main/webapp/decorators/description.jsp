@@ -34,7 +34,7 @@
         </c:if>
     </div>
 
-    <div class="container" id="content">
+    <div class="main-container" id="content">
         <%@ include file="/common/messages.jsp" %>
         <div class="row">
         	<div class="col-sm-3">

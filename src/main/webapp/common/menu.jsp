@@ -1,4 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
+<!--link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" /-->
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
 <script type="text/javascript">
@@ -6,6 +7,7 @@ function labChange() {
 }
 
 $(function() {
+<<<<<<< HEAD
 	if( ${pageContext.request.remoteUser != null} ) {
 		var url = window.location.href;
 		if(url.indexOf("pb")>=0){
@@ -15,6 +17,9 @@ $(function() {
 			url = "../users/ajax/hospital";
 		}
 		
+=======
+	if(${pageContext.request.remoteUser != null}) {
+>>>>>>> origin/master
 		$.ajax({
 	        type : "GET",
 	        url : url,

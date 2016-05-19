@@ -78,7 +78,6 @@
 	
 	function getExplain(docNo){
 		var width = $("#rightContent").width();
-		alert(width);
 		jQuery("#audit_information").jqGrid({
 			url:"../manage/patientList/explain?id="+docNo,
 			datatype: "json",
@@ -192,13 +191,33 @@
 			var select = $("#search_select").val();
 			var searchText = $("#search_text").val();
 			
-			
 			jQuery("#list").jqGrid("setGridParam",{
 				url:"../manage/patientList/data?from="+from+"&to="+to+"&text="+searchText+"&type="+select
 			}).trigger("reloadGrid"); 
 			
 		});
 		
+		//张晋南 2016-5-19 查询结果详细信息打印报告----------
+		$("#search_detailed_printBtn").click(function() {
+			$('#printFrame').empty();
+			var id = $("#hiddenDocId").val();
+			var sample = $("#hiddenSampleNo").val();
+			var last = 0;
+			if ($("#hisLastResult").val() == 1) {
+				last = 1;
+			}
+			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>")
+			$("#auditPrint").dialog("open");
+			$("#iframe_print").height(450);
+		});
+		$("#auditPrint").dialog({
+			autoOpen: false,
+			resizable: false,
+			modal:true,
+		    width: 750,
+		    height: 600
+		});
+		//------------------------------------------
 		$("#historyTabs").tabs({
 			active : 0,
 			activate: function(event, ui) { 
@@ -235,3 +254,4 @@
 	  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
 	  return fmt;   
 	}  
+	

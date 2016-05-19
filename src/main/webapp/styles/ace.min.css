@@ -4,7 +4,7 @@ html {
 }
 
 body {
-    background-color: #e4e6e9;
+    background-color: #FAFAFA;
     min-height: 100%;
     padding-bottom: 0;
     font-family: 'Open Sans';
@@ -12,7 +12,11 @@ body {
     color: #393939;
     line-height: 1.5
 }
-
+.main-container{
+    margin-left:15px;
+    margin-right:15px;
+    padding:0px;
+}
 .main-container:before {
     display: block;
     content: "";
@@ -347,7 +351,7 @@ pre.prettyprint {
     background-color: #6faed9;
     border-color: #6faed9;
     color: #fff;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    /*text-shadow: 0 -1px 0 rgba(0,0,0,0.25);*/
     z-index: 2
 }
 
@@ -1874,7 +1878,7 @@ pre.prettyprint {
     background-color: transparent;
     font-size: 13px;
     color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.25)
+    /*text-shadow: 0 1px 0 rgba(0,0,0,0.25)*/
 }
 
 .navbar .navbar-nav>li>a:hover,.navbar .navbar-nav>li>a:focus,.navbar .navbar-nav>li.open>a {
@@ -5740,7 +5744,6 @@ body.mob-safari .sidebar.sidebar-fixed {
 .btn {
     display: inline-block;
     color: #FFF !important;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25) !important;
     background-image: none !important;
     border: 5px solid #FFF;
     border-radius: 0;
@@ -6146,7 +6149,6 @@ button.btn:active {
 
 .btn-yellow {
     color: #963 !important;
-    text-shadow: 0 -1px 0 rgba(255,255,255,0.4) !important
 }
 
 .btn-yellow,.btn-yellow:focus {
@@ -6184,7 +6186,7 @@ button.btn:active {
 
 .btn-light {
     color: #888 !important;
-    text-shadow: 0 -1px 0 rgba(250,250,250,0.25) !important
+    /*text-shadow: 0 -1px 0 rgba(250,250,250,0.25) !important*/
 }
 
 .btn-light,.btn-light:focus {
@@ -6843,7 +6845,7 @@ button.btn:active {
     font-weight: normal;
     color: #FFF;
     text-align: center;
-    text-shadow: 0 -1px -1px rgba(0,0,0,0.2) !important;
+    /*text-shadow: 0 -1px -1px rgba(0,0,0,0.2) !important;*/
     border: none;
     border-radius: 12px;
     padding: 12px 0 8px;
@@ -7014,7 +7016,7 @@ button.btn:active {
 
 .btn.btn-app.btn-light {
     color: #5a5a5a !important;
-    text-shadow: 0 1px 1px #EEE !important
+    /*text-shadow: 0 1px 1px #EEE !important*/
 }
 
 .btn.btn-app.btn-light,.btn.btn-app.btn-light.no-hover:hover,.btn.btn-app.btn-light.disabled:hover {
@@ -7035,7 +7037,7 @@ button.btn:active {
 
 .btn.btn-app.btn-yellow {
     color: #963 !important;
-    text-shadow: 0 -1px 0 rgba(255,255,255,0.4) !important
+    /*text-shadow: 0 -1px 0 rgba(255,255,255,0.4) !important*/
 }
 
 .btn.btn-app.btn-yellow,.btn.btn-app.btn-yellow.no-hover:hover,.btn.btn-app.btn-yellow.disabled:hover {
@@ -8957,7 +8959,7 @@ input[type=checkbox].ace.ace-switch.ace-switch-6 + .lbl {
 input[type=checkbox].ace.ace-switch.ace-switch-6 + .lbl::before {
     font-family: FontAwesome;
     content: "\f00d";
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    /*text-shadow: 0 -1px 0 rgba(0,0,0,0.25);*/
     box-shadow: none;
     border: none;
     font-weight: lighter;
@@ -8976,7 +8978,7 @@ input[type=checkbox].ace.ace-switch.ace-switch-6 + .lbl::before {
 
 input[type=checkbox].ace.ace-switch.ace-switch-6 + .lbl::after {
     content: '';
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    /*text-shadow: 0 -1px 0 rgba(0,0,0,0.25);*/
     position: absolute;
     top: 2px;
     left: 3px;
@@ -9003,7 +9005,7 @@ input[type=checkbox].ace.ace-switch.ace-switch-6:checked + .lbl::after {
     left: 32px;
     background-color: #FFF;
     border: 4px solid #FFF;
-    text-shadow: 0 -1px 0 rgba(0,200,0,0.25)
+    /*text-shadow: 0 -1px 0 rgba(0,200,0,0.25)*/
 }
 
 input[type=checkbox].ace.ace-switch.ace-switch-7 {
@@ -10697,7 +10699,7 @@ th .lbl:only-child,td .lbl:only-child {
     -ms-transform: scale(1.2);
     transform: scale(1.2)
 }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action] {
-     text-shadow: 0 1px 1px rgba(0,0,0,0.2)
+     /*text-shadow: 0 1px 1px rgba(0,0,0,0.2)*/
  }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action="settings"],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action="settings"] {
       color: #D3E4ED
   }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action="reload"],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action="reload"] {
@@ -10991,7 +10993,7 @@ th .lbl:only-child,td .lbl:only-child {
 .widget-toolbar>.dropdown,.widget-toolbar>.dropup {
     display: inline-block
 }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action] {
-     text-shadow: 0 1px 1px rgba(0,0,0,0.2)
+     /*text-shadow: 0 1px 1px rgba(0,0,0,0.2)*/
  }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action="settings"],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action="settings"] {
       color: #D3E4ED
   }[class*="widget-color-"]>.widget-header>.widget-toolbar>[data-action="reload"],[class*="widget-color-"]>.widget-header>.widget-toolbar>.widget-menu>[data-action="reload"] {
@@ -11481,7 +11483,7 @@ th .lbl:only-child,td .lbl:only-child {
     background-color: #333;
     color: #FFF;
     font-size: 12px;
-    text-shadow: 1px 1px 0 rgba(42,45,50,0.5);
+    /*text-shadow: 1px 1px 0 rgba(42,45,50,0.5);*/
     border-radius: 0;
     padding: 5px 9px
 }
@@ -11512,7 +11514,7 @@ th .lbl:only-child,td .lbl:only-child {
 
 .tooltip-error+.tooltip>.tooltip-inner,.tooltip.tooltip-error>.tooltip-inner {
     background-color: #c94d32;
-    text-shadow: 1px 1px 0 rgba(100,60,20,0.3)
+    /*text-shadow: 1px 1px 0 rgba(100,60,20,0.3)*/
 }
 
 .tooltip-error+.tooltip.top .tooltip-arrow,.tooltip.tooltip-error.top .tooltip-arrow {
@@ -11537,7 +11539,7 @@ th .lbl:only-child,td .lbl:only-child {
 
 .tooltip-success+.tooltip>.tooltip-inner,.tooltip.tooltip-success>.tooltip-inner {
     background-color: #629b58;
-    text-shadow: 1px 1px 0 rgba(60,100,20,0.3)
+    /*text-shadow: 1px 1px 0 rgba(60,100,20,0.3)*/
 }
 
 .tooltip-success+.tooltip.top .tooltip-arrow,.tooltip.tooltip-success.top .tooltip-arrow {
@@ -11562,7 +11564,7 @@ th .lbl:only-child,td .lbl:only-child {
 
 .tooltip-warning+.tooltip>.tooltip-inner,.tooltip.tooltip-warning>.tooltip-inner {
     background-color: #ed9421;
-    text-shadow: 1px 1px 0 rgba(100,90,10,0.3)
+    /*text-shadow: 1px 1px 0 rgba(100,90,10,0.3)*/
 }
 
 .tooltip-warning+.tooltip.top .tooltip-arrow,.tooltip.tooltip-warning.top .tooltip-arrow {
@@ -11587,7 +11589,7 @@ th .lbl:only-child,td .lbl:only-child {
 
 .tooltip-info+.tooltip>.tooltip-inner,.tooltip.tooltip-info>.tooltip-inner {
     background-color: #4b89aa;
-    text-shadow: 1px 1px 0 rgba(40,50,100,0.3)
+    /*text-shadow: 1px 1px 0 rgba(40,50,100,0.3)*/
 }
 
 .tooltip-info+.tooltip.top .tooltip-arrow,.tooltip.tooltip-info.top .tooltip-arrow {
@@ -11625,7 +11627,7 @@ th .lbl:only-child,td .lbl:only-child {
     background-color: #eff3f8;
     color: #555;
     border-bottom: 1px solid #dde6f0;
-    text-shadow: 1px 1px 1px rgba(220,220,220,0.2)
+    /*text-shadow: 1px 1px 1px rgba(220,220,220,0.2)*/
 }
 
 .popover.bottom>.arrow:after {
@@ -12005,7 +12007,7 @@ th .lbl:only-child,td .lbl:only-child {
     color: rgba(255,255,255,0.9);
     background-color: transparent;
     background-color: rgba(255,255,255,0.2);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.14)
+    /*text-shadow: 1px 1px 1px rgba(0,0,0,0.14)*/
 }
 
 .infobox .infobox-content {
@@ -12034,7 +12036,7 @@ th .lbl:only-child,td .lbl:only-child {
     font-size: 22px;
     margin: 2px 0 4px;
     position: relative;
-    text-shadow: 1px 1px 0 rgba(0,0,0,0.15)
+    /*text-shadow: 1px 1px 0 rgba(0,0,0,0.15)*/
 }
 
 .infobox>.infobox-data>.infobox-text {
@@ -12725,7 +12727,7 @@ th .lbl:only-child,td .lbl:only-child {
 .login-layout .widget-box .widget-body .toolbar>div>a {
     font-size: 15px;
     font-weight: 400;
-    text-shadow: 1px 0 1px rgba(0,0,0,0.25)
+    /*text-shadow: 1px 0 1px rgba(0,0,0,0.25)*/
 }
 
 .login-box .forgot-password-link {
@@ -12781,7 +12783,7 @@ th .lbl:only-child,td .lbl:only-child {
     color: #FE9;
     font-size: 14px;
     font-weight: bold;
-    text-shadow: 1px 0 1px rgba(0,0,0,0.25)
+    /*text-shadow: 1px 0 1px rgba(0,0,0,0.25)*/
 }
 
 .login-layout .login-box .widget-main {
@@ -13485,7 +13487,7 @@ th[aria-selected=true] .ui-jqgrid-sortable {
     color: #a94442;
     margin: 4px 4px 8px;
     padding: 6px 10px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    /*text-shadow: 0 1px 0 rgba(255,255,255,0.5);*/
     font-size: 13px
 }
 
@@ -13538,7 +13540,7 @@ th[aria-selected=true] .ui-jqgrid-sortable {
     padding: 0 12px 1px;
     margin: 0 8px;
     position: relative;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    /*text-shadow: 0 -1px 0 rgba(0,0,0,0.25);*/
     -webkit-transition: all 0.15s;
     transition: all 0.15s;
     vertical-align: middle
@@ -16034,7 +16036,7 @@ div.dataTables_scrollFoot table {
     margin-right: 0;
     padding: 6px 22px 7px 9px;
     position: relative;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+    /*text-shadow: 1px 1px 1px rgba(0,0,0,0.15);*/
     transition: all 0.2s ease 0s;
     vertical-align: baseline;
     white-space: nowrap;
@@ -17948,7 +17950,7 @@ img.editable-click:hover {
     line-height: 14px;
     width: 18px;
     color: #FFFFFF !important;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.25) !important;
+    /*text-shadow: 0 -1px 0 rgba(0,0,0,0.25) !important;*/
     display: inline-block;
     position: absolute;
     text-align: center;
@@ -19597,7 +19599,7 @@ img.editable-click:hover {
     white-space: nowrap;
     background-color: #91b8d0;
     color: #FFF;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+    /*text-shadow: 1px 1px 1px rgba(0,0,0,0.15);*/
     padding: 4px 22px 5px 9px;
     margin-bottom: 3px;
     margin-right: 3px;
@@ -19760,3 +19762,43 @@ img.editable-click:hover {
         display: none !important
     }
 }
+/*******************************
+* 表单验证样式
+* ADD BY ZCW 2016/05/16
+*******************************/
+
+.Validform_error {
+    background-color: #fbe2e2;
+    border-color: #c66161;
+    color: #c00
+}
+
+.Validform_wrong,.Validform_right,.Validform_warning {
+    display: inline-block;
+    height: 20px;
+    font-size: 12px;
+    vertical-align: middle;
+    padding-left: 25px
+}
+
+.Validform_wrong {
+    background: url(../images/icon_error_s.png) no-repeat 0 center;
+    color: #ef392b;
+    margin-left:10px;
+}
+
+.Validform_right {
+    background: url(../images/icon_right_s.png) no-repeat 0 center;
+    margin-left:10px;
+}
+
+.Validform_warning {
+    background: url(../images/icon_warning_s.png) no-repeat 0 center;
+    color: #777
+}
+#switchLocale{
+    display: none;
+}
+=======
+}
+>>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf

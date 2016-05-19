@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.zju.api.model.SyncResult;
 import com.smart.Constants;
 import com.smart.model.rule.Item;
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
 import com.smart.model.lis.Patient;

@@ -19,7 +19,7 @@ import com.smart.service.DictionaryManager;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Result;
 import com.smart.service.rule.ResultManager;
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 
 import com.smart.webapp.util.IndexMapUtil;
 
