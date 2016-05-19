@@ -1,6 +1,4 @@
-function labChange(item){
-	window.location.href="../pb/sxgroupPbcx?date=" + $("#date").val()+"&section=" + $(item).val();
-}
+
 
 $(function() {
 	$("#labSelect").val($("#section").val());
@@ -66,6 +64,15 @@ $(function() {
 	});
 	
 	$("#date").val($("#month").val());
+	
+	labChange=function(select){
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+$(select).children().attr("title")
+		});
+		$("#labText").html($(select).children().html());
+		window.location.href="../pb/sxgroupPbcx?date=" + $("#date").val()+"&section=" +  $(select).children().attr("title");
+	}
 		
 });
 

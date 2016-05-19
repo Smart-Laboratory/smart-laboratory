@@ -17,18 +17,9 @@
     <script type="text/javascript" src="../scripts/jquery.validate.js"></script>
     <script type="text/javascript" src="../scripts/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
-	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
 	
 </head>
 
-<div id="lab">
-	<select id="labSelect" onchange="labChange(this)" class="form-control" >
-		<c:forEach var="depart" items="${departList }">
-			<option value="${depart.key }"><c:out value="${depart.value}" /></option>
-		</c:forEach>
-	</select>
-</div>
 
 <input id="section" type="hidden" value="${section }"/>
 <div id="tabs">

@@ -1,12 +1,21 @@
 
+$(function(){
+	labChange=function(select){
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+			  success:function(data){
+				  selectNoteAdd = true;
+					$("#labText").html($(select).children().html());
+					window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+			  }
+		});
+		
+	}
+})
 
-function labChange(item){
-	$.ajax({
-		  type: 'POST',
-		  url: "../audit/labChange?lab="+$(item).val()
-	});
-	window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(item).val();
-}
+
+
 
 function randomShift(day) {
 	

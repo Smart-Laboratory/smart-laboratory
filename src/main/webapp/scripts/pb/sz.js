@@ -1,10 +1,3 @@
-function labChange(select){
-	var depart = select.value;
-	$("#labSelect").val(depart);
-	jQuery("#witable").jqGrid("setGridParam",{
-			url:"../pb/sz/ajax/getWinfo?section="+depart}).trigger("reloadGrid");
-	
-}
 
 
 var wiFirst = true;
@@ -18,7 +11,7 @@ function getWI() {
 			colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休'],
 		   	colModel:[
 				{name:'id',index:'id',hidden:true,editable:false},
-				{name:'isactive',index:'isactive',width:30,editable:true,edittype:'select',editoptions:{value:"false:不使用;true:使用"}},
+				{name:'isactive',index:'isactive',width:30,editable:true,edittype:"select",editoptions:{value:"false:不使用;true:使用"}},
 				{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10},search:true,sopt:'eq'},
 				{name:'name',index:'name',width:50,editable:true,editoptions:{size:10},sortable:false,search:true,sopt:('eq','cn')},
 		   		{name:'sex',index:'sex',width:30,editable:true,edittype:"select",editoptions:{value:"0:\u7537;1:\u5973"} ,sortable:false,search:false},
@@ -152,6 +145,7 @@ function getKQ() {
 }
 
 $(function() {
+	
 	$("#labSelect").val($("#section").val());
 	$( "#tabs" ).tabs({
 		active : 0,
@@ -176,4 +170,14 @@ $(function() {
 	$("#resetHoliday").click(function(){
 		$.get("../pb/sz/resetHoliday");
 	});
+	
+	labChange=function(select){
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+$(select).children().attr("title")
+		});
+		$("#labText").html($(select).children().html());
+		jQuery("#witable").jqGrid("setGridParam",{
+			url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
+	}
 });
