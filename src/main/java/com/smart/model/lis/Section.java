@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotNull;
 
 /**
  * 科室内部 部门分类
@@ -20,7 +21,7 @@ public class Section extends BaseObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 7918375753453175457L;
-	
+
 	private Long id;    //主键
 	private String code;
 	private String name;

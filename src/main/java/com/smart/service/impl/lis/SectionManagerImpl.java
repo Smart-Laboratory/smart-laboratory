@@ -30,13 +30,18 @@ public class SectionManagerImpl extends GenericManagerImpl<Section, Long> implem
 	}
 
 	@Override
-	public int getSectionCount(String code, String name, String hospitalId) {
-		return sectionDao.getSectionCount(code,name,hospitalId);
+	public int getSectionCount(String query, String hospitalId) {
+		return sectionDao.getSectionCount(query,hospitalId);
 	}
 
 	@Override
-	public List<Section> getSectionList(String code, String name, String hospitalId, int start, int end) {
-		return sectionDao.getSectionList(code,name,hospitalId,start,end);
+	public List<Section> getSectionList(String query, String hospitalId, int start, int end,String sidx,String sord) {
+		return sectionDao.getSectionList(query,hospitalId,start,end,sidx,sord);
+	}
+
+	@Override
+	public boolean batchRemove(long[] ids) {
+		return sectionDao.batchRemove(ids);
 	}
 
 

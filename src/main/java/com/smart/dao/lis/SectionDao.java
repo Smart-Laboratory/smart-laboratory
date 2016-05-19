@@ -5,6 +5,7 @@ import com.smart.dao.GenericDao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface SectionDao extends GenericDao<Section,Long>{
 
@@ -15,16 +16,22 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	 * @param hospitalId
 	 * @return
      */
-	int getSectionCount(String code,String name,String hospitalId);
+	int getSectionCount(String query,String hospitalId);
 
 	/**
 	 * 查询科室列表
-	 * @param code
-	 * @param name
+	 * @param query
 	 * @param hospitalId
 	 * @param start
 	 * @param end
      * @return
      */
-	List<Section> getSectionList(String code,String name,String hospitalId, int start,int end);
+	List<Section> getSectionList(String query,String hospitalId, int start,int end,String sidx,String sord);
+
+	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+     */
+	boolean batchRemove(long[] ids);
 }

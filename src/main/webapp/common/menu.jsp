@@ -1,4 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
+<!--link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" /-->
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
 <script type="text/javascript">
