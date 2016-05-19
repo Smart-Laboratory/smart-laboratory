@@ -30,7 +30,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.Constants;
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.lis.CollectSample;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.model.lis.Sample;

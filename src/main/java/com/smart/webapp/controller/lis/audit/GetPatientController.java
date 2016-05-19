@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.Patient;

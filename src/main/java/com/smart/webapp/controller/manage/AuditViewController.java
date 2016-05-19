@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 import com.smart.util.Config;
 import com.smart.Constants;
 import com.smart.model.Code;
@@ -41,18 +39,15 @@ public class AuditViewController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		String strToday = Constants.DF3.format(new Date());
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String lab = "";
 		String department = operator.getDepartment();
-		Map<String, String> depart = new HashMap<String, String>();
 		if (operator.getLastLab() != null) {
 			lab = operator.getLastLab();
 		}
 		if (department != null) {
 			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
 				if (StringUtils.isEmpty(lab)) {
 					lab = s;
 				}
@@ -116,14 +111,10 @@ public class AuditViewController {
 		request.setAttribute("today", strToday);
 		request.setAttribute("userCode", operator.getLabCode());
 		request.setAttribute("lab", lab);
-		request.setAttribute("departList", depart);
 		request.setAttribute("codeList", codeList);
 		return new ModelAndView();
 	}
 	
-	
-	@Autowired
-	private RMIService rmiService = null;
 	@Autowired
 	private UserManager userManager = null;
 }

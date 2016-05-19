@@ -1,23 +1,15 @@
-package com.smart;
+package com.smart.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.smart.model.BaseObject;
-
+import javax.persistence.*;
+import com.smart.model.DictionaryType;
 /**
  * 映射
  */
 @Entity
 @Table(name = "lab_dictionary")
-public class Dictionary extends BaseObject implements Serializable {
+public class Dictionary  implements Serializable {
 
 	/**
 	 * 
@@ -43,19 +35,18 @@ public class Dictionary extends BaseObject implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	/**
-	 * 映射类型
-	 */
-	@Column
+	 * 字典类别
+	 * @return
+     */
 	public int getType() {
 		return type;
 	}
-
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * 需要映射的符号
 	 */

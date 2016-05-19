@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -155,6 +156,10 @@ public class AjaxController extends BaseAuditController {
 			map.put("sd", deFormat.format(sd));
 			map.put("cov", deFormat.format(sd*100/average));
         }
+        Collections.reverse(timeArr);
+		Collections.reverse(reArr);
+		Collections.reverse(hiArr);
+		Collections.reverse(loArr);
         map.put("lo", loArr);
         map.put("re", reArr);
         map.put("hi", hiArr);
@@ -215,7 +220,8 @@ public class AjaxController extends BaseAuditController {
 	}
 	/**
 	 * 文件上传
-	 * 
+	 * 张晋南 2016-5-15
+	 * 修改上传目录，上传目录自动获取为真实路径
 	 * @param multipartRequest
 	 * @param response
 	 * @return
@@ -226,27 +232,34 @@ public class AjaxController extends BaseAuditController {
 	public void uploadImg(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
         String sampleno = multipartRequest.getParameter("sampleno");
         String imgDescription = multipartRequest.getParameter("imgnote");
-        String uploadFileUrl = Constants.imageUrl + sampleno;
-        String uploadFileUrl_bak = Constants.imageUrl_bak + sampleno;
+        //String uploadFileUrl = Constants.imageUrl + sampleno;
+       
         int count = 0;
 
         String realPath = multipartRequest.getServletContext().getRealPath("/");
+        
+        String uploadFileUrl = realPath+"\\images\\upload\\"+sampleno;
+        String uploadFileUrl_bak = "C:\\images\\upload\\" + sampleno;
+        
 //        realPath = realPath.substring(0, realPath.lastIndexOf("\\"));
         multipartRequest.setAttribute("addr", realPath);
         System.out.println(uploadFileUrl);
         File dir = new File(uploadFileUrl);
-        File backdir = new File(uploadFileUrl_bak);
-		if (!backdir.exists()) {
-			backdir.mkdirs();
-			backdir.setWritable(true);
-			System.out.println("创建目录1");
-		}
 		if (!dir.exists()) {
 			dir.mkdirs();
-			System.out.println("创建目录1");
+			System.out.println("创建图片目录");
 		} else {
+			System.out.println("图片目录存在");
 			count = dir.listFiles().length;
 		}
+		 File backdir = new File(uploadFileUrl_bak);
+			if (!backdir.exists()) {
+				backdir.mkdirs();
+				System.out.println("创建备份目录");
+			} else {
+				System.out.println("备份目录存在");
+				count = backdir.listFiles().length;
+			}
 		//获取多个file
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
 			String key = (String) it.next();
@@ -255,7 +268,8 @@ public class AjaxController extends BaseAuditController {
 				String fileName = imgFile.getOriginalFilename();
 				String newFileName = (count + 1) + fileName.substring(fileName.lastIndexOf("."), fileName.length());
 				try {
-					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, uploadFileUrl_bak, newFileName);
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, "", newFileName);
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl_bak, "", newFileName);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -297,7 +311,7 @@ public class AjaxController extends BaseAuditController {
     //保存文件
 	private void saveFileFromInputStream(InputStream stream, String path, String backpath, String filename) throws IOException {
 		Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(path + "/" + filename);
-		Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(backpath + "/" + filename);
+		//Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(backpath + "/" + filename);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/getImage")

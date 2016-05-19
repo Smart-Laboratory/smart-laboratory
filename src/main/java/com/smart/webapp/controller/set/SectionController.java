@@ -49,11 +49,10 @@ public class SectionController {
 		int end = row * page;
 		System.out.println("query--->"+query);
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-
 		DataResponse dataResponse = new DataResponse();
-
 		List<Section> list = new ArrayList<Section>();
 
+<<<<<<< HEAD
 		int size = sectionManager.getSectionCount(query,hospitalId);
 
 		System.out.println("size===>"+size);
@@ -61,6 +60,11 @@ public class SectionController {
 		list =sectionManager.getSectionList(query,hospitalId,start,end,sidx,sord);
 
 
+=======
+		int size = sectionManager.getSectionCount(code,name,hospitalId);
+		System.out.println("size===>"+size);
+		list =sectionManager.getSectionList(code,name,hospitalId,start,end);
+>>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);

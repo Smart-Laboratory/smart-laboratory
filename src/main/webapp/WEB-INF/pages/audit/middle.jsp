@@ -83,11 +83,6 @@
 	
 	<div id="right" class="col-sm-4" style="position:absolute;right:0px;z-index:1">
 		<div class="form-inline">
-		<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;">
-			<span ><c:forEach var="depart" items="${departList}">
-				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-			</c:forEach></span>
-		</select>
 		<button class="btn btn-info" id="AuditCodeSetting" style="width:80px;margin-bottom:5px;""><fmt:message key="code.setting"/></button>
 		</div>
 		<div id="historyTabs">

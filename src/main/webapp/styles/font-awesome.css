@@ -213,7 +213,10 @@
 .fa-th-large:before {
   content: "\f009";
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf
 .fa-th:before {
   content: "\f00a";
 }
@@ -1565,4 +1568,7 @@
 .fa-bomb:before {
   content: "\f1e2";
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf

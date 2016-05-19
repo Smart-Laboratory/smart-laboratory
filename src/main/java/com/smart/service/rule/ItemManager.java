@@ -1,8 +1,5 @@
 package com.smart.service.rule;
 
-import java.util.List;
-
-import com.smart.Dictionary;
 import com.smart.model.rule.Item;
 import com.smart.service.GenericManager;
 

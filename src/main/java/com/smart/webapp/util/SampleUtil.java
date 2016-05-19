@@ -3,7 +3,7 @@ package com.smart.webapp.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.smart.Dictionary;
+import com.smart.model.Dictionary;
 import com.smart.service.DictionaryManager;
 
 public class SampleUtil {

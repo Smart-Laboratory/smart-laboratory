@@ -183,7 +183,7 @@ public class SearchController {
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
-			map.put("sample", info.getSampleNo());
+			map.put("sample", "<a href='../manage/patientList?blh="+patient.getBlh()+"'>"+info.getSampleNo()+"</a>");
 			map.put("status", info.getAuditStatusValue());
 			map.put("inspection", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());

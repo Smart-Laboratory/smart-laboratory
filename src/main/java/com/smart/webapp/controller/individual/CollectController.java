@@ -46,9 +46,6 @@ import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.user.Evaluate;
 
-
-
-
 @Controller
 @RequestMapping("/collect/list*")
 public class CollectController extends BaseAuditController{

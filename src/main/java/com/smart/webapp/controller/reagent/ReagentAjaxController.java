@@ -133,7 +133,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if(type == 1) {
 			List<SyncReagent> srList = rmiService.getSyncReagent(id+"");
 			String productcode = "";
-			Set<String> productSet = new HashSet<>();
+			Set<String> productSet = new HashSet<String>();
 			Map<String, SyncReagent> srMap = new HashMap<String, SyncReagent>();
 			for(SyncReagent sr : srList) {
 				productSet.add(sr.getSpec_id());

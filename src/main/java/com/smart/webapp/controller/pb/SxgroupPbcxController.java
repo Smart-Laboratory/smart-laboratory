@@ -244,7 +244,9 @@ public class SxgroupPbcxController {
 		
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-				if(sectionMap.get(a.getSection()).equals(section)){
+				if(a.getSection()==null || a.getSection().isEmpty())
+					continue;
+				if(sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section)){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
 					
 					String days = getweekDays(tomonth, Integer.parseInt(a.getWeek()));
