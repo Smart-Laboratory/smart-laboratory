@@ -18,6 +18,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
@@ -40,7 +41,13 @@ public class SamplePrintController extends BaseAuditController {
 		request.setAttribute("docId", request.getParameter("docId"));
 		request.setAttribute("sampleNo", request.getParameter("sampleNo"));
 		request.setAttribute("showLast", request.getParameter("last"));
-		return new ModelAndView("print/sample");
+		Sample s = sampleManager.getBySampleNo(request.getParameter("sampleNo"));
+		
+		if("1300801".equals(s.getSectionId())){
+			return new ModelAndView("print/chromosome");
+		}else{
+			return new ModelAndView("print/sample");
+		}
 	}
 	
 	//打印类型：1-单栏正常；2-双栏正常；3-乙肝MYC；4-微生物培养和鉴定；5-微生物药敏
@@ -67,6 +74,10 @@ public class SamplePrintController extends BaseAuditController {
 			/*if(list.size() > 22) {
 				type = 2;
 			}*/
+			//染色体
+			if("1300801".equals(s.getSectionId())) {
+				type = 5;
+			}
 		}
 		info.put("blh", patient.getBlh());
 		info.put("pName", patient.getPatientName());
@@ -197,20 +208,39 @@ public class SamplePrintController extends BaseAuditController {
 			}
 		}
 		if(type > 3) {
-			html = getWSWHTML(type,wswlist);
+			if(type==5){
+				html = getRSTHTML(list);
+			}else{
+				html = getWSWHTML(type,wswlist);
+			}
 		} else {
 			html = getHTML(type,hasLast,list,hisTitle1,resultMap1,dangerTest);
 		}
 		info.put("html", html);
 		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
 		String imghtml = "";
-		if(s.getHasimages() == 1) {
-			String filepath = Constants.imageUrl + sampleno;
-			File dir = new File(filepath);
-			if (dir.exists()) {
-				for (File f : dir.listFiles()) {
-					if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
-						imghtml += "<img src='../images/upload/" + sampleno + "/" + f.getName() + "' style='float:left;margin-left:5%;width:45%'>";
+		//type==5说明是染色体，染色体图片为分开2张
+		if(type==5){
+			if(s.getHasimages() == 1) {
+		        String filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\upload\\"+sampleno;
+				File dir = new File(filepath);
+				if (dir.exists()) {
+					for (File f : dir.listFiles()) {
+						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+							imghtml += "../images/upload/" + sampleno + "/" + f.getName() + ";";
+						}
+					}
+				}
+			}
+		}else{
+			if(s.getHasimages() == 1) {
+				String filepath = Constants.imageUrl + sampleno;
+				File dir = new File(filepath);
+				if (dir.exists()) {
+					for (File f : dir.listFiles()) {
+						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+							imghtml += "<img src='../images/upload/" + sampleno + "/" + f.getName() + "' style='float:left;margin-left:5%;width:45%'>";
+						}
 					}
 				}
 			}
@@ -828,5 +858,14 @@ public class SamplePrintController extends BaseAuditController {
 			}
 		}
 		return html.toString();
+	}
+	
+	private String getRSTHTML(List<TestResult> list){
+		String result = "";
+		for(int i = 1; i<=list.size(); i++) {
+			TestResult re = list.get(i-1); 
+			result +=re.getTestResult();
+		}
+		return result;
 	}
 }

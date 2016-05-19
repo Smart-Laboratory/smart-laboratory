@@ -6,7 +6,7 @@ function labChange() {
 }
 
 $(function() {
-	if( ${pageContext.request.remoteUser != null} ) {
+	if(${pageContext.request.remoteUser != null}) {
 		$.ajax({
 	        type : "GET",
 	        url : "../users/ajax/hospital",

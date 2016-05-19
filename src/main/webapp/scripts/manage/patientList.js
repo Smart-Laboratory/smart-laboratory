@@ -199,6 +199,19 @@
 			
 		});
 		
+		$("#printBtn").click(function() {
+			var from = $("#from").val();
+			var to = $("#to").val();
+			var select = $("#search_select").val();
+			var searchText = $("#search_text").val();
+			
+			
+			jQuery("#list").jqGrid("setGridParam",{
+				url:"../manage/patientList/data?from="+from+"&to="+to+"&text="+searchText+"&type="+select
+			}).trigger("reloadGrid"); 
+			
+		});
+		
 		$("#historyTabs").tabs({
 			active : 0,
 			activate: function(event, ui) { 
