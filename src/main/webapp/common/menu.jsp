@@ -7,7 +7,6 @@ function labChange() {
 }
 
 $(function() {
-<<<<<<< HEAD
 	if( ${pageContext.request.remoteUser != null} ) {
 		var url = window.location.href;
 		if(url.indexOf("pb")>=0){
@@ -17,9 +16,6 @@ $(function() {
 			url = "../users/ajax/hospital";
 		}
 		
-=======
-	if(${pageContext.request.remoteUser != null}) {
->>>>>>> origin/master
 		$.ajax({
 	        type : "GET",
 	        url : url,
