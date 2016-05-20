@@ -9,6 +9,7 @@
 <div class="col-sm-10">
 	<div class="widget-box">
 		<div class="widget-header">
+			<h4 class="widget-title">样本录入</h4>
 		</div>
 		<div class="widget-body">
 			<div class="widget-main">
@@ -93,17 +94,15 @@
 						<input type="text" class="col-sm-9 input-mask-date" id="receivetime"></input>
 					</div>
 				</div>
-				<div class="form-actions">
-					<div class="col-md-offset-3 col-md-9">
+				<div class="form-group">
+					<div class="col-sm-4" style="float:right">
 						<button class="btn btn-info" type="button">
 							<i class="ace-icon fa fa-check bigger-110"></i>
-							Submit
+							保存
 						</button>
-		
-						&nbsp; &nbsp; &nbsp;
 						<button class="btn" type="reset">
 							<i class="ace-icon fa fa-undo bigger-110"></i>
-							Reset
+							取消
 						</button>
 					</div>
 				</div>

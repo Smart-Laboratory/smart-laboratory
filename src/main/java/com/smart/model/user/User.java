@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,17 +28,13 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.smart.model.BaseObject;
 import com.smart.model.LabelValue;
-import com.smart.model.lis.Hospital;
-import com.smart.webapp.controller.set.HospitalController;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -52,7 +47,6 @@ import com.smart.webapp.controller.set.HospitalController;
  */
 @Entity
 @Table(name = "lab_user")
-
 public class User extends BaseObject implements Serializable, UserDetails {
     private static final long serialVersionUID = 3832626162173359411L;
 

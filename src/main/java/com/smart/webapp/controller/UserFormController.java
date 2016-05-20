@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.ReusableAnalyzerBase;
 
 import com.smart.Constants;
 import com.smart.model.lis.Hospital;
