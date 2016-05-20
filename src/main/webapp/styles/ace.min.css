@@ -18,15 +18,15 @@ body {
     padding:0px;
 }
 .main-container:before {
-    display: block;
-    content: "";
-    position: absolute;
-    z-index: -2;
-    width: 100%;
-    max-width: inherit;
-    bottom: 0;
-    top: 0;
-    background-color: #FFF
+    /*display: block;*/
+    /*content: "";*/
+    /*position: absolute;*/
+    /*z-index: -2;*/
+    /*width: 100%;*/
+    /*max-width: inherit;*/
+    /*bottom: 0;*/
+    /*top: 0;*/
+    /*background-color: #FFF*/
 }
 
 .main-container.container,.rtl .main-container.container {

@@ -6,7 +6,7 @@
         <pattern>/resources/*</pattern>
         <pattern>*ajax*</pattern>
         <pattern>*print*</pattern>
-    </excludes> 
+    </excludes>
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>
     </decorator>
@@ -17,5 +17,8 @@
     </decorator>
     <decorator name="description" page="description.jsp">
         <pattern>/description/*</pattern>
+    </decorator>
+    <decorator name="login" page="defaultlogin.jsp">
+        <pattern>/login</pattern>
     </decorator>
 </decorators>
