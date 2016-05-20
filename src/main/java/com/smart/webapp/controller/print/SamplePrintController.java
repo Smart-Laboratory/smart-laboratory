@@ -1,6 +1,6 @@
 package com.smart.webapp.controller.print;
 
-import java.io.File;
+import java.io.File;	
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -29,6 +29,7 @@ import com.smart.model.lis.TestResult;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.UserUtil;
 import com.zju.api.model.SyncResult;
 
 @Controller
@@ -42,7 +43,6 @@ public class SamplePrintController extends BaseAuditController {
 		request.setAttribute("sampleNo", request.getParameter("sampleNo"));
 		request.setAttribute("showLast", request.getParameter("last"));
 		Sample s = sampleManager.getBySampleNo(request.getParameter("sampleNo"));
-		
 		if("1300801".equals(s.getSectionId())){
 			return new ModelAndView("print/chromosome");
 		}else{
@@ -110,6 +110,8 @@ public class SamplePrintController extends BaseAuditController {
 		//更改为电子签名图片地址
 		//info.put("auditor", process.getCheckoperator());
 		String dzqm_imghtm = "";
+		//由于process.getCheckoperator() 有工号有姓名，需要区分
+		String username = UserUtil.getInstance(userManager).getKey(process.getCheckoperator());
 		//实现获取电子签名
         String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\electronicSignature";
 		File dzqm_dir = new File(dzqm_filepath);
@@ -117,13 +119,13 @@ public class SamplePrintController extends BaseAuditController {
 			for (File dzqm_f : dzqm_dir.listFiles()) {
 				//去掉后缀
 				int dot = dzqm_f.getName().lastIndexOf('.'); 
-				if (dzqm_f.getName().substring(0, dot).equals(process.getCheckoperator())&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
+				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
 					dzqm_imghtm += "../images/electronicSignature/" + dzqm_f.getName() + ";";
 				}
 			}
 		}
 		info.put("auditro", dzqm_imghtm);
-		System.out.println("111");
+		
 		info.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
 		info.put("checktime", Constants.SDF.format(process.getChecktime()));
 		info.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
