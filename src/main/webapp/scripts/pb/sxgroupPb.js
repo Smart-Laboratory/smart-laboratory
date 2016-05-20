@@ -1,10 +1,4 @@
-function labChange(item){
-	$.ajax({
-		  type: 'POST',
-		  url: "../audit/labChange?lab="+$(item).val()
-	});
-	window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $(item).val();
-}
+
 
 $(function() {
 	$("#labSelect").val($("#section").val());
@@ -113,6 +107,15 @@ $(function() {
 			}
 		})
 	});
+	
+	labChange=function(select){
+		$.ajax({
+			  type: 'POST',
+			  url: "../audit/labChange?lab="+$(select).children().attr("title")
+		});
+		$("#labText").html($(select).children().html());
+		window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+	}
 });
 
 Date.prototype.Format = function(fmt)   

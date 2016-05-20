@@ -70,11 +70,6 @@ display: none;
 			<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
-			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-bottom:5px;float:right;width:400px;">
-				<span ><c:forEach var="depart" items="${departList}">
-				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-			</c:forEach></span>
-			</select>
 		</div>
 		<div id="shiftSelect" class="checkbox form-inline" >
 			<c:forEach items="${wshifts}" var="shift">

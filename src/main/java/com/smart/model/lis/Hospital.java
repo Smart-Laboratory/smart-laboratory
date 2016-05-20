@@ -5,10 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.hibernate.search.annotations.Indexed;
 
 import com.smart.model.BaseObject;
@@ -16,7 +13,6 @@ import com.smart.model.BaseObject;
 @Entity
 @Table(name = "LAB_HOSPITAL")
 @Indexed
-@XmlRootElement
 public class Hospital extends BaseObject{
 
 	/**
