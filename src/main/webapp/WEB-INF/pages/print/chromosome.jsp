@@ -151,7 +151,7 @@
 			<fmt:message key="tat.auditor" />
 		</div>
 		<div style="float:left;width:20%;">
-			<b id="auditor">&nbsp;</b>
+			<img id="auditor" alt="" src="" border="0" width="60px" height="17px">
 		</div>
 		<div style="float:left;width:5%;">&nbsp;</div>
 	</div>
