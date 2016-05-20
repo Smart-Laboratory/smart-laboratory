@@ -18,7 +18,6 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		super(Dictionary.class);
 	}
 
-	@Override
 	public List<Dictionary> getDictionaryList(Dictionary dictionary, int start, int end, String sidx, String sord) {
 		Criteria criteria = getSession().createCriteria(Dictionary.class);
 		//字典信息查询
@@ -41,17 +40,16 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Dictionary> getPatientInfo(String name) {
+		String hql = "from Dictionary where type=2 and value like '%" + name + "%'";
+		Query q = getSession().createQuery(hql);
+		return q.list();
+	}
 
-//	@SuppressWarnings("unchecked")
-//	public List<Dictionary> getPatientInfo(String name) {
-//		String hql = "from Dictionary where type=2 and value like '%" + name + "%'";
-//		Query q = getSession().createQuery(hql);
-//		return q.list();
-//	}
-//
-//	@SuppressWarnings("unchecked")
-//	public List<Dictionary> getSampleType() {
-//		return getSession().createQuery("from Dictionary where type=1").list();
-//	}
+	@SuppressWarnings("unchecked")
+	public List<Dictionary> getSampleType() {
+		return getSession().createQuery("from Dictionary where type=1").list();
+	}
 
 }

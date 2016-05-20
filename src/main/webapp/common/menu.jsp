@@ -7,10 +7,18 @@ function labChange() {
 }
 
 $(function() {
-	if(${pageContext.request.remoteUser != null}) {
+	if( ${pageContext.request.remoteUser != null} ) {
+		var url = window.location.href;
+		if(url.indexOf("pb")>=0){
+			url = "../users/ajax/hospital?ispb=1";
+		}
+		else{
+			url = "../users/ajax/hospital";
+		}
+		
 		$.ajax({
 	        type : "GET",
-	        url : "../users/ajax/hospital",
+	        url : url,
 	        success : function(data) {
 	           var json = jQuery.parseJSON(data);
 	           $("#userText").html(json.username);
@@ -50,8 +58,8 @@ $(function() {
 <ul class="nav navbar-nav">
     <c:if test="${empty pageContext.request.remoteUser}">
         <li class="active form-inline">
-            <span class="form-control" style="width:55px;" ><a href="../login"><fmt:message key="login.title"/></a></span>
-            <span class="form-control" style="width:100px;"><a href="../pb/pbcx"><fmt:message key="menu.pb.pbcx"/></a></span>
+            <span class="form-control" style="width:55px;" ><a href="/lab/login"><fmt:message key="login.title"/></a></span>
+            <span class="form-control" style="width:100px;"><a href="/lab/pb/pbcx"><fmt:message key="menu.pb.pbcx"/></a></span>
         </li>
     </c:if>
 

@@ -59,11 +59,17 @@ public class UserController {
     
     @RequestMapping(value="/ajax/hospital", method = RequestMethod.GET)
     public String getHospital(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	String ispb = request.getParameter("ispb");
+    	
     	JSONObject obj = new JSONObject();
     	SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
     	User user = userManager.getUserByUsername(request.getRemoteUser());
+    	String department = user.getDepartment();
+    	if(ispb!=null && ispb.equals("1")){
+    		department = user.getPbsection();
+    	}
     	Map<String, String> labMap = new HashMap<String, String>();
-    	for(String labcode : user.getDepartment().split(",")) {
+    	for(String labcode : department.split(",")) {
     		System.out.println(sectionUtil.getValue(labcode));
     		labMap.put(labcode, sectionUtil.getValue(labcode));
     	}

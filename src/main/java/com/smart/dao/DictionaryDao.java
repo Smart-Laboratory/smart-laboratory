@@ -16,6 +16,13 @@ public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	List<Dictionary> getDictionaryList(Dictionary dictionary,int start,int end,String sidx,String sord);
+
+	@Transactional
+	List<Dictionary> getPatientInfo(String name);
+
+	@Transactional
+	List<Dictionary> getSampleType();
 
 }

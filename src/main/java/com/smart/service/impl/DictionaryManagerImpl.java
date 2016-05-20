@@ -2,8 +2,6 @@ package com.smart.service.impl;
 
 import java.util.List;
 
-
-import com.smart.model.DictionaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +20,15 @@ public class DictionaryManagerImpl extends GenericManagerImpl<Dictionary, Long> 
 		this.dictionaryDao = dictionary;
 	}
 
-	@Override
 	public List<Dictionary> getDictionaryList(Dictionary dictionary, int start, int end, String sidx, String sord) {
 		return dictionaryDao.getDictionaryList(dictionary,start,end,sidx,sord);
 	}
 
-	@Override
 	public List<Dictionary> getPatientInfo(String name) {
-		return null;
+		return dictionaryDao.getPatientInfo(name);
 	}
 
-	@Override
 	public List<Dictionary> getSampleType() {
-		return null;
+		return dictionaryDao.getSampleType();
 	}
 }

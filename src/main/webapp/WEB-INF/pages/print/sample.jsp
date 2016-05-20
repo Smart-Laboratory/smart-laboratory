@@ -65,7 +65,7 @@
 			<div style="float:left;width:10%;"><fmt:message key="tat.tester"/></div>
 			<div style="float:left;width:20%;"><b id="tester">&nbsp;</b></div>
 			<div style="float:left;width:10%;"><fmt:message key="tat.auditor"/></div>
-			<div style="float:left;width:20%;"><b id="auditor">&nbsp;</b></div>
+			<div style="float:left;width:20%;">	<img id="auditor" alt="" src="" border="0" width="60px" height="17px"></div>
 			<div style="float:left;width:5%;">&nbsp;</div>
 		</div>
 		<div style="margin-left:10px;width:100%;">

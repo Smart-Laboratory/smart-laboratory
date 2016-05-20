@@ -13,7 +13,9 @@ $(function(){
 		$("#pSection").html(data.section);
 		$("#requester").html(data.requester);
 		$("#tester").html(data.tester);
-		$("#auditor").html(data.auditor);
+		//更改为电子签名
+		//$("#auditor").html(data.auditor);
+		$("#auditor").attr("src",data.auditro);
 		$("#receivetime").html(data.receivetime);
 		$("#checktime").html(data.checktime);
 		$("#executetime").html(data.executetime);

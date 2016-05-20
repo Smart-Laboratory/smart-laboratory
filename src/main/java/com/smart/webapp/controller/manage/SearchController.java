@@ -156,10 +156,10 @@ public class SearchController {
 		int totalPage = (size + x) / (row == 0 ? size : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
-		if(size-1>end)
+		if(size-1>=end)
 			samples = samples.subList(start, end);
 		else if(size>start)
-			samples = samples.subList(start, size-1);
+			samples = samples.subList(start, size);
 		else {
 			return null;
 		}
@@ -195,6 +195,8 @@ public class SearchController {
 			map.put("section",section);
 			map.put("patientid",info.getPatientId());
 			map.put("sampleType", sMap.get(info.getSampleType()));
+			System.out.println(info.getSampleNo()+"-----------------------------");
+			map.put("operation", "<button id='search_printBtn' onclick='search_printBtn(\""+info.getSampleNo()+"\")' class='btn btn-info' style='margin-left:20px;'>打印</button>");
 			if (info.getSampleStatus()>=5) {
 				if (info.getIswriteback() == 1) {
 					map.put("lisPass", "<font color='red'>" + "已打印" + "</font>");
