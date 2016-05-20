@@ -10,6 +10,11 @@
 	<div class="widget-box">
 		<div class="widget-header">
 			<h4 class="widget-title">样本录入</h4>
+			<div class="widget-toolbar">
+				<a href="#" data-action="collapse">
+					<i class="ace-icon fa fa-chevron-up"></i>
+				</a>
+			</div>
 		</div>
 		<div class="widget-body">
 			<div class="widget-main">
@@ -71,12 +76,6 @@
 					<div class="col-sm-2">
 						<input type="text" class="col-sm-12" id="sampletype"></input>
 					</div>
-					<label class="col-sm-1 control-label no-padding-right" for="examinaim">检验目的</label>
-					<div class="col-sm-5">
-						<input type="text" class="col-sm-12" id="examinaim"></input>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-sm-1 control-label no-padding-right" for="requester">送检医生</label>
 					<div class="col-sm-2">
 						<input type="text" class="col-sm-12" id="requester"></input>
@@ -85,24 +84,32 @@
 					<div class="col-sm-2">
 						<input type="text" class="col-sm-12" id="feestatus"></input>
 					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-1 control-label no-padding-right" for="excutetime">采样时间</label>
-					<div class="col-sm-2">
+					<div class="col-sm-5">
 						<input type="text" class="col-sm-12 input-mask-date" id="excutetime"></input>
 					</div>
 					<label class="col-sm-1 control-label no-padding-right" for="receivetime">接收时间</label>
-					<div class="col-sm-2">
-						<input type="text" class="col-sm-9 input-mask-date" id="receivetime"></input>
+					<div class="col-sm-5">
+						<input type="text" class="col-sm-12 input-mask-date" id="receivetime"></input>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-4" style="float:right">
-						<button class="btn btn-info" type="button">
-							<i class="ace-icon fa fa-check bigger-110"></i>
-							保存
-						</button>
-						<button class="btn" type="reset">
+					<label class="col-sm-1 control-label no-padding-right" for="examinaim">检验目的</label>
+					<div class="col-sm-8">
+						<input type="text" class="col-sm-12" id="examinaim"></input>
+					</div>
+					<div class="col-sm-1" style="float:right">
+						<button class="btn" type="reset" style="float:right">
 							<i class="ace-icon fa fa-undo bigger-110"></i>
 							取消
+						</button>
+					</div>
+					<div class="col-sm-1" style="float:right">
+						<button class="btn btn-info" type="button" style="float:right;">
+							<i class="ace-icon fa fa-check bigger-110"></i>
+							保存
 						</button>
 					</div>
 				</div>
