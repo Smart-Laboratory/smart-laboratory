@@ -1,7 +1,9 @@
 <%@ include file="/common/taglibs.jsp"%>
-<!--link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" /-->
-<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
+<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+<script type="text/javascript" src="../scripts/ace.min.js"></script>
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
+<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
+
 <script type="text/javascript">
 function labChange() {
 }

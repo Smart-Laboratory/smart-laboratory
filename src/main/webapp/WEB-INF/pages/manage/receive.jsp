@@ -6,7 +6,7 @@
     <script type="text/javascript" src="../scripts/manage/receive.js"></script>
 </head>
 <body>
-<div class="col-sm-10">
+<div class="col-sm-12">
 	<div class="row" style="margin-top:10px;">
 		<div style="float:left;width:30%">
 			<div class="col-sm-5"><h4><fmt:message key="sample.id"/></h4></div>

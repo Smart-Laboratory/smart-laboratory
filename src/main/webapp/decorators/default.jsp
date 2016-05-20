@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="<c:url value='/'/>"><img src=""><fmt:message key="webapp.name"/></a>
+            <a class="navbar-brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
         </div>
 
         <%@ include file="/common/menu.jsp" %>
@@ -39,48 +39,6 @@
     <div class="main-container" sytle="padding-top:50px;" id="content">
         <%@ include file="/common/messages.jsp" %>
             <decorator:body/>
-            <c:if test="${currentMenu == 'SampleManage'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="SampleManage"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
-            <c:if test="${currentMenu == 'SampleSet'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="SampleSet"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
-            <c:if test="${currentMenu == 'Reagent'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="Reagent"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
-            <c:if test="${currentMenu == 'Statistic'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="Statistic"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
-            <c:if test="${currentMenu == 'Quality'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="Quality"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
-            <c:if test="${currentMenu == 'Individual'}">
-                <div class="col-sm-2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="Individual"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if>
     </div>
     <div class="footer">
         <div class="footer-inner" style="left: 0px;">
