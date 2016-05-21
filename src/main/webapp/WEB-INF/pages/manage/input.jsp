@@ -3,6 +3,7 @@
 
 <head>
     <title><fmt:message key="sample.manage.input"/></title>
+    <script type="text/javascript" src="<c:url value='/scripts/manage/input.js'/> "></script>
 </head>
 <body>
 <div class="col-sm-6">
@@ -57,11 +58,15 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right" for="patientname">姓&nbsp;名</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12" id="patientid"></input>
+						<input type="text" class="col-sm-12" id="patientname"></input>
 					</div>
-					<label class="col-sm-2 control-label no-padding-right" for="hossection">性&nbsp;别</label>
+					<label class="col-sm-2 control-label no-padding-right" for="sex">性&nbsp;别</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12" id="hossection"></input>
+						<select class="col-sm-12" id="sex">
+							<option value="1">男</option>
+							<option value="2">女</option>
+							<option value="3">未知</option>
+						</select>
 					</div>
 					<div class="col-sm-2">&nbsp;
 					</div>
@@ -88,7 +93,11 @@
 					</div>
 					<label class="col-sm-2 control-label no-padding-right" for="sampletype">样本类型</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12" id="sampletype"></input>
+						<select class="col-sm-12" id="sampletype">
+							<c:forEach var="sType" items="${typelist}">
+								<option value='<c:out value="${sType.sign}" />'><c:out value="${sType.value}" /></option>
+							</c:forEach>
+						</select>
 					</div>
 					<div class="col-sm-2">&nbsp;
 					</div>
@@ -120,7 +129,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right" for="examinaim">检验目的</label>
 					<div class="col-sm-8">
-						<input type="text" class="col-sm-12" id="examinaim"></input>
+						<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="输入检验目的的中文、拼音" />
 					</div>
 					<div class="col-sm-2">&nbsp;
 					</div>
@@ -165,87 +174,15 @@
 				</a>
 			</div>
 		</div>
-	</div>
-	<div class="widget-body">
-		<div class="widget-main no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead class="thin-border-bottom">
-					<tr>
-						<th>
-							<i class="ace-icon fa fa-user"></i>
-							User
-						</th>
-
-						<th>
-							<i>@</i>
-							Email
-						</th>
-						<th class="hidden-480">Status</th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<tr>
-						<td class="">Alex</td>
-
-						<td>
-							<a href="#">alex@email.com</a>
-						</td>
-
-						<td class="hidden-480">
-							<span class="label label-warning">Pending</span>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="">Fred</td>
-
-						<td>
-							<a href="#">fred@email.com</a>
-						</td>
-
-						<td class="hidden-480">
-							<span class="label label-success arrowed-in arrowed-in-right">Approved</span>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="">Jack</td>
-
-						<td>
-							<a href="#">jack@email.com</a>
-						</td>
-
-						<td class="hidden-480">
-							<span class="label label-warning">Pending</span>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="">John</td>
-
-						<td>
-							<a href="#">john@email.com</a>
-						</td>
-
-						<td class="hidden-480">
-							<span class="label label-inverse arrowed">Blocked</span>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="">James</td>
-
-						<td>
-							<a href="#">james@email.com</a>
-						</td>
-
-						<td class="hidden-480">
-							<span class="label label-info arrowed-in arrowed-in-right">Online</span>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="widget-body">
+			<div class="widget-main no-padding">
+				<table class="table table-striped table-bordered table-hover">
+					<thead class="thin-border-bottom">
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>

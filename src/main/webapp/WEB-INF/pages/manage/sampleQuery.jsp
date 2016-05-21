@@ -83,15 +83,15 @@
 		
 		<label style="margin-left : 10px;"><fmt:message key="sample.section" /></label>
 		<select id="labSelect_seach"  class="form-control" style="">
-			<span ><c:forEach var="depart" items="${departList}">
-			<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-			</c:forEach></span>
+			<c:forEach var="depart" items="${departList}">
+				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
+			</c:forEach>
 		</select>
 		<label style="margin-left : 0px;"><fmt:message key="sample.sampleType" /></label>
 		<select id="sampleTypeSelect"  class="form-control" style="width:100px;">
-			<span ><c:forEach var="sType" items="${sampleTypes}">
-			<option value='<c:out value="${sType.key}" />'><c:out value="${sType.value}" /></option>
-			</c:forEach></span>
+			<c:forEach var="sType" items="${sampleTypes}">
+				<option value='<c:out value="${sType.key}" />'><c:out value="${sType.value}" /></option>
+			</c:forEach>
 		</select>
 </div>
 
