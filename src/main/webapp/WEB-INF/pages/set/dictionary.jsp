@@ -7,16 +7,30 @@
 --%>
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
+<head>
+    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+    <script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
+    <script type="text/javascript" src="../scripts/layer/layer.js"></script>
+    <script type="text/javascript" src="../scripts/set/dictionary.js"></script>
+
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
+
+</head>
 <style>
 .laftnav{
-    background: #ffffff;
-    border: 1px solid #D9D9D9;
+    /*background: #ffffff;*/
+    border-right: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
 }
 .lazy_header{
-    height: 35px;
+    height: 40px;
     background: #F7F7F7 !important;
     border-bottom: 1px solid #D9D9D9;
-    line-height: 35px
+    border-top: 1px solid #D9D9D9;
+    line-height: 35px;
+    margin-top:1px;
 }
 .lazy-list-title {
     font-size: 14px;
@@ -55,12 +69,15 @@ ul.nav{
         </div>
     </div>
     <div class="col-xs-10">
-        GRID LIST
+        <table id="sectionList"></table>
+        <div id="pager"></div>
     </div>
 </div>
 <div style="clear: both"></div>
 <script>
   $(function() {
+      var height = document.body.scrollHeight ;
+      $('.laftnav').height(height-110);
       /*
       * 生成字典类别列表
       * add by zcw 2016-05-19

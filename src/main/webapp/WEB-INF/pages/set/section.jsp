@@ -18,11 +18,11 @@
 <div class="row">
 <div id="mainTable" class="col-xs-12">
 	<div  style="padding-top: 5px;">
-		<button type="button" class="btn btn-sm btn-success " title="添加科室" onclick="AddSection()">
+		<button type="button" class="btn btn-sm btn-primary " title="添加科室" onclick="AddSection()">
 			<i class="ace-icon fa fa-fire bigger-110"></i>
 			<fmt:message key="button.add" />
 		</button>
-		<button type="button" class="btn btn-sm btn-primary" title="编辑科室" onclick="editSection()">
+		<button type="button" class="btn btn-sm  btn-success" title="编辑科室" onclick="editSection()">
 			<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 			<fmt:message key="button.edit" />
 		</button>

@@ -2609,7 +2609,8 @@ $.fn.jqGrid = function( pin ) {
 			if(isNaN(ts.p.width)) {
 				ts.p.width  = initwidth + ((ts.p.shrinkToFit ===false && !isNaN(ts.p.height)) ? scw : 0);
 			}
-			grid.width = ts.p.width;
+			//edit by zcw 2016-05-20 解决外层DIV显示滚动条问题
+			grid.width = ts.p.width-15;
 			ts.p.tblwidth = initwidth;
 			if(ts.p.shrinkToFit ===false && ts.p.forceFit === true) {ts.p.forceFit=false;}
 			if(ts.p.shrinkToFit===true && vc > 0) {
@@ -3105,7 +3106,8 @@ $.fn.jqGrid = function( pin ) {
 		$(grid.bDiv)
 			.append($('<div style="position:relative;"></div>').append('<div></div>').append(this))
 			.addClass("ui-jqgrid-bdiv")
-			.css({ height: ts.p.height+(isNaN(ts.p.height)?"":"px"), width: (grid.width)+"px"})
+			//edit by zcw 2016-05-20 解决外层DIV显示滚动条问题
+			.css({ height: ts.p.height+(isNaN(ts.p.height)?"":"px"), width: (grid.width+2)+"px"})
 			.scroll(grid.scrollGrid);
 		$("table:first",grid.bDiv).css({width:ts.p.tblwidth+"px"});
 		if( !$.support.tbody ) { //IE

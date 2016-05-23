@@ -89,9 +89,9 @@ function editSection(){
 
 $(function(){
 	//表单校验
-	$("#addResultForm").Validform({
-		tiptype:4
-	});
+	//$("#addResultForm").Validform({
+	//	tiptype:4
+	//});
 	//keyPress 回车检索
 	$("#query").keypress(function(e){
 		if (e.keyCode == 13){
@@ -127,7 +127,7 @@ $(function(){
 		//height: 300,
 		height: "100%",
 		rowNum: 10,
-		rowList:[10,20,30],
+		rowList:[10,30,50],
 		rownumbers: true, // 显示行号
 		rownumWidth: 35, // the width of the row numbers columns
 		pager: "#pager",//分页控件的id

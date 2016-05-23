@@ -10,7 +10,6 @@
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
     <t:assets/>
     <decorator:head/>
-    
     <%-- <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" /> --%>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>  class="no-skin">

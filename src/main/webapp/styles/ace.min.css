@@ -5600,7 +5600,7 @@ body.mob-safari .sidebar.sidebar-fixed {
 }
 
 .footer .footer-inner {
-    text-align: center;
+    text-align: left;
     position: absolute;
     z-index: auto;
     left: 190px;
@@ -5720,7 +5720,7 @@ body.mob-safari .sidebar.sidebar-fixed {
     bottom: 4px;
     padding: 8px;
     line-height: 36px;
-    border-top: 3px double #E5E5E5
+    border-top: 1px dotted #E5E5E5
 }
 
 .footer.footer-fixed .footer-inner {
@@ -12926,7 +12926,7 @@ th .lbl:only-child,td .lbl:only-child {
     height: 40px;
     line-height: 24px;
     color: #FFF;
-    background: #307ecc;
+    background: #87b87f;
     padding: 0;
     font-size: 15px
 }
