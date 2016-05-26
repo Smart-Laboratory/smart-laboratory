@@ -21,6 +21,7 @@
             <Item name="Device" title="set.device" page="/set/device"/>
             <Item name="YlSF" title="set.ylsf" page="/set/ylsf"/>
             <Item name="SOP" title="set.sop" page="/set/sop"/>
+            <Item name="Dictionary" title="set.dictionary" page="/set/dictionary"/>
         </Menu>
         <Menu name="Reagent" title="reagent.title" page="/reagent/stock" roles="ROLE_ADMIN,ROLE_USER">
         	<Item name="Stock" title="reagent.stock" page="/reagent/stock" />

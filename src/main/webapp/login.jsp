@@ -29,7 +29,7 @@
         .reg-slogan{height:50px;line-height:50px;text-align:center;font-size:16px;}
         .reg-form{width:328px;height:280px;margin:auto;}
         .reg-form .cell{position:relative;height:40px;margin-bottom:22px;zoom:1;}
-        .reg-form .cell label{position:absolute;top:0;left:0;z-index:1;padding:0 12px;line-height:40px;font-size:16px;color:#999;font-weight:bold;cursor:text;}
+        .reg-form .cell label{position:absolute;top:0;left:0;z-index:1;padding:0 12px;line-height:40px;font-size:14px;color:#999;font-weight:bold;cursor:text;}
         .reg-form .cell input{position:absolute;top:0;left:0;width:328px;padding:7px 11px;font-size:16px;background:none;}
         .reg-form .vcode input{width:110px;}
         .reg-form .vcode img{position:absolute;top:0;left:144px;width:110px;height:40px;}
@@ -37,13 +37,11 @@
         .reg-form .user-agreement input{float:left;width:14px;height:14px;margin:1px 5px 0 0;}
         .reg-form .bottom .button{display:block;border-radius:3px;}
         .social-or-login :first-child{background: #f0f0f0 !important;}
-        .footer .footer-inner{text-align: left}
-        .footer .footer-inner .footer-content{border-top:1px dotted #A6C4DB;}
         .input-icon>.ace-icon{line-height: 44px;}
     </style>
 
 </head>
-<body id="login" class="login-layout light-login">
+<body id="login">
 <div class="wrap">
     <div class="banner-show" id="js_ban_content">
         <div class="cell bns-01" style="display: block;">
@@ -211,9 +209,11 @@
         </div>
     </div>
 
-    <div class="footer">
-        <div class="footer-inner" style="left: 0px;">
-            <div class="footer-content">
+
+</div>
+<div class="footer">
+    <div class="footer-inner" style="left: 0px;">
+        <div class="footer-content">
 				 <span class="">
         	<fmt:message key="project.name"/> |
         	<fmt:message key="webapp.version"/>
@@ -226,12 +226,18 @@
    		<span style="float: right;">
        		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
         </span>
-            </div>
         </div>
     </div>
-
 </div>
+
 <c:set var="scripts" scope="request">
 <%@ include file="/scripts/login.js"%>
 </c:set>
 </body>
+<script type="text/javascript" >
+    $(function(){
+        var cHeight= window.document.body.clientHeight;
+
+    })
+
+</script>

@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-	<script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
+	<script type="text/javascript" src="../scripts/validform/Validform.js"></script>
 	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
 	<script type="text/javascript" src="../scripts/set/section.js"></script>
 
@@ -18,11 +18,11 @@
 <div class="row">
 <div id="mainTable" class="col-xs-12">
 	<div  style="padding-top: 5px;">
-		<button type="button" class="btn btn-sm btn-success " title="添加科室" onclick="AddSection()">
+		<button type="button" class="btn btn-sm btn-primary " title="添加科室" onclick="AddSection()">
 			<i class="ace-icon fa fa-fire bigger-110"></i>
 			<fmt:message key="button.add" />
 		</button>
-		<button type="button" class="btn btn-sm btn-primary" title="编辑科室" onclick="editSection()">
+		<button type="button" class="btn btn-sm  btn-success" title="编辑科室" onclick="editSection()">
 			<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 			<fmt:message key="button.edit" />
 		</button>

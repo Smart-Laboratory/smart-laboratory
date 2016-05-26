@@ -11,4 +11,6 @@ public interface SFXMDao extends GenericDao<SFXM, Long> {
 
 	List<SFXM> getPageLIst(String search, String hospitalId, int start, int end);
 
+	List<SFXM> searchSFXM(String query, Long hospitalid);
+
 }

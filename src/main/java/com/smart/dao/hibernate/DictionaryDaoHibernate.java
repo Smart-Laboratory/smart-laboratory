@@ -18,26 +18,43 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		super(Dictionary.class);
 	}
 
-	public List<Dictionary> getDictionaryList(Dictionary dictionary, int start, int end, String sidx, String sord) {
-		Criteria criteria = getSession().createCriteria(Dictionary.class);
-		//字典信息查询
-		if( dictionary.getType() >0){
-			criteria.add(Restrictions.eq("type",dictionary.getType()));
-		}
-		if(null!=dictionary.getValue() && !"".equals(dictionary.getValue()))   {
-			criteria.add(Restrictions.ilike("value",dictionary.getValue()));
-		}
-		if(!"".equals(sord) && "desc".equals(sord))
-			criteria.addOrder(Order.asc(sidx));
-		else
-			criteria.addOrder(Order.asc(sidx));
+	@Override
+	public int getDictionaryCount(String query, String type) {
+		String sql = "select count(1) cnt from lab_dictionary where 1=1 ";
+		if(query != null && !query.equals(""))
+			sql += " and value  like '%" +query +"%'";
+		if(type != null && !type.equals(""))
+			sql += " and type = " +type;
+		Query q =  getSession().createSQLQuery(sql);
+		return new Integer(q.uniqueResult() + "");
+	}
 
-		int counts = criteria.list().size();
-		criteria.setFirstResult(start);
-		criteria.setMaxResults(end);
+	/**
+	 * 获取科室分页列表
+	 * @param query 查询值:编号或名称
+	 * @param type
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@Override
+	public List<Dictionary> getDictionaryList(String query, String type, int start, int end,String sidx,String sord)  {
+		String sql = " from Dictionary s where 1=1 ";
+		if(query != null && !query.equals(""))
+			sql += " and s.value  like '%" +query +"%'";
+		if(type != null && !type.equals(""))
+			sql += " and s.type = " +type;
 
-		List<Dictionary> list= criteria.list();
-		return list;
+		sidx = sidx.equals("")?"id":sidx;
+		sql +=" order by  " +sidx + " " + sord;
+
+		Query q =  getSession().createQuery(sql);
+
+		if(end != 0){
+			q.setFirstResult(start);
+			q.setMaxResults(end);
+		}
+		return  q.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,9 +64,21 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		return q.list();
 	}
 
+	/**
+	 * 样本类型信息 type =1
+	 * @return
+     */
 	@SuppressWarnings("unchecked")
 	public List<Dictionary> getSampleType() {
 		return getSession().createQuery("from Dictionary where type=1").list();
 	}
 
+	/**
+	 * 获取仪器类别信息 TYPE=3
+	 * @return
+     */
+	@SuppressWarnings("unchecked")
+	public List<Dictionary> getDeviceType(){
+		return  getSession().createQuery("from Dictionary where type = 3").list();
+	};
 }

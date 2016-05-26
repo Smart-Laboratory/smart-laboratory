@@ -7,7 +7,7 @@ function  AddSection(){
 	clearData();
 	layer.open({
 		type: 1,
-		area: ['500px','250px'],
+		area: ['520px','250px'],
 		fix: false, //不固定
 		maxmin: false,
 		shade:0.6,
@@ -73,7 +73,7 @@ function editSection(){
 	$('#name').val(rowData.name);
 	layer.open({
 		type: 1,
-		area: ['500px','250px'],
+		area: ['520px','250px'],
 		fix: false, //不固定
 		maxmin: false,
 		shade:0.6,
@@ -124,10 +124,10 @@ $(function(){
 		shrinkToFit: true,
 		altRows:true,
 		autowidth:true,
-		height: 350,
-		//height: "100%",
+		//height: 300,
+		height: "100%",
 		rowNum: 10,
-		rowList:[10,30,50],
+		rowList:[10,20,30],
 		rownumbers: true, // 显示行号
 		rownumWidth: 35, // the width of the row numbers columns
 		pager: "#pager",//分页控件的id

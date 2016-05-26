@@ -28,6 +28,8 @@ public class SFXMManagerImpl extends GenericManagerImpl<SFXM, Long> implements S
 	public List<SFXM> getPageList(String search, String hospitalId, int start, int end) {
 		return sfxmDao.getPageLIst(search, hospitalId, start, end);
 	}
-	
-	
+
+	public List<SFXM> searchSFXM(String query, Long hospitalid) {
+		return sfxmDao.searchSFXM(query, hospitalid);
+	}
 }

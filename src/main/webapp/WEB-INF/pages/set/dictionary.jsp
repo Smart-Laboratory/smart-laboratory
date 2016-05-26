@@ -7,16 +7,30 @@
 --%>
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
+<head>
+    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+    <script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
+    <script type="text/javascript" src="../scripts/layer/layer.js"></script>
+    <script type="text/javascript" src="../scripts/set/dictionary.js"></script>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
+
+</head>
 <style>
 .laftnav{
-    background: #ffffff;
-    border: 1px solid #D9D9D9;
+    /*background: #ffffff;*/
+    border-right: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
 }
 .lazy_header{
-    height: 35px;
+    height: 40px;
     background: #F7F7F7 !important;
     border-bottom: 1px solid #D9D9D9;
-    line-height: 35px
+    border-top: 1px solid #D9D9D9;
+    line-height: 35px;
+    margin-top:1px;
 }
 .lazy-list-title {
     font-size: 14px;
@@ -43,41 +57,84 @@ ul.nav{
 </style>
 <div class="row">
     <div class="col-xs-2 treelist">
-        <div class="laftnav">
+        <div class="laftnav" >
             <div class="lazy_header">
                 <span class="lazy-list-title">
                 <i class="fa fa-bars"></i>
                 <span class="tip" style="cursor:pointer;">全部类别</span>
                 </span>
+                <span class="widget-toolbar">
+                    <a href="#" data-action="settings" onclick="addType()" title="新增类别">
+                        <i class="ace-icon fa fa-plus"></i>
+                    </a>
+                    <a href="#" data-action="reload"  onclick="removeType()"  title="删除类别">
+                        <i class="ace-icon fa fa-times"></i>
+                    </a>
+                </span>
             </div>
-            <ul class="nav nav-pills nav-stacked" id="ullist">
-            </ul>
+            <div>
+                <ul class="nav nav-pills nav-stacked" id="ullist">
+                </ul>
+            </div>
         </div>
     </div>
     <div class="col-xs-10">
-        GRID LIST
+        <div  style="padding-top: 5px;">
+            <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="AddSection()">
+                <i class="ace-icon fa fa-fire bigger-110"></i>
+                <fmt:message key="button.add" />
+            </button>
+            <button type="button" class="btn btn-sm  btn-success" title="编辑" onclick="editSection()">
+                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                <fmt:message key="button.edit" />
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" title="删除" onclick="deleteSection()">
+                <i class="ace-icon fa fa-times bigger-110"></i>
+                <fmt:message key="button.delete" />
+            </button>
+            <div class="input-group col-sm-3 " style="float: right;" >
+                <input type="text" id="query" class="form-control search-query" placeholder="输入编号或名称" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-purple btn-sm" onclick="search()">
+                    <fmt:message key="button.search"/>
+                    <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                </button>
+			</span>
+            </div>
+        </div>
+        <table id="tableList"></table>
+        <div id="pager"></div>
     </div>
 </div>
 <div style="clear: both"></div>
-<script>
-  $(function() {
-      /*
-      * 生成字典类别列表
-      * add by zcw 2016-05-19
-      * */
-      $.post('../set/dictionaryType/getList', function(data){
-          if(data){
-              var ul = $('#ullist')
-              for (i=0; i< data.length; i++) {
-                  var li = $('<li></li>');
-                  li.html('<a href="#_" title="'+ data [i].name+'">'+data[i].name+'</a>');
-                  li.bind('click',function(){
-                      ul.children('li').removeClass('active');
-                      $(this).addClass("active")
-                  })
-                  ul.append(li);
-              }
-          }
-      })
-})
-</script>
+<div id="addDialog" style="display: none;width: 500px;overflow: hidden" class="row">
+    <form id="addDictionaryForm" class="form-horizontal" action="<c:url value='../set/dictionary/saveDictionary'/>" method="post">
+        <input type="hidden" name="id" id="id" value="0"/>
+        <input type="hidden" name="type" id="type" value="0"/>
+        <div class="form-group">
+            <div class="space-4"></div>
+            <label class="col-xs-3 control-label no-padding-right" for="sign">标记 </label>
+            <div class="col-xs-8">
+                <input type="text" id="sign" name= "sign" placeholder="标记" class="col-xs-8"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label no-padding-right" for="value"> 名称 </label>
+            <div class="col-xs-8">
+                <input type="text" id="value" name="value" placeholder="名称" class="col-xs-8"/>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="addType" style="display: none;width: 500px;overflow: hidden" class="row">
+    <form id="addTypeForm" class="form-horizontal" action="<c:url value='../set/dictionaryType/saveType'/>" method="post">
+        <div class="form-group">
+            <div class="space-4"></div>
+            <label class="col-xs-3 control-label no-padding-right" for="value"> 名称 </label>
+            <div class="col-xs-8">
+                <input type="text" id="name" name="name" placeholder="名称" class="col-xs-8"/>
+            </div>
+        </div>
+    </form>
+</div>
+

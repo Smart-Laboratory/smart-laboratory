@@ -1,14 +1,12 @@
 package com.smart.model.lis;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.smart.model.Dictionary;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "l_device")
 public class Device {
-	
 	private String id;
 	private String type;
 	private String name;
@@ -34,12 +32,10 @@ public class Device {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	@Column
+
 	public String getType() {
 		return type;
 	}
-	
 	public void setType(String type) {
 		this.type = type;
 	}
