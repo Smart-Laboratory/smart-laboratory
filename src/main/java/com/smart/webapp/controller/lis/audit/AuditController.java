@@ -84,7 +84,6 @@ public class AuditController extends BaseAuditController {
 		final Map<String, Describe> idMap = new HashMap<String, Describe>();
     	final Map<String, String> indexNameMap = new HashMap<String, String>();
     	List<Rule> ruleList = new ArrayList<Rule>();
-		
 		if (!DroolsRunner.getInstance().isBaseInited()) {
     		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
     		Reader reader = analyticUtil.getReader(ruleList);

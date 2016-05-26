@@ -259,15 +259,20 @@ $(function(){
 	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		$('#printFrame').empty();
+		
 		var id = $("#hiddenDocId").val();
 		var sample = $("#hiddenSampleNo").val();
 		var last = 0;
 		if ($("#hisLastResult").val() == 1) {
 			last = 1;
 		}
+		
 		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>")
+		
+		
 		$("#auditPrint").dialog("open");
 		$("#iframe_print").height(450);
+		
 		//alert($("#chartPanel").height());
 	});
 	

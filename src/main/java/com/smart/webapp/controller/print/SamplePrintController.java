@@ -1,6 +1,6 @@
 package com.smart.webapp.controller.print;
 
-import java.io.File;	
+import java.io.File;		
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,6 +43,7 @@ public class SamplePrintController extends BaseAuditController {
 		request.setAttribute("sampleNo", request.getParameter("sampleNo"));
 		request.setAttribute("showLast", request.getParameter("last"));
 		Sample s = sampleManager.getBySampleNo(request.getParameter("sampleNo"));
+		//PDFConverterUtil.getInstance().processFile("c://", s.getSampleNo(), "");
 		if("1300801".equals(s.getSectionId())){
 			return new ModelAndView("print/chromosome");
 		}else{

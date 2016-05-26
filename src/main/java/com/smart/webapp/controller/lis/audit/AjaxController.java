@@ -1,6 +1,8 @@
 package com.smart.webapp.controller.lis.audit;
 
+import java.io.ByteArrayInputStream;	
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -325,7 +327,6 @@ public class AjaxController extends BaseAuditController {
         String imgUrl = "fxglabfxgimagesfxguploadfxg" + sampleno + "fxg";
         //String imgUrl = "/images/upload/" + sampleno + "/";
 		File dir = new File(uploadFileUrl);
-		System.out.println(uploadFileUrl);
 		if (dir.exists()) {
 			System.out.println("dir  exist!");
 			File[] files = dir.listFiles();
@@ -350,7 +351,6 @@ public class AjaxController extends BaseAuditController {
 	@RequestMapping(value = "/writeBack*", method = RequestMethod.GET)
 	@ResponseBody
 	public void getNeedWriteBack(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		List<NeedWriteCount> list = sampleManager.getAllWriteBack(Constants.DF3.format(new Date()));
 		JSONArray array = new JSONArray();
 		for (NeedWriteCount nwc : list) {
@@ -362,5 +362,29 @@ public class AjaxController extends BaseAuditController {
 		}
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
+	}
+	/**
+	 * 打印报告单时，保存为PDF文件
+	 * 张晋南 2016-05-23
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/saveHtml*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean getSaveHtml(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String sampleNo = request.getParameter("sampleNo");
+		String lastNo = request.getParameter("lastNo");
+		String docIdNo = request.getParameter("docIdNo");
+		String baseurl = "http://localhost:8080/print/sample?docId="+docIdNo+"&sampleNo="+sampleNo+"&last="+lastNo;
+		String filename = new StringBuffer().append("c:\\").append(sampleNo).append(".pdf").toString();
+//		PDFConverterUtil.getInstance().processFile("c:\\", filename, baseurl);
+//		String html = PDFConversionUtil.getInstance().readFile(baseurl, "UTF-8");
+//		System.out.println(html);
+//		PDFConversionUtil.getInstance().doConversion(html, filename);
+		System.out.println();
+		System.out.println(docIdNo+"|"+sampleNo+"|"+lastNo+"|"+baseurl);
+		return true;
 	}
 }

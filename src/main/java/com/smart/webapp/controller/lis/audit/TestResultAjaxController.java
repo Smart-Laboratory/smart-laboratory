@@ -131,6 +131,9 @@ public class TestResultAjaxController extends BaseAuditController{
 	/**
 	 * 样本添加检验项目
 	 * 
+	 * 
+	 * 张晋南 2016-5-25
+	 * 新增tcValues参数，修改user表的last字段
 	 * @param request（test-testid:result）
 	 * @param response
 	 * @return
@@ -144,6 +147,9 @@ public class TestResultAjaxController extends BaseAuditController{
 			String testResults = request.getParameter("test");
 			String sample = request.getParameter("sample");
 			String[] testResult = testResults.split(";");
+			
+			String tcValues = request.getParameter("tcValues");
+			String[] tcValue = tcValues.split(",");
 
 			List<Describe> desList = rmiService.getDescribe();
             List<Reference> refList = rmiService.getReference();

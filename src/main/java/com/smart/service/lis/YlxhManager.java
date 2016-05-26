@@ -14,5 +14,7 @@ public interface YlxhManager extends GenericManager<Ylxh, Long> {
 	List<Ylxh> getSearchData(String text);
 
 	String getRelativeTest(String ylxh);
+	
+	List<Ylxh> getLabofYlmcBylike(String lab ,String ylmc);
 
 }

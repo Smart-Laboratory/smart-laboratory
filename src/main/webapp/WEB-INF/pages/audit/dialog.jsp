@@ -15,10 +15,10 @@
 </div>
 
 <div id="auditPrint" align="left" title='<fmt:message key="audit.preview" />'>
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="savePDF();javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
 	<div id="printFrame">
 	</div>
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="savePDF();javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
 </div>
 
 <div id="samplePrint" align="left" title='<fmt:message key="audit.preview" />'>
@@ -40,8 +40,9 @@
 	
 	<div class="form-inline">
 		<input id="lastprofile" type="hidden" value="<c:out value='${lastprofle}'/>"  />
-		<select id="profileList" class="form-control" style="width:280px;"></select>
-		<button id="addProfileBtn" class="btn btn-info"><fmt:message key="button.add.profile" /></button>
+		<!-- <select id="profileList" class="form-control" style="width:280px;"></select> -->
+		<input  id="packages" class="form-control" style="width:330px;" placeholder="<fmt:message key='button.add.profile'/>">
+		<!-- <button id="addProfileBtn" class="btn btn-info"><fmt:message key="button.add.profile" /></button> -->
 		<button id="deleteAllTest" class="btn btn-danger"><fmt:message key="button.empty" /></button>
 	</div>
 	<fieldset>

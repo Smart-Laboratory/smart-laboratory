@@ -25,6 +25,11 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	public List<Ylxh> getTest(String lab){
 		return getSession().createQuery("from Ylxh where ksdm='"+lab+"' order by profiletest").list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Ylxh> getLabofYlmcBylike(String lab,String ylmc){
+		return getSession().createQuery("from Ylxh where ksdm='"+lab+"' and ylmc like '%"+ylmc+"%'order by profiletest").list();
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Ylxh> getSearchData(String text){

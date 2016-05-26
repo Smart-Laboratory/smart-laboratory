@@ -21,4 +21,7 @@ public interface YlxhDao extends GenericDao<Ylxh, Long> {
 
 	@Transactional
 	String getRelativeTest(String ylxh);
+	
+	@Transactional
+	List<Ylxh> getLabofYlmcBylike(String lab ,String ylmc);
 }
