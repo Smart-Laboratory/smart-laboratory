@@ -1157,7 +1157,7 @@
          -->
         <jdbc.url>jdbc:mariadb://127.0.0.1:3306/lab?rewriteBatchedStatements=true&amp;amp;createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
         <jdbc.username>root</jdbc.username>
-        <jdbc.password>zcw520</jdbc.password>
+        <jdbc.password></jdbc.password>
         <jdbc.validationQuery>SELECT 1 + 1</jdbc.validationQuery>
 
         <!-- Properties calculated by AppFuse when running full-source plugin -->
