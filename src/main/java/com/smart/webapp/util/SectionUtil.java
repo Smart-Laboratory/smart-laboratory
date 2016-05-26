@@ -23,7 +23,7 @@ public class SectionUtil {
 		}
 		return instance;
 	}
-	
+
 	public String getValue(String key) {
 		if (map.containsKey(key)) {
 			return map.get(key);

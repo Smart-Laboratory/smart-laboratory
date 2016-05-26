@@ -13,14 +13,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "lab_dictionarytype")
 public class DictionaryType {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,7 +39,9 @@ public class DictionaryType {
         this.orderNo = orderNo;
     }
 
-    private int id;
+
+
+    private Long id;
     private String typeName;        //类型名称
     private String orderNo;         //排序号
 }
