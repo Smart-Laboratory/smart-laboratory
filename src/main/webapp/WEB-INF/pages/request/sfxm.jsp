@@ -22,6 +22,7 @@
 </style>
 
 </head>
+<div class="row">
 <div class="col-sm-12" style="background: #ffffff" id="mainTable">
 	<div  style="padding-top: 10px;">
 		<button type="button" class="btn btn-sm btn-success " title="添加科室" onclick="AddSection('添加科室')">
@@ -44,4 +45,5 @@
 	</div>
 	<table id="sfxmList" style="width: 100%;"></table>
 	<div id="pager" style="width: 100%"></div>
+</div>
 </div>

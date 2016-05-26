@@ -1,3 +1,12 @@
+function format(cellvalue) {
+	alert(1)
+	if(cellvalue == '1') {
+		return "是";
+	} else {
+		return "否";
+	}
+}
+
 $(function(){
 
 	//var jqGrid = $("#sectionList");
@@ -17,9 +26,9 @@ $(function(){
 			{ name: 'price', index: 'price', width: 100,editable : true },
 			{ name: 'section', index: 'section', width: 100,editable : true },
 			{ name: 'unit', index: 'unit', width: 100,editable : true },
-			{ name: 'mzpb', index: 'zmpb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"} },
-			{ name: 'zypb', index: 'zypb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"} },
-			{ name: 'tjpb', index: 'tjpb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"} }
+			{ name: 'mzpb', index: 'zmpb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"},formatter:format },
+			{ name: 'zypb', index: 'zypb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"},formatter:format },
+			{ name: 'tjpb', index: 'tjpb', width: 100,editable : true,edittype : "select",editoptions : {value : "1:是;0:否"},formatter:format }
 		],
 		onSelectRow: function(id) {
 			if(id && id!==lastsel){
@@ -37,7 +46,7 @@ $(function(){
 				enableTooltips(table);
 			}, 0);
 		},
-		editurl: "../audit/edit",
+		editurl: "../request/sfxm/edit",
 		viewrecords: true,
 		autowidth: true,
 		altRows:true,
@@ -46,9 +55,7 @@ $(function(){
 		rowList:[10,20,30],
 		rownumbers: true, // 显示行号
 		rownumWidth: 35, // the width of the row numbers columns
-		pager: "#pager",//分页控件的id
-		subGrid: false//是否启用子表格
-		
+		pager: "#pager"
 	});
 	jQuery("#sfxmList").jqGrid('navGrid',"#pager",{edit:false,add:false,del:false});
 	//$(window).triggerHandler('resize.jqGrid');
