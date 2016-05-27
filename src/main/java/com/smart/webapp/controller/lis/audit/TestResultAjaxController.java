@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
@@ -157,7 +156,6 @@ public class TestResultAjaxController extends BaseAuditController{
             
 
 			Sample info = sampleManager.getBySampleNo(sample);
-			Patient patient = patientManager.getByBlh(info.getPatientblh());
 
 			for (String test : testResult) {
 				String[] idValue = test.split(":");
@@ -180,7 +178,7 @@ public class TestResultAjaxController extends BaseAuditController{
 						nt.setSampleType(""+ des.getSAMPLETYPE());
 						nt.setUnit(des.getUNIT());
 					}
-					fillUtil.fillResult(nt, info, patient.getAge(), patient.getSexValue());
+					fillUtil.fillResult(nt, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();
 //					testModify.setModifyTime(new Date());

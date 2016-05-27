@@ -24,7 +24,6 @@ import com.smart.Constants;
 import com.smart.model.Dictionary;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Item;
@@ -66,22 +65,17 @@ public class GetPatientController extends BaseAuditController {
 			initDiagMap();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
-		Patient patient = patientManager.getByBlh(info.getPatientblh());
 		Process process = processManager.getBySampleId(info.getId());
 		CriticalRecord cr = criticalRecordManager.getBySampleId(info.getId());
 		List<TestResult> list = testResultManager.getTestBySampleNo(info.getSampleNo());
-		
-		if(patient == null){
-			return null;
-		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		
 		if (info != null) {
 			map.put("id", info.getId());
-			map.put("name", patient.getPatientName());
-			map.put("age", String.valueOf(patient.getAge()));
+			map.put("name", info.getPatientname());
+			map.put("age", info.getAge());
 			if(info.getInspectionName() != null) {
 				map.put("examinaim", info.getInspectionName());
 			} else {
@@ -124,7 +118,7 @@ public class GetPatientController extends BaseAuditController {
 			}
 			map.put("description", info.getDescription());
 			map.put("mark", info.getAuditMark());
-			map.put("sex", patient.getSexValue());
+			map.put("sex", info.getSexValue());
 			map.put("hasImages", info.getHasimages() == 0 ? false : true);
 			map.put("blh", info.getPatientblh());
 			

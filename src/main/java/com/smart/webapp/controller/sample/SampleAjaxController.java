@@ -17,13 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.smart.Constants;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.request.SFXM;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.request.SFXMManager;
@@ -49,8 +47,6 @@ public class SampleAjaxController {
 	@Autowired
 	private SampleManager sampleManager = null;
 	@Autowired
-	private PatientManager patientManager = null;
-	@Autowired
 	private ProcessManager processManager = null;
 	
 	@RequestMapping(value = "/get*", method = RequestMethod.GET)
@@ -63,17 +59,16 @@ public class SampleAjaxController {
 		YLSFXMUtil ylsfxmUtil = YLSFXMUtil.getInstance(sfxmManager);
 		JSONObject o = new JSONObject();
 		Sample sample = sampleManager.get(Long.parseLong(code));
-		Patient patient = patientManager.getByBlh(sample.getPatientblh());
 		Process process = processManager.getBySampleId(Long.parseLong(code));
 		o.put("doctadviseno", sample.getId());
 		o.put("sampleno", sample.getSampleNo());
 		o.put("stayhospitalmode", sample.getStayHospitalMode());
-		o.put("patientid", patient.getBlh());
+		o.put("patientid", sample.getPatientblh());
 		o.put("section", sectionutil.getValue(sample.getHosSection()));
 		o.put("sectionCode", sample.getHosSection());
-		o.put("patientname", patient.getPatientName());
-		o.put("sex", patient.getSex());
-		o.put("age", patient.getAge());
+		o.put("patientname", sample.getPatientname());
+		o.put("sex", sample.getSex());
+		o.put("age", sample.getAge());
 		o.put("diagnostic", sample.getDiagnostic());
 		o.put("requester", process.getRequester());
 		o.put("feestatus", sample.getFeestatus());
@@ -138,7 +133,6 @@ public class SampleAjaxController {
 	@RequestMapping(value = "/editSample*", method = RequestMethod.POST)
 	public String editSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Sample sample = new Sample();
-		Patient patient = new Patient();
 		Process process = new Process();
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String operate = request.getParameter("operate");
@@ -159,13 +153,13 @@ public class SampleAjaxController {
 		String examinaim = request.getParameter("exam");
 		String ylxh = request.getParameter("ylxh");
 		JSONObject o = new JSONObject();
-		if(patientid == null) {
+		/*if(patientid == null) {
 			patient.setPatientName(patientname);
 			patient.setSex(sex);
 			//patientManager.save(patient);
 		} else {
 			patient = patientManager.getByBlh(patientid);
-		}
+		}*/
 		if(operate.equals("add")) {
 			sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
 			sample.setHosSection(sectionCode);
@@ -200,7 +194,7 @@ public class SampleAjaxController {
 		o.put("sampleno", sampleno);
 		o.put("pid", patientid);
 		o.put("pname", patientname);
-		o.put("sex", patient.getSexValue());
+		o.put("sex", sample.getSexValue());
 		o.put("age", age);
 		o.put("diag", diagnostic);
 		o.put("exam", examinaim);

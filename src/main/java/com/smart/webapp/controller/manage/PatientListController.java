@@ -29,7 +29,6 @@ import com.smart.model.rule.Item;
 import com.smart.model.Dictionary;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.model.rule.Result;
@@ -75,14 +74,13 @@ public class PatientListController extends BaseAuditController {
 		}
 
 		Sample info = sampleManager.get(Long.parseLong(id));
-		Patient patient = patientManager.getByBlh(info.getPatientblh());
 		Section section = sectionManager.getByCode(info.getSectionId());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (info != null) {
 			map.put("id", info.getPatientId());
-			map.put("name", patient.getPatientName());
-			map.put("age", String.valueOf(patient.getAge()));
+			map.put("name", info.getPatientname());
+			map.put("age", info.getAge());
 			/*String ex = info.getInspectionName();
 			if (ex.length() > 16) {
 				ex = ex.substring(0, 16) + "...";
@@ -90,7 +88,7 @@ public class PatientListController extends BaseAuditController {
 			map.put("examinaim", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("section", section.getName());
-			map.put("sex", patient.getSexValue());
+			map.put("sex", info.getSexValue());
 			map.put("blh", info.getPatientblh());
 			map.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
 		}

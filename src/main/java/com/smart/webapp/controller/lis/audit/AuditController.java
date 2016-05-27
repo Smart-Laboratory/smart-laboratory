@@ -41,7 +41,6 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.PassTrace;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Task;
 import com.smart.model.lis.TestResult;
@@ -114,7 +113,6 @@ public class AuditController extends BaseAuditController {
 		manager.addOperatorName(currentUser);
 		manager.addTask(task);
 		final List<Sample> samples = new ArrayList<Sample>();
-		final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
 		final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
 		User operator = userManager.getUserByUsername(currentUser);
 		final Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
@@ -228,17 +226,11 @@ public class AuditController extends BaseAuditController {
     		}
     		task.setSampleCount(samples.size());
     		
-    		String hisBlh = "";
 			String hisSampleNo = "";
 			for(Sample s : samples) {
-				hisBlh += "'" + s.getPatientblh() + "',";
 				hisSampleNo += "'" + s.getSampleNo() + "',";
 			}
-			List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-			for(Patient p : patientList) {
-				hisPatientMap.put(p.getBlh(), p);
-			}
 			for(TestResult tr : testList) {
 				if(StringUtils.isNumeric(tr.getTestId())) {
 					if(hisTestMap.containsKey(tr.getSampleNo())) {
@@ -253,9 +245,8 @@ public class AuditController extends BaseAuditController {
     		
     		for (Sample info : samples) {
     			try {
-    				Patient patient = hisPatientMap.get(info.getPatientblh());
                 	List<TestResult> now = hisTestMap.get(info.getSampleNo());
-                	formulaUtil.formula(info, "admin", now, patient.getAge(), Integer.parseInt(patient.getSex()));
+                	formulaUtil.formula(info, "admin", now, Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
     				Set<String> testIdSet = new HashSet<String>();
     				for (TestResult t : now) {
     					testIdSet.add(t.getTestId());
@@ -334,7 +325,6 @@ public class AuditController extends BaseAuditController {
     			int index = 0;
         		for (Sample info : samples) {
         			try {
-        				Patient patient = hisPatientMap.get(info.getPatientblh());
 	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
 	                	CriticalRecord cr = new CriticalRecord();
 	        			info.setMarkTests("");
@@ -350,7 +340,7 @@ public class AuditController extends BaseAuditController {
 						diffCheck.doCheck(info, now, diffData);
 						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
 						ratioCheck.doCheck(info, now);
-						R r = droolsRunner.getResult(now, info.getPatientId(), patient.getAge(), Integer.parseInt(patient.getSex()));
+						R r = droolsRunner.getResult(now, info.getPatientId(), Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
 						if (r!= null && !r.getRuleIds().isEmpty()) {
 							reTestCheck.doCheck(info, r, now);
 							alarm2Check.doCheck(info, r, diffTests, now);
@@ -542,7 +532,6 @@ public class AuditController extends BaseAuditController {
     		return;
     	
     	Sample sample = sampleManager.getBySampleNo(sampleno);
-    	Patient patient = patientManager.getByBlh(sample.getPatientblh());
     	List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleno);
     	String information="";
     	for(TestResult t : testResults){
@@ -565,8 +554,8 @@ public class AuditController extends BaseAuditController {
     			p.setSampleNo(sampleno);
     			
     			
-    			p.setAge(patient.getAge());
-    			p.setSex(patient.getSex());
+    			p.setAge(Integer.parseInt(sample.getAge()));
+    			p.setSex(sample.getSex());
     			
     			
     			p.setInformation(information);

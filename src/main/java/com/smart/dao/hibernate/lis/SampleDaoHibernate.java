@@ -213,7 +213,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //		String hql = "select p from Sample p,Process s where s.sample=p and p.patient.patientName='" + pName + "' and s.operation='接收' and s.time between to_date('" + from + " 00:00:00','"
 //                    + DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + DATEFORMAT
 //                    + "') order by s.time desc";
-		String hql = "select s from Sample s,Patient p where s.patientblh=p.blh and p.patientName='" + pName + "' ";
+		String hql = "select s from Sample s where s.patientname='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
 			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + from + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + to + "') order by s.sampleNo desc";
 		}
@@ -222,7 +222,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text){
-		String hql = "select s from Sample s,Patient p where s.patientblh=p.blh and s."+searchType+"='" + text + "' ";
+		String hql = "select s from Sample s where s."+searchType+"='" + text + "' ";
 		if(!StringUtils.isEmpty(fromDate) && fromDate!=null && toDate!=null &&!StringUtils.isEmpty(toDate)){
 			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + fromDate + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + toDate + "') order by s.sampleNo desc";
 		}

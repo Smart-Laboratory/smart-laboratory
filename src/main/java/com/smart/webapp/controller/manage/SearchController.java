@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
-import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -164,33 +161,23 @@ public class SearchController {
 			return null;
 		}
 		
-		String hisBlh = "";
-		for(Sample sample : samples) {
-			hisBlh += "'" + sample.getPatientblh() + "',";
-		}
 		Map<String, String> sMap = SampleUtil.getInstance().getSampleList(dictionaryManager);
-		List<Patient> patientList = patientManager.getHisPatient(hisBlh.substring(0, hisBlh.length()-1));
-		final Map<String, Patient> hisPatientMap = new HashMap<String, Patient>();
-		for(Patient p : patientList) {
-			hisPatientMap.put(p.getBlh(), p);
-		}
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		
 		
 		for(Sample info :samples) {
-			Patient patient = hisPatientMap.get(info.getPatientblh());
 			String section = sectionutil.getValue(info.getSectionId());
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
-			map.put("sample", "<a href='../manage/patientList?blh="+patient.getBlh()+"'>"+info.getSampleNo()+"</a>");
+			map.put("sample", "<a href='../manage/patientList?blh="+info.getPatientblh()+"'>"+info.getSampleNo()+"</a>");
 			map.put("status", info.getAuditStatusValue());
 			map.put("inspection", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());
-			map.put("name",patient.getPatientName());
-			map.put("blh",patient.getBlh());
-			map.put("sex",patient.getSexValue());
-			map.put("birthday", yyyyMM.format(patient.getBirthday()));
+			map.put("name",info.getPatientname());
+			map.put("blh",info.getPatientblh());
+			map.put("sex",info.getSexValue());
+			map.put("birthday", yyyyMM.format(info.getBirthday()));
 			map.put("stayHospitalMode",info.getStayHospitalModelValue());
 			map.put("section",section);
 			map.put("patientid",info.getPatientId());
@@ -218,10 +205,6 @@ public class SearchController {
 	private UserManager userManager;
 	@Autowired
 	private SampleManager sampleManager;
-	@Autowired
-	private PatientManager patientManager;
-	@Autowired
-	private SectionManager sectionManager;
 	@Autowired
 	private DictionaryManager dictionaryManager;
 	@Autowired

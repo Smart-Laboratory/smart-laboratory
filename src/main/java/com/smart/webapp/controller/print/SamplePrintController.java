@@ -18,11 +18,9 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
-import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
@@ -61,7 +59,6 @@ public class SamplePrintController extends BaseAuditController {
 		JSONObject info = new JSONObject();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		Sample s = sampleManager.getBySampleNo(sampleno);
-		Patient patient = patientManager.getByBlh(s.getPatientblh());
 		Process process = processManager.getBySampleId(s.getId());
 		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
 		List<SyncResult> wswlist = null;
@@ -80,10 +77,10 @@ public class SamplePrintController extends BaseAuditController {
 				type = 5;
 			}
 		}
-		info.put("blh", patient.getBlh());
-		info.put("pName", patient.getPatientName());
-		info.put("sex", patient.getSexValue());
-		info.put("age", patient.getAge());
+		info.put("blh", s.getPatientblh());
+		info.put("pName", s.getPatientname());
+		info.put("sex", s.getSexValue());
+		info.put("age", s.getAge());
 		info.put("pType", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(s.getSampleType())));
 		info.put("diagnostic", s.getDiagnostic());
 		if(s.getStayHospitalMode() == 2) {
