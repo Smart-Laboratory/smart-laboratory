@@ -96,14 +96,24 @@ public class YlsfController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
-
+	/**
+	 * 张晋南2016-5-25
+	 * 修改
+	 * 新增getLabofYlmcBylike方法
+	 * lab 科室代码
+	 * name 输入需要查询的套餐
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/ajax/ylsfList*", method = RequestMethod.GET)
 	@ResponseBody
 	public String getYlshList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String lab = request.getParameter("lab");
 		
-		List<Ylxh> list = ylxhManager.getTest(lab);
+		String lab = request.getParameter("lab");
+		String ylmc = request.getParameter("ylmc");
+		List<Ylxh> list = ylxhManager.getLabofYlmcBylike(lab,ylmc);
 		for(Ylxh y : list){
 			if(y.getProfiletest()==null)
 				list.remove(y);
@@ -111,9 +121,9 @@ public class YlsfController extends BaseAuditController {
 		JSONArray array = new JSONArray();
 		for (Ylxh y : list) {
 			JSONObject obj = new JSONObject();
-			obj.put("ksdm", y.getKsdm());
+			obj.put("ylxh", y.getYlxh());
 			obj.put("ylmc", y.getYlmc());
-			obj.put("test", y.getProfiletest());
+			obj.put("profiletest", y.getProfiletest());
 			array.put(obj);
 		}
 		response.setContentType("text/html;charset=UTF-8");
@@ -315,36 +325,47 @@ public class YlsfController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
-	
+	/**
+	 * 张晋南 2016-05-25
+	 * test 用户上一次选择的项目，多次添加时默认上次的项目
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/ajax/profileTest*", method = RequestMethod.POST)
 	@ResponseBody
 	public void getProfileTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String sample = request.getParameter("sample");
 		String test = request.getParameter("test");
-		User operator = userManager.getUserByUsername(request.getRemoteUser());
-		operator.setLastProfile(test);
-		userManager.saveUser(operator);
-		if (test.endsWith(","))
-			test = test.substring(0, test.length() - 1);
-		if (idMap.size() == 0)
-			initMap();
-		String[] testId = test.split(",");
-		Set<String> testSet = new HashSet<String>();
-		List<TestResult> testResult = testResultManager.getTestBySampleNo(sample);
-		for (TestResult tr : testResult)
-			testSet.add(tr.getTestId());
-		JSONArray array = new JSONArray();
-		for (String t : testId) {
-			if (testSet.contains(t))
-				continue;
-			String name = idMap.get(t).getName();
-			JSONObject obj = new JSONObject();
-			obj.put("test", t);
-			obj.put("name", name);
-			array.put(obj);
+		if(!"".equals(test)){
+			User operator = userManager.getUserByUsername(request.getRemoteUser());
+			operator.setLastProfile(test);
+			userManager.saveUser(operator);
+			if (test.endsWith(","))
+				test = test.substring(0, test.length() - 1);
+			if (idMap.size() == 0)
+				initMap();
+			String[] testId = test.split(",");
+			Set<String> testSet = new HashSet<String>();
+			List<TestResult> testResult = testResultManager.getTestBySampleNo(sample);
+			for (TestResult tr : testResult)
+				testSet.add(tr.getTestId());
+			JSONArray array = new JSONArray();
+			for (String t : testId) {
+				if (testSet.contains(t))
+					continue;
+				String name = idMap.get(t).getName();
+				JSONObject obj = new JSONObject();
+				obj.put("test", t);
+				obj.put("name", name);
+				array.put(obj);
+			}
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().print(array.toString());
+		}else{
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().print("".toString());
 		}
-		response.setContentType("text/html;charset=UTF-8");
-		response.getWriter().print(array.toString());
 	}
 }

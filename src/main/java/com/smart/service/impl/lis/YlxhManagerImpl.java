@@ -29,6 +29,10 @@ public class YlxhManagerImpl extends GenericManagerImpl<Ylxh, Long> implements Y
 		return ylxhDao.getTest(lab);
 	}
 	
+	public List<Ylxh> getLabofYlmcBylike(String lab ,String ylmc){
+		return ylxhDao.getLabofYlmcBylike(lab,ylmc);
+	}
+	
 	public List<Ylxh> getSearchData(String text){
 		return ylxhDao.getSearchData(text);
 	}

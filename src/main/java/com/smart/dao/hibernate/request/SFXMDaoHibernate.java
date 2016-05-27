@@ -39,4 +39,13 @@ public class SFXMDaoHibernate extends GenericDaoHibernate<SFXM, Long> implements
 		return  q.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<SFXM> searchSFXM(String query, Long hospitalid) {
+		List<SFXM> list = getSession().createQuery("from SFXM where hospitalid=" + hospitalid + " and (name like '" + query + "%' or pinyin like '" + query + "%' or wubi like '" + query + "%' or english like '" + query + "%')").list();
+		if(list.size() > 5) {
+			list = list.subList(0, 5);
+		}
+		return list;
+	}
+
 }

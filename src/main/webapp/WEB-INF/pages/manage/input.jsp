@@ -6,6 +6,7 @@
     <script type="text/javascript" src="<c:url value='/scripts/manage/input.js'/> "></script>
 </head>
 <body>
+<div class="row">
 <div class="col-sm-6">
 	<div class="widget-box widget-color-green">
 		<div class="widget-header">
@@ -38,7 +39,7 @@
 					</div>
 					<label class="col-sm-2 control-label no-padding-right" for="doctadviseno">医嘱号</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12" id="doctadviseno"></input>
+						<input type="text" class="col-sm-12" id="doctadviseno" onkeypress="getData(this,event)"></input>
 					</div>
 					<div class="col-sm-2">&nbsp;
 					</div>
@@ -87,9 +88,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label no-padding-right" for="hossection">科&nbsp;室</label>
+					<label class="col-sm-2 control-label no-padding-right" for="section">科&nbsp;室</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12" id="hossection"></input>
+						<input type="text" class="col-sm-12" id="section"></input>
+						<input type="text" id="sectionCode" style="display:none;"></input>
 					</div>
 					<label class="col-sm-2 control-label no-padding-right" for="sampletype">样本类型</label>
 					<div class="col-sm-3">
@@ -115,9 +117,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-2 control-label no-padding-right" for="excutetime">采样时间</label>
+					<label class="col-sm-2 control-label no-padding-right" for="executetime">采样时间</label>
 					<div class="col-sm-3">
-						<input type="text" class="col-sm-12 input-mask-date" id="excutetime"></input>
+						<input type="text" class="col-sm-12 input-mask-date" id="executetime"></input>
 					</div>
 					<label class="col-sm-2 control-label no-padding-right" for="receivetime">接收时间</label>
 					<div class="col-sm-3">
@@ -128,27 +130,38 @@
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right" for="examinaim">检验目的</label>
-					<div class="col-sm-8">
-						<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="输入检验目的的中文、拼音" />
+					<div class="col-sm-8" id="examTag">
+						<input type="text" name="examinaim" id="examinaim" placeholder="输入检验目的的中文、拼音" />
 					</div>
+					<input type="text" id="ylxh" style="display:none;"></input>
 					<div class="col-sm-2">&nbsp;
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<div class="col-sm-3">&nbsp;
 						</div>
-						<button class="btn btn-info col-sm-6" type="button">
-							<i class="ace-icon fa fa-check bigger-110"></i>
-							保存
+						<button class="btn btn-info col-sm-6" type="button" onclick="sample('add')">
+							<i class="ace-icon fa fa-folder bigger-110"></i>
+							新增
 						</button>
 						<div class="col-sm-3">&nbsp;
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<div class="col-sm-3">&nbsp;
 						</div>
-						<button class="btn col-sm-6" type="reset">
+						<button class="btn btn-success col-sm-6" type="button" onclick="sample('edit')">
+							<i class="ace-icon fa fa-floppy-o bigger-110"></i>
+							编辑
+						</button>
+						<div class="col-sm-3">&nbsp;
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="col-sm-3">&nbsp;
+						</div>
+						<button class="btn col-sm-6" type="reset" id="cancel">
 							<i class="ace-icon fa fa-undo bigger-110"></i>
 							取消
 						</button>
@@ -174,16 +187,30 @@
 				</a>
 			</div>
 		</div>
-		<div class="widget-body">
+		<div class="widget-body" style="overflow:auto;">
 			<div class="widget-main no-padding">
-				<table class="table table-striped table-bordered table-hover">
+				<table class="table table-striped table-bordered table-hover" style="width:1000px;">
 					<thead class="thin-border-bottom">
+						<tr>
+							<th></th>
+							<th>医嘱号</th>
+							<th>样本号</th>
+							<th>就诊卡号</th>
+							<th>姓名</th>
+							<th>性别</th>
+							<th>年龄</th>
+							<th>诊断</th>
+							<th>检验目的</th>
+							<th>接收者</th>
+							<th>接收时间</th>
+						</tr>
 					</thead>
-					<tbody>
+					<tbody id="tableBody">
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 </body>

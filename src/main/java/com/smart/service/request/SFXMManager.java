@@ -11,4 +11,6 @@ public interface SFXMManager extends GenericManager<SFXM, Long> {
 
 	List<SFXM> getPageList(String search, String hospitalId, int start, int end);
 
+	List<SFXM> searchSFXM(String query, Long hospitalid);
+
 }

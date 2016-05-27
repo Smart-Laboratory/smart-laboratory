@@ -59,8 +59,8 @@ $(function(){
 	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
 	    					
 	    					$("#needEdit").val(false);
-	    					$("#testAdd").css('display','none');
-	    	    			$("#testDelete").css('display','none');
+	    					$("#testAdd").css('display','inline');
+	    	    			$("#testDelete").css('display','inline');
 	    	    			$("#auditUnpassBtn").css('display','inline');
 	    	    			$("#auditPassBtn").css('display','none');
 	    	    			$("#collectBtn").css('display','inline');
@@ -274,6 +274,7 @@ $(function(){
 	    width: 450,
 	    height: 400,
 	    buttons:{
+	    	//张晋南1016-5-25  添加按钮获取
 	    	"添加":function() {
 	    		var result = false;
 	    		$("#addTestList .testValue").each(function(index,self){
@@ -284,7 +285,7 @@ $(function(){
 	    		if (!result) {
 	    			//alert("<fmt:message key='alert.input.testresult'/>");
 	    		} else {
-	    			var postStr = "";
+	    			var postStr = ""; var tcValue = "";
 	    			var sample = $("#hiddenSampleNo").val();
 	    			$("#addTestList div").each(function(index,self){
     		    		var id = $(self).find(".testID").val();
@@ -292,10 +293,14 @@ $(function(){
     		    		if (value != null && value != "") {
 	    		    		if (postStr != "") postStr+=";";
 	    		    		postStr += id + ":" + value;
+	    		    		if(tcValue!=""){
+	    		    			tcValue+=",";
+	    		    		}
+	    		    		tcValue +=id;
     		    		}
     		    	});
 	    			if (postStr != "") {
-		    			$.post("../audit/add",{test:postStr,sample:sample},function(data){
+		    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
 		    				if (data) {
 		    					$("#addTestResultDialog").dialog("close");
 		    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
@@ -496,10 +501,8 @@ $(function(){
 			var array = jQuery.parseJSON(data);
 			for (var i=0 ; i < array.length ; i++) {
 				var html = array[i].ksdm+","+array[i].ylmc;
-				if(lastProfile == array[i].test) {
-					$("#profileList").append("<option value='"+array[i].test+"' selected>"+html+"</option>");
-				} else {
-					$("#profileList").append("<option value='"+array[i].test+"'>"+html+"</option>");
+				if(lastProfile == array[i].profiletest) {
+					//此处添加显示的套餐
 				}
 			}
 		 });
@@ -522,6 +525,68 @@ $(function(){
 //		}
 	});
 	
+	//张晋南2016-5-25
+	//套餐选项改为autocomplete
+	$("#packages").autocomplete({
+		source: function( request, response ) {
+            $.ajax({
+            	url: "../set/ylsf/ajax/ylsfList",
+                dataType: "json",
+                data: {
+                	maxRows : 12,
+                	ylmc : request.term,
+                    lab :$("#labSelect").val()
+                },
+                success: function( data ) {
+                	response( $.map( data, function( item ) {
+                        return {
+                            label:  item.ylmc,
+                            value: item.ylmc,
+                            testIds:item.profiletest
+                        }
+                    }));
+                    $("#searchProject").removeClass("ui-autocomplete-loading");
+                }
+            });
+        },
+        
+        minLength: 1,
+        delay : 500,
+        select : function(event, ui) {
+        	var result = true;
+     		$.post("../set/ylsf/ajax/profileTest",{test:ui.item.testIds,sample:$("#hiddenSampleNo").val()},function(data) {
+     			var array = jQuery.parseJSON(data);
+    			for (var i=0 ; i < array.length ; i++) {
+    				var result = true;
+    				$("#addTestList .testID").each(function(index,self){
+    		    		if ($(self).val() == array[i].test)
+    		    			result = false;
+    		    	});
+    				if(result){
+    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>")
+    				}else{
+    					alert("样本列表或者添加列表中已包含该检验项目!");
+    				}
+    			}
+    			//alert("<fmt:message key='alert.add.profile.finished' />");
+     		});
+        }
+//        	var result = true;
+//			$("#addTestList.testID").each(function(index,self){
+//				alert(ui.item.id);
+//	    		if ($(self).val() == ui.item.id)
+//	    			result = false;
+//	    	});
+//			if(result){
+//				$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2 form-control'/></div>")
+//			}else{
+//				alert("样本列表或者添加列表中已包含该检验项目!");
+//			}
+//        	
+//        }
+       
+	});
+	
 	$("#searchProject").autocomplete({
         source: function( request, response ) {
             $.ajax({
@@ -532,7 +597,6 @@ $(function(){
                     name : request.term
                 },
                 success: function( data ) {
-  					
                 	response( $.map( data, function( item ) {
                         return {
                             label: item.id + " : "  + item.name,
@@ -540,7 +604,6 @@ $(function(){
                             id : item.id
                         }
                     }));
-
                     $("#searchProject").removeClass("ui-autocomplete-loading");
                 }
             });
@@ -549,7 +612,7 @@ $(function(){
         delay : 500,
         select : function(event, ui) {
         	var result = true;
-			$("#addTestList .testID").each(function(index,self){
+			$("#addTestList.testID").each(function(index,self){
 	    		if ($(self).val() == ui.item.id)
 	    			result = false;
 	    	});
@@ -671,8 +734,9 @@ $(function(){
 	
 	$("#autoAuditNote").html("参考范围为<strong class='text-warning'>3位</strong>数字,不输入审核<strong class='text-warning'>整个段</strong>");
 
-
-	$("#addProfileBtn").click(function() {
+//点击套餐按钮,已合并，暂时取消
+	//张晋南2016-5-25
+	/*$("#addProfileBtn").click(function() {
  		var testIds = $("#profileList").val();
  		$.post("../set/ylsf/ajax/profileTest",{test:testIds,sample:$("#hiddenSampleNo").val()},function(data) {
  			var array = jQuery.parseJSON(data);
@@ -688,7 +752,7 @@ $(function(){
 			}
 			//alert("<fmt:message key='alert.add.profile.finished' />");
  		});
-	});
+	});*/
 	
 	$("#deleteAllTest").click(function(){
  		$("#addTestList").html("");
@@ -798,4 +862,19 @@ function removeInput(evt, parentId){
 	    return false;
 	   }
 	   return true;
+}
+function savePDF(){
+	var sample = $("#hiddenSampleNo").val();
+	var docId =$("#hiddenDocId").val();
+	var last = 0;
+	if ($("#hisLastResult").val() == 1) {
+		last = 1;
+	}
+	$.post("../audit/ajax/saveHtml",{sampleNo:sample,lastNo:last,docIdNo:docId},function(data) {
+		if (data == true) {
+			alert("保存成功！");
+		} else {
+			alert("保存失败！");
+		}
+	});
 }

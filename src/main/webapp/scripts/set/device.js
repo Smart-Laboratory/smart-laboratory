@@ -3,11 +3,11 @@
  *  添加字典
  *  add by zcw 2015-05-16
  * **********************************/
-function  AddSection(){
+function  Add(){
 	clearData();
 	layer.open({
 		type: 1,
-		area: ['500px','250px'],
+		area: ['520px','500px'],
 		fix: false, //不固定
 		maxmin: false,
 		shade:0.6,
@@ -15,7 +15,7 @@ function  AddSection(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("#addDictionaryForm").submit();
+			$("#addForm").submit();
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -24,15 +24,16 @@ function  AddSection(){
  *  删除字典
  *  add by zcw 2015-05-16
  * **********************************/
-function deleteSection(){
-	var id=$('#tableList').jqGrid('getGridParam','selrow');
-	if(id==null || id==0){
+function Delete(){
+
+	var id = $('#tableList').jqGrid('getGridParam','selrow');
+	if(id==null || id==''){
 		layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post('../set/dictionary/remove',{id:id},function(data) {
-			jQuery("#tableList").jqGrid('delRowData',id );
+		$.post('../set/device/deleteDevie',{id:id},function(data) {
+			jQuery("#tableList").jqGrid('delRowData',id);
 		});
 		layer.close(index);
 	});
@@ -44,10 +45,10 @@ function search(){
 	var query = $('#query').val()||'';
 	var typeid =$('#type').val()||'';
 	jQuery("#tableList").jqGrid('setGridParam',{
-		url: "../set/dictionary/getList",
+		url: "../set/device/getDeviceList",
 		datatype : 'json',
 		//发送数据
-		postData : {type:typeid,"query":query },
+		postData : {"type":typeid,"query":query },
 		page : 1
 	}).trigger('reloadGrid');//重新载入
 }
@@ -55,7 +56,7 @@ function search(){
 /**
  * 编辑字典
  */
-function editSection(){
+function Edit(){
 	var rowId = $("#tableList").jqGrid('getGridParam','selrow');
 	var rowData = $("#tableList").jqGrid('getRowData',rowId);
 	if(!rowId || rowId =='' || rowId==null){
@@ -64,11 +65,19 @@ function editSection(){
 	}
 	//设置数据
 	$('#id').val(rowData.id);
-	$('#sign').val(rowData.sign);
-	$('#value').val(rowData.value);
+	$('#type').val(rowData.type);
+	$('#name').val(rowData.name);
+	$('#lab').val(rowData.lab);
+	$('#comport').val(rowData.comport);
+	$('#baudrate').val(rowData.baudrate);
+	$('#parity').val(rowData.parity);
+	$('#databit').val(rowData.databit);
+	$('#stopbit').val(rowData.stopbit);
+	$('#handshark').val(rowData.handshark);
+	$('#datawind').val(rowData.datawind);
 	layer.open({
 		type: 1,
-		area: ['500px','250px'],
+		area: ['520px','500px'],
 		fix: false, //不固定
 		maxmin: false,
 		shade:0.6,
@@ -83,35 +92,11 @@ function editSection(){
 }
 
 $(function(){
-	var height = document.documentElement.scrollHeight;
-	$('.laftnav').height(height-110);
+	var height = document.documentElement.clientHeight;
+	initGrid();
+	if(height>150) $('#ullist').height(height-150);
 	var isfirst = true;
-	/*
-	 * 生成字典类别列表
-	 * add by zcw 2016-05-19
-	 * */
-	$.post('../set/dictionaryType/getList', function(data){
-		if(data){
-			var ul = $('#ullist')
-			for (i=0; i< data.length; i++) {
-				var li = $('<li typeid="'+data[i].id+'" ></li>');
-				li.html('<a href="#_" title="'+ data [i].name+'">'+data[i].name+'</a>');
-				li.bind('click',function(){
-					ul.children('li').removeClass('active');
-					$(this).addClass("active");
-					$('#type').val($(this).attr("typeid"));
-					if(isfirst) {
-						initGrid($(this).attr("typeid"));
-						isfirst = false;
-					} else {
-						reloadGrid($(this).attr("typeid"));
-					}
-				})
-				ul.append(li);
-			}
-			ul.children("li").eq(0).click();
-		}
-	})
+
 
 	//$('#ullist').children("li").eq(0).click();
 	//表单校验
@@ -130,9 +115,7 @@ $(function(){
 })
 
 function  clearData(){
-	$('#id').val('0');
-	$('#sign').val('');
-	$('#value').val('');
+
 }
 
 /**
@@ -154,34 +137,27 @@ function updatePagerIcons(table) {
 	})
 }
 
-/*
- 加载数据
- */
-function reloadGrid(typeid){
-	var query = $('#query').val()||'';
-	jQuery("#tableList").jqGrid('setGridParam',{
-		url: "../set/dictionary/getList",
-		type : "POST",
-		dataType : "json",
-		contentType : 'application/json;charset=UTF-8',
-		page:1,
-		//发送数据
-		postData :{type:typeid}
-	}).trigger('reloadGrid');//重新载入
-}
-
 function initGrid(typeid){
 	$("#tableList").jqGrid({
 		caption: "设置",
-		url: "../set/dictionary/getList",
-		postData:{type:typeid},
+		url: "../set/device/getDeviceList",
+		//postData:{type:typeid},
 		mtype: "GET",
 		datatype: "json",
-		colNames: ['ID', '标记', '名称'],
+		colNames: ['编号', '类型ID', '类型名称','名称','实验室','COM口','波特率','数据位','奇偶位','停止位','握手','数据窗口'],
 		colModel: [
-			{ name: 'id', index: 'id', width: 60, hidden: true },
-			{ name: 'sign', index: 'sign', width: 60},
-			{ name: 'value', index: 'value', width: 100 }
+			{ name: 'id', index: 'id', width: 60},
+			{ name: 'type', index: 'type', width: 60,hidden:true},
+			{ name: 'typename', index: 'typename', width: 60},
+			{ name: 'name', index: 'name', width: 200 },
+			{ name: 'lab', index: 'lab', width: 100},
+			{ name: 'comport', index: 'comport', width: 60},
+			{ name: 'baudrate', index: 'baudrate', width: 60},
+			{ name: 'databit', index: 'databit', width: 60},
+			{ name: 'parity', index: 'parity', width: 60 },
+			{ name: 'stopbit', index: 'stopbit', width: 60},
+			{ name: 'handshark', index: 'handshark', width: 60},
+			{ name: 'datawind', index: 'datawind', width: 60}
 		],
 		loadComplete : function() {
 			var table = this;
@@ -202,45 +178,5 @@ function initGrid(typeid){
 		rownumWidth: 35, // the width of the row numbers columns
 		pager: "#pager",//分页控件的id
 		subGrid: false//是否启用子表格
-	});
-}
-
-/**
- * 添加类别
- */
-function addType(){
-	layer.open({
-		type: 1,
-		area: ['500px','150px'],
-		fix: false, //不固定
-		maxmin: false,
-		shade:0.6,
-		title: "添加对照类别",
-		content: $("#addType"),
-		btn:["保存","取消"],
-		yes: function(index, layero){
-			$("#addTypeForm").submit();
-			//layer.close(index); //如果设定了yes回调，需进行手工关闭
-		}
-	});
-}
-//删除类别
-function removeType(){
-	var id = $('#ullist').children("li.active").attr("typeid");
-	if(id==null || id==0){
-		layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
-		return false;
-	}
-	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post("../set/dictionaryType/removeType",{id:id},function(data) {
-			//console.log(data)
-			if(data.success=="true"){
-				$('#ullist').children("li.active").remove();
-				$('#ullist').children("li").eq(0).click();
-			}else if(data.success=="false"){
-				layer.alert("包含明细数据不允许删除",{icon:1,title:"提示"});
-			}
-		});
-		layer.close(index);
 	});
 }

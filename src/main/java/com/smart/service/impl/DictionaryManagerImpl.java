@@ -19,16 +19,29 @@ public class DictionaryManagerImpl extends GenericManagerImpl<Dictionary, Long> 
 		this.dao = dictionary;
 		this.dictionaryDao = dictionary;
 	}
-
-	public List<Dictionary> getDictionaryList(Dictionary dictionary, int start, int end, String sidx, String sord) {
-		return dictionaryDao.getDictionaryList(dictionary,start,end,sidx,sord);
+	public int getDictionaryCount(String query, String type) {
+		return dictionaryDao.getDictionaryCount(query,type);
 	}
-
+	public List<Dictionary> getDictionaryList(String query,String type, int start, int end, String sidx, String sord) {
+		return dictionaryDao.getDictionaryList(query,type,start,end,sidx,sord);
+	}
 	public List<Dictionary> getPatientInfo(String name) {
 		return dictionaryDao.getPatientInfo(name);
 	}
 
+	/**
+	 * 获取标本类型
+	 * @return
+     */
 	public List<Dictionary> getSampleType() {
 		return dictionaryDao.getSampleType();
 	}
+
+	/**
+	 * 获取仪器类型
+	 * @return
+     */
+	public List<Dictionary> getDeviceType(){
+		return dictionaryDao.getDeviceType();
+	};
 }

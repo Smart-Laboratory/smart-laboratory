@@ -43,14 +43,14 @@ function getList(text, lab) {
     			$("#unaudit_reason_btn").hide();	
     		} else if(ret.status == "已通过") {
     			$("#unaudit_reason_btn").hide();
-    			$("#testAdd").css('display','none');
-    			$("#testDelete").css('display','none');
+    			$("#testAdd").css('display','inline');
+    			$("#testDelete").css('display','inline');
     			$("#auditPassBtn").css('display','none');
     			$("#needEdit").val(false);
     		} else if (ret.status == "无结果"){
     			$("#unaudit_reason_btn").hide();
-    			$("#testAdd").css('display','none');
-    			$("#testDelete").css('display','none');
+    			$("#testAdd").css('display','inline');
+    			$("#testDelete").css('display','inline');
     			$("#auditUnpassBtn").css('display','none');
     			$("#auditPassBtn").css('display','none');
     			$("#collectBtn").css('display','none');
