@@ -3,10 +3,7 @@
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
 <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
 
-<<<<<<< HEAD
 <!-- <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script> -->
-=======
->>>>>>> origin/master
 <script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
 <script type="text/javascript" src="../scripts/ace.min.js"></script>
 <script type="text/javascript" src="../scripts/ace-elements.min.js"></script>
