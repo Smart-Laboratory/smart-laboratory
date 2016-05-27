@@ -70,7 +70,7 @@ public class UserController {
     	}
     	Map<String, String> labMap = new HashMap<String, String>();
     	for(String labcode : department.split(",")) {
-    		System.out.println(sectionUtil.getValue(labcode));
+//    		System.out.println(sectionUtil.getValue(labcode));
     		labMap.put(labcode, sectionUtil.getValue(labcode));
     	}
     	obj.put("username", user.getName());

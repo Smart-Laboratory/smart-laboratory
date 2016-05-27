@@ -13,7 +13,7 @@ function preview1() {
 }
 
 $(function() {
-	
+	$(".footer").css('display','none');
 	$("#data").html($("#cxdata").val());
 	
 	$("#date").datepicker({

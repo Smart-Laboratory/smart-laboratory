@@ -259,7 +259,6 @@ public class SxgroupPbController {
 			sectionMap.put(shift.getAb(), shift.getName());
 		}
 		
-		
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
 				if(a.getSection()==null || a.getSection().isEmpty()){
