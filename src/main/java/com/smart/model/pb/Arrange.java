@@ -29,9 +29,9 @@ public class Arrange {
 	private Date operatime;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ARR")
-//	@SequenceGenerator(name = "SEQ_ARR", sequenceName = "arr_sequence", allocationSize = 1)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ARRANGE")
+	@SequenceGenerator(name = "SEQ_ARRANGE", sequenceName = "arrange_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

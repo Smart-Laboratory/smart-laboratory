@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -35,7 +36,9 @@ public class DesBag extends BaseObject implements Serializable{
 	}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DES_BAG")
+	@SequenceGenerator(name = "SEQ_DES_BAG", sequenceName = "des_bag_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -64,9 +65,9 @@ public class Index extends BaseObject implements Serializable {
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INDEX")
-	@SequenceGenerator(name = "SEQ_INDEX", sequenceName = "index_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INDEX")
+	@SequenceGenerator(name = "SEQ_INDEX", sequenceName = "index_sequence", allocationSize = 1)
     @DocumentId
 	public Long getId() {
 		return id;

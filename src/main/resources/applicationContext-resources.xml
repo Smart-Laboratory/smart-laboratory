@@ -35,20 +35,20 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
 
-    <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-        <property name="url" value="jdbc:oracle:thin:@192.168.1.7:1521:jyk" />
-        <property name="username" value="zjhis" />
-        <property name="password" value="zjhis" />
-    </bean> -->
-    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+        <property name="url" value="jdbc:oracle:thin:@192.168.150.106:1521:orcl" />
+        <property name="username" value="lab" />
+        <property name="password" value="lab" />
+    </bean>
+    <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="org.mariadb.jdbc.Driver" />
 		<property name="url" value="jdbc:mariadb://127.0.0.1:3306/lab?rewriteBatchedStatements=true&amp;amp;createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true" />
 		<property name="username" value="root" />
 		<property name="password" value="" />
-    </bean>
+    </bean> -->
     <bean id="jdbcTemplatez1" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource-z1"></property>
     </bean>

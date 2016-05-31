@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,9 +25,9 @@ public class Shift {
 	private double days;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SHIFT")
-//	@SequenceGenerator(name = "SEQ_SHIFT", sequenceName = "shift_sequence", allocationSize = 1)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SHIFT")
+	@SequenceGenerator(name = "SEQ_SHIFT", sequenceName = "shift_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

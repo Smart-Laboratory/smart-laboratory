@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.search.annotations.Indexed;
 
@@ -29,9 +30,9 @@ public class Hospital extends BaseObject{
 	private String idCard;//组织代码
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HOSPITAL")
-	@SequenceGenerator(name="SEQ_HOSPITAL", sequenceName = "hospital_seq", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HOSPITAL")
+	@SequenceGenerator(name="SEQ_HOSPITAL", sequenceName = "hospital_sequence", allocationSize = 1)
 	public Long getId(){
 		return id;
 	}

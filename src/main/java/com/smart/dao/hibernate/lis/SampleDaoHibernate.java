@@ -215,7 +215,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //                    + "') order by s.time desc";
 		String hql = "select s from Sample s where s.patientname='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
-			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + from + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + to + "') order by s.sampleNo desc";
+			hql+="and SUBSTR(s.sampleNo,1,8)>='" + from + "' and SUBSTR(s.sampleNo,1,8)<='" + to + "' order by s.sampleNo desc";
 		}
 		return getSession().createQuery(hql).list();
 	}
@@ -224,7 +224,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text){
 		String hql = "select s from Sample s where s."+searchType+"='" + text + "' ";
 		if(!StringUtils.isEmpty(fromDate) && fromDate!=null && toDate!=null &&!StringUtils.isEmpty(toDate)){
-			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + fromDate + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + toDate + "') order by s.sampleNo desc";
+			hql+="and SUBSTR(s.sampleNo,1,8)>='" + fromDate + "' and SUBSTR(s.sampleNo,1,8)<='" + toDate + "' order by s.sampleNo desc";
 		}
 		return getSession().createQuery(hql).list();
 	}

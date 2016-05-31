@@ -21,9 +21,9 @@ public class DayShift {
 	private String shift;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DSH")
-//	@SequenceGenerator(name = "SEQ_DSH", sequenceName = "dshift_sequence", allocationSize = 1)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DAY_SHIFT")
+	@SequenceGenerator(name = "SEQ_DAY_SHIFT", sequenceName = "day_shift_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

@@ -37,7 +37,8 @@ public class TestResultDaoHibernate extends GenericDaoHibernate<TestResult, Test
 		if(formula.contains("decode(2,2")) {
 			formula = formula.substring(12, formula.indexOf("),1,("));
 		}
-		String sql = "select concat(round(" + formula + ", 2),'')";
+		String sql = "select to_char(round(" + formula + ", 2),'fm99990.00') from dual";
+		//String sql = "select concat(round(" + formula + ", 2),'')";
 		return (String) getSession().createSQLQuery(sql).uniqueResult();
 	}
 	

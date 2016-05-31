@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -50,9 +51,9 @@ public class CriticalRecord extends BaseObject{
 	private int isTesterDealed;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_CRITICAL")
-	@SequenceGenerator(name="SEQ_CRITICAL",sequenceName="critical_seq",allocationSize=1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_CRITICAL")
+	@SequenceGenerator(name="SEQ_CRITICAL",sequenceName="critical_seq",allocationSize=1)
 	public Long getId(){
 		return this.id;
 	}

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -35,7 +36,9 @@ public class Evaluate extends BaseObject implements Serializable {
 	 * 主键id，自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_EVALUTEA")
+	@SequenceGenerator(name = "SEQ_EVALUTEA", sequenceName = "evaluate_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

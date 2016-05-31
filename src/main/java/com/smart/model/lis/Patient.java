@@ -38,9 +38,9 @@ public class Patient extends BaseObject {
 	private int age;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
-	@SequenceGenerator(name = "SEQ_PATIENT", sequenceName = "patient_seq", allocationSize=1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PATIENT")
+	@SequenceGenerator(name = "SEQ_PATIENT", sequenceName = "patient_sequence", allocationSize=1)
 	public Long getId(){
 		return this.id;
 	}

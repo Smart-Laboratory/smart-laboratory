@@ -1,5 +1,6 @@
 package com.smart.dao.reagent;
 
+import java.util.Date;
 import java.util.List;
 
 import com.smart.dao.GenericDao;
@@ -9,7 +10,7 @@ public interface InDao extends GenericDao<In, Long> {
 
 	void saveAll(List<In> needSaveIn);
 
-	List<In> getByInDate(String indate);
+	List<In> getByInDate(Date indate);
 
 	List<In> getByLab(String lab);
 }
