@@ -59,4 +59,8 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getByIds(String substring);
 
 	List<Sample> getSampleByCode(String string);
+	
+	boolean existSampleNo(String sampleno);
+	
+	Sample getBySfsb(String patientid, String ylxh, String sfsb);
 }

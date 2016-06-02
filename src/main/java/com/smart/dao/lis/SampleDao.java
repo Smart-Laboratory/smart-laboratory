@@ -37,4 +37,8 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<Sample> getByIds(String ids);
 
 	List<Sample> getSampleByCode(String code);
+	
+	boolean existSampleNo(String sampleno);
+	
+	Sample getBySfsb(String patientid, String ylxh, String sfsb);
 }

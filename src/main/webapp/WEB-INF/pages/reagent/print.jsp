@@ -8,3 +8,9 @@
 		<div style="font-size:9px;margin-left:10px;">REP:<c:out value="${temp.indate}"/> EXP:<c:out value="${temp.exdate}"/></div>
 	</div>
 </c:forEach>
+
+<%-- <div style="float:left;width:190px;height:135px;margin-top:5px;">
+	<div style="font-size:10px;margin-left:10px;"><fmt:message key="labDepartment.1300501"/></div>
+	<div style="font-size:10px;margin-left:10px;">IMMULITE 1</div>
+	<img src='<%=request.getContextPath() %>/barcode?&msg=1&hrsize=0mm' style="align:left;height:75px;"/>
+</div> --%>

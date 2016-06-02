@@ -187,11 +187,14 @@ $(function() {
 	labChange=function(select){
 		$.ajax({
 			  type: 'POST',
-			  url: "../audit/labChange?lab="+$(select).children().attr("title")
+			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+			  success:function(){
+				  $("#labText").html($(select).children().html());
+					
+					window.location.href="../pb/pb?section=" + $(select).children().attr("title")+"&date=" + $("#date").val();
+			  }	
 		});
-		$("#labText").html($(select).children().html());
 		
-		window.location.href="../pb/pb?section=" + $(select).children().attr("title")+"&date=" + $("#date").val();
 	}
 });
 </script>

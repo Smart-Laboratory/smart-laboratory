@@ -105,6 +105,8 @@ public class SxgroupPbController {
 			for(Map.Entry<WInfo, String> entry : sxList.entrySet()){
 				if(entry.getValue()==null || entry.getValue().isEmpty())
 					continue;
+				if(!entry.getKey().isActive())
+					continue;
 //				System.out.println(entry.getKey().getName()+entry.getValue());
 				for(String s : entry.getValue().split(";")){
 					if(StringUtils.isNumeric(s)){
@@ -149,6 +151,8 @@ public class SxgroupPbController {
 			}
 		}
 		for(WInfo wi : wiList) {
+			if(!wi.isActive())
+				continue;
 			map.put(i, wi);
 			wiNames = wiNames + "'" + wi.getName() + "',"; 
 			i++;

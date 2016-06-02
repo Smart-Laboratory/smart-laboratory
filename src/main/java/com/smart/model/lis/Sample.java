@@ -56,6 +56,7 @@ public class Sample extends BaseObject {
 	private Integer iswriteback;//写回标识
 	private Integer hasimages;//是否包含图片
 	private int cycle;
+	private int invoiceNum; //发票号
 	
 	private int auditStatus; //样本审核的状态
 	private int auditMark; //审核标记
@@ -508,6 +509,15 @@ public class Sample extends BaseObject {
 
 	public void setCharttest(String charttest) {
 		this.charttest = charttest;
+	}
+	
+	@Column(name="invoicenum")
+	public int getInvoiceNum() {
+		return invoiceNum;
+	}
+
+	public void setInvoiceNum(int invoiceNum) {
+		this.invoiceNum = invoiceNum;
 	}
 
 	@Transient

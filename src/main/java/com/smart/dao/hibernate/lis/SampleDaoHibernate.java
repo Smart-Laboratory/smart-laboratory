@@ -427,4 +427,21 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getSampleByCode(String code) {
 		return getSession().createQuery("from Sample where sampleNo like '"+ code +"%'").list();
 	}
+	
+	public boolean existSampleNo(String sampleno){
+		String sql = "select count(*) from l_sample where sampleno = '"+sampleno+"'";
+		Query q = getSession().createQuery(sql);
+		if(((Number)(q.uniqueResult())).intValue()==0)
+			return false;
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Sample getBySfsb(String patientid, String ylxh, String sfsb){
+		String sql = "from Sample where sampleno='0' and patientId='"+patientid+"' and ylxh like '%"+ylxh+"%' and invoiceNum="+sfsb;
+		List<Sample> samples =  getSession().createQuery(sql).list();
+		if(samples!=null && samples.size()>0)
+			return samples.get(0);
+		return null;
+	}
 }

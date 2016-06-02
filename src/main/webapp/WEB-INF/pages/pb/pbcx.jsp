@@ -70,12 +70,12 @@ table tr th {
 	<c:otherwise>
 		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:preview1()'><fmt:message key='audit.print'/></button>
 		<!--startprint-->
-		<div class="col-sm-12" style="overflow:auto;">
+		<div class="col-sm-12" style="">
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<p><fmt:message key="pb.annotation"/></p>
 			
 			<input id="cxdata" value="${arrString }" type="hidden"/>
-			<table id="data" class="table-hover" style="width:1500px;margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+			<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
 				
 			</table>
 		</div>
