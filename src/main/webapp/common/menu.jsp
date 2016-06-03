@@ -1,16 +1,4 @@
 <%@ include file="/common/taglibs.jsp"%>
-<<<<<<< HEAD
-=======
-<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
-<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
-<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
-<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
-
-<script type="text/javascript" src="../scripts/ace.min.js"></script>
-<script type="text/javascript" src="../scripts/ace-elements.min.js"></script>
-<script type="text/javascript" src="../scripts/bootstrap-tag.min.js"></script> 
->>>>>>> origin/master
-
 <script type="text/javascript">
 function labChange() {
 }
