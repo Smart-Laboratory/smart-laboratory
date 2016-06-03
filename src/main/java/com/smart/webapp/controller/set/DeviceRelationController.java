@@ -123,7 +123,7 @@ public class DeviceRelationController {
         jsonResult.put("instrument",instrument);
         jsonResult.put("departmentList",departmentList);
         JSONObject jDevicelist = new JSONObject();
-        Map<String,String> mDevices = new HashMap<>();
+        Map<String,String> mDevices = new HashMap<String,String>();
         for(Device a : devicelist){
             mDevices.put(a.getId(),a.getName());
         }
