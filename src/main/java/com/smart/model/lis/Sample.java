@@ -5,7 +5,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -68,8 +71,12 @@ public class Sample extends BaseObject {
 	private String sectionId;
 	private String patientblh;
 	private String charttest;
+	private String ageunit;
 	
 	@Id
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
+	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize=1)
 	public Long getId(){
 		return this.id;
 	}
@@ -383,6 +390,15 @@ public class Sample extends BaseObject {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	
+	@Column(name = "AGEUNIT")
+	public String getAgeunit() {
+		return ageunit;
+	}
+
+	public void setAgeunit(String ageunit) {
+		this.ageunit = ageunit;
 	}
 
 	@Column(name = "AGE")

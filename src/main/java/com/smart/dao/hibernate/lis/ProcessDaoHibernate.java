@@ -28,4 +28,9 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		return getSession().createQuery("from Process where sampleid in (" + sampleids + ")").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Process> getBySampleCondition(String text, String lab) {
+		return getSession().createQuery("select p from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%'").list();
+	}
+
 }

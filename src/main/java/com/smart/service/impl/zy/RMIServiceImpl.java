@@ -269,8 +269,9 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<Ksdm> searchSection(String name) {
-		String sql ="select KSDM,KSMC from gy_ksdm where ksmc like '" + name + "%' or srm1 like '" + name + "%' or srm2 like '" + name + "%' or srm3 like '" + name + "%'";
-		return jdbcTemplate.query(sql, new RowMapper<Ksdm>() {
+		//String sql ="select KSDM,KSMC from gy_ksdm where ksmc like '" + name + "%' or srm1 like '" + name + "%' or srm2 like '" + name + "%' or srm3 like '" + name + "%'";
+		String sql ="select KSDM,KSMC from gy_ksdm where ksdm like '" + name + "%' or ksmc like '" + name + "%' order by ksdm";
+		List<Ksdm> list = jdbcTemplate.query(sql, new RowMapper<Ksdm>() {
 
             public Ksdm mapRow(ResultSet rs, int rowNum) throws SQLException {
             	Ksdm ksdm = new Ksdm();
@@ -279,6 +280,10 @@ public class RMIServiceImpl implements RMIService {
                 return ksdm;
             }
 		});
+		if(list.size() > 10) {
+			list = list.subList(0, 5);
+		}
+		return list;
 	}
 	
 	private Object setField(ResultSet rs, Object info) {
