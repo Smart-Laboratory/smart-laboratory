@@ -71,10 +71,17 @@ public class Sample extends BaseObject {
 	private String sectionId;
 	private String patientblh;
 	private String charttest;
+	private String ageunit;
 	
 	@Id
+<<<<<<< HEAD
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SAMPLE")
 	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize = 1)
+=======
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
+	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize=1)
+>>>>>>> origin/master
 	public Long getId(){
 		return this.id;
 	}
@@ -388,6 +395,15 @@ public class Sample extends BaseObject {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	
+	@Column(name = "AGEUNIT")
+	public String getAgeunit() {
+		return ageunit;
+	}
+
+	public void setAgeunit(String ageunit) {
+		this.ageunit = ageunit;
 	}
 
 	@Column(name = "AGE")

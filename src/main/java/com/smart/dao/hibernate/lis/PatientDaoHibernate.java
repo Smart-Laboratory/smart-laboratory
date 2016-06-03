@@ -29,4 +29,13 @@ public class PatientDaoHibernate extends GenericDaoHibernate<Patient, Long> impl
 		return getSession().createQuery("from Patient where blh in (" + blhs + ")").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public Patient getByPatientId(String pid) {
+		List<Patient> list = getSession().createQuery("from Patient where patientId like '%" + pid + "%' or blh ='" + pid + "'").list();
+		if(list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
 }

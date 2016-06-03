@@ -11,4 +11,6 @@ public interface PatientManager extends GenericManager<Patient, Long> {
 
 	List<Patient> getHisPatient(String blhs);
 
+	Patient getByPatientId(String pid);
+
 }

@@ -18,4 +18,7 @@ public interface ProcessDao extends GenericDao<Process, Long> {
 	@Transactional
 	List<Process> getHisProcess(String sampleids);
 
+	@Transactional
+	List<Process> getBySampleCondition(String text, String lab);
+
 }

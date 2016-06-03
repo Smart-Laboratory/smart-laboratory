@@ -28,5 +28,9 @@ public class PatientManagerImpl extends GenericManagerImpl<Patient, Long> implem
 	public List<Patient> getHisPatient(String blhs) {
 		return patientDao.getHisPatient(blhs);
 	}
+
+	public Patient getByPatientId(String pid) {
+		return patientDao.getByPatientId(pid);
+	}
 	
 }

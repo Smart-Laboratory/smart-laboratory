@@ -134,7 +134,7 @@ public class GetPatientController extends BaseAuditController {
 				}
 			}
 			map.put("type",
-					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+					SampleUtil.getInstance().getSampleList(dictionaryManager).get(info.getSampleType()));
 			if(cr != null) {
 				map.put("dgFlag", cr.getCriticalDealFlag());
 				map.put("dgInfo", cr.getCriticalDeal());

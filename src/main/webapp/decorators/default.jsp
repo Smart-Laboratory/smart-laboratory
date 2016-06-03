@@ -9,7 +9,15 @@
     <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
     <t:assets/>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/bootstrap.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace-elements.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/bootstrap-tag.min.js"/>"></script>
     <decorator:head/>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
     <%-- <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" /> --%>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>  class="no-skin">

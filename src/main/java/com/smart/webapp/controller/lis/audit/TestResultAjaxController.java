@@ -148,8 +148,8 @@ public class TestResultAjaxController extends BaseAuditController{
 			String[] testResult = testResults.split(";");
 			
 			String tcValues = request.getParameter("tcValues");
-			String[] tcValue = tcValues.split(",");
-
+			String[] tcResult = tcValues.split(",");
+			System.out.println(tcValues);
 			List<Describe> desList = rmiService.getDescribe();
             List<Reference> refList = rmiService.getReference();
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
@@ -189,9 +189,26 @@ public class TestResultAjaxController extends BaseAuditController{
 					testModify.setType(Constants.ADD);
 					testModifyManager.save(testModify);
 					info.setModifyFlag(1);
-					sampleManager.save(info);
+					//sampleManager.save(info);
 				}
 			}
+			//获取user表中常用的检测类型，修改
+			String username = request.getRemoteUser();
+			User user = userManager.getUserByUsername(username);
+			
+			if(null!=user){
+				for (String tc : tcResult) {
+					if(null!=user.getLastProfile()&&!"".equals(user.getLastProfile())){
+						if(user.getLastProfile().indexOf(tc)!=-1){
+							user.setLastProfile(user.getLastProfile()+tc+",");
+						}
+					}else{
+						user.setLastProfile(tcValues+",");
+					}
+				}
+			}
+			userManager.save(user);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());

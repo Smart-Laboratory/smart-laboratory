@@ -32,5 +32,9 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 	public List<Process> getHisProcess(String sampleids) {
 		return processDao.getHisProcess(sampleids);
 	}
+
+	public List<Process> getBySampleCondition(String text, String lab) {
+		return processDao.getBySampleCondition(text, lab);
+	}
 	
 }

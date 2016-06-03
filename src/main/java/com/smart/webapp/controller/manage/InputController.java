@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.manage;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.Dictionary;
 import com.smart.service.DictionaryManager;
 
@@ -21,7 +23,8 @@ public class InputController {
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest() throws Exception {
 		List<Dictionary> sampletypelist = dictionaryManager.getSampleType();
-        return new ModelAndView().addObject("typelist", sampletypelist);
+        return new ModelAndView().addObject("typelist", sampletypelist)
+        		.addObject("receivetime", Constants.SDF.format(new Date()));
     }
 
 }

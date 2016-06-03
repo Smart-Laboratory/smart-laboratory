@@ -4,16 +4,14 @@
 <!--<meta name="menu" content="SampleSet"/>-->
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	<script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	<!--script type="text/javascript" src="../scripts/bootstrap.min.js"></script-->
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-	<script type="text/javascript" src="../scripts/validform/Validform.js"></script>
+	<script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
 	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
 	<script type="text/javascript" src="../scripts/set/section.js"></script>
-
-	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 </head>
 <div class="row">
 <div id="mainTable" class="col-xs-12">

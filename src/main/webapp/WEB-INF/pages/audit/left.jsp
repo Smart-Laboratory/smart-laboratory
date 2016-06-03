@@ -19,6 +19,7 @@
 					<li><a id="manualWriteBackBtn" href="#"><fmt:message key='batch.writeback'/></a></li>
 					<li><a id="statisticDialogBtn" href="#"><fmt:message key='batch.statistic'/></a></li>
 					<li role="separator" class="divider"></li>
+					<li><a id="batchAddResultsBtn" href="#"><fmt:message key='batch.add.results'/></a></li>
 					<li><a id="samplePrintBtn" href="#"><fmt:message key='audit.danger.print'/></a></li>
 				</ul>
 			</div>

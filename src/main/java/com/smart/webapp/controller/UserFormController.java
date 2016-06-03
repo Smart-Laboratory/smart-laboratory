@@ -1,5 +1,6 @@
 package com.smart.webapp.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,7 @@ import com.smart.service.UserExistsException;
 import com.smart.service.UserManager;
 import com.smart.service.lis.HospitalManager;
 import com.smart.webapp.util.RequestUtil;
+import com.smart.webapp.util.UserUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -198,6 +200,26 @@ public class UserFormController extends BaseFormController {
     		hospitals.put(h.getId(), h.getName());
     	}
     	request.setAttribute("hospitals", hospitals);
+    	
+    	//获取电子签名地址--------------------------------
+    	String dzqm_imghtm = "";
+		//由于process.getCheckoperator() 有工号有姓名，需要区分
+		String username = request.getRemoteUser();
+		//实现获取电子签名
+        String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\electronicSignature";
+		File dzqm_dir = new File(dzqm_filepath);
+		if (dzqm_dir.exists()) {
+			for (File dzqm_f : dzqm_dir.listFiles()) {
+				//去掉后缀
+				int dot = dzqm_f.getName().lastIndexOf('.'); 
+				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
+					dzqm_imghtm += "../images/electronicSignature/" + dzqm_f.getName() + ";";
+				}
+			}
+		}
+		request.setAttribute("dzqm_imghtm",dzqm_imghtm);
+		//获取电子签名地址--------------------------------
+    	
         // If not an administrator, make sure user is not trying to add or edit another user
         if (!request.isUserInRole(Constants.ADMIN_ROLE) && !isFormSubmission(request)) {
             if (isAdd(request) || request.getParameter("id") != null) {
@@ -227,6 +249,8 @@ public class UserFormController extends BaseFormController {
             // populate user object from database, so all fields don't need to be hidden fields in form
             return getUserManager().getUser(request.getParameter("id"));
         }
+        
+        
     }
 
     private boolean isFormSubmission(final HttpServletRequest request) {
