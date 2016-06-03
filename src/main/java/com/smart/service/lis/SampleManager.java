@@ -57,6 +57,8 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<NeedWriteCount> getAllWriteBack(String date);
 
 	List<Sample> getByIds(String substring);
+	
+	List<Sample> getBysampleNos(String sampleNos);
 
 	List<Sample> getSampleByCode(String string);
 	

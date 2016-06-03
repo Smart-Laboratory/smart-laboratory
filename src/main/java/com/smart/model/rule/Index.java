@@ -57,6 +57,8 @@ public class Index extends BaseObject implements Serializable {
 	private String printord;
 	private int needhistory;
 	private String method;
+	private String defaultvalue;
+	
 	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
 
@@ -305,6 +307,15 @@ public class Index extends BaseObject implements Serializable {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+	
+	@Column
+	public String getDefaultvalue() {
+		return defaultvalue;
+	}
+
+	public void setDefaultvalue(String defaultvalue) {
+		this.defaultvalue = defaultvalue;
 	}
 
 	/**

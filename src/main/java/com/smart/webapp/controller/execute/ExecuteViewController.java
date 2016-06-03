@@ -89,7 +89,7 @@ public class ExecuteViewController {
 			e.setZxksdm(e.getZxksdm().trim());
 			
 			html.append("<div class='col-sm-1' style=''>"+
-						"<div class='checkbox col-sm-3'><label><input type='checkbox' value='"+e.getYjsb()+"+"+e.getYlxh()+"'></label></div>"+
+						"<div class='checkbox col-sm-3'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>"+
 //		    			"<div class='checkbox col-sm-3'><img src='"+bmp+"' alt='"+e.getHyfl()+"'/></div>"+
 						"</div>");
 			html.append("<div class='col-sm-11' style=''>");

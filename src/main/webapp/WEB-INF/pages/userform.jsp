@@ -1,5 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
-
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <head>
     <title><fmt:message key="userProfile.title"/></title>
     <meta name="menu" content="Individual"/>
@@ -211,16 +211,88 @@
         </div>
     </form:form>
 </div>
+<div class="col-sm-3">
 
+	<div id="uploadDialog" title="<fmt:message key="electronic.Signature.titel" /><fmt:message key='upload.title' />" style="text-align:left;" >
+		<fieldset style="width:95%; margin-left:4px;">
+		<legend style="margin-top:3px;"><fmt:message key='electronic.Signature.titel' /></legend>
+			<div>
+		    <button class="btn btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
+		    <button class="btn btn-success" onclick="ajaxFileUploads()"><fmt:message key='upload.title'/></button>
+			<div id="more" style="float:left;"></div>
+			</div>
+		</fieldset>
+	    <h5><fmt:message key='electronic.Signature.display'/></h5>
+	    <img id="electronicSignature" alt="" src="${dzqm_imghtm}" border="0" width="120px" height="40px" style="border:1px solid #000000;">
+	    <div id="galleria"></div>
+	</div>
+</div>
 <c:set var="scripts" scope="request">
 <script type="text/javascript">
 // This is here so we can exclude the selectAll call when roles is hidden
 function onFormSubmit(theForm) {
     return validateUser(theForm);
 }
+
+	$("#electronicSignature").click(function(){
+		$("#more").html("");
+		$("#galleria").html("");
+		$("#galleria").css("height", "0px");
+		$('#cellSelect option:first').attr('selected','selected');
+		$("#cellTemplateSelect").html("");
+		$("#cellTemplateSelect").css('display', 'none');
+		$("#uploadDialog").dialog("open");
+	});
+	
+	
+function createInput(){
+    var count=1;
+    var str = '<div class="col-sm-12" style="margin-top:5px;"><input type="file" contentEditable="false" id="uploads' + count + '' +
+    '" name="uploads'+ count +'" class="col-sm-10"/><button onclick="removeInput(event,\'more\')" class="col-sm-2">'+'删除</button></div>';
+    //document.getElementById(parentId).insertAdjacentHTML("beforeEnd",str);
+     if($("#more").html()==""){
+   		 $("#more").append(str);
+    }else{
+    	alert("只能上传一个图片文件");
+    	
+    }
+}
+function removeInput(evt, parentId){
+	   var el = evt.target == null ? evt.srcElement : evt.target;
+	   var div = el.parentNode;
+	   var cont = document.getElementById(parentId);       
+	   if(cont.removeChild(div) == null){
+	    return false;
+	   }
+	   return true;
+}
+
+function ajaxFileUploads(){
+    var uplist = $("input[name^=uploads]");
+	var arrId = [];
+	for (var i=0; i< uplist.length; i++){
+	    if(uplist[i].value){
+	    	arrId[i] = uplist[i].id;
+		}
+    }
+	$.ajaxFileUpload({
+		url:'../audit/ajax/uploadElectronicSignatureImg',
+		secureuri:false,
+		fileElementId: arrId,  
+		dataType: 'json',//返回数据的类型  
+		success: function (data){
+			alert("修改电子签名成功！");
+			$("#electronicSignature").attr("src",data.imgurl);
+			$("#more").html("");
+		},
+		error: function(){
+			alert("error");
+		}
+	});
+}
 </script>
 </c:set>
 
 <v:javascript formName="user" staticJavascript="false"/>
 <script type="text/javascript" src="<c:url value="/scripts/validator.jsp"/>"></script>
-
+<script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>

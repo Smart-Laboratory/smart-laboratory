@@ -57,5 +57,7 @@
         <mapping class="com.smart.model.request.SFXM"/>
         <mapping class="com.smart.model.request.SFXMTC"/>
         <mapping class="com.smart.model.request.JFMX"/>
+        <mapping class="com.smart.model.execute.LabOrder"/>
+        <mapping class="com.smart.model.execute.SampleNoBuilder"/>
     </session-factory>
 </hibernate-configuration>

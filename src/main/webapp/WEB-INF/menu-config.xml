@@ -7,6 +7,7 @@
         <!-- <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER"/> -->
         <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
         	<Item name="Input" title="sample.manage.input" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+            <Item name="Modify" title="sample.manage.modify" page="/manage/modify" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="Receive" title="sample.manage.receive" page="/manage/receive" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="Audit" title="sample.manage.audit" page="/manage/audit" roles="ROLE_ADMIN,ROLE_USER"/>
             <Item name="Search" title="sample.manage.search" page="/manage/sampleQuery" roles="ROLE_ADMIN,ROLE_USER"/>

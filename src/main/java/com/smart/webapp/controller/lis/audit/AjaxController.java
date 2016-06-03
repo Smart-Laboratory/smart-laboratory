@@ -39,6 +39,7 @@ import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.util.NeedWriteCount;
 import com.smart.service.reagent.OutManager;
+import com.smart.webapp.util.UserUtil;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -220,6 +221,72 @@ public class AjaxController extends BaseAuditController {
 		response.getWriter().print(obj.toString());
 		return null;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * 文件上传
+	 * 张晋南 2016-5-30
+	 * 修改电子签名图片
+	 * @param multipartRequest
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(method=RequestMethod.POST, value="/uploadElectronicSignatureImg")
+	@ResponseBody
+	public void uploadElectronicSignatureImgs(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
+		String username = multipartRequest.getRemoteUser();
+		String realPath = multipartRequest.getServletContext().getRealPath("/");
+	    String uploadFileUrl = realPath+"\\images\\electronicSignature";
+	    String uploadFileUrl_bak = "C:\\images\\electronicSignature";
+	    
+	    int count = 0;
+	    multipartRequest.setAttribute("addr", realPath);
+        File dir = new File(uploadFileUrl);
+		if (!dir.exists()) {
+			dir.mkdirs();
+			System.out.println("创建图片目录");
+		} else {
+			System.out.println("图片目录存在");
+			count = dir.listFiles().length;
+		}
+		 File backdir = new File(uploadFileUrl_bak);
+			if (!backdir.exists()) {
+				backdir.mkdirs();
+				System.out.println("创建备份目录");
+			} else {
+				System.out.println("备份目录存在");
+				count = backdir.listFiles().length;
+			}
+		//获取多个file
+		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
+			String key = (String) it.next();
+			MultipartFile imgFile = multipartRequest.getFile(key);
+			if (imgFile.getOriginalFilename().length() > 0) {
+				String fileName = imgFile.getOriginalFilename();
+				String suffix = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+				String newFileName = username + suffix;
+				try {
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl, "", newFileName);
+					saveFileFromInputStream(imgFile.getInputStream(), uploadFileUrl_bak, "", newFileName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				count++;
+			}
+		}
+		
+		 //返回结果  
+		JSONObject obj = new JSONObject();
+		String imgurl = "../images/electronicSignature/"+username+".bmp";
+		obj.put("imgurl", imgurl);
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(obj.toString());
+	}
+	
 	/**
 	 * 文件上传
 	 * 张晋南 2016-5-15
@@ -313,7 +380,6 @@ public class AjaxController extends BaseAuditController {
     //保存文件
 	private void saveFileFromInputStream(InputStream stream, String path, String backpath, String filename) throws IOException {
 		Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(path + "/" + filename);
-		//Thumbnails.of(stream).forceSize(300, 200).outputQuality(1.0f).toFile(backpath + "/" + filename);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/getImage")
