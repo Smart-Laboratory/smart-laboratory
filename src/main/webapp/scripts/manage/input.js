@@ -42,7 +42,7 @@ function showData(type) {
 			isFirst = false;
 		} else {
 			jQuery("#oldTable").jqGrid('setGridParam',{
-				url: "../set/section/data"
+				url: "../sample/ajax/old"
 			}).trigger('reloadGrid');//重新载入
 		}
 	}
