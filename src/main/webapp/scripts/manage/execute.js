@@ -23,7 +23,7 @@ function getData(item,event){
 				$("#blh").html("");$("#patientId").html("");$("#pName").html("");$("#pSex").html("");$("#pCsrq").html("");
 				//插入数据
 				var csrq = data.csrq;
-				$("#blh").html(data.blh);$("#patientId").html(data.patientId);$("#pName").html(data.name);$("#pSex").html(data.sex);$("#pCsrq").html(csrq.substring(0,10));
+				$("#blh").html(data.blh);$("#patientId").html(data.patientId);$("#pName").html(data.name);$("#pSex").html(data.sex);$("#pCsrq").html(csrq.split(".")[0]);
 			})
 			
 			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
@@ -75,22 +75,33 @@ $(function(){
 	$("#bloodCheck").prop("checked",'true');
 	
 	$("#conform").click(function(){
-		var selval;
+		var selval="";
 		$("#tests input:checkbox").each(function(){
-			selval = selval + $(this).val()+";";
+			if($(this).prop("checked")==true)
+				selval = selval + $(this).val()+";";
 		});
-		alert(selval);
 		if(selval==null || selval == ''){
 			alert("请选择检验项目");
 			return;
 		}
-//		$.post("../manage/execute/submit",{selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
-//			
-//		});
+//		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
+		$.get("../manage/execute/ajax/submit",{selval:selval,patientId:$("#jzkh").val(),requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
+			data = jQuery.parseJSON(data);
+			var tests = data.laborders;
+			var testStr="";
+			for(var i =0; i<tests.length;i++){
+				testStr += testStr + tests[i] + ";";
+			}
+			if(data.error == null || data.error == undefined){
+				$('#printFrame').empty();
+		    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode?tests="+testStr+"\"/>");
+				$("#printDialog").dialog("open");
+			}
+		});
 		
-		$('#printFrame').empty();
-    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode\"/>");
-		$("#printDialog").dialog("open");
+//		$('#printFrame').empty();
+//    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode\"/>");
+//		$("#printDialog").dialog("open");
 	});
 })
 

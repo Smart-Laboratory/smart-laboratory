@@ -1,4 +1,6 @@
 $(function(){
+	var aaa =${laborder};
+	alert(laborder);
 	
 	$("#name").html("王莺燕");
 	$("#sex").html("男");

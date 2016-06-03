@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 <head>
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
@@ -6,7 +7,6 @@
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="../scripts/print/printBarcode.js"></script>
 </head>
 
 <style>
@@ -14,6 +14,42 @@
 	padding-left:10px;
 }
 </style>
+<script type="text/javascript">
+
+$(function(){
+	var tests =${tests};
+	
+	$.get("../manage/getlaborder",{tests:tests},function(data){
+		$("#name").html(data.patientname);
+		$("#sex").html(data.sex);
+		$("#age").html("44");
+		$("#examine").html(data.examitem);
+		$("#sampletype").html(data.sampletype);
+		$("#sf").html(data.price);
+		$("#executetime").html(data.executetime);
+		$("#qbgsj").html(data.qbgsj);
+		$("#qbgdd").html(data.qbgdt);
+	})
+	
+	
+	
+	
+	$("#hint1").html("*法定节假日(如春节等)仪器故障报告时间顺延*");
+	$("#hint2").html("*抽血时请带就诊卡，凭此单或就诊卡去检验报告*");
+	$("#hint3").html("再挂号窗口留下核对密码，或者ucmed.cn//zszy.html下载掌上浙一软件或关注微信账号查询检查报告");
+//	$("#").html("");
+//	$("#").html("");
+//	$("#").html("");
+	
+	
+})
+
+
+
+</script>
+
+
+
 <div style="background:#999;width:450px;height:350px;padding:10px 10px;float:left;">
 	<div id="top" style="text-align:center;">
 		<p><span ><fmt:message key="execute.print.hzd"></fmt:message></span></p>

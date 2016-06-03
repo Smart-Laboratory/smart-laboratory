@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.execute;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.model.execute.LabOrder;
 import com.smart.model.execute.SampleNoBuilder;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.execute.LabOrderManager;
 import com.smart.service.execute.SampleNoBuilderManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
@@ -45,8 +48,7 @@ public class ExecuteController {
 	private static SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMdd");
 	private static SimpleDateFormat hhmm = new SimpleDateFormat("hh:mm");
 	
-	@RequestMapping(value = "/execute/submit*", method = RequestMethod.GET)
-	@ResponseBody
+	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
@@ -75,7 +77,7 @@ public class ExecuteController {
 		
 		for(String str : selval.split(";")){
 			if(str!=null && !str.isEmpty()){
-				selMap.put(str.split(";")[0], str.split(";")[1]);
+				selMap.put(str.split("\\+")[0], str.split("\\+")[1]);
 			}
 		}
 		
@@ -84,9 +86,10 @@ public class ExecuteController {
 		ExecuteInfo info = new ExecuteInfo();
 		Ylxh ylxh = new Ylxh();
 		
+		List<Long> laborders = new ArrayList<Long>(); // 记录需要打印的项目
 		for(int i=0;i<eList.size();i++){
 			e = eList.get(i);
-			if(selMap.get(e.getYjsb())==null || !selMap.get(e.getYjsb()).equals(e.getYlxh())){
+			if(selMap.get(e.getYjsb()+e.getYlxh())==null ){
 				continue;
 			}
 			
@@ -96,7 +99,7 @@ public class ExecuteController {
 			
 			fee = Double.parseDouble(e.getDj()) * Double.parseDouble(e.getSl());
 			examinaim = e.getYlmc();
-			if(e.getJyxmfl().equals("9") && examinaim.contains("/")){
+			if(e.getJyxmfl()!=null && e.getJyxmfl().equals("9") && examinaim.contains("/")){
 				examinaim = examinaim.substring(0, examinaim.indexOf("/"));
 			}
 			
@@ -129,9 +132,9 @@ public class ExecuteController {
 			
 			//合并组合
 			if(sampletype != null && !sampletype.isEmpty()){    
-				for(int j=i;j<eList.size();j++){
+				for(int j=i+1;j<eList.size();j++){
 					info = eList.get(j);
-					if(selMap.get(info.getYjsb())==null || !selMap.get(info.getYjsb()).equals(info.getYlxh())){
+					if(selMap.get(info.getYjsb()+e.getYlxh())==null ){
 						continue;
 					}
 					info.setZxksdm(info.getZxksdm().trim());
@@ -213,10 +216,11 @@ public class ExecuteController {
 			//生成样本号结束
 			
 			//--一个条码抽血多次---
+			long doctadviseno = 0;
 			ylxh = ylxhManager.get(Long.parseLong(e.getYlxh()));
 			ylxhdescribe = ylxh.getProfiletest();
 			//if li_dccx = 1  and li_pos > 0  and pos(ls_ylxh,'+') = 0  then //有多个标本
-			if(ylxhdescribe.contains(",") && ylxhdescribe.contains("+")){
+			if(ylxhdescribe.contains(",") && ylxhdescribe.contains("\\+")){
 				for(String testid : ylxh.getProfiletest().split(",")){
 				
 				}
@@ -225,8 +229,8 @@ public class ExecuteController {
 				Sample sample = new Sample();
 				Process process = new Process();
 				eylxh = e.getYlxh();
-				if(eylxh.contains("+")){
-					testid = eylxh.substring(0, eylxh.indexOf("+"));
+				if(eylxh.contains("\\+")){
+					testid = eylxh.substring(0, eylxh.indexOf("\\+"));
 				}else {
 					testid = eylxh;
 				}
@@ -235,21 +239,24 @@ public class ExecuteController {
 				if(sample!=null){
 					//如果有项目组合，判断组合项目是否一致
 					String sylxh = sample.getYlxh();
-					if(eylxh.split("+").length != sylxh.split("+").length)
+					if(eylxh.split("\\+").length != sylxh.split("\\+").length)
 						issame = false;
-					for(String s : sylxh.split("+")){
+					for(String s : sylxh.split("\\+")){
 						if(!eylxh.contains(s))
 							issame = false;
 					}
 				}
 				
-				if(issame){
+				if(sample!=null && issame){
+					doctadviseno = sample.getId();
 					sample.setSampleNo(sampleno);
 					process = processManager.getBySampleId(sample.getId());
 					process.setExecutetime(executetime);
 					process.setExecutor(user.getUsername());
 					sample.setYlxh(eylxh);
 					process.setReceiver(user.getUsername());
+					
+					sampleManager.save(sample);
 				}
 				else{
 					sample = new Sample();
@@ -264,7 +271,18 @@ public class ExecuteController {
 					sample.setRequestMode(requestmode);
 					sample.setInspectionName(examinaim);
 					sample.setYlxh(eylxh);
+					sample.setInvoiceNum(Integer.parseInt(e.getSfsb()));
 					
+					sample.setBirthday(ymd1.parse(patient.getCsrq()));
+					sample.setPatientname(patient.getName());
+					sample.setSex(patient.getSex());
+					sample.setSampleNo(sampleno);
+					
+					sample = sampleManager.save(sample);
+					
+					
+					doctadviseno = sample.getId();
+					process.setSampleid(sample.getId());
 					process.setRequesttime(e.getKdsj());
 					process.setRequester(e.getSjysgh());
 					process.setExecutetime(executetime);
@@ -273,11 +291,57 @@ public class ExecuteController {
 					process.setReceiver(user.getUsername());
 					
 				}
-				sampleManager.save(sample);
+				
 				processManager.save(process);
 			}
+			//插入更新laborder表
+			LabOrder labOrder = new LabOrder();
+			if(labOrderManager.existSampleId(doctadviseno+""))
+				labOrder = labOrderManager.get(doctadviseno);
+			if(labOrder !=null && labOrder.getLaborder()!=null){
+				labOrder.setSampleno(sampleno);
+			}
+			else{
+				labOrder = new LabOrder();
+				labOrder.setLaborder(doctadviseno);
+				labOrder.setLaborderorg(Long.parseLong(e.getYjsb()));
+				labOrder.setStayhospitalmode(stayhospitalmode);
+				labOrder.setRequestetime(e.getKdsj());
+				labOrder.setExecutetime(executetime);
+				labOrder.setBirthday(ymd1.parse(patient.getCsrq()));
+				labOrder.setRequester(e.getSjysgh());
+				labOrder.setExecutor(user.getUsername());
+				labOrder.setPatientid(e.getJzkh());
+				labOrder.setCurrentdepartment(Integer.parseInt(e.getSjksdm()));
+				labOrder.setPatientname(patient.getName());
+				labOrder.setSex(Integer.parseInt(patient.getSex()));
+				labOrder.setDiagnostic(e.getLzcd());
+				labOrder.setSampletype(sampletype);
+				labOrder.setPrice(fee);
+				labOrder.setFeestatus(6);
+				labOrder.setExamitem(e.getYlmc());
+				labOrder.setYlxh(e.getYlxh());
+				labOrder.setLabdepartment(Integer.parseInt(e.getZxksdm()));
+				labOrder.setComputername(user.getUsername()); //抽血电脑编号
+				labOrder.setPrintflag(0);
+				labOrder.setReceiveflag(0);
+				
+				//如何获取计算后的取报告单时间 、地点
+				String qbgsjdd= selMap.get(e.getYjsb()+e.getYlxh());
+				labOrder.setQbgsj(qbgsjdd.split("-")[0]);
+				labOrder.setQbgdt(qbgsjdd.split("-")[1]);
+				labOrder.setRequestmode(requestmode);
+				labOrder.setSampleno(sampleno);
+			}
+			
+			labOrder = labOrderManager.save(labOrder);
+			
+			laborders.add(labOrder.getLaborder());
 			
 		}
+		o.put("laborders", laborders);
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(o.toString());
 		
 		return null;
 	}
@@ -394,11 +458,23 @@ public class ExecuteController {
 	
 	@RequestMapping(value = "/printBarcode*", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView printBarcoe(HttpServletRequest request, HttpServletResponse response){
-		
-		return new ModelAndView();
+	public ModelAndView printBarcoe(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String tests = request.getParameter("tests");
+		System.out.println(tests);
+		return new ModelAndView().addObject("tests", tests);
 	}
 	
+	@RequestMapping(value = "/getlaborder*", method = RequestMethod.GET)
+	@ResponseBody
+	public LabOrder getlaborder(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String tests = request.getParameter("tests");
+
+		String test = tests.split(";")[0];
+		LabOrder labOrder = labOrderManager.get(Long.parseLong(test));
+		
+		
+		return labOrder;
+	}
 	
 	
 	
@@ -416,5 +492,7 @@ public class ExecuteController {
 	private SampleNoBuilderManager sampleNoBuilderManager;
 	@Autowired
 	private ProcessManager processManager;
-
+	@Autowired
+	private LabOrderManager labOrderManager;
+	
 }

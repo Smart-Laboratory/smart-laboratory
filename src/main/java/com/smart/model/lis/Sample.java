@@ -5,7 +5,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -34,32 +37,32 @@ public class Sample extends BaseObject {
 	private String age;
 	private String departBed; //病床号
 	private String sampleNo;//样本编号， 手动生成
-	private Integer stayHospitalMode; //就诊方式（门诊、住院、急诊）
+	private Integer stayHospitalMode=0; //就诊方式（门诊、住院、急诊）
 	private String hosSection; //申请科室
 	private String diagnostic; //诊断
 	private String inspectionName; //检验项目及套餐名称
 	private String ylxh;//检验项目及套餐序号
 	private String sampleType; //样本类型 、来源（血液、粪便）
-	private Integer sampleStatus; //样本所处的状态（申请、采集、测试。。。）
+	private Integer sampleStatus=0; //样本所处的状态（申请、采集、测试。。。）
 	private String printFlag; //是否打印
 	private String printTime;
 	private String chkoper2;
-	private int requestMode;
+	private int requestMode=0;
 	private String fee;	//费用
 	private String feestatus;	//收费状态
 	private String part;	//采集部位
 	private String description; //描述
 	private String note; //性状
 	private String count; //采集数量
-	private Integer modifyFlag;//修改标识
-	private Integer writeback;//写回标识
-	private Integer iswriteback;//写回标识
-	private Integer hasimages;//是否包含图片
-	private int cycle;
-	private int invoiceNum; //发票号
+	private Integer modifyFlag=0;//修改标识
+	private Integer writeback=0;//写回标识
+	private Integer iswriteback=0;//写回标识
+	private Integer hasimages=0;//是否包含图片
+	private int cycle=0;
+	private int invoiceNum=0; //发票号
 	
-	private int auditStatus; //样本审核的状态
-	private int auditMark; //审核标记
+	private int auditStatus=0; //样本审核的状态
+	private int auditMark=0; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
 	private String notes; //自动审核的结果记录
 	private String ruleIds; //规则库生成的为题规则集，用“，”隔开
@@ -70,6 +73,8 @@ public class Sample extends BaseObject {
 	private String charttest;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SAMPLE")
+	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize = 1)
 	public Long getId(){
 		return this.id;
 	}

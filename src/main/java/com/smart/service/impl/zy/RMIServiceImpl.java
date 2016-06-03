@@ -357,19 +357,35 @@ public class RMIServiceImpl implements RMIService {
 	public Patient getPatient(String patientId) {
 		
 		List<Patient> list = new ArrayList<Patient>();
-		String sql ="select JZKH,LXDZ,LXDH,BAH,XM,XB,CSRQ  from gy_brjbxxk where JZKH = '"+patientId+"'";
+//		String sql ="select JZKH,LXDZ,LXDH,BAH,XM,XB,CSRQ  from gy_brjbxxk where JZKH = '"+patientId+"'";
+//		list.addAll(jdbcTemplate.query(sql, new RowMapper<Patient>() {
+//
+//            public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
+//
+//                Patient p = new Patient();
+//                p.setPatientId(rs.getString("JZKH"));
+//                p.setAddress(rs.getString("LXDZ"));
+//                p.setPhone(rs.getString("LXDH"));
+//                p.setBlh(rs.getString("BAH"));
+//                p.setName(rs.getString("XM"));
+//                p.setSex(rs.getString("XB"));
+//                p.setCsrq(rs.getString("CSRQ"));
+//                return p;
+//            }
+//		}));
+		String sql = "select patientid,address,phone,blh,patientname,sex,birthday from lab_patient where patientid like '%"+patientId+"%'";
 		list.addAll(jdbcTemplate.query(sql, new RowMapper<Patient>() {
 
             public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
 
                 Patient p = new Patient();
-                p.setPatientId(rs.getString("JZKH"));
-                p.setAddress(rs.getString("LXDZ"));
-                p.setPhone(rs.getString("LXDH"));
-                p.setBlh(rs.getString("BAH"));
-                p.setName(rs.getString("XM"));
-                p.setSex(rs.getString("XB"));
-                p.setCsrq(rs.getString("CSRQ"));
+                p.setPatientId(rs.getString("patientid"));
+                p.setAddress(rs.getString("address"));
+                p.setPhone(rs.getString("phone"));
+                p.setBlh(rs.getString("blh"));
+                p.setName(rs.getString("patientname"));
+                p.setSex(rs.getString("sex"));
+                p.setCsrq(rs.getString("birthday"));
                 return p;
             }
 		}));
@@ -392,8 +408,10 @@ public class RMIServiceImpl implements RMIService {
         " YJ_YJK1.SJKSDM sjksdm,  "+ 
         " YJ_YJK1.KDSJ kdsj,"+   
         " YJ_YJK1.MZPB mzpb,"+   
+        " YJ_YJK1.LCZD lczd,"+ 
         " YJ_YJK2.SL sl,"+
         " decode(nvl(YJ_YJK2.TCYLXH,0),0,YJ_YJK2.YLXH,YJ_YJK2.TCYLXH)  ylxh, "+ 
+        "GY_YLSF.TCPB tcpb," +
         "GY_YLSF.DJ DJ," +
         " GY_YLSF.YLMC ylmc, "+  
         " GY_YLSF.QBGDD qbgdd, "+  
@@ -436,6 +454,7 @@ public class RMIServiceImpl implements RMIService {
 	            p.setSjksdm(rs.getString("SJKSDM"));
 	            p.setKdsj(rs.getDate("KDSJ"));
 	            p.setMzpb(rs.getString("MZPB"));
+	            p.setLzcd(rs.getString("LCZD"));
 	            
 	            p.setSl(rs.getString("SL"));
 	            p.setYlxh(rs.getString("YLXH"));
@@ -444,6 +463,7 @@ public class RMIServiceImpl implements RMIService {
 	            p.setHyjg(rs.getString("HYJG"));
 	            p.setDoctadviseno(rs.getString("DOCTADVISENO"));
 	            
+	            p.setTcpb(rs.getString("tcpb"));
 	            p.setDj(rs.getString("DJ"));
 	            p.setYlmc(rs.getString("YLMC"));
 	            p.setQbgdd(rs.getString("QBGDD"));

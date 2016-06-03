@@ -116,13 +116,13 @@
 			<div class="widget-main">
 				<div  style="height:20px;">
 					<div class="col-sm-2 ">
-							<span class='col-sm-5'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
+							<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
 					</div>
 					<div class="col-sm-3 ">
 							<span class='col-sm-5'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
 					</div>
 					<div class="col-sm-2 ">
-						<span class='col-sm-4'><fmt:message key="patient.name" />:</span><b id="pName"></b>
+						<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
 					</div>
 					<div class="col-sm-4 ">
 						<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
