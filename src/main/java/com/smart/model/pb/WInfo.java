@@ -41,9 +41,9 @@ public class WInfo {
 	private String defeholidayhis;//历年积休
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INFO")
-//	@SequenceGenerator(name = "SEQ_INFO", sequenceName = "info_sequence", allocationSize = 1)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WINFO")
+	@SequenceGenerator(name = "SEQ_WINFO", sequenceName = "winfo_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

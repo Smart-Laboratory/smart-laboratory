@@ -269,8 +269,9 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<Ksdm> searchSection(String name) {
-		String sql ="select KSDM,KSMC from gy_ksdm where ksmc like '" + name + "%' or srm1 like '" + name + "%' or srm2 like '" + name + "%' or srm3 like '" + name + "%'";
-		return jdbcTemplate.query(sql, new RowMapper<Ksdm>() {
+		//String sql ="select KSDM,KSMC from gy_ksdm where ksmc like '" + name + "%' or srm1 like '" + name + "%' or srm2 like '" + name + "%' or srm3 like '" + name + "%'";
+		String sql ="select KSDM,KSMC from gy_ksdm where ksdm like '" + name + "%' or ksmc like '" + name + "%' order by ksdm";
+		List<Ksdm> list = jdbcTemplate.query(sql, new RowMapper<Ksdm>() {
 
             public Ksdm mapRow(ResultSet rs, int rowNum) throws SQLException {
             	Ksdm ksdm = new Ksdm();
@@ -279,6 +280,10 @@ public class RMIServiceImpl implements RMIService {
                 return ksdm;
             }
 		});
+		if(list.size() > 10) {
+			list = list.subList(0, 5);
+		}
+		return list;
 	}
 	
 	private Object setField(ResultSet rs, Object info) {
@@ -422,6 +427,7 @@ public class RMIServiceImpl implements RMIService {
 		"	( YJ_YJK1.SFSB IS NOT NULL OR YJ_YJK1.YHZFID IS NOT NULL OR YJ_YJK1.BRXH IS NOT NULL) AND "+
          "( YJ_YJK1.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') )"; 
 	
+		System.out.println(sql);
 		eList.addAll(jdbcTemplate.query(sql, new RowMapper<ExecuteInfo>() {
 
 	        public ExecuteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -456,4 +462,69 @@ public class RMIServiceImpl implements RMIService {
 		}));
 		return eList;
 	};
+	
+	public List<ExecuteInfo> getSelectInfo(String yjsbs,String ylxhs){
+		
+		List<ExecuteInfo> eList = new ArrayList<ExecuteInfo>();
+		String sql = "SELECT distinct YJ_YJK1.YJSB yjsb, YJ_YJK1.JZKH jzkh, "+
+			"YJ_YJK1.SFSB sfsb,"+   
+        " YJ_YJK1.BRXM brxm,"+   
+        " YJ_YJK1.SJYSGH sjysgh,"+   
+        " YJ_YJK1.SJKSDM sjksdm,  "+ 
+        " YJ_YJK1.KDSJ kdsj,"+   
+        " YJ_YJK1.MZPB mzpb,"+   
+        " YJ_YJK2.SL sl,"+
+        " decode(nvl(YJ_YJK2.TCYLXH,0),0,YJ_YJK2.YLXH,YJ_YJK2.TCYLXH)  ylxh, "+ 
+        "GY_YLSF.DJ DJ," +
+        " GY_YLSF.YLMC ylmc, "+  
+        " GY_YLSF.QBGDD qbgdd, "+  
+        " GY_YLSF.QBGSJ qbgsj,   "+
+        " YJ_YJK2.ZXKSDM zxksdm,   "+
+        " GY_YLSF.HYFL hyfl,  "+ 
+        " GY_YLSF.YBLX yblx, "+  
+        " YJ_YJK2.REQUESTMODE requestmode, "+  
+        " GY_YLSF.QBBDD qbbdd, "+  
+        " GY_YLSF.JYXMFL jyxmfl, "+  
+        " YJ_YJK2.HYJG  hyjg, "+
+        " YJ_YJK2.DOCTADVISENO DOCTADVISENO" +
+   " FROM GY_YLSF, YJ_YJK1,  YJ_YJK2  "+
+  " WHERE ( YJ_YJK1.YJSB = YJ_YJK2.YJSB ) and  "+
+ 		"	( GY_YLSF.YLXH = decode(nvl(YJ_YJK2.TCYLXH,0),0,YJ_YJK2.YLXH,YJ_YJK2.TCYLXH)) and  "+
+        " YJ_YJK1.YJSB in ("+yjsbs+") and" +
+		" GY_YLSF.YLXH in ("+ylxhs+")";
+	
+		eList.addAll(jdbcTemplate.query(sql, new RowMapper<ExecuteInfo>() {
+
+	        public ExecuteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+	            ExecuteInfo p = new ExecuteInfo();
+	            p.setYjsb(rs.getString("YJSB"));
+	            p.setJzkh(rs.getString("JZKH"));
+	            p.setSfsb(rs.getString("SFSB"));
+	            p.setBrxm(rs.getString("BRXM"));
+	            p.setSjysgh(rs.getString("SJYSGH"));
+	            p.setSjksdm(rs.getString("SJKSDM"));
+	            p.setKdsj(rs.getDate("KDSJ"));
+	            p.setMzpb(rs.getString("MZPB"));
+	            
+	            p.setSl(rs.getString("SL"));
+	            p.setYlxh(rs.getString("YLXH"));
+	            p.setZxksdm(rs.getString("ZXKSDM"));
+	            p.setRequestmode(rs.getString("REQUESTMODE"));
+	            p.setHyjg(rs.getString("HYJG"));
+	            p.setDoctadviseno(rs.getString("DOCTADVISENO"));
+	            
+	            p.setDj(rs.getString("DJ"));
+	            p.setYlmc(rs.getString("YLMC"));
+	            p.setQbgdd(rs.getString("QBGDD"));
+	            p.setQbgsj(rs.getString("QBGSJ"));
+	            p.setHyfl(rs.getString("HYFL"));
+	            p.setYblx(rs.getString("YBLX"));
+	            p.setQbbdd(rs.getString("QBBDD"));
+	            p.setJyxmfl(rs.getString("JYXMFL"));
+	            return p;
+	        }
+		}));
+		return eList;
+	}
 }

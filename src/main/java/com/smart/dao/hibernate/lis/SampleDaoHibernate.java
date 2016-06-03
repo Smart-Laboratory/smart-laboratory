@@ -215,7 +215,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 //                    + "') order by s.time desc";
 		String hql = "select s from Sample s where s.patientname='" + pName + "' ";
 		if(!StringUtils.isEmpty(from) && from!=null && to!=null &&!StringUtils.isEmpty(to)){
-			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + from + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + to + "') order by s.sampleNo desc";
+			hql+="and SUBSTR(s.sampleNo,1,8)>='" + from + "' and SUBSTR(s.sampleNo,1,8)<='" + to + "' order by s.sampleNo desc";
 		}
 		return getSession().createQuery(hql).list();
 	}
@@ -224,7 +224,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text){
 		String hql = "select s from Sample s where s."+searchType+"='" + text + "' ";
 		if(!StringUtils.isEmpty(fromDate) && fromDate!=null && toDate!=null &&!StringUtils.isEmpty(toDate)){
-			hql+="and DATE( SUBSTR(s.sampleNo,1,8) )>=DATE('" + fromDate + "') and DATE( SUBSTR(s.sampleNo,1,8) )<=DATE('" + toDate + "') order by s.sampleNo desc";
+			hql+="and SUBSTR(s.sampleNo,1,8)>='" + fromDate + "' and SUBSTR(s.sampleNo,1,8)<='" + toDate + "' order by s.sampleNo desc";
 		}
 		return getSession().createQuery(hql).list();
 	}
@@ -426,5 +426,22 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleByCode(String code) {
 		return getSession().createQuery("from Sample where sampleNo like '"+ code +"%'").list();
+	}
+	
+	public boolean existSampleNo(String sampleno){
+		String sql = "select count(*) from l_sample where sampleno = '"+sampleno+"'";
+		Query q = getSession().createQuery(sql);
+		if(((Number)(q.uniqueResult())).intValue()==0)
+			return false;
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Sample getBySfsb(String patientid, String ylxh, String sfsb){
+		String sql = "from Sample where sampleno='0' and patientId='"+patientid+"' and ylxh like '%"+ylxh+"%' and invoiceNum="+sfsb;
+		List<Sample> samples =  getSession().createQuery(sql).list();
+		if(samples!=null && samples.size()>0)
+			return samples.get(0);
+		return null;
 	}
 }

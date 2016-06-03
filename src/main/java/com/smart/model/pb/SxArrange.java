@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +20,9 @@ public class SxArrange {
 	private String section;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SX_ARRANGE")
+	@SequenceGenerator(name = "SEQ_SX_ARRANGE", sequenceName = "sx_arrange_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

@@ -15,4 +15,7 @@ public interface PatientDao extends GenericDao<Patient, Long> {
 	@Transactional
 	List<Patient> getHisPatient(String blhs);
 
+	@Transactional
+	Patient getByPatientId(String pid);
+
 }

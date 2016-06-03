@@ -38,9 +38,9 @@ public class AuditTrace extends BaseObject implements Serializable {
 	 * 主键id，自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
-	@SequenceGenerator(name = "SEQ_TRACE", sequenceName = "trace_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
+	@SequenceGenerator(name = "SEQ_TRACE", sequenceName = "trace_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

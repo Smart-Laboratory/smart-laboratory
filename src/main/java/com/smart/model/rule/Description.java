@@ -6,12 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-
-import com.smart.model.user.User;
 
 @Entity
 @Table(name="lab_description")
@@ -39,9 +35,9 @@ private Long id;
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RULE")
-	@SequenceGenerator(name = "SEQ_RULE", sequenceName = "rule_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DES")
+	@SequenceGenerator(name = "SEQ_DES", sequenceName = "description_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

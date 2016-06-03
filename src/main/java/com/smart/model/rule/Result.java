@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
@@ -49,9 +50,9 @@ public class Result extends BaseObject implements Serializable{
 	 * 主键、自增
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESULT")
-	@SequenceGenerator(name = "SEQ_RESULT", sequenceName = "result_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESULT")
+	@SequenceGenerator(name = "SEQ_RESULT", sequenceName = "result_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

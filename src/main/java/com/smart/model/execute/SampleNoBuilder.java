@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name="l_sampleno_auto")
@@ -40,7 +41,9 @@ public class SampleNoBuilder {
 	private String notes;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SAMPLE_AUTO_TYPE")
+	@SequenceGenerator(name = "SAMPLE_AUTO_TYPE", sequenceName = "sample_auto_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

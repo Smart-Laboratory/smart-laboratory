@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import com.smart.model.BaseObject;
 
@@ -30,9 +31,9 @@ public class Batch extends BaseObject implements Serializable {
 	private Long rgId;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BAN")
-	@SequenceGenerator(name = "SEQ_BAN", sequenceName = "ban_sequence", allocationSize = 1)*/
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BAN")
+	@SequenceGenerator(name = "SEQ_BAN", sequenceName = "ban_sequence", allocationSize = 1)
 	public Long getId() {
 		return id;
 	}

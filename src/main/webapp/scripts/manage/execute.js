@@ -1,4 +1,4 @@
-function getDate(item,event){
+function getData(item,event){
 	var e = e||event;
 	var key = event.keyCode;
 	if(navigator.appName=="Netscape"){
@@ -26,7 +26,7 @@ function getDate(item,event){
 				$("#blh").html(data.blh);$("#patientId").html(data.patientId);$("#pName").html(data.name);$("#pSex").html(data.sex);$("#pCsrq").html(csrq.substring(0,10));
 			})
 			
-			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:1,from:$("#from").val(),to:$("#to").val()},function(data){
+			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
 				if(data!=null){
 					$("#tests").html(data.html);
 				}
@@ -39,6 +39,16 @@ function getDate(item,event){
 }
 
 $(function(){
+	$("#printDialog").dialog({
+		title: "条码打印",
+		autoOpen: false,
+		resizable: false,
+		modal:true,
+	    width: 550,
+	    height: 500
+	});
+	
+	$(".footer").css('display','none');
 	$( "#from" ).datepicker({
 		changeMonth: true,
 		dateFormat:"yy-mm-dd",
@@ -58,13 +68,30 @@ $(function(){
 	    }
 	});
 	var d = new Date();
-	d.setMonth(d.getMonth()-4);
+	d.setMonth(d.getMonth()-1);
 	$( "#from" ).val(d.Format("yyyy-MM-dd"));
 	$( "#to" ).val(new Date().Format("yyyy-MM-dd"));
 	
 	$("#bloodCheck").prop("checked",'true');
 	
-	
+	$("#conform").click(function(){
+		var selval;
+		$("#tests input:checkbox").each(function(){
+			selval = selval + $(this).val()+";";
+		});
+		alert(selval);
+		if(selval==null || selval == ''){
+			alert("请选择检验项目");
+			return;
+		}
+//		$.post("../manage/execute/submit",{selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
+//			
+//		});
+		
+		$('#printFrame').empty();
+    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode\"/>");
+		$("#printDialog").dialog("open");
+	});
 })
 
 

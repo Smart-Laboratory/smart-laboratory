@@ -174,10 +174,13 @@ $(function() {
 	labChange=function(select){
 		$.ajax({
 			  type: 'POST',
-			  url: "../audit/labChange?lab="+$(select).children().attr("title")
+			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+			  success:function(){
+				  $("#labText").html($(select).children().html());
+					jQuery("#witable").jqGrid("setGridParam",{
+						url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
+			  }
 		});
-		$("#labText").html($(select).children().html());
-		jQuery("#witable").jqGrid("setGridParam",{
-			url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
+		
 	}
 });

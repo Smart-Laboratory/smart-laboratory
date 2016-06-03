@@ -4,8 +4,9 @@
 <head>
     <title><fmt:message key="sample.manage.receive"/></title>
     
-    
+    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
@@ -42,7 +43,7 @@
 		<div class="widget-main">
 		<div>
 			<label ><fmt:message key="execute.jzkh" /></label>
-			<input type="text" id="jzkh" class="form-control" onkeypress="getDate(this,event)">
+			<input type="text" id="jzkh" class="form-control" onkeypress="getData(this,event)">
 		</div>
 		<div style="padding-top:5px;">
 			<button><fmt:message key="execute.smk" /></button>
@@ -208,6 +209,11 @@
 	</div>
 
 
+</div>
+
+<div id="printDialog" align="left">
+	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
+	<div id="printFrame" style="height:400px;"></div>
 </div>
 
 </body>

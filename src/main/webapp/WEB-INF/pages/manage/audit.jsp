@@ -20,11 +20,11 @@
     <script type="text/javascript" src="../scripts/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="../scripts/justgage.1.0.1.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="../scripts/lis/audit.js"></script>
     <script type="text/javascript" src="../scripts/highcharts.js"></script>
     <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
     <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
 	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
+	<script type="text/javascript" src="../scripts/lis/audit.js"></script>
 
 <style>
 .ui-tabs-anchor {
