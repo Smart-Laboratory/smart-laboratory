@@ -1,6 +1,11 @@
 package com.smart.model.lis;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.IdClass;
+import java.io.Serializable;
 
 /**
  * Title: Channel
@@ -11,11 +16,12 @@ import javax.persistence.*;
  * @Version:
  */
 @Entity
-@IdClass(ChannelId.class)
+@IdClass(ChannelPK.class)
 @Table(name = "lab_channel")
-public class Channel {
+public class Channel implements Serializable {
+    private static final long serialVersionUID = 3142043106827517693L;
+
     @Id
-    @Column(name = "deviceid")
     public String getDeviceId() {
         return deviceId;
     }
@@ -34,7 +40,6 @@ public class Channel {
     }
 
     @Id
-    @Column(name = "testid")
     public String getTestId() {
         return testId;
     }
