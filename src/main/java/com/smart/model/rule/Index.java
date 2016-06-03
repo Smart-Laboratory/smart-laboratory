@@ -23,8 +23,12 @@ import org.hibernate.search.annotations.DocumentId;
 import com.smart.model.BaseObject;
 
 /**
-	 * Index对象表示最基本的检验项目
-	 */
+ *  Index对象表示最基本的检验项目
+ *
+ *  add by zcw 2016-05-31
+ *  	labdepartment：		关联部门
+ *  	instrument			关联仪器
+ */
 @Entity
 @Table(name = "lab_index")
 public class Index extends BaseObject implements Serializable {
@@ -33,7 +37,6 @@ public class Index extends BaseObject implements Serializable {
 	
 	// Primary Key
 	private Long id;
-		
 	private String indexId;
 	private String english;
 	private String name;
@@ -53,10 +56,14 @@ public class Index extends BaseObject implements Serializable {
 	private String printord;
 	private int needhistory;
 	private String method;
-	
 	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
-	
+
+	private String labdepartment;	//关联部门
+	private String instrument;		//关联仪器
+
+
+
 	public Index() {
 	}
 
@@ -319,8 +326,25 @@ public class Index extends BaseObject implements Serializable {
 	public void setGuide(String guide) {
 		this.guide = guide;
 	}
-	
-	
+
+	@Column
+	public String getLabdepartment() {
+		return labdepartment;
+	}
+
+	public void setLabdepartment(String labdepartment) {
+		this.labdepartment = labdepartment;
+	}
+
+	@Column
+	public String getInstrument() {
+		return instrument;
+	}
+
+	public void setInstrument(String instrument) {
+		this.instrument = instrument;
+	}
+
 	@Transient
 	public int getRuleCount() {
 		HashMap<Long, Rule> map = new HashMap<Long, Rule>();

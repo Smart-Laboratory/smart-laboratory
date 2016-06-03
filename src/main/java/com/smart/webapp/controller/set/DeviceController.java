@@ -13,10 +13,8 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,37 +152,22 @@ public class DeviceController {
      * @throws Exception
      */
     @RequestMapping(value="/saveDevice*",method=RequestMethod.POST)
-    public ModelAndView save(HttpServletRequest request,HttpServletResponse response)throws  Exception{
+    @ResponseBody
+    public String saveDevice(@ModelAttribute @Validated Device device, HttpServletRequest request, HttpServletResponse response)throws  Exception{
         String id = request.getParameter("id");
-//        if(deviceManager.getDeviceByCode(id) != null){
-//            return new ModelAndView().addObject("error","id aaaaaaaaaaaaaaaaaaaa");
-//        }
-        Device device = new Device();
-        String name = request.getParameter("name");
-        String type = request.getParameter("type");                             //类型
-        String lab = request.getParameter("lab");                               //所属科室
-        int comport = Integer.parseInt(request.getParameter("comport"));        //COM口
-        String baudrate =request.getParameter("baudrate");                      //波特率
-        String parity = request.getParameter("parity");                         //奇偶校验位
-        String databit = request.getParameter("databit");                       //数据位
-        String stopbit = request.getParameter("stopbit");                       //停止位
-        int handshark = Integer.parseInt(request.getParameter("handshark"));    //握手
-        String datawind = request.getParameter("datawind");                     //数据窗口
-
-        device.setId(id);
-        device.setName(name);
-        device.setLab(lab);
-        device.setType(type);
-        device.setComport(comport);
-        device.setBaudrate(baudrate);
-        device.setDatabit(databit);
-        device.setParity(parity);
-        device.setHandshake(handshark);
-        device.setStopbit(stopbit);
-        device.setDatawind(datawind);
-        device.setStatus(1);
+        JSONObject success = new JSONObject();
+        String method = request.getParameter("method");
+        System.out.println("method==>"+method);
+        if("add".equals(method)) {
+            device.setStatus(1);
+            if (deviceManager.getDeviceByCode(device.getId()) != null) {
+                success.put("success", "编号已经存在");
+                return success.toString();
+            }
+        }
         deviceManager.save(device);
-        return new ModelAndView("redirect:/set/device");
+        success.put("success","0");
+        return success.toString();
     }
 
     /**
@@ -194,19 +177,23 @@ public class DeviceController {
      * @param response
      * @return
      */
-    @RequestMapping(value="/deleteDevie",method=RequestMethod.POST)
+    @RequestMapping(value="/deleteDevice*",method=RequestMethod.POST)
     @ResponseBody
-    public ModelAndView delete(@RequestParam(value = "id") String id, HttpServletRequest request, HttpServletResponse response){
+    public String delete(@RequestParam(value = "id") String id, HttpServletRequest request, HttpServletResponse response) throws  Exception{
        //检测状态
         Device device = deviceManager.getDeviceByCode(id);
+        JSONObject result = new JSONObject();
         if (device.getInuse()==1){
-            return new ModelAndView().addObject("susess","仪器己在使用中,不允许删除！");
+            result.put("susess","仪器己在使用中,不允许删除！");
+            return result.toString();
         }
         try{
             deviceManager.remove(device);
-            return new ModelAndView().addObject("susess","true");
+            result.put("susess","0");
+            return result.toString();
         }catch (Exception ex){
-            return new ModelAndView().addObject("susess", ex.getMessage());
+            result.put("susess", ex.getMessage());
+            return result.toString();
         }
 
     }
