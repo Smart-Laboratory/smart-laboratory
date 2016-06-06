@@ -23,10 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.Constants;
 import com.smart.model.lis.ReceivePoint;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.ReceivePointManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.TestResultManager;
 
 @Controller
 @RequestMapping("/manage/modify*")
@@ -37,6 +39,9 @@ public class ModifyController {
 
 	@Autowired
 	private SampleManager sampleManager = null;
+	
+	@Autowired
+	private TestResultManager testResultManager = null;
 
 	@Autowired
 	private ReceivePointManager receivePointManager = null;
@@ -71,11 +76,13 @@ public class ModifyController {
 	public String getModifyTest(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String error = "error";
-		JSONObject obj = new JSONObject();
+		String search_date = request.getParameter("search_date");
 		String testSection = request.getParameter("testSection");
 		String sampleNumber = request.getParameter("sampleNumber");
 		String operation = request.getParameter("operation");
 		String operationValue = request.getParameter("operationValue");
+		//1样本信息，0结果信息
+		String modifyResult = request.getParameter("modifyResult");
 		int switchValue = 0;
 		// 加
 		if ("add".equals(operation)) {
@@ -93,13 +100,13 @@ public class ModifyController {
 		if (0 == stringTOint(operationValue)) {
 			return error;
 		}
-		// 当前日期
-		String nowDate = Constants.DF3.format(new Date());
 		// 例：sampleNo = 20150601BAC
-		String sampleNo = new StringBuffer().append(nowDate)
+		String sampleNo = new StringBuffer().append(search_date)
 				.append(testSection).toString().trim();
 		// 获取页面设置的，需要修改的sampleNo
 		List<Sample> sampleList = new ArrayList<Sample>();
+		List<TestResult> trList = new ArrayList<TestResult>();
+		
 		Set<String> set = judgeSampleNumber(sampleNo, sampleNumber);
 		if (null != set) {
 			StringBuffer sNo = new StringBuffer();
@@ -110,71 +117,165 @@ public class ModifyController {
 			}
 			sampleList = sampleManager.getBysampleNos(sNo.toString().substring(
 					0, sNo.toString().length() - 1));
-			System.out.println(sampleList.size());
+			trList = testResultManager.getTestBySampleNos(sNo.toString().substring(
+					0, sNo.toString().length() - 1));
 		} else {
 			return error;
 		}
 		// 加减后新的sampleNo的集合，用户判断新的集合中是否在数据库中存在
-		List<String> sampleNewNoList = new ArrayList<String>();
+		List<String> resultNewNoList = new ArrayList<String>();
 		switch (switchValue) {
 		case 0: // 操作错误
 			return error;
 		case 1: // 加
-			if (null != sampleList) {
-				for (int i = 0; i < sampleList.size(); i++) {
-					String sNo = updateSampleNo(
-							sampleList.get(i).getSampleNo(), operationValue,
-							switchValue);
-					if (null != sNo) {
-						sampleList.get(i).setSampleNo(sNo);
-						sampleNewNoList.add(sNo);
+			if("1".equals(modifyResult)){
+				//标本号信息修改
+				if (null != sampleList&&sampleList.size()>0) {
+					//批量更新需要的MAP
+					Map <String, String>trMap =new HashMap<String, String>() ;
+					for (int i = 0; i < sampleList.size(); i++) {
+						String sNo = updateSampleNo(
+								sampleList.get(i).getSampleNo(), operationValue,
+								switchValue);
+						if (null != sNo) {
+							trMap.put(sampleList.get(i).getSampleNo(), sNo);
+							resultNewNoList.add(sNo);
+						} else {
+							return error;
+						}
+					}
+					// 判断新的编号集合数据库中是否存在
+					StringBuffer sampleNewNo = new StringBuffer();
+					for (String value : resultNewNoList) {
+						sampleNewNo.append("'");
+						sampleNewNo.append(value);
+						sampleNewNo.append("',");
+					}
+					List<Sample> sNewList = sampleManager
+							.getBysampleNos(sampleNewNo.toString().substring(0,
+									sampleNewNo.toString().length() - 1));
+					if (null != sNewList && sNewList.size() < 1) 
+					{
+						for (int i = 0; i < sampleList.size(); i++) {
+							String sNo = updateSampleNo(
+									sampleList.get(i).getSampleNo(), operationValue,
+									switchValue);
+							sampleList.get(i).setSampleNo(sNo);
+						}
+						sampleManager.saveAll(sampleList);
 					} else {
 						return error;
 					}
-				}
-				// 判断新的编号集合数据库中是否存在
-				StringBuffer sampleNewNo = new StringBuffer();
-				for (String value : sampleNewNoList) {
-					sampleNewNo.append("'");
-					sampleNewNo.append(value);
-					sampleNewNo.append(",");
-				}
-				List<Sample> sNewList = sampleManager
-						.getBysampleNos(sampleNewNo.toString().substring(0,
-								sampleNewNo.toString().length() - 1));
-				if (null != sNewList && sNewList.size() > 0) {
+				}else{
 					return error;
-				} else {
-					sampleManager.saveAll(sampleList);
+				}
+			}else{//标本号结果修改
+				if (null != trList&&trList.size()>0) {
+					//批量更新需要的MAP
+					Map <String, String>trMap =new HashMap<String, String>() ;
+					for (int i = 0; i < trList.size(); i++) {
+						String sNo = updateSampleNo(
+								trList.get(i).getSampleNo(), operationValue,
+								switchValue);
+						if (null != sNo) {
+							trMap.put(trList.get(i).getSampleNo(), sNo);
+							resultNewNoList.add(sNo);
+						} else {
+							return error;
+						}
+					}
+					// 判断新的编号集合数据库中是否存在
+					StringBuffer trNewNo = new StringBuffer();
+					for (String value : resultNewNoList) {
+						trNewNo.append("'");
+						trNewNo.append(value);
+						trNewNo.append("',");
+					}
+					List<TestResult> trNewList = testResultManager
+							.getTestBySampleNos(trNewNo.toString().substring(0,
+									trNewNo.toString().length() - 1));
+					if (null != trNewList && trNewList.size() <1) 
+					{
+						testResultManager.updateAll(trMap);
+					} else {
+						return error;
+					}
+				}else{
+					return error;
 				}
 			}
+			
 			break;
 		case 2: // 减
-			if (null != sampleList) {
-				for (int i = 0; i < sampleList.size(); i++) {
-					String sNo = updateSampleNo(
-							sampleList.get(i).getSampleNo(), operationValue,
-							switchValue);
-					if (null != sNo) {
-						sampleList.get(i).setSampleNo(sNo);
-						sampleNewNoList.add(sNo);
+			if("1".equals(modifyResult)){
+				//标本号信息修改
+				if (null != sampleList&&sampleList.size()>0) {
+					//批量更新需要的MAP
+					Map <String, String>trMap =new HashMap<String, String>() ;
+					
+					for (int i = 0; i < sampleList.size(); i++) {
+						String sNo = updateSampleNo(
+								sampleList.get(i).getSampleNo(), operationValue,
+								switchValue);
+						if (null != sNo) {
+							trMap.put(sampleList.get(i).getSampleNo(), sNo);
+							resultNewNoList.add(sNo);
+						} else {
+							return error;
+						}
+					}
+					StringBuffer sampleNewNo = new StringBuffer();
+					for (String value : resultNewNoList) {
+						sampleNewNo.append("'");
+						sampleNewNo.append(value);
+						sampleNewNo.append("',");
+					}
+					List<Sample> sNewList = sampleManager
+							.getBysampleNos(sampleNewNo.toString().substring(0,
+									sampleNewNo.toString().length() - 1));
+					if (null != sNewList && sNewList.size() < 1) {
+						for (int i = 0; i < sampleList.size(); i++) {
+							String sNo = updateSampleNo(
+									sampleList.get(i).getSampleNo(), operationValue,
+									switchValue);
+							sampleList.get(i).setSampleNo(sNo);
+						}
+							sampleManager.saveAll(sampleList);
+						}
 					} else {
 						return error;
 					}
-				}
-				StringBuffer sampleNewNo = new StringBuffer();
-				for (String value : sampleNewNoList) {
-					sampleNewNo.append("'");
-					sampleNewNo.append(value);
-					sampleNewNo.append(",");
-				}
-				List<Sample> sNewList = sampleManager
-						.getBysampleNos(sampleNewNo.toString().substring(0,
-								sampleNewNo.toString().length() - 1));
-				if (null != sNewList && sNewList.size() > 0) {
+			}else{
+				if (null != trList&&trList.size()>0) {
+					//批量更新需要的MAP
+					Map <String, String>trMap =new HashMap<String, String>() ;
+					for (int i = 0; i < trList.size(); i++) {
+						String sNo = updateSampleNo(
+								trList.get(i).getSampleNo(), operationValue,
+								switchValue);
+						if (null != sNo) {
+							trMap.put(trList.get(i).getSampleNo(), sNo);
+							resultNewNoList.add(sNo);
+						} else {
+							return error;
+						}
+					}
+					StringBuffer trNewNo = new StringBuffer();
+					for (String value : resultNewNoList) {
+						trNewNo.append("'");
+						trNewNo.append(value);
+						trNewNo.append("',");
+					}
+					List<TestResult> trNewList = testResultManager
+							.getTestBySampleNos(trNewNo.toString().substring(0,
+									trNewNo.toString().length() - 1));
+					if (null != trNewList && trNewList.size() <1 ) {
+						testResultManager.updateAll(trMap);
+					}else{
+						return error;
+					}
+				}else{
 					return error;
-				} else {
-					sampleManager.saveAll(sampleList);
 				}
 			}
 			break;
@@ -184,6 +285,8 @@ public class ModifyController {
 			List<Sample> sampleNoListSort = new ArrayList<Sample>();
 			if (sampleNumber.indexOf(",") != -1) {
 				String sampleNums[] = sampleNumber.split(",");
+				//批量更新需要的MAP
+				Map <String, String>trMap =new HashMap<String, String>() ;
 				for (String sampleNum : sampleNums) {
 					// 如果是001-005格式的
 					if (sampleNum.indexOf("-") != -1) {
@@ -200,17 +303,7 @@ public class ModifyController {
 							if (sb < se
 									&& snumBegin.length() == snumEnd.length()) {
 								for (int i = sb; i <= se; i++) {
-									// s.length表示补0后一共的长度，5表示当前的数字，即在5前面补零
-									// String str =
-									// String.format("%"+s.length()+"d",
-									// 5).replace(" ", "0");
-									sampleNo = sampleNo
-											+ String.format(
-													"%" + snumBegin.length()
-															+ "d", i).replace(
-													" ", "0");
-									;
-									sampleNoList.add(sampleNo);
+									sampleNoList.add(sampleNo+i);
 								}
 							} else {
 								return error;
@@ -224,7 +317,7 @@ public class ModifyController {
 							for (String value : sampleNoList) {
 								sNo.append("'");
 								sNo.append(value);
-								sNo.append(",");
+								sNo.append("',");
 							}
 							sampleList1 = sampleManager.getBysampleNos(sNo
 									.toString().substring(0,
@@ -237,16 +330,23 @@ public class ModifyController {
 						Collections.reverse(sampleNoListSort);
 						if (null != sampleList1) {
 							for (int i = 0; i < sampleList1.size(); i++) {
+								trMap.put(sampleList1.get(i).getSampleNo(), sampleNoListSort.get(i).toString());
 								sampleList1.get(i).setSampleNo(
 										sampleNoListSort.get(i).toString());
 							}
 						}
-						sampleManager.saveAll(sampleList1);
+						
+						if("1".equals(modifyResult)){
+							sampleManager.saveAll(sampleList1);
+						}else{
+							testResultManager.updateAll(trMap);
+						}
 					} else {
 						return error;
 					}
 				}
 			} else {
+				Map <String, String>trMap =new HashMap<String, String>() ;
 				// 如果是001-005格式的
 				if (sampleNumber.indexOf("-") != -1) {
 					String snums[] = sampleNumber.split("-");
@@ -261,16 +361,7 @@ public class ModifyController {
 						// 001-002 后面的数字必须大于前面的数字
 						if (sb < se && snumBegin.length() == snumEnd.length()) {
 							for (int i = sb; i <= se; i++) {
-								// s.length表示补0后一共的长度，5表示当前的数字，即在5前面补零
-								// String str =
-								// String.format("%"+s.length()+"d",
-								// 5).replace(" ", "0");
-								sampleNo = sampleNo
-										+ String.format(
-												"%" + snumBegin.length() + "d",
-												i).replace(" ", "0");
-								;
-								sampleNoList.add(sampleNo);
+								sampleNoList.add(sampleNo+i);
 							}
 						} else {
 							return null;
@@ -285,19 +376,25 @@ public class ModifyController {
 					for (String value : sampleNoList) {
 						sNo.append("'");
 						sNo.append(value);
-						sNo.append(",");
+						sNo.append("',");
 					}
 					sampleList2 = sampleManager.getBysampleNos(sNo.toString()
 							.substring(0, sNo.toString().length() - 1));
 					// 实现更新
 					sampleNoListSort.addAll(sampleList2);
 					Collections.reverse(sampleNoListSort);
-					if (null != sampleList2) {
+					if (null != sampleList2&&sampleList2.size()>0) {
 						for (int i = 0; i < sampleList2.size(); i++) {
-							sampleList2.get(i).setSampleNo(
-									sampleNoListSort.get(i).toString());
+							trMap.put(sampleList2.get(i).getSampleNo(), sampleNoListSort.get(i).getSampleNo().toString());
 						}
-						sampleManager.saveAll(sampleList2);
+						if("1".equals(modifyResult)){
+							for (int i = 0; i < sampleList2.size(); i++) {
+								sampleList2.get(i).setSampleNo(trMap.get(sampleList2.get(i).getSampleNo().toString()));
+							}
+							sampleManager.saveAll(sampleList2);
+						}else{
+							testResultManager.updateAll(trMap);
+						}
 					} else {
 						return error;
 					}
@@ -307,7 +404,7 @@ public class ModifyController {
 			}
 		}
 		response.setContentType("text/html;charset=UTF-8");
-		response.getWriter().print(obj.toString());
+		response.getWriter().print("success");
 		return null;
 	}
 
@@ -336,6 +433,7 @@ public class ModifyController {
 	 */
 	private static String updateSampleNo(String sampleNo,
 			String operationValue, int switchValue) {
+		
 		String subSampleNo = sampleNo.substring(11, sampleNo.length());
 		int ssn = stringTOint(subSampleNo);
 		int ov = stringTOint(operationValue);
@@ -355,8 +453,7 @@ public class ModifyController {
 			}
 		}
 		if (flag) {
-			return String.format("%" + sampleNo.length() + "d", result)
-					.replace(" ", "0");
+			return sampleNo.substring(0,11)+result;
 		} else {
 			return null;
 		}

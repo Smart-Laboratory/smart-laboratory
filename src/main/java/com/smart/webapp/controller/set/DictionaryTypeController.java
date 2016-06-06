@@ -94,7 +94,7 @@ public class DictionaryTypeController {
             try {
                 dictionaryTypeManager.remove(id);
             }catch (Exception e){
-                throw e;
+                e.printStackTrace();
             }
             map.put("success", "true");
         }
