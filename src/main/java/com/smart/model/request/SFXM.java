@@ -27,6 +27,14 @@ public class SFXM {
 	private int zypb;
 	private int tjpb;
 	private String note;
+	
+	private String qbgdd;	//取报告地点
+	private String qbgsj;	//取报告时间
+	private String hyfl;	//化验分类
+	private String yblx; 	//样本类型
+	private String jyxmfl;	//计费项目分类
+	private int tcpb;		//套餐判别
+	private int qbbdd;
 	private long hospitalid; //医院ID
 	
 	@Id
@@ -114,6 +122,15 @@ public class SFXM {
 	}
 	
 	@Column
+	public String getYblx() {
+		return yblx;
+	}
+
+	public void setYblx(String yblx) {
+		this.yblx = yblx;
+	}
+	
+	@Column
 	public int getZypb() {
 		return zypb;
 	}
@@ -131,6 +148,60 @@ public class SFXM {
 		this.tjpb = tjpb;
 	}
 	
+	@Column
+	public String getQbgdd() {
+		return qbgdd;
+	}
+
+	public void setQbgdd(String qbgdd) {
+		this.qbgdd = qbgdd;
+	}
+
+	@Column
+	public String getQbgsj() {
+		return qbgsj;
+	}
+
+	public void setQbgsj(String qbgsj) {
+		this.qbgsj = qbgsj;
+	}
+
+	@Column
+	public String getHyfl() {
+		return hyfl;
+	}
+
+	public void setHyfl(String hyfl) {
+		this.hyfl = hyfl;
+	}
+
+	@Column
+	public String getJyxmfl() {
+		return jyxmfl;
+	}
+
+	public void setJyxmfl(String jyxmfl) {
+		this.jyxmfl = jyxmfl;
+	}
+
+	@Column
+	public int getTcpb() {
+		return tcpb;
+	}
+
+	public void setTcpb(int tcpb) {
+		this.tcpb = tcpb;
+	}
+
+	@Column
+	public int getQbbdd() {
+		return qbbdd;
+	}
+
+	public void setQbbdd(int qbbdd) {
+		this.qbbdd = qbbdd;
+	}
+
 	@Column
 	public String getNote() {
 		return note;

@@ -37,11 +37,11 @@
 		</div>
 		<div class="widget-body">
 			<div class="widget-main">
-			<form class="form-horizontal" role="form" style="margin-top:5px;">
+			<form class="form-horizontal" role="form" style="margin-top:5px;" id="sampleForm">
 				<div class="form-group" style="margin-right:0px;margin-left:0px;">
 					<label class="col-sm-1 control-label no-padding-right" for="stayhospitaimode">在院方式</label>
 					<div class="col-sm-2">
-						<select class="col-sm-12" id="stayhospitaimode">
+						<select class="col-sm-12" id="stayhospitalmode">
 							<option value="1">门诊</option>
 							<option value="2">住院</option>
 							<option value="3">体检</option>
@@ -143,42 +143,37 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-3">
-						<div class="col-sm-3">&nbsp;
-						</div>
-						<button class="btn btn-info col-sm-6" type="button" onclick="sample('add')">
-							<i class="ace-icon fa fa-folder bigger-110"></i>
-							新增
-						</button>
-						<div class="col-sm-3">&nbsp;
-						</div>
+					<div class="col-sm-1">&nbsp;</div>
+					<div class="col-sm-2 radio">
+						<label>
+							<input name="edittype" type="radio" class="ace input-lg" value="add">
+							<span class="lbl bigger-120">新增</span>
+						</label>
+					</div>
+					<div class="col-sm-2 radio">
+						<label>
+							<input name="edittype" type="radio" class="ace input-lg" checked value="edit">
+							<span class="lbl bigger-120">编辑</span>
+						</label>
+					</div>
+					<div class="col-sm-2 radio">
+						<label>
+							<input name="edittype" type="radio" class="ace input-lg" value="delete">
+							<span class="lbl bigger-120">删除</span>
+						</label>
+					</div>
+					<div class="col-sm-2 radio">
+						<label>
+							<input name="edittype" type="radio" class="ace input-lg" value="cancel">
+							<span class="lbl bigger-120">清空</span>
+						</label>
 					</div>
 					<div class="col-sm-3">
 						<div class="col-sm-3">&nbsp;
 						</div>
-						<button class="btn btn-success col-sm-6" type="button" onclick="sample('edit')">
-							<i class="ace-icon fa fa-floppy-o bigger-110"></i>
-							编辑
-						</button>
-						<div class="col-sm-3">&nbsp;
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="col-sm-3">&nbsp;
-						</div>
-						<button class="btn btn-warning col-sm-6" type="button" onclick="sample('delete')">
-							<i class="ace-icon fa fa-floppy-o bigger-110"></i>
-							删除
-						</button>
-						<div class="col-sm-3">&nbsp;
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="col-sm-3">&nbsp;
-						</div>
-						<button class="btn col-sm-6" type="reset" id="cancel">
-							<i class="ace-icon fa fa-undo bigger-110"></i>
-							取消
+						<button class="btn btn-info col-sm-6" type="button" onclick="sample()">
+							<i class="ace-icon fa fa-folder bigger-120"></i>
+							提交
 						</button>
 						<div class="col-sm-3">&nbsp;
 						</div>
