@@ -151,7 +151,7 @@ public class DeviceRelationController {
             jsonObject.put("direct",ConvertUtil.null2String(t.getDirect()));
             jsonObject.put("refhigh",ConvertUtil.null2String(t.getRefHigh()));
             jsonObject.put("reflower",ConvertUtil.null2String(t.getRefLower()));
-            jsonObject.put("orderno",ConvertUtil.null2String(t.getOrderno()));
+            jsonObject.put("orderno",ConvertUtil.null2String(t.getOrderNo()));
             jsonArray.put(jsonObject);
         }
         //返回常用信息
@@ -319,7 +319,7 @@ public class DeviceRelationController {
             testReference.setSex(sex);
             testReference.setAge(age);
             testReference.setAgeUnit(ageunit);
-            testReference.setOrderno(orderno);
+            testReference.setOrderNo(orderno);
             testReference.setDirect(direct);
             testReference.setRefHigh(refhigh);
             testReference.setRefLower(reflower);
