@@ -38,14 +38,10 @@ import com.smart.service.lis.SampleLogManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultLogManager;
 import com.smart.service.lis.TestResultManager;
-<<<<<<< HEAD
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
-=======
-import com.smart.webapp.util.UserUtil;
->>>>>>> origin/master
 
 @Controller
 @RequestMapping("/manage/modify*")
@@ -56,12 +52,7 @@ public class ModifyController {
 
 	@Autowired
 	private SampleManager sampleManager = null;
-	@Autowired
-	private ProcessManager processManager = null;
-	@Autowired
-	private SampleLogManager sampleLogManager = null;
-	@Autowired
-	private ProcessLogManager processLogManager = null;
+
 	@Autowired
 	private ProcessManager processManager = null;
 	
@@ -73,8 +64,10 @@ public class ModifyController {
 	
 	@Autowired
 	private TestResultManager testResultManager = null;
+	
 	@Autowired
 	private TestResultLogManager testResultLogManager = null;
+	
 	@Autowired
 	private ReceivePointManager receivePointManager = null;
 	
@@ -204,8 +197,8 @@ public class ModifyController {
 	 */
 	@RequestMapping(value = "/ajax/sample*", method = RequestMethod.POST)
 	@ResponseBody
-	public String getModifyTest(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public String getModifyTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		String error = "error";
 		String search_date = request.getParameter("search_date");
 		String testSection = request.getParameter("testSection");
@@ -429,11 +422,9 @@ public class ModifyController {
 			// --------------------------------------------------------
 			List<String> resultNoList = new ArrayList<String>();
 			List<String> resultNoListSort = new ArrayList<String>();
-			List<Sample> sampleNoListSort = new ArrayList<Sample>();
 			if (sampleNumber.indexOf(",") != -1) {
 				return error;
 			} else {
-				Map<String, String> trMap = new HashMap<String, String>();
 				// 如果是001-005格式的
 				if (sampleNumber.indexOf("-") != -1) {
 					String snums[] = sampleNumber.split("-");
@@ -468,7 +459,6 @@ public class ModifyController {
 				// 获取页面设置的，需要修改的sampleNo
 				List<Sample> sampleList2 = new ArrayList<Sample>();
 				List<TestResult> trList2 = new ArrayList<TestResult>();
-				List<TestResult> trLogList = new ArrayList<TestResult>();
 				StringBuffer sNo = new StringBuffer();
 				for (String value : resultNoList) {
 					sNo.append("'");
@@ -478,14 +468,6 @@ public class ModifyController {
 				if ("1".equals(modifyResult)) {// 修改样本信息表
 					sampleList2 = sampleManager.getBysampleNos(sNo.toString()
 							.substring(0, sNo.toString().length() - 1));
-<<<<<<< HEAD
-					// 实现更新
-					sampleNoListSort.addAll(sampleList2);
-					Collections.reverse(sampleNoListSort);
-					if (null != sampleList2&&sampleList2.size()>0) {
-						for (int i = 0; i < sampleList2.size(); i++) {
-							trMap.put(sampleList2.get(i).getSampleNo(), sampleNoListSort.get(i).getSampleNo());
-=======
 					
 					List<Sample> saveList = new ArrayList<Sample>();
 					for(Sample sample : sampleList2) {
@@ -495,7 +477,6 @@ public class ModifyController {
 							saveSampleLog(s, username, Constants.LOG_OPERATE_REPLACE);
 							s.setSampleNo(oldAndNew.get(sample.getSampleNo()));
 							saveList.add(s);
->>>>>>> origin/master
 						}
 					}
 					sampleManager.saveAll(saveList);
@@ -531,7 +512,6 @@ public class ModifyController {
 				if (sNoOld.length() != sNoNew.length()) {
 					return error;
 				}
-				List<Sample> samplesList = new ArrayList<Sample>();
 				Sample sample1 = sampleManager.getBySampleNo(sNoOld);
 				Sample sample2 = sampleManager.getBySampleNo(sNoNew);
 				
@@ -715,7 +695,6 @@ public class ModifyController {
 		return sampleNoSet;
 	}
 	
-	@SuppressWarnings("unused")
 	private void saveSampleLog(Sample sample, String username,String operation) throws Exception{
 		SampleLog slog = new SampleLog();
 		slog.setSampleEntity(sample);
@@ -723,10 +702,11 @@ public class ModifyController {
 		slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 		slog.setLogoperate(operation);//Constants.LOG_OPERATE_ADD
 		slog.setLogtime(new Date());
-		sampleLogManager.save(slog);
+		slog = sampleLogManager.save(slog);
 		
 		Process process = processManager.getBySampleId(sample.getId());
 		ProcessLog plog = new ProcessLog();
+		plog.setSampleLogId(slog.getId());
 		plog.setProcessEntity(process);
 		plog.setLogger(username);
 		plog.setLogip(InetAddress.getLocalHost().getHostAddress());
@@ -735,7 +715,6 @@ public class ModifyController {
 		processLogManager.save(plog);
 	}
 	
-	@SuppressWarnings("unused")
 	private void saveTestResultLog(TestResult tr, String username,String operation) throws Exception{
 		try {
 			TestResultLog slog = new TestResultLog();
