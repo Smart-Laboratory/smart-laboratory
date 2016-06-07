@@ -23,6 +23,7 @@
 					<option value="add">样本号增加</option>
 					<option value="reduce">样本号减少</option>
 					<option value="inversion">样本号倒置</option>
+					<option value="replace">样本号替换</option>
 				</select>
 		</div>
 		<div style="float:left;width:150px;margin-left:10px;">

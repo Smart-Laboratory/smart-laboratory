@@ -54,7 +54,7 @@ function modifySample() {
 	}
 	$.ajax({
   		type:'post',
-		url: "../manage/modify/ajax/sample?search_date="+search_date+"&modifyResult=" + modifyResult +"&testSection=" + testSection + "&sampleNumber=" + sampleNumber + "&operation=" + operation+ "&operationValue=" + operationValue,
+		url: "../manage/modify/ajax/sample?search_date="+search_date +"&modifyResult=" + modifyResult +"&testSection=" + testSection + "&sampleNumber=" + sampleNumber + "&operation=" + operation+ "&operationValue=" + operationValue,
   		success: function(data) {
   			if('success'==data){
   				alert("操作成功！");

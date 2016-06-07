@@ -40,7 +40,10 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 
 	@Transactional
 	void saveAll(List<TestResult> list);
-
+	
+	@Transactional
+	void deleteAll(List<TestResult> list);
+	
 	@Transactional
 	List<TestResult> getHisTestResult(String samplenos);
 

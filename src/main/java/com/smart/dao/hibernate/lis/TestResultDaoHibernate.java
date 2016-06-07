@@ -84,7 +84,6 @@ public class TestResultDaoHibernate extends
 
 	public int updateAll(Map <String,String>trMap){
 		try {
-			System.out.println(new Date());
 			Transaction tx = getSession().beginTransaction();
 			for (String key : trMap.keySet()) {  
 				String hqlUpdate = "update TestResult set sampleNo = :newsampleNo where sampleNo=:sampleNo";
@@ -93,7 +92,6 @@ public class TestResultDaoHibernate extends
 						.setString("sampleNo",key).executeUpdate();
 			}
 			tx.commit();
-			System.out.println(new Date());
 		} catch (Exception e) {
 			return 0;
 		}
@@ -146,6 +144,14 @@ public class TestResultDaoHibernate extends
 		Session s = getSession();
 		for (TestResult tr : list) {
 			s.merge(tr);
+		}
+		s.flush();
+	}
+	
+	public void deleteAll(List<TestResult> list){
+		Session s = getSession();
+		for (TestResult tr : list) {
+			s.delete(tr);
 		}
 		s.flush();
 	}
