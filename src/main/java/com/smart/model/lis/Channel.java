@@ -22,6 +22,7 @@ public class Channel implements Serializable {
     private static final long serialVersionUID = 3142043106827517693L;
 
     @Id
+    @Column(name = "deviceid")
     public String getDeviceId() {
         return deviceId;
     }
@@ -40,6 +41,7 @@ public class Channel implements Serializable {
     }
 
     @Id
+    @Column(name = "testid")
     public String getTestId() {
         return testId;
     }
@@ -56,7 +58,6 @@ public class Channel implements Serializable {
         this.sampleType = sampleType;
     }
 
-    private long id;
     private String deviceId;        //仪器ID
     private String channel;         //仪器通道
     private String testId;          //检验项目ID

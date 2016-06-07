@@ -98,4 +98,23 @@ public final class ConvertUtil {
 
         return obj;
     }
+    public static String null2String(String s) {
+        return s == null ? "" : s;
+
+    }
+    public static String null2String(Object s) {
+        return s == null ? "" : s.toString();
+
+    }
+    public static int getIntValue(String v) {
+        return getIntValue(v, -1);
+    }
+
+    public static int getIntValue(String v, int def) {
+        try {
+            return Integer.parseInt(v);
+        } catch (Exception ex) {
+            return def;
+        }
+    }
 }

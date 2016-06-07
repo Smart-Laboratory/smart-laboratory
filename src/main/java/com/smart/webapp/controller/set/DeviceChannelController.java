@@ -9,6 +9,8 @@ import com.smart.service.lis.ChannelManager;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -16,11 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +50,7 @@ public class DeviceChannelController {
     private IndexManager indexManager = null;
     @Autowired
     private ChannelManager channelManager= null;
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -53,22 +58,16 @@ public class DeviceChannelController {
         //部门编号
         String departmentId = request.getParameter("department");
         //departmentId="3010109";
-        User operator = userManager.getUserByUsername(request.getRemoteUser());
-        departmentId = operator.getLastLab();
-        System.out.println("departmentId22=>"+operator.getLastLab());
-        String departmentName = sectionManager.getByCode(departmentId).getName();
+        User operator = userManager.getUserByUsername(request.getRemoteUser()); //获取当前用户
+        departmentId = operator.getLastLab();       //当前用户所选择科室
+
+        String departmentName = sectionManager.getByCode(departmentId).getName(); //科室名称
         //获取仪器
         //List<Device> devices = deviceManager.getAll();
-        List<Index> indexes = indexManager.getAll();
+        //List<Index> indexes = indexManager.getAll();
+        String query = " and lab_index.labDepartment is not null or lab_index.labDepartment <>''";
+        List<Index> indexes = indexManager.getIndexsByQuery(query);
         JSONArray jsonArray = new JSONArray();
-
-//        JSONObject root = new JSONObject();
-//        root.put("id",departmentId);
-//        root.put("pId","0");
-//        root.put("name",departmentName);
-//        root.put("open","true");
-//        jsonArray.put(root);
-
         String instruments = "";
         for(Index index :indexes){
             String labDepartment = index.getLabdepartment();
@@ -104,31 +103,89 @@ public class DeviceChannelController {
         return  view;
     }
 
-    @RequestMapping(value = "/save*",method = RequestMethod.POST)
+    /**
+     * 保存仪器通道数据
+     * @param request
+     * @param response
+     * @return
+     * @throws JSONException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/save*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public String save(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
-
+    public void save(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
         String datas = request.getParameter("datas");
-
         JSONArray jsonArray = new JSONArray(datas);
+        List<Channel> channels = new ArrayList<Channel>();
         for(int i=0;i< jsonArray.length();i++){
-            JSONObject iObj=jsonArray.getJSONObject(i);
-            String deviceid=iObj.getString("deviceid");
-            String testid=iObj.getString("testid");
-            String channelValue  = iObj.getString("channel");
+            JSONObject obj=jsonArray.getJSONObject(i);
+            String deviceid=obj.getString("deviceid");          //仪器ID
+            String testid=obj.getString("testid");              //检验项目ID
+            String channelValue  = obj.getString("channel");    //通道
+            String sampleType = obj.getString("sampletype");    //标本类型
 
-            System.out.println("deviceid=>"+deviceid);
-            System.out.println("testid=>"+testid);
-            System.out.println("channelValue=>"+channelValue);
             Channel channel = new Channel();
-            //channel.setId(id);
             channel.setDeviceId(deviceid);
             channel.setTestId(testid);
             channel.setChannel(channelValue);
-            channelManager.save(channel);
+            channel.setSampleType(sampleType);
+
+            channels.add(channel);
         }
+        channelManager.saveChannels(channels);  //批量保存数据
+    }
 
 
-        return "";
+    /**
+     * 获取仪器的所检验项目通道数据
+     * @param deviceid      //仪器ID
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/getData*",method = RequestMethod.POST,produces = "application/json; charset=utf-8" )
+    @ResponseBody
+    public String getChannelData(@RequestParam(value = "deviceid") String deviceid, HttpServletRequest request, HttpServletResponse response) throws  Exception{
+        long starTime=System.currentTimeMillis();
+        //List<Index> indexes = indexManager.getAll();    //检验项目
+        String query = " and lab_index.Instrument is not null or lab_index.Instrument <>''";
+        List<Index> indexes = indexManager.getIndexsByQuery(query);
+        String instruments = "";
+        List<Channel> channels = new ArrayList<Channel>();
+
+        JSONArray jsonArray = new JSONArray();
+
+        for(Index index :indexes){
+            String instrument =  index.getInstrument();
+            String testid = index.getIndexId();
+
+            //System.out.println("testid==>"+testid);
+            if(instrument==null || "".equals(instrument)) continue;
+
+            Channel channel = null;
+            JSONObject jsonObject= new JSONObject();
+            //获取仪器相关检验项目
+            if(instrument.indexOf(deviceid)>=0){
+                channel = channelManager.getChannel(deviceid,testid);
+                if(channel == null){
+                    channel = new Channel();
+                    //如果为空则从检验项目中获取
+                    channel.setTestId(testid);
+                    channel.setDeviceId(deviceid);
+                    channel.setSampleType(index.getSampleFrom());
+                    channel.setChannel("");
+                }
+                jsonObject.put("deviceid",channel.getDeviceId()+"");
+                jsonObject.put("testid",channel.getTestId()+"");
+                jsonObject.put("testname",index.getName()+"");
+                jsonObject.put("channel",channel.getChannel()+"");
+                jsonObject.put("sampletype",channel.getSampleType()+"");
+                jsonArray.put(jsonObject);
+            }
+        }
+        long endTime=System.currentTimeMillis();
+        long Time=endTime-starTime;
+        System.out.println("Time==>"+Time);
+        return jsonArray.toString();
     }
 }

@@ -71,6 +71,9 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 */
 	@Transactional
 	List<Index> getIndexsByName(String name, int pageNum, String field, boolean isAsc);
+
+	@Transactional
+	List<Index> getIndexsByQuery(String query);
 	
 	/**
 	 * 
