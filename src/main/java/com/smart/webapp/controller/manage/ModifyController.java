@@ -97,9 +97,12 @@ public class ModifyController {
 			switchValue = 3;
 		}
 		//
-		if (0 == stringTOint(operationValue)) {
-			return error;
+		if(!"inversion".equals(operation)){
+			if (0 == stringTOint(operationValue)) {
+				return error;
+			}
 		}
+		
 		// 例：sampleNo = 20150601BAC
 		String sampleNo = new StringBuffer().append(search_date)
 				.append(testSection).toString().trim();

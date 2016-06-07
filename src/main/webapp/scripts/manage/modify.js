@@ -56,7 +56,12 @@ function modifySample() {
   		type:'post',
 		url: "../manage/modify/ajax/sample?search_date="+search_date+"&modifyResult=" + modifyResult +"&testSection=" + testSection + "&sampleNumber=" + sampleNumber + "&operation=" + operation+ "&operationValue=" + operationValue,
   		success: function(data) {
-  			alert(data);
+  			if('success'==data){
+  				alert("操作成功！");
+  			}
+  			if('error'==data){
+  				alert("填写的数据有错误！");
+  			}
   	  	}
   	});
 	
