@@ -196,7 +196,7 @@ function sample() {
 		function(data) {
 			var data = JSON.parse(data);
 			var sampleno = $("#sampleno").val();
-			$("#cancel").click();
+			$('#sampleForm')[0].reset();
 			$('#examinaim').data('tag').clear();
 			$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 			var html = "<tr>";

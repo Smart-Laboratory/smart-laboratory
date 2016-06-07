@@ -342,6 +342,8 @@ public class SampleAjaxController {
 			sample.setAge(age);
 			sample.setAgeunit(ageunit);
 			sample.setSex(sex);
+			sample.setFee(fee);
+			sample.setFeestatus(feestatus);
 			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			process.setReceivetime(new Date());
 				
