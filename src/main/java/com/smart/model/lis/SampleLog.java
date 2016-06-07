@@ -1,5 +1,6 @@
 package com.smart.model.lis;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -135,6 +136,12 @@ public class SampleLog extends BaseObject {
 	
 	@Column
 	public String getAge() {
+		if (birthday != null) {
+			Calendar now = Calendar.getInstance();
+			Calendar previous = Calendar.getInstance();
+			previous.setTime(birthday);
+			setAge((now.get(Calendar.YEAR) - previous.get(Calendar.YEAR)+1) + "");
+		}
 		return age;
 	}
 	
@@ -593,6 +600,37 @@ public class SampleLog extends BaseObject {
 		this.stayHospitalMode = s.getStayHospitalMode();
 		this.writeback = s.getWriteback();
 		this.ylxh = s.getYlxh();
+	}
+	
+	@Transient
+	public String getStayHospitalModelValue(){
+		String value = "";
+		switch (getStayHospitalMode()) {
+		case 1:
+			value = "门诊";
+			break;
+		case 2:
+			value = "病房";
+			break;
+		case 3:
+			value = "急诊";
+			break;
+			
+		default:
+			value = "";
+			break;
+		}
+		return value;
+	}
+	
+	@Transient
+	public String getSexValue() {
+		if (sex.equals("1")) {
+			return "男";
+		} else if (sex.equals("2")) {
+			return "女";
+		}
+		return "未知";
 	}
 
 	public String toString() {

@@ -28,6 +28,52 @@ function setDefaultValue(){
 	$("#search_date").val(new Date().Format("yyyyMMdd"));
 }
 
+var isFirstLog = true;
+function showLogData() {
+	if(isFirstLog) {
+		$("#sampleLog").jqGrid({
+			url: "../manage/modify/getLog?text=" + $("#logtext").val() + "&type=" + $("#logtexttype").val(),
+			mtype: "GET",
+			datatype: "json",
+			colNames: ['日志记录时间','IP','操作者','操作','样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','接收实验室','检验目的','样本类型','就诊卡号','临床诊断','申请者','金额'],
+			colModel: [
+			    { name: 'logtime', index: 'logtime', width: 120},
+			    { name: 'logip', index: 'logip', width: 120},
+			    { name: 'logger', index: 'logger', width: 60},
+			    { name: 'logoperate', index: 'logoperate', width: 60},
+				{ name: 'sampleno', index: 'sampleno', width: 110},
+				{ name: 'shm', index: 'shm', width: 70},
+				{ name: 'pname', index: 'pname', width: 80 },
+				{ name: 'section', index: 'section', width: 80 },
+				{ name: 'bed', index: 'bed', width: 40 },
+				{ name: 'sex', index: 'sex', width: 40 },
+				{ name: 'age', index: 'age', width: 40 },
+				{ name: 'sampleid', index: 'sampleid', width: 80 },
+				{ name: 'receivetime', index: 'receivetime', width: 130 },
+				{ name: 'lab', index: 'lab', width: 100 },
+				{ name: 'exam', index: 'exam', width: 100 },
+				{ name: 'sampletype', index: 'sampletype', width: 70 },
+				{ name: 'pid', index: 'pid', width: 100 },
+				{ name: 'diag', index: 'diag', width: 100 },
+				{ name: 'requester', index: 'requester', width: 70 },
+				{ name: 'fee', index: 'fee', width: 40 }
+			],
+			viewrecords: true,
+			height: "100%",
+			rownumbers: true, 
+			rownumWidth: 35
+		});
+		isFirstLog = false;
+	} else {
+		jQuery("#sampleLog").jqGrid('setGridParam',{
+			url: "../sample/ajax/old"
+		}).trigger('reloadGrid');//重新载入
+	}
+}
+
+function recoverLog() {
+	
+}
 
 function modifySample() {
 	var testSection = $("#testSection").val();

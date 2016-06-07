@@ -47,6 +47,12 @@ function showData(type) {
 		}
 	}
 }
+
+function deleteYlxh(obj) {
+	var fee = $("#fee").val();
+	$("#fee").val(parseInt(fee) - parseInt(obj.id));
+}
+
 function getData(obj,event) {
 	var e=e||event;
 	var key=event.keyCode;;
@@ -80,8 +86,9 @@ function getData(obj,event) {
 					var $tag_obj = $('#examinaim').data('tag');
 					$tag_obj.clear();
 					var ylxhMap = data.ylxhMap;
+					var feeMap = data.feeMap;
 					for(var key in ylxhMap) {
-						$tag_obj.add(ylxhMap[key], key);
+						$tag_obj.add(ylxhMap[key], key, feeMap[key]);
 					}
 					$("#sampletype").val(data.sampletype);
 					$("#fee").val(data.fee);

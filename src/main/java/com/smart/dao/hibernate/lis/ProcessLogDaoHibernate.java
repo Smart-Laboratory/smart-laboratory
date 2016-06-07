@@ -1,5 +1,7 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -11,6 +13,11 @@ public class ProcessLogDaoHibernate extends GenericDaoHibernate<ProcessLog, Long
 
 	public ProcessLogDaoHibernate() {
 		super(ProcessLog.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ProcessLog> getBySampleId(Long sid) {
+		return getSession().createQuery("from ProcessLog where sampleid=" + sid + " order by logtime desc").list();
 	}
 
 }

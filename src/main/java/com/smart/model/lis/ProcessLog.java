@@ -26,6 +26,8 @@ public class ProcessLog extends BaseObject {
 	private static final long serialVersionUID = -158140239103104718L;
 	
 	private long id;
+	private long sampleLogId;
+	
 	private long processid;
 	private String requester;
 	private Date requesttime;
@@ -61,6 +63,15 @@ public class ProcessLog extends BaseObject {
 		this.id = id;
 	}
 	
+	@Column(name = "sample_log_id")
+	public long getSampleLogId() {
+		return sampleLogId;
+	}
+
+	public void setSampleLogId(long sampleLogId) {
+		this.sampleLogId = sampleLogId;
+	}
+
 	@Column(name = "process_id")
 	public long getProcessid() {
 		return processid;

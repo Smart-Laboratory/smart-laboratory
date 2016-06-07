@@ -9,26 +9,22 @@ import com.smart.service.request.SFXMManager;
 public class YLSFXMUtil {
 	
 	private static YLSFXMUtil instance = new YLSFXMUtil();
-	private static Map<String, String> map = null;
+	private static Map<String, SFXM> map = null;
 
 	private YLSFXMUtil() {}
 	
 	public static YLSFXMUtil getInstance(SFXMManager sfxmManager) {
 		if (map == null) {
-			map = new HashMap<String, String>();
+			map = new HashMap<String, SFXM>();
 			for (SFXM s : sfxmManager.getAll()) {
-				map.put("" + s.getId(), s.getName());
+				map.put("" + s.getId(), s);
 			}
 		}
 		return instance;
 	}
 	
-	public String getValue(String key) {
-		if (map.containsKey(key)) {
-			return map.get(key);
-		} else {
-			return key;
-		}
+	public SFXM getSFXM(String key) {
+		return map.get(key);
 	}
 
 }

@@ -12,7 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +20,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
+import com.smart.model.lis.Process;
+import com.smart.model.lis.ProcessLog;
 import com.smart.model.lis.ReceivePoint;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.SampleLog;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
+import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
+import com.smart.service.lis.ProcessLogManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ReceivePointManager;
+import com.smart.service.lis.SampleLogManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TestResultManager;
+import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.SectionUtil;
+import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/manage/modify*")
@@ -41,10 +51,25 @@ public class ModifyController {
 	private SampleManager sampleManager = null;
 	
 	@Autowired
+	private ProcessManager processManager = null;
+	
+	@Autowired
+	private SampleLogManager sampleLogManager = null;
+	
+	@Autowired
+	private ProcessLogManager processLogManager = null;
+	
+	@Autowired
 	private TestResultManager testResultManager = null;
 
 	@Autowired
 	private ReceivePointManager receivePointManager = null;
+	
+	@Autowired
+	private DictionaryManager dictionaryManager = null;
+	
+	@Autowired
+	private RMIService rmiService = null;
 
 	private Map<String, String> pointMap = new HashMap<String, String>();
 
@@ -60,6 +85,99 @@ public class ModifyController {
 		view.addObject("name", user.getName());
 		view.addObject("pointList", pointList);
 		return view;
+	}
+	
+	@RequestMapping(value = "/getLog*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getOldData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String text = request.getParameter("text");
+		String type = request.getParameter("type");
+		Sample sample = new Sample();
+		if(Integer.parseInt(type) == 0) {
+			sample = sampleManager.get(Long.parseLong(text));
+		} else {
+			sample = sampleManager.getBySampleNo(text);
+		}
+		Process process = processManager.getBySampleId(sample.getId());
+		List<SampleLog> sampleLogList = sampleLogManager.getBySampleId(sample.getId());
+		List<ProcessLog> processLogList = processLogManager.getBySampleId(sample.getId());
+		Map<Long, ProcessLog> processLogMap  = new HashMap<Long, ProcessLog>();
+		for(ProcessLog pl : processLogList) {
+			processLogMap.put(pl.getSampleLogId(), pl);
+		}
+		DataResponse dataResponse = new DataResponse();
+		if(sampleLogList == null || sampleLogList.size() == 0) {
+			return null;
+		}
+		int size  = sampleLogList.size() + 1;
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		dataResponse.setRecords(size);
+		for(int i = 0; i <= sampleLogList.size(); i++) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			SampleLog sl = new SampleLog();
+			ProcessLog pl = new ProcessLog();
+			if(i == 0) {
+				sl.setSampleEntity(sample);
+				pl.setProcessEntity(process);
+				map.put("logtime", "当前记录");
+				map.put("logip", "");
+				map.put("logger", "");
+				map.put("logoperate", "");
+			} else {
+				sl = sampleLogList.get(i-1);
+				pl = processLogMap.get(sl.getId());
+				map.put("logtime", Constants.SDF.format(sl.getLogtime()));
+				map.put("logip", sl.getLogip());
+				map.put("logger", sl.getLogger());
+				map.put("logoperate", sl.getLogoperate());
+			}
+			map.put("sampleid", sl.getSampleId());
+			map.put("sampleno", sl.getSampleNo());
+			map.put("shm", sl.getStayHospitalModelValue());
+			map.put("pname", sl.getPatientname());
+			map.put("pid", sl.getPatientId());
+			map.put("sex", sl.getSexValue());
+			map.put("age", sl.getAge() + sl.getAgeunit());
+			map.put("bed", sl.getDepartBed());
+			map.put("exam", sl.getInspectionName());
+			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sl.getSampleType()));
+			map.put("fee", sl.getFee());
+			map.put("diag", sl.getDiagnostic());
+			map.put("section", SectionUtil.getInstance(rmiService).getValue(sl.getHosSection()));
+			map.put("lab", SectionUtil.getInstance(rmiService).getValue(sl.getSectionId()));
+			map.put("requester", pl.getRequester());
+			map.put("receiver", pl.getReceiver());
+			map.put("receivetime", pl.getReceivetime());
+			dataRows.add(map);
+		}
+		/*for(Sample sample : sampleLogList) {
+			Process process = processMap.get(sample.getId());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", sample.getId());
+			map.put("shm", sample.getStayHospitalModelValue());
+			map.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
+			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			map.put("sampleno", sample.getSampleNo());
+			map.put("pid", sample.getPatientId());
+			map.put("pname", sample.getPatientname());
+			map.put("sex", sample.getSexValue());
+			map.put("age", sample.getAge() + sample.getAgeunit());
+			map.put("diag", sample.getDiagnostic());
+			map.put("exam", sample.getInspectionName());
+			map.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
+			map.put("cycle", sample.getCycle());
+			map.put("fee", sample.getFee());
+			map.put("feestatus", sample.getFeestatus());
+			map.put("part", sample.getPart() == null ? "" : sample.getPart());
+			map.put("requestmode", sample.getRequestMode());
+			map.put("requester", process.getRequester());
+			map.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
+			dataRows.add(map);
+		}*/
+		dataResponse.setRows(dataRows);
+		response.setContentType("text/html; charset=UTF-8");
+		return dataResponse;
 	}
 
 	/**
@@ -388,7 +506,7 @@ public class ModifyController {
 					Collections.reverse(sampleNoListSort);
 					if (null != sampleList2&&sampleList2.size()>0) {
 						for (int i = 0; i < sampleList2.size(); i++) {
-							trMap.put(sampleList2.get(i).getSampleNo(), sampleNoListSort.get(i).getSampleNo().toString());
+							trMap.put(sampleList2.get(i).getSampleNo(), sampleNoListSort.get(i).getSampleNo());
 						}
 						if("1".equals(modifyResult)){
 							for (int i = 0; i < sampleList2.size(); i++) {

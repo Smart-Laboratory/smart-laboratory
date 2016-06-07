@@ -110,14 +110,18 @@ public class SampleAjaxController {
 		o.put("executetime", process.getExecutetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getExecutetime()));
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		Map<String, String> ylxhMap = new HashMap<String, String>();
+		Map<String, String> feeMap = new HashMap<String, String>();
 		if(sample.getYlxh().indexOf("+") > 0) {
 			for(String s : sample.getYlxh().split("[+]")) {
-				ylxhMap.put(s, ylsfxmUtil.getValue(s));
+				ylxhMap.put(s, ylsfxmUtil.getSFXM(s).getName());
+				feeMap.put(s, ylsfxmUtil.getSFXM(s).getPrice());
 			}
 		} else {
 			ylxhMap.put(sample.getYlxh(), sample.getInspectionName());
+			feeMap.put(sample.getYlxh(), sample.getFee());
 		}
 		o.put("ylxhMap", ylxhMap);
+		o.put("feeMap", feeMap);
 		/*SyncPatient sp = rmiService.getSampleByDoct(Long.parseLong(code));
 		o.put("doctadviseno", sp.getDOCTADVISENO());
 		o.put("sampleno", sp.getSAMPLENO());
@@ -301,17 +305,17 @@ public class SampleAjaxController {
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
 			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_ADD);
-			//slog.setLogtime(new Date());
-			sampleLogManager.save(slog);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
 			plog.setProcessEntity(process);
 			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_ADD);
-			//plog.setLogtime(new Date());
+			plog.setLogtime(new Date());
 			processLogManager.save(plog);
 			
 		} else if (operate.equals("edit")) {
@@ -323,14 +327,15 @@ public class SampleAjaxController {
 			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			//slog.setLogtime(new Date());
-			sampleLogManager.save(slog);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
 			plog.setProcessEntity(process);
 			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			//plog.setLogtime(new Date());
+			plog.setLogtime(new Date());
 			processLogManager.save(plog);
 
 			sample.setSampleNo(sampleno);
@@ -359,14 +364,15 @@ public class SampleAjaxController {
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
-			//slog.setLogtime(new Date());
-			sampleLogManager.save(slog);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
 			plog.setProcessEntity(process);
 			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
-			//plog.setLogtime(new Date());
+			plog.setLogtime(new Date());
 			processLogManager.save(plog);
 			
 			sampleManager.remove(Long.parseLong(doctadviseno));
