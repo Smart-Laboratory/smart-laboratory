@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
 </head>
 <div class="row">
-    <div class="col-xs-9">
+    <div class="col-xs-12">
         <div  style="padding-top: 5px;">
             <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="Add()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>
@@ -37,18 +37,18 @@
 			</span>
             </div>
         </div>
-        <div class="col-xs-3"></div>
+
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12" class="jqGrid_wrapper">
+    <div class="col-xs-9 leftContent">
         <table id="leftGrid"></table>
         <div id="leftPager"></div>
     </div>
-    <%--<div class="col-xs-3">--%>
-        <%--<table id="rightGird"></table>--%>
-        <%--<div id="rightPager"></div>--%>
-    <%--</div>--%>
+    <div class="col-xs-3">
+        <table id="rightGird"></table>
+        <div id="rightPager"></div>
+    </div>
 </div>
 <script type="text/javascript">
     $(function(){
@@ -60,7 +60,8 @@
 
         //resize to fit page size
         $(window).on('resize.jqGrid', function () {
-            $(grid_selector).jqGrid( 'setGridWidth', $(".page-content").width() );
+            //alert( $(".jqGrid_wrapper").width())
+            $('#leftGrid').jqGrid( 'setGridWidth', $(".leftContent").width());
         })
         //resize on sidebar collapse/expand
         var parent_column = $(grid_selector).closest('[class*="col-"]');
@@ -74,17 +75,17 @@
         })
         jQuery("#leftGrid").jqGrid( {
                     datatype : "local",
-                    height : "100%",
-                    autowidth:true,
+                    height : 400,
+                    //autowidth:true,
                     colNames : [ 'Inv No', 'Date', 'Client', 'Amount', 'Tax','Total', 'Notes' ],
                     colModel : [
                         {name : 'id',index : 'id',width : 60,sorttype : "int"},
                         {name : 'invdate',index : 'invdate',width : 90,sorttype : "date"},
-                        {name : 'name',index : 'name',width : 100},
+                        {name : 'name',index : 'name',width : 60},
                         {name : 'amount',index : 'amount',width : 80,align : "right",sorttype : "float"},
                         {name : 'tax',index : 'tax',width : 80,align : "right",sorttype : "float"},
                         {name : 'total',index : 'total',width : 80,align : "right",sorttype : "float"},
-                        {name : 'note',index : 'note',width : 150,sortable : false}
+                        {name : 'note',index : 'note',width : 100,sortable : false}
                     ],
                     multiselect : true,
 
@@ -106,7 +107,7 @@
         }
         jQuery("#rightGird").jqGrid( {
             datatype : "local",
-            height : "100%",
+            height : 300,
             autowidth:true,
             colNames : [ 'Inv No', 'Date', 'Client', 'Amount', 'Tax','Total', 'Notes' ],
             colModel : [
@@ -122,6 +123,8 @@
 
             caption : "Manipulating Array Data"
         });
+
+        $(window).triggerHandler('resize.jqGrid');
     }
 
 </script>

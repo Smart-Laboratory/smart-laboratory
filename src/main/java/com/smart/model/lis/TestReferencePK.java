@@ -21,10 +21,10 @@ public class TestReferencePK implements Serializable {
     public TestReferencePK() {
     }
 
-    public TestReferencePK(String testId, int sex, int orderno) {
+    public TestReferencePK(String testId, int sex, int orderNo) {
         this.testId = testId;
         this.sex = sex;
-        this.orderNo = orderno;
+        this.orderNo = orderNo;
     }
 
     public String getTestId() {
@@ -43,12 +43,12 @@ public class TestReferencePK implements Serializable {
         this.sex = sex;
     }
 
-    public int getOrderno() {
+    public int getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderno(int orderno) {
-        this.orderNo = orderno;
+    public void setOrderNo(int orderNo) {
+        this.orderNo = orderNo;
     }
 
     @Override

@@ -20,7 +20,7 @@ public class TestReference implements Serializable {
     private static final long serialVersionUID = -2513150853714387288L;
     private String testId;          //项目ID
     private int sex;                //性别 : 0男、1女
-    private int orderno;            //序号
+    private int orderNo;            //序号
     private String sampleType;      //标本类型
     private int age;                    //年龄
     private String ageUnit;          //年龄单位; 岁、月、周、天
@@ -51,12 +51,12 @@ public class TestReference implements Serializable {
 
     @Id
     @Column(name = "orderno")
-    public int getOrderno() {
-        return orderno;
+    public int getOrderNo() {
+        return orderNo;
     }
 
-    public void setOrderno(int orderno) {
-        this.orderno = orderno;
+    public void setOrderNo(int orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getSampleType() {

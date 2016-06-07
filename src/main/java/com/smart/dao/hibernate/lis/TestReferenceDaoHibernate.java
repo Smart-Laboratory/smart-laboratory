@@ -30,7 +30,7 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      */
     @Override
     public List<TestReference> getTestRefenreceListByTestId(String testid) {
-        String sql = "from TestReference t where t.testId=:testid order by t.testId,t.sex,t.orderno Asc ";
+        String sql = "from TestReference t where t.testId=:testid order by t.testId,t.sex,t.orderNo Asc ";
         Query query = getSession().createQuery(sql);
         query.setString("testid",testid);
         return query.list();
@@ -68,16 +68,16 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      * 获取参考范围
      * @param testid
      * @param sex
-     * @param orderno
+     * @param orderNo
      * @return
      */
     @Override
-    public TestReference getTestReference(String testid, int sex, int orderno)  {
-        String Sql = "from TestReference t where t.testId=:testid and t.sex=:sex and t.orderno=:orderno";
+    public TestReference getTestReference(String testid, int sex, int orderNo)  {
+        String Sql = "from TestReference t where t.testId=:testid and t.sex=:sex and t.orderno=:orderNo";
         Query query = getSession().createQuery(Sql);
         query.setString("testid",testid);
         query.setInteger("sex",sex);
-        query.setInteger("orderno",orderno);
+        query.setInteger("orderNo",orderNo);
         List<TestReference> list = query.list();
         if(list.size()>0){
             return  list.get(0);
@@ -89,15 +89,15 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      * 删除参考范围
      * @param testid
      * @param sex
-     * @param orderno
+     * @param orderNo
      * @return
      */
-    public void deleteTestReference(String testid, int sex, int orderno)  {
-        String Sql="delete TestReference as t where t.testId=:testid and t.sex=:sex and t.orderno=:orderno";
+    public void deleteTestReference(String testid, int sex, int orderNo)  {
+        String Sql="delete TestReference as t where t.testId=:testid and t.sex=:sex and t.orderNo=:orderNo";
         Query query = getSession().createQuery(Sql);
         query.setString("testid",testid);
         query.setInteger("sex",sex);
-        query.setInteger("orderno",orderno);
+        query.setInteger("orderNo",orderNo);
         query.executeUpdate();
     }
 }
