@@ -35,6 +35,9 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 	public List<TestResult> getTestBySampleNos(String sampleNos){
 		return testResultDao.getTestBySampleNos(sampleNos);
 	}
+	/**
+	 * key:old value:new
+	 */
 	public int updateAll(Map <String,String>trMap){
 		return testResultDao.updateAll(trMap);
 	}
@@ -60,6 +63,9 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 
 	public void saveAll(List<TestResult> list) {
 		testResultDao.saveAll(list);
+	}
+	public void deleteAll(List<TestResult> list) {
+		testResultDao.deleteAll(list);
 	}
 
 	public List<TestResult> getHisTestResult(String samplenos) {

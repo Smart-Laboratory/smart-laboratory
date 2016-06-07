@@ -4,6 +4,8 @@ import com.smart.model.lis.Channel;
 import com.smart.service.GenericManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Title: ChannelManager
  * Description:仪器通道
@@ -14,4 +16,6 @@ import org.springframework.stereotype.Service;
  */
 
 public interface ChannelManager extends GenericManager<Channel, Long> {
+    public void saveChannels(List<Channel> channels);
+    public Channel getChannel(String deviceid, String testid);
 }

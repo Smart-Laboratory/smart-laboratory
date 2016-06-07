@@ -8,6 +8,9 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping class="com.smart.model.lis.ProfileTest"/>
+        <mapping class="com.smart.model.lis.TestReference"/>
+        <mapping class="com.smart.model.lis.Channel"/>
     	<mapping class="com.smart.model.Dictionary"/>
     	<mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.user.User"/>

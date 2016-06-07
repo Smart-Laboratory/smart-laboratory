@@ -45,6 +45,11 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndex(indexId);
 	}
 
+	@Override
+	public List<Index> getIndexsByQuery(String query) {
+		return indexDao.getIndexsByQuery(query);
+	}
+
 	public List<Index> getIndexsByName(String name, int pageNum, String field, boolean isAsc) {
 		return indexDao.getIndexsByName(name, pageNum, field, isAsc);
 	}

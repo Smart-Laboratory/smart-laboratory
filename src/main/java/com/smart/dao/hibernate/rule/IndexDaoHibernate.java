@@ -64,8 +64,10 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	
 	@SuppressWarnings("rawtypes")
 	public Index getIndex(String indexId) {
-		
-		List indexs = getSession().createQuery("from Index where indexId=" + indexId).list();
+		String sql = "from Index where indexId =:indexId";
+		Query query = getSession().createQuery(sql);
+		query.setString("indexId",indexId);
+		List indexs = query.list();
         if (indexs == null || indexs.isEmpty()) {
             return null;
         } else {
@@ -86,6 +88,14 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		q.setMaxResults(Constants.PAGE_SIZE);
 		
 		return q.list();
+	}
+
+	@Override
+	public List<Index> getIndexsByQuery(String q) {
+		String sql = "select lab_index.* from lab_index  where 1=1";
+		sql += q;
+		List<Index> list = getSession().createSQLQuery(sql).addEntity(Index.class).list();
+		return list;
 	}
 
 	public int getIndexsByNameCount(String name) {
