@@ -87,86 +87,156 @@
         }
     </style>
 </head>
+
 <div class="main-container" id="content">
+    <div class="row" id="toolbar">
+        <div class="col-xs-12">
+            <div style="padding-top: 5px;">
+                <button type="button" class="btn btn-sm btn-primary " title="保存" onclick="Save()">
+                    <i class="ace-icon fa fa-fire bigger-110"></i>
+                    保存
+                </button>
+                <button type="button" class="btn btn-sm  btn-success" title="取消" onclick="Cancel()">
+                    <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                    取消
+                </button>
+                <div class="input-group col-xs-6 " style="float: right;">
+                    <input class="form-control col-xs-12"  id="searchProject" type="text" placeholder="检验项目..">
+                </div>
+            </div>
+
+        </div>
+    </div>
     <div class="row">
         <div class="space-6"></div>
-        <div class="col-xs-5 form-horizontal">
+        <div class="col-xs-6 form-horizontal">
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="profilename"> 缩写 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="profilecode" name="profilecode" placeholder="缩写"/>
+                <label class="col-xs-3 control-label no-padding-right" for="profilename"> 缩写 </label>
+                <div class="col-xs-9">
+                    <input type="text"  class="col-xs-9" id="profilecode" name="profilecode" placeholder="缩写"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="profilecode"> 代号 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="profilename" name="profilename" placeholder="代号"/>
+                <label class="col-xs-3 control-label no-padding-right" for="profilecode"> 代号 </label>
+                <div class="col-xs-9">
+                    <input type="text"  class="col-xs-9" id="profilename" name="profilename" placeholder="代号"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="profiledescribe"> 组合试验名称 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="profiledescribe" name="profiledescribe" placeholder="组合试验名称"/>
+                <label class="col-xs-3 control-label no-padding-right" for="profiledescribe"> 组合试验名称 </label>
+                <div class="col-xs-9">
+                    <input type="text" class="col-xs-9" id="profiledescribe" name="profiledescribe" placeholder="组合试验名称"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="sectionid"> 分析科室 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="sectionid" name="sectionid" placeholder="分析科室"/>
+                <label class="col-xs-3 control-label no-padding-right" for="sectionid"> 分析科室 </label>
+                <div class="col-xs-9">
+                    <input type="text" class="col-xs-9" id="sectionid" name="sectionid" placeholder="分析科室"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="deviceid"> 分析仪器 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="deviceid" name="deviceid" placeholder="分析仪器"/>
+                <label class="col-xs-3 control-label no-padding-right" for="deviceid"> 分析仪器 </label>
+                <div class="col-xs-9">
+                    <input type="text" class="col-xs-9" id="deviceid" name="deviceid" placeholder="分析仪器"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="sampletype"> 标本类型 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="sampletype" name="sampletype" placeholder="标本类型"/>
+                <label class="col-xs-3 control-label no-padding-right" for="sampletype"> 标本类型 </label>
+                <div class="col-xs-9">
+                    <input type="text"  class="col-xs-9" id="sampletype" name="sampletype" placeholder="标本类型"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="frequencytime"> 周期 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="frequencytime" name="frequencytime" placeholder="周期"/>
+                <label class="col-xs-3 control-label no-padding-right" for="frequencytime"> 周期 </label>
+                <div class="col-xs-9">
+                    <input type="text"  class="col-xs-9" id="frequencytime" name="frequencytime" placeholder="周期"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-4 control-label no-padding-right" for="usenow"> 是否使用 </label>
-                <div class="col-xs-8">
-                    <input type="text" id="usenow" name="usenow" placeholder="是否使用"/>
+                <label class="col-xs-3 control-label no-padding-right" for="usenow"> 是否使用 </label>
+                <div class="col-xs-9">
+                    <input type="text"  class="col-xs-9" id="usenow" name="usenow" placeholder="是否使用"/>
                 </div>
             </div>
         </div>
-        <div class="col-xs-7 rightContent">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="col-xs-9" >
-                        <input class="form-control col-xs-12" id="searchProject" type="text" placeholder="检验项目..">
-                    </div>
-                    <div class="col-xs-3">
-                        <button type="button" class="btn btn-sm  btn-success"  style="float: right;margin-right: 15px" title="删除" onclick="Delete()">
-                            <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                            删除
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="widget-body">
-                    <div class="widget-main">
-                        <table id="rightGrid"></table>
-                        <div id="rightPager"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-xs-6 rightContent">
+            <table id="rightGrid"></table>
+            <div id="rightPager"></div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    function Save(){
+        var obj={};
+        obj.profilecode = $('#profilecode').val()||'';
+        obj.profilename = $('#profilename').val()||'';
+        obj.profiledescribe = $('#profiledescribe').val()||'';
+        obj.sectionid = $('#sectionid').val()||'';
+        obj.deviceid = $('#deviceid').val()||'';
+        obj.sampletype = $('#sampletype').val();
+        obj.frequencytime = $('#frequencytime').val();
+        obj.usenow = $('#usenow').val();
+        obj.indexids = "";
 
+        var rows = $("#rightGrid").jqGrid("getRowData");
+        var datas = [];
+        jQuery(rows).each(function(){
+            console.log(this);
+            datas.push(this.indexid);
+        });
+        if(datas.length>0) obj.indexids = datas.join(",")+",";
+        console.log(obj);
+
+        if(obj.sectionid ==''){
+            layer.alert('分析科室没有输入，不允许保存',{icon:2});
+            return false;
+        }
+        if(obj.profilename ==''){
+            layer.alert('简称没有输入，不允许保存',{icon:2});
+            return false;
+        }
+        if(obj.profilecode ==''){
+            layer.alert('代码没有输入，不允许保存',{icon:2});
+            return false;
+        }
+        if(obj.indexids ==''){
+            layer.alert('检验项目没有输入，不允许保存',{icon:2});
+            return false;
+        }
+        //保存数据
+        $.post('/set/profiletest/saveProfileTest',
+                {profilecode:obj.profilecode,
+                profilename:obj.profilename,
+                profiledescribe:obj.profiledescribe,
+                sectionid:obj.sectionid,
+                deviceid:obj.deviceid,
+                sampletype:obj.sampletype,
+                frequencytime:obj.frequencytime,
+                usenow:obj.usenow,
+                indexids:obj.indexids
+        },function(data){
+
+        })
+    }
+    /**
+     * 删除项目
+     * */
+    function Delete(id){
+        //var id = $('#rightGrid').jqGrid('getGridParam', 'selrow');
+        if (id == null || id == 0) {
+            layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
+            return false;
+        }
+        $("#rightGrid").jqGrid('delRowData',id );
+
+    }
+    /*
+    * 取消
+    * */
+    function Cancel(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);
+    }
     $(function(){
         pageInit();
 //        $("#tableList").jqGrid('setGridParam',{
@@ -181,12 +251,21 @@
            // rowNum:indexlist.length,
             height :350,
             width:$('.rightContent').width(),
-            colNames : [ 'indexid', '英文缩写', '中文名称'],
+            colNames : [ 'indexid', '英文缩写', '中文名称','操作'],
             colModel : [
                 {name : 'indexid',index : 'indexid',width : 90,hidden:true},
                 {name : 'english',index : 'english',width : 80},
-                {name : 'name',index : 'name',width : 160,align : "left",sorttype : "text"}
+                {name : 'name',index : 'name',width : 180,align : "left",sorttype : "text"},
+                {name : 'Delete',index : 'Delete',width : 60}
             ],
+            gridComplete: function () {
+                var ids = jQuery("#rightGrid").jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var id = ids[i];
+                    var DeleteBtn = "<a href='#' style='color:#f60' onclick='Delete("+id+")' >删除</a>";
+                    jQuery("#rightGrid").jqGrid('setRowData', ids[i], {Delete: DeleteBtn});
+                }
+            },
             //multiselect : true,
             shrinkToFit:false,
             scrollOffset:2,
@@ -195,6 +274,10 @@
         });
     }
 
+
+    /**
+     * 搜索检验项目
+     */
     $("#searchProject").autocomplete({
         source: function( request, response ) {
             $.ajax({
@@ -239,8 +322,65 @@
                 name: ui.item.value
             };
             $("#rightGrid").jqGrid('addRowData', newId, rowData);
-            //indexids.push(ui.item.indexid);
-            //jQuery('#rightGrid').saveRow(newId, false, 'clientArray');
+            $('#rightGrid').saveRow(newId, false, 'clientArray');
+            $("#searchProject").val('');
+        }
+    });
+
+    /**
+     * 搜索仪器
+     */
+    $("#deviceid").autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/ajax/searchDevice",
+                dataType: "json",
+                data: {
+                    name : request.term
+                },
+                success: function( data ) {
+                    response( $.map( data, function( result ) {
+                        return {
+                            label: result.id + " : " + result.name,
+                            value: result.name,
+                            id : result.id
+                        }
+                    }));
+                    $("#deviceid").removeClass("ui-autocomplete-loading");
+                }
+            });
+        },
+        minLength: 1,
+        select : function(event, ui) {
+            $("#deviceid").val(ui.item.id);
+        }
+    });
+    /**
+     * 搜索科室
+     */
+    $("#sectionid").autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/ajax/searchSection",
+                dataType: "json",
+                data: {
+                    name : request.term
+                },
+                success: function( data ) {
+                    response( $.map( data, function( result ) {
+                        return {
+                            label: result.code + " : " + result.name,
+                            value: result.name,
+                            id : result.id
+                        }
+                    }));
+                    $("#sectionid").removeClass("ui-autocomplete-loading");
+                }
+            });
+        },
+        minLength: 1,
+        select : function(event, ui) {
+            $("#sectionid").val(ui.item.id);
         }
     });
 

@@ -63,6 +63,16 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	}
 
 	/**
+	 * 根据代码、名称查询部门列表
+	 * @param name
+	 * @return
+     */
+	@Override
+	public List<Section> getSectionList(String name) {
+		return getSession().createQuery("from Section as s where s.code like '" + name +"%' or s.name like '" +name +"%' order by s.name,s.code" ).list();
+	}
+
+	/**
 	 * 批量删除科室
 	 * @param ids 科室ID
      * @return

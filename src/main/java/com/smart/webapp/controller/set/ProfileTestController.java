@@ -14,6 +14,7 @@ import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.DeviceUtil;
 import com.smart.webapp.util.SampleUtil;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.drools.core.util.index.IndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,23 +171,33 @@ public class ProfileTestController {
     @RequestMapping(value = "/ajaxprofiletest*",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView editprofiletest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //获取检验项目
-//        List<Index> indexList = indexManager.getAll();
-//        JSONArray jsonArray = new JSONArray();
-//
-//        for(Index index :indexList){
-//            JSONObject jsonObject= new JSONObject();
-//            //获取仪器相关检验项目
-//                jsonObject.put("id",index.getId()+"");
-//                jsonObject.put("indexid",index.getIndexId());
-//                jsonObject.put("name",index.getName());
-//                jsonObject.put("english",index.getEnglish());
-//                jsonObject.put("sampletype",index.getSampleFrom());
-//                jsonArray.put(jsonObject);
-//            }
         ModelAndView view = new ModelAndView("set/ajaxprofiletest");
-        //view.addObject("indexlist",jsonArray);
         return view;
+    }
+
+    /**
+     * 保存数据
+     * @param request
+     * @param response
+     * @throws JSONException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/saveProfileTest*",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public void saveProfileTest(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+        //获取组合试验JSON
+        ProfileTest profileTest = new ProfileTest();
+        profileTest.setSampleType(ConvertUtil.null2String(request.getParameter("sampletype")));
+        profileTest.setProfileCode(ConvertUtil.null2String(request.getParameter("profilecode")));
+        profileTest.setProfileName(ConvertUtil.null2String(request.getParameter("profilename")));
+        profileTest.setProfileDescribe(ConvertUtil.null2String(request.getParameter("profiledescribe")));
+        profileTest.setSection(ConvertUtil.null2String(request.getParameter("sectionid")));
+        profileTest.setDeviceId(ConvertUtil.null2String(request.getParameter("deviceid")));
+        profileTest.setProfileTest(ConvertUtil.null2String(request.getParameter("indexids")));
+        profileTest.setFrequencyTime(ConvertUtil.getIntValue(request.getParameter("frequencytime"),0));
+        profileTest.setUseNow(ConvertUtil.getIntValue(request.getParameter("usenow"),1));
+        //保存
+        profileTestManager.save(profileTest);
     }
     /**
      * 分割字符加引号，用于SQL查询

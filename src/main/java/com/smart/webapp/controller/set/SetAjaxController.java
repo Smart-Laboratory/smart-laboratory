@@ -1,7 +1,9 @@
 package com.smart.webapp.controller.set;
 
 import com.smart.model.lis.Device;
+import com.smart.model.lis.Section;
 import com.smart.service.lis.DeviceManager;
+import com.smart.service.lis.SectionManager;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -28,6 +30,8 @@ import java.util.List;
 public class SetAjaxController {
     @Autowired
     private DeviceManager deviceManager = null;
+    @Autowired
+    private SectionManager sectionManager = null;
     /**
      * 搜索仪器
      * @param request
@@ -37,7 +41,7 @@ public class SetAjaxController {
      */
     @RequestMapping(value = "/searchDevice", method = { RequestMethod.GET })
     @ResponseBody
-    public String searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String searchDevice(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String name = request.getParameter("name");
         if (StringUtils.isEmpty(name)) {
@@ -51,14 +55,49 @@ public class SetAjaxController {
         JSONArray array = new JSONArray();
         if (deviceList != null) {
             for (Device device : deviceList) {
-
                 JSONObject  jsonObject = new JSONObject();
                 jsonObject.put("id", device.getId());
+                jsonObject.put("type", device.getType());
                 jsonObject.put("name",device.getName());
                 array.put(jsonObject);
             }
         }
 
+        response.setContentType("text/html; charset=UTF-8");
+        response.getWriter().print(array.toString());
+        return null;
+    }
+
+    /**
+     * 搜索部门
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/searchSection", method = { RequestMethod.GET })
+    @ResponseBody
+    public String searchSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String name = request.getParameter("name");
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+
+        List<Section> sectionList =  sectionManager.getSectionList(name);
+        if(sectionList.size()>10)
+            sectionList = sectionList.subList(0, 10);
+
+        JSONArray array = new JSONArray();
+        if (sectionList != null) {
+            for (Section section : sectionList) {
+                JSONObject  jsonObject = new JSONObject();
+                jsonObject.put("id", section.getId());
+                jsonObject.put("code",section.getCode());
+                jsonObject.put("name",section.getName());
+                array.put(jsonObject);
+            }
+        }
         response.setContentType("text/html; charset=UTF-8");
         response.getWriter().print(array.toString());
         return null;

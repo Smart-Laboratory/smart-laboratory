@@ -80,9 +80,9 @@
                 type: 2,
             area: ['800px','500px'],
             fix: false, //不固定
-            maxmin: false,
-            shade:0.6,
-            title: "添加数据",
+            maxmin: true,
+            shade:0.5,
+            title: "添加组合试验",
                 content:  '../set/profiletest/ajaxprofiletest'
             })
     }

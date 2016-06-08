@@ -13,6 +13,6 @@ public interface SectionManager extends GenericManager<Section, Long> {
 	int getSectionCount(String query,String hospitalId);
 
 	List<Section> getSectionList(String query,String hospitalId,int start,int end,String sidx,String sord);
-
+	List<Section> getSectionList(String name);
 	boolean batchRemove(long[] ids);
 }
