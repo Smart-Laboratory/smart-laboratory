@@ -197,7 +197,11 @@ public class ProfileTestController {
         profileTest.setFrequencyTime(ConvertUtil.getIntValue(request.getParameter("frequencytime"),0));
         profileTest.setUseNow(ConvertUtil.getIntValue(request.getParameter("usenow"),1));
         //保存
-        profileTestManager.save(profileTest);
+        try {
+        	profileTestManager.save(profileTest);
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
     }
     /**
      * 分割字符加引号，用于SQL查询
