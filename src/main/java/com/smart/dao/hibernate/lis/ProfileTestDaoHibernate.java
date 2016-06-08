@@ -8,8 +8,6 @@ import com.smart.model.lis.ProfileTest;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * Title: ProfileTestDaoHibernate
  * Description:套餐组合
@@ -23,6 +21,7 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
     public ProfileTestDaoHibernate() {
         super(ProfileTest.class);
     }
+    
     @SuppressWarnings("unchecked")
     public List<ProfileTest> getBySection(String lab){
     	List s = null;
@@ -30,7 +29,6 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
 			s =  getSession().createQuery(
 					"from ProfileTest where section='" + lab + "' ").list();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
     	return s;

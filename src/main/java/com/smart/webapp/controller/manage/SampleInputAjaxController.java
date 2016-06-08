@@ -378,7 +378,7 @@ public class SampleInputAjaxController {
 			sampleManager.remove(Long.parseLong(doctadviseno));
 			processManager.removeBySampleId(Long.parseLong(doctadviseno));
 		}
-		o.put("id", doctadviseno);
+		o.put("id", sample.getId());
 		o.put("sampleno", sampleno);
 		o.put("pid", patientid);
 		o.put("pname", patientname);

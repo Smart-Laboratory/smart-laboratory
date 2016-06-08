@@ -1,5 +1,7 @@
 package com.smart.dao.hibernate;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.execute.LabOrderDao;
@@ -19,5 +21,12 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		if(count>0)
 			return true;
 		return false;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LabOrder> getByIds(String ids){
+		String hqlString = "from LabOrder where laborder in ("+ids+")";
+		System.out.println(hqlString);
+		return getSession().createQuery(hqlString).list();
 	}
 }

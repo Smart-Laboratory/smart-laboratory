@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.functors.IfClosure;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -403,7 +404,7 @@ public class RMIServiceImpl implements RMIService {
 		
 		String fromStr = ymd.format(from)+" 00:00:00";
 		String toStr = ymd.format(to)+" 23:59:59";
-		System.out.println(jzkh + requestmode+fromStr+toStr);
+//		System.out.println(jzkh + requestmode+fromStr+toStr);
 		
 		List<ExecuteInfo> eList = new ArrayList<ExecuteInfo>();
 		String sql = "SELECT distinct YJ_YJK1.YJSB yjsb, YJ_YJK1.JZKH jzkh, "+
@@ -438,12 +439,18 @@ public class RMIServiceImpl implements RMIService {
 		"	(  GY_YLSF.YBLX = 'C') or "+
 		"	(  GY_YLSF.YBLX = '|')) and "+
          "( YJ_YJK1.JZKH = '"+jzkh+"') AND  "+
-         "( YJ_YJK2.FYGB = 10 ) AND  "+
-         "( NVL(YJ_YJK2.REQUESTMODE,0) <= "+requestmode+" ) AND "+ 
-		"	( NVL(YJ_YJK2.REQUESTMODE,0) <> -1 ) AND  "+
+         "( YJ_YJK2.FYGB = 10 ) AND  ";
+		//判断是否未采集
+         if(requestmode.equals("999")){
+        	 sql+=" zxbz='1' and";
+         }else{
+        	 sql+="( NVL(YJ_YJK2.REQUESTMODE,0) <= "+requestmode+" ) AND ";
+         }
+
+         sql+="	( NVL(YJ_YJK2.REQUESTMODE,0) <> -1 ) AND  "+
 		"	( NVL(YJ_YJK2.ZFPB,0) = 0 ) AND "+ 
 		"	( YJ_YJK1.SFSB IS NOT NULL OR YJ_YJK1.YHZFID IS NOT NULL OR YJ_YJK1.BRXH IS NOT NULL) AND "+
-         "( YJ_YJK1.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') )"; 
+         "( YJ_YJK1.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') ) order by YJ_YJK1.KDSJ, YJ_YJK1.YJSB desc "; 
 	
 		System.out.println(sql);
 		eList.addAll(jdbcTemplate.query(sql, new RowMapper<ExecuteInfo>() {
@@ -457,7 +464,7 @@ public class RMIServiceImpl implements RMIService {
 	            p.setBrxm(rs.getString("BRXM"));
 	            p.setSjysgh(rs.getString("SJYSGH"));
 	            p.setSjksdm(rs.getString("SJKSDM"));
-	            p.setKdsj(rs.getDate("KDSJ"));
+	            p.setKdsj(new Date(rs.getTimestamp("KDSJ").getTime()));
 	            p.setMzpb(rs.getString("MZPB"));
 	            p.setLzcd(rs.getString("LCZD"));
 	            
@@ -525,6 +532,7 @@ public class RMIServiceImpl implements RMIService {
 	            p.setSjysgh(rs.getString("SJYSGH"));
 	            p.setSjksdm(rs.getString("SJKSDM"));
 	            p.setKdsj(rs.getDate("KDSJ"));
+	            
 	            p.setMzpb(rs.getString("MZPB"));
 	            
 	            p.setSl(rs.getString("SL"));
@@ -546,5 +554,14 @@ public class RMIServiceImpl implements RMIService {
 	        }
 		}));
 		return eList;
+	}
+	
+	public void updateExecuteInfo(String yjsb, String ylxh, String sl){
+		String sql = "update YJ_YJK1 set zxbz='1' where yjsb = '"+yjsb+"'";
+		String sql2 = "update YJ_YJK2 set requestmode='"+sl+"' where yjsb = '"+yjsb+"' and (tcylxh = '"+ylxh+"' or ylxh = '"+ylxh+"')";
+		
+		jdbcTemplate.execute(sql);
+		jdbcTemplate.execute(sql2);
+		
 	}
 }

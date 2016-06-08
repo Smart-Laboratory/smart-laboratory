@@ -24,6 +24,7 @@ import com.smart.model.reagent.Out;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.PatientManager;
+import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
 @Controller
@@ -67,15 +68,20 @@ public class ExecuteViewController {
 		List<ExecuteInfo> eList = rmiService.gExecuteInfo(patientId, requestmode, from, to);
 		StringBuilder html = new StringBuilder();
 		ExecuteInfo e = new ExecuteInfo();
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
 		for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
-			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
+//			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
 			if(i%2==1){
 				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
 			}else{
 				html.append("<div  id='date"+i+"' class='alert alert-success sampleInfo' style='' >");
 			}
-			String bmp="BMP/"+ getBmp(e.getHyfl()) +".bmp";
+			String bmp = "";
+			if(!getBmp(e.getHyfl()).equals("notube") && !getBmp(e.getHyfl()).isEmpty()){
+				bmp ="../images/bmp/"+ getBmp(e.getHyfl()) +".bmp";
+			}
+			
 			String mode = e.getHyjg().substring(0, 1);
 			if(mode==null)
 				mode="0";
@@ -89,20 +95,25 @@ public class ExecuteViewController {
 			e.setZxksdm(e.getZxksdm().trim());
 			
 			html.append("<div class='col-sm-1' style=''>"+
-						"<div class='checkbox col-sm-3'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>"+
-//		    			"<div class='checkbox col-sm-3'><img src='"+bmp+"' alt='"+e.getHyfl()+"'/></div>"+
-						"</div>");
+						"<div class='col-sm-6'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
+			if(!bmp.isEmpty()){
+				html.append("<div class='col-sm-4'><img src='"+bmp+"' alt='"+e.getHyfl()+"' width='30px' height='50px' /></div>");
+			}
+			if(e.getHyjg().substring(0, 1).equals("1")){
+				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;' aria-hidden='true'></span></div>");
+			}
+			html.append("</div>");
 			html.append("<div class='col-sm-11' style=''>");
 			html.append("<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+e.getYlmc()+"</b>"+
 								"<span >发票号:</span><b id='sfsb'>"+e.getSfsb()+"</b>"+
 								"<span >单价:</span><b id='dj'>"+e.getDj()+"</b>"+
 									"×<b id='sl'>"+e.getSl()+"</b>"+
-								"<span >执行科室:</span><b id='ksdm'>"+e.getZxksdm()+"</b>"+
+								"<span >执行科室:</span><b id='ksdm'>"+sectionUtil.getValue(e.getZxksdm())+"</b>"+
 						"</div>"+
 						"<div><span >医嘱号:</span><b id='doctadviseno'>"+e.getDoctadviseno()+"</b>"
 						+ "<span >报告时间:</span><b id='qbgsj'>"+e.getQbgsj()+"</b>"+
-								"<span >申请时间:</span><b id='kdsj'>"+e.getKdsj()+"</b>"+
-								"<span >申请科室:</span><b id='sjksdm'>"+e.getSjksdm()+"</b>"+
+								"<span >申请时间:</span><b id='kdsj'>"+ymdh.format(e.getKdsj())+"</b>"+
+								"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(e.getSjksdm())+"</b>"+
 								"<span >地点:</span><b id='qbgdd'>"+e.getQbgdd()+"</b>"+
 							"</div>");
 			html.append("</div></div>");
@@ -116,38 +127,38 @@ public class ExecuteViewController {
 	public String getBmp(String str){
 		if(str==null || str.isEmpty())
 			return "";
-		String bmpStr="";
-		if (str.indexOf("黑")>0) //and str.indexOf('1.6')>0 
+		String bmpStr=str;
+		if (str.indexOf("黑")>=0) //and str.indexOf('1.6')>0 
 			bmpStr="black1d6";
-		else if (str.indexOf("蓝")>0  &&  (str.indexOf("2")>0 || str.indexOf("3")>0)) 
+		else if (str.indexOf("蓝")>=0  &&  (str.indexOf("2")>=0 || str.indexOf("3")>=0)) 
 			bmpStr="blue2d7";
-		else if ( str.indexOf("蓝")>0 && (str.indexOf("4")>0 || str.indexOf("5")>0) )
+		else if ( str.indexOf("蓝")>=0 && (str.indexOf("4")>=0 || str.indexOf("5")>=0) )
 			bmpStr="blue5";
-		else if (str.indexOf("灰")>0)  //and str.indexOf('2')>0 
+		else if (str.indexOf("灰")>=0)  //and str.indexOf('2')>0 
 			bmpStr="gray2";
-		else if (str.indexOf("紫")>0 && str.indexOf("2")>0) 
+		else if (str.indexOf("紫")>=0 && str.indexOf("2")>=0) 
 			bmpStr="purple2";
-		else if (str.indexOf("紫")>0 && str.indexOf("5")>0) 
+		else if (str.indexOf("紫")>=0 && str.indexOf("5")>=0) 
 			bmpStr="purple5";
-		else if ( str.indexOf("红")>0) 
+		else if ( str.indexOf("红")>=0) 
 			bmpStr="red5";
-		else if ( str.indexOf("黄")>0) //and str.indexOf('5')>0 
+		else if ( str.indexOf("黄")>=0) //and str.indexOf('5')>0 
 			bmpStr="yellow5";
-		else if ( str.indexOf("普通")>0 && str.indexOf("2.7ml")>0) 
+		else if ( str.indexOf("普通")>=0 && str.indexOf("2.7ml")>=0) 
 			bmpStr="no_1";
-		else if ( str.indexOf("普通")>0 && str.indexOf("3ml")>0) 
+		else if ( str.indexOf("普通")>=0 && str.indexOf("3ml")>=0) 
 			bmpStr="no_2";
-		else if ( str.indexOf("普通")>0 && str.indexOf("5ml")>0) 
+		else if ( str.indexOf("普通")>=0 && str.indexOf("5ml")>=0) 
 			bmpStr="no_3";
-		else if ( str.indexOf("特殊")>0 && str.indexOf("5ml")>0) 
+		else if ( str.indexOf("特殊")>=0 && str.indexOf("5ml")>=0) 
 			bmpStr="no_3";
-		else if ( str.indexOf("特殊")>0 && str.indexOf("4ml")>0) 
+		else if ( str.indexOf("特殊")>=0 && str.indexOf("4ml")>=0) 
 			bmpStr="no_3";
-		else if ( str.indexOf("血培养")>0 && str.indexOf("5ml")>0) 
+		else if ( str.indexOf("血培养")>=0 && str.indexOf("5ml")>=0) 
 			bmpStr="no_3";
-		else if ( str.indexOf("肝素")>0 && str.indexOf("血")>0) 
+		else if ( str.indexOf("肝素")>=0 && str.indexOf("血")>=0) 
 			bmpStr="no_4";
-		else if ( str.indexOf("肝素")>0 && str.indexOf("骨髓")>0) 
+		else if ( str.indexOf("肝素")>=0 && str.indexOf("骨髓")>=0) 
 			bmpStr="no_4";
 	   else
 			bmpStr="notube";
@@ -156,7 +167,7 @@ public class ExecuteViewController {
 	
 	public String takeReportTime(String sj,String labdepartment, String ll_requestmode,String qbgdd){
 		
-		System.out.println(sj+labdepartment+qbgdd+ll_requestmode);
+//		System.out.println(sj+labdepartment+qbgdd+ll_requestmode);
 		
 		Date qbgsj = new Date();
 		String qdsj="";
@@ -167,7 +178,7 @@ public class ExecuteViewController {
 		
 		Date now = new Date();
 		double ld_time = Double.parseDouble(hhmm.format(now).replace(":", "."));
-		System.out.println(ld_time);
+//		System.out.println(ld_time);
 
 		Calendar c = new GregorianCalendar();
 		c.setTime(now);
@@ -178,14 +189,14 @@ public class ExecuteViewController {
 		
 		if(sj.contains("$"+ll_week)){
 			int ll_pos = sj.indexOf("$"+ll_week);
-			System.out.println("$"+ll_week);
+//			System.out.println("$"+ll_week);
 			int ll_pos1 = sj.indexOf("(",ll_pos)+1;
 			int ll_pos2 = sj.indexOf(")",ll_pos);
 			String ls_time = sj.substring(ll_pos1, ll_pos2);  //抽血时间
 			ls_time = ls_time.replace(":", ".");
 			double ld_timeo = Double.parseDouble(ls_time);    //转换
-			System.out.println(ls_time);
-			System.out.println(ld_timeo);
+//			System.out.println(ls_time);
+//			System.out.println(ld_timeo);
 
 			if (ld_time > ld_timeo){ //if ld_timeo = 0 then messagebox('1','2')
 				ll_pos1=sj.indexOf("{", ll_pos)+1; 
@@ -203,10 +214,10 @@ public class ExecuteViewController {
 				else{
 					ll_pos2 = sj.indexOf("|", ll_pos1);
 					ls_day = sj.substring(ll_pos1, ll_pos2);
-					System.out.println(ls_day);
+//					System.out.println(ls_day);
 					if(ls_day.contains("<")){   //<15:30[d01/11:30]>d01第三种取报告时间
 						ls_time = ls_day.substring(ls_day.indexOf("<")+1,ls_day.indexOf("["));
-						System.out.println(ls_time);
+//						System.out.println(ls_time);
 						ls_time = ls_time.replace(":", ".");
 						ld_timeo = Double.parseDouble(ls_time);    //转换
 						if(ld_time > ld_timeo){
@@ -215,20 +226,20 @@ public class ExecuteViewController {
 							ll_pos1=sj.indexOf("|", ll_pos1)+1;
 							ll_pos2=sj.indexOf("}",ll_pos);
 							ls_time = sj.substring(ll_pos1, ll_pos2);
-							System.out.print(">超过当天取单时间:"+ls_day+"|"+ls_time);  //取单时间
+//							System.out.print(">超过当天取单时间:"+ls_day+"|"+ls_time);  //取单时间
 						}
 						else{
 							ls_day = ls_day.substring(ls_day.indexOf("<")+1, ls_day.indexOf(">"));
 							ls_time = ls_day.substring(ls_day.indexOf("/")+1, ls_day.indexOf("]"));
 							ls_day = ls_day.substring(ls_day.indexOf("[")+1, ls_day.indexOf("/"));
-							System.out.print("<未超过当天取单时间:"+ls_day+"/"+ls_time);  //取单时间
+//							System.out.print("<未超过当天取单时间:"+ls_day+"/"+ls_time);  //取单时间
 						}
 					}
 					else{
 						ll_pos1=sj.indexOf("|",ll_pos1);
 						ll_pos2=sj.indexOf("}",ll_pos1);
 						ls_time = sj.substring(ll_pos1+1, ll_pos2);//取单时间
-						System.out.println(ls_time);
+//						System.out.println(ls_time);
 					}
 				}
 				
@@ -237,17 +248,17 @@ public class ExecuteViewController {
 				}else{
 					ll_day = Integer.parseInt(ls_day.substring(1,3)) + i;
 				}
-				System.out.println(ymd.format(c.getTime()));
-				System.out.println(ll_day);
+//				System.out.println(ymd.format(c.getTime()));
+//				System.out.println(ll_day);
 				c.add(Calendar.DAY_OF_MONTH, ll_day);
-				System.out.println(ymdh.format(c.getTime()));
+//				System.out.println(ymdh.format(c.getTime()));
 				qbgsj = c.getTime();
 				//判断是否在法定节假日
 				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ls_time.split(":")[0]));
 				c.set(Calendar.MINUTE, Integer.parseInt(ls_time.split(":")[1]));
 				qdsj = ymdh.format(c.getTime());
 				qbgsj = c.getTime();
-				System.out.println(qdsj);
+//				System.out.println(qdsj);
 			}
 			else{
 				ll_pos1 = sj.indexOf("[",ll_pos)+1;
@@ -264,7 +275,7 @@ public class ExecuteViewController {
 					ll_pos2=sj.indexOf("|",ll_pos);
 					ls_day = sj.substring(ll_pos1, ll_pos2);
 				}
-				System.out.println("ll_day="+ll_day);
+//				System.out.println("ll_day="+ll_day);
 				if(ls_day.toLowerCase().startsWith("w")){
 					ll_day = (Integer.parseInt(ls_day.substring(1,2))+i)*7 + Integer.parseInt(ls_day.substring(2,3)) - ll_week;
 				}else{
@@ -274,17 +285,17 @@ public class ExecuteViewController {
 				ll_pos2 = sj.indexOf("]",ll_pos);
 				ls_time = sj.substring(ll_pos1, ll_pos2);
 				
-				System.out.println(ymd.format(c.getTime()));
+//				System.out.println(ymd.format(c.getTime()));
 				
 				c.add(Calendar.DAY_OF_MONTH, ll_day);
-				System.out.println(ymdh.format(c.getTime()));
+//				System.out.println(ymdh.format(c.getTime()));
 				qbgsj = c.getTime();
 				//判断是否在法定节假日
 				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ls_time.split(":")[0]));
 				c.set(Calendar.MINUTE, Integer.parseInt(ls_time.split(":")[1]));
 				qdsj = ymdh.format(c.getTime());
 				qbgsj = c.getTime();
-				System.out.println(qdsj);
+//				System.out.println(qdsj);
 			}
 		}
 		else if(sj.contains("小时")){
@@ -321,7 +332,7 @@ public class ExecuteViewController {
 				}
 				qdsj = ymdh.format(c.getTime());
 				qbgsj = c.getTime();
-				System.out.println(sj+qdsj);
+//				System.out.println(sj+qdsj);
 			}
 			
 		}
