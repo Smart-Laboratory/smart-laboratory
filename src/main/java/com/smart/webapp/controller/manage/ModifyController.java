@@ -471,7 +471,7 @@ public class ModifyController {
 						if(oldAndNew.containsKey(sample.getSampleNo())) {
 							Sample s = sample;
 							//插入日志
-							saveSampleLog(s, username, Constants.LOG_OPERATE_REPLACE);
+							saveSampleLog(s, username, Constants.LOG_OPERATE_INVERSION);
 							s.setSampleNo(oldAndNew.get(sample.getSampleNo()));
 							saveList.add(s);
 						}
@@ -486,7 +486,7 @@ public class ModifyController {
 						if(oldAndNew.containsKey(tr.getSampleNo())) {
 							TestResult t = tr;
 							//插入日志
-							saveTestResultLog(tr, username, Constants.LOG_OPERATE_REPLACE);
+							saveTestResultLog(tr, username, Constants.LOG_OPERATE_INVERSION);
 							t.setSampleNo(oldAndNew.get(tr.getSampleNo()));
 							saveList.add(t);
 						}
