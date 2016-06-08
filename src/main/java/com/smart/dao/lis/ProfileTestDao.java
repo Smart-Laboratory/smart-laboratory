@@ -1,5 +1,7 @@
 package com.smart.dao.lis;
 
+import java.util.List;
+
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.ProfileTest;
 
@@ -12,4 +14,8 @@ import com.smart.model.lis.ProfileTest;
  * @Version:
  */
 public interface ProfileTestDao extends GenericDao<ProfileTest, Long> {
+	
+	List<ProfileTest> getBySection(String lab);
+	
+	List <ProfileTest> getByProfileName(String profileName);
 }
