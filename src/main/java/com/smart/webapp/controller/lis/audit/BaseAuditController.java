@@ -26,6 +26,7 @@ import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.ProcessManager;
+import com.smart.service.lis.ProfileTestManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.TaskManager;
 import com.smart.service.lis.TestResultManager;
@@ -41,6 +42,8 @@ import com.zju.api.model.LabGroupInfo;
 import com.zju.api.service.RMIService;
 
 public class BaseAuditController {
+	@Autowired
+	protected ProfileTestManager proFileTestManager = null;
 	
 	@Autowired
     protected AuditTraceManager auditTraceManager = null;

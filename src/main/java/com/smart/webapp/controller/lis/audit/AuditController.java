@@ -41,6 +41,7 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.lis.CriticalRecord;
 import com.smart.model.lis.PassTrace;
+import com.smart.model.lis.ProfileTest;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Task;
 import com.smart.model.lis.TestResult;
@@ -61,6 +62,7 @@ import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
 import com.smart.service.EvaluateManager;
 import com.smart.service.lis.PassTraceManager;
+import com.smart.service.lis.ProfileTestManager;
 import com.smart.util.Config;
 
 @Controller
@@ -934,7 +936,38 @@ public class AuditController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
-	
+	/**
+	 * 张晋南 2016-06-07
+	 * 批量修改时根据检验段载入检验段
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/batchAddResults_statistic_getLoadValue*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getBatchAddResultsStatisticGetLoadValue(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String lab = request.getParameter("lab");
+		List <ProfileTest>pftList= new ArrayList<ProfileTest>();
+		pftList = proFileTestManager.getBySection(lab);
+		
+		DataResponse dataResponse = new DataResponse();
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		for (ProfileTest pft : pftList) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("value", pft.get);
+				map.put("name", pft.getProfileName()+"-"+pft.getProfileDescribe());
+				dataRows.add(map);
+		}
+		
+		dataResponse.setRows(dataRows);
+		dataResponse.setRecords(dataRows.size());
+		
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
+		return pftList;
+	}
+
 	@RequestMapping(value = "/batchAddResults_statistic_get*", method = RequestMethod.GET)
 	@ResponseBody
 	public DataResponse getBatchAddResultsStatisticGet(HttpServletRequest request, HttpServletResponse response) throws Exception {

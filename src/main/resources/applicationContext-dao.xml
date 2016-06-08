@@ -20,7 +20,15 @@
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
                 <!-- Hibernate Search index directory -->
                 <prop key="hibernate.search.default.indexBase">${app.search.index.basedir}</prop>
+<<<<<<< HEAD
                  <prop key="hibernate.show_sql">true</prop>
+=======
+<<<<<<< HEAD
+               <!--  <prop key="hibernate.show_sql">true</prop> -->
+=======
+                <!-- <prop key="hibernate.show_sql">true</prop> -->
+>>>>>>> origin/master
+>>>>>>> origin/master
             </props>
             <!-- Turn batching off for better error messages under PostgreSQL -->
             <!-- hibernate.jdbc.batch_size=0 -->

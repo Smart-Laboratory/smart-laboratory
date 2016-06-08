@@ -1,5 +1,7 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.List;
+
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.ProfileTestDao;
 import com.smart.model.lis.ProfileTest;
@@ -21,6 +23,24 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
     public ProfileTestDaoHibernate() {
         super(ProfileTest.class);
     }
+<<<<<<< HEAD
+    @SuppressWarnings("unchecked")
+    public List<ProfileTest> getBySection(String lab){
+    	List s = null;
+    	try {
+			s =  getSession().createQuery(
+					"from ProfileTest where section='" + lab + "' ").list();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	return s;
+    }
+    @SuppressWarnings("unchecked")
+	public List <ProfileTest> getByProfileName(String profileName){
+    	return getSession().createQuery("from ProfileTest where profileName='" + profileName + "' ").list();
+	}
+=======
 
     /**
      *  获取组合试验
@@ -58,4 +78,5 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
         Query q =  getSession().createSQLQuery(sql);
         return new Integer(q.uniqueResult() + "");
     };
+>>>>>>> origin/master
 }
