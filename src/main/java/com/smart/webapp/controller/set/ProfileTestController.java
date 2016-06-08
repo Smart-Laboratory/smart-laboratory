@@ -205,17 +205,10 @@ public class ProfileTestController {
         profileTest.setInuredate(new Date());
         profileTest.setOperator("张");
         //保存
-<<<<<<< HEAD
         try{
-        profileTestManager.save(profileTest);
+        	profileTestManager.save(profileTest);
         }catch (Exception e){
             e.printStackTrace();
-=======
-        try {
-        	profileTestManager.save(profileTest);
-        }catch(Exception e) {
-        	e.printStackTrace();
->>>>>>> origin/master
         }
     }
     /**
