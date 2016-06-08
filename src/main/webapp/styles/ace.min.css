@@ -13005,12 +13005,12 @@ th .lbl:only-child,td .lbl:only-child {
 
 .ui-jqgrid .ui-jqgrid-pager {
     line-height: 15px;
-    height: 55px;
+    height: 35px;
     padding-top: 3px !important;
-    padding-bottom: 5px !important;
+    padding-bottom: 2px !important;
     background-color: #eff3f8 !important;
     border-bottom: 1px solid #E1E1E1 !important;
-    border-top: 1px solid #E1E1E1 !important
+    border-right: 1px solid #E1E1E1 !important;
 }
 
 .ui-jqgrid .ui-pg-input {
@@ -13040,7 +13040,7 @@ th .lbl:only-child,td .lbl:only-child {
 }
 
 .ui-jqgrid .ui-pager-control {
-    height: 50px;
+    height: 30px;
     position: relative;
     padding-left: 9px;
     padding-right: 9px

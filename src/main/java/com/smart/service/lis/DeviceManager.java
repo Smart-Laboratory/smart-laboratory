@@ -9,4 +9,5 @@ public interface DeviceManager extends GenericManager<Device, Long> {
     List<Device> getDeviceList(String query,String type,int start,int end,String sidx,String sord);
     int getDeviceCount(String query,String type);
     Device getDeviceByCode(String code);
+    List<Device> getDeviceList(String name);
 }

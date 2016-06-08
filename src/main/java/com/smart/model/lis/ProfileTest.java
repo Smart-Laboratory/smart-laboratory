@@ -23,7 +23,7 @@ public class ProfileTest {
     private int emergency ;
     private int frequencyTime;              //时间频率
     private String dataWindowName;
-    private Date inredate;                  //录入日期
+    private Date inuredate;                  //录入日期
     private String operator;                //操作人
     private String section;                 //科室
     private int useNow;
@@ -114,12 +114,12 @@ public class ProfileTest {
         this.dataWindowName = dataWindowName;
     }
 
-    public Date getInredate() {
-        return inredate;
+    public Date getInuredate() {
+        return inuredate;
     }
 
-    public void setInredate(Date inredate) {
-        this.inredate = inredate;
+    public void setInuredate(Date inuredate) {
+        this.inuredate = inuredate;
     }
 
     public String getOperator() {

@@ -618,9 +618,7 @@
             if (obj.qcneed != '') {
                 $("input[type=radio][value=" + obj.qcneed + "]").prop('checked', true);
             }
-
             //是否历史记录
-
             if (obj.needhistory == '1') {
                 $("#needhistory").prop('checked', true);
             } else {
@@ -690,6 +688,8 @@
             //增加工具栏按钮
             var setting = $('<span class="widget-toolbar" style="right:20px;top:4px"><button type="button" id="add" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加</button>| <button type="button" id="delete" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除</button></span>');
             $("#gview_tableList").find('.ui-jqgrid-titlebar').append(setting);
+
+            $('#tableList').jqGrid('setGridWidth', $(".rightContent").width(),false);
 
             //增加表格行
             $('#add').bind('click', function () {

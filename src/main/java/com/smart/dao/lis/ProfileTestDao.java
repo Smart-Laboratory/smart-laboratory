@@ -3,6 +3,8 @@ package com.smart.dao.lis;
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.ProfileTest;
 
+import java.util.List;
+
 /**
  * Title: ProfileTestDao
  * Description:试验组合
@@ -12,4 +14,6 @@ import com.smart.model.lis.ProfileTest;
  * @Version:
  */
 public interface ProfileTestDao extends GenericDao<ProfileTest, Long> {
+    public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
+    public int getProfileTestSize(String query);
 }
