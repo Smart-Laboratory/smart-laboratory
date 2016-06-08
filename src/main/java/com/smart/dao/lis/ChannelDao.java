@@ -4,6 +4,8 @@ import com.smart.dao.GenericDao;
 import com.smart.model.lis.Channel;
 import com.smart.model.lis.Device;
 
+import java.util.List;
+
 /**
  * Title: ChannelDao
  * Description:仪器通道
@@ -13,4 +15,7 @@ import com.smart.model.lis.Device;
  * @Version:
  */
 public interface ChannelDao  extends GenericDao<Channel, Long> {
+
+    public void saveChannels(List<Channel> channels);
+    public Channel getChannel(String deviceid,String testid);
 }

@@ -29,6 +29,12 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	List<Section> getSectionList(String query,String hospitalId, int start,int end,String sidx,String sord);
 
 	/**
+	 * 根据名称获取部门
+	 * @param name
+	 * @return
+     */
+	List<Section> getSectionList(String name);
+	/**
 	 * 批量删除
 	 * @param ids
 	 * @return

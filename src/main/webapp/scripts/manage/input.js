@@ -47,6 +47,12 @@ function showData(type) {
 		}
 	}
 }
+
+function deleteYlxh(obj) {
+	var fee = $("#fee").val();
+	$("#fee").val(parseInt(fee) - parseInt(obj.id));
+}
+
 function getData(obj,event) {
 	var e=e||event;
 	var key=event.keyCode;;
@@ -63,31 +69,40 @@ function getData(obj,event) {
 				type = 2;
 			}
 			$.get("../sample/ajax/get",{id:id,type:type},function(data) {
-				var data = JSON.parse(data);
-				$("#stayhospitalmode").val(data.stayhospitalmode);
-				$("#doctadviseno").val(data.doctadviseno);
-				if(data.sampleno != '0') {
-					$("#sampleno").val(data.sampleno);
+				if(data != "") {
+					var data = JSON.parse(data);
+					$("#stayhospitalmode").val(data.stayhospitalmode);
+					$("#doctadviseno").val(data.doctadviseno);
+					if(data.sampleno != '0') {
+						$("#sampleno").val(data.sampleno);
+					}
+					$("#patientid").val(data.patientid);
+					$("#section").val(data.section);
+					$("#sectionCode").val(data.sectionCode);
+					$("#patientname").val(data.patientname);
+					$("#sex").val(data.sex);
+					$("#age").val(data.age);
+					$("#diagnostic").val(data.diagnostic);
+					var $tag_obj = $('#examinaim').data('tag');
+					$tag_obj.clear();
+					var ylxhMap = data.ylxhMap;
+					var feeMap = data.feeMap;
+					for(var key in ylxhMap) {
+						$tag_obj.add(ylxhMap[key], key, feeMap[key]);
+					}
+					$("#sampletype").val(data.sampletype);
+					$("#fee").val(data.fee);
+					$("#feestatus").val(data.feestatus);
+					$("#requester").val(data.requester);
+					$("#receivetime").val(data.receivetime);
+					$("#executetime").val(data.executetime);
+				} else {
+					if(type == 1) {
+						layer.msg("医嘱号为" + id + "的标本不存在！", {icon: 0, time: 1000});
+					} else {
+						layer.msg("样本号为" + id + "的标本不存在！", {icon: 0, time: 1000});
+					}
 				}
-				$("#patientid").val(data.patientid);
-				$("#section").val(data.section);
-				$("#sectionCode").val(data.sectionCode);
-				$("#patientname").val(data.patientname);
-				$("#sex").val(data.sex);
-				$("#age").val(data.age);
-				$("#diagnostic").val(data.diagnostic);
-				var $tag_obj = $('#examinaim').data('tag');
-				$tag_obj.clear();
-				var ylxhMap = data.ylxhMap;
-				for(var key in ylxhMap) {
-					$tag_obj.add(ylxhMap[key], key);
-				}
-				$("#sampletype").val(data.sampletype);
-				$("#fee").val(data.fee);
-				$("#feestatus").val(data.feestatus);
-				$("#requester").val(data.requester);
-				$("#receivetime").val(data.receivetime);
-				$("#executetime").val(data.executetime);
 			});
 			break;
 	}
@@ -112,10 +127,10 @@ function getPatient(obj,event) {
 						$("#sex").val(data.sex);
 						$("#age").val(data.age);
 					} else{
-						alert("就诊卡号为" + obj.value + "的病人不存在！")
+						layer.msg("就诊卡号为" + obj.value + "的病人不存在！", {icon: 0, time: 1000})
 					}
 				} else {
-					alert("医嘱号已存在，无权限修改接诊卡号！");
+					layer.msg("医嘱号已存在，无权限修改接诊卡号！", {icon: 0, time: 1000});
 				}
 			});
 			break;
@@ -126,40 +141,44 @@ function Pad(num, n) {
     return (Array(n).join(0) + num).slice(-n);
 }
 
-function sample(operate) {
-	var shm,doct,sampleno,pid,section,sectionCode,pname,sex,age,diag,ylxh,exam,feestatus,requester,receivetime,executetime;
-	ylxh = "";
-	exam ="";
-	shm = $("#stayhospitalmode").val();
-	doct = $("#doctadviseno").val();
-	sampleno = $("#sampleno").val();
-	pid = $("#patientid").val();
-	section = $("#section").val();
-	sectionCode = $("#sectionCode").val();
-	pname = $("#patientname").val();
-	sex = $("#sex").val();
-	age = $("#age").val();
-	ageunit = $("#ageunit").val();
-	diag = $("#diagnostic").val();
-	var len = $('#examTag .tag').length - 1;
-	$('#examTag .tag').each(function(i) {
-		if(i == len) {
-			ylxh += this.id;
-			exam += $(this).text().replace("×","");
-		} else {
-			ylxh += this.id + "+";
-			exam += $(this).text().replace("×","") + "+";
-		}
-	});
-	sampletype = $("#sampletype").val();
-	fee = $("#fee").val();
-	feestatus = $("#feestatus").val();
-	requester = $("#requester").val();
-	receivetime = $("#receivetime").val();
-	executetime = $("#executetime").val();
-	
-	$.post("../sample/ajax/editSample",
-		{
+function sample() {
+	var operate,shm,doct,sampleno,pid,section,sectionCode,pname,sex,age,diag,ylxh,exam,feestatus,requester,receivetime,executetime,fee;
+	operate = $("input[name='edittype']:checked").val();
+	if(operate == 'cancel') {
+		$('#sampleForm')[0].reset();
+		$('#examinaim').data('tag').clear();
+	} else {
+		ylxh = "";
+		exam ="";
+		shm = $("#stayhospitalmode").val();
+		doct = $("#doctadviseno").val();
+		sampleno = $("#sampleno").val();
+		pid = $("#patientid").val();
+		section = $("#section").val();
+		sectionCode = $("#sectionCode").val();
+		pname = $("#patientname").val();
+		sex = $("#sex").val();
+		age = $("#age").val();
+		ageunit = $("#ageunit").val();
+		diag = $("#diagnostic").val();
+		var len = $('#examTag .tag').length - 1;
+		$('#examTag .tag').each(function(i) {
+			if(i == len) {
+				ylxh += this.id;
+				exam += $(this).text().replace("×","");
+			} else {
+				ylxh += this.id + "+";
+				exam += $(this).text().replace("×","") + "+";
+			}
+		});
+		sampletype = $("#sampletype").val();
+		fee = $("#fee").val();
+		feestatus = $("#feestatus").val();
+		requester = $("#requester").val();
+		receivetime = $("#receivetime").val();
+		executetime = $("#executetime").val();
+		
+		$.post("../sample/ajax/editSample", {
 			operate : operate,
 			shm : shm,
 			doct : doct,
@@ -183,58 +202,39 @@ function sample(operate) {
 		},
 		function(data) {
 			var data = JSON.parse(data);
-			if(data.isreceived) {
-				alert("医嘱号为" + data.id + "的样本已接收！");
-			} else {
-				var sampleno = $("#sampleno").val();
-				$("#cancel").click();
-				$('#examinaim').data('tag').clear();
-				$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
-				var html = "<tr>";
-				html += "<td><i class='fa fa-pencil'/></td>";
-				html += "<td>" + data.sampleno + "</td>";
-				html += "<td>" + data.shm + "</td>";
-				html += "<td>" + data.pname + "</td>";
-				html += "<td>" + data.section + "</td>";
-				html += "<td>" + data.bed + "</td>";
-				html += "<td>" + data.sex + "</td>";
-				html += "<td>" + data.age + "</td>";
-				html += "<td>" + data.id + "</td>";
-				html += "<td>" + data.receivetime + "</td>";
-				html += "<td>" + data.exam + "</td>";
-				html += "<td>" + data.sampletype + "</td>";
-				html += "<td>" + data.pid + "</td>";
-				html += "<td>" + data.feestatus + "</td>";
-				html += "<td>" + data.diag + "</td>";
-				html += "<td>" + data.cycle + "</td>";
-				html += "<td>" + data.requester + "</td>";
-				html += "<td>" + data.part + "</td>";
-				html += "<td>" + data.requestmode + "</td>";
-				html += "<td>" + data.fee + "</td>";
-				html += "</tr>";
-				$("#tableBody").append(html);
-			}
-		}
-	);
+			var sampleno = $("#sampleno").val();
+			$('#sampleForm')[0].reset();
+			$('#examinaim').data('tag').clear();
+			$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
+			var html = "<tr>";
+			html += "<td><i class='fa fa-pencil'/></td>";
+			html += "<td>" + data.sampleno + "</td>";
+			html += "<td>" + data.shm + "</td>";
+			html += "<td>" + data.pname + "</td>";
+			html += "<td>" + data.section + "</td>";
+			html += "<td>" + data.bed + "</td>";
+			html += "<td>" + data.sex + "</td>";
+			html += "<td>" + data.age + "</td>";
+			html += "<td>" + data.id + "</td>";
+			html += "<td>" + data.receivetime + "</td>";
+			html += "<td>" + data.exam + "</td>";
+			html += "<td>" + data.sampletype + "</td>";
+			html += "<td>" + data.pid + "</td>";
+			html += "<td>" + data.feestatus + "</td>";
+			html += "<td>" + data.diag + "</td>";
+			html += "<td>" + data.cycle + "</td>";
+			html += "<td>" + data.requester + "</td>";
+			html += "<td>" + data.part + "</td>";
+			html += "<td>" + data.requestmode + "</td>";
+			html += "<td>" + data.fee + "</td>";
+			html += "</tr>";
+			$("#tableBody").append(html);
+		});
+	}
 }
-
 
 $(function() {
 	$("#sampletype").val("C");
-	
-	var tag_input = $('#examinaim');
-	tag_input.tag({
-		placeholder:tag_input.attr('placeholder'),
-		style:tag_input.attr('class'),
-		source: function(query, process) {
-			$.get("../sample/ajax/searchYlsf",{query:query},function(data) {
-				var json = jQuery.parseJSON(data);
-				process(json.list);
-			});
-		}
-	})
-	var $tag_obj = $('#examinaim').data('tag');
-	//$tag_obj.add('Programmatically Added');
 	
 	$("#section").autocomplete({
         source: function( request, response ) {
@@ -284,4 +284,18 @@ $(function() {
         },
         minLength: 1
 	});
+	
+	var tag_input = $('#examinaim');
+	tag_input.tag({
+		placeholder:tag_input.attr('placeholder'),
+		style:tag_input.attr('class'),
+		source: function(query, process) {
+			$.get("../sample/ajax/searchYlsf",{query:query},function(data) {
+				var json = jQuery.parseJSON(data);
+				process(json.list);
+			});
+		}
+	})
+	var $tag_obj = $('#examinaim').data('tag');
+	//$tag_obj.add('Programmatically Added');
 });

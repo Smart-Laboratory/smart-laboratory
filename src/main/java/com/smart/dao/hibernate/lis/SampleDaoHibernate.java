@@ -428,7 +428,12 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	
 	@SuppressWarnings("unchecked")
 	public List<Sample> getBysampleNos(String ids) {
-		return getSession().createQuery("from Sample where sampleNo in (" + ids + ")").list();
+		try {
+			return getSession().createQuery("from Sample where sampleNo in (" + ids + ")").list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -37,6 +37,7 @@ public class DictionaryController {
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response ){
         return new ModelAndView();
     }
+
     @RequestMapping( value = "/getList" ,method = {RequestMethod.GET,RequestMethod.POST} )
     @ResponseBody
     public DataResponse getList(HttpServletRequest request, HttpServletResponse response) throws Exception {

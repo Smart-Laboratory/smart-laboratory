@@ -270,4 +270,13 @@ public final class Constants {
 	 * 图片上传路径
 	 */
 	public final static String imageUrl = "/home/tomcat/webapps/lab/images/upload/";
+	
+	public final static String LOG_OPERATE_ADD = "新增";
+	public final static String LOG_OPERATE_EDIT = "修改";
+	public final static String LOG_OPERATE_DELETE = "删除";
+	public final static String LOG_OPERATE_RECOVER = "恢复";
+	public final static String LOG_OPERATE_INCREASE = "标本编号增加";
+	public final static String LOG_OPERATE_REDUCE = "标本编号减少";
+	public final static String LOG_OPERATE_INVERSION = "标本编号倒置";
+	public final static String LOG_OPERATE_REPLACE = "标本编号替换";
 }

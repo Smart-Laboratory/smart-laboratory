@@ -26,9 +26,16 @@ import com.smart.model.BaseObject;
 /**
  *  Index对象表示最基本的检验项目
  *
- *  add by zcw 2016-05-31
- *  	labdepartment：		关联部门
+ *  add by zcw 2016-05-31	增加仪器/部门关联信息
+ *  	labdepartment		关联部门
  *  	instrument			关联仪器
+ *
+ *  add by zcw 2016-06-05 增加不常用信息
+ *  	 principle 			测定原理
+ *  	 workCriterion		操作规范
+ *  	 increasedHint		升高意义
+ *  	 decreasedHint		降低意义
+ *  	 notes				注意事项
  */
 @Entity
 @Table(name = "lab_index")
@@ -64,6 +71,132 @@ public class Index extends BaseObject implements Serializable {
 
 	private String labdepartment;	//关联部门
 	private String instrument;		//关联仪器
+
+	/*不常用信息*/
+	private String principle ;			//测定原理
+	private String workCriterion;		//操作规范
+	private String increasedHint;		//升高意义
+	private String decreasedHint;		//降低意义
+	private String notes;				//注意事项
+	private String methodName;			//方法名称
+
+
+	/*常用信息*/
+	private Date inureDate;				//生效日期
+	private Date outDate;				//失效日期
+	private String outDateOperator;		//失效人
+	private String TEA;
+	private String CCV;
+	private String testClass;			//分类代码
+	private Integer qcNeed;				//质控需求
+
+	public Integer getQcNeed() {
+		return qcNeed;
+	}
+
+	public void setQcNeed(Integer qcNeed) {
+		this.qcNeed = qcNeed;
+	}
+
+	public Date getInureDate() {
+		return inureDate;
+	}
+
+	public void setInureDate(Date inureDate) {
+		this.inureDate = inureDate;
+	}
+
+	public Date getOutDate() {
+		return outDate;
+	}
+
+	public void setOutDate(Date outDate) {
+		this.outDate = outDate;
+	}
+
+	public String getOutDateOperator() {
+		return outDateOperator;
+	}
+
+	public void setOutDateOperator(String outDateOperator) {
+		this.outDateOperator = outDateOperator;
+	}
+
+	public String getTEA() {
+		return TEA;
+	}
+
+	public void setTEA(String TEA) {
+		this.TEA = TEA;
+	}
+
+	public String getCCV() {
+		return CCV;
+	}
+
+	public void setCCV(String CCV) {
+		this.CCV = CCV;
+	}
+
+	public String getTestClass() {
+		return testClass;
+	}
+
+	public void setTestClass(String testClass) {
+		this.testClass = testClass;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getPrinciple() {
+		return principle;
+	}
+
+	public void setPrinciple(String principle) {
+		this.principle = principle;
+	}
+
+	public String getWorkCriterion() {
+		return workCriterion;
+	}
+
+	public void setWorkCriterion(String workCriterion) {
+		this.workCriterion = workCriterion;
+	}
+
+	public String getIncreasedHint() {
+		return increasedHint;
+	}
+
+	public void setIncreasedHint(String increasedHint) {
+		this.increasedHint = increasedHint;
+	}
+
+	public String getDecreasedHint() {
+		return decreasedHint;
+	}
+
+	public void setDecreasedHint(String decreasedHint) {
+		this.decreasedHint = decreasedHint;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
 
 
 
@@ -356,6 +489,7 @@ public class Index extends BaseObject implements Serializable {
 	public void setInstrument(String instrument) {
 		this.instrument = instrument;
 	}
+
 
 	@Transient
 	public int getRuleCount() {

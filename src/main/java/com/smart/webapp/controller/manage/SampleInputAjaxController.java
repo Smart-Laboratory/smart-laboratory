@@ -1,5 +1,6 @@
-package com.smart.webapp.controller.sample;
+package com.smart.webapp.controller.manage;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,14 +20,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.smart.Constants;
 import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
+import com.smart.model.lis.ProcessLog;
 import com.smart.model.lis.Sample;
-import com.smart.model.lis.Section;
+import com.smart.model.lis.SampleLog;
 import com.smart.model.request.SFXM;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.lis.PatientManager;
+import com.smart.service.lis.ProcessLogManager;
 import com.smart.service.lis.ProcessManager;
+import com.smart.service.lis.SampleLogManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.request.SFXMManager;
 import com.smart.webapp.util.DataResponse;
@@ -35,13 +38,12 @@ import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.smart.webapp.util.UserUtil;
 import com.smart.webapp.util.YLSFXMUtil;
-import com.zju.api.model.SyncPatient;
 import com.zju.api.service.RMIService;
 
 
 @Controller
 @RequestMapping("/sample/ajax*")
-public class SampleAjaxController {
+public class SampleInputAjaxController {
 
 	@Autowired
 	private RMIService rmiService = null;
@@ -59,6 +61,10 @@ public class SampleAjaxController {
 	private PatientManager patientManager = null;
 	@Autowired
 	private DictionaryManager dictionaryManager = null;
+	@Autowired
+	private SampleLogManager sampleLogManager = null;
+	@Autowired
+	private ProcessLogManager processLogManager = null;
 	
 	@RequestMapping(value = "/get*", method = RequestMethod.GET)
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -74,15 +80,22 @@ public class SampleAjaxController {
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
 		if(type == 1) {
-			sample = sampleManager.get(Long.parseLong(code));
+			try {
+				sample = sampleManager.get(Long.parseLong(code));
+			} catch(Exception e) {
+				return null;
+			}
 		} else {
 			sample = sampleManager.getBySampleNo(code);
+		}
+		if(sample == null) {
+			return null;
 		}
 		Process process = processManager.getBySampleId(sample.getId());
 		o.put("doctadviseno", sample.getId());
 		o.put("sampleno", sample.getSampleNo());
 		o.put("stayhospitalmode", sample.getStayHospitalMode());
-		o.put("patientid", sample.getPatientblh());
+		o.put("patientid", sample.getPatientId());
 		o.put("section", sectionutil.getValue(sample.getHosSection()));
 		o.put("sectionCode", sample.getHosSection());
 		o.put("patientname", sample.getPatientname());
@@ -97,14 +110,18 @@ public class SampleAjaxController {
 		o.put("executetime", process.getExecutetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getExecutetime()));
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		Map<String, String> ylxhMap = new HashMap<String, String>();
+		Map<String, String> feeMap = new HashMap<String, String>();
 		if(sample.getYlxh().indexOf("+") > 0) {
 			for(String s : sample.getYlxh().split("[+]")) {
-				ylxhMap.put(s, ylsfxmUtil.getValue(s));
+				ylxhMap.put(s, ylsfxmUtil.getSFXM(s).getName());
+				feeMap.put(s, ylsfxmUtil.getSFXM(s).getPrice());
 			}
 		} else {
 			ylxhMap.put(sample.getYlxh(), sample.getInspectionName());
+			feeMap.put(sample.getYlxh(), sample.getFee());
 		}
 		o.put("ylxhMap", ylxhMap);
+		o.put("feeMap", feeMap);
 		/*SyncPatient sp = rmiService.getSampleByDoct(Long.parseLong(code));
 		o.put("doctadviseno", sp.getDOCTADVISENO());
 		o.put("sampleno", sp.getSAMPLENO());
@@ -179,11 +196,11 @@ public class SampleAjaxController {
 			map.put("age", sample.getAge() + sample.getAgeunit());
 			map.put("diag", sample.getDiagnostic());
 			map.put("exam", sample.getInspectionName());
-			map.put("bed", sample.getDepartBed());
+			map.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
 			map.put("cycle", sample.getCycle());
 			map.put("fee", sample.getFee());
 			map.put("feestatus", sample.getFeestatus());
-			map.put("part", sample.getPart());
+			map.put("part", sample.getPart() == null ? "" : sample.getPart());
 			map.put("requestmode", sample.getRequestMode());
 			map.put("requester", process.getRequester());
 			map.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
@@ -218,12 +235,11 @@ public class SampleAjaxController {
 		String query = request.getParameter("query");
 		long hospitalid = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
 		List<SFXM> sfxmList = sfxmManager.searchSFXM(query.toUpperCase(), hospitalid);
-		System.out.println(sfxmList.size());
 		JSONObject o = new JSONObject();
 		//JSONArray array = new JSONArray();
 		List<String> list= new ArrayList<String>();
 		for(SFXM sfxm : sfxmList) {
-			list.add(sfxm.getId() + " " + sfxm.getName());
+			list.add(sfxm.getId() + " " + sfxm.getName() + " " + sfxm.getYblx() +" " + sfxm.getPrice());
 			/*JSONObject obj = new JSONObject();
 			obj.put("ylxh", sfxm.getId());
 			obj.put("ylmc", sfxm.getName());*/
@@ -237,8 +253,8 @@ public class SampleAjaxController {
 	
 	@RequestMapping(value = "/editSample*", method = RequestMethod.POST)
 	public String editSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Sample sample = new Sample();
-		Process process = new Process();
+		Sample sample = null;
+		Process process = null;
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String operate = request.getParameter("operate");
 		String stayhospitalmode = request.getParameter("shm");
@@ -258,45 +274,107 @@ public class SampleAjaxController {
 		String executetime = request.getParameter("executetime");
 		String examinaim = request.getParameter("exam");
 		String ylxh = request.getParameter("ylxh");
+		String fee = request.getParameter("fee");
 		JSONObject o = new JSONObject();
-		/*if(patientid == null) {
-			patient.setPatientName(patientname);
-			patient.setSex(sex);
-			//patientManager.save(patient);
-		} else {
-			patient = patientManager.getByBlh(patientid);
-		}*/
 		if(operate.equals("add")) {
+			sample = new Sample();
+			process = new Process();
 			sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
 			sample.setHosSection(sectionCode);
 			sample.setSampleType(sampletype);
 			sample.setSectionId(user.getLastLab());
+			sample.setSampleNo(sampleno);
+			sample.setPatientId(patientid);
+			sample.setAge(age);
+			sample.setAgeunit(ageunit);
+			sample.setSex(sex);
+			sample.setDiagnostic(diagnostic);
+			sample.setFee(fee);
+			sample.setFeestatus(feestatus);
+			sample.setInspectionName(examinaim);
+			sample.setYlxh(ylxh);
+			sample.setPatientname(patientname);
 			sample = sampleManager.save(sample);
 			process.setSampleid(sample.getId());
 			process.setRequester(requester);
-			process.setExecutetime(Constants.SDF.parse(executetime));
+			process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
 			process.setReceiver(user.getName());
-			process.setReceivetime(Constants.SDF.parse(receivetime));
-			processManager.save(process);
+			process.setReceivetime(new Date());
+			process = processManager.save(process);
+			
+			SampleLog slog = new SampleLog();
+			slog.setSampleEntity(sample);
+			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogoperate(Constants.LOG_OPERATE_ADD);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
+			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
+			plog.setProcessEntity(process);
+			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			plog.setLogoperate(Constants.LOG_OPERATE_ADD);
+			plog.setLogtime(new Date());
+			processLogManager.save(plog);
 			
 		} else if (operate.equals("edit")) {
 			sample = sampleManager.get(Long.parseLong(doctadviseno));
 			process = processManager.getBySampleId(Long.parseLong(doctadviseno));
-			if(process.getReceivetime() != null) {
-				o.put("isreceived", true);
-			} else {
-				sample.setSampleNo(sampleno);
-				sample.setInspectionName(examinaim);
-				sample.setYlxh(ylxh);
-				sample.setSectionId(user.getLastLab());
-				process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-				process.setReceivetime(Constants.SDF.parse(receivetime));
-				o.put("isreceived", false);
-				sampleManager.save(sample);
-				processManager.save(process);
-			}
+			
+			SampleLog slog = new SampleLog();
+			slog.setSampleEntity(sample);
+			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
+			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
+			plog.setProcessEntity(process);
+			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+			plog.setLogtime(new Date());
+			processLogManager.save(plog);
+
+			sample.setSampleNo(sampleno);
+			sample.setInspectionName(examinaim);
+			sample.setYlxh(ylxh);
+			sample.setSectionId(user.getLastLab());
+			sample.setPatientname(patientname);
+			sample.setPatientId(patientid);
+			sample.setAge(age);
+			sample.setAgeunit(ageunit);
+			sample.setSex(sex);
+			sample.setFee(fee);
+			sample.setFeestatus(feestatus);
+			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			process.setReceivetime(new Date());
+				
+			sampleManager.save(sample);
+			processManager.save(process);
 		} else if (operate.equals("delete")) {
 			sample = sampleManager.get(Long.parseLong(doctadviseno));
+			process = processManager.getBySampleId(Long.parseLong(doctadviseno));
+			
+			SampleLog slog = new SampleLog();
+			slog.setSampleEntity(sample);
+			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
+			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
+			plog.setProcessEntity(process);
+			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			plog.setLogtime(new Date());
+			processLogManager.save(plog);
+			
 			sampleManager.remove(Long.parseLong(doctadviseno));
 			processManager.removeBySampleId(Long.parseLong(doctadviseno));
 		}
@@ -308,7 +386,7 @@ public class SampleAjaxController {
 		o.put("age", age + ageunit);
 		o.put("diag", diagnostic);
 		o.put("exam", examinaim);
-		o.put("bed", sample.getDepartBed() + "");
+		o.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
 		o.put("cycle", sample.getCycle());
 		o.put("fee", sample.getFee() + "");
 		o.put("feestatus", sample.getFeestatus());
@@ -316,7 +394,7 @@ public class SampleAjaxController {
 		o.put("shm", sample.getStayHospitalModelValue());
 		o.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
 		o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
-		o.put("part", sample.getPart() + "");
+		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
 		o.put("requester", process.getRequester());
 		response.setContentType("text/html; charset=UTF-8");

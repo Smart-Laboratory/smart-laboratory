@@ -1,11 +1,13 @@
 package com.smart.service.impl.lis;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smart.dao.lis.TestResultDao;
+import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
 import com.smart.service.impl.GenericManagerImpl;
@@ -26,10 +28,19 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getFormulaResult(fm);
 	}
 	
-	public List<TestResult> getTestBySampleNo(String sampleNo){
-		return testResultDao.getTestBySampleNo(sampleNo);
+	public List<TestResult> getTestBySampleNo(String sampleNos){
+		return testResultDao.getTestBySampleNo(sampleNos);
 	}
 	
+	public List<TestResult> getTestBySampleNos(String sampleNos){
+		return testResultDao.getTestBySampleNos(sampleNos);
+	}
+	/**
+	 * key:old value:new
+	 */
+	public int updateAll(Map <String,String>trMap){
+		return testResultDao.updateAll(trMap);
+	}
 	public TestResult getSingleTestResult(String sampleNo, String testId){
 		return testResultDao.getSingleTestResult(sampleNo,testId);
 	}
@@ -52,6 +63,9 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 
 	public void saveAll(List<TestResult> list) {
 		testResultDao.saveAll(list);
+	}
+	public void deleteAll(List<TestResult> list) {
+		testResultDao.deleteAll(list);
 	}
 
 	public List<TestResult> getHisTestResult(String samplenos) {

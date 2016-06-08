@@ -78,4 +78,8 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
 		}
 		return null;
 	}
+	public List<Device> getDeviceList(String name){
+		List<Device> devices = getSession().createQuery("from Device where name like '" + name + "%'  or id like '"+name+"%' order by name,id").list();
+		return devices;
+	}
 }

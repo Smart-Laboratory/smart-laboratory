@@ -1,10 +1,12 @@
 package com.smart.dao.lis;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
+import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResultPK;
 import com.smart.model.lis.TestResult;
 
@@ -15,6 +17,11 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 
 	@Transactional
 	List<TestResult> getTestBySampleNo(String sampleNo);
+	
+	int updateAll(Map <String,String>trMap);
+	
+	@Transactional
+	List<TestResult> getTestBySampleNos(String sampleNos);
 	
 	@Transactional
 	TestResult getSingleTestResult(String sampleNo, String testId);
@@ -33,7 +40,10 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 
 	@Transactional
 	void saveAll(List<TestResult> list);
-
+	
+	@Transactional
+	void deleteAll(List<TestResult> list);
+	
 	@Transactional
 	List<TestResult> getHisTestResult(String samplenos);
 

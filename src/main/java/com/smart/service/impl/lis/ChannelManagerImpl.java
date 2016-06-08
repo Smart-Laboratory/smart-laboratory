@@ -8,6 +8,8 @@ import com.smart.service.lis.ChannelManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Title: ChannelManagerImpl
  * Description:仪器通道
@@ -24,5 +26,19 @@ public class ChannelManagerImpl extends GenericManagerImpl<Channel,Long> impleme
     public void setChannelDaoDao(ChannelDao channelDao) {
         this.channelDao = channelDao;
         this.dao = channelDao;
+    }
+
+    /**
+     * 批量保存仪器通道数据
+     * @param channels
+     */
+    @Override
+    public void saveChannels(List<Channel> channels) {
+        channelDao.saveChannels(channels);
+    }
+
+    @Override
+    public Channel getChannel(String deviceid, String testid) {
+        return channelDao.getChannel(deviceid,testid);
     }
 }

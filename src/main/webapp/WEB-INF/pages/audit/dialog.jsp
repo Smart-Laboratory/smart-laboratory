@@ -280,16 +280,18 @@
 		
 	</div>
 	<!-- 标本批量添加默认值 张晋南20160602 -->
-	<div id="batchAddResultsDialog" title="<fmt:message key='statistic.title' />" style="text-align:left;" >
+	<div id="batchAddResultsDialog" title="<fmt:message key='batch.add.results' />" style="text-align:left;" >
 		<div >
-			<input id="batchAddResults_statistic_code" onkeyup="this.value=this.value.toUpperCase()" class="form-control" style="float:left;width:150px;" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
-			<input id="batchAddResults_statistic_begin" class="form-control" style="float:left;width:120px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
-			<input id="batchAddResults_statistic_end" class="form-control" style="float:left;width:120px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
+			<input id="batchAddResults_statistic_date" onfocus="setDefaultValue()" class="form-control" style="float:left;width:100px;" type="text" />
+			<input id="batchAddResults_statistic_code" onkeyup="this.value=this.value.toUpperCase()" class="form-control" style="float:left;width:100px;;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
+			<select id="batchAddResults_statistic_packages"  style="float:left;width:180px;margin-left:8px;" class="form-control" >
+			</select>
+			<input id="batchAddResults_statistic_begin" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
+			<input id="batchAddResults_statistic_end" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
 			<button id="batchAddResults_statisticBtn_get" class="btn btn-info" style="margin-left:8px;"><fmt:message key='search'/></button>
 			<button id="batchAddResults_statisticBtn_save" class="btn btn-info" style="margin-left:8px;">保存</button>
 		</div>
-		<div style="font-size: 14px;margin-top:45px;">
-			<table id="batchAddResults_statistic_table"></table>
+		<div style="font-size: 14px;margin-top:45px;" id="batchAddResults_statistic_table">
 		</div>
 	</div>
 	

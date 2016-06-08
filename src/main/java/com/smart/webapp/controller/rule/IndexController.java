@@ -34,7 +34,7 @@ public class IndexController {
 	@ModelAttribute
 	@RequestMapping(method = RequestMethod.GET)
 	public Index showForm(HttpServletRequest request, HttpServletResponse response) {
-		
+		 
 		request.setAttribute("sampleList", Constants.SAMPLE_TYPE);
 		
 		Map<String, String> type = new HashMap<String, String>();

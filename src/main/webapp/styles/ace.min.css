@@ -3,14 +3,10 @@ html {
     position: relative
 }
 
-body {
-    background-color: #FAFAFA;
-    min-height: 100%;
-    padding-bottom: 0;
-    font-family: 'Open Sans';
+body, th, td, button, input, select, textarea {
+    font-family: "Microsoft Yahei","Helvetica Neue","Helvetica,tahoma,arial","Verdana","sans-serif","\5B8B\4F53";
     font-size: 13px;
     color: #393939;
-    line-height: 1.5
 }
 .main-container{
     margin-left:15px;
@@ -8428,7 +8424,7 @@ label.inline {
 
 textarea,input[type="text"],input[type="password"],input[type="datetime"],input[type="datetime-local"],input[type="date"],input[type="month"],input[type="time"],input[type="week"],input[type="number"],input[type="email"],input[type="url"],input[type="search"],input[type="tel"],input[type="color"] {
     border-radius: 0 !important;
-    color: #858585;
+    color: #000;
     background-color: #fff;
     border: 1px solid #d5d5d5;
     padding: 5px 4px 6px;
@@ -8447,7 +8443,7 @@ textarea:hover,input[type="text"]:hover,input[type="password"]:hover,input[type=
 textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
-    color: #696969;
+    color: #000;
     border-color: #f59942;
     background-color: #fff;
     outline: none
@@ -8457,13 +8453,13 @@ textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type=
     border-radius: 0;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    color: #858585;
+    color: #333;
     background-color: #fff;
     border: 1px solid #d5d5d5
 }
 
 .form-control:focus,select:focus {
-    color: #696969;
+    color: #333;
     border-color: #f59942;
     background-color: #fff;
     outline: none
@@ -13009,12 +13005,12 @@ th .lbl:only-child,td .lbl:only-child {
 
 .ui-jqgrid .ui-jqgrid-pager {
     line-height: 15px;
-    height: 55px;
+    height: 35px;
     padding-top: 3px !important;
-    padding-bottom: 5px !important;
+    padding-bottom: 2px !important;
     background-color: #eff3f8 !important;
     border-bottom: 1px solid #E1E1E1 !important;
-    border-top: 1px solid #E1E1E1 !important
+    border-right: 1px solid #E1E1E1 !important;
 }
 
 .ui-jqgrid .ui-pg-input {
@@ -13044,7 +13040,7 @@ th .lbl:only-child,td .lbl:only-child {
 }
 
 .ui-jqgrid .ui-pager-control {
-    height: 50px;
+    height: 30px;
     position: relative;
     padding-left: 9px;
     padding-right: 9px

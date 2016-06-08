@@ -19,6 +19,12 @@ public interface DeviceDao extends GenericDao<Device, Long> {
     List<Device> getDeviceList(String query, String type, int start, int end, String sidx, String sord);
 
     /**
+     * 根据名称获取设备列表
+     * @param name
+     * @return
+     */
+    List<Device> getDeviceList(String name);
+    /**
      * 获取记录数
      * @param query
      * @param type
@@ -33,4 +39,6 @@ public interface DeviceDao extends GenericDao<Device, Long> {
      * @return
      */
     Device getDeviceByCode(String code);
+
+
 }

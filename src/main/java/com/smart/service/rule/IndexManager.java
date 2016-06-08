@@ -74,4 +74,11 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @return
 	 */
 	Index getIndex(String indexId);
+
+	/**
+	 * 按条件获取指标
+	 * @param query
+	 * @return
+     */
+	List<Index> getIndexsByQuery(String query);
 }

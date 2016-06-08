@@ -32,7 +32,6 @@ public class Process extends BaseObject {
 	private Date executetime;
 	private String sender;
 	
-	
 	private Date sendtime;
 	private String receiver;
 	private Date receivetime;

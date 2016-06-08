@@ -12,10 +12,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.IndexColumn;
 import com.smart.model.BaseObject;
 
-//样本信息表
 /**
  * 检验单样本信息表
  */
@@ -88,7 +86,6 @@ public class Sample extends BaseObject {
 	/**
 	 * 检验单开单时间
 	 */
-	@IndexColumn(name = "sampleno") 
 	@Column(name = "sampleno", length = 20)
 	public String getSampleNo() {
 		return sampleNo;
