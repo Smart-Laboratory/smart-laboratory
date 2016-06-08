@@ -20,20 +20,20 @@ public class ProfileTest {
     private String profileDescribe;         //试验组合名称
     private String deviceId;                //设备ID
     private String profileTest;             //A项目ID
-    private int emergency ;
-    private int frequencyTime;              //时间频率
+    private int emergency=0;
+    private int frequencyTime=0;              //时间频率
     private String dataWindowName;
     private Date inuredate;                  //录入日期
     private String operator;                //操作人
     private String section;                 //科室
-    private int useNow;
+    private int useNow=1;
     private String sampleType;              //标本类型
     private String bjmc;
     private String wb;
     private String py;
-    private int zdm;
+    private int zdm=0;
     private String fee;
-    private int ylxh;
+    private int ylxh=0;
     private String zmwz;
     private String jyz;
     private String jyzTime;
