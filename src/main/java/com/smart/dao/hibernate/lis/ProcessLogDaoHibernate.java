@@ -20,4 +20,8 @@ public class ProcessLogDaoHibernate extends GenericDaoHibernate<ProcessLog, Long
 		return getSession().createQuery("from ProcessLog where sampleid=" + sid + " order by logtime desc").list();
 	}
 
+	public ProcessLog getBySampleLogId(Long logid) {
+		return (ProcessLog) getSession().createQuery("from ProcessLog where sampleLogId=" + logid).list().get(0);
+	}
+
 }

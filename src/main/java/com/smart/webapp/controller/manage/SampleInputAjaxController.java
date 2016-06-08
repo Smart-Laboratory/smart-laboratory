@@ -1,4 +1,4 @@
-package com.smart.webapp.controller.sample;
+package com.smart.webapp.controller.manage;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/sample/ajax*")
-public class SampleAjaxController {
+public class SampleInputAjaxController {
 
 	@Autowired
 	private RMIService rmiService = null;

@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ace-elements.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/bootstrap-tag.min.js"/>"></script>
+    <script type="text/javascript" src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../scripts/manage/input.js"></script>
 </head>
 <style>

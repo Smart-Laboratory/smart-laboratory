@@ -41,6 +41,7 @@ import com.smart.service.lis.TestResultManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.UserUtil;
 import com.zju.api.service.RMIService;
 
 @Controller
@@ -106,6 +107,7 @@ public class ModifyController {
 			sample = sampleManager.getBySampleNo(text);
 		}
 		Process process = processManager.getBySampleId(sample.getId());
+		System.out.println(sample.getId());
 		List<SampleLog> sampleLogList = sampleLogManager.getBySampleId(sample.getId());
 		List<ProcessLog> processLogList = processLogManager.getBySampleId(sample.getId());
 		Map<Long, ProcessLog> processLogMap  = new HashMap<Long, ProcessLog>();
@@ -138,6 +140,7 @@ public class ModifyController {
 				map.put("logger", sl.getLogger());
 				map.put("logoperate", sl.getLogoperate());
 			}
+			map.put("id", sl.getId() == null ? "" : sl.getId());
 			map.put("sampleid", sl.getSampleId());
 			map.put("sampleno", sl.getSampleNo());
 			map.put("shm", sl.getStayHospitalModelValue());
@@ -157,35 +160,29 @@ public class ModifyController {
 			map.put("receivetime", pl.getReceivetime());
 			dataRows.add(map);
 		}
-		/*for(Sample sample : sampleLogList) {
-			Process process = processMap.get(sample.getId());
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", sample.getId());
-			map.put("shm", sample.getStayHospitalModelValue());
-			map.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
-			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
-			map.put("sampleno", sample.getSampleNo());
-			map.put("pid", sample.getPatientId());
-			map.put("pname", sample.getPatientname());
-			map.put("sex", sample.getSexValue());
-			map.put("age", sample.getAge() + sample.getAgeunit());
-			map.put("diag", sample.getDiagnostic());
-			map.put("exam", sample.getInspectionName());
-			map.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
-			map.put("cycle", sample.getCycle());
-			map.put("fee", sample.getFee());
-			map.put("feestatus", sample.getFeestatus());
-			map.put("part", sample.getPart() == null ? "" : sample.getPart());
-			map.put("requestmode", sample.getRequestMode());
-			map.put("requester", process.getRequester());
-			map.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
-			dataRows.add(map);
-		}*/
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");
 		return dataResponse;
 	}
-
+	
+	@RequestMapping(value = "/ajax/recoverLog*", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean recoverLog(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Long logid = Long.parseLong(request.getParameter("id"));
+			SampleLog slog = sampleLogManager.get(logid);
+			ProcessLog plog = processLogManager.getBySampleLogId(logid);
+			
+			saveSampleLog(sampleManager.get(slog.getSampleId()), UserUtil.getInstance(userManager).getValue(request.getRemoteUser()), Constants.LOG_OPERATE_RECOVER);
+			
+			sampleManager.save(slog.getSampleEntity());
+			processManager.save(plog.getProcessEntity());
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}	
+	
 	/**
 	 * 张晋南2016-5-31 testSection 检验段 sampleNumber 需要修改的编号，可多输入 operation 修改的操作类型
 	 * operationValue 修改操作的值
@@ -205,7 +202,7 @@ public class ModifyController {
 		String sampleNumber = request.getParameter("sampleNumber");
 		String operation = request.getParameter("operation");
 		String operationValue = request.getParameter("operationValue");
-		String username = request.getRemoteUser();
+		String username = UserUtil.getInstance(userManager).getValue(request.getRemoteUser());
 		// 1样本信息，0结果信息
 		String modifyResult = request.getParameter("modifyResult");
 		int switchValue = 0;

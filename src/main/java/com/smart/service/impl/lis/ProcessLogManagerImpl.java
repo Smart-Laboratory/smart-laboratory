@@ -24,4 +24,8 @@ public class ProcessLogManagerImpl extends GenericManagerImpl<ProcessLog, Long> 
 	public List<ProcessLog> getBySampleId(Long id) {
 		return processLogDao.getBySampleId(id);
 	}
+
+	public ProcessLog getBySampleLogId(Long logid) {
+		return processLogDao.getBySampleLogId(logid);
+	}
 }

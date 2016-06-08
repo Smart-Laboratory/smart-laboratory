@@ -35,8 +35,9 @@ function showLogData() {
 			url: "../manage/modify/getLog?text=" + $("#logtext").val() + "&type=" + $("#logtexttype").val(),
 			mtype: "GET",
 			datatype: "json",
-			colNames: ['日志记录时间','IP','操作者','操作','样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','接收实验室','检验目的','样本类型','就诊卡号','临床诊断','申请者','金额'],
+			colNames: ['ID','日志记录时间','IP','操作者','操作','样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','接收实验室','检验目的','样本类型','就诊卡号','临床诊断','申请者','金额'],
 			colModel: [
+			    { name: 'logid', index: 'logid', hidden: true},
 			    { name: 'logtime', index: 'logtime', width: 120},
 			    { name: 'logip', index: 'logip', width: 120},
 			    { name: 'logger', index: 'logger', width: 60},
@@ -66,13 +67,30 @@ function showLogData() {
 		isFirstLog = false;
 	} else {
 		jQuery("#sampleLog").jqGrid('setGridParam',{
-			url: "../sample/ajax/old"
+			url: "../manage/modify/getLog?text=" + $("#logtext").val() + "&type=" + $("#logtexttype").val()
 		}).trigger('reloadGrid');//重新载入
 	}
 }
 
 function recoverLog() {
-	
+	var id = $("#sampleLog").jqGrid('getGridParam','selrow');
+	var row = jQuery("#sampleLog").jqGrid('getRowData',id);
+	if(id == "") {
+		layer.msg("你选中的是当前的样本信息，无需恢复！", {icon: 2, time: 1000});
+	} else {
+		if (confirm("确认将当前样本恢复到"+row.logtime+"吗？")) {
+			$.post("../manage/modify/ajax/recoverLog",{id:id},function(data){
+				if(data) {
+					layer.msg("当前样本信息已恢复到" + row.logtime + "!", {icon: 1, time: 1000});
+					jQuery("#sampleLog").jqGrid('setGridParam',{
+						url: "../manage/modify/getLog?text=" + $("#logtext").val() + "&type=" + $("#logtexttype").val()
+					}).trigger('reloadGrid');
+				} else {
+					layer.msg("恢复失败！", {icon: 2, time: 1000});
+				}
+			});
+		}
+	}
 }
 
 function modifySample() {

@@ -98,9 +98,9 @@ function getData(obj,event) {
 					$("#executetime").val(data.executetime);
 				} else {
 					if(type == 1) {
-						alert("医嘱号为" + id + "的标本不存在！");
+						layer.msg("医嘱号为" + id + "的标本不存在！", {icon: 0, time: 1000});
 					} else {
-						alert("样本号为" + id + "的标本不存在！");
+						layer.msg("样本号为" + id + "的标本不存在！", {icon: 0, time: 1000});
 					}
 				}
 			});
@@ -127,10 +127,10 @@ function getPatient(obj,event) {
 						$("#sex").val(data.sex);
 						$("#age").val(data.age);
 					} else{
-						alert("就诊卡号为" + obj.value + "的病人不存在！")
+						layer.msg("就诊卡号为" + obj.value + "的病人不存在！", {icon: 0, time: 1000})
 					}
 				} else {
-					alert("医嘱号已存在，无权限修改接诊卡号！");
+					layer.msg("医嘱号已存在，无权限修改接诊卡号！", {icon: 0, time: 1000});
 				}
 			});
 			break;

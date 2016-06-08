@@ -9,4 +9,6 @@ public interface ProcessLogManager extends GenericManager<ProcessLog, Long> {
 
 	List<ProcessLog> getBySampleId(Long id);
 
+	ProcessLog getBySampleLogId(Long logid);
+
 }
