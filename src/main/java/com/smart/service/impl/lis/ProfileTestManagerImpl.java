@@ -1,21 +1,14 @@
 package com.smart.service.impl.lis;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import com.smart.dao.lis.ProfileTestDao;
 import com.smart.dao.lis.SampleDao;
-=======
 import com.smart.dao.lis.ProfileTestDao;
->>>>>>> origin/master
 import com.smart.model.lis.ProfileTest;
 import com.smart.service.GenericManager;
 import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.lis.ProfileTestManager;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +24,6 @@ import java.util.List;
  */
 @Service("profileTestManager")
 public class ProfileTestManagerImpl extends GenericManagerImpl<ProfileTest,Long> implements ProfileTestManager{
-<<<<<<< HEAD
 	private ProfileTestDao profileTestDao ;
 	@Autowired
     public void setProfileTestDao(ProfileTestDao profileTestDao) {
@@ -45,16 +37,6 @@ public class ProfileTestManagerImpl extends GenericManagerImpl<ProfileTest,Long>
 	public List <ProfileTest> getByProfileName(String profileName){
 		return profileTestDao.getByProfileName(profileName);
 	}
-
-=======
-    @SuppressWarnings("unused")
-    private ProfileTestDao profileTestDao;
-
-    @Autowired
-    public void setProfileTestDao(ProfileTestDao profileTestDao ) {
-        this.dao = profileTestDao;
-        this.profileTestDao = profileTestDao;
-    }
 
     /**
      * 组合试验列表
@@ -77,5 +59,4 @@ public class ProfileTestManagerImpl extends GenericManagerImpl<ProfileTest,Long>
     public int getProfileTestSize(String query){
         return profileTestDao.getProfileTestSize(query);
     };
->>>>>>> origin/master
 }

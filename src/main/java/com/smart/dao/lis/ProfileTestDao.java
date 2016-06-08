@@ -16,13 +16,10 @@ import java.util.List;
  * @Version:
  */
 public interface ProfileTestDao extends GenericDao<ProfileTest, Long> {
-<<<<<<< HEAD
 	
 	List<ProfileTest> getBySection(String lab);
 	
 	List <ProfileTest> getByProfileName(String profileName);
-=======
     public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
     public int getProfileTestSize(String query);
->>>>>>> origin/master
 }

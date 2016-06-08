@@ -23,7 +23,6 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
     public ProfileTestDaoHibernate() {
         super(ProfileTest.class);
     }
-<<<<<<< HEAD
     @SuppressWarnings("unchecked")
     public List<ProfileTest> getBySection(String lab){
     	List s = null;
@@ -40,7 +39,6 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
 	public List <ProfileTest> getByProfileName(String profileName){
     	return getSession().createQuery("from ProfileTest where profileName='" + profileName + "' ").list();
 	}
-=======
 
     /**
      *  获取组合试验
@@ -78,5 +76,4 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
         Query q =  getSession().createSQLQuery(sql);
         return new Integer(q.uniqueResult() + "");
     };
->>>>>>> origin/master
 }

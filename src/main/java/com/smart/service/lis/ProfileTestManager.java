@@ -18,7 +18,7 @@ import java.util.List;
  * @Version:
  */
 public interface ProfileTestManager extends GenericManager<ProfileTest,Long> {
-<<<<<<< HEAD
+
 	/**
 	 * 根据部门编号获取ProfileTest List
 	 * @param lab
@@ -27,8 +27,8 @@ public interface ProfileTestManager extends GenericManager<ProfileTest,Long> {
 	List<ProfileTest> getBySection(String lab);
 	
 	List <ProfileTest> getByProfileName(String profileName);
-=======
+
     public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
     public int getProfileTestSize(String query);
->>>>>>> origin/master
+
 }
