@@ -1141,12 +1141,8 @@
         <jdbc.artifactId>ojdbc14</jdbc.artifactId>
         <jdbc.version>10.2.0.4.0</jdbc.version>
         <jdbc.driverClassName>oracle.jdbc.OracleDriver</jdbc.driverClassName> 
-<<<<<<< HEAD
         <!-- <jdbc.url>jdbc:oracle:thin:@192.168.150.106:1521:orcl</jdbc.url> -->
         <jdbc.url>jdbc:oracle:thin:@127.0.0.1:1521:XE</jdbc.url>
-=======
-        <jdbc.url>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbc.url>
->>>>>>> origin/master
         <jdbc.username>lab</jdbc.username>
         <jdbc.password>lab</jdbc.password>
         <jdbc.validationQuery>SELECT 1 + 1 from DUAL</jdbc.validationQuery>
