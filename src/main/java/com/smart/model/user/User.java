@@ -134,7 +134,7 @@ public class User extends BaseObject implements Serializable, UserDetails {
         return name;
     }
 
-    @Column(nullable = false, unique = true)
+    @Column
     @Field
     public String getEmail() {
         return email;

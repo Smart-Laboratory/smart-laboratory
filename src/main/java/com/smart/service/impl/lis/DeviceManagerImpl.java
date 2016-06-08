@@ -36,4 +36,9 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long> implemen
 	public Device getDeviceByCode(String code) {
 		return deviceDao.getDeviceByCode(code);
 	}
+
+	@Override
+	public List<Device> getDeviceList(String name) {
+		return deviceDao.getDeviceList(name);
+	}
 }
