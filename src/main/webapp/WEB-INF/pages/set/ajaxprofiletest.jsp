@@ -165,14 +165,18 @@
         </div>
     </div>
 </div>
+
+<input type="hidden" id="section" value="">
+<input type="hidden" id="device" value="">
+
 <script type="text/javascript">
     function Save(){
         var obj={};
         obj.profilecode = $('#profilecode').val()||'';
         obj.profilename = $('#profilename').val()||'';
         obj.profiledescribe = $('#profiledescribe').val()||'';
-        obj.sectionid = $('#sectionid').val()||'';
-        obj.deviceid = $('#deviceid').val()||'';
+        obj.sectionid = $('#section').val()||'';
+        obj.deviceid = $('#device').val()||'';
         obj.sampletype = $('#sampletype').val();
         obj.frequencytime = $('#frequencytime').val();
         obj.usenow = $('#usenow').val();
@@ -215,7 +219,8 @@
                 usenow:obj.usenow,
                 indexids:obj.indexids
         },function(data){
-
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);
         })
     }
     /**
@@ -352,7 +357,7 @@
         },
         minLength: 1,
         select : function(event, ui) {
-            $("#deviceid").val(ui.item.id);
+            $("#device").val(ui.item.id);
         }
     });
     /**
@@ -368,10 +373,11 @@
                 },
                 success: function( data ) {
                     response( $.map( data, function( result ) {
+                        console.log(result)
                         return {
                             label: result.code + " : " + result.name,
                             value: result.name,
-                            id : result.id
+                            code : result.code
                         }
                     }));
                     $("#sectionid").removeClass("ui-autocomplete-loading");
@@ -380,7 +386,8 @@
         },
         minLength: 1,
         select : function(event, ui) {
-            $("#sectionid").val(ui.item.id);
+
+            $("#section").val(ui.item.code);
         }
     });
 

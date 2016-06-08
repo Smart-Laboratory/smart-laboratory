@@ -26,10 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Title: ProfileTestController
@@ -172,6 +169,14 @@ public class ProfileTestController {
     @ResponseBody
     public ModelAndView editprofiletest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView view = new ModelAndView("set/ajaxprofiletest");
+//        Long id = Long.parseLong(request.getParameter("id"));
+//        ProfileTest profileTest = profileTestManager.get(id);
+//
+//
+//        profileTest.getProfileTest();
+//
+
+
         return view;
     }
 
@@ -196,8 +201,15 @@ public class ProfileTestController {
         profileTest.setProfileTest(ConvertUtil.null2String(request.getParameter("indexids")));
         profileTest.setFrequencyTime(ConvertUtil.getIntValue(request.getParameter("frequencytime"),0));
         profileTest.setUseNow(ConvertUtil.getIntValue(request.getParameter("usenow"),1));
+        profileTest.setDataWindowName("0");
+        profileTest.setInuredate(new Date());
+        profileTest.setOperator("张");
         //保存
+        try{
         profileTestManager.save(profileTest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     /**
      * 分割字符加引号，用于SQL查询
