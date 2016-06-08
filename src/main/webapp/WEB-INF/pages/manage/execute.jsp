@@ -2,7 +2,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
-    <title><fmt:message key="sample.manage.receive"/></title>
+    <title><fmt:message key="sample.manage.execute"/></title>
     
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
@@ -22,6 +22,12 @@
 .sampleInfo{
 	height:70px;
 	padding:5px 5px;
+}
+
+#tests input[type=checkbox]{
+	width:50px;
+	height:50px;
+	margin-top:0px;
 }
 
 </style>
@@ -70,19 +76,19 @@
 		<div>
 			<div class="radio">
 				<label class="radio">
-  				<input type="radio" name="select_type" id="uncheck" value="1" checked>
+  				<input type="radio" name="select_type" id="uncheck" value="0" checked>
   				<fmt:message key="execute.uncheck" />
 				</label>
 			</div>
 			<div class="radio">
 				<label class="radio">
-	  			<input type="radio" name="select_type" id="all" value="2" >
+	  			<input type="radio" name="select_type" id="all" value="100" >
 	  			<fmt:message key="execute.all" />
 				</label>
 			</div>
 			<div class="radio">
 				<label class="radio">
-	  			<input type="radio" name="select_type" id="executed" value="3" >
+	  			<input type="radio" name="select_type" id="executed" value="999" >
 	  			<fmt:message key="execute.executed" />
 				</label>
 			</div>

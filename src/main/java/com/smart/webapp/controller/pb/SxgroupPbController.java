@@ -105,6 +105,7 @@ public class SxgroupPbController {
 			for(Map.Entry<WInfo, String> entry : sxList.entrySet()){
 				if(entry.getValue()==null || entry.getValue().isEmpty())
 					continue;
+				WInfo wInfo = entry.getKey();
 				if(!entry.getKey().isActive())
 					continue;
 //				System.out.println(entry.getKey().getName()+entry.getValue());

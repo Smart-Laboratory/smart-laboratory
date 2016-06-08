@@ -1,5 +1,7 @@
 package com.smart.service.impl.execute;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,9 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 	
 	public boolean existSampleId(String sampleid){
 		return labOrderDao.existSampleId(sampleid);
+	}
+	
+	public List<LabOrder> getByIds(String ids){
+		return labOrderDao.getByIds(ids);
 	}
 }

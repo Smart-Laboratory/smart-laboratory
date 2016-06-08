@@ -2,6 +2,7 @@ package com.smart.model.execute;
 
 import java.util.Date;
 
+import javax.persistence.Transient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,26 +24,31 @@ public class LabOrder {
 	private String requester;
 	private Date executetime;
 	private String executor;
+	private Integer zxbz=0;//采样执行标志
 	
 	private Date birthday;
 	private String patientid;
 	private String patientname;
 	private Integer sex=0;
+	private Integer blh;
 	
 	private String diagnostic;
-	private Integer currentdepartment=0;
+	private Integer requestdepartment=0; //申请科室
 	private String sampletype;
 	private Double price;
 	private Integer feestatus=0;
 	private String examitem;
 	private String ylxh;
-	private Integer labdepartment=0;
+	private Integer labdepartment=0; //检验科室
 	private String computername;
 	private Integer printflag=0;
 	private Integer receiveflag=0;
 	private String qbgsj;
 	private String qbgdt;
-	private Integer requestmode=0;
+	private Integer requestmode=0; //急诊标识
+	
+	private String sectionStr=""; //科室名称
+	private String requestdepartmentStr="";
 	
 	
 	@Id
@@ -144,6 +150,14 @@ public class LabOrder {
 	}
 	
 	@Column
+	public Integer getBlh() {
+		return blh;
+	}
+	public void setBlh(Integer blh) {
+		this.blh = blh;
+	}
+	
+	@Column
 	public String getDiagnostic() {
 		return diagnostic;
 	}
@@ -152,11 +166,11 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Integer getCurrentdepartment() {
-		return currentdepartment;
+	public Integer getRequestdepartment() {
+		return requestdepartment;
 	}
-	public void setCurrentdepartment(Integer currentdepartment) {
-		this.currentdepartment = currentdepartment;
+	public void setRequestdepartment(Integer requestdepartment) {
+		this.requestdepartment = requestdepartment;
 	}
 	
 	@Column(name="specimen")
@@ -199,7 +213,7 @@ public class LabOrder {
 		this.ylxh = ylxh;
 	}
 	
-	@Column
+	@Column(name="labdepartment")
 	public Integer getLabdepartment() {
 		return labdepartment;
 	}
@@ -253,6 +267,30 @@ public class LabOrder {
 	}
 	public void setRequestmode(Integer requestmode) {
 		this.requestmode = requestmode;
+	}
+	
+	@Column
+	public Integer getZxbz() {
+		return zxbz;
+	}
+	public void setZxbz(Integer zxbz) {
+		this.zxbz = zxbz;
+	}
+	
+	@Transient
+	public String getSectionStr() {
+		return sectionStr;
+	}
+	public void setSectionStr(String sectionStr) {
+		this.sectionStr = sectionStr;
+	}
+
+	@Transient
+	public String getRequestdepartmentStr() {
+		return requestdepartmentStr;
+	}
+	public void setRequestdepartmentStr(String requestdepartmentStr) {
+		this.requestdepartmentStr = requestdepartmentStr;
 	}
 	
 	

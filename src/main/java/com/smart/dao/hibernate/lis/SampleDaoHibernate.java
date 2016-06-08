@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.lis;
 import com.smart.dao.lis.SampleDao;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public SampleDaoHibernate() {
         super(Sample.class);
     }
+	
+	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
@@ -434,7 +437,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	}
 	
 	public boolean existSampleNo(String sampleno){
-		String sql = "select count(*) from l_sample where sampleno = '"+sampleno+"'";
+		String sql = "select count(*) from Sample where sampleno = '"+sampleno+"'";
 		Query q = getSession().createQuery(sql);
 		if(((Number)(q.uniqueResult())).intValue()==0)
 			return false;
@@ -448,5 +451,12 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		if(samples!=null && samples.size()>0)
 			return samples.get(0);
 		return null;
+	}
+	
+	public void insertSample(Sample s){
+		String sql = "INSERT into l_sample VALUES("+s.getId()+",'"+s.getAge()+"',0,0,TO_DATE('"+ymd.format(s.getBirthday())+"','yyyy-MM-dd hh24:mi:ss'),'','','','',0,'','','','"+s.getFee()+"','"+s.getFeestatus()+"',0,"+s.getHosSection()+",'"+s.getInspectionName()+"',0,'',0,'','','','',"+
+				"'"+s.getPatientId()+"','','"+s.getPatientname()+"','','',0,'','"+s.getSampleNo()+"',0,'"+s.getSampleType()+"','"+s.getSectionId()+"','"+s.getSex()+"','"+s.getStayHospitalMode()+"',0,'"+s.getYlxh()+"','"+s.getInvoiceNum()+"',''	)";
+		System.out.println(sql);
+		getSession().createSQLQuery(sql).executeUpdate();
 	}
 }

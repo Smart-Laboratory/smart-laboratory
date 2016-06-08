@@ -94,4 +94,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public Sample getBySfsb(String patientid, String ylxh, String sfsb){
 		return sampleDao.getBySfsb(patientid, ylxh, sfsb);
 	}
+	
+	public void insertSample(Sample s){
+		sampleDao.insertSample(s);
+	}
 }

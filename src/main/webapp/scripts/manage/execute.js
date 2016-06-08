@@ -26,7 +26,7 @@ function getData(item,event){
 				$("#blh").html(data.blh);$("#patientId").html(data.patientId);$("#pName").html(data.name);$("#pSex").html(data.sex);$("#pCsrq").html(csrq.split(".")[0]);
 			})
 			
-			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()},function(data){
+			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
 				if(data!=null){
 					$("#tests").html(data.html);
 				}
@@ -90,8 +90,9 @@ $(function(){
 			var tests = data.laborders;
 			var testStr="";
 			for(var i =0; i<tests.length;i++){
-				testStr += testStr + tests[i] + ";";
+				testStr += tests[i] + ",";
 			}
+			alert(testStr);
 			if(data.error == null || data.error == undefined){
 				$('#printFrame').empty();
 		    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode?tests="+testStr+"\"/>");
