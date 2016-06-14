@@ -835,22 +835,43 @@ $(function(){
  			return ;
  		}
  		$.get("../audit/ajax/batchAddResults_statistic_get",{packages:packages,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse},function(data){
- 				var array = jQuery.parseJSON(data);
- 				for (var i=0 ; i < array.length ; i++) {
- 					$("#batchAddResults_statistic_table").append("<div class='form-group'><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' onfocus='getDictionaries()' id='' \></div> </div>")
+ 			$("#batchAddResults_statistic_table .testValue").each(function(index,self){
+	    		if ($(self).val() != "") {
+	    			result = true;
+	    		}
+	    	});	
+ 			
+ 			var array = jQuery.parseJSON(data);
+ 				for (var i=0 ; i < array.length ; i++) {    
+ 					$("#batchAddResults_statistic_table").append("<div class='form-group'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries()' class='testValue span2 form-control' \></div> </div>")
  			   }
  		});
  	});
  	
- 	
+ 	//保存批量的结果
  	$("#batchAddResults_statisticBtn_save").click(function() {
-	 	$.post("../audit/batchAddResults_statistic_save",{sampleNo:$("#hiddenSampleNo").val(),id:ii0}, function(data) {
-			if (data == true) {
-				alert("Success!!!");
-			} else {
-				alert("Fail!!!");
-			}
-		});
+ 		var bdate = $("#batchAddResults_statistic_date").val();
+ 		var bsc = $("#batchAddResults_statistic_code").val();
+ 		var bsb = $("#batchAddResults_statistic_begin").val();
+ 		var bse = $("#batchAddResults_statistic_end").val();
+ 		
+ 		$("#batchAddResults_statistic_table div").each(function(index,self){
+    		var id = $(self).find(".testID").val();
+    		var value = $(self).find(".testValue").val();
+    		if (value != null && value != ""&&id!=undefined) {
+	    		if (postStr != "") postStr+=";";
+	    		postStr += id + ":" + value;
+    		}
+    	});
+		if (postStr != "") {
+	 		$.post("../audit/batchAddResults_statistic_save",{postStr:postStr,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse}, function(data) {
+				if (data == "success") {
+					alert("Success!!!");
+				} else {
+					alert("Fail!!!");
+				}
+			});
+		}
  	});
  	
  	
@@ -891,52 +912,28 @@ $(function(){
 
 
 function getDictionaries(inputId){
-	alert(inputId);
-	$("#packages").autocomplete({
+	$("#"+inputId+"").autocomplete({
 		source: function( request, response ) {
             $.ajax({
-            	url: "../set/ylsf/ajax/ylsfList",
+            	url: "../audit/ajax/getDictionaries",
                 dataType: "json",
                 data: {
                 	maxRows : 12,
-                	ylmc : request.term,
+                	inputId : inputId,
                     lab :$("#labSelect").val()
                 },
                 success: function( data ) {
                 	response( $.map( data, function( item ) {
                         return {
-                            label:  item.ylmc,
-                            value: item.ylmc,
-                            testIds:item.profiletest
+                            value: item.value,
                         }
                     }));
-                    $("#searchProject").removeClass("ui-autocomplete-loading");
                 }
             });
         },
-        
         minLength: 1,
         delay : 500,
-        select : function(event, ui) {
-        	var result = true;
-     		$.post("../set/ylsf/ajax/profileTest",{test:ui.item.testIds,sample:$("#hiddenSampleNo").val()},function(data) {
-     			var array = jQuery.parseJSON(data);
-    			for (var i=0 ; i < array.length ; i++) {
-    				var result = true;
-    				$("#addTestList .testID").each(function(index,self){
-    		    		if ($(self).val() == array[i].test)
-    		    			result = false;
-    		    	});
-    				if(result){
-    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>")
-    				}else{
-    					alert("样本列表或者添加列表中已包含该检验项目!");
-    				}
-    			}
-    			// alert("<fmt:message key='alert.add.profile.finished' />");
-     		});
-        }
-       )};
+	});
 }
 
 

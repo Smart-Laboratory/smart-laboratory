@@ -52,6 +52,14 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	int getIndexsCount(String sample);
 	
 	/**
+	 * 根据部门和id获取字典信息
+	 * @param indexId
+	 * @param labDepartment
+	 * @return
+	 */
+	List getIndexsByIdandLab(String indexId ,String labDepartment);
+	
+	/**
 	 *  根据名称模糊查找指标
 	 * @param name
 	 * @param pageNum

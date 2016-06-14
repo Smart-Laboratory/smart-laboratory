@@ -53,6 +53,11 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		List<Index> indexs = getSession().createQuery("from Index where name like '" + indexName + "%'  or english like '"+indexName+"%' order by name,sampleFrom").list();
 		return indexs;
 	}
+	
+	public List getIndexsByIdandLab(String indexId ,String labDepartment){
+		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment = '"+labDepartment+"'").list();
+		return indexs;
+	}
 
 	public int getIndexsCount() {
 		return ((Number)getSession().createQuery("select count(*) from Index").iterate().next()).intValue();
@@ -101,5 +106,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	public int getIndexsByNameCount(String name) {
 		return ((Number)getSession().createQuery("select count(*) from Index where name like '"+name+"%'").iterate().next()).intValue();
 	}
+	
+	
 
 }
