@@ -569,7 +569,6 @@ public class ModifyController {
 	 */
 	private static String updateSampleNo(String sampleNo,
 			String operationValue, int switchValue) {
-
 		String subSampleNo = sampleNo.substring(11, sampleNo.length());
 		int ssn = stringTOint(subSampleNo);
 		int ov = stringTOint(operationValue);
@@ -589,7 +588,9 @@ public class ModifyController {
 			}
 		}
 		if (flag) {
-			return sampleNo.substring(0, 11) + result;
+			return sampleNo.substring(0, 11) + String.format(
+					"%" + subSampleNo.length() + "d", result)
+					.replace(" ", "0");
 		} else {
 			return null;
 		}

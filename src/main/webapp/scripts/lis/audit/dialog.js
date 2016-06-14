@@ -806,6 +806,7 @@ $(function(){
 					$("#batchAddResults_statistic_packages").append("<option value='"+array[i].value+"'>"+array[i].name+"</option>");
 				}
 		 });
+ 		$("#batchAddResults_statistic_table").html("");
  		$("#batchAddResultsDialog").dialog("open");
  	});
  	/**
@@ -825,21 +826,23 @@ $(function(){
  			alert("请输入检验段！");
  			return ;
  		}
- 		if(""==bsb){
- 			alert("请输入开始编号！");
+ 		if(""==bsb&&bsb.length!=3){
+ 			alert("请输入开始编号,并且长度为3！");
  			return ;
  		}
- 		if(""==bse){
- 			alert("请输入结束编号！");
+ 		if(""==bse&&bse.length!=3){
+ 			alert("请输入结束编号,并且长度为3！");
  			return ;
  		}
  		$.get("../audit/ajax/batchAddResults_statistic_get",{packages:packages,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse},function(data){
  				var array = jQuery.parseJSON(data);
  				for (var i=0 ; i < array.length ; i++) {
- 					$("#batchAddResults_statistic_table").append("<div class='form-group'><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='profiledescribe' name='profiledescribe' placeholder='默认值' value="+array[i].value+"></div> </div>")
+ 					$("#batchAddResults_statistic_table").append("<div class='form-group'><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' onfocus='getDictionaries()' id='' \></div> </div>")
  			   }
  		});
  	});
+ 	
+ 	
  	$("#batchAddResults_statisticBtn_save").click(function() {
 	 	$.post("../audit/batchAddResults_statistic_save",{sampleNo:$("#hiddenSampleNo").val(),id:ii0}, function(data) {
 			if (data == true) {
@@ -849,6 +852,8 @@ $(function(){
 			}
 		});
  	});
+ 	
+ 	
 	var isFirstStatistic = true;
 	$("#statisticBtn").click(function() {
 		var code = $("#statistic_code").val();
@@ -882,6 +887,58 @@ $(function(){
 	});
 	
 });
+
+
+
+function getDictionaries(inputId){
+	alert(inputId);
+	$("#packages").autocomplete({
+		source: function( request, response ) {
+            $.ajax({
+            	url: "../set/ylsf/ajax/ylsfList",
+                dataType: "json",
+                data: {
+                	maxRows : 12,
+                	ylmc : request.term,
+                    lab :$("#labSelect").val()
+                },
+                success: function( data ) {
+                	response( $.map( data, function( item ) {
+                        return {
+                            label:  item.ylmc,
+                            value: item.ylmc,
+                            testIds:item.profiletest
+                        }
+                    }));
+                    $("#searchProject").removeClass("ui-autocomplete-loading");
+                }
+            });
+        },
+        
+        minLength: 1,
+        delay : 500,
+        select : function(event, ui) {
+        	var result = true;
+     		$.post("../set/ylsf/ajax/profileTest",{test:ui.item.testIds,sample:$("#hiddenSampleNo").val()},function(data) {
+     			var array = jQuery.parseJSON(data);
+    			for (var i=0 ; i < array.length ; i++) {
+    				var result = true;
+    				$("#addTestList .testID").each(function(index,self){
+    		    		if ($(self).val() == array[i].test)
+    		    			result = false;
+    		    	});
+    				if(result){
+    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>")
+    				}else{
+    					alert("样本列表或者添加列表中已包含该检验项目!");
+    				}
+    			}
+    			// alert("<fmt:message key='alert.add.profile.finished' />");
+     		});
+        }
+       )};
+}
+
 
 var isFirstTrace = true;
 function getAuditHistory() {

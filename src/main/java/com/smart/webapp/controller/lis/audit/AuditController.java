@@ -992,7 +992,6 @@ public class AuditController extends BaseAuditController {
 				array.put(obj);
 			}
 		}
-		
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
 		return null;
@@ -1000,7 +999,9 @@ public class AuditController extends BaseAuditController {
 	
 	@RequestMapping(value = "/batchAddResults_statistic_save*", method = RequestMethod.POST)
 	@ResponseBody
-	public DataResponse getBatchAddResultsStatisticSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String getBatchAddResultsStatisticSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String error = "error";
+		
 		
 		return null;
 	}

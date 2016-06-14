@@ -219,6 +219,16 @@ public class TestResultAjaxController extends BaseAuditController{
 		return true;
 	}
 	
+	@RequestMapping(value = "/ajax/getDictionaries*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getDictionaries(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		
+		return null;
+	}
+
+		
+	
 	@Autowired
 	private TestModifyManager testModifyManager;
 }
