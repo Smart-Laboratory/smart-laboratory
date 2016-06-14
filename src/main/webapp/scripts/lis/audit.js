@@ -1,3 +1,25 @@
+function tabChange(id) {
+	if(id == 1) {
+		jQuery("#rowed3").setGridParam().showCol("last2");
+		jQuery("#rowed3").setGridParam().showCol("last3");
+		jQuery("#rowed3").setGridParam().showCol("last4");
+		//jQuery("#rowed3").setGridParam().showCol("device");
+		//jQuery("#rowed3").setGridParam().showCol("unit");
+	} else {
+		$("#patientRow").css('display','block');
+		$("#twosampleTable").css('display','none');
+		jQuery("#rowed3").setGridParam().hideCol("last2");
+		jQuery("#rowed3").setGridParam().hideCol("last3");
+		jQuery("#rowed3").setGridParam().hideCol("last4");
+		//jQuery("#rowed3").setGridParam().hideCol("device");
+		//jQuery("#rowed3").setGridParam().hideCol("unit");
+		var s = jQuery("#list").jqGrid('getGridParam','selrow');
+		if (id == 0) {
+			getExplain(s);
+		}
+	}
+}
+
 $(function(){
 	$("#footer").css('display','none');
 	$("#labSelect").val($("#lab").val());
@@ -5,32 +27,6 @@ $(function(){
 	getList($("#sampletext").val(),$("#labSelect").val());
 
 	getSopSchedule($("#labSelect").val());
-	
-	$("#historyTabs").tabs({
-		active : 1,
-		activate : function(event, ui) {
-			var id = ui.newPanel.attr("id");
-			if(id == "tabs-1") {
-				jQuery("#rowed3").setGridParam().showCol("last2");
-				jQuery("#rowed3").setGridParam().showCol("last3");
-				jQuery("#rowed3").setGridParam().showCol("last4");
-				//jQuery("#rowed3").setGridParam().showCol("device");
-				jQuery("#rowed3").setGridParam().showCol("unit");
-			} else {
-				$("#patientRow").css('display','block');
-    			$("#twosampleTable").css('display','none');
-				jQuery("#rowed3").setGridParam().hideCol("last2");
-				jQuery("#rowed3").setGridParam().hideCol("last3");
-				jQuery("#rowed3").setGridParam().hideCol("last4");
-				//jQuery("#rowed3").setGridParam().hideCol("device");
-				jQuery("#rowed3").setGridParam().hideCol("unit");
-				var s = jQuery("#list").jqGrid('getGridParam','selrow');
-				if (id == "tabs-0") {
-					getExplain(s);
-				}
-			}
-		}
-	});
 	
 	$("#reason_block").click(function() {
 		$("#reason_none").css('display','inline');

@@ -7,10 +7,13 @@
 	padding-right: 5px;
 	padding-left: 5px;
 }
+#testresultDiv .ui-jqgrid-bdiv {
+	overflow-x:hidden;
+}
 </style>
 
 <div id="mid" class="col-sm-9" >
-	<div id="patientinfo" class="col-sm-8">
+	<div id="patientinfo" class="col-sm-9">
 		<h2 style="display:none;" id="sampleTitle"></h2>
 		<div id='passLabel' class="alert alert-success" style="display:none;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
 			<b><fmt:message key="passreason"/>&nbsp;</b>
@@ -81,63 +84,70 @@
 		</div>
 	</div>
 	
-	<div id="right" class="col-sm-4" style="position:absolute;right:0px;z-index:1">
-		<div class="form-inline">
-		<button class="btn btn-info" id="AuditCodeSetting" style="width:80px;margin-bottom:5px;""><fmt:message key="code.setting"/></button>
-		</div>
+	<div id="right" class="col-sm-3" style="position:absolute;right:0px;z-index:1">
 		<div id="historyTabs">
-			<ul>
-				<li style="width:30%"><a href="#tabs-0"><fmt:message key="sample.explain"/></a></li>
-				<li style="width:30%"><a href="#tabs-1"><fmt:message key="result.history"/></a></li>
-				<li style="width:30%"><a href="#tabs-2"><fmt:message key="knowledge"/></a></li>
-			</ul>
-			<div id="tabs-0" style="padding:5px;">
-				<div style="margin:5px;">
-					
-					<div style="margin-right:10px;float:right;" id="reasonBtn">	
-						<button id="reason_block" class="btn btn-info" style="font-size:15px;">
-							<fmt:message key="sample.explain.block" />
-						</button>
-						<button id="reason_none" class="btn btn-info" style="font-size:15px;display:none;">
-							<fmt:message key="sample.explain.none" />
-						</button>
-					</div>
-				</div>
-				<div>
-					<div style="margin-top:30px;">
-						<div id="explainRow" style="margin-top: 6px; font-size: 13px;">
-							<table id="audit_information"></table>
+			<div>
+				<ul class="nav nav-tabs">
+					<li class="">
+						<a data-toggle="tab" href="#tabs-0" aria-expanded="true" onclick="tabChange(0)"><fmt:message key="sample.explain"/></a>
+					</li>
+					<li class="active">
+						<a data-toggle="tab" href="#tabs-1" aria-expanded="false" onclick="tabChange(1)"><fmt:message key="result.history"/></a>
+					</li>
+					<li class="">
+						<a data-toggle="tab" href="#tabs-2" aria-expanded="false" onclick="tabChange(2)"><fmt:message key="knowledge"/></a>
+					</li>
+				</ul>
+			</div>
+			<div class="tab-content">
+				<div id="tabs-0" class="tab-pane">
+					<div style="margin:5px;">
+						
+						<div style="margin-right:10px;float:right;" id="reasonBtn">	
+							<button id="reason_block" class="btn btn-info" style="font-size:15px;">
+								<fmt:message key="sample.explain.block" />
+							</button>
+							<button id="reason_none" class="btn btn-info" style="font-size:15px;display:none;">
+								<fmt:message key="sample.explain.none" />
+							</button>
 						</div>
 					</div>
-					<div style="margin-top:5px;">
-						<button id="resultAdd" class="btn btn-success"><fmt:message key="button.add" /></button>
-						<button id="resultDelete" class="btn btn-danger"><fmt:message key="button.delete" /></button>
+					<div>
+						<div style="margin-top:30px;">
+							<div id="explainRow" style="margin-top: 6px; font-size: 13px;">
+								<table id="audit_information"></table>
+							</div>
+						</div>
+						<div style="margin-top:5px;">
+							<button id="resultAdd" class="btn btn-sm btn-success"><fmt:message key="button.add" /></button>
+							<button id="resultDelete" class="btn btn-sm btn-danger"><fmt:message key="button.delete" /></button>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div id="tabs-1" style="padding:5px;">
-				<div style="margin: 1px;">
-					<input type="checkbox" id="oneColumnShowBtn" style="margin-bottom:5px;">
-					<label class="label label-warning" for="oneColumnShowBtn" style="cursor:pointer;"><fmt:message key="one.column.show" /></label>
-					<input type="checkbox" id="englishToChBtn" style="margin-bottom:5px;">
-					<label class="label label-warning" for="englishToChBtn" style="cursor:pointer;"><fmt:message key="ab" /></label>
+				<div id="tabs-1" class="tab-pane active">
+					<div style="margin: 1px;">
+						<input type="checkbox" id="oneColumnShowBtn" style="margin-bottom:5px;">
+						<label class="label label-warning" for="oneColumnShowBtn" style="cursor:pointer;"><fmt:message key="one.column.show" /></label>
+						<input type="checkbox" id="englishToChBtn" style="margin-bottom:5px;">
+						<label class="label label-warning" for="englishToChBtn" style="cursor:pointer;"><fmt:message key="ab" /></label>
+					</div>
 				</div>
-			</div>
-			<div id="tabs-2" style="padding:5px;">
-				<div id="g1"></div>
-				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
-				<div id="g2"></div>
-				<span class="label label-info" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
-				<div id="g3"></div>
-				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
-				<div id="g4"></div>
-				<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(3)"><fmt:message key="sop.detail.g4" /></a></span>
+				<div id="tabs-2" class="tab-pane">
+					<div id="g1"></div>
+					<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(0)"><fmt:message key="sop.detail.g1" /></a></span>
+					<div id="g2"></div>
+					<span class="label label-info" style="margin-left:56px;"><button class="btn" onclick="getDetailSop(1)"><fmt:message key="sop.detail.g2" /></button></span>
+					<div id="g3"></div>
+					<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(2)"><fmt:message key="sop.detail.g3" /></a></span>
+					<div id="g4"></div>
+					<span class="label label-info" style="margin-left:56px;"><a onclick="getDetailSop(3)"><fmt:message key="sop.detail.g4" /></a></span>
+				</div>
 			</div>
 		</div>
 	</div>
 	
 	<div  class="col-sm-12" id="testresultDiv">
-		<div id="patientRow" style="width:100%">
+		<div id="patientRow" style="margin-top:5px;width:100%">
 			<table id="rowed3" style="font-size: 14px;"></table>
 		</div>
 		<div id="twosampleTable" style="float:left;margin-top:5px;width:100%;">

@@ -45,7 +45,7 @@
 				$("#tatBtn").html("<b>TAT</b>");
 			}
 			
-    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false && $("#historyTabs").tabs('option', 'active') == 1) {
+    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false && $('#historyTabs').find('li.active a').attr('href') == "#tabs-1") {
     			$("#twosampleTable").css('display','block');
         		$("#patientRow").css('display','none');
         		if(isFirst){
@@ -86,14 +86,15 @@
 				jQuery("#sample1").setGridParam().hideCol("ab");
 			}
 			
-    		if ($("#historyTabs").tabs('option', 'active') == 0) {
+			var activeTab = $('#historyTabs').find('li.active a').attr('href');
+    		if (activeTab == "#tabs-0") {
     			$("#patientRow").css('display','block');
     			$("#twosampleTable").css('display','none');
     			jQuery("#audit_information").jqGrid("setGridParam",{
    					url:"../audit/explain?id="+ret.id,
    					editurl: "../audit/explain/edit?docNo=" + ret.id
    				}).trigger("reloadGrid");
-    		} else if ($("#historyTabs").tabs('option', 'active') == 1) {
+    		} else if (activeTab == "#tabs-1") {
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
 				jQuery("#rowed3").setGridParam().showCol("last4");
@@ -215,14 +216,14 @@
 		   		{name:'color',index:'color',hidden:true},
 		   		{name:'ab',index:'ab',width:width*0.15,hidden:true},
 		   		{name:'name',index:'name',width:width*0.15,sortable:false},
-		   		{name:'result',index:'result',width:width*0.09,sortable:false,editable:true},
-		   		{name:'last',index:'last',width:width*0.09,sortable:false},
-		   		{name:'last1',index:'last1',width:width*0.09,sortable:false},
-		   		{name:'last2',index:'last2',width:width*0.09,sortable:false},
+		   		{name:'result',index:'result',width:width*0.08,sortable:false,editable:true},
+		   		{name:'last',index:'last',width:width*0.08,sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.08,sortable:false},
+		   		{name:'last2',index:'last2',width:width*0.08,sortable:false},
 		   		{name:'last3',index:'last3',width:width*0.09,sortable:false},
-		   		{name:'last4',index:'last4',width:width*0.09,sortable:false},
+		   		{name:'last4',index:'last4',width:width*0.08,sortable:false},
 		   		{name:'checktime',index:'checktime',width:width*0.08,sortable:false},
-		   		{name:'device',index:'device',width:width*0.06,sortable:false},
+		   		{name:'device',index:'device',width:width*0.08,sortable:false},
 		   		{name:'scope',index:'scope',width:width*0.09,sortable:false},
 		   		{name:'unit', sortable:false, width:width*0.08,index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName',hidden:true},
@@ -1387,15 +1388,6 @@ $(function() {
 				alert("Fail!!!")
 			}
 	    }
-	});
-	
-	$("#AuditCodeSetting").click(function(){
-		if ($("#hiddenAuditConfirm").val() == 'true') {
-			$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
- 		} else {
-			$("#codeSetDiv .input-ctl").removeAttr('disabled');
- 		}
-		$("#codeSetDialog").dialog("open");
 	});
 	
 	$("#controlAuditBtn").click(function() {
