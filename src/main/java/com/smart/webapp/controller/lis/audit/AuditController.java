@@ -992,20 +992,119 @@ public class AuditController extends BaseAuditController {
 				array.put(obj);
 			}
 		}
-		
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
 		return null;
 	}
 	
+	/**
+	 * 张晋南 20160613
+	 * 批量保存检测结果
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/batchAddResults_statistic_save*", method = RequestMethod.POST)
 	@ResponseBody
-	public DataResponse getBatchAddResultsStatisticSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String getBatchAddResultsStatisticSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String error = "error";
+		String bsc = request.getParameter("bsc");
+		String bdate = request.getParameter("bdate");
+		String bsb = request.getParameter("bsb");
+		String bse = request.getParameter("bse");
+		String lab = request.getParameter("lab");
+		String postStrs = request.getParameter("postStr");
 		
-		return null;
+		String sampleNoSub =bdate+bsc;
+		
+		if(stringTOint(bsb)==0||stringTOint(bse)==0){
+			return error;
+		}
+		if(Integer.parseInt(bsb)<Integer.parseInt(bse)){
+			return error;
+		}
+		
+		List<Describe> desList = rmiService.getDescribe();
+        List<Reference> refList = rmiService.getReference();
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
+		
+		List <TestResult>resultList = new ArrayList<TestResult>();
+		if(null!=postStrs&&!"".equals(postStrs)){
+			if(postStrs.indexOf(";")!=-1){
+				for(String postStr:postStrs.split(";")){
+					String []testResult = postStr.split(":");
+					for(int i=Integer.parseInt(bsb);i<=Integer.parseInt(bse);i++){
+						String sampleNo = sampleNoSub + String.format("%" + 3 + "d",i).replace(" ", "0");
+						TestResult tr = new TestResult();
+						tr.setSampleNo(sampleNo);
+						tr.setTestId(testResult[0]);
+						tr.setTestResult(testResult[1]);
+						tr.setOperator(request.getRemoteUser());
+						tr.setCorrectFlag("1");
+						tr.setMeasureTime(new Date());
+						tr.setResultFlag("AAAAAA");
+						tr.setEditMark(Constants.ADD_FLAG);
+						Describe des = fillUtil.getDescribe(testResult[0]);
+						if (des != null) {
+							tr.setSampleType(""+ des.getSAMPLETYPE());
+							tr.setUnit(des.getUNIT());
+						}
+						
+						TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
+						if(!t.getTestId().equals(tr.getTestId())){
+							resultList.add(tr);
+						}
+					}
+				}
+			}else{
+				String []testResult = postStrs.split(":");
+				for(int i=Integer.parseInt(bsb);i<=Integer.parseInt(bse);i++){
+					String sampleNo = sampleNoSub + String.format("%" + 3 + "d",i).replace(" ", "0");
+					TestResult tr = new TestResult();
+					tr.setSampleNo(sampleNo);
+					tr.setTestId(testResult[0]);
+					tr.setTestResult(testResult[1]);
+					tr.setOperator(request.getRemoteUser());
+					tr.setCorrectFlag("1");
+					tr.setMeasureTime(new Date());
+					tr.setResultFlag("AAAAAA");
+					tr.setEditMark(Constants.ADD_FLAG);
+					Describe des = fillUtil.getDescribe(testResult[0]);
+					if (des != null) {
+						tr.setSampleType(""+ des.getSAMPLETYPE());
+						tr.setUnit(des.getUNIT());
+					}
+					
+					TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
+					if(!t.getTestId().equals(tr.getTestId())){
+						resultList.add(tr);
+					}
+				}
+			
+			}
+			testResultManager.saveAll(resultList);
+		}else{
+			return error;
+		}
+		return "success";
 	}
 
-	
+	/**
+	 * 判断是不是整数
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private int stringTOint(String value) {
+		int sti = 0;
+		try {
+			sti = Integer.parseInt(value);
+		} catch (Exception e) {
+			sti = 0;
+		}
+		return sti;
+	}
 		
 	@Autowired
 	private EvaluateManager evaluateManager;

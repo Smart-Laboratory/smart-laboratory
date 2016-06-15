@@ -30,6 +30,9 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	List<TestResult> getListByTestString (String sampleNo, String testString);
 	
 	@Transactional
+	TestResult getListByTestId(String sNo,String tid);
+	
+	@Transactional
 	List<TestResult> getSingleHistory(String testid, String patientName);
 
 	@Transactional

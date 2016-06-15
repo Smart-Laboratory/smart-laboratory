@@ -2,19 +2,20 @@
 function getList(text, lab) {
 	jQuery("#list").jqGrid({ 
     	url:"../audit/data?sample="+text+"&lab="+lab, 
-    	datatype: "json", 
-    	autowidth:true,
+    	datatype: "json",
+    	width:$("#sampleListPanel").width(),
     	colNames:['ID','状态', '标记', '', '样本号','FLAG','SIZE'], 
     	colModel:[ 
     		{name:'id',index:'id', hidden:true}, 
-    		{name:'status',index:'status', width:50, sortable:false, stype:'select', searchoptions:{value:"-3:所有;-1:无结果;0:未审核;1:已通过;2:未通过;3:已修改;4:未核实;5:含图片"}},
-    		{name:'mark',index:'mark', width:50, sortable:false, stype:'select', searchoptions:{value:"0:所有;1:自动;2:差值;3:比值;4:少做;5:复检;6:危急;7:警戒1;8:警戒2;9:极值;10:Bayes"}}, 
-    		{name:'lisPass',index:'lisPass', width:15, sortable:false},
-    		{name:'sample',index:'sample', width:120, align:"right", sortable:false},
+    		{name:'status',index:'status', width:60, stype:'select', searchoptions:{value:"-3:所有;-1:无结果;0:未审核;1:已通过;2:未通过;3:已修改;4:未核实;5:含图片"}},
+    		{name:'mark',index:'mark', width:60, stype:'select', searchoptions:{value:"0:所有;1:自动;2:差值;3:比值;4:少做;5:复检;6:危急;7:警戒1;8:警戒2;9:极值;10:Bayes"}}, 
+    		{name:'lisPass',index:'lisPass', width:20},
+    		{name:'sample',index:'sample', width:160, align:"right"},
     		{name:'flag',index:'flag', hidden:true},
     		{name:'size',index:'size', hidden:true}], 
     	rowNum:25,
     	viewrecords:true,
+    	shrinkToFit:true,
     	height: '100%',
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
@@ -106,6 +107,7 @@ function getList(text, lab) {
     		}); 
     		$("#list").setSelection(firstDocId, true);
     		
+    		$("#gs_lisPass").css('display','none');
     		if ($("#gs_status").children('option:selected').val() != 1 && $("#gs_status").children('option:selected').val() != 2) {
 				$("#gs_mark").css('display','none');
 			}
@@ -118,8 +120,8 @@ function getList(text, lab) {
     			}
     		});
     		
-    		$("#gs_status").css('width','60px');
-    		$("#gs_mark").css('width','60px');
+    		//$("#gs_status").css('width','60px');
+    		//$("#gs_mark").css('width','60px');
     	}
     }).trigger("reloadGrid");
 	jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:false,search:false,refresh:false});

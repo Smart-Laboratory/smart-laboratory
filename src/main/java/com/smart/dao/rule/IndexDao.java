@@ -56,6 +56,14 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	List<Index> getIndexsByCategory(String sample, int pageNum, String field, boolean isAsc);
 	
 	/**
+	 * 
+	 * @param indexId
+	 * @param labDepartment
+	 * @return
+	 */
+	@Transactional
+	List getIndexsByIdandLab(String indexId ,String labDepartment);
+	/**
 	 *  该样本来源下的指标数
 	 * @param sample
 	 * @return

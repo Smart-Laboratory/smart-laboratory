@@ -20,12 +20,13 @@
 			<span id="info_dangerous_undeal"><c:out value="${dangerous_undeal}" /></span>
 		</div>
 		<div class="form-group" style="float: right; margin-right:10px;">
-			<button id="writeBackPartBtn" class="btn btn-default" style="width:100px;height:28px;padding:4px 5px;"><fmt:message key="writebackpart" /></button>
-			<button id="writeBackBtn" class="btn btn-success" style="width:55px;height:28px;padding:4px 5px;"><fmt:message key="writeback" /></button>
-			<button id="pageRefreshBtn" class="btn btn-info" style="width:30px;height:28px;padding:3px;">
-				<span class="glyphicon glyphicon-refresh" style="margin:3px;"></span>
+			<button id="writeBackPartBtn" class="btn btn-default" style="height:28px;padding:0px 0px;"><fmt:message key="writebackpart" /></button>
+			<button id="writeBackBtn" class="btn btn-success" style="height:28px;padding:0px 0px;"><fmt:message key="writeback" /></button>
+			<button class="btn btn-sm btn-info" id="AuditCodeSetting" style="height:28px;padding:0px 0px;"><fmt:message key="code.setting"/></button>
+			<button id="pageRefreshBtn" class="btn btn-info" style="height:28px;padding:0px 0px;">
+				<span class="glyphicon glyphicon-refresh" style="margin:1px;"></span>
 			</button>
-			<button id="fullScreen" class="btn btn-info" style="width:30px;height:28px;padding:5px;">
+			<button id="fullScreen" class="btn btn-info" style="height:28px;padding:0px 0px;">
 				<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
 			</button>
 			<input type="hidden" value="0" id="isfulltag">

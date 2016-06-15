@@ -95,9 +95,11 @@
 		</select>
 </div>
 
-<div id="sampleListPanel" class="col-sm-12">
-			<table id="list"></table>
-			<div id="pager"></div>
+<div class="row">
+	<div id="sampleListPanel" class="col-sm-12">
+		<table id="list"></table>
+		<div id="pager"></div>
+	</div>
 </div>
 <div style="font-size: 13px; display:none;margin-top: 10px;">
 	<div style="margin-left:60px;">

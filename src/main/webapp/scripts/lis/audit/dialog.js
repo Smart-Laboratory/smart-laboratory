@@ -54,7 +54,6 @@ $(function(){
 	    return fmt;
 	}
 	
-	
 	$("#opStatusDialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -92,7 +91,6 @@ $(function(){
 	    	    			$("#auditPassBtn").css('display','none');
 	    	    			$("#collectBtn").css('display','inline');
 	    	    			$("#opStatusDialog").dialog("close");
-	    	    			$("#twoColumnDialog").dialog("close");
 	    				}
 	    			});
 	    		} else {
@@ -109,7 +107,6 @@ $(function(){
 	    	    			$("#auditPassBtn").css('display','inline');
 	    	    			$("#collectBtn").css('display','none');
 	    	    			$("#opStatusDialog").dialog("close");
-	    	    			$("#twoColumnDialog").dialog("close");
 	    				}
 	    			});
 	    		}
@@ -250,12 +247,6 @@ $(function(){
 	    }
 	});
 	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
 	$("#auditDialog").dialog({
 		autoOpen: false,
 	    resizable: false,
@@ -368,20 +359,6 @@ $(function(){
 	    height: 260
 	});
 	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	$("#twoColumnDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	
-	
 	$("#collectDialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -429,24 +406,10 @@ $(function(){
 	    width: 480
 	});
 	
-	$("#testModifyDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 480,
-	    height: 320
-	});
-	
 	$("#sampleCompareDialog").dialog({
 		autoOpen: false,
 	    width: 600,
 	    height: 500
-	});
-	
-	$("#auditTraceDialog").dialog({
-		autoOpen: false,
-	    width: 520,
-	    height: 460
 	});
 	
 	$("#allNeedWriteBackDialog").dialog({
@@ -725,14 +688,24 @@ $(function(){
 		$("#tat_send").html("");
 		$("#tat_ksreceive").html("");
 		$("#audit_tat").html("");
-		$("#tatDialog").dialog("open");
+		var index = layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['300px','420px'],
+		  title: $("#tatBtn").text(), //不显示标题
+		  content: $('#tatDialog'), //捕获的元素
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		var doc = $("#hiddenDocId").val();
 		$.get("../audit/tat",{id:doc},function(data){
 			data = jQuery.parseJSON(data);
 			$("#tat_request").html(data.request);
 			$("#tat_execute").html(data.execute);
 			$("#tat_receive").html(data.receive);
-			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
+			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-sm btn-info' onclick='getAuditHistory(" + index + ")'>" + data.audit + "</a>");
 			$("#tat_auditor").html(data.auditor);
 			$("#tat_result").html(data.result);
 			$("#tat_send").html(data.send);
@@ -806,6 +779,7 @@ $(function(){
 					$("#batchAddResults_statistic_packages").append("<option value='"+array[i].value+"'>"+array[i].name+"</option>");
 				}
 		 });
+ 		$("#batchAddResults_statistic_table").html("");
  		$("#batchAddResultsDialog").dialog("open");
  	});
  	/**
@@ -825,30 +799,55 @@ $(function(){
  			alert("请输入检验段！");
  			return ;
  		}
- 		if(""==bsb){
- 			alert("请输入开始编号！");
+ 		if(""==bsb&&bsb.length!=3){
+ 			alert("请输入开始编号,并且长度为3！");
  			return ;
  		}
- 		if(""==bse){
- 			alert("请输入结束编号！");
+ 		if(""==bse&&bse.length!=3){
+ 			alert("请输入结束编号,并且长度为3！");
  			return ;
  		}
  		$.get("../audit/ajax/batchAddResults_statistic_get",{packages:packages,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse},function(data){
- 				var array = jQuery.parseJSON(data);
- 				for (var i=0 ; i < array.length ; i++) {
- 					$("#batchAddResults_statistic_table").append("<div class='form-group'><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='profiledescribe' name='profiledescribe' placeholder='默认值' value="+array[i].value+"></div> </div>")
+ 			$("#batchAddResults_statistic_table .testValue").each(function(index,self){
+	    		if ($(self).val() != "") {
+	    			result = true;
+	    		}
+	    	});	
+ 			
+ 			var array = jQuery.parseJSON(data);
+ 				for (var i=0 ; i < array.length ; i++) {    
+ 					$("#batchAddResults_statistic_table").append("<div class='form-group'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries()' class='testValue span2 form-control' \></div> </div>")
  			   }
  		});
  	});
+ 	
+ 	//保存批量的结果
  	$("#batchAddResults_statisticBtn_save").click(function() {
-	 	$.post("../audit/batchAddResults_statistic_save",{sampleNo:$("#hiddenSampleNo").val(),id:ii0}, function(data) {
-			if (data == true) {
-				alert("Success!!!");
-			} else {
-				alert("Fail!!!");
-			}
-		});
+ 		var bdate = $("#batchAddResults_statistic_date").val();
+ 		var bsc = $("#batchAddResults_statistic_code").val();
+ 		var bsb = $("#batchAddResults_statistic_begin").val();
+ 		var bse = $("#batchAddResults_statistic_end").val();
+ 		
+ 		$("#batchAddResults_statistic_table div").each(function(index,self){
+    		var id = $(self).find(".testID").val();
+    		var value = $(self).find(".testValue").val();
+    		if (value != null && value != ""&&id!=undefined) {
+	    		if (postStr != "") postStr+=";";
+	    		postStr += id + ":" + value;
+    		}
+    	});
+		if (postStr != "") {
+	 		$.post("../audit/batchAddResults_statistic_save",{postStr:postStr,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse}, function(data) {
+				if (data == "success") {
+					alert("Success!!!");
+				} else {
+					alert("Fail!!!");
+				}
+			});
+		}
  	});
+ 	
+ 	
 	var isFirstStatistic = true;
 	$("#statisticBtn").click(function() {
 		var code = $("#statistic_code").val();
@@ -883,8 +882,37 @@ $(function(){
 	
 });
 
+
+
+function getDictionaries(inputId){
+	$("#"+inputId+"").autocomplete({
+		source: function( request, response ) {
+            $.ajax({
+            	url: "../audit/ajax/getDictionaries",
+                dataType: "json",
+                data: {
+                	maxRows : 12,
+                	inputId : inputId,
+                    lab :$("#labSelect").val()
+                },
+                success: function( data ) {
+                	response( $.map( data, function( item ) {
+                        return {
+                            value: item.value,
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        delay : 500,
+	});
+}
+
+
 var isFirstTrace = true;
-function getAuditHistory() {
+function getAuditHistory(index) {
+	layer.close(index);
 	var sample = $("#hiddenSampleNo").val();
 	if(isFirstTrace){
 		jQuery("#audit_trace_information").jqGrid({
@@ -904,9 +932,18 @@ function getAuditHistory() {
 		jQuery("#audit_trace_information").jqGrid("setGridParam",{
 			url:"../audit/trace?sample="+sample
 		}).trigger("reloadGrid"); 
-	} 
-	$("#auditTraceDialog").dialog("open");
-	
+	}
+	layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['300px','420px'],
+		  title: '审核踪迹', //不显示标题
+		  content: $("#auditTraceDialog"), //捕获的元素
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 }
 
 var count=0;

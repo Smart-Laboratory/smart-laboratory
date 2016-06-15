@@ -27,6 +27,8 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 
 	List<TestResult> getListByTestString(String sampleNo, String testString);
 	
+	TestResult getListByTestId(String sNo,String tid);
+	
 	//testresult右键表图
 	List<TestResult> getSingleHistory(String testid, String patientName);
 

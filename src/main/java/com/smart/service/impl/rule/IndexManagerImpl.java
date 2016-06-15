@@ -66,6 +66,10 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	public int getIndexsCount() {
 		return indexDao.getIndexsCount();
 	}
+	
+	public List getIndexsByIdandLab(String indexId ,String labDepartment){
+		return indexDao.getIndexsByIdandLab(indexId,labDepartment);
+	}
 
 	public int getIndexsCount(String sample) {
 		return indexDao.getIndexsCount(sample);

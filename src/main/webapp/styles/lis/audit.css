@@ -176,20 +176,7 @@ h2 {
 	font-weight:700;
 	margin:0px;
 	color:#000000;
-	height:20px;
 	padding:1px,1px;
-}
-
-#gs_mark {
-	height: 20px;
-	width:50px;
-	padding:1px 1px;
-}
-
-#gs_status {
-	width:50px;
-	height: 20px;
-	padding:1px 1px;
 }
 
 #gview_s3list .ui-jqgrid-htable th {

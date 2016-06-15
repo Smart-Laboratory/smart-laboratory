@@ -1,7 +1,7 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <script type="text/javascript" src="../scripts/lis/audit/dialog.js"></script>
 
-<div id="dialogs" style="display:none;">
+<div id="dialogs">
 <div id="auditDialog" style="text-align:left;" title="<fmt:message key="manual.audit"/>">
 	<div id="searchPanel" align="left">
 		<div style="display:none;" id="isContinued">0</div>
@@ -80,67 +80,6 @@
 	</form>
 </div>
 
-	<div id="tatDialog" title="TAT"  style="text-align:left;" >
-		<table class="table">
-			<tbody>
-			<tr><th><fmt:message key='tat.request' /></th><td><span id="tat_request"></span></td></tr>
-			<tr><th><fmt:message key='tat.execute' /></th><td><span id="tat_execute"></span></td></tr>
-			<tr><th><fmt:message key='tat.send' /></th><td><span id="tat_send"></span></td></tr>
-			<tr><th><fmt:message key='tat.ksreceive' /></th><td><span id="tat_ksreceive"></span></td></tr>
-			<tr><th><fmt:message key='tat.receive' /></th><td><span id="tat_receive"></span></td></tr>
-			<tr><th><fmt:message key='tat.audit' /></th><td><span id="tat_audit"></span></td></tr>
-			<tr><th><fmt:message key='tat.auditor' /></th><td><span id="tat_auditor"></span></td></tr>
-			<tr><th><fmt:message key='tat.result' /></th><td><span id="tat_result"></span></td></tr>
-			<tr><th><fmt:message key='tat.audit.tat' /></th><td><span id="audit_tat"></span></td></tr>
-			</tbody>
-		</table>
-	</div>
-	
-	<div id="twoColumnDialog" title="" >
-		<div class="clearfix">
-			<h2 style="display:none;" id="sampleTitle"></h2>
-			<div id="patient-info2" class="alert alert-info" style="margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
-				<div class="pItem">
-					<span class="pLabel"><fmt:message key="patient.name" /></span>
-					<span class="pText"><b id="pName2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.sex" /></span>
-					<span class="pText"><b id="pSex2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.age" /></span>
-					<span class="pText"><b id="pAge2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.sampleType" /></span>
-					<span class="pText"><b id="pType2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.blh" /></span>
-					<span class="pText"><b id="blh2"></b></span>
-					<span class="pLabel"><fmt:message key="sample.id" /></span>
-					<span class="pText"><b id="pId2"></b></span>
-					<span class="pLabel"><fmt:message key="patient.section"/>&nbsp;</span>
-					<span class="pText"><b id="pSection2"></b></span>
-					<span id="pBedLabel2" class="pLabel"><fmt:message key="patient.departbed"/>&nbsp;</span>
-					<span id="pBedText2" class="pText"><b id="pBed2"></b></span>
-					<span class="pLabel"><fmt:message key="diagnostic"/>&nbsp;</span>
-					<span class="pText"><b id="diagnostic2"></b></span>
-				</div>
-			</div>
-		</div>
-	
-		<div style="text-align:left;margin:5px;">
-			<button id="tcPassBtn" class="btn btn-success" style="font-size:14px;">
-				<b><fmt:message key="pass.button" /></b>
-			</button>
-			<button id="tcUnpassBtn" class="btn" style="font-size:14px;">
-				<b><fmt:message key="unpass.button" /></b>
-			</button>
-			<button id="tcCloseBtn" class="btn" style="font-size:14px;">
-				<b><fmt:message key="button.undeal" /></b>
-			</button>
-		</div>
-		<div style="font-size: 13px;">
-			<table id="twocol"></table>
-		</div>
-		<div id="color2Help" style="margin-top:3px;">
-		</div>
-	</div>
-	
 	<div id="opStatusDialog" title="<fmt:message key='pass.button' />/<fmt:message key='unpass.button' />" style="text-align:left;" >
 		<h5 id="passNotes"></h5>
 		<div id="selectNoteDiv" class="clearfix"></div>
@@ -252,10 +191,6 @@
 
 	</div>
 	
-	<div id="testModifyDialog" title="<fmt:message key='audit.testModify' />" style="text-align:left;" >
-		<table id="test_modify_information"></table>
-	</div>
-	
 	<div id="sampleCompareDialog" title="<fmt:message key='audit.compare.sample' />" style="text-align:left;" >
 		<table id="sample_compare_information"></table>
 	</div>
@@ -303,11 +238,6 @@
 		<%-- <label class='checkbox inline'><input type='checkbox' id='checkAll'/><fmt:message key='writebacklist.checkall'/></label> --%>
 	</div>
 	
-	
-	<div id="auditTraceDialog" title="<fmt:message key='audit.trace' />" style="text-align:left;" >
-		<table id="audit_trace_information"></table>
-	</div>
-	
 	<div id="chartDialog" title="<fmt:message key='result.info' />" style="text-align:left;" >
 		<div id="singleChartPanel" style="width:640px;height:320px"></div>
 		<table id="chartTongji" class="table">
@@ -330,3 +260,27 @@
 		<div id="sopDetailHtml"></div>
 	</div>
 </div>
+
+	<div id="tatDialog" style="text-align:left;display:none;" >
+		<table class="table">
+			<tbody>
+			<tr><th><fmt:message key='tat.request' /></th><td><span id="tat_request"></span></td></tr>
+			<tr><th><fmt:message key='tat.execute' /></th><td><span id="tat_execute"></span></td></tr>
+			<tr><th><fmt:message key='tat.send' /></th><td><span id="tat_send"></span></td></tr>
+			<tr><th><fmt:message key='tat.ksreceive' /></th><td><span id="tat_ksreceive"></span></td></tr>
+			<tr><th><fmt:message key='tat.receive' /></th><td><span id="tat_receive"></span></td></tr>
+			<tr><th><fmt:message key='tat.audit' /></th><td><span id="tat_audit"></span></td></tr>
+			<tr><th><fmt:message key='tat.auditor' /></th><td><span id="tat_auditor"></span></td></tr>
+			<tr><th><fmt:message key='tat.result' /></th><td><span id="tat_result"></span></td></tr>
+			<tr><th><fmt:message key='tat.audit.tat' /></th><td><span id="audit_tat"></span></td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="testModifyDialog" title="<fmt:message key='audit.testModify' />" style="text-align:left; display:none;" >
+		<table id="test_modify_information"></table>
+	</div>
+
+	<div id="auditTraceDialog" style="text-align:left;display:none;">
+		<table class="table" id="audit_trace_information"></table>
+	</div>

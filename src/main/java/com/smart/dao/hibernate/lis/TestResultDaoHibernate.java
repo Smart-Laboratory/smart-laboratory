@@ -106,6 +106,15 @@ public class TestResultDaoHibernate extends
 						+ "' and testId in ('" + testString.replace(",", "','")
 						+ "')").list();
 	}
+	
+	public TestResult getListByTestId(String sampleNo,
+			String testId) {
+		return (TestResult) getSession().createQuery(
+				"from TestResult where sampleNo='" + sampleNo
+						+ "' and testId  ='" + testId+ "'").list().get(0);
+	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getSingleHistory(String testid, String patientid) {
