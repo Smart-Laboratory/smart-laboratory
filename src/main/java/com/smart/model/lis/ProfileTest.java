@@ -38,6 +38,29 @@ public class ProfileTest {
     private String jyz="";
     private String jyzTime="";
 
+    public ProfileTest(){
+        this.profileCode = "";             //编号
+        this.profileName = "";
+        this.profileDescribe = "";
+        this.deviceId = "";
+        this.emergency = 0;
+        this.frequencyTime = 0;
+        this.dataWindowName = "0";
+        this.inuredate =  new Date();
+        this.operator = "";
+        this.section = "";
+        this.useNow = 1 ;
+        this.sampleType = "";
+        this.bjmc = "";
+        this.wb = "";
+        this.py = "";
+        this.zdm = 0;
+        this.fee = "";
+        this.ylxh = 0;
+        this.jyz = "";
+        this.zmwz = "";
+        this.jyzTime ="";
+    }
     //ROFILETEST_SEQUENCE
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PROFILETEST")

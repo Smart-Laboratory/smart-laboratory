@@ -6,7 +6,7 @@ html {
 body, th, td, button, input, select, textarea {
     font-family: "Microsoft Yahei","Helvetica Neue","Helvetica,tahoma,arial","Verdana","sans-serif","\5B8B\4F53";
     font-size: 13px;
-    color: #393939;
+    color: #222;
 }
 .main-container{
     margin-left:15px;
@@ -13103,10 +13103,10 @@ th .lbl:only-child,td .lbl:only-child {
 .ui-jqgrid .ui-jqgrid-labels {
     border-bottom: none;
     background: #F2F2F2;
-    background-image: -webkit-linear-gradient(top, #f8f8f8 0, #ececec 100%);
-    background-image: linear-gradient(to bottom, #f8f8f8 0, #ececec 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0);
+    /*background-image: -webkit-linear-gradient(top, #f8f8f8 0, #ececec 100%);*/
+    /*background-image: linear-gradient(to bottom, #f8f8f8 0, #ececec 100%);*/
+    /*background-repeat: repeat-x;*/
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0);*/
     padding: 0 !important;
     border-left: 1px solid #E1E1E1 !important
 }
@@ -13124,7 +13124,7 @@ th .lbl:only-child,td .lbl:only-child {
 .ui-jqgrid-sortable {
     padding-left: 4px;
     font-size: 13px;
-    color: #777;
+    color: #555;
     font-weight: bold
 }
 
@@ -13133,14 +13133,14 @@ th .lbl:only-child,td .lbl:only-child {
 }
 
 th[aria-selected=true] {
-    background-image: -webkit-linear-gradient(top, #eff3f8 0, #e3e7ed 100%);
-    background-image: linear-gradient(to bottom, #eff3f8 0, #e3e7ed 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeff3f8', endColorstr='#ffe3e7ed', GradientType=0)
+    /*background-image: -webkit-linear-gradient(top, #eff3f8 0, #e3e7ed 100%);*/
+    /*background-image: linear-gradient(to bottom, #eff3f8 0, #e3e7ed 100%);*/
+    /*background-repeat: repeat-x;*/
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeff3f8', endColorstr='#ffe3e7ed', GradientType=0)*/
 }
 
 th[aria-selected=true] .ui-jqgrid-sortable {
-    color: #307ecc
+    color: #555
 }
 
 .ui-icon {
@@ -19794,6 +19794,14 @@ img.editable-click:hover {
 #switchLocale{
     display: none;
 }
-=======
+/*add by zcw 2016/06/14 解决autocomplete样式问题*/
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
 }
->>>>>>> 60e7ca88821610d9eef082d8d5dd967bf05b4ddf

@@ -117,4 +117,15 @@ public final class ConvertUtil {
             return def;
         }
     }
+    public static Long getLongValue(String v) {
+        return getLongValue(v, -1l);
+    }
+
+    public static Long getLongValue(String v, Long def) {
+        try {
+            return Long.parseLong(v);
+        } catch (Exception ex) {
+            return def;
+        }
+    }
 }

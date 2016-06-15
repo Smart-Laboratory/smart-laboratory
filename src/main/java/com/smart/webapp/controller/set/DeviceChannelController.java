@@ -73,6 +73,7 @@ public class DeviceChannelController {
             String labDepartment = index.getLabdepartment();
             String instrument =  index.getInstrument();
             if(labDepartment==null || "".equals(labDepartment)) continue;
+            if(instrument==null || "".equals(instrument)) continue;
             //System.out.println("labDepartment==>"+labDepartment+ "=="+departmentId);
             //获取部门对应的仪器
             if(labDepartment.indexOf(departmentId)>=0){

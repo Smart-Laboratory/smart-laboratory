@@ -24,6 +24,9 @@
             <Item name="YlSF" title="set.ylsf" page="/set/ylsf"/>
             <Item name="SOP" title="set.sop" page="/set/sop"/>
             <Item name="Dictionary" title="set.dictionary" page="/set/dictionary"/>
+            <Item name="Channel" title="set.channelset" page="/set/channelset"/>
+            <Item name="CalculateFormula" title="set.dictionary" page="/set/calculateformula"/>
+            <Item name="DeviceRelationList" title="sample.inspectionName" page="/set/devicerelationlist"/>
         </Menu>
         <Menu name="Reagent" title="reagent.title" page="/reagent/stock" roles="ROLE_ADMIN,ROLE_USER">
         	<Item name="Stock" title="reagent.stock" page="/reagent/stock" />

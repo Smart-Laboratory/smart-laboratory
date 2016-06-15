@@ -18,7 +18,25 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 */
 	@Transactional
 	List<Index> getIndexs(int pageNum, String field, boolean isAsc);
-	
+
+	/**
+	 * 分页查询
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+     * @param sord
+     * @return
+     */
+	@Transactional
+	List<Index> getIndexs(String query, int start, int end, String sidx, String sord);
+	/**
+	 * 获取分页记录数
+	 * @param query
+	 * @param type
+	 * @return
+	 */
+	int getIndexsCount(String query, int start, int end, String sidx, String sord);
 	/**
 	 *  指标数
 	 * @return

@@ -39,9 +39,6 @@ public class SectionController {
 		String query = request.getParameter("query");
 		String sidx = request.getParameter("sidx");
 		String sord = request.getParameter("sord");
-		if(query != null){
-			query = new String(query.getBytes("ISO-8859-1"),"UTF-8");
-		}
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		int start = row * (page - 1);

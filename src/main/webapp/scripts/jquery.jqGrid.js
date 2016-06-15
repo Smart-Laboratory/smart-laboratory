@@ -2610,7 +2610,7 @@ $.fn.jqGrid = function( pin ) {
 				ts.p.width  = initwidth + ((ts.p.shrinkToFit ===false && !isNaN(ts.p.height)) ? scw : 0);
 			}
 			//edit by zcw 2016-05-20 解决外层DIV显示滚动条问题
-			grid.width = ts.p.width-15;
+			grid.width = ts.p.width;
 			ts.p.tblwidth = initwidth;
 			if(ts.p.shrinkToFit ===false && ts.p.forceFit === true) {ts.p.forceFit=false;}
 			if(ts.p.shrinkToFit===true && vc > 0) {

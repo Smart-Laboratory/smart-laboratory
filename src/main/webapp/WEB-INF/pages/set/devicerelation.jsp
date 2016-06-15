@@ -40,9 +40,9 @@
         width: 100%;
     }
     .form-horizontal .form-group{
-         margin-right: 0px;
-         margin-left: 0px;
-     }
+        margin-right: 0px;
+        margin-left: 0px;
+    }
     div.treeList{
         overflow: auto;
         min-height: 510px;
@@ -68,6 +68,10 @@
     </div>
     <div class="col-xs-10">
         <div class="widget-toolbar no-border">
+            <button class="btn btn-xs btn-info" onclick="add()">
+                <i class="ace-icon fa fa-floppy-o bigger-120"></i>
+                添加
+            </button>
             <button class="btn btn-xs btn-info" onclick="save()">
                 <i class="ace-icon fa fa-floppy-o bigger-120"></i>
                 保存
@@ -97,7 +101,7 @@
                 <li>
                     <a data-toggle="tab" href="#reference">
                         <i class="purple ace-icon fa  fa-comments bigger-120"></i>
-                       参考范围
+                        参考范围
                     </a>
                 </li>
             </ul>
@@ -135,10 +139,10 @@
                                         <label class="col-sm-1 control-label" for="samplefrom">样本类型</label>
                                         <div class="col-sm-5">
                                             <select class="form-control" id="samplefrom" name="samplefrom" placeholder="样本类型" >
-                                            <c:forEach items="${samplelist}" var="entry">
-                                               <option value="<c:out value="${entry.key}" />"><c:out value="${entry.value}" /></option>
-                                            </c:forEach>
-                                        </select>
+                                                <c:forEach items="${samplelist}" var="entry">
+                                                    <option value="<c:out value="${entry.key}" />"><c:out value="${entry.value}" /></option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
                                         <label class="col-sm-1 control-label" for="labdepartment">检验部门</label>
                                         <div class="col-sm-5">
@@ -254,14 +258,14 @@
                                             <input  type="text" class="col-sm-12" id="name2" disabled>
                                         </div>
                                         <%--<div class="col-sm-6 controls controls-row">--%>
-                                            <%--<label class="control-label" for="name">试验名称</label>--%>
-                                            <%--<input class="span1" type="text" placeholder="name">--%>
+                                        <%--<label class="control-label" for="name">试验名称</label>--%>
+                                        <%--<input class="span1" type="text" placeholder="name">--%>
 
-                                            <%--<label class="control-label pull-right inline">--%>
-                                                <%--<span class="muted">是否显示加粗:</span>--%>
-                                                <%--<input id="id-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-3">--%>
-                                                <%--<span class="lbl middle"></span>--%>
-                                            <%--</label>--%>
+                                        <%--<label class="control-label pull-right inline">--%>
+                                        <%--<span class="muted">是否显示加粗:</span>--%>
+                                        <%--<input id="id-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-3">--%>
+                                        <%--<span class="lbl middle"></span>--%>
+                                        <%--</label>--%>
                                         <%--</div>--%>
                                     </div>
                                     <div class="form-group">
@@ -346,11 +350,25 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    var departlist = eval("("+'${departlist}'+")");
-    var devicelist =eval("("+'${devicelist}'+")");
-    var zNodes = eval("("+'${treeNodes}'+")");
 
+<script type="text/javascript">
+    var departlist = '${departlist}';
+    var devicelist =  '${devicelist}';
+    var zNodes = '${treeNodes}';
+    if(departlist !='') departlist = eval("("+departlist+")");
+    if(devicelist !='') devicelist = eval("("+devicelist+")");
+    if(zNodes !='') zNodes = eval("("+zNodes+")");
+
+    /*******************************
+     * 添加数据
+     ********************************/
+    function add(){
+        $('#indexid').removeAttr("disabled");
+        //$('#myTab a[href="#activeinfo"]').tab('show');
+        $('#myTab a:first').tab('show');
+        //document.getElementByIdx_x("form1").reset();
+        loadDualListbox();
+    }
     /*******************************
      * 保存数据
      ********************************/
@@ -425,7 +443,7 @@
                 obj.sex= this.sex;
                 obj.age= this.age;
                 obj.ageunit = this.ageunit,
-                obj.orderno= this.orderno;
+                        obj.orderno= this.orderno;
                 obj.sampletype = this.sampletype;
                 obj.direct = this.direct;
                 obj.reflower = this.reflower;
@@ -449,306 +467,309 @@
             }
         }
     }
-        /*******************************
-         * 初始化选择列表框
-         ********************************/
-        function initDualListbox() {
-            var demo1 = $('select[name="devicelist[]"]').bootstrapDualListbox({
-                infoText: false,
-                filterPlaceHolder: '过滤',
-                selectorMinimalHeight: 200,
-                preserveSelectionOnMove: false
-            });
-            var container1 = demo1.bootstrapDualListbox('getContainer');
-            container1.find('.btn').addClass('btn-white btn-info btn-bold');
-            var demo2 = $('select[name="departlist[]"]').bootstrapDualListbox({
-                infoText: false,
-                filterPlaceHolder: '过滤',
-                selectorMinimalHeight: 200
-            });
-            var container2 = demo2.bootstrapDualListbox('getContainer');
-            container2.find('.btn').addClass('btn-white btn-info btn-bold');
-        }
+
+    /*******************************
+     * 初始化选择列表框
+     ********************************/
+    function initDualListbox() {
+        var demo1 = $('select[name="devicelist[]"]').bootstrapDualListbox({
+            infoText: false,
+            filterPlaceHolder: '过滤',
+            selectorMinimalHeight: 200,
+            preserveSelectionOnMove: false
+        });
+        var container1 = demo1.bootstrapDualListbox('getContainer');
+        container1.find('.btn').addClass('btn-white btn-info btn-bold');
+        var demo2 = $('select[name="departlist[]"]').bootstrapDualListbox({
+            infoText: false,
+            filterPlaceHolder: '过滤',
+            selectorMinimalHeight: 200
+        });
+        var container2 = demo2.bootstrapDualListbox('getContainer');
+        container2.find('.btn').addClass('btn-white btn-info btn-bold');
+    }
 
 
-        /*******************************
-         * 加载选择列表数据
-         ********************************/
-        function loadDualListbox(id, indexid) {
-            $.ajax({
-                url: '../set/devicerelation/getDataList',
-                type: 'POST',
-                dataType: "json",
-                data: {id: id},
-                success: function (data) {
-                    if (data) {
-                        var labdepartment = data.index.labdepartment || '';     //已选部门信息
-                        var instrument = data.index.instrument || '';           //已选仪器信息
-                        var references= data.references;        //参考范围
+    /*******************************
+     * 加载选择列表数据
+     ********************************/
+    function loadDualListbox(id) {
+        $.ajax({
+            url: '../set/devicerelation/getDataList',
+            type: 'POST',
+            dataType: "json",
+            data: {id: id},
+            success: function (data) {
+                if (data) {
+                    var labdepartment = data.index.labdepartment || '';     //已选部门信息
+                    var instrument = data.index.instrument || '';           //已选仪器信息
+                    var references= data.references;        //参考范围
 
-                        var selectDev = $('#devicelist');
-                        selectDev.empty();
-                        for (var k in devicelist) {
-                            var option = document.createElement("option");
-                            option.value = k;
-                            option.text = devicelist[k];
-                            if ((instrument.toString()).indexOf(k + ",") >= 0) {
-                                option.selected = 'selected';
-                            }
-                            selectDev[0].options.add(option);
+                    var selectDev = $('#devicelist');
+                    selectDev.empty();
+                    for (var k in devicelist) {
+                        var option = document.createElement("option");
+                        option.value = k;
+                        option.text = devicelist[k];
+                        if ((instrument.toString()).indexOf(k + ",") >= 0) {
+                            option.selected = 'selected';
                         }
-
-                        //加载部门
-                        var selectDep = $('#departlist');
-                        selectDep.empty();
-
-                        for (var k in departlist) {
-                            var option = document.createElement("option");
-                            option.value = k;
-                            option.text = departlist[k];
-                            if ((labdepartment.toString()).indexOf(k + ",") >= 0) {
-                                option.selected = 'selected';
-                            }
-                            selectDep[0].options.add(option);
-                        }
+                        selectDev[0].options.add(option);
                     }
-                    $('select[name="departlist[]"]').bootstrapDualListbox("refresh");
-                    $('select[name="devicelist[]"]').bootstrapDualListbox("refresh");
 
-                    //加载表单数据
-                    setFromValue(data.index);
+                    //加载部门
+                    var selectDep = $('#departlist');
+                    selectDep.empty();
 
-                    //reloadGrid
-                    $("#tableList").jqGrid('setGridParam',{
-                        datatype:'local',
-                        rowNum:references.length,
-                        data:references
-                    }).trigger('reloadGrid');//重新载入
+                    for (var k in departlist) {
+                        var option = document.createElement("option");
+                        option.value = k;
+                        option.text = departlist[k];
+                        if ((labdepartment.toString()).indexOf(k + ",") >= 0) {
+                            option.selected = 'selected';
+                        }
+                        selectDep[0].options.add(option);
+                    }
                 }
+                $('select[name="departlist[]"]').bootstrapDualListbox("refresh");
+                $('select[name="devicelist[]"]').bootstrapDualListbox("refresh");
 
-            })
+                //加载表单数据
+                setFromValue(data.index);
+
+                //reloadGrid
+                $("#tableList").jqGrid('setGridParam',{
+                    datatype:'local',
+                    rowNum:references.length,
+                    data:references
+                }).trigger('reloadGrid');//重新载入
+            }
+
+        })
+    }
+
+    /*******************************
+     * ztree 设置参数
+     ********************************/
+    var setting = {
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onClick: function (event, treeId, treeNode, clickFlag) {
+                loadDualListbox(treeNode.id)
+            }
+        },
+        view: {}
+    };
+
+
+    jQuery(function ($) {
+        initGrid()
+        $('#outdate').datetimepicker().next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+        //初始化选择列表
+        initDualListbox();
+
+        //加载树形列表
+        $.fn.zTree.init($("#treeList"), setting, zNodes);
+
+        $("#search").keypress(function (e) {
+            if (e.keyCode == 13) {
+                search(this.value);
+            }
+        });
+    })
+
+    /********************************
+     * 搜索树形节点
+     *********************************/
+    function search(k) {
+        if (k == "") {
+            $.fn.zTree.init($("#treeList"), setting, zNodes);
         }
 
-        /*******************************
-         * ztree 设置参数
-         ********************************/
-        var setting = {
-            data: {
-                simpleData: {
-                    enable: true
+        var arr = [];
+        var patt = new RegExp(k);
+        for (var i = 0; i < zNodes.length; i++) {
+            if (patt.test(zNodes[i].name)) {
+                arr.push(zNodes[i]);
+            }
+        }
+        if (arr.length) {
+            $.fn.zTree.init($("#treeList"), setting, arr);
+        } else {
+            layer.msg("对不起，没有找到数据")
+            //$.fn.zTree.init($("#treeList"), "", zNodes);
+        }
+    }
+
+    /********************************
+     * 设置表单数据
+     *********************************/
+    function setFromValue(obj) {
+        $('#indexid').val(obj.indexid);
+        $('#name').val(obj.name);
+        $('#name2').val(obj.name);
+        $('#testclass').val(obj.testclass);
+        $('#eglish').val(obj.eglish);
+        $('#samplefrom').val(obj.samplefrom);
+        $('#labdepartment').val(obj.labdepartment);
+        $('#instrument').val(obj.instrument);
+        $('#type').val(obj.type);
+        $('#algorithm').val(obj.algorithm);
+        $('#method').val(obj.method);
+        $('#description').val(obj.description);
+        $('#guide').val(obj.guide);
+        $('#unit').val(obj.unit);
+        //$('#needhistory').val(obj.needhistory);
+        $('#inuredate').val(obj.inuredate);
+        $('#tea').val(obj.tea);
+        $('#ccv').val(obj.ccv);
+        $('#outdate').val(obj.outdate);
+        $('#defaultvalue').val(obj.defaultvalue);
+
+        //质控需要
+        $("input[type=radio]").removeAttr("checked");
+        if (obj.qcneed != '') {
+            $("input[type=radio][value=" + obj.qcneed + "]").prop('checked', true);
+        }
+        //是否历史记录
+        if (obj.needhistory == '1') {
+            $("#needhistory").prop('checked', true);
+        } else {
+            $("#needhistory").prop('checked', false);
+        }
+
+        //不常用信息
+        $('#principle').val(obj.principle);
+        $('#workcriterion').val(obj.workcriterion);
+        $('#increasedhint').val(obj.increasedhint);
+        $('#decreasedhint').val(obj.decreasedhint);
+        $('#notes').val(obj.notes);
+        $('#methodname').val(obj.methodname);
+
+    }
+
+    /*******************************
+     * 加载参考范围表格
+     ********************************/
+    var lastsel;
+
+    function initGrid() {
+        $("#tableList").jqGrid({
+            caption: "设置",
+            //url: "../set/dictionary/getList",
+            //postData:{deviceid:typeid},
+            datatype: "json",
+            colNames: ['testid', '项目名称', '标本名称', '性别', '年龄','年龄单位', '序号', '设备ID', '周期', '参考范围低值', '参考范围高值'],
+            colModel: [
+                {name: 'testid', index: 'testid', width: 60, hidden: true},
+                {name: 'testname', index: 'testname', width: 200},
+                {name: 'sampletype', index: 'sampletype', width: 100},
+                {
+                    name: 'sex',
+                    index: 'sex',
+                    width: 60,
+                    editable: true,
+                    formatter: "select",
+                    edittype: "select",
+                    editoptions: {value: "0:男;1:女;2:其他"}
+                },
+                {name: 'age', index: 'age', width: 60, editable: true},
+                {name: 'ageunit', index: 'ageunit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
+                {name: 'orderno', index: 'orderno', width: 60, editable: true},
+                {name: 'deviceid', index: 'deviceid', width: 60, editable: true},
+                {name: 'direct', index: 'direct', width: 60, editable: true},
+                {name: 'reflower', index: 'reflower', width: 120, editable: true},
+                {name: 'refhigh', index: 'refhigh', width: 120, editable: true}
+            ],
+            onSelectRow: function (id) {
+                if (id && id !== lastsel) {
+                    $('#tableList').saveRow(lastsel, false, 'clientArray');
+                    lastsel = id;
                 }
+                $('#tableList').editRow(id, false);
             },
-            callback: {
-                onClick: function (event, treeId, treeNode, clickFlag) {
-                    loadDualListbox(treeNode.id, treeNode.indexid)
-                }
-            },
-            view: {}
-        };
+            repeatitems: false,
+            viewrecords: true,
+            autowidth: true,
+            altRows: true,
+            //height: 300,
+            height: "100%",
+            rownumbers: true, // 显示行号
+            rownumWidth: 35
+        });
 
+        //增加工具栏按钮
+        var setting = $('<span class="widget-toolbar" style="right:20px;top:4px"><button type="button" id="add" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加</button>| <button type="button" id="delete" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除</button></span>');
+        $("#gview_tableList").find('.ui-jqgrid-titlebar').append(setting);
 
-        jQuery(function ($) {
-            initGrid()
-            $('#outdate').datetimepicker().next().on(ace.click_event, function () {
-                $(this).prev().focus();
-            });
-            //初始化选择列表
-            initDualListbox();
+        $('#tableList').jqGrid('setGridWidth', $(".rightContent").width(),false);
 
-            //加载树形列表
-            $.fn.zTree.init($("#treeList"), setting, zNodes);
+        //增加表格行
+        $('#add').bind('click', function () {
+            var ids = $('#tableList').jqGrid('getDataIDs');
+            var newId = parseInt(ids[ids.length - 1] || 0) + 1;
+            var zTree = $.fn.zTree.getZTreeObj("treeList");
+            var node = zTree.getSelectedNodes()[0];
+            var id = node.id || '';
+            //当前节点没有值或者为根节点则不保存
+            if (id == '' || node.level == 0) {
+                layer.alert('请先选择检验项目', {icon: 2, time: 1000});
+                return false;
+            }
+            var rowData = {
+                testid:node.indexid,
+                testname: node.name,
+                sampletype: node.sampletype,
+                sex: "0",
+                age: "0",
+                ageunit:'岁',
+                orderno: "0",
+                deviceid: "",
+                direct: "0",
+                reflower: "",
+                refhigh: ""
+            };
+            $("#tableList").jqGrid('addRowData', newId, rowData);
+        })
+        //删除表格数据
+        $('#delete').bind('click', function () {
+            var id = $('#tableList').jqGrid('getGridParam', 'selrow');
+            if (id == null || id == 0) {
+                layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
+                return false;
+            }
+            layer.confirm('确定删除选择数据？', {icon: 2, title: '警告'}, function (index) {
+                var rowData = $('#tableList').jqGrid('getRowData',id);
+                var sex= $('#'+id + "_sex").val();
+                var orderno= $('#'+id + "_orderno").val();      //编辑状态数据获取
+                $.post('../set/devicerelation/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
+                    var data = eval("("+data+")");
+                    if(data && data.result=='true'){
+                        layer.msg("删除成功！")
+                        $("#tableList").jqGrid('delRowData',id );
+                    }else{
+                        layer.msg("删除失败！",{icon:2});
+                    }
 
-            $("#search").keypress(function (e) {
-                if (e.keyCode == 13) {
-                    search(this.value);
-                }
+                });
+                layer.close(index);
             });
         })
+    }
 
-        /********************************
-         * 搜索树形节点
-         *********************************/
-        function search(k) {
-            if (k == "") {
-                $.fn.zTree.init($("#treeList"), setting, zNodes);
-            }
 
-            var arr = [];
-            var patt = new RegExp(k);
-            for (var i = 0; i < zNodes.length; i++) {
-                if (patt.test(zNodes[i].name)) {
-                    arr.push(zNodes[i]);
-                }
-            }
-            if (arr.length) {
-                $.fn.zTree.init($("#treeList"), setting, arr);
-            } else {
-                layer.msg("对不起，没有找到数据")
-                //$.fn.zTree.init($("#treeList"), "", zNodes);
-            }
-        }
 
-        /********************************
-         * 设置表单数据
-         *********************************/
-        function setFromValue(obj) {
-            $('#indexid').val(obj.indexid);
-            $('#name').val(obj.name);
-            $('#name2').val(obj.name);
-            $('#testclass').val(obj.testclass);
-            $('#eglish').val(obj.eglish);
-            $('#samplefrom').val(obj.samplefrom);
-            $('#labdepartment').val(obj.labdepartment);
-            $('#instrument').val(obj.instrument);
-            $('#type').val(obj.type);
-            $('#algorithm').val(obj.algorithm);
-            $('#method').val(obj.method);
-            $('#description').val(obj.description);
-            $('#guide').val(obj.guide);
-            $('#unit').val(obj.unit);
-            //$('#needhistory').val(obj.needhistory);
-            $('#inuredate').val(obj.inuredate);
-            $('#tea').val(obj.tea);
-            $('#ccv').val(obj.ccv);
-            $('#outdate').val(obj.outdate);
-            $('#defaultvalue').val(obj.defaultvalue);
-
-            //质控需要
-            $("input[type=radio]").removeAttr("checked");
-            if (obj.qcneed != '') {
-                $("input[type=radio][value=" + obj.qcneed + "]").prop('checked', true);
-            }
-            //是否历史记录
-            if (obj.needhistory == '1') {
-                $("#needhistory").prop('checked', true);
-            } else {
-                $("#needhistory").prop('checked', false);
-            }
-
-            //不常用信息
-            $('#principle').val(obj.principle);
-            $('#workcriterion').val(obj.workcriterion);
-            $('#increasedhint').val(obj.increasedhint);
-            $('#decreasedhint').val(obj.decreasedhint);
-            $('#notes').val(obj.notes);
-            $('#methodname').val(obj.methodname);
-
-        }
-
-        /*******************************
-         * 加载参考范围表格
-         ********************************/
-        var lastsel;
-
-        function initGrid() {
-            $("#tableList").jqGrid({
-                caption: "设置",
-                //url: "../set/dictionary/getList",
-                //postData:{deviceid:typeid},
-                datatype: "json",
-                colNames: ['testid', '项目名称', '标本名称', '性别', '年龄','年龄单位', '序号', '设备ID', '周期', '参考范围低值', '参考范围高值'],
-                colModel: [
-                    {name: 'testid', index: 'testid', width: 60, hidden: true},
-                    {name: 'testname', index: 'testname', width: 200},
-                    {name: 'sampletype', index: 'sampletype', width: 100},
-                    {
-                        name: 'sex',
-                        index: 'sex',
-                        width: 60,
-                        editable: true,
-                        formatter: "select",
-                        edittype: "select",
-                        editoptions: {value: "0:男;1:女;2:其他"}
-                    },
-                    {name: 'age', index: 'age', width: 60, editable: true},
-                    {name: 'ageunit', index: 'ageunit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
-                    {name: 'orderno', index: 'orderno', width: 60, editable: true},
-                    {name: 'deviceid', index: 'deviceid', width: 60, editable: true},
-                    {name: 'direct', index: 'direct', width: 60, editable: true},
-                    {name: 'reflower', index: 'reflower', width: 120, editable: true},
-                    {name: 'refhigh', index: 'refhigh', width: 120, editable: true}
-                ],
-                onSelectRow: function (id) {
-                    if (id && id !== lastsel) {
-                        $('#tableList').saveRow(lastsel, false, 'clientArray');
-                        lastsel = id;
-                    }
-                    $('#tableList').editRow(id, false);
-                },
-                repeatitems: false,
-                viewrecords: true,
-                autowidth: true,
-                altRows: true,
-                //height: 300,
-                height: "100%",
-                rownumbers: true, // 显示行号
-                rownumWidth: 35
-            });
-
-            //增加工具栏按钮
-            var setting = $('<span class="widget-toolbar" style="right:20px;top:4px"><button type="button" id="add" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加</button>| <button type="button" id="delete" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除</button></span>');
-            $("#gview_tableList").find('.ui-jqgrid-titlebar').append(setting);
-
-            $('#tableList').jqGrid('setGridWidth', $(".rightContent").width(),false);
-
-            //增加表格行
-            $('#add').bind('click', function () {
-                var ids = $('#tableList').jqGrid('getDataIDs');
-                var newId = parseInt(ids[ids.length - 1] || 0) + 1;
-                var zTree = $.fn.zTree.getZTreeObj("treeList");
-                var node = zTree.getSelectedNodes()[0];
-                var id = node.id || '';
-                //当前节点没有值或者为根节点则不保存
-                if (id == '' || node.level == 0) {
-                    layer.alert('请先选择检验项目', {icon: 2, time: 1000});
-                    return false;
-                }
-                var rowData = {
-                    testid:node.indexid,
-                    testname: node.name,
-                    sampletype: node.sampletype,
-                    sex: "0",
-                    age: "0",
-                    ageunit:'岁',
-                    orderno: "0",
-                    deviceid: "",
-                    direct: "0",
-                    reflower: "",
-                    refhigh: ""
-                };
-                $("#tableList").jqGrid('addRowData', newId, rowData);
-            })
-            //删除表格数据
-            $('#delete').bind('click', function () {
-                var id = $('#tableList').jqGrid('getGridParam', 'selrow');
-                if (id == null || id == 0) {
-                    layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
-                    return false;
-                }
-                layer.confirm('确定删除选择数据？', {icon: 2, title: '警告'}, function (index) {
-                    var rowData = $('#tableList').jqGrid('getRowData',id);
-                    var sex= $('#'+id + "_sex").val();
-                    var orderno= $('#'+id + "_orderno").val();      //编辑状态数据获取
-                    $.post('../set/devicerelation/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
-                      var data = eval("("+data+")");
-                       if(data && data.result=='true'){
-                           layer.msg("删除成功！")
-                           $("#tableList").jqGrid('delRowData',id );
-                       }else{
-                           layer.msg("删除失败！",{icon:2});
-                       }
-
-                    });
-                    layer.close(index);
-                });
-            })
-        }
-
-    /**
+    /*******************************
      * 数组转JSON
      * @param o
      * @returns {*}
-     */
+     ********************************/
     function arrayToJson(o) {
         var r = [];
         if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";

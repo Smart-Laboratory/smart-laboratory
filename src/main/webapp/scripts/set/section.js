@@ -90,7 +90,10 @@ function editSection(){
 $(function(){
 	//表单校验
 	$("#addResultForm").Validform({
-		tiptype:4
+		tiptype:4,
+		callback:function(){
+
+		}
 	});
 	//keyPress 回车检索
 	$("#query").keypress(function(e){
