@@ -38,10 +38,8 @@
  		var docNo = ret.id;
 		$.get("../audit/patient",{id:docNo},function(data){
 			if (data.isOverTime) {
-				$('#tatDialog').dialog("option","title", "TAT超时");
 				$("#tatBtn").html("<b style='color: #FF4500;'>TAT超时</b>");
 			} else {
-				$('#tatDialog').dialog("option","title", "TAT");
 				$("#tatBtn").html("<b>TAT</b>");
 			}
 			
@@ -1187,9 +1185,9 @@
 			colNames:['项目名称','修改类型','修改前'
 			          ,'修改后','修改时间','修改者'],
 		   	colModel:[{name:'test',index:'test',width:80,sortable:false},
-		   		{name:'type',index:'type',width:60,sortable:false},
-		   		{name:'oldValue',index:'oldValue',width:40,sortable:false},
-		   		{name:'newValue',index:'newValue',width:40,sortable:false},
+		   		{name:'type',index:'type',width:70,sortable:false},
+		   		{name:'oldValue',index:'oldValue',width:50,sortable:false},
+		   		{name:'newValue',index:'newValue',width:50,sortable:false},
 		   		{name:'modifyTime',index:'modifyTime',sortable:false},
 		   		{name:'modifyUser',index:'modifyUser',width:60,sortable:false}],
 		   	height: '100%'
@@ -1443,7 +1441,17 @@ $(function() {
 				url:"../audit/testModify?sampleNo="+$("#hiddenSampleNo").val()
 			}).trigger("reloadGrid");
 		}
-		$("#testModifyDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['480px','420px'],
+			  title: '样本修改', //不显示标题
+			  content: $('#testModifyDialog'), //捕获的元素
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	$("#colorHelp").append("<span class='c_td diff_td'> </span>\u5dee\u503c <span class='c_td ratio_td'> </span>\u6bd4\u503c <span class='c_td re_td'> </span>\u590d\u68c0<span class='c_td dan_td'></span>\u5371\u6025 <span class='c_td al2_td'> </span>\u8b66\u62121 <span class='c_td al3_td'> </span>\u8b66\u62122 <span class='c_td ex_td'> </span>\u6781\u503c");
 

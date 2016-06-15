@@ -54,7 +54,6 @@ $(function(){
 	    return fmt;
 	}
 	
-	
 	$("#opStatusDialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -92,7 +91,6 @@ $(function(){
 	    	    			$("#auditPassBtn").css('display','none');
 	    	    			$("#collectBtn").css('display','inline');
 	    	    			$("#opStatusDialog").dialog("close");
-	    	    			$("#twoColumnDialog").dialog("close");
 	    				}
 	    			});
 	    		} else {
@@ -109,7 +107,6 @@ $(function(){
 	    	    			$("#auditPassBtn").css('display','inline');
 	    	    			$("#collectBtn").css('display','none');
 	    	    			$("#opStatusDialog").dialog("close");
-	    	    			$("#twoColumnDialog").dialog("close");
 	    				}
 	    			});
 	    		}
@@ -250,12 +247,6 @@ $(function(){
 	    }
 	});
 	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
 	$("#auditDialog").dialog({
 		autoOpen: false,
 	    resizable: false,
@@ -368,20 +359,6 @@ $(function(){
 	    height: 260
 	});
 	
-	$("#tatDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	$("#twoColumnDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true
-	});
-	
-	
-	
 	$("#collectDialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -429,24 +406,10 @@ $(function(){
 	    width: 480
 	});
 	
-	$("#testModifyDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 480,
-	    height: 320
-	});
-	
 	$("#sampleCompareDialog").dialog({
 		autoOpen: false,
 	    width: 600,
 	    height: 500
-	});
-	
-	$("#auditTraceDialog").dialog({
-		autoOpen: false,
-	    width: 520,
-	    height: 460
 	});
 	
 	$("#allNeedWriteBackDialog").dialog({
@@ -725,14 +688,24 @@ $(function(){
 		$("#tat_send").html("");
 		$("#tat_ksreceive").html("");
 		$("#audit_tat").html("");
-		$("#tatDialog").dialog("open");
+		var index = layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['300px','420px'],
+		  title: $("#tatBtn").text(), //不显示标题
+		  content: $('#tatDialog'), //捕获的元素
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		var doc = $("#hiddenDocId").val();
 		$.get("../audit/tat",{id:doc},function(data){
 			data = jQuery.parseJSON(data);
 			$("#tat_request").html(data.request);
 			$("#tat_execute").html(data.execute);
 			$("#tat_receive").html(data.receive);
-			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
+			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-sm btn-info' onclick='getAuditHistory(" + index + ")'>" + data.audit + "</a>");
 			$("#tat_auditor").html(data.auditor);
 			$("#tat_result").html(data.result);
 			$("#tat_send").html(data.send);
@@ -938,7 +911,8 @@ function getDictionaries(inputId){
 
 
 var isFirstTrace = true;
-function getAuditHistory() {
+function getAuditHistory(index) {
+	layer.close(index);
 	var sample = $("#hiddenSampleNo").val();
 	if(isFirstTrace){
 		jQuery("#audit_trace_information").jqGrid({
@@ -958,9 +932,18 @@ function getAuditHistory() {
 		jQuery("#audit_trace_information").jqGrid("setGridParam",{
 			url:"../audit/trace?sample="+sample
 		}).trigger("reloadGrid"); 
-	} 
-	$("#auditTraceDialog").dialog("open");
-	
+	}
+	layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['300px','420px'],
+		  title: '审核踪迹', //不显示标题
+		  content: $("#auditTraceDialog"), //捕获的元素
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 }
 
 var count=0;
