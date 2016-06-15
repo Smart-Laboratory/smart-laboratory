@@ -1013,7 +1013,6 @@ public class AuditController extends BaseAuditController {
 		String bdate = request.getParameter("bdate");
 		String bsb = request.getParameter("bsb");
 		String bse = request.getParameter("bse");
-		String lab = request.getParameter("lab");
 		String postStrs = request.getParameter("postStr");
 		
 		String sampleNoSub =bdate+bsc;
@@ -1021,14 +1020,16 @@ public class AuditController extends BaseAuditController {
 		if(stringTOint(bsb)==0||stringTOint(bse)==0){
 			return error;
 		}
-		if(Integer.parseInt(bsb)<Integer.parseInt(bse)){
+		if(Integer.parseInt(bsb)>Integer.parseInt(bse)){
 			return error;
 		}
 		
 		List<Describe> desList = rmiService.getDescribe();
         List<Reference> refList = rmiService.getReference();
         FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-		
+       
+        
+        
 		List <TestResult>resultList = new ArrayList<TestResult>();
 		if(null!=postStrs&&!"".equals(postStrs)){
 			if(postStrs.indexOf(";")!=-1){
@@ -1036,6 +1037,7 @@ public class AuditController extends BaseAuditController {
 					String []testResult = postStr.split(":");
 					for(int i=Integer.parseInt(bsb);i<=Integer.parseInt(bse);i++){
 						String sampleNo = sampleNoSub + String.format("%" + 3 + "d",i).replace(" ", "0");
+						Sample info = sampleManager.getBySampleNo(sampleNo);
 						TestResult tr = new TestResult();
 						tr.setSampleNo(sampleNo);
 						tr.setTestId(testResult[0]);
@@ -1050,9 +1052,9 @@ public class AuditController extends BaseAuditController {
 							tr.setSampleType(""+ des.getSAMPLETYPE());
 							tr.setUnit(des.getUNIT());
 						}
-						
+						fillUtil.fillResult(tr, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
 						TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
-						if(!t.getTestId().equals(tr.getTestId())){
+						if(null==t){
 							resultList.add(tr);
 						}
 					}
@@ -1061,6 +1063,7 @@ public class AuditController extends BaseAuditController {
 				String []testResult = postStrs.split(":");
 				for(int i=Integer.parseInt(bsb);i<=Integer.parseInt(bse);i++){
 					String sampleNo = sampleNoSub + String.format("%" + 3 + "d",i).replace(" ", "0");
+					Sample info = sampleManager.getBySampleNo(sampleNo);
 					TestResult tr = new TestResult();
 					tr.setSampleNo(sampleNo);
 					tr.setTestId(testResult[0]);
@@ -1075,7 +1078,7 @@ public class AuditController extends BaseAuditController {
 						tr.setSampleType(""+ des.getSAMPLETYPE());
 						tr.setUnit(des.getUNIT());
 					}
-					
+					fillUtil.fillResult(tr, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
 					TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
 					if(!t.getTestId().equals(tr.getTestId())){
 						resultList.add(tr);

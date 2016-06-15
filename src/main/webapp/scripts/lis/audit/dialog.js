@@ -816,7 +816,7 @@ $(function(){
  			
  			var array = jQuery.parseJSON(data);
  				for (var i=0 ; i < array.length ; i++) {    
- 					$("#batchAddResults_statistic_table").append("<div class='form-group'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries()' class='testValue span2 form-control' \></div> </div>")
+ 					$("#batchAddResults_statistic_table").append("<div class='form-group'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control' \></div> </div>")
  			   }
  		});
  	});
@@ -827,7 +827,7 @@ $(function(){
  		var bsc = $("#batchAddResults_statistic_code").val();
  		var bsb = $("#batchAddResults_statistic_begin").val();
  		var bse = $("#batchAddResults_statistic_end").val();
- 		
+ 		var postStr ="";
  		$("#batchAddResults_statistic_table div").each(function(index,self){
     		var id = $(self).find(".testID").val();
     		var value = $(self).find(".testValue").val();
@@ -836,6 +836,7 @@ $(function(){
 	    		postStr += id + ":" + value;
     		}
     	});
+ 		alert(postStr);
 		if (postStr != "") {
 	 		$.post("../audit/batchAddResults_statistic_save",{postStr:postStr,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse}, function(data) {
 				if (data == "success") {
@@ -893,12 +894,14 @@ function getDictionaries(inputId){
                 data: {
                 	maxRows : 12,
                 	inputId : inputId,
+                	inputValue :$("#"+inputId+"").val(),
                     lab :$("#labSelect").val()
                 },
                 success: function( data ) {
                 	response( $.map( data, function( item ) {
                         return {
-                            value: item.value,
+                        	label:item.id+" "+item.name,
+                            value: item.name,
                         }
                     }));
                 }

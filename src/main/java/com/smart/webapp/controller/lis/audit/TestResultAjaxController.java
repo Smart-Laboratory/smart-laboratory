@@ -225,6 +225,7 @@ public class TestResultAjaxController extends BaseAuditController{
 	@ResponseBody
 	public String getDictionaries(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String error = "error";
+		String inputValue = request.getParameter("inputValue");
 		String indexId = request.getParameter("inputId");
 		String labDepartment = request.getParameter("lab");
 		List <Index>indexList = new ArrayList<Index>();
@@ -232,21 +233,30 @@ public class TestResultAjaxController extends BaseAuditController{
 		
 		JSONArray array = new JSONArray();
 		if(null!=indexList&&indexList.size()>0){
-			
-			JSONObject obj = new JSONObject();
 			for(Index index : indexList){
+				
 				String dictionaries = index.getDictionaries();
 				if(null!=dictionaries&&!"".equals(dictionaries)){
 					if(dictionaries.indexOf(";")!=-1){
 						for(String dictionary:dictionaries.split(";")){
+							JSONObject obj = new JSONObject();
 							String []zd = dictionary.split(":");
-							obj.put("value", zd[1]);
+							if(zd[0].toUpperCase().indexOf(inputValue.toUpperCase())!=-1){
+								obj.put("id", zd[0]);
+								obj.put("name", zd[1]);
+								array.put(obj);
+							}
 						}
 					}else{
 						String []zd = dictionaries.split(":");
-						obj.put("value", zd[1]);
+						if(zd[0].toUpperCase().indexOf(inputValue.toUpperCase())!=-1){
+							JSONObject obj = new JSONObject();
+							obj.put("id", zd[0]);
+							obj.put("name", zd[1]);
+							array.put(obj);
+						}
 					}
-					array.put(obj);
+					
 				}else{
 					return error;
 				}
@@ -254,11 +264,9 @@ public class TestResultAjaxController extends BaseAuditController{
 		}else{
 			return error;
 		}
-		
-		
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
-		return "success";
+		return null;
 	}
 
 		
