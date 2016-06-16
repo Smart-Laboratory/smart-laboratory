@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.webapp.util.DataResponse;
-import javassist.bytecode.stackmap.BasicBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -113,10 +112,9 @@ public class SectionController {
      */
 	@RequestMapping(value = "/bathremove")
 	public ModelAndView bathRemove(@RequestParam(value = "ids[]") long[] ids,HttpServletRequest request, HttpServletResponse response)throws Exception{
-		try{
-			sectionManager.batchRemove(ids);
+		if(sectionManager.batchRemove(ids)){
 			return new ModelAndView().addObject("resulut", "success");
-		}catch (Exception e){
+		}else{
 			return new ModelAndView().addObject("resulut", "error");
 		}
 	}

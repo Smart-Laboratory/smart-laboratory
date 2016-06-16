@@ -14,5 +14,5 @@ public interface SectionManager extends GenericManager<Section, Long> {
 
 	List<Section> getSectionList(String query,String hospitalId,int start,int end,String sidx,String sord);
 	List<Section> getSectionList(String name);
-	void batchRemove(long[] ids);
+	boolean batchRemove(long[] ids);
 }

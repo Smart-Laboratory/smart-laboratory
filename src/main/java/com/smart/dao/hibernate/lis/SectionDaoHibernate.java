@@ -73,8 +73,11 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param ids 科室ID
      * @return
      */
-	public void batchRemove(long[] ids) {
+	public boolean batchRemove(long[] ids) {
 		StringBuilder  sql = new StringBuilder(" delete from Section p where p.id in (?");
+		Transaction tx = getSession().beginTransaction();
+		try {
+
 			for(int i=1;i <ids.length;i++){
 				sql.append( ",?");
 			}
@@ -84,6 +87,13 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 				q.setLong(i, ids[i]);
 			}
 			q.executeUpdate();
+			tx.commit();
+		}catch (HibernateException e){
+			tx.rollback();
+			System.out.print(e.getMessage());
+			log.error(e.getMessage());
+		}
+		return true;
 	}
 
 
