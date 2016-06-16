@@ -2,8 +2,7 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
-import javax.persistence.criteria.Order;
-
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.SxArrangeDao;
@@ -17,8 +16,12 @@ public class SxArrangeDaoHibernate extends GenericDaoHibernate<SxArrange, Long> 
 	}
 	
 	public void saveAll(List<SxArrange> list){
-		for(SxArrange s: list)
-			getSession().saveOrUpdate(s);
+		Session s = getSession();
+		for(SxArrange sx : list) {
+			s.saveOrUpdate(sx);
+		}
+		s.flush();
+		s.close();
 	}
 	
 	

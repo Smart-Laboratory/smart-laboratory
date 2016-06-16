@@ -13,19 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.smart.service.DictionaryManager;
 import com.smart.service.EvaluateManager;
-import com.smart.service.UserManager;
-import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.ReasoningModifyManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.TestResultManager;
-import com.smart.service.rule.IndexManager;
-import com.smart.service.rule.ItemManager;
-import com.smart.service.rule.RuleManager;
+import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.PatientUtil;
-import com.zju.api.service.RMIService;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -45,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/collect/list*")
-public class CollectDialogController {
+public class CollectDialogController extends BaseAuditController {
 
 	@RequestMapping(value = "/evaluate*", method = RequestMethod.POST)
 	@ResponseBody
@@ -191,7 +183,8 @@ public class CollectDialogController {
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
-
+		if (idMap.size() == 0) initMap();
+		
 		for (Rule rule : rules) {
 //			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
@@ -310,7 +303,7 @@ public class CollectDialogController {
 			result = lib.getValue();
 		} else {
 			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
+			String testName = idMap.get(item.getIndexId()).getName();
 			String value = item.getValue();
 			if (value.contains("||")) {
 				return testName + value.replace("||", "或");
@@ -325,7 +318,7 @@ public class CollectDialogController {
 	private double getRank(Rule rule, Result re) {
 		double importance = 0;
 		for (Item item : rule.getItems()) {
-			String impo = item.getIndex().getImportance();
+			String impo = idMap.get(item.getIndexId()).getImportance();
 			if (impo != null && !StringUtils.isEmpty(impo)) {
 				importance = Double.parseDouble(impo) + importance;
 			}
@@ -342,35 +335,9 @@ public class CollectDialogController {
 	}
 	
 	@Autowired
-	private IndexManager indexManager;
-	
-	@Autowired
-	private CollectSampleManager collectSampleManager;
-	
-	@Autowired
-	private SampleManager sampleManager;
-	
-	@Autowired
-	private TestResultManager testResultManager;
-	
-	@Autowired
-	private RMIService rmiService;
-	
-	@Autowired
-	private RuleManager ruleManager;
-	
-	@Autowired
-	private DictionaryManager dictionaryManager;
-	
-	@Autowired
 	private EvaluateManager evaluateManager;
-	
-	@Autowired
-	private UserManager userManager;
 	
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager;
 	
-	@Autowired
-	private ItemManager itemManager;
 }

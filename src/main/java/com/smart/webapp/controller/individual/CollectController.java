@@ -44,7 +44,7 @@ import com.smart.model.user.Evaluate;
 
 @Controller
 @RequestMapping("/collect/list*")
-public class CollectController extends BaseAuditController{
+public class CollectController extends BaseAuditController {
 	
 	
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
@@ -138,7 +138,7 @@ public class CollectController extends BaseAuditController{
 		if (sample == null) {
 			throw new NullPointerException();
 		}
-
+		if (idMap.size() == 0) initMap();
 		Sample info = sampleManager.getBySampleNo(sample);
 		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -163,7 +163,7 @@ public class CollectController extends BaseAuditController{
 						String result = rule.getResultName();
 						String itemString = "";
 						for (Item i : rule.getItems()) {
-							itemString = itemString + i.getIndex().getName() + "、";
+							itemString = itemString + idMap.get(i.getIndexId()).getName() + "、";
 						}
 						if (note != null && !note.isEmpty()) {
 							note = note + "<br>" + itemString.substring(0, itemString.length() - 1) + "异常，" + result;

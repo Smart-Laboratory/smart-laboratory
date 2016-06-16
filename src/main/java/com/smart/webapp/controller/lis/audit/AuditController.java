@@ -96,7 +96,7 @@ public class AuditController extends BaseAuditController {
 		final DroolsRunner droolsRunner = DroolsRunner.getInstance();
 		final Set<String> hasRuleSet = new HashSet<String>();
 		for (Item i : itemManager.getAll()) {
-			String testid = i.getIndex().getIndexId();
+			String testid = i.getIndexId();
 			hasRuleSet.add(testid);
 		}
 		List<Describe> desList = rmiService.getDescribe();

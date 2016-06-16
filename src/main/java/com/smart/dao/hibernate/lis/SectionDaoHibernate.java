@@ -3,7 +3,6 @@ package com.smart.dao.hibernate.lis;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.lis.Section;
@@ -23,7 +22,6 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 		return (Section) getSession().createQuery("from Section where code=" + sectionId).uniqueResult();
 	}
 
-	@Override
 	public int getSectionCount(String query, String hospitalId) {
 		String sql = "select count(1) cnt from l_depart where 1=1";
 		if(query != null && !query.equals(""))
@@ -42,7 +40,6 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param end
      * @return
      */
-	@Override
 	public List<Section> getSectionList(String query, String hospitalId, int start, int end,String sidx,String sord)  {
 		String sql = "from Section s where 1=1 ";
 		if(query != null && !query.equals(""))
@@ -67,7 +64,6 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param name
 	 * @return
      */
-	@Override
 	public List<Section> getSectionList(String name) {
 		return getSession().createQuery("from Section as s where s.code like '" + name +"%' or s.name like '" +name +"%' order by s.name,s.code" ).list();
 	}
@@ -77,7 +73,6 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param ids 科室ID
      * @return
      */
-	@Override
 	public boolean batchRemove(long[] ids) {
 		StringBuilder  sql = new StringBuilder(" delete from Section p where p.id in (?");
 		Transaction tx = getSession().beginTransaction();

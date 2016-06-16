@@ -2,6 +2,7 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
@@ -17,8 +18,12 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	}
 
 	public void saveAll(List<Arrange> list) {
-		for(Arrange arrange : list)
-			getSession().saveOrUpdate(arrange); 
+		Session s = getSession();
+		for(Arrange arrange : list) {
+			s.saveOrUpdate(arrange);
+		}
+		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,10 +61,8 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 		return getSession().createQuery("from Arrange where worker in ("+ names +") and date<'"+ tomonth +"' and type=1 order by worker asc, date asc").list();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void removeAll(String name, String date) {
-		List<Arrange> list = getSession().createQuery("from Arrange where worker='"+ name +"' and date like '"+ date +"%'").list();
-		getSession().delete(list);
+		getSession().createQuery("delete Arrange where worker='"+ name +"' and date like '"+ date +"%'").executeUpdate();
 	}
 	
 	public List<String> getGXcount(String month){

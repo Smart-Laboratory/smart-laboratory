@@ -1,6 +1,5 @@
 package com.smart.dao.hibernate;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<String> getBySection(String section) {
-		List abs = getSession().createQuery("select ab from Shift where section='"+section+"'").list();
+		List<String> abs = getSession().createQuery("select ab from Shift where section='"+section+"'").list();
 		return abs;
 	}
 

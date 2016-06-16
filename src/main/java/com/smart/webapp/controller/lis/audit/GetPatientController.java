@@ -170,7 +170,7 @@ public class GetPatientController extends BaseAuditController {
 			result = lib.getValue();
 		} else {
 			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
+			String testName = idMap.get(item.getIndexId()).getName();
 			String value = item.getValue();
 			if (value.contains("||")) {
 				return testName + value.replace("||", "或");

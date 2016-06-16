@@ -5,6 +5,8 @@ import com.smart.model.lis.TestReference;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Title: TestReferenceDao
  * Description:检验项目参考范围
@@ -19,12 +21,14 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param testid
      * @return
      */
+	@Transactional
     public List<TestReference> getTestRefenreceListByTestId(String testid);
 
     /**
      * 保存参考范围
      * @param testReferences
      */
+	
     public void saveTestReferences(List<TestReference> testReferences);
 
     /**
@@ -34,6 +38,7 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param orderno
      * @return
      */
+    @Transactional
     public TestReference getTestReference(String testid,int sex,int orderno);
 
     /**
@@ -42,5 +47,6 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param sex
      * @param orderno
      */
+	@Transactional
     public void deleteTestReference(String testid, int sex, int orderno);
 }

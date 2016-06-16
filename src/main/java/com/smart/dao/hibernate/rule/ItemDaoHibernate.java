@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.rule;
 
 import java.util.List;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -16,23 +15,20 @@ public class ItemDaoHibernate extends GenericDaoHibernate<Item, Long> implements
 		super(Item.class);
 	}
 
-	public Item getWithIndex(Long id) {
-		Session sses = getSession();
-		Item item = (Item) sses.createQuery("from Item where id=" + id).list().get(0);
-		item.getIndex().getIndexId();
-		sses.close();
-		return item;
-	}
-
 	@SuppressWarnings("unchecked")
 	public Item exsitItem(Long indexId, String value) {
 		
-		List<Item> items = getSession().createQuery("from Item where index.id=" + indexId + " and value='" + value + "'").list(); 
+		List<Item> items = getSession().createQuery("from Item where indexId=" + indexId + " and value='" + value + "'").list(); 
 		
 		if (items == null || items.size() == 0) {
 			return null;
 		} else {
 			return items.get(0);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Item> getByIndexId(Long indexid) {
+		return getSession().createQuery("from Item where indexId=" + indexid).list();
 	}
 }

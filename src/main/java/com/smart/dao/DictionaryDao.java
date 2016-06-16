@@ -2,20 +2,26 @@ package com.smart.dao;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.smart.model.Dictionary;
 
 public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 
+	@Transactional
 	List<Dictionary> getPatientInfo(String name);
 
+	@Transactional
 	List<Dictionary> getSampleType();
 
+	@Transactional
 	List<Dictionary> getDeviceType();
 	/**
 	 * 获取记录数
 	 * @param type 对照类别
 	 * @return
 	 */
+	@Transactional
 	int getDictionaryCount(String query,String type);
 
 	/**
@@ -26,6 +32,7 @@ public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 	 * @param end
 	 * @return
 	 */
+	@Transactional
 	List<Dictionary> getDictionaryList(String query,String type, int start,int end,String sidx,String sord);
 
 }

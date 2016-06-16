@@ -85,8 +85,8 @@ public class GenericDaoHibernate<T, PK extends Serializable> implements GenericD
     public Session getSession() {
     	Session sess = null;
     	try {
-    		sess = getSessionFactory().getCurrentSession();
-    	} catch(HibernateException he) {
+    		sess =  getSessionFactory().getCurrentSession();
+    	} catch(Exception e) {
     		sess = getSessionFactory().openSession();
     	}
         return sess;

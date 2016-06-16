@@ -15,13 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
-import com.smart.model.rule.Index;
-
 
 /**
  * 规则条目，一个规则可以包含多个条目。条目中记录index（检验项目）对应的参考范围等
@@ -36,7 +33,7 @@ public class Item extends BaseObject implements Serializable{
 	
 	private Long id;
 
-	private Index index; // 指标
+	private String indexId;
 	private String value; // 数值为表达式，字符和枚举使用字符串
 	private String unit;	//单位
 	private int isStr;
@@ -73,17 +70,13 @@ public class Item extends BaseObject implements Serializable{
 		this.isStr = isStr;
 	}
 
-	/**
-	 * 条目所涉及的指标，指标与条目的关系一对多
-	 */
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "index_id")
-	public Index getIndex() {
-		return index;
+	@Column(name = "indexid")
+	public String getIndexId() {
+		return indexId;
 	}
 
-	public void setIndex(Index index) {
-		this.index = index;
+	public void setIndexId(String indexId) {
+		this.indexId = indexId;
 	}
 	
 	/**
@@ -93,7 +86,7 @@ public class Item extends BaseObject implements Serializable{
 	public String getUnit() {
 		return unit;
 	}
-	
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}

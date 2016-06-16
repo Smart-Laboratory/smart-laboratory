@@ -31,8 +31,6 @@ import com.smart.webapp.util.PatientUtil;
 import com.smart.Constants;
 import com.smart.model.rule.Item;;
 
-
-
 @Controller
 @RequestMapping("/audit*")
 public class ExplainController extends BaseAuditController {
@@ -207,7 +205,7 @@ public class ExplainController extends BaseAuditController {
 			result = lib.getValue();
 		} else {
 			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
+			String testName = idMap.get(item.getIndexId()).getName();
 			String value = item.getValue();
 			if (value.contains("||")) {
 				return testName + value.replace("||", "或");
@@ -222,7 +220,7 @@ public class ExplainController extends BaseAuditController {
 	private double getRank(Rule rule, Result re) {
 		double importance = 0;
 		for (Item item : rule.getItems()) {
-			String impo = item.getIndex().getImportance();
+			String impo = idMap.get(item.getIndexId()).getImportance();
 			if (impo != null && !StringUtils.isEmpty(impo)) {
 				importance = Double.parseDouble(impo) + importance;
 			}

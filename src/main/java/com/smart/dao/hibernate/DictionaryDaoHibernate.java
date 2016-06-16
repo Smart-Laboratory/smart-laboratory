@@ -2,10 +2,7 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.Dictionary;
@@ -18,7 +15,6 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 		super(Dictionary.class);
 	}
 
-	@Override
 	public int getDictionaryCount(String query, String type) {
 		String sql = "select count(1) cnt from lab_dictionary where 1=1 ";
 		if(query != null && !query.equals(""))
@@ -37,7 +33,7 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 	 * @param end
 	 * @return
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<Dictionary> getDictionaryList(String query, String type, int start, int end,String sidx,String sord)  {
 		String sql = " from Dictionary s where 1=1 ";
 		if(query != null && !query.equals(""))

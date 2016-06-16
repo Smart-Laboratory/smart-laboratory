@@ -28,7 +28,6 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      * @param testid
      * @return
      */
-    @Override
     public List<TestReference> getTestRefenreceListByTestId(String testid) {
         String sql = "from TestReference t where t.testId=:testid order by t.testId,t.sex,t.orderNo Asc ";
         Query query = getSession().createQuery(sql);
@@ -71,7 +70,6 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      * @param orderNo
      * @return
      */
-    @Override
     public TestReference getTestReference(String testid, int sex, int orderNo)  {
         String Sql = "from TestReference t where t.testId=:testid and t.sex=:sex and t.orderno=:orderNo";
         Query query = getSession().createQuery(Sql);
