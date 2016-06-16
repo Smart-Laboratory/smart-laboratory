@@ -69,11 +69,7 @@ table td.sx{
 			<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 			
 			
-			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
-				<span ><c:forEach var="depart" items="${departList}">
-				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-			</c:forEach></span>
-			</select>
+			
 		</div>
 
 		<div id="shiftSelect" class="checkbox form-inline" >

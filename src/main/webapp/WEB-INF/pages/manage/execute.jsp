@@ -34,6 +34,8 @@
 
 <body>
 
+<input type="hidden" id="laborder" />
+
 <div class="col-sm-12">
 	<div class="col-sm-3">
 	<div class="widget-box">
@@ -73,6 +75,7 @@
 			
 		</div>
 		<button id="conform" class="btn btn-lg center-block"><fmt:message key="button.confirm" /></button>
+		<button id="unusualRegister" class="btn btn-lg center-block">异常登记</button>
 		<div>
 			<div class="radio">
 				<label class="radio">
@@ -125,7 +128,7 @@
 							<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
 					</div>
 					<div class="col-sm-3 ">
-							<span class='col-sm-5'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
+							<span class='col-sm-4'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
 					</div>
 					<div class="col-sm-2 ">
 						<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
@@ -134,6 +137,8 @@
 						<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
 						<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
 					</div>
+				</div>
+				<div id="warnLabel" class="alert alert-success" style="display: block; margin-bottom: 2px; padding: 5px 15px;">
 				</div>
 			</div>
 		</div>
@@ -151,62 +156,8 @@
 				</div>
 				<div class="widget-body" style="overflow-x:scroll;">
 					<div id="tests" class="widget-main" style="width:1500px;">
-					<div  id="date1" class="alert alert-info sampleInfo" style="" >
-						<div class="col-sm-2" style="">
-							<div class="checkbox col-sm-3">
-		    					<label>
-		      						<input type="checkbox" value=""> 
-		    					</label>
-		    				</div>
-		    				<div class="checkbox col-sm-3">
-		    					<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-		    				</div>
-		    				
-						</div>
-						<div class="col-sm-10" style="">
-							<div >
-								<span class="datespan"><fmt:message key="execute.sfxm" />:</span><b id="ylmc"></b>
-								<span ><fmt:message key="execute.fph" />:</span><b id="sfsb"></b>
-								<span ><fmt:message key="execute.dj" />:</span><b id="dj"></b> 
-									<fmt:message key="execute.ch" /><b id="sl"></b>
-								<span ><fmt:message key="execute.zxks" />:</span><b id="ksdm"></b>
-							</div>
-							<div>
-								<span ><fmt:message key="execute.bgsj" />:</span><b id="qbgsj"></b>
-								<span ><fmt:message key="execute.sqsj" />:</span><b id="kdsj"></b>
-								<span ><fmt:message key="execute.sqks" />:</span><b id="sjksdm"></b>
-								<span ><fmt:message key="execute.dd" />:</span><b id="qbgdd"></b>
-							</div>
-						</div>
-					</div>
-					<div  id="date2" class="alert alert-success sampleInfo" style="" >
-						<div class="col-sm-2" style="">
-							<div class="checkbox col-sm-3">
-		    					<label>
-		      						<input type="checkbox" value=""> 
-		    					</label>
-		    				</div>
-		    				<div class="checkbox col-sm-3">
-		    					<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-		    				</div>
-		    				
-						</div>
-						<div class="col-sm-10" style="">
-							<div>
-								<span class="datespan"><fmt:message key="execute.sfxm" />:</span><b id="ylmc"></b>
-								<span ><fmt:message key="execute.fph" />:</span><b id="sfsb"></b>
-								<span ><fmt:message key="execute.dj" />:</span><b id="dj"></b> 
-									<fmt:message key="execute.ch" /><b id="sl"></b>
-								<span ><fmt:message key="execute.zxks" />:</span><b id="ksdm"></b>
-							</div>
-							<div>
-								<span ><fmt:message key="execute.bgsj" />:</span><b id="qbgsj"></b>
-								<span ><fmt:message key="execute.sqsj" />:</span><b id="kdsj"></b>
-								<span ><fmt:message key="execute.sqks" />:</span><b id="sjksdm"></b>
-								<span ><fmt:message key="execute.dd" />:</span><b id="qbgdd"></b>
-							</div>
-						</div>
-					</div>
+					
+					
 					</div>
 				</div>
 			</div>
@@ -220,6 +171,48 @@
 <div id="printDialog" align="left">
 	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
 	<div id="printFrame" style="height:400px;"></div>
+</div>
+
+<div id="executeUnusualDialog">
+	<form class="form-horizontal" role="form" style="margin-top:5px;" id="executeUnusualForm">
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="unpatientid">就诊卡号：</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-sm-10" id="unpatientid" disabled ></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="part">抽血位置：</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-sm-10" id="part" ></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="mode">抽血方式：</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-sm-10" id="mode" ></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="reaction">抽血反应：</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-sm-10" id="reaction" ></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="time">抽血次数：</label>
+			<div class="col-sm-9">
+				<input type="text" class="col-sm-10" id="time" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="note">备注：</label>
+			<div class="col-sm-9">
+				<textarea id="note" rows="3" class="form-control" style="width:100%;"></textarea>
+			</div>
+		</div>
+		<input type="button" id="tijiao" class="btn btn-info" onclick="unusual()" value="提交">
+	</form>
 </div>
 
 </body>

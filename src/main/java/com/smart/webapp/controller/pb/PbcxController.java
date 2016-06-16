@@ -26,7 +26,6 @@ import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
-import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
 import jxl.*;
@@ -41,7 +40,7 @@ import java.net.MalformedURLException;
 
 @Controller
 @RequestMapping("/pb/pbcx*")
-public class PbcxController {
+public class PbcxController extends PbBaseController {
 	
 	@Autowired
 	private WInfoManager wInfoManager;
@@ -314,9 +313,9 @@ public class PbcxController {
 		String[] gh = new String[wInfos.size()];
 		String[] ks = new String[wInfos.size()];
 		int i=0;
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+		initLabMap();
 		for(WInfo wInfo : wInfos){
-			ks[i]= sectionUtil.getValue(wInfo.getSection());
+			ks[i]= labMap.get(wInfo.getSection());
 			gh[i]=wInfo.getWorkid();
 			data[i][0] = wInfo.getName();
 			List<Arrange> arranges = arrangeManager.getPersonalArrange(wInfo.getName(), date);

@@ -24,7 +24,6 @@ import com.smart.model.pb.WorkCount;
 import com.smart.service.ArrangeManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
-import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
 import com.smart.model.pb.Shift;
@@ -32,7 +31,7 @@ import com.smart.service.ShiftManager;
 
 @Controller
 @RequestMapping("/pb/grcx*")
-public class PbgrController {
+public class PbgrController extends PbBaseController {
 	
 	@Autowired
 	private WInfoManager wInfoManager;
@@ -118,10 +117,10 @@ public class PbgrController {
 		JSONObject o = new JSONObject();
 		o.put("name",wInfo.getName() );
 		String section = wInfo.getSection();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
-		for(String s : section.split(",")){
-			section = section.replace(s, sectionUtil.getKey(s));
-		}
+		initLabMap();
+//		for(String s : section.split(",")){
+//			section = section.replace(s, sectionUtil.getKey(s));
+//		}
 		
 		o.put("section", section);
 		o.put("sworktime",ymd.format( wInfo.getWorktime() ));

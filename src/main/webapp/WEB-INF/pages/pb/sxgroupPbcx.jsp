@@ -67,7 +67,7 @@ table td.sx{
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			
 			
-			<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
+			<select id="sectionSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
 				<option value="1300000"><fmt:message key="labDepartment.1300000"/></option>
 		<option value="1300100"><fmt:message key="labDepartment.1300100"/></option>
 		<option value="1300200"><fmt:message key="labDepartment.1300200"/></option>

@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.zju.api.model.ExecuteInfo;
 import com.zju.api.model.Patient;
+import com.smart.Constants;
+import com.smart.model.lis.InvalidSample;
 import com.smart.model.reagent.Out;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.lis.InvalidSampleManager;
 import com.smart.service.lis.PatientManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
@@ -46,10 +50,21 @@ public class ExecuteViewController {
 	
 	@RequestMapping(value = "/getPatient*", method = RequestMethod.GET)
 	@ResponseBody
-	public Patient getPatient(HttpServletRequest request, HttpServletResponse response){
-		String patientId = request.getParameter("patientId");
+	public Map<String, Object>  getPatient(HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String,Object>();
+		String patientId = request.getParameter("patientId").trim();
 		Patient patient = rmiService.getPatient(patientId);
-		return patient;
+		map.put("patient", patient);
+		InvalidSample invalidSample = invalidSampleManager.getByPatientId(patientId);
+		if(invalidSample!=null){
+			String[] reasonList = Constants.INVALIDSAMPLE_REASON;
+			map.put("invalidsample", reasonList[invalidSample.getRejectSampleReason()]);
+		}
+		String host = request.getRemoteHost();
+		String addr = request.getRemoteAddr();
+		map.put("host", host);
+		map.put("addr", addr);
+		return map;
 	}
 	
 	@RequestMapping(value = "/getTests*", method = RequestMethod.GET)
@@ -69,8 +84,12 @@ public class ExecuteViewController {
 		StringBuilder html = new StringBuilder();
 		ExecuteInfo e = new ExecuteInfo();
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+		//记录最新的发票号
+		String recentInvoiceNum="";
 		for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
+			if(i==0)
+				recentInvoiceNum = e.getSfsb();
 //			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
 			if(i%2==1){
 				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
@@ -94,8 +113,13 @@ public class ExecuteViewController {
 			e.setQbgsj(reportTime);
 			e.setZxksdm(e.getZxksdm().trim());
 			
-			html.append("<div class='col-sm-1' style=''>"+
+			if(e.getSfsb().equals(recentInvoiceNum)){
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-6'><label><input type='checkbox' checked value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
+			}else{
+				html.append("<div class='col-sm-1' style=''>"+
 						"<div class='col-sm-6'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
+			}
 			if(!bmp.isEmpty()){
 				html.append("<div class='col-sm-4'><img src='"+bmp+"' alt='"+e.getHyfl()+"' width='30px' height='50px' /></div>");
 			}
@@ -352,7 +376,7 @@ public class ExecuteViewController {
 			double hour = 0;
 			c.setTime(qbgsj);
 			ll_day=c.get(Calendar.DAY_OF_WEEK);
-			System.out.println("取单日星期几"+ll_day);
+//			System.out.println("取单日星期几"+ll_day);
 			if(Long.parseLong(ymd.format(qbgsj))<Long.parseLong(ymd.format(now))){
 				qdsj="请与科室联系";
 			}
@@ -371,7 +395,7 @@ public class ExecuteViewController {
 						c.add(Calendar.DAY_OF_MONTH, 1);
 						qbgsj=c.getTime();
 						qdsj = ymdh.format(qbgsj);
-						System.out.println(qdsj);
+//						System.out.println(qdsj);
 					}
 					ll_day -=1;
 					if(ll_day==0)
@@ -440,7 +464,7 @@ public class ExecuteViewController {
 			qdsj = "请与检验部门联系";
 		}
 		
-		System.out.println("结束："+qdsj);
+//		System.out.println("结束："+qdsj);
 		
 		
 		return qdsj+"-"+qbgdd;
@@ -452,4 +476,6 @@ public class ExecuteViewController {
 	private PatientManager patientManager;
 	@Autowired
 	private RMIService rmiService;
+	@Autowired
+	private InvalidSampleManager invalidSampleManager;
 }

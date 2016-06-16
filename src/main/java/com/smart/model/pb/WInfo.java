@@ -38,7 +38,8 @@ public class WInfo {
 	
 	private double holiday;//年休
 	private String defeHoliday;//积休
-	private String defeholidayhis;//历年积休
+	private double defeholidayhis;//历年积休
+	private double lxsy;//历休使用
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -206,11 +207,11 @@ public class WInfo {
 	}
 
 	@Column
-	public String getDefeholidayhis() {
+	public double getDefeholidayhis() {
 		return defeholidayhis;
 	}
 
-	public void setDefeholidayhis(String defeholidayhis) {
+	public void setDefeholidayhis(double defeholidayhis) {
 		this.defeholidayhis = defeholidayhis;
 	}
 
@@ -223,6 +224,15 @@ public class WInfo {
 		this.isActive = isActive;
 	}
 
+	@Column
+	public double getLxsy() {
+		return lxsy;
+	}
+
+	public void setLxsy(double lxsy) {
+		this.lxsy = lxsy;
+	}
+	
 	@Transient
 	public String getTypeString() {
 		String value = "";
@@ -304,4 +314,8 @@ public class WInfo {
 		return num;
 	}
 	
+	@Transient
+	public double getDefeHolidayhisNum(){
+		return defeholidayhis-lxsy;
+	}
 }

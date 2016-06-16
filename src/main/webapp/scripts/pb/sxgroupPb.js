@@ -109,12 +109,16 @@ $(function() {
 	});
 	
 	labChange=function(select){
+		var value = $(select).children().attr("title");
+		if(value ==null || value== undefined)
+			value = $(select).val();
+		
 		$.ajax({
 			  type: 'POST',
-			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+			  url: "../audit/labChange?lab="+value,
 			  success:function(){
 				  $("#labText").html($(select).children().html());
-					window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+					window.location.href="../pb/sxgroupPb?date=" + $("#date").val()+"&section=" +  value;
 			  }
 		});
 		

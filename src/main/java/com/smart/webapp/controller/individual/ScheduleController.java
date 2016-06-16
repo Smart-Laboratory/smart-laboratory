@@ -37,6 +37,7 @@ import com.smart.service.SxArrangeManager;
 import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
+import com.smart.webapp.controller.pb.PbBaseController;
 import com.smart.webapp.util.SectionUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.thoughtworks.xstream.mapper.Mapper.Null;
@@ -44,7 +45,7 @@ import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/pb/pb*")
-public class ScheduleController {
+public class ScheduleController extends PbBaseController {
 	
 	@Autowired
 	private WInfoManager wInfoManager;
@@ -83,16 +84,16 @@ public class ScheduleController {
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
 		
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		String department = user.getPbsection();
 		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
 		if(section==null && user.getLastLab() != null) {
 			section = user.getLastLab();
 		}
+		initLabMap();
 		if (department != null) {
 			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
+				depart.put(s, labMap.get(s));
 				if(section==null || section.isEmpty())
 					section = s;
 			}

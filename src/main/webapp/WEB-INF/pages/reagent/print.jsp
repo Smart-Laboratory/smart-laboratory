@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <c:forEach var="temp" items="${list}" varStatus="status">
@@ -14,3 +15,6 @@
 	<div style="font-size:10px;margin-left:10px;">IMMULITE 1</div>
 	<img src='<%=request.getContextPath() %>/barcode?&msg=1&hrsize=0mm' style="align:left;height:75px;"/>
 </div> --%>
+
+
+	

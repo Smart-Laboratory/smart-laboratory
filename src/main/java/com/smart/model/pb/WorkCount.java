@@ -27,6 +27,7 @@ public class WorkCount extends BaseObject{
 	private double yjx; //月积休
 	private String section;//科室
 	private double holiday;//年休
+	private double defeholiday;//历休使用
 	
 	
 	@Id
@@ -94,6 +95,14 @@ public class WorkCount extends BaseObject{
 	}
 	public void setHoliday(double holiday) {
 		this.holiday = holiday;
+	}
+	
+	@Column
+	public double getDefeholiday() {
+		return defeholiday;
+	}
+	public void setDefeholiday(double defeholiday) {
+		this.defeholiday = defeholiday;
 	}
 	
 	@Override
