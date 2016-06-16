@@ -5,8 +5,6 @@ import java.util.List;
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.ProfileTest;
 
-import java.util.List;
-
 /**
  * Title: ProfileTestDao
  * Description:试验组合

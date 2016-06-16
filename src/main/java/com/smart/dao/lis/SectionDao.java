@@ -4,8 +4,6 @@ import com.smart.model.lis.Section;
 import com.smart.dao.GenericDao;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public interface SectionDao extends GenericDao<Section,Long>{
 

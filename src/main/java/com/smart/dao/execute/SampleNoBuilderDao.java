@@ -1,7 +1,5 @@
 package com.smart.dao.execute;
 
-import java.util.Date;
-
 import com.smart.dao.GenericDao;
 import com.smart.model.execute.SampleNoBuilder;
 

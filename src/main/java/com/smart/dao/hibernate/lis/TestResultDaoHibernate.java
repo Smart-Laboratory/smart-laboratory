@@ -161,6 +161,7 @@ public class TestResultDaoHibernate extends
 			s.merge(tr);
 		}
 		s.flush();
+		s.close();
 	}
 	
 	public void deleteAll(List<TestResult> list){
@@ -169,6 +170,7 @@ public class TestResultDaoHibernate extends
 			s.delete(tr);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")
