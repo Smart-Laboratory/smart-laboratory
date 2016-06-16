@@ -100,6 +100,12 @@
                             参考范围
                         </a>
                     </li>
+                    <li>
+                        <a data-toggle="tab" href="#dictionaries">
+                            <i class="orange ace-icon fa  fa-book bigger-120"></i>
+                            项目字典
+                        </a>
+                    </li>
                 </ul>
                 <form class="form-horizontal" name="infoForm" id="infoForm"  action="/set/devicerelation/saveInfo">
                 <div class="tab-content">
@@ -318,7 +324,6 @@
                             </div>
                         </div>
                     </div><!--不常用信息end-->
-
                     <!--仪器/部门选择start-->
                     <div id="relation" class="tab-pane fade">
                         <div class="row">
@@ -355,8 +360,18 @@
                             </div>
                         </div>
                     </div><!--参考范围end-->
+                    <!--项目字典start-->
+                    <div id="dictionaries" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table id="dicTable"></table>
+                                <div id="dicPager"></div>
+                            </div>
+                        </div>
+                    </div><!--项目字典end-->
                 </div>
                     <textarea style="display: none" name="datas" id="datas"></textarea>
+                    <textarea style="display: none" name="dictionariesData" id="dictionariesData">${dictionaries}</textarea>
                 </form>
             </div>
         </div>
@@ -394,11 +409,20 @@
                 else
                     return null;
             },
+            dictionaries: function(){
+                var str = $('#dictionariesData').val()||'';
+                if(str != '')
+                    return eval("("+str+")");
+                else
+                    return null;
+            },
             method : $('#action_Method').val()||'',
             indexid : $('#index_Id').val()||'',
             refTable:$('#tableList'),                       //参考范围列表
+            dicTable:$('#dicTable'),                        //项目字典列表
             saveUrl:'../devicerelationlist/saveInfo',
-            lastsel:'0'
+            lastsel:'0',
+            lastsel2:'0'
         }
         var public = {
             getMethod:function(){
@@ -475,6 +499,21 @@
                 });
                 datas = public.arrayToJson(datas);
                 $('#datas').text(datas);
+
+                //项目字典
+                cache.dicTable.saveRow(cache.lastsel2, false, 'clientArray');
+                var dicData = cache.dicTable.jqGrid("getRowData");
+                var dicDatas ='';
+
+                $(dicData).each(function(){
+                    if(dicDatas != '')dicDatas +=";";
+                    dicDatas += this.textkey +":"+ this.textvalue;
+                })
+                console.log(dicDatas);
+                //dicDatas = public.arrayToJson(dicDatas);
+                $('#dictionariesData').text(dicDatas);
+                //console.log(dicDatas);
+                //return false;
                 $.ajax({
                     url: cache.saveUrl,
                     type: 'POST',
@@ -583,11 +622,11 @@
                 });
                 //增加工具栏按钮
                 var setting = $('<span class="widget-toolbar" style="right:20px;top:4px"><button type="button" id="add" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加</button>| <button type="button" id="delete" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除</button></span>');
-                $('#gview_tableList').find('.ui-jqgrid-titlebar').append(setting);
+                $('#reference').find('#gview_tableList .ui-jqgrid-titlebar').append(setting);
                 cache.refTable.jqGrid('setGridWidth', $(".rightContent").width(),false);
                 $("#add").click(function (){
                     //增加表格行
-                    var ids = $('#tableList').jqGrid('getDataIDs');
+                    var ids = cache.refTable.jqGrid('getDataIDs');
                     var newId = parseInt(ids[ids.length - 1] || 0) + 1;
                     var rowData = {
                         testid:$('#indexid').val()||'',
@@ -629,6 +668,58 @@
                     });
                 })
             },
+            initDicGrid:function(){
+                var dictionaries= cache.dictionaries();
+                console.log(dictionaries);
+                cache.dicTable.jqGrid({
+                    caption: "项目结果字典",
+                    datatype:'local',
+                    rowNum:dictionaries.length,
+                    data:dictionaries,
+                    colNames: ['快捷键', '字典值'],
+                    colModel: [
+                        {name: 'textkey', index: 'textkey', width: 100,editable: true},
+                        {name: 'testvalue', index: 'testvalue', width: 200,editable: true}
+                    ],
+                    onSelectRow: function (id) {
+                        if (id && id !== cache.lastsel2) {
+                            cache.dicTable.saveRow(cache.lastsel2, false, 'clientArray');
+                            cache.lastsel2 = id;
+                        }
+                        cache.dicTable.editRow(id, false);
+                    },
+                    repeatitems: false,
+                    viewrecords: true,
+                    width: 900,
+                    altRows: true,
+                    height: 300,
+                    rownumbers: true, // 显示行号
+                    rownumWidth: 35
+                });
+                //增加工具栏按钮
+                var setting = $('<span class="widget-toolbar" style="right:20px;top:4px"><button type="button" id="dicAdd" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加</button>| <button type="button" id="dicDelete" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除</button></span>');
+                $('#dictionaries').find('.ui-jqgrid-titlebar').append(setting);
+                cache.dicTable.jqGrid('setGridWidth', $(".rightContent").width(),false);
+                $("#dicAdd").click(function (){
+                    //增加表格行
+                    var ids = cache.dicTable.jqGrid('getDataIDs');
+                    var newId = parseInt(ids[ids.length - 1] || 0) + 1;
+                    var rowData = {
+                        key:'',
+                        value:''
+                    };
+                    cache.dicTable.jqGrid('addRowData', newId, rowData);
+                });
+                //删除表格数据
+                $('#dicDelete').bind('click', function () {
+                    var id = cache.dicTable.jqGrid('getGridParam', 'selrow');
+                    if (id == null || id == 0) {
+                        layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
+                        return false;
+                    }
+                    cache.dicTable.jqGrid('delRowData',id );
+                })
+            },
         }
         return public;
     })()
@@ -647,6 +738,7 @@
             $(this).prev().focus();
         });
         $.Custom.initGrid();
+        $.Custom.initDicGrid();
         $.Custom.initDualListbox();
         $.Custom.loadDualListbox();
         $("#labdepartmentshow").autocomplete({

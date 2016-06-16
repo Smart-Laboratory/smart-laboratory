@@ -148,7 +148,7 @@
         <div class="space-4"></div>
         <div class="layui-layer-btn">
             <a class="layui-layer-btn0" onclick="jQuery.Custom.Save()">保存</a>
-            <a class="layui-layer-btn1" onclick="Cancel()">取消</a>
+            <a class="layui-layer-btn1" onclick="jQuery.Custom.Cancel()">取消</a>
         </div>
     </div>
 </div>
@@ -240,6 +240,10 @@
                         }
                     }
                 })
+            },
+            Cancel:function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             }
         }
         return public;

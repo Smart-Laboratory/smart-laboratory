@@ -171,7 +171,7 @@ public class DeviceRelationListController {
      */
     @RequestMapping(value = "ajaxeditdevicerelation*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView editdevicerelation( HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
+    public ModelAndView getDevicerelation( HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
         ModelAndView view = new ModelAndView("set/ajaxeditdevicerelation");
         Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
         String method = ConvertUtil.null2String(request.getParameter("method"));    //add or edit
@@ -187,10 +187,29 @@ public class DeviceRelationListController {
         for(Device a : devicelist){
             mDevices.put(a.getId(),a.getName());
         }
-        JSONArray jsonArray = new JSONArray();
+
+
+        JSONArray jsonRefArray = new JSONArray();       //参考范围DATA
+        JSONArray jsonDicArray = new JSONArray();       //项目字典DATA
         if(id >0) {
             //获取指标信息
             Index index = indexManager.get(id);
+
+            //生成项目字典
+            String dictionaries = ConvertUtil.null2String(index.getDictionaries());
+            if(!dictionaries.equals("")) {
+                String[] arrDic = dictionaries.split(";");
+                for (String s : arrDic) {
+                    JSONObject jsonObject = new JSONObject();
+
+                    String testKey = ConvertUtil.null2String(s.substring(0, s.indexOf(":")));
+                    String testValue = ConvertUtil.null2String(s.substring(s.indexOf(":")+1));
+                    jsonObject.put("textkey", testKey);
+                    jsonObject.put("testvalue", testValue);
+                    jsonDicArray.put(jsonObject);
+                }
+            }
+            //System.out.println(jsonDicArray.toString());
             //获取参考范围信息
             List<TestReference> testReferences = testReferenceManager.getTestRefenreceListByTestId(index.getIndexId());
 
@@ -207,7 +226,7 @@ public class DeviceRelationListController {
                 jsonObject.put("refhigh", ConvertUtil.null2String(t.getRefHigh()));
                 jsonObject.put("reflower", ConvertUtil.null2String(t.getRefLower()));
                 jsonObject.put("orderno", ConvertUtil.null2String(t.getOrderNo()));
-                jsonArray.put(jsonObject);
+                jsonRefArray.put(jsonObject);
             }
 
             view.addObject("index",index);                  //指标信息
@@ -217,11 +236,12 @@ public class DeviceRelationListController {
         JSONObject jsonDeviceList = new JSONObject(mDevices);
         JSONObject jsonDepartList = new JSONObject(departmentList);
         JSONObject jsonSampleList = new JSONObject(sampleList);
-        view.addObject("references",jsonArray);         //参考范围信息
+        view.addObject("references",jsonRefArray);       //参考范围信息
         view.addObject("departlist",jsonDepartList);    //部门信息
         view.addObject("devicelist",jsonDeviceList);    //仪器信息
         view.addObject("samplelist",sampleList);        //标本信息
-        view.addObject("method",method);        //标本信息
+        view.addObject("method",method);                //标本信息
+        view.addObject("dictionaries",jsonDicArray);    //项目字典信息
         System.out.println(jsonResult.toString());
         return view;
     }
@@ -236,7 +256,7 @@ public class DeviceRelationListController {
      */
     @RequestMapping(value = "/saveInfo*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public String saveActiveInfo(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public String saveInfo(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String indexId = ConvertUtil.null2String(request.getParameter("indexid"));
         Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
         Index index = null;
@@ -302,6 +322,16 @@ public class DeviceRelationListController {
         String instrument = request.getParameter("instrument");     //仪器
         if(!labDepartment.equals("")) index.setLabdepartment(labDepartment);
         if(!instrument.equals("")) index.setInstrument(instrument);
+
+        //项目字典
+        String dictionariesData = request.getParameter("dictionariesData");
+        index.setDictionaries(dictionariesData);
+//        JSONArray jsDictionaries = new JSONArray(dictionariesData);
+//        for (int i = 0; i < jsDictionaries.length(); i++) {
+//            JSONObject obj = jsDictionaries.getJSONObject(i);
+//            String key = ConvertUtil.null2String(obj.getString("key"));
+//            String value = ConvertUtil.null2String(obj.getString("value"));
+//        }
 
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date outdate = sdf.parse(outDate);
