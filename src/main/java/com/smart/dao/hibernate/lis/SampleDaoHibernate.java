@@ -163,6 +163,9 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			date = "________";
 		}
 		
+		if(code == null) {
+			code = "";
+		}
 		String[] cds = code.split(",");
 		StringBuilder builder = new StringBuilder();
 		if (department.contains(",")) {

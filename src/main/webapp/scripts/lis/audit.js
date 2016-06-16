@@ -215,7 +215,17 @@ $(function(){
 	
 	$("#imageBtn").click(function(){
 		getImages($("#hiddenSampleNo").val());
-		$("#imageDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['800px','700px'],
+			  title: '图片',
+			  content: $('#imageDialog'),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	
 	$("#auditBtn2").click(function(){
@@ -239,19 +249,6 @@ $(function(){
 		getProValue();
 	});
 	
-	var isFirstCompare = true;
-	$("#compareBtn").click(function(){
-		var text = $("#sample_compare").val();
-		if(isFirstCompare){
-			getCompareTable(text);
-			isFirstCompare=false;
-		}else{
-			jQuery("#sample_compare_information").jqGrid("setGridParam",{
-				url:"<c:url value='/explain/audit/sampleCompare'/>?sampleNo="+text
-			}).trigger("reloadGrid"); 
-		} 
-		$("#sampleCompareDialog").dialog("open");
-	});
 	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		$('#printFrame').empty();

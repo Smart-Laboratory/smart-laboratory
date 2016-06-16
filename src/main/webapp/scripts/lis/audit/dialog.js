@@ -263,13 +263,6 @@ $(function(){
 	    width: 750,
 	    height: 600
 	});
-	$("#chartDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 680,
-	    height: 480
-	});
 	$("#samplePrint").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -381,68 +374,6 @@ $(function(){
 		modal:true,
 	    width: 380,
 	    height: 460
-	});
-	
-	$("#imageDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 800,
-	    height: 700
-	});
-	
-	$("#codeSetDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 360,
-	    height: 250
-	});
-	
-	$("#writeBackPartDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 480
-	});
-	
-	$("#sampleCompareDialog").dialog({
-		autoOpen: false,
-	    width: 600,
-	    height: 500
-	});
-	
-	$("#allNeedWriteBackDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 580,
-	    height: 320
-	});
-	
-	$("#taskListDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 580,
-	    height: 320
-	});
-	
-	$("#statisticDialog").dialog({
-		autoOpen: false,
-	    width: 600,
-	    height: 500
-	});
-	
-	$("#batchAddResultsDialog").dialog({
-		autoOpen: false,
-	    width: 800,
-	    height: 500
-	});
-	
-	$("#sopDetailDialog").dialog({
-		autoOpen: false,
-	    width: 400
 	});
 	
 	$("#diseaseSelect").autocomplete({
@@ -688,13 +619,13 @@ $(function(){
 		$("#tat_send").html("");
 		$("#tat_ksreceive").html("");
 		$("#audit_tat").html("");
-		var index = layer.open({
+		layer.open({
 		  type: 1,
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
 		  area:['300px','420px'],
-		  title: $("#tatBtn").text(), //不显示标题
-		  content: $('#tatDialog'), //捕获的元素
+		  title: $("#tatBtn").text(),
+		  content: $('#tatDialog'),
 		  cancel: function(index){
 		    layer.close(index);
 		  }
@@ -705,7 +636,7 @@ $(function(){
 			$("#tat_request").html(data.request);
 			$("#tat_execute").html(data.execute);
 			$("#tat_receive").html(data.receive);
-			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-sm btn-info' onclick='getAuditHistory(" + index + ")'>" + data.audit + "</a>");
+			$("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-sm btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
 			$("#tat_auditor").html(data.auditor);
 			$("#tat_result").html(data.result);
 			$("#tat_send").html(data.send);
@@ -766,7 +697,17 @@ $(function(){
 	});
 	
  	$("#statisticDialogBtn").click(function() {
-		$("#statisticDialog").dialog("open");
+ 		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['600px','500px'],
+		  title: '统计查询',
+		  content: $('#statisticDialog'),
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 	});
  	
  	/**
@@ -780,7 +721,17 @@ $(function(){
 				}
 		 });
  		$("#batchAddResults_statistic_table").html("");
- 		$("#batchAddResultsDialog").dialog("open");
+ 		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area: ['800px','500px'],
+			  title: '批量添加结果',
+			  content: $('#batchAddResultsDialog'),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
  	});
  	/**
 	 * 张晋南2016-06-02 标本批量添加默认值
@@ -816,7 +767,7 @@ $(function(){
  			
  			var array = jQuery.parseJSON(data);
  				for (var i=0 ; i < array.length ; i++) {    
- 					$("#batchAddResults_statistic_table").append("<div class='form-group'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-4 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-8'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control' \></div> </div>")
+ 					$("#batchAddResults_statistic_table").append("<div class='col-sm-12' style='margin-top:5px;'><div class='col-sm-2'>&nbsp;</div><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-sm-3 no-padding-right' for='profiledescribe'>"+array[i].name+"</label><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='col-sm-5' \><div class='col-sm-2'>&nbsp;</div></div>")
  			   }
  		});
  	});
@@ -914,8 +865,8 @@ function getDictionaries(inputId){
 
 
 var isFirstTrace = true;
-function getAuditHistory(index) {
-	layer.close(index);
+function getAuditHistory() {
+	layer.closeAll();
 	var sample = $("#hiddenSampleNo").val();
 	if(isFirstTrace){
 		jQuery("#audit_trace_information").jqGrid({
@@ -940,7 +891,7 @@ function getAuditHistory(index) {
 		  type: 1,
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
-		  area:['300px','420px'],
+		  area:['490px','420px'],
 		  title: '审核踪迹', //不显示标题
 		  content: $("#auditTraceDialog"), //捕获的元素
 		  cancel: function(index){

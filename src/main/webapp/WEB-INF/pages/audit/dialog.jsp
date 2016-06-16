@@ -155,10 +155,15 @@
 	<div id="showGalleria"></div>
 	</div>
 	
-	<div id="codeSetDialog" title="<fmt:message key='audit.code.setting' />" style="text-align:left;" >
+</div>
+
+	<div id="imageDialog" style="text-align:left;display:none;" >
+		<div id="showGalleria"></div>
+	</div>
+
+	<div id="codeSetDialog" style="text-align:left;display:none;" >
 		<div style="margin:10px;">
-			<span><fmt:message key='writeback'/></span>
-			<button id="controlAuditBtn" class="btn btn-info">
+			<button id="controlAuditBtn" class="btn btn-sm btn-info">
 			<c:choose>
 				<c:when test="${activeAuto}">
 					<fmt:message key='audit.stop'/>
@@ -168,22 +173,21 @@
 				</c:otherwise>
 			</c:choose>
 			</button>
-			
+			<blockquote><small id="autoAuditNote" ></small></blockquote>
 		</div>
-		<div><blockquote><small id="autoAuditNote" ></small></blockquote></div>
-		<div id="codeSetDiv" >
+		<div id="codeSetDiv" style="margin:10px;">
 			<c:forEach var="code" items="${codeList}">
-			<div class="codeItem" style="margin-bottom:5px;">
+			<div class="codeItem col-sm-12" style="margin-bottom:5px;">
 				<div class="col-sm-3">
-					<label class="checkbox inline">
+					<label class="inline">
 						<input type="checkbox" class="codeCheck input-ctl" <c:if test="${code.active == true}">checked</c:if>>
 						<span class="codeText"><c:out value="${code.labCode}" /></span>
 					</label>
 				</div>
-				<div class="col-sm-9 scopeDiv form-inline" <c:if test="${code.active == false}">style="display:none;"</c:if>>
-					<input class="input-ctl val-lo form-control" style="color:#000000; width:80px;" type="text" value="${code.lo}" /> 
-					<input class="form-control" type="text" style="width:30px;" value="-" disabled/> 
-					<input class="input-ctl val-hi form-control" style="color:#000000; width:80px;" type="text" value="${code.hi}" /> 
+				<div class="col-sm-9 scopeDiv" <c:if test="${code.active == false}">style="display:none;"</c:if>>
+					<input class="input-ctl val-lo" style="color:#000000; width:80px;" type="text" value="${code.lo}" /> 
+					<input type="text" style="width:25px;" value=" - " disabled/> 
+					<input class="input-ctl val-hi" style="color:#000000; width:80px;" type="text" value="${code.hi}" /> 
 				</div>
 			</div>
 			</c:forEach>
@@ -191,54 +195,52 @@
 
 	</div>
 	
-	<div id="sampleCompareDialog" title="<fmt:message key='audit.compare.sample' />" style="text-align:left;" >
-		<table id="sample_compare_information"></table>
-	</div>
-	
-	<div id="allNeedWriteBackDialog" title="<fmt:message key='info.need.writeback' />" style="text-align:left;" >
+	<div id="allNeedWriteBackDialog" style="text-align:left;display:none;" >
 		<table id="need_writeback_table" class="table">
 			
 		</table>
 	</div>
-	
-	<div id="statisticDialog" title="<fmt:message key='statistic.title' />" style="text-align:left;" >
-		<div class='col-sm-12'>
+
+	<div id="statisticDialog" style="text-align:left;display:none;" >
+		<div class='col-sm-12' style="margin-top:10px;">
 			<input id="statistic_code" class="form-control" style="float:left;width:150px;" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
 			<input id="statistic_from" class="form-control" style="float:left;width:150px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
 			<input id="statistic_to" class="form-control" style="float:left;width:150px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
-			<button id="statisticBtn" class="btn btn-info" style="margin-left:8px;"><fmt:message key='button.statistic'/></button>
+			<button id="statisticBtn" class="btn btn-sm btn-info" style="margin-left:8px;"><fmt:message key='button.statistic'/></button>
 		</div>
 		
-		<div style="font-size: 14px;margin-top:45px;">
+		<div class='col-sm-12' style="font-size: 14px;margin-top:10px;">
 			<table id="statistic_table"></table>
 		</div>
 		
 	</div>
+
 	<!-- 标本批量添加默认值 张晋南20160602 -->
-	<div id="batchAddResultsDialog" title="<fmt:message key='batch.add.results' />" style="text-align:left;" >
-		<div >
-			<input id="batchAddResults_statistic_date" onfocus="setDefaultValue()" class="form-control" style="float:left;width:100px;" type="text" />
-			<input id="batchAddResults_statistic_code" onkeyup="this.value=this.value.toUpperCase()" class="form-control" style="float:left;width:100px;;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
-			<select id="batchAddResults_statistic_packages"  style="float:left;width:180px;margin-left:8px;" class="form-control" >
+	<div id="batchAddResultsDialog" style="text-align:left;display:none;" >
+		<div class="col-sm-12" style="margin-top:10px;">
+			<input id="batchAddResults_statistic_date" onfocus="setDefaultValue()" class="col-sm-2" type="text" />
+			<input id="batchAddResults_statistic_code" onkeyup="this.value=this.value.toUpperCase()" class="col-sm-2" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
+			<select id="batchAddResults_statistic_packages" class="col-sm-4" style="height:33px;">
 			</select>
-			<input id="batchAddResults_statistic_begin" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
-			<input id="batchAddResults_statistic_end" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
-			<button id="batchAddResults_statisticBtn_get" class="btn btn-info" style="margin-left:8px;"><fmt:message key='search'/></button>
-			<button id="batchAddResults_statisticBtn_save" class="btn btn-info" style="margin-left:8px;">保存</button>
+			<input id="batchAddResults_statistic_begin" class="col-sm-1" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
+			<input id="batchAddResults_statistic_end" class="col-sm-1" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
+			<button id="batchAddResults_statisticBtn_get" class="btn btn-sm btn-info col-sm-1"><fmt:message key='search'/></button>
+			<button id="batchAddResults_statisticBtn_save" class="btn btn-sm btn-info col-sm-1">保存</button>
 		</div>
-		<div style="font-size: 14px;margin-top:45px;" id="batchAddResults_statistic_table">
+		<div class="col-sm-12" style="margin-top:10px;" id="batchAddResults_statistic_table">
 		</div>
 	</div>
 	
-	<div id="writeBackPartDialog" title="<fmt:message key='writebackpart' />" style="text-align:left;" >
-		<div class='form-inline'>
-			<input id="writeBack_text" class="span4" type="text"/>
-			<button id="writePartBtn" class="btn btn-info"><fmt:message key='writeback'/></button>
+	<div id="writeBackPartDialog" style="text-align:left;display:none;" >
+		<div class="row">
+			<input id="writeBack_text" class="col-sm-4" type="text"/>
+			<button id="writePartBtn" class="btn btn-sm btn-info"><fmt:message key='writeback'/></button>
 		</div>
 		<%-- <label class='checkbox inline'><input type='checkbox' id='checkAll'/><fmt:message key='writebacklist.checkall'/></label> --%>
 	</div>
 	
-	<div id="chartDialog" title="<fmt:message key='result.info' />" style="text-align:left;" >
+	<div id="chartDialog" style="text-align:left;display:none;" >
+		<p class="alert alert-danger" id="chartAlert"><fmt:message key='result.chart.alert'/></p>
 		<div id="singleChartPanel" style="width:640px;height:320px"></div>
 		<table id="chartTongji" class="table">
 			<tbody>
@@ -246,20 +248,12 @@
 			<tr><th><fmt:message key='tongji.ave'/></th><td><span id="tongji_ave"></span></td><th><fmt:message key='tongji.sd' /></th><td><span id="tongji_sd"></span></td><th><fmt:message key='tongji.cov'/></th><td><span id="tongji_cov"></span></td></tr>
 			</tbody>
 		</table>
-		<div id="hmInfo">
-		</div>
+		<div id="hmInfo"></div>
 	</div>
 	
-	<div id="taskListDialog" title="<fmt:message key='usertask.title' />" style="text-align:left;">
-		<table id="tasklist_table" class="table">
-			
-		</table>
-	</div>
-	
-	<div id="sopDetailDialog" style="text-align:left;">
+	<div id="sopDetailDialog" style="text-align:left;display:none;">
 		<div id="sopDetailHtml"></div>
 	</div>
-</div>
 
 	<div id="tatDialog" style="text-align:left;display:none;" >
 		<table class="table">
