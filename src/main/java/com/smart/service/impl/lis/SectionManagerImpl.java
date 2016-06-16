@@ -45,8 +45,8 @@ public class SectionManagerImpl extends GenericManagerImpl<Section, Long> implem
 	}
 
 	@Override
-	public boolean batchRemove(long[] ids) {
-		return sectionDao.batchRemove(ids);
+	public void batchRemove(long[] ids) {
+		sectionDao.batchRemove(ids);
 	}
 
 

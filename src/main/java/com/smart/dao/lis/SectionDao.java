@@ -44,5 +44,6 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	 * @param ids
 	 * @return
      */
-	boolean batchRemove(long[] ids);
+	@Transactional
+	void batchRemove(long[] ids);
 }
