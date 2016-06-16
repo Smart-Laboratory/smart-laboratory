@@ -29,6 +29,7 @@ public class AuditTraceDaoHibernate extends GenericDaoHibernate<AuditTrace, Long
 			s.saveOrUpdate(at);
 		}
 		s.flush();
+		s.close();
 	}
 
 

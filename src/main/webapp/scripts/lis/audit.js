@@ -1,3 +1,25 @@
+function tabChange(id) {
+	if(id == 1) {
+		jQuery("#rowed3").setGridParam().showCol("last2");
+		jQuery("#rowed3").setGridParam().showCol("last3");
+		jQuery("#rowed3").setGridParam().showCol("last4");
+		//jQuery("#rowed3").setGridParam().showCol("device");
+		//jQuery("#rowed3").setGridParam().showCol("unit");
+	} else {
+		$("#patientRow").css('display','block');
+		$("#twosampleTable").css('display','none');
+		jQuery("#rowed3").setGridParam().hideCol("last2");
+		jQuery("#rowed3").setGridParam().hideCol("last3");
+		jQuery("#rowed3").setGridParam().hideCol("last4");
+		//jQuery("#rowed3").setGridParam().hideCol("device");
+		//jQuery("#rowed3").setGridParam().hideCol("unit");
+		var s = jQuery("#list").jqGrid('getGridParam','selrow');
+		if (id == 0) {
+			getExplain(s);
+		}
+	}
+}
+
 $(function(){
 	$("#footer").css('display','none');
 	$("#labSelect").val($("#lab").val());
@@ -5,32 +27,6 @@ $(function(){
 	getList($("#sampletext").val(),$("#labSelect").val());
 
 	getSopSchedule($("#labSelect").val());
-	
-	$("#historyTabs").tabs({
-		active : 1,
-		activate : function(event, ui) {
-			var id = ui.newPanel.attr("id");
-			if(id == "tabs-1") {
-				jQuery("#rowed3").setGridParam().showCol("last2");
-				jQuery("#rowed3").setGridParam().showCol("last3");
-				jQuery("#rowed3").setGridParam().showCol("last4");
-				//jQuery("#rowed3").setGridParam().showCol("device");
-				jQuery("#rowed3").setGridParam().showCol("unit");
-			} else {
-				$("#patientRow").css('display','block');
-    			$("#twosampleTable").css('display','none');
-				jQuery("#rowed3").setGridParam().hideCol("last2");
-				jQuery("#rowed3").setGridParam().hideCol("last3");
-				jQuery("#rowed3").setGridParam().hideCol("last4");
-				//jQuery("#rowed3").setGridParam().hideCol("device");
-				jQuery("#rowed3").setGridParam().hideCol("unit");
-				var s = jQuery("#list").jqGrid('getGridParam','selrow');
-				if (id == "tabs-0") {
-					getExplain(s);
-				}
-			}
-		}
-	});
 	
 	$("#reason_block").click(function() {
 		$("#reason_none").css('display','inline');
@@ -219,7 +215,17 @@ $(function(){
 	
 	$("#imageBtn").click(function(){
 		getImages($("#hiddenSampleNo").val());
-		$("#imageDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['800px','700px'],
+			  title: '图片',
+			  content: $('#imageDialog'),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	
 	$("#auditBtn2").click(function(){
@@ -243,19 +249,6 @@ $(function(){
 		getProValue();
 	});
 	
-	var isFirstCompare = true;
-	$("#compareBtn").click(function(){
-		var text = $("#sample_compare").val();
-		if(isFirstCompare){
-			getCompareTable(text);
-			isFirstCompare=false;
-		}else{
-			jQuery("#sample_compare_information").jqGrid("setGridParam",{
-				url:"<c:url value='/explain/audit/sampleCompare'/>?sampleNo="+text
-			}).trigger("reloadGrid"); 
-		} 
-		$("#sampleCompareDialog").dialog("open");
-	});
 	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		$('#printFrame').empty();

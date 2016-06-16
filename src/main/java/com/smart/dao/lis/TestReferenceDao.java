@@ -1,7 +1,6 @@
 package com.smart.dao.lis;
 
 import com.smart.dao.GenericDao;
-import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.TestReference;
 
 import java.util.List;

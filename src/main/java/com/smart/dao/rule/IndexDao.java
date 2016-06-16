@@ -2,8 +2,6 @@ package com.smart.dao.rule;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Index;
 
@@ -16,14 +14,29 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param isAsc
 	 * @return
 	 */
-	@Transactional
 	List<Index> getIndexs(int pageNum, String field, boolean isAsc);
-	
+
+	/**
+	 * 分页查询
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+     * @param sord
+     * @return
+     */
+	List<Index> getIndexs(String query, int start, int end, String sidx, String sord);
+	/**
+	 * 获取分页记录数
+	 * @param query
+	 * @param type
+	 * @return
+	 */
+	int getIndexsCount(String query, int start, int end, String sidx, String sord);
 	/**
 	 *  指标数
 	 * @return
 	 */
-	@Transactional
 	int getIndexsCount();
 	
 	/**
@@ -34,15 +47,20 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param isAsc
 	 * @return
 	 */
-	@Transactional
 	List<Index> getIndexsByCategory(String sample, int pageNum, String field, boolean isAsc);
 	
+	/**
+	 * 
+	 * @param indexId
+	 * @param labDepartment
+	 * @return
+	 */
+	List<Index> getIndexsByIdandLab(String indexId ,String labDepartment);
 	/**
 	 *  该样本来源下的指标数
 	 * @param sample
 	 * @return
 	 */
-	@Transactional
 	int getIndexsCount(String sample);
 	
 	/**
@@ -50,7 +68,6 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param index
 	 * @return
 	 */
-	@Transactional
 	List<Index> getIndexs(String indexName);
 	
 	/**
@@ -58,7 +75,6 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param indexId
 	 * @return
 	 */
-	@Transactional
 	Index getIndex(String indexId);
 	
 	/**
@@ -69,10 +85,8 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param isAsc
 	 * @return
 	 */
-	@Transactional
 	List<Index> getIndexsByName(String name, int pageNum, String field, boolean isAsc);
 
-	@Transactional
 	List<Index> getIndexsByQuery(String query);
 	
 	/**
@@ -80,6 +94,5 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @param name
 	 * @return
 	 */
-	@Transactional
 	int getIndexsByNameCount(String name);
 }

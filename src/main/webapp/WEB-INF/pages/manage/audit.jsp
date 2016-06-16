@@ -4,14 +4,10 @@
     <title><fmt:message key="sample.manage.audit"/></title>
         
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/lis/audit.css'/>" />
 	
-    
-    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../scripts/jquery.tablednd_0_5.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
@@ -24,6 +20,7 @@
     <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
     <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
 	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
+	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
 	<script type="text/javascript" src="../scripts/lis/audit.js"></script>
 
 <style>
@@ -48,30 +45,11 @@ p{
 	<%@ include file="../audit/top.jsp" %>
 </div>
 
-<div class="col-sm-12">
-	<%@ include file="../audit/left.jsp" %>
-	<%@ include file="../audit/middle.jsp" %>
+<div class="row">
+	<div class="col-sm-12">
+		<%@ include file="../audit/left.jsp" %>
+		<%@ include file="../audit/middle.jsp" %>
+	</div>
 </div>
-
-
-<div id="footer2" class="col-sm-12" style="padding-top:20px;">
-		<hr style="width:100%;height:1px;border:none;border-top:1px solid #555555; "/>
-        <span class="col-sm-6" >
-        	<fmt:message key="project.name"/> | 
-        	<fmt:message key="webapp.version"/>
-            <c:if test="${pageContext.request.remoteUser != null}">
-            | <fmt:message key="user.status"/> ${pageContext.request.remoteUser}
-            </c:if>
-            | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
-       	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
-   		</span>
-   		<span class="col-sm-2" style="float:right;">
-       		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
-        </span>
-        
-        
-</div>
-
-
 <%@ include file="../audit/dialog.jsp" %>
 </body>

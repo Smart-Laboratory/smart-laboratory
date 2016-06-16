@@ -38,14 +38,12 @@
  		var docNo = ret.id;
 		$.get("../audit/patient",{id:docNo},function(data){
 			if (data.isOverTime) {
-				$('#tatDialog').dialog("option","title", "TAT超时");
 				$("#tatBtn").html("<b style='color: #FF4500;'>TAT超时</b>");
 			} else {
-				$('#tatDialog').dialog("option","title", "TAT");
 				$("#tatBtn").html("<b>TAT</b>");
 			}
 			
-    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false && $("#historyTabs").tabs('option', 'active') == 1) {
+    		if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false && $('#historyTabs').find('li.active a').attr('href') == "#tabs-1") {
     			$("#twosampleTable").css('display','block');
         		$("#patientRow").css('display','none');
         		if(isFirst){
@@ -86,14 +84,15 @@
 				jQuery("#sample1").setGridParam().hideCol("ab");
 			}
 			
-    		if ($("#historyTabs").tabs('option', 'active') == 0) {
+			var activeTab = $('#historyTabs').find('li.active a').attr('href');
+    		if (activeTab == "#tabs-0") {
     			$("#patientRow").css('display','block');
     			$("#twosampleTable").css('display','none');
     			jQuery("#audit_information").jqGrid("setGridParam",{
    					url:"../audit/explain?id="+ret.id,
    					editurl: "../audit/explain/edit?docNo=" + ret.id
    				}).trigger("reloadGrid");
-    		} else if ($("#historyTabs").tabs('option', 'active') == 1) {
+    		} else if (activeTab == "#tabs-1") {
 				jQuery("#rowed3").setGridParam().showCol("last2");
 				jQuery("#rowed3").setGridParam().showCol("last3");
 				jQuery("#rowed3").setGridParam().showCol("last4");
@@ -215,14 +214,14 @@
 		   		{name:'color',index:'color',hidden:true},
 		   		{name:'ab',index:'ab',width:width*0.15,hidden:true},
 		   		{name:'name',index:'name',width:width*0.15,sortable:false},
-		   		{name:'result',index:'result',width:width*0.09,sortable:false,editable:true},
-		   		{name:'last',index:'last',width:width*0.09,sortable:false},
-		   		{name:'last1',index:'last1',width:width*0.09,sortable:false},
-		   		{name:'last2',index:'last2',width:width*0.09,sortable:false},
+		   		{name:'result',index:'result',width:width*0.08,sortable:false,editable:true},
+		   		{name:'last',index:'last',width:width*0.08,sortable:false},
+		   		{name:'last1',index:'last1',width:width*0.08,sortable:false},
+		   		{name:'last2',index:'last2',width:width*0.08,sortable:false},
 		   		{name:'last3',index:'last3',width:width*0.09,sortable:false},
-		   		{name:'last4',index:'last4',width:width*0.09,sortable:false},
+		   		{name:'last4',index:'last4',width:width*0.08,sortable:false},
 		   		{name:'checktime',index:'checktime',width:width*0.08,sortable:false},
-		   		{name:'device',index:'device',width:width*0.06,sortable:false},
+		   		{name:'device',index:'device',width:width*0.08,sortable:false},
 		   		{name:'scope',index:'scope',width:width*0.09,sortable:false},
 		   		{name:'unit', sortable:false, width:width*0.08,index:'unit'},
 		   		{name:'knowledgeName',index:'knowledgeName',hidden:true},
@@ -440,9 +439,24 @@
 				}
 			},
 			onRightClickRow: function(id) {
+				//关闭浏览器右键
+				document.oncontextmenu=function(){return false;};
 				var sample=$("#hiddenSampleNo").val();
 				$.get("../audit/ajax/singleChart",{id:id, sample:sample},function(data){
-					$("#chartDialog").dialog("open");
+					$("#chartAlert").css("display","none");
+					layer.open({
+						  type: 1,
+						  shade: 0.4,
+						  skin: 'layui-layer-lan',
+						  area:['680px','540px'],
+						  title: '样本项目试剂信息和历史记录',
+						  content: $('#chartDialog'),
+						  cancel: function(index){
+						    layer.close(index);
+						    //关闭浏览器右键
+						    document.oncontextmenu=function(){return true;};
+						  }
+						});
 					$("#hmInfo").empty();
 					for (var i=0; i< data.hmList.length; i++) {
 						$("#hmInfo").append(data.hmList[i]);
@@ -504,7 +518,7 @@
 				            }]  
 				        });
 					} else {
-						alert('该检验项目没有历史记录或检验结果不是数值或无参考范围！');
+						$("#chartAlert").css("display","block");
 					}
 		 		});
 			},
@@ -1186,9 +1200,9 @@
 			colNames:['项目名称','修改类型','修改前'
 			          ,'修改后','修改时间','修改者'],
 		   	colModel:[{name:'test',index:'test',width:80,sortable:false},
-		   		{name:'type',index:'type',width:60,sortable:false},
-		   		{name:'oldValue',index:'oldValue',width:40,sortable:false},
-		   		{name:'newValue',index:'newValue',width:40,sortable:false},
+		   		{name:'type',index:'type',width:70,sortable:false},
+		   		{name:'oldValue',index:'oldValue',width:50,sortable:false},
+		   		{name:'newValue',index:'newValue',width:50,sortable:false},
 		   		{name:'modifyTime',index:'modifyTime',sortable:false},
 		   		{name:'modifyUser',index:'modifyUser',width:60,sortable:false}],
 		   	height: '100%'
@@ -1350,16 +1364,56 @@ function getDetailSop(type) {
 	});		
 	switch (type) {
 	case 0:
-		$('#sopDetailDialog').dialog("option","title", "通用文档熟悉度").dialog('open');
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '通用文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		break;
 	case 1:
-		$('#sopDetailDialog').dialog("option","title", "专业文档熟悉度").dialog('open');
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '专业文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 		break;
 	case 2:
-		$('#sopDetailDialog').dialog("option","title", "仪器文档熟悉度").dialog('open');
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '仪器文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 		break;
 	case 3:
-		$('#sopDetailDialog').dialog("option","title", "项目文档熟悉度").dialog('open');
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '项目文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		break;
 	}
 }
@@ -1387,15 +1441,6 @@ $(function() {
 				alert("Fail!!!")
 			}
 	    }
-	});
-	
-	$("#AuditCodeSetting").click(function(){
-		if ($("#hiddenAuditConfirm").val() == 'true') {
-			$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
- 		} else {
-			$("#codeSetDiv .input-ctl").removeAttr('disabled');
- 		}
-		$("#codeSetDialog").dialog("open");
 	});
 	
 	$("#controlAuditBtn").click(function() {
@@ -1451,7 +1496,17 @@ $(function() {
 				url:"../audit/testModify?sampleNo="+$("#hiddenSampleNo").val()
 			}).trigger("reloadGrid");
 		}
-		$("#testModifyDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['480px','420px'],
+			  title: '样本修改', 
+			  content: $('#testModifyDialog'), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	$("#colorHelp").append("<span class='c_td diff_td'> </span>\u5dee\u503c <span class='c_td ratio_td'> </span>\u6bd4\u503c <span class='c_td re_td'> </span>\u590d\u68c0<span class='c_td dan_td'></span>\u5371\u6025 <span class='c_td al2_td'> </span>\u8b66\u62121 <span class='c_td al3_td'> </span>\u8b66\u62122 <span class='c_td ex_td'> </span>\u6781\u503c");
 

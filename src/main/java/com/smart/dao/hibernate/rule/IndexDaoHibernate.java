@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.rule;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -31,6 +32,33 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.list();
 	}
 
+	@Override
+	public List<Index> getIndexs(String query, int start, int end, String sidx, String sord) {
+		String sql = "select lab_index.* from lab_index  where 1=1";
+		sql += query;
+
+		sidx = sidx.equals("") ? "id" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		SQLQuery q = getSession().createSQLQuery(sql);
+		//System.out.println(sql);
+		if(end !=0){
+			q.setFirstResult(start);
+			q.setMaxResults(end);
+		}
+		return q.addEntity(Index.class).list();
+	}
+
+	@Override
+	public int getIndexsCount(String query, int start, int end, String sidx, String sord) {
+		String sql = "select count(1) cnt from lab_index  where 1=1";
+		if(query != null && !query.equals(""))
+			sql += query;
+		sidx = sidx.equals("") ? "id" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		Query q =  getSession().createSQLQuery(sql);
+		return new Integer(q.uniqueResult() + "");
+	}
+
 	// 待增加疾病种类和检验专业的搜索
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexsByCategory(String sample, int pageNum, String field, boolean isAsc) {
@@ -51,6 +79,12 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexs(String indexName) {
 		List<Index> indexs = getSession().createQuery("from Index where name like '" + indexName + "%'  or english like '"+indexName+"%' order by name,sampleFrom").list();
+		return indexs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Index> getIndexsByIdandLab(String indexId ,String labDepartment){
+		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment = '"+labDepartment+"'").list();
 		return indexs;
 	}
 
@@ -90,7 +124,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.list();
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<Index> getIndexsByQuery(String q) {
 		String sql = "select lab_index.* from lab_index  where 1=1";
 		sql += q;
@@ -101,5 +135,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	public int getIndexsByNameCount(String name) {
 		return ((Number)getSession().createQuery("select count(*) from Index where name like '"+name+"%'").iterate().next()).intValue();
 	}
+	
+	
 
 }

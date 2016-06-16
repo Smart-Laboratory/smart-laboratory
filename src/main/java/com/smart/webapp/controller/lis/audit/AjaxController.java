@@ -240,8 +240,8 @@ public class AjaxController extends BaseAuditController {
 	public void uploadElectronicSignatureImgs(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
 		String username = multipartRequest.getRemoteUser();
 		String realPath = multipartRequest.getServletContext().getRealPath("/");
-	    String uploadFileUrl = realPath+"\\images\\electronicSignature";
-	    String uploadFileUrl_bak = "C:\\images\\electronicSignature";
+	    String uploadFileUrl = realPath+"\\images\\bmp";
+	    String uploadFileUrl_bak = "C:\\images\\bmp";
 	    
 	    int count = 0;
 	    multipartRequest.setAttribute("addr", realPath);
@@ -281,7 +281,7 @@ public class AjaxController extends BaseAuditController {
 		
 		 //返回结果  
 		JSONObject obj = new JSONObject();
-		String imgurl = "../images/electronicSignature/"+username+".bmp";
+		String imgurl = "../images/bmp/"+username+".bmp";
 		obj.put("imgurl", imgurl);
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(obj.toString());

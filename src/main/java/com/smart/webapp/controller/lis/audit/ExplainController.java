@@ -58,10 +58,8 @@ public class ExplainController extends BaseAuditController {
 		String needreason = request.getParameter("needReason");
 		if(needreason==null || needreason.isEmpty())
 			needreason = "true";
-		boolean needReason =Boolean.parseBoolean(needreason);
-		
-		
-		if (StringUtils.isEmpty(id))
+		boolean needReason = Boolean.parseBoolean(needreason);
+		if (id.equals("null") || StringUtils.isEmpty(id))
 			return null;
 //			throw new NullPointerException();
 		Sample info = new Sample();

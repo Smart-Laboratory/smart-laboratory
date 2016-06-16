@@ -2,18 +2,14 @@ package com.smart.dao;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.smart.model.Dictionary;
 
 public interface DictionaryDao extends GenericDao<Dictionary, Long> {
-	@Transactional
+
 	List<Dictionary> getPatientInfo(String name);
 
-	@Transactional
 	List<Dictionary> getSampleType();
 
-	@Transactional
 	List<Dictionary> getDeviceType();
 	/**
 	 * 获取记录数

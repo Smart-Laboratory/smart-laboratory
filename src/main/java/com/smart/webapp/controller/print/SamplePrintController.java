@@ -111,14 +111,14 @@ public class SamplePrintController extends BaseAuditController {
 		//由于process.getCheckoperator() 有工号有姓名，需要区分
 		String username = UserUtil.getInstance(userManager).getKey(process.getCheckoperator());
 		//实现获取电子签名
-        String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\electronicSignature";
+        String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\bmp";
 		File dzqm_dir = new File(dzqm_filepath);
 		if (dzqm_dir.exists()) {
 			for (File dzqm_f : dzqm_dir.listFiles()) {
 				//去掉后缀
 				int dot = dzqm_f.getName().lastIndexOf('.'); 
 				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
-					dzqm_imghtm += "../images/electronicSignature/" + dzqm_f.getName() + ";";
+					dzqm_imghtm += "../images/bmp/" + dzqm_f.getName() + ";";
 				}
 			}
 		}

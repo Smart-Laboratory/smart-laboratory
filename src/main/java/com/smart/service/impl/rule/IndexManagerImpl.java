@@ -29,12 +29,46 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexs(pageNum, field, isAsc);
 	}
 
+	@Override
+	public List<Index> getIndexs(String query,String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
+		String querySql = " ";
+		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
+		if(!departmentid.equals("") && !departmentid.equals("other")){
+			departmentid+=",";
+			querySql += "  and  lab_index.labdepartment like '%"+departmentid+"%'";
+		}else {
+			if(isAdmin){
+				querySql += "  and  (lab_index.labdepartment is null or lab_index.labdepartment='')";
+			}
+		}
+		return indexDao.getIndexs(querySql,start,end,sidx,sord);
+	}
+
+	@Override
+	public int getIndexsCount(String query, String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
+		String querySql = " ";
+		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
+		if(!departmentid.equals("") && !departmentid.equals("other")){
+			departmentid+=",";
+			querySql += "  and  lab_index.labdepartment like '%"+departmentid+"%'";
+		}else {
+			if(isAdmin){
+				querySql += "  and  (lab_index.labdepartment is null or lab_index.labdepartment='')";
+			}
+		}
+		return indexDao.getIndexsCount(querySql,start,end,sidx,sord);
+	}
+
 	public List<Index> getIndexs(String sample, int pageNum, String field, boolean isAsc) {
 		return indexDao.getIndexsByCategory(sample, pageNum, field, isAsc);
 	}
 
 	public int getIndexsCount() {
 		return indexDao.getIndexsCount();
+	}
+	
+	public List getIndexsByIdandLab(String indexId ,String labDepartment){
+		return indexDao.getIndexsByIdandLab(indexId,labDepartment);
 	}
 
 	public int getIndexsCount(String sample) {

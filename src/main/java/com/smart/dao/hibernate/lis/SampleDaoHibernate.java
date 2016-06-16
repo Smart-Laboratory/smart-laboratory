@@ -10,13 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
@@ -24,7 +21,6 @@ import com.smart.model.util.NeedWriteCount;
 
 
 @Repository("sampleDao")
-@Transactional
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
 
 	public SampleDaoHibernate() {
@@ -112,6 +108,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			s.saveOrUpdate(sample);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -163,6 +160,9 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			date = "________";
 		}
 		
+		if(code == null) {
+			code = "";
+		}
 		String[] cds = code.split(",");
 		StringBuilder builder = new StringBuilder();
 		if (department.contains(",")) {

@@ -8,8 +8,6 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
-
-
     <script type="text/javascript" src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/bootstrap.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
@@ -29,7 +27,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery.jqGrid.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js"/>"></script>
-
+    <script type="text/javascript" src="<c:url value="/scripts/validform/Validform.min.js"/>"></script>
     <style>
         .ui-jqgrid {
             border: 1px solid #ddd;
@@ -109,35 +107,36 @@
     </div>
     <div class="row">
         <div class="space-6"></div>
-        <div class="col-xs-6 form-horizontal">
+        <form class="form-horizontal" name="profiletestForm" id="profiletestForm" action="#">
+        <div class="col-xs-6 ">
             <div class="form-group">
                 <label class="col-xs-3 control-label no-padding-right" for="profilename"> 缩写 </label>
                 <div class="col-xs-9">
-                    <input type="text"  class="col-xs-9" id="profilecode" name="profilecode" placeholder="缩写"/>
+                    <input type="text"  class="col-xs-9" id="profilename" name="profilename" placeholder="缩写" datatype="s3-3"  nullmsg="请输入缩写！" errormsg="缩写为3个字符！"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-3 control-label no-padding-right" for="profilecode"> 代号 </label>
                 <div class="col-xs-9">
-                    <input type="text"  class="col-xs-9" id="profilename" name="profilename" placeholder="代号"/>
+                    <input type="text"  class="col-xs-9" id="profilecode" name="profilecode" placeholder="代号"  datatype="*2-2"  nullmsg="请输入代号！"  errormsg="代号为2个字符！"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-3 control-label no-padding-right" for="profiledescribe"> 组合试验名称 </label>
                 <div class="col-xs-9">
-                    <input type="text" class="col-xs-9" id="profiledescribe" name="profiledescribe" placeholder="组合试验名称"/>
+                    <input type="text" class="col-xs-9" id="profiledescribe" name="profiledescribe" placeholder="组合试验名称" datatype="*" nullmsg="请输入组合试验名称！"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-3 control-label no-padding-right" for="sectionid"> 分析科室 </label>
                 <div class="col-xs-9">
-                    <input type="text" class="col-xs-9" id="sectionid" name="sectionid" placeholder="分析科室"/>
+                    <input type="text" class="col-xs-9" id="sectionid" name="sectionid" placeholder="分析科室" value="" datatype="*" nullmsg="请输入分析科室！"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-3 control-label no-padding-right" for="deviceid"> 分析仪器 </label>
                 <div class="col-xs-9">
-                    <input type="text" class="col-xs-9" id="deviceid" name="deviceid" placeholder="分析仪器"/>
+                    <input type="text" class="col-xs-9" id="deviceid" name="deviceid" placeholder="分析仪器" datatype="*" nullmsg="请输入分析仪器！"/>
                 </div>
             </div>
             <div class="form-group">
@@ -163,24 +162,40 @@
             <table id="rightGrid"></table>
             <div id="rightPager"></div>
         </div>
+        </form>
     </div>
 </div>
+
+<input type="hidden" id="section" value="">
+<input type="hidden" id="device" value="">
+<input type="hidden" id="profiletestid" value="${id}">
 <script type="text/javascript">
+    var profileInfo = '${profileTest}';
+    if(profileInfo !='') profileInfo = eval("("+'${profileTest}'+")");
+
+    /*
+    * 保存
+    * */
     function Save(){
         var obj={};
         obj.profilecode = $('#profilecode').val()||'';
         obj.profilename = $('#profilename').val()||'';
         obj.profiledescribe = $('#profiledescribe').val()||'';
-        obj.sectionid = $('#sectionid').val()||'';
-        obj.deviceid = $('#deviceid').val()||'';
+        obj.sectionid = $('#section').val()||'';
+        obj.deviceid = $('#device').val()||'';
         obj.sampletype = $('#sampletype').val();
         obj.frequencytime = $('#frequencytime').val();
         obj.usenow = $('#usenow').val();
+        obj.id = $('#profiletestid').val();
         obj.indexids = "";
 
-        var rows = $("#rightGrid").jqGrid("getRowData");
+
+        var rowDatas = $("#rightGrid").jqGrid("getRowData");
+
+        console.log(rowDatas)
+        //return false;
         var datas = [];
-        jQuery(rows).each(function(){
+        jQuery(rowDatas).each(function(){
             console.log(this);
             datas.push(this.indexid);
         });
@@ -213,9 +228,11 @@
                 sampletype:obj.sampletype,
                 frequencytime:obj.frequencytime,
                 usenow:obj.usenow,
-                indexids:obj.indexids
+                indexids:obj.indexids,
+                id:obj.id
         },function(data){
-
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);
         })
     }
     /**
@@ -228,7 +245,6 @@
             return false;
         }
         $("#rightGrid").jqGrid('delRowData',id );
-
     }
     /*
     * 取消
@@ -239,11 +255,36 @@
     }
     $(function(){
         pageInit();
-//        $("#tableList").jqGrid('setGridParam',{
-//            datatype:'local',
-//            rowNum:references.length,
-//            data:references
-//        }).trigger('reloadGrid');//重新载入
+        $("#profiletestForm").Validform({
+            tiptype:4,
+            btnSubmit:"#btn_sub",
+            submitHandler: function(form) {
+                save();
+            }
+        });
+
+        //加载数据
+        if(profileInfo){
+            console.log(profileInfo)
+            $('#profilecode').val(profileInfo.profileCode);
+            $('#profilename').val(profileInfo.profileName);
+            $('#profiledescribe').val(profileInfo.profileDescribe);
+            $('#frequencytime').val(profileInfo.frequencyTime);
+            $('#deviceid').val(profileInfo.deviceName);
+            $('#device').val(profileInfo.deviceId);
+            $('#sectionid').val(profileInfo.sectionName);
+            $('#section').val(profileInfo.sectionId);
+            $('#frequencytime').val(profileInfo.frequencyTime);
+            $('#sampletype').val(profileInfo.sampleType);
+            $('#usenow').val(profileInfo.useNow);
+
+        $("#rightGrid").jqGrid('setGridParam',{
+            datatype:'local',
+            rowNum:profileInfo.indexs.length,
+            data:profileInfo.indexs
+        }).trigger('reloadGrid');//重新载入
+        }
+
     });
     function pageInit(){
         $("#rightGrid").jqGrid( {
@@ -352,7 +393,7 @@
         },
         minLength: 1,
         select : function(event, ui) {
-            $("#deviceid").val(ui.item.id);
+            $("#device").val(ui.item.id);
         }
     });
     /**
@@ -368,10 +409,11 @@
                 },
                 success: function( data ) {
                     response( $.map( data, function( result ) {
+                        console.log(result)
                         return {
                             label: result.code + " : " + result.name,
                             value: result.name,
-                            id : result.id
+                            code : result.code
                         }
                     }));
                     $("#sectionid").removeClass("ui-autocomplete-loading");
@@ -380,9 +422,11 @@
         },
         minLength: 1,
         select : function(event, ui) {
-            $("#sectionid").val(ui.item.id);
+
+            $("#section").val(ui.item.code);
         }
     });
+
 
 </script>
 

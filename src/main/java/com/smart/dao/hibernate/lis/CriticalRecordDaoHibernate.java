@@ -22,6 +22,7 @@ public class CriticalRecordDaoHibernate extends GenericDaoHibernate<CriticalReco
 			s.saveOrUpdate(cr);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")

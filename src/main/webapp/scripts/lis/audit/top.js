@@ -29,12 +29,22 @@ $(function(){
  			});
  		});
  		
- 		$("#allNeedWriteBackDialog").dialog("open");
+ 		layer.open({
+ 			  type: 1,
+ 			  shade: 0.4,
+ 			  skin: 'layui-layer-lan',
+ 			  area:['580px','320px'],
+ 			  title: '需要写回',
+ 			  content: $('#allNeedWriteBackDialog'),
+ 			  cancel: function(index){
+ 			    layer.close(index);
+ 			  }
+ 			});
  	});
 	
 	$("#writeBackBtn").click(function() {
 		if($("#hiddenAuditConfirm").val() == "false") {
-			alert("写回未开启，请到写回配置中开启写回！");
+			layer.msg("写回未开启，请到写回配置中开启写回！", {icon: 0, time: 1000});
 			return;
 		}
 		var btnText = $("#controlAuditBtn").html().trim();
@@ -78,7 +88,7 @@ $(function(){
 					}
 				}
 			} else {
-				alert(codeAll + "中有未设置的检验者，请先查看检验者设置！");
+				layer.msg(codeAll + "中有未设置的检验者，请先查看检验者设置！", {icon: 0, time: 1000});
 			}
 		});
 		
@@ -87,7 +97,7 @@ $(function(){
 	var isFirstCliclkPart = true;
 	$("#writeBackPartBtn").click(function() {
 		if($("#hiddenAuditConfirm").val() == "false") {
-			alert("写回未开启，请到写回配置中开启写回！");
+			layer.msg("写回未开启，请到写回配置中开启写回！", {icon: 0, time: 1000});
 			return;
 		}
 		if ($("#need_write_back").html() != "0") {
@@ -104,7 +114,17 @@ $(function(){
 				isFirstCliclkPart = false;
 			}
 			//getWriteBackList($("#lastDepLib").val(), "${checkOperator}");
-			$("#writeBackPartDialog").dialog("open");
+			layer.open({
+				  type: 1,
+				  shade: 0.4,
+				  skin: 'layui-layer-lan',
+				  area: '480px',
+				  title: '部分写回',
+				  content: $('#writeBackPartDialog'),
+				  cancel: function(index){
+				    layer.close(index);
+				  }
+				});
 		}
 	});
 	
@@ -122,7 +142,7 @@ $(function(){
 					writeBackPart($("#writeBack_text").val(), $("#labSelect").val(), $("#userText").html());
 				}
 			} else {
-				alert(code + "中有未设置的检验者，请先查看检验者设置！");
+				layer.msg(code + "中有未设置的检验者，请先查看检验者设置！", {icon:0, time: 1000});
 			}
 		});
 	});
@@ -138,12 +158,31 @@ $(function(){
 		}
 	});
 	
+	$("#AuditCodeSetting").click(function(){
+		if ($("#hiddenAuditConfirm").val() == 'true') {
+			$("#codeSetDiv .input-ctl").attr('disabled', 'disabled');
+ 		} else {
+			$("#codeSetDiv .input-ctl").removeAttr('disabled');
+ 		}
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['360px','250px'],
+			  title: '写回代码配置',
+			  content: $('#codeSetDialog'),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
+	});
+	
 });
 
 function writeBackOnce(code, lab, user) {
 	$.getJSON($("#writebackurl").val() + "ajax/writeBack/once.htm?callback=?",{code:code, lib:lab, operator:user},function(data){
 		if (data.result == 0) {
-			alert("正在写回中...");
+			layer.msg("正在写回中...", {time: 1000});
 		} else if (data.result == 1) {
 			$.get("。。/audit/count",{}, function(data) {
 	 			$("#today_info_unaudit").html(data.todayunaudit);
@@ -158,9 +197,9 @@ function writeBackOnce(code, lab, user) {
 	 				$("#div_dangerous").addClass('alert-success');
 	 			}
 	 		},'json');
-			alert("写回成功！");
+			layer.msg("写回成功！", {icon: 1, time: 1000});
 		 } else {
-			alert("写回失败！");
+			layer.msg("写回失败！", {icon: 2, time: 1000});
 		 }
 	});
 }
@@ -169,7 +208,7 @@ function writeBackPart(text, lab, user) {
 		
 	$.getJSON($("#writebackurl").val() + "ajax/writeBack/part.htm?callback=?",{text:text.toUpperCase(), lib:lab, operator:user},function(data){
 		if (data.result == 0) {
-			alert("正在写回中...");
+			layer.msg("正在写回中...", {time: 1000});
 		} else if (data.result == 1) {
 			$.get("../audit/count",{}, function(data) {
 	 			$("#today_info_unaudit").html(data.todayunaudit);
@@ -184,10 +223,12 @@ function writeBackPart(text, lab, user) {
 	 				$("#div_dangerous").addClass('alert-success');
 	 			}
 	 		},'json');
-			alert("写回成功！");
-			$("#writeBackPartDialog").dialog("close");
+			layer.msg("写回成功！", {icon: 1, time: 1000});
+			setTimeout(function(){
+				layer.closeAll();
+			}, 1000);
 		 } else {
-			alert("写回失败！");
+			layer.msg("写回失败！", {icon: 2, time: 1000});
 		 }
 	 });
 }

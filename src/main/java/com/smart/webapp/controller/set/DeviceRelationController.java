@@ -1,9 +1,7 @@
 package com.smart.webapp.controller.set;
 
-import com.smart.model.lis.Channel;
 import com.smart.model.lis.Device;
 import com.smart.model.lis.TestReference;
-import com.smart.model.reagent.In;
 import com.smart.model.rule.Index;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
@@ -14,26 +12,19 @@ import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.DepartUtil;
-import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.core.util.index.IndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.tags.Param;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -45,7 +36,7 @@ import java.util.*;
  * @Version:
  */
 @Controller
-@RequestMapping("/set/devicerelation*")
+@RequestMapping("/set/devicerelation")
 public class DeviceRelationController {
     @Autowired
     private DeviceManager deviceManager = null;
@@ -65,36 +56,45 @@ public class DeviceRelationController {
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView view = new ModelAndView();
         //部门编号
-        String departmentId = request.getParameter("department");
+        String departmentIds = request.getParameter("department");
         //departmentId="3010109";
+
+        //System.out.println(request.getRemoteUser());
         User operator = userManager.getUserByUsername(request.getRemoteUser());
-        departmentId = operator.getLastLab();
-
-        String departmentName = sectionManager.getByCode(departmentId).getName();
-        //检验项目
+        departmentIds = operator.getDepartment();
         List<Index> indexes = indexManager.getAll();
-        JSONArray jsonArray = new JSONArray();
+        JSONArray  arrTree = new JSONArray();
+        String departmentId [] = departmentIds.split(",");
+        for (int  i=0;i<departmentId.length;i++){
+            JSONObject root = new JSONObject();
+            String departmentName = sectionManager.getByCode(departmentId[i]).getName();
+            root.put("id","p_"+departmentId[i]);
+            root.put("pId","0");
+            root.put("name",departmentName);
+            root.put("open","true");
+            arrTree.put(root);
+        }
 
-        JSONObject root = new JSONObject();
-        root.put("id",departmentId);
-        root.put("pId","0");
-        root.put("name",departmentName);
-        root.put("open","true");
-        jsonArray.put(root);
+        //检验项目
         for(Index index :indexes){
             String labDepartment = index.getLabdepartment();
             if(labDepartment==null || "".equals(labDepartment)) continue;
             //判断是否当前部门项目
             JSONObject node = new JSONObject();
             //System.out.println("labDepartment==>"+labDepartment+ "=="+departmentId);
-            if(labDepartment.indexOf(departmentId)>=0){
-                node.put("id",index.getId());
-                node.put("indexid",index.getIndexId());
-                node.put("name",index.getName());
-                node.put("sampletype",index.getSampleFrom());
-                node.put("pId",departmentId);
-                jsonArray.put(node);
+            for (int  i=0;i<departmentId.length;i++) {
+                if(labDepartment.indexOf(departmentId[i])>=0){
+                    node.put("id",index.getId());
+                    node.put("indexid",index.getIndexId());
+                    node.put("name",index.getName());
+                    node.put("sampletype",index.getSampleFrom());
+                    node.put("pId","p_"+departmentId[i]);
+                    //node.put("iconSkin","icon06");
+                    arrTree.put(node);
+                }
+
             }
+
         }
         //获取所有部门信息
         Map<String,String> departmentList = DepartUtil.getInstance(sectionManager).getMap();
@@ -115,9 +115,10 @@ public class DeviceRelationController {
         view.addObject("devicelist",jsonDevice);
         view.addObject("departlist",jsonDepartList);
         view.addObject("samplelist",sampleList);
-        view.addObject("treeNodes",jsonArray);
+        view.addObject("treeNodes",arrTree);
         return  view;
     }
+
 
     /**
      * 查询仪器及部门列表信息

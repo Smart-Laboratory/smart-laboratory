@@ -49,6 +49,10 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getListByTestString(sampleNo,testString);
 	}
 	
+	public TestResult getListByTestId(String sNo,String tid){
+		return testResultDao.getListByTestId(sNo,tid);
+	}
+	
 	public List<TestResult> getSingleHistory(String testid, String patientid) {
 		return testResultDao.getSingleHistory(testid, patientid);
 	}

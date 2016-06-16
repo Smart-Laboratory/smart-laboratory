@@ -106,6 +106,21 @@ public class TestResultDaoHibernate extends
 						+ "' and testId in ('" + testString.replace(",", "','")
 						+ "')").list();
 	}
+	
+	public TestResult getListByTestId(String sampleNo,
+			String testId) {
+		 List  tList = getSession().createQuery(
+				"from TestResult where sampleNo='" + sampleNo
+						+ "' and testId  ='" + testId+ "'").list();
+		 if(null!=tList&&tList.size()>0){
+			 return (TestResult) tList.get(0);
+		 }else{
+			 return null;
+		 }
+		 
+	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getSingleHistory(String testid, String patientid) {
@@ -146,6 +161,7 @@ public class TestResultDaoHibernate extends
 			s.merge(tr);
 		}
 		s.flush();
+		s.close();
 	}
 	
 	public void deleteAll(List<TestResult> list){
@@ -154,6 +170,7 @@ public class TestResultDaoHibernate extends
 			s.delete(tr);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")

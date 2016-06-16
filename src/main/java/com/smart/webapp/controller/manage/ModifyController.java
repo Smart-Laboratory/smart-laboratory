@@ -471,7 +471,7 @@ public class ModifyController {
 						if(oldAndNew.containsKey(sample.getSampleNo())) {
 							Sample s = sample;
 							//插入日志
-							saveSampleLog(s, username, Constants.LOG_OPERATE_REPLACE);
+							saveSampleLog(s, username, Constants.LOG_OPERATE_INVERSION);
 							s.setSampleNo(oldAndNew.get(sample.getSampleNo()));
 							saveList.add(s);
 						}
@@ -486,7 +486,7 @@ public class ModifyController {
 						if(oldAndNew.containsKey(tr.getSampleNo())) {
 							TestResult t = tr;
 							//插入日志
-							saveTestResultLog(tr, username, Constants.LOG_OPERATE_REPLACE);
+							saveTestResultLog(tr, username, Constants.LOG_OPERATE_INVERSION);
 							t.setSampleNo(oldAndNew.get(tr.getSampleNo()));
 							saveList.add(t);
 						}
@@ -569,7 +569,6 @@ public class ModifyController {
 	 */
 	private static String updateSampleNo(String sampleNo,
 			String operationValue, int switchValue) {
-
 		String subSampleNo = sampleNo.substring(11, sampleNo.length());
 		int ssn = stringTOint(subSampleNo);
 		int ov = stringTOint(operationValue);
@@ -589,7 +588,9 @@ public class ModifyController {
 			}
 		}
 		if (flag) {
-			return sampleNo.substring(0, 11) + result;
+			return sampleNo.substring(0, 11) + String.format(
+					"%" + subSampleNo.length() + "d", result)
+					.replace(" ", "0");
 		} else {
 			return null;
 		}

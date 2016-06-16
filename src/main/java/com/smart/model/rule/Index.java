@@ -65,6 +65,7 @@ public class Index extends BaseObject implements Serializable {
 	private int needhistory;
 	private String method;
 	private String defaultvalue;
+	private String dictionaries;
 	
 	private String guide;
 	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
@@ -89,6 +90,14 @@ public class Index extends BaseObject implements Serializable {
 	private String CCV;
 	private String testClass;			//分类代码
 	private Integer qcNeed;				//质控需求
+
+	public String getDictionaries() {
+		return dictionaries;
+	}
+
+	public void setDictionaries(String dictionaries) {
+		this.dictionaries = dictionaries;
+	}
 
 	public Integer getQcNeed() {
 		return qcNeed;

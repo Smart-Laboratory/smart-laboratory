@@ -27,7 +27,28 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @return
 	 */
 	List<Index> getIndexs(int pageNum, String field, boolean isAsc);
-	
+
+	/**
+	 * 分页指标列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+     * @param sord
+     * @return
+     */
+	List<Index> getIndexs(String query,String departmentid, boolean isAdmin,int start, int end, String sidx, String sord);
+
+	/**
+	 * 分页记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	int getIndexsCount(String query, String departmentid,boolean isAdmin,int start, int end, String sidx, String sord);
 	/**
 	 *  指标总数
 	 * @return
@@ -50,6 +71,14 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @return
 	 */
 	int getIndexsCount(String sample);
+	
+	/**
+	 * 根据部门和id获取字典信息
+	 * @param indexId
+	 * @param labDepartment
+	 * @return
+	 */
+	List getIndexsByIdandLab(String indexId ,String labDepartment);
 	
 	/**
 	 *  根据名称模糊查找指标
@@ -81,4 +110,5 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @return
      */
 	List<Index> getIndexsByQuery(String query);
+
 }

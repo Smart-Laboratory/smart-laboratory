@@ -83,8 +83,40 @@
             maxmin: true,
             shade:0.5,
             title: "添加组合试验",
-                content:  '../set/profiletest/ajaxprofiletest'
+                content:  '../set/profiletest/ajaxprofiletest?method=add'
             })
+    }
+    function Edit(){
+        var id=$('#leftGrid').jqGrid('getGridParam','selrow');
+        if(id==null || id==0){
+            layer.msg('请先选择要编辑的数据', {icon: 2,time: 1000});
+            return false;
+        }
+       // var rowData = $("#leftGrid").jqGrid('getRowData',id);
+
+        layer.open({
+            type: 2,
+            area: ['800px','500px'],
+            fix: false, //不固定
+            maxmin: true,
+            shade:0.5,
+            title: "添加组合试验",
+            content:  '../set/profiletest/ajaxprofiletest?method=edit&id='+id
+        })
+    }
+
+    function Delete(){
+        var id=$('#leftGrid').jqGrid('getGridParam','selrow');
+        if(id==null || id==0){
+            layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
+            return false;
+        }
+        layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
+            $.post('../set/profiletest/remove',{id:id},function(data) {
+                jQuery("#leftGrid").jqGrid('delRowData',id );
+            });
+            layer.close(index);
+        });
     }
 
     $(function(){
@@ -126,14 +158,17 @@
                 }, 0);
             },
             onSelectRow: function(id){
-                var rowData = $("#leftGrid").jqGrid('getRowData',id);
+               // var rowData = $("#leftGrid").jqGrid('getRowData',id);
                 jQuery("#rightGrid").jqGrid('setGridParam',{
                     url: "../set/profiletest/getIndexList",
                     datatype : 'json',
                     //发送数据
-                    postData : {"indexids":rowData.profiletest },
+                    postData : {"id":id},
                     page : 1
                 }).trigger('reloadGrid');//重新载入
+            },
+            ondblClickRow:function(id){
+                Edit();
             },
             //multiselect : true,
             rowNum: 10,

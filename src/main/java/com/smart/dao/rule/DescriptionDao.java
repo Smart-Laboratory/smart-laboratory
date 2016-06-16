@@ -2,11 +2,8 @@ package com.smart.dao.rule;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Description;
-import com.smart.model.rule.Rule;
 
 public interface DescriptionDao extends GenericDao<Description, Long> {
 
@@ -17,14 +14,12 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param isAsc 排序方向
 	 * @return
 	 */
-	@Transactional
 	List<Description> getDescription(int pageNum, String field, boolean isAsc);
 	
 	/**
 	 *  返回规则数
 	 * @return
 	 */
-	@Transactional
 	int getDescriptionsCount();
 	
 	/**
@@ -32,7 +27,6 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param category  类别
 	 * @return
 	 */
-	@Transactional
 	List<Description> getDescriptionsByBagID(Long bagId);
 	
 	/**
@@ -43,7 +37,6 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param isAsc
 	 * @return
 	 */
-	@Transactional
 	List<Description> getDescriptionsByBagID(Long bagId, int pageNum, String field, boolean isAsc);
 	
 	/**
@@ -51,7 +44,6 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param bagId
 	 * @return
 	 */
-	@Transactional
 	int getDescriptionsCount(Long bagId);
 	
 	/**
@@ -59,7 +51,6 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param ruleName
 	 * @return
 	 */
-	@Transactional
 	List<Description> getDescriptionsByName(String ruleName);
 	
 	/**
@@ -67,16 +58,12 @@ public interface DescriptionDao extends GenericDao<Description, Long> {
 	 * @param type
 	 * @return
 	 */
-	@Transactional
 	List<Description> getDescriptionByType(int type);
 
-	@Transactional
 	List<Description> getDescriptionList(String descriptionIds);
 	
-	@Transactional
 	List<Description> getDescriptionManual(String descriptionIds);
 
-	@Transactional
 	List<Description> getDescriptionByTypes(String type);
 	
 }

@@ -44,7 +44,6 @@ public class TestResultLog extends BaseObject {
     private int editMark;
     private String method;
     
-    private Long sampleId;
     
     private String logger;
 	private Date logtime;
@@ -252,14 +251,6 @@ public class TestResultLog extends BaseObject {
 		this.logoperate = logoperate;
 	}
 	
-	@Column
-	public Long getSampleId() {
-		return sampleId;
-	}
-
-	public void setSampleId(Long sampleId) {
-		this.sampleId = sampleId;
-	}
 
 	@Transient
 	public TestResult getTestResultEntity() {

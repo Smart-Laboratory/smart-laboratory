@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.smart.Constants;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.smart.model.rule.Index;
 import com.smart.model.user.User;
 import com.smart.service.lis.TestModifyManager;
 import com.smart.model.lis.TestModify;
@@ -218,6 +220,56 @@ public class TestResultAjaxController extends BaseAuditController{
 		// System.out.println(testResult);
 		return true;
 	}
+	
+	@RequestMapping(value = "/ajax/getDictionaries*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getDictionaries(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String error = "error";
+		String inputValue = request.getParameter("inputValue");
+		String indexId = request.getParameter("inputId");
+		String labDepartment = request.getParameter("lab");
+		List <Index>indexList = new ArrayList<Index>();
+		indexList = indexManager.getIndexsByIdandLab(indexId,labDepartment);
+		
+		JSONArray array = new JSONArray();
+		if(null!=indexList&&indexList.size()>0){
+			for(Index index : indexList){
+				
+				String dictionaries = index.getDictionaries();
+				if(null!=dictionaries&&!"".equals(dictionaries)){
+					if(dictionaries.indexOf(";")!=-1){
+						for(String dictionary:dictionaries.split(";")){
+							JSONObject obj = new JSONObject();
+							String []zd = dictionary.split(":");
+							if(zd[0].toUpperCase().indexOf(inputValue.toUpperCase())!=-1){
+								obj.put("id", zd[0]);
+								obj.put("name", zd[1]);
+								array.put(obj);
+							}
+						}
+					}else{
+						String []zd = dictionaries.split(":");
+						if(zd[0].toUpperCase().indexOf(inputValue.toUpperCase())!=-1){
+							JSONObject obj = new JSONObject();
+							obj.put("id", zd[0]);
+							obj.put("name", zd[1]);
+							array.put(obj);
+						}
+					}
+					
+				}else{
+					return error;
+				}
+			}
+		}else{
+			return error;
+		}
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+
+		
 	
 	@Autowired
 	private TestModifyManager testModifyManager;

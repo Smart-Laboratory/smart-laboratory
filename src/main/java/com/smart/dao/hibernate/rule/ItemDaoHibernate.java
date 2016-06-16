@@ -2,6 +2,7 @@ package com.smart.dao.hibernate.rule;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -16,8 +17,10 @@ public class ItemDaoHibernate extends GenericDaoHibernate<Item, Long> implements
 	}
 
 	public Item getWithIndex(Long id) {
-		Item item = (Item) getSession().createQuery("from Item where id=" + id).list().get(0);
+		Session sses = getSession();
+		Item item = (Item) sses.createQuery("from Item where id=" + id).list().get(0);
 		item.getIndex().getIndexId();
+		sses.close();
 		return item;
 	}
 
