@@ -13,28 +13,22 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.smart.service.DictionaryManager;
 import com.smart.service.EvaluateManager;
 import com.smart.service.UserManager;
 import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.TestResultManager;
-import com.smart.service.rule.IndexManager;
-import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.PatientUtil;
+import com.smart.webapp.util.explainUtil;
 import com.zju.api.service.RMIService;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.Constants;
-import com.smart.model.Dictionary;
 import com.smart.model.lis.CollectSample;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.model.lis.Sample;
-import com.smart.model.rule.Item;
 import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.Evaluate;
@@ -173,7 +167,6 @@ public class CollectDialogController {
 //			throw new NullPointerException();
 
 		Sample info = sampleManager.get(Long.parseLong(id));
-		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String ruleIds = info.getRuleIds();
 //		String customResult = user.getReasoningResult();
 		String customResult = null;
@@ -196,7 +189,7 @@ public class CollectDialogController {
 //			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
-					double rank = getRank(rule, re);
+					double rank = explainUtil.instance.getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());
@@ -264,85 +257,9 @@ public class CollectDialogController {
 		return returnRows;
 	}
 	
-	private StringBuilder getItem(JSONObject root, StringBuilder sb) {
-		try {
-			if ("and".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 并 ");
-					}
-				}
-			} else if ("or".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 或 ");
-					}
-				}
-				sb.append(")");
-			} else if ("not".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("非(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-				}
-				sb.append(")");
-			} else {
-				sb.append(getItemStr(root.get("id").toString()));
-			}
-		} catch (Exception e) {
-//			log.error(e.getMessage());
-		}
-		
-		return sb;
-
-	}
 	
-	private String getItemStr(String id) {
-		String result = "";
-		Long ID = Long.parseLong(id.substring(1));
-		if (id.startsWith("P")) {
-			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
-			result = lib.getValue();
-		} else {
-			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
-			String value = item.getValue();
-			if (value.contains("||")) {
-				return testName + value.replace("||", "或");
-			} else if (value.contains("&&")) {
-				return testName + value.replace("&&", "且");
-			}
-			result = testName + value;
-		}
-		return result;
-	}
 	
-	private double getRank(Rule rule, Result re) {
-		double importance = 0;
-		for (Item item : rule.getItems()) {
-			String impo = item.getIndex().getImportance();
-			if (impo != null && !StringUtils.isEmpty(impo)) {
-				importance = Double.parseDouble(impo) + importance;
-			}
-		}
-		double level = 0;
-		if (re.getLevel() != null && !StringUtils.isEmpty(re.getLevel())) {
-			level = Double.parseDouble(re.getLevel());
-		}
-		double precent = 0;
-		if (re.getPercent() != null && !StringUtils.isEmpty(re.getPercent())) {
-			precent = Double.parseDouble(re.getPercent());
-		}
-		return importance * 0.5 + level * 0.3 + precent * 0.1;
-	}
 	
-	@Autowired
-	private IndexManager indexManager;
 	
 	@Autowired
 	private CollectSampleManager collectSampleManager;
@@ -351,16 +268,10 @@ public class CollectDialogController {
 	private SampleManager sampleManager;
 	
 	@Autowired
-	private TestResultManager testResultManager;
-	
-	@Autowired
 	private RMIService rmiService;
 	
 	@Autowired
 	private RuleManager ruleManager;
-	
-	@Autowired
-	private DictionaryManager dictionaryManager;
 	
 	@Autowired
 	private EvaluateManager evaluateManager;
@@ -370,7 +281,4 @@ public class CollectDialogController {
 	
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager;
-	
-	@Autowired
-	private ItemManager itemManager;
 }

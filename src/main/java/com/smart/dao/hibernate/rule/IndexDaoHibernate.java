@@ -83,7 +83,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	}
 	
 	public List getIndexsByIdandLab(String indexId ,String labDepartment){
-		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment = '"+labDepartment+"'").list();
+		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment like '%"+labDepartment+"%'").list();
 		return indexs;
 	}
 

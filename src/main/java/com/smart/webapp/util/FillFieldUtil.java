@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.model.lis.TestResult;
 import com.zju.api.model.Describe;
@@ -50,6 +52,14 @@ public class FillFieldUtil {
 		int li_direct = fillReference(result, age, cycle, sex);
 		filleResultFlag(result, li_direct);
 		return result;
+	}
+	
+	public void fillReference(String testid,JSONObject obj) throws JSONException{
+		if (refMap.containsKey(testid)) {
+			List<Reference> referList = refMap.get(testid);
+			Reference reference = referList.get(0);
+			obj.put("reference", reference.getFREFLO0()+"-"+reference.getFREFHI0());
+		}
 	}
 
 	private int fillReference(TestResult result, int age, int cycle, String sex) {

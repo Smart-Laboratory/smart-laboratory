@@ -965,20 +965,29 @@ public class AuditController extends BaseAuditController {
 		return null;
 	}
 
+	/**
+	 * 张晋南 2016-06-14
+	 * 批量获取结果查询
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/ajax/batchAddResults_statistic_get*", method = RequestMethod.GET)
 	@ResponseBody
 	public String getBatchAddResultsStatisticGet(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String packages = request.getParameter("packages");
-		String bsc = StringUtils.upperCase(request.getParameter("bsc"));
-		String bsb = request.getParameter("bsb");
-		String bse = request.getParameter("bse");
-		String bdate = request.getParameter("bdate");
-		
+		//获取单位
+		List<Describe> desList = rmiService.getDescribe();
+        List<Reference> refList = rmiService.getReference();
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
 		
 		ProfileTest pft = proFileTestManager.get(Long.parseLong(packages));
 		
 		String []pfts = pft.getProfileTest().split(",");
+		//获取结果范围
+		
 		
 		if (idMap.size() == 0)
 			initMap();
@@ -986,6 +995,15 @@ public class AuditController extends BaseAuditController {
 		for (String pftString : pfts) {
 			if(idMap.containsKey(pftString)){
 				JSONObject obj = new JSONObject();
+				Map refMap = new HashMap<String, String>();
+				fillUtil.fillReference(pftString,obj);
+				
+				Describe des = fillUtil.getDescribe(pftString);
+				if (des != null) {
+					obj.put("unit", null==des.getUNIT()?"":des.getUNIT());
+				}else{
+					obj.put("unit","");
+				}
 				obj.put("id", pftString);
 				obj.put("name", idMap.get(pftString).getName());
 				obj.put("value", idMap.get(pftString).getDefaultvalue());

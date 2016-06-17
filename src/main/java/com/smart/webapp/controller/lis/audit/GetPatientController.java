@@ -31,6 +31,7 @@ import com.smart.model.rule.Rule;
 import com.smart.webapp.util.PatientUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.explainUtil;
 
 @Controller
 @RequestMapping("/audit*")
@@ -106,7 +107,7 @@ public class GetPatientController extends BaseAuditController {
 					if (rule.getType() == 3 || rule.getType() == 4
 							|| rule.getType() == 5 || rule.getType() == 6
 							|| rule.getType() == 7) {
-	 					String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
+	 					String reason = explainUtil.instance.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 						String result = rule.getResultName();
 						if (note != null && !note.isEmpty()) {
 							note = note + "<br>" + reason + ", <font color='red'>" + result + "</font>";
@@ -162,61 +163,5 @@ public class GetPatientController extends BaseAuditController {
 		return map;
 	}
 	
-	private String getItemStr(String id) {
-		String result = "";
-		Long ID = Long.parseLong(id.substring(1));
-		if (id.startsWith("P")) {
-			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
-			result = lib.getValue();
-		} else {
-			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
-			String value = item.getValue();
-			if (value.contains("||")) {
-				return testName + value.replace("||", "或");
-			} else if (value.contains("&&")) {
-				return testName + value.replace("&&", "且");
-			}
-			result = testName + value;
-		}
-		return result;
-	}
 
-	private StringBuilder getItem(JSONObject root, StringBuilder sb) {
-		try {
-			if ("and".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 并 ");
-					}
-				}
-			} else if ("or".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 或 ");
-					}
-				}
-				sb.append(")");
-			} else if ("not".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("非(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-				}
-				sb.append(")");
-			} else {
-				sb.append(getItemStr(root.get("id").toString()));
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		
-		return sb;
-
-	}
 }

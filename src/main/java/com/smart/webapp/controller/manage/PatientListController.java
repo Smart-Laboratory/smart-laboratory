@@ -41,6 +41,7 @@ import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.PatientUtil;
 import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.explainUtil;
 
 @Controller
 @RequestMapping("/manage/patientList*")
@@ -129,10 +130,10 @@ public class PatientListController extends BaseAuditController {
 		dataResponse.setRecords(rules.size());
 
 		for (Rule rule : rules) {
-			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
+			String reason = explainUtil.instance.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null ) {
-					double rank = getRank(rule, re);
+					double rank = explainUtil.instance.getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());
@@ -151,43 +152,6 @@ public class PatientListController extends BaseAuditController {
 		return dataResponse;
 	}
 	
-	private StringBuilder getItem(JSONObject root, StringBuilder sb) {
-		try {
-			if ("and".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 并 ");
-					}
-				}
-			} else if ("or".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-					if (i != array.length() - 1) {
-						sb.append(" 或 ");
-					}
-				}
-				sb.append(")");
-			} else if ("not".equals(root.get("id"))) {
-				JSONArray array = root.getJSONArray("children");
-				sb.append("非(");
-				for (int i = 0; i < array.length(); i++) {
-					getItem(array.getJSONObject(i), sb);
-				}
-				sb.append(")");
-			} else {
-				sb.append(getItemStr(root.get("id").toString()));
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		
-		return sb;
-
-	}
 
 	private List<Map<String, Object>> modifyData(List<ReasoningModify> modifyList, List<Map<String, Object>> dataRows) {
 		Map<String, ReasoningModify> modifyMap = new HashMap<String, ReasoningModify>();
@@ -238,44 +202,7 @@ public class PatientListController extends BaseAuditController {
 		return returnRows;
 	}
 
-	private String getItemStr(String id) {
-		String result = "";
-		Long ID = Long.parseLong(id.substring(1));
-		if (id.startsWith("P")) {
-			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
-			result = lib.getValue();
-		} else {
-			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
-			String value = item.getValue();
-			if (value.contains("||")) {
-				return testName + value.replace("||", "或");
-			} else if (value.contains("&&")) {
-				return testName + value.replace("&&", "且");
-			}
-			result = testName + value;
-		}
-		return result;
-	}
-
-	private double getRank(Rule rule, Result re) {
-		double importance = 0;
-		for (Item item : rule.getItems()) {
-			String impo = item.getIndex().getImportance();
-			if (impo != null && !StringUtils.isEmpty(impo)) {
-				importance = Double.parseDouble(impo) + importance;
-			}
-		}
-		double level = 0;
-		if (re.getLevel() != null && !StringUtils.isEmpty(re.getLevel())) {
-			level = Double.parseDouble(re.getLevel());
-		}
-		double precent = 0;
-		if (re.getPercent() != null && !StringUtils.isEmpty(re.getPercent())) {
-			precent = Double.parseDouble(re.getPercent());
-		}
-		return importance * 0.5 + level * 0.3 + precent * 0.1;
-	}
+	
 	
 	/**
 	 * 获取某一样本的检验数据
