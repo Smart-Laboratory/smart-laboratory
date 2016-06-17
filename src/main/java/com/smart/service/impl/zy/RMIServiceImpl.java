@@ -380,6 +380,7 @@ public class RMIServiceImpl implements RMIService {
 //            }
 //		}));
 		String sql = "select patientid,address,phone,blh,patientname,sex,birthday from lab_patient where patientid like '%"+patientId+"%'";
+		System.out.println(sql);
 		list.addAll(jdbcTemplate.query(sql, new RowMapper<Patient>() {
 
             public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {

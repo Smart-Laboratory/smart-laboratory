@@ -18,7 +18,6 @@ function getData(item,event){
 			$("#laborder").val("")
 			$("#unpatientid").val("");
 			$("#part").val("");
-			alert($("#part").val());
 			$("#mode").val("");
 			$("#reaction").val("");
 			$("#time").val("");
@@ -40,9 +39,17 @@ function getData(item,event){
 				if(invalidsample !=null ){
 					$("#warnLabel").html("<b>"+invalidsample+"</b>");
 				}
-				alert(data.host);
-				alert(data.addr);
-			})
+				//历史抽血记录
+				if(data.size==0){
+					$("#cxcx").html(0);
+				}else{
+					$("#cxcx").html(data.size);
+					var labOrder = data.labOrder;
+					$("#cxry").html(labOrder.executor);
+					$("#cxsj").html(labOrder.executetime);
+					$("#cxxm").html(labOrder.examitem);
+				}
+			});
 			
 			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
 				if(data!=null){
