@@ -25,4 +25,13 @@ public class InvalidSampleDaoHibernate extends GenericDaoHibernate<InvalidSample
 			return null;
 		return samples.get(0);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public InvalidSample getByPatientId(String patientId){
+		String hql = "from InvalidSample where patientid = '"+patientId+"'";
+		List<InvalidSample> list = getSession().createQuery(hql).list();
+		if(list==null || list.size()==0)
+			return null;
+		return list.get(0);
+	}
 }

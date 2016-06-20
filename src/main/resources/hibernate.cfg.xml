@@ -63,6 +63,7 @@
         <mapping class="com.smart.model.request.JFMX"/>
         <mapping class="com.smart.model.execute.LabOrder"/>
         <mapping class="com.smart.model.execute.SampleNoBuilder"/>
+        <mapping class="com.smart.model.execute.ExecuteUnusual"/>
         <mapping class="com.smart.model.lis.ProcessLog"/>
         <mapping class="com.smart.model.lis.SampleLog"/>
         <mapping class="com.smart.model.lis.TestResultLog"/>

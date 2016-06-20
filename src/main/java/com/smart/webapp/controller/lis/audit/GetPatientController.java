@@ -163,5 +163,63 @@ public class GetPatientController extends BaseAuditController {
 		return map;
 	}
 	
+<<<<<<< HEAD
+=======
+	private String getItemStr(String id) {
+		String result = "";
+		Long ID = Long.parseLong(id.substring(1));
+		if (id.startsWith("P")) {
+			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
+			result = lib.getValue();
+		} else {
+			Item item = itemManager.get(ID);
+			String testName = idMap.get(item.getIndexId()).getName();
+			String value = item.getValue();
+			if (value.contains("||")) {
+				return testName + value.replace("||", "或");
+			} else if (value.contains("&&")) {
+				return testName + value.replace("&&", "且");
+			}
+			result = testName + value;
+		}
+		return result;
+	}
+
+	private StringBuilder getItem(JSONObject root, StringBuilder sb) {
+		try {
+			if ("and".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+					if (i != array.length() - 1) {
+						sb.append(" 并 ");
+					}
+				}
+			} else if ("or".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				sb.append("(");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+					if (i != array.length() - 1) {
+						sb.append(" 或 ");
+					}
+				}
+				sb.append(")");
+			} else if ("not".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				sb.append("非(");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+				}
+				sb.append(")");
+			} else {
+				sb.append(getItemStr(root.get("id").toString()));
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		
+		return sb;
+>>>>>>> origin/master
 
 }

@@ -105,18 +105,24 @@ public interface RuleManager extends GenericManager<Rule, Long> {
 	List<Rule> getRuleByTypes(String type);
 	
 	/**
-	 * 获取规则使用的指标
-	 * @param id	规则ID
-	 * @return
-	 */
-	List<Index> getUsedIndex(long id);
-
-	/**
 	 *  获取差值规则
 	 * @param i		规则类别
 	 * @param mode		就诊类型
 	 * @return
 	 */
 	List<Rule> getDiffRule(int i, String mode);
+
+	/**
+	 *  通过检验项目Id获取规则
+	 * @param type	规则类型
+	 * @return
+	 */
+	List<Rule> getRuleByIndexId(String indexId);
+	/**
+	 *  通过规则id获取检验项目
+	 * @param type	规则类型
+	 * @return
+	 */
+	List<Index> getUsedIndex(Long id);
 
 }

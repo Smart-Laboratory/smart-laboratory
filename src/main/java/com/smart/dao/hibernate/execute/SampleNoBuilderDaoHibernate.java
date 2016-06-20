@@ -1,7 +1,6 @@
 package com.smart.dao.hibernate.execute;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.springframework.stereotype.Repository;
 

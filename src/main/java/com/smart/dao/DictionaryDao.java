@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.smart.model.Dictionary;
 
 public interface DictionaryDao extends GenericDao<Dictionary, Long> {
+
 	@Transactional
 	List<Dictionary> getPatientInfo(String name);
 
@@ -20,6 +21,7 @@ public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 	 * @param type 对照类别
 	 * @return
 	 */
+	@Transactional
 	int getDictionaryCount(String query,String type);
 
 	/**
@@ -30,6 +32,7 @@ public interface DictionaryDao extends GenericDao<Dictionary, Long> {
 	 * @param end
 	 * @return
 	 */
+	@Transactional
 	List<Dictionary> getDictionaryList(String query,String type, int start,int end,String sidx,String sord);
 
 }

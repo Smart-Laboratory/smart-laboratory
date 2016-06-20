@@ -30,26 +30,16 @@ public class ChannelDaoHibernate extends GenericDaoHibernate<Channel,Long> imple
      */
     @Override
     public void saveChannels(List<Channel> channels) {
-        Session session = null;
+        Session s = getSession();
         if(channels !=null && channels.size()>0){
-            try{
-                session = getSession();     //获取session
-                session.beginTransaction(); //开启事务
                 Channel channel = null;
                 for(int i = 0; i < channels.size(); i++){
                     channel = channels.get(i);
-                    session.saveOrUpdate(channel);
+                    s.saveOrUpdate(channel);
                 }
                 // 批插入的对象立即写入数据库并释放内存
-                session.flush();
-                session.clear();
-                session.getTransaction().commit(); // 提交事务
-            }catch (Exception e){
-                log.error(e);
-                session.getTransaction().rollback(); // 出错将回滚事务
-            }finally{
-                session.close(); // 关闭Session
-            }
+                s.flush();
+                s.clear();
         }
     }
 

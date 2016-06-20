@@ -22,6 +22,7 @@ public class BatchDaoHibernate extends GenericDaoHibernate<Batch, Long> implemen
 			s.saveOrUpdate(b);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")

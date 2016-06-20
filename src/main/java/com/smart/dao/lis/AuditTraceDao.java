@@ -12,7 +12,6 @@ public interface AuditTraceDao extends GenericDao<AuditTrace, Long> {
 	@Transactional
 	List<AuditTrace> getBySampleNo(String sampleNo);
 
-	@Transactional
 	void saveAll(List<AuditTrace> updateAuditTrace);
 
 }

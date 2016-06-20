@@ -154,13 +154,13 @@ public class AnalyticUtil {
 
 		Long ID = Long.parseLong(id.substring(1));
 		if (id.startsWith("I")) {
-			Item item = itemManager.getWithIndex(ID);
+			Item item = itemManager.get(ID);
 			String value = item.getValue();
 			String unit = item.getUnit();
 			char c = value.charAt(0);
 			if (c == '<' || c == '>' || c == '=') {
 				builder.append("I(");
-				builder.append("c==").append(Integer.parseInt(item.getIndex().getIndexId()));
+				builder.append("c==").append(Integer.parseInt(item.getIndexId()));
 				builder.append(",v");
 				if (c == '=')
 					builder.append("=");
@@ -175,7 +175,7 @@ public class AnalyticUtil {
 				}
 			} else {
 				builder.append("SI(");
-				builder.append("c==").append(Integer.parseInt(item.getIndex().getIndexId()));
+				builder.append("c==").append(Integer.parseInt(item.getIndexId()));
 				builder.append(",sv=='");
 				builder.append(value);
 				/*builder.append("',s=='");

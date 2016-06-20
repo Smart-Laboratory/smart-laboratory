@@ -41,6 +41,7 @@ public class Alarm2Check implements Check {
 		
 		for (Rule rule : ruleManager.getRuleList(ruleId)) {
 			if (rule.getType() == ALARM2_RULE) {
+				
 				List<Index> indexs = ruleManager.getUsedIndex(rule.getId());
 				for (Index i : indexs) {
 					if (trMap.containsKey(i.getIndexId())) {

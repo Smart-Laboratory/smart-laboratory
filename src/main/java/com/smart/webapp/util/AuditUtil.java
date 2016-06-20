@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.smart.drools.Diff;
 import com.smart.drools.Ratio;
-import com.smart.model.rule.Index;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.service.rule.RuleManager;
@@ -47,10 +46,9 @@ public class AuditUtil {
 		for (Rule r : list) {
 			Set<Item> items = r.getItems();
 			for (Item i : items) {
-				Index index = i.getIndex();
 				String ref = i.getValue();
 				Diff d = new Diff();
-				d.setTestid(index.getIndexId());
+				d.setTestid(i.getIndexId());
 				d.setAlgorithm(r.getAlgorithm());
 				for (String s : ref.split("\\|\\|")) {
 					if (s.contains("<=")) {
@@ -64,7 +62,7 @@ public class AuditUtil {
 						d.setRefhi(Float.parseFloat(s.replace(">", "")));
 					}
 				}
-				diff.put(index.getIndexId(), d);
+				diff.put(i.getIndexId(), d);
 			}
 		}
 		return diff;
@@ -80,12 +78,12 @@ public class AuditUtil {
 			if(items.size()==0)
 				continue;
 			if (items.get(0).getValue().equals("=1")) {
-				ra.setDenominatorId(items.get(0).getIndex().getIndexId());
-				ra.setNumeratorId(items.get(1).getIndex().getIndexId());
+				ra.setDenominatorId(items.get(0).getIndexId());
+				ra.setNumeratorId(items.get(1).getIndexId());
 				ref = items.get(1).getValue();
 			} else {
-				ra.setDenominatorId(items.get(1).getIndex().getIndexId());
-				ra.setNumeratorId(items.get(0).getIndex().getIndexId());
+				ra.setDenominatorId(items.get(1).getIndexId());
+				ra.setNumeratorId(items.get(0).getIndexId());
 				ref = items.get(0).getValue();
 			}
 			if (ref.contains("||")) {

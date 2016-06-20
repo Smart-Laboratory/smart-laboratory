@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,34 +25,12 @@ import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 import com.smart.model.rule.Item;
-import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
-import com.smart.service.rule.BagManager;
-import com.smart.service.rule.IndexManager;
-import com.smart.service.rule.ResultManager;
-import com.smart.service.rule.RuleManager;
+import com.smart.webapp.controller.lis.audit.BaseAuditController;
 
 @Controller
 @RequestMapping("/ajax*")
-public class RuleAjaxController {
+public class RuleAjaxController extends BaseAuditController {
 
-	@Autowired
-	private BagManager bagManager = null;
-	
-	@Autowired
-	private UserManager userManager = null;
-	
-	@Autowired
-	private ResultManager resultManager = null;
-	
-	@Autowired
-	private RuleManager ruleManager = null;
-	
-	@Autowired
-	private IndexManager indexManager = null;
-	
-	@Autowired
-	private DictionaryManager dictionaryManager = null;
 	private String bagJson = null;
 	private AtomicBoolean isChanged = new AtomicBoolean(true);
 	
@@ -238,6 +215,8 @@ public class RuleAjaxController {
 
 		String id = request.getParameter("id");
 		String json = null;
+		
+		if(idMap.size() == 0) initMap();
 
 		if (!StringUtils.isEmpty(id)) {
 			Rule r = ruleManager.get(Long.parseLong(id));
@@ -261,7 +240,7 @@ public class RuleAjaxController {
 			String unit = i.getUnit();
 			unit = StringUtils.isEmpty(unit) ? "" : ("," + unit);
 			map.put("I" + i.getId().toString(),
-					i.getIndex().getName() + ":" + i.getValue() + " (" + i.getIndex().getSampleFrom()
+					idMap.get(i.getIndexId()).getName() + ":" + i.getValue() + " (" + idMap.get(i.getIndexId()).getSampleFrom()
 							+ unit + ")");
 		}
 		List<Dictionary> pInfo = dictionaryManager.getPatientInfo("");

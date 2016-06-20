@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.DesBag;
-import com.smart.model.rule.Description;
 
 public interface DesBagDao extends GenericDao<DesBag, Long> {
+	
 	@Transactional
 	List<DesBag> getByParentId(Long parentId);
 

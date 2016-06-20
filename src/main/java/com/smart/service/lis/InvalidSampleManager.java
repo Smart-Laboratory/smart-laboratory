@@ -10,4 +10,6 @@ public interface InvalidSampleManager extends GenericManager<InvalidSample, Long
 	//根据医嘱号获取不合格标本
 	InvalidSample getByEzh(Long id);
 	
+	InvalidSample getByPatientId(String patientId);
+	
 }

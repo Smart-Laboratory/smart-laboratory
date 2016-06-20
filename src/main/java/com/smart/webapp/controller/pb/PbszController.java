@@ -24,19 +24,16 @@ import com.smart.service.ShiftManager;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
-import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.WInfo;
-import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
-import com.smart.webapp.util.SectionUtil;
 
 import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/pb/sz*")
-public class PbszController {
+public class PbszController extends PbBaseController {
 	
 	@Autowired
 	private WInfoManager wInfoManager;
@@ -65,12 +62,11 @@ public class PbszController {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		section = user.getLastLab();
 		Map<String, String> departList = new HashMap<String, String>();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
 		String department = user.getPbsection();
-		
+		initLabMap();
 		if(department != null){
 			for(String depart : department.split(",")){
-				departList.put(depart, sectionUtil.getValue(depart));
+				departList.put(depart, labMap.get(depart));
 				if(section.isEmpty()){
 					section=depart;
 				}
@@ -205,7 +201,6 @@ public class PbszController {
 		int page = Integer.parseInt(request.getParameter("page"));
 		int row = Integer.parseInt(request.getParameter("rows"));
 		List<Shift> list = shiftManager.getShiftBySection(section);
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 
@@ -229,7 +224,7 @@ public class PbszController {
 			map.put("name", sh.getName());
 			map.put("ab", sh.getAb());
 			map.put("wtime", sh.getWorktime());
-			map.put("section", sectionutil.getValue(sh.getSection()));
+			map.put("section", labMap.get(sh.getSection()));
 			map.put("order", sh.getOrder());
 			map.put("days", sh.getDays());
 			dataRows.add(map);
@@ -246,7 +241,6 @@ public class PbszController {
 		int page = Integer.parseInt(request.getParameter("page"));
 		int row = Integer.parseInt(request.getParameter("rows"));
 		List<DayShift> list = dayShiftManager.getBySection(section);
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 
@@ -268,7 +262,7 @@ public class PbszController {
 			DayShift dsh = list.get(start + index);
 			map.put("id", dsh.getId());
 			map.put("week", dsh.getWeek());
-			map.put("section", sectionutil.getValue(dsh.getSection()));
+			map.put("section", labMap.get(dsh.getSection()));
 			map.put("shift", dsh.getShift());
 			dataRows.add(map);
 			index++;
@@ -323,7 +317,7 @@ public class PbszController {
 			wi.setOrd5(ord5);
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
-			wi.setDefeholidayhis(defeHolidayhis);
+			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
 			wi.setActive(isActive);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
@@ -344,7 +338,7 @@ public class PbszController {
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
 			wi.setDefeHoliday(wi.getDefeHoliday());
-			wi.setDefeholidayhis(defeHolidayhis);
+			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
 			wi.setActive(isActive);
 			wInfoManager.save(wi);
 		} else {

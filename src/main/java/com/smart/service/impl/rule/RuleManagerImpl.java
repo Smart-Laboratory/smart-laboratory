@@ -100,12 +100,16 @@ public class RuleManagerImpl extends GenericManagerImpl<Rule, Long> implements R
 		return ruleDao.getRuleByTypes(type);
 	}
 
-	public List<Index> getUsedIndex(long id) {
-		return ruleDao.getUsedIndex(id);
-	}
-
 	public List<Rule> getDiffRule(int i, String mode) {
 		return ruleDao.getDiffRule(i, mode);
+	}
+
+	public List<Rule> getRuleByIndexId(String indexId) {
+		return ruleDao.getRuleByIndexId(indexId);
+	}
+
+	public List<Index> getUsedIndex(Long id) {
+		return ruleDao.getUsedIndex(id);
 	}
 	
 }

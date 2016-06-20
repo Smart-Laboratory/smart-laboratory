@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.rule.Description;
-import com.smart.model.rule.Rule;
 
 public interface DescriptionDao extends GenericDao<Description, Long> {
 

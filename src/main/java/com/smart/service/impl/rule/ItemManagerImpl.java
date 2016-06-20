@@ -1,5 +1,7 @@
 package com.smart.service.impl.rule;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,8 @@ public class ItemManagerImpl extends GenericManagerImpl<Item, Long> implements I
 		return itemDao.exsitItem(indexId, value);
 	}
 
-	public Item getWithIndex(Long id) {
-		return itemDao.getWithIndex(id);
+	public List<Item> getByIndexId(Long indexid) {
+		return itemDao.getByIndexId(indexid);
 	}
-	
 
 }

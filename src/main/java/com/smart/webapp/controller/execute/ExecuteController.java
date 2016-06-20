@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.Dictionary;
+import com.smart.model.execute.ExecuteUnusual;
 import com.smart.model.execute.LabOrder;
 import com.smart.model.execute.SampleNoBuilder;
 import com.smart.model.lis.Process;
@@ -32,6 +33,7 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
+import com.smart.service.execute.ExecuteUnusualManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.execute.SampleNoBuilderManager;
 import com.smart.service.impl.zy.RMIServiceImpl;
@@ -290,7 +292,11 @@ public class ExecuteController {
 				
 				if(sample!=null && issame){
 					doctadviseno = sample.getId();
-					sample.setSampleNo(sampleno);
+					if(zxbz>0 && lab.getSampleno().length()==14 && lab.getSampleno().substring(0, 8).equals(ymd.format(new Date()))){
+						
+					}else if(sampleno!=null && !sampleno.isEmpty()){
+						sample.setSampleNo(sampleno);
+					}
 					process = processManager.getBySampleId(sample.getId());
 					process.setExecutetime(executetime);
 					process.setExecutor(user.getUsername());
@@ -347,7 +353,8 @@ public class ExecuteController {
 			if(labOrderManager.existSampleId(doctadviseno+""))
 				labOrder = labOrderManager.get(doctadviseno);
 			if(labOrder !=null && labOrder.getLaborder()!=null){
-				labOrder.setSampleno(sampleno);
+				if(sampleno!=null && !sampleno.isEmpty())
+					labOrder.setSampleno(sampleno);
 				labOrder.setExecutetime(executetime);
 			}
 			else{
@@ -586,7 +593,7 @@ public class ExecuteController {
 							+ "<b class='col-sm-6 info' id='sex' >"+l.getSex()+"</b></div>"
 						+ "<div class='col-sm-4' style='width:33.3%;float:left;'>"
 							+ "<span class='col-sm-4'>年龄:</span>"
-							+ "<b class='col-sm-5 info' id='age' >44 </b>"
+							+ "<b class='col-sm-5 info' id='age' >"+l.getAge()+"</b>"
 							+ "<span class='col-sm-3'>岁</span></div>"
 					+ "</div>");
 			html.append("</div>");//patient
@@ -648,7 +655,7 @@ public class ExecuteController {
 						+"</div>"
 						+"<div class='col-sm-12' style='width:99%;float:left;'>"
 							+"<span class='col-sm-4 sfont'  name='sampleid'>"+l.getLaborder()+"</span>"
-							+"<span class='col-sm-8 sfont' name='sampleno' style='text-align:right;'>"+l.getSampleno()+"</span>"
+							+"<span class='col-sm-8 sfont' name='sampleno' style='text-align:right;'>"+(l.getSampleno().equals("0")?"":l.getSampleno())+"</span>"
 						+"</div>");
 			html.append("</div></div>");
 			
@@ -672,7 +679,64 @@ public class ExecuteController {
 		}
 	}
 	
+	@RequestMapping(value = "/getUnusualExecute*", method = RequestMethod.GET)
+	@ResponseBody
+	public ExecuteUnusual getunusualExecute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String laborders = request.getParameter("laborder");
+		if(laborders==null || laborders.isEmpty())
+			return null;
+		laborders = laborders.split(",")[0];
+		ExecuteUnusual e = new ExecuteUnusual();
+		if(executeUnusualManager.exists(Long.parseLong(laborders))){
+			e = executeUnusualManager.get(Long.parseLong(laborders));
+		}
+		
+		return e;
+		
+	}
 	
+	@RequestMapping(value = "/ajax/unusual*", method = RequestMethod.GET)
+	public String unusualExecute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String laborders = request.getParameter("laborder");
+		String jzkh = request.getParameter("jzkh");
+		String part = request.getParameter("part");
+		String mode = request.getParameter("mode");
+		String reaction = request.getParameter("reaction");
+		String time = request.getParameter("time");
+		String note = request.getParameter("note");
+		
+		JSONObject object = new JSONObject();
+		object.put("data", "false");
+		if(laborders == null || jzkh == null ){
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(object.toString());
+			return null;
+		}
+		for(String laborder : laborders.split(",")){
+			ExecuteUnusual e = new ExecuteUnusual();
+			if(laborder==null || laborder.isEmpty())
+				continue;
+			if(executeUnusualManager.exists(Long.parseLong(laborder))){
+				e = executeUnusualManager.get(Long.parseLong(laborder));
+			}else{
+				e.setLaborder(Long.parseLong(laborder));
+			}
+			e.setPatientId(jzkh);
+			e.setPart(part);
+			e.setExecuteMode(mode);
+			e.setReaction(reaction);
+			e.setTime(Long.parseLong(time));
+			e.setNote(note);
+			
+			executeUnusualManager.save(e);
+		}
+		object.put("data", "true");
+		
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(object.toString());
+		return null;
+		
+	}
 	
 	@Autowired
 	private RMIService rmiService;
@@ -690,5 +754,7 @@ public class ExecuteController {
 	private LabOrderManager labOrderManager;
 	@Autowired
 	private DictionaryManager dictionaryManager;
+	@Autowired
+	private ExecuteUnusualManager executeUnusualManager;
 	
 }

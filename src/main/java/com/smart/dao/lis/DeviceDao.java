@@ -5,8 +5,11 @@ import com.smart.model.lis.Device;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 public interface DeviceDao extends GenericDao<Device, Long> {
-    /**
+    
+	/**
      * 获取仪器列表
      * @param query
      * @param type  仪器类别
@@ -16,6 +19,7 @@ public interface DeviceDao extends GenericDao<Device, Long> {
      * @param sord
      * @return
      */
+	@Transactional
     List<Device> getDeviceList(String query, String type, int start, int end, String sidx, String sord);
 
     /**
@@ -23,22 +27,24 @@ public interface DeviceDao extends GenericDao<Device, Long> {
      * @param name
      * @return
      */
+	@Transactional
     List<Device> getDeviceList(String name);
-    /**
+   
+	/**
      * 获取记录数
      * @param query
      * @param type
      * @return
      */
+	@Transactional
     int getDeviceCount(String query,String type);
-
 
     /**
      * 根据编号获取仪器信息
      * @param code  //编号
      * @return
      */
+	@Transactional
     Device getDeviceByCode(String code);
-
 
 }

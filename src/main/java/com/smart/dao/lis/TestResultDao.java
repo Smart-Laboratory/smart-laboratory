@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
-import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResultPK;
 import com.smart.model.lis.TestResult;
 
@@ -41,14 +40,13 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	@Transactional
 	List<TestResult> getPrintTestBySampleNo(String sampleno);
 
-	@Transactional
 	void saveAll(List<TestResult> list);
 	
-	@Transactional
 	void deleteAll(List<TestResult> list);
 	
 	@Transactional
 	List<TestResult> getHisTestResult(String samplenos);
 
+	@Transactional
 	List<TestResult> getSampleByCode(String code);
 }

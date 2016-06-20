@@ -82,8 +82,14 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return indexs;
 	}
 	
+<<<<<<< HEAD
 	public List getIndexsByIdandLab(String indexId ,String labDepartment){
 		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment like '%"+labDepartment+"%'").list();
+=======
+	@SuppressWarnings("unchecked")
+	public List<Index> getIndexsByIdandLab(String indexId ,String labDepartment){
+		List<Index> indexs = getSession().createQuery("from Index where indexId = '" + indexId + "'  and labdepartment = '"+labDepartment+"'").list();
+>>>>>>> origin/master
 		return indexs;
 	}
 
@@ -123,7 +129,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.list();
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<Index> getIndexsByQuery(String q) {
 		String sql = "select lab_index.* from lab_index  where 1=1";
 		sql += q;

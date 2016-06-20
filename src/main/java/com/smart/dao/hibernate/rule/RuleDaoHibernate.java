@@ -1,6 +1,5 @@
 package com.smart.dao.hibernate.rule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -12,7 +11,6 @@ import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.rule.RuleDao;
 import com.smart.model.rule.Index;
 import com.smart.model.rule.Rule;
-import com.smart.model.rule.Item;
 
 @Repository("ruleDao")
 public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements RuleDao {
@@ -83,9 +81,6 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 		for (Rule r : rules) {
 			r.getResults().size();
 			r.getItems().size();
-			for (Item i : r.getItems()) {
-				i.getIndex().getIndexId();
-			}
 		}
 		return rules;
 	}
@@ -112,16 +107,12 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 		return rules;
 	}
 
-	public List<Index> getUsedIndex(long id) {
-		List<Index> indexs = new ArrayList<Index>();
-		Query query = getSession().createQuery("from Rule where id=" + id);
-		Rule rule = (Rule) query.uniqueResult();
-		for (Item item : rule.getItems()) {
-			Index index = item.getIndex();
-			index.getName();
-			indexs.add(index);
-		}
-		return indexs;
+	@SuppressWarnings("unchecked")
+	public List<Index> getUsedIndex(Long id) {
+		Query query = getSession().createSQLQuery(
+			"select b.* from lab_rule a, lab_index b, lab_item c, lab_rule_item d where a.id=" + id + " and a.id=d.rule_id and d.item_id=c.id and b.index_id=c.indexid"
+		);
+		return query.list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -130,9 +121,6 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 		for (Rule r : rules) {
 			r.getResults().size();
 			r.getItems().size();
-			for (Item i : r.getItems()) {
-				i.getIndex().getIndexId();
-			}
 		}
 		return rules;
 	}
@@ -147,5 +135,13 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
         s.flush();
         return rule;
 		
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Rule> getRuleByIndexId(String indexId) {
+		Query query = getSession().createSQLQuery(
+			"select a.* from lab_rule a, lab_index b, lab_item c, lab_rule_item d where b.index_id='" + indexId + "' and a.id=d.rule_id and d.item_id=c.id and b.index_id=c.indexid"
+		);
+		return query.list();
 	}
 }

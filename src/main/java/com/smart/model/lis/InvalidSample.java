@@ -32,6 +32,7 @@ public class InvalidSample {
 	private int measureTaken; //采取措施
 	private String notes;  //说明
 	private String rejectPerson; //拒收人
+	private String patientid; //就诊卡号
 	
 	//外来标本信息
 	private Long sampleId;
@@ -175,6 +176,13 @@ public class InvalidSample {
 		this.rejectPerson = rejectPerson;
 	}
 	
+	@Column
+	public String getPatientid() {
+		return patientid;
+	}
+	public void setPatientid(String patientid) {
+		this.patientid = patientid;
+	}
 	@Transient
 	public String getSexValue() {
 		if (sex.equals("1")) {

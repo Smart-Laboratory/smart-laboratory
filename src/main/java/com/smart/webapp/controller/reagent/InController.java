@@ -87,4 +87,20 @@ public class InController {
 		request.setAttribute("size", ibList.size());
 		return new ModelAndView();
 	}
+	
+	@RequestMapping(value = "/smallprint*", method = RequestMethod.GET)
+	public ModelAndView smallprint(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String begintime = request.getParameter("begintime");
+		String endtime = request.getParameter("endtime");
+		String ts = request.getParameter("ts");
+		String fs = request.getParameter("fs");
+		String reagent = request.getParameter("reagent");
+		
+		return new ModelAndView().addObject("begintime", begintime).addObject("endtime", endtime).addObject("ts", ts).addObject("fs", fs).addObject("reagent", reagent);
+	}
+	@RequestMapping(value = "/smallprintsz*", method = RequestMethod.GET)
+	public ModelAndView smallprintsz(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		return new ModelAndView();
+	}
 }

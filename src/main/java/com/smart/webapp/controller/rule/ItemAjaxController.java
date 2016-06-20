@@ -50,7 +50,7 @@ public class ItemAjaxController {
 		Index index = indexManager.get(Long.parseLong(id));
 		JSONArray array = new JSONArray();
 		if (index != null) {
-			for (Item item : index.getItem()) {
+			for (Item item : itemManager.getByIndexId(index.getId())) {
 				String unit = item.getUnit();
 				String value = item.getValue().replace("&&", "与").replace("||", "或");
 				if (!StringUtils.isEmpty(unit)) {
@@ -82,7 +82,7 @@ public class ItemAjaxController {
 		String value = request.getParameter("value");
 		String unit = request.getParameter("unit");
 		Index index = indexManager.get(Long.parseLong(id));
-		item.setIndex(index);
+		item.setIndexId(index.getIndexId());
 		item.setValue(value);
 		item.setUnit(unit);
 
@@ -96,7 +96,7 @@ public class ItemAjaxController {
 		JSONObject obj = new JSONObject();
 		value = newItem.getValue().replace("&&", "与").replace("||", "或");
 		unit = StringUtils.isEmpty(unit) ? "" : ("," + unit);
-		obj.put("value", newItem.getIndex().getName()+":"+value+" ("+index.getSampleFrom()+unit+")");
+		obj.put("value", index.getName()+":"+value+" ("+index.getSampleFrom()+unit+")");
 		obj.put("id", "I" + newItem.getId().toString());
 
 		response.setContentType("text/html;charset=UTF-8");

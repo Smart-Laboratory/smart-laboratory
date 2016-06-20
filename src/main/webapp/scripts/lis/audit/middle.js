@@ -439,9 +439,24 @@
 				}
 			},
 			onRightClickRow: function(id) {
+				//关闭浏览器右键
+				document.oncontextmenu=function(){return false;};
 				var sample=$("#hiddenSampleNo").val();
 				$.get("../audit/ajax/singleChart",{id:id, sample:sample},function(data){
-					$("#chartDialog").dialog("open");
+					$("#chartAlert").css("display","none");
+					layer.open({
+						  type: 1,
+						  shade: 0.4,
+						  skin: 'layui-layer-lan',
+						  area:['680px','540px'],
+						  title: '样本项目试剂信息和历史记录',
+						  content: $('#chartDialog'),
+						  cancel: function(index){
+						    layer.close(index);
+						    //关闭浏览器右键
+						    document.oncontextmenu=function(){return true;};
+						  }
+						});
 					$("#hmInfo").empty();
 					for (var i=0; i< data.hmList.length; i++) {
 						$("#hmInfo").append(data.hmList[i]);
@@ -503,7 +518,7 @@
 				            }]  
 				        });
 					} else {
-						alert('该检验项目没有历史记录或检验结果不是数值或无参考范围！');
+						$("#chartAlert").css("display","block");
 					}
 		 		});
 			},
@@ -1349,16 +1364,56 @@ function getDetailSop(type) {
 	});		
 	switch (type) {
 	case 0:
-		$('#sopDetailDialog').dialog("option","title", "通用文档熟悉度").dialog('open');
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '通用文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		break;
 	case 1:
-		$('#sopDetailDialog').dialog("option","title", "专业文档熟悉度").dialog('open');
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '专业文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 		break;
 	case 2:
-		$('#sopDetailDialog').dialog("option","title", "仪器文档熟悉度").dialog('open');
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '仪器文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 		break;
 	case 3:
-		$('#sopDetailDialog').dialog("option","title", "项目文档熟悉度").dialog('open');
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '项目文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
 		break;
 	}
 }
@@ -1446,8 +1501,8 @@ $(function() {
 			  shade: 0.4,
 			  skin: 'layui-layer-lan',
 			  area:['480px','420px'],
-			  title: '样本修改', //不显示标题
-			  content: $('#testModifyDialog'), //捕获的元素
+			  title: '样本修改', 
+			  content: $('#testModifyDialog'), 
 			  cancel: function(index){
 			    layer.close(index);
 			  }

@@ -30,13 +30,16 @@ public interface IndexDao extends GenericDao<Index, Long> {
      */
 	@Transactional
 	List<Index> getIndexs(String query, int start, int end, String sidx, String sord);
+	
 	/**
 	 * 获取分页记录数
 	 * @param query
 	 * @param type
 	 * @return
 	 */
+	@Transactional
 	int getIndexsCount(String query, int start, int end, String sidx, String sord);
+	
 	/**
 	 *  指标数
 	 * @return
@@ -62,7 +65,8 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 * @return
 	 */
 	@Transactional
-	List getIndexsByIdandLab(String indexId ,String labDepartment);
+	List<Index> getIndexsByIdandLab(String indexId ,String labDepartment);
+	
 	/**
 	 *  该样本来源下的指标数
 	 * @param sample

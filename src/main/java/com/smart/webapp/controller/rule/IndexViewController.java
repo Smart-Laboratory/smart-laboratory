@@ -1,6 +1,8 @@
 package com.smart.webapp.controller.rule;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.service.UserManager;
 import com.smart.service.rule.IndexManager;
+import com.smart.service.rule.RuleManager;
 import com.smart.util.PageList;
 import com.smart.webapp.util.CheckAllow;
 import com.smart.model.rule.Index;
+import com.smart.model.rule.Rule;
 import com.smart.model.user.User;
 
 @Controller
@@ -28,6 +32,9 @@ public class IndexViewController {
 	
 	@Autowired
 	private UserManager userManager = null;
+	
+	@Autowired
+	private RuleManager ruleManager = null;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/list*")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {	
@@ -124,8 +131,12 @@ public class IndexViewController {
 		} else {
 			index.setType("字符型");
 		}
+		Map<String, String> ruleList = new HashMap<String, String>();
+		for(Rule r : ruleManager.getRuleByIndexId(index.getIndexId())) {
+			ruleList.put(r.getId().toString(), r.getName());
+		}
 		request.setAttribute("canEdit", CheckAllow.allow(index, user));
-		request.setAttribute("rulesList", index.getRules());
+		request.setAttribute("rulesList", ruleList);
 		return new ModelAndView("index/view","index", index);
 	}
 	

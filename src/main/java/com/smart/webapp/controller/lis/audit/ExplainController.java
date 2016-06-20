@@ -27,8 +27,6 @@ import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.explainUtil;
 import com.smart.Constants;
 
-
-
 @Controller
 @RequestMapping("/audit*")
 public class ExplainController extends BaseAuditController {
@@ -153,6 +151,85 @@ public class ExplainController extends BaseAuditController {
 		return returnRows;
 	}
 	
+<<<<<<< HEAD
+=======
+	private StringBuilder getItem(JSONObject root, StringBuilder sb) {
+		try {
+			if ("and".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+					if (i != array.length() - 1) {
+						sb.append(" 并 ");
+					}
+				}
+			} else if ("or".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				sb.append("(");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+					if (i != array.length() - 1) {
+						sb.append(" 或 ");
+					}
+				}
+				sb.append(")");
+			} else if ("not".equals(root.get("id"))) {
+				JSONArray array = root.getJSONArray("children");
+				sb.append("非(");
+				for (int i = 0; i < array.length(); i++) {
+					getItem(array.getJSONObject(i), sb);
+				}
+				sb.append(")");
+			} else {
+				sb.append(getItemStr(root.get("id").toString()));
+			}
+		} catch (Exception e) {
+//			log.error(e.getMessage());
+		}
+		
+		return sb;
+
+	}
+	
+	private String getItemStr(String id) {
+		String result = "";
+		Long ID = Long.parseLong(id.substring(1));
+		if (id.startsWith("P")) {
+			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
+			result = lib.getValue();
+		} else {
+			Item item = itemManager.get(ID);
+			String testName = idMap.get(item.getIndexId()).getName();
+			String value = item.getValue();
+			if (value.contains("||")) {
+				return testName + value.replace("||", "或");
+			} else if (value.contains("&&")) {
+				return testName + value.replace("&&", "且");
+			}
+			result = testName + value;
+		}
+		return result;
+	}
+	
+	private double getRank(Rule rule, Result re) {
+		double importance = 0;
+		for (Item item : rule.getItems()) {
+			String impo = idMap.get(item.getIndexId()).getImportance();
+			if (impo != null && !StringUtils.isEmpty(impo)) {
+				importance = Double.parseDouble(impo) + importance;
+			}
+		}
+		double level = 0;
+		if (re.getLevel() != null && !StringUtils.isEmpty(re.getLevel())) {
+			level = Double.parseDouble(re.getLevel());
+		}
+		double precent = 0;
+		if (re.getPercent() != null && !StringUtils.isEmpty(re.getPercent())) {
+			precent = Double.parseDouble(re.getPercent());
+		}
+		return importance * 0.5 + level * 0.3 + precent * 0.1;
+	}
+>>>>>>> origin/master
 	
 	/**
 	 * 拖拽智能解释

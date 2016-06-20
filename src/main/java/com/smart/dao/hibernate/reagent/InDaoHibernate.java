@@ -23,6 +23,7 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 			s.saveOrUpdate(i);
 		}
 		s.flush();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")

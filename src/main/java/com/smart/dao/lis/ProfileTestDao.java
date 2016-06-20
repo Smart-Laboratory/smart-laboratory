@@ -2,10 +2,10 @@ package com.smart.dao.lis;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.ProfileTest;
-
-import java.util.List;
 
 /**
  * Title: ProfileTestDao
@@ -17,9 +17,15 @@ import java.util.List;
  */
 public interface ProfileTestDao extends GenericDao<ProfileTest, Long> {
 	
+	@Transactional
 	List<ProfileTest> getBySection(String lab);
 	
+	@Transactional
 	List <ProfileTest> getByProfileName(String profileName);
-    public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
-    public int getProfileTestSize(String query);
+    
+	@Transactional
+	public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
+    
+	@Transactional
+	public int getProfileTestSize(String query);
 }

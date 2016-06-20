@@ -81,11 +81,14 @@ public interface RuleDao extends GenericDao<Rule, Long> {
 	List<Rule> getRuleByTypes(String type);
 	
 	@Transactional
-	List<Index> getUsedIndex(long id);
-
-	@Transactional
 	List<Rule> getDiffRule(int i, String mode);
 	
 	@Transactional
 	Rule saveRule(Rule rule);
+
+	@Transactional
+	List<Rule> getRuleByIndexId(String indexId);
+
+	@Transactional
+	List<Index> getUsedIndex(Long id);
 }

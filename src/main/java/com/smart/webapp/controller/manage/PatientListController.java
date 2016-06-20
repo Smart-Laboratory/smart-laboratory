@@ -202,7 +202,48 @@ public class PatientListController extends BaseAuditController {
 		return returnRows;
 	}
 
+<<<<<<< HEAD
 	
+=======
+	private String getItemStr(String id) {
+		String result = "";
+		Long ID = Long.parseLong(id.substring(1));
+		if (id.startsWith("P")) {
+			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
+			result = lib.getValue();
+		} else {
+			Item item = itemManager.get(ID);
+			String testName = idMap.get(item.getIndexId()).getName();
+			String value = item.getValue();
+			if (value.contains("||")) {
+				return testName + value.replace("||", "或");
+			} else if (value.contains("&&")) {
+				return testName + value.replace("&&", "且");
+			}
+			result = testName + value;
+		}
+		return result;
+	}
+
+	private double getRank(Rule rule, Result re) {
+		double importance = 0;
+		for (Item item : rule.getItems()) {
+			String impo = idMap.get(item.getIndexId()).getImportance();
+			if (impo != null && !StringUtils.isEmpty(impo)) {
+				importance = Double.parseDouble(impo) + importance;
+			}
+		}
+		double level = 0;
+		if (re.getLevel() != null && !StringUtils.isEmpty(re.getLevel())) {
+			level = Double.parseDouble(re.getLevel());
+		}
+		double precent = 0;
+		if (re.getPercent() != null && !StringUtils.isEmpty(re.getPercent())) {
+			precent = Double.parseDouble(re.getPercent());
+		}
+		return importance * 0.5 + level * 0.3 + precent * 0.1;
+	}
+>>>>>>> origin/master
 	
 	/**
 	 * 获取某一样本的检验数据

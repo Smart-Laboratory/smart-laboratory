@@ -9,7 +9,6 @@ import com.smart.model.lis.CriticalRecord;
 
 public interface CriticalRecordDao extends GenericDao<CriticalRecord, Long> {
 
-	@Transactional
 	void saveAll(List<CriticalRecord> updateCriticalRecord);
 
 	@Transactional

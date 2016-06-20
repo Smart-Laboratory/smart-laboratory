@@ -2,9 +2,10 @@ package com.smart.dao.lis;
 
 import com.smart.dao.GenericDao;
 import com.smart.model.lis.Channel;
-import com.smart.model.lis.Device;
 
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Title: ChannelDao
@@ -16,6 +17,9 @@ import java.util.List;
  */
 public interface ChannelDao  extends GenericDao<Channel, Long> {
 
+	@Transactional
     public void saveChannels(List<Channel> channels);
-    public Channel getChannel(String deviceid,String testid);
+   
+	@Transactional
+	public Channel getChannel(String deviceid,String testid);
 }

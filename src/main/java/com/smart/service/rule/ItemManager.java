@@ -1,5 +1,7 @@
 package com.smart.service.rule;
 
+import java.util.List;
+
 import com.smart.model.rule.Item;
 import com.smart.service.GenericManager;
 
@@ -21,12 +23,13 @@ public interface ItemManager extends GenericManager<Item, Long> {
 	 * @return
 	 */
 	Item exsitItem(Long indexId, String value);
-	
+
 	/**
-	 * 相关知识点
-	 * @param id 指标id
+	 *  通过indexid获取Item
+	 * @param indexId 指标id
+	 * @param value
 	 * @return
 	 */
-	Item getWithIndex(Long id);
+	List<Item> getByIndexId(Long indexid);
 	
 }

@@ -1,5 +1,6 @@
 package com.smart.model.execute;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Transient;
@@ -31,6 +32,7 @@ public class LabOrder {
 	private String patientname;
 	private Integer sex=0;
 	private Integer blh;
+	private String age;
 	
 	private String diagnostic;
 	private Integer requestdepartment=0; //申请科室
@@ -293,6 +295,19 @@ public class LabOrder {
 		this.requestdepartmentStr = requestdepartmentStr;
 	}
 	
-	
+	@Transient
+	public String getAge() {
+		if (birthday != null) {
+			Calendar now = Calendar.getInstance();
+			Calendar previous = Calendar.getInstance();
+			previous.setTime(birthday);
+			setAge((now.get(Calendar.YEAR) - previous.get(Calendar.YEAR)) + "");
+		}
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
 	
 }

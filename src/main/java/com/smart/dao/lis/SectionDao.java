@@ -4,11 +4,12 @@ import com.smart.model.lis.Section;
 import com.smart.dao.GenericDao;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+
+import org.springframework.transaction.annotation.Transactional;
 
 public interface SectionDao extends GenericDao<Section,Long>{
 
+	@Transactional
 	Section getByCode(String sectionId);
 
 	/**
@@ -16,6 +17,7 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	 * @param hospitalId
 	 * @return
      */
+	@Transactional
 	int getSectionCount(String query,String hospitalId);
 
 	/**
@@ -26,6 +28,7 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	 * @param end
      * @return
      */
+	@Transactional
 	List<Section> getSectionList(String query,String hospitalId, int start,int end,String sidx,String sord);
 
 	/**
@@ -33,7 +36,9 @@ public interface SectionDao extends GenericDao<Section,Long>{
 	 * @param name
 	 * @return
      */
+	@Transactional
 	List<Section> getSectionList(String name);
+	
 	/**
 	 * 批量删除
 	 * @param ids

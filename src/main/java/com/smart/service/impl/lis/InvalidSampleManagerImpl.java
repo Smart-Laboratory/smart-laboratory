@@ -24,5 +24,9 @@ public class InvalidSampleManagerImpl extends GenericManagerImpl<InvalidSample, 
 	public InvalidSample getByEzh(Long id){
 		return invalidSampleDao.getByEzh(id);
 	}
+	
+	public InvalidSample getByPatientId(String patientId){
+		return invalidSampleDao.getByPatientId(patientId);
+	}
 
 }

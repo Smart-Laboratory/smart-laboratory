@@ -380,6 +380,7 @@ public class RMIServiceImpl implements RMIService {
 //            }
 //		}));
 		String sql = "select patientid,address,phone,blh,patientname,sex,birthday from lab_patient where patientid like '%"+patientId+"%'";
+		System.out.println(sql);
 		list.addAll(jdbcTemplate.query(sql, new RowMapper<Patient>() {
 
             public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -450,7 +451,7 @@ public class RMIServiceImpl implements RMIService {
          sql+="	( NVL(YJ_YJK2.REQUESTMODE,0) <> -1 ) AND  "+
 		"	( NVL(YJ_YJK2.ZFPB,0) = 0 ) AND "+ 
 		"	( YJ_YJK1.SFSB IS NOT NULL OR YJ_YJK1.YHZFID IS NOT NULL OR YJ_YJK1.BRXH IS NOT NULL) AND "+
-         "( YJ_YJK1.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') ) order by YJ_YJK1.KDSJ, YJ_YJK1.YJSB desc "; 
+         "( YJ_YJK1.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') ) order by YJ_YJK1.SFSB desc "; 
 	
 		System.out.println(sql);
 		eList.addAll(jdbcTemplate.query(sql, new RowMapper<ExecuteInfo>() {

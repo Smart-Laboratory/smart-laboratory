@@ -2,19 +2,12 @@ package com.smart.model.rule;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -68,8 +61,6 @@ public class Index extends BaseObject implements Serializable {
 	private String dictionaries;
 	
 	private String guide;
-	private Set<Item> item = new HashSet<Item>(); // 该指标的知识点列表
-
 	private String labdepartment;	//关联部门
 	private String instrument;		//关联仪器
 
@@ -460,18 +451,6 @@ public class Index extends BaseObject implements Serializable {
 		this.defaultvalue = defaultvalue;
 	}
 
-	/**
-	 * 使用该指标的规则集合
-	 */
-	@OneToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY, targetEntity = Item.class, mappedBy = "index")
-	public Set<Item> getItem() {
-		return item;
-	}
-
-	public void setItem(Set<Item> item) {
-		this.item = item;
-	}
-	
 	@Column
 	public String getGuide() {
 		return guide;
@@ -498,62 +477,15 @@ public class Index extends BaseObject implements Serializable {
 	public void setInstrument(String instrument) {
 		this.instrument = instrument;
 	}
-
-
-	@Transient
-	public int getRuleCount() {
-		HashMap<Long, Rule> map = new HashMap<Long, Rule>();
-		for (Item item : this.getItem()) {
-			for (Rule rule : item.getRules()) {
-				if (!map.containsKey(rule.getId())) {
-					map.put(rule.getId(), rule);
-				}
-			}
-		}
-		return map.size();
-		
-	}
 	
-
-	@Transient
-	public int getAuditRuleCount() {
-		HashMap<Long, Rule> map = new HashMap<Long, Rule>();
-		for (Item item : this.getItem()) {
-			for (Rule rule : item.getRules()) {
-				if (!map.containsKey(rule.getId()) && rule.getType() != 0) {
-					map.put(rule.getId(), rule);
-				}
-			}
-		}
-		return map.size();
-	}
-	
-	@Transient
-	public Map<String, String> getRules() {
-		
-		Map<String, String> map = new HashMap<String, String>();
-		for (Item item : this.getItem()) {
-			for (Rule rule : item.getRules()) {
-				String id = rule.getId().toString();
-				if (!map.containsKey(id)) {
-					map.put(id, rule.getName());
-				}
-			}
-		}
-		return map;
-	}
-	
-	@Override
 	public String toString() {
 		return null;
 	}
 
-	@Override
 	public boolean equals(Object o) {
 		return false;
 	}
 
-	@Override
 	public int hashCode() {
 		return 0;
 	}
