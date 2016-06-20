@@ -216,7 +216,6 @@
 	</div>
 
 	<!-- 标本批量添加默认值 张晋南20160602 -->
-<<<<<<< HEAD
 	<div id="batchAddResultsDialog" title="<fmt:message key='batch.add.results' />" style="text-align:left;" >
 		<div >
 			<select id="batchAddResults_statistic_packages"  style="float:left;width:220px" class="form-control" >
@@ -226,18 +225,6 @@
 			<input id="batchAddResults_statistic_begin" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
 			<input id="batchAddResults_statistic_end" class="form-control" style="float:left;width:80px;margin-left:8px;" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
 			<button id="batchAddResults_statisticBtn_save" class="btn btn-info" style="margin-left:8px;">保存</button>
-=======
-	<div id="batchAddResultsDialog" style="text-align:left;display:none;" >
-		<div class="col-sm-12" style="margin-top:10px;">
-			<input id="batchAddResults_statistic_date" onfocus="setDefaultValue()" class="col-sm-2" type="text" />
-			<input id="batchAddResults_statistic_code" onkeyup="this.value=this.value.toUpperCase()" class="col-sm-2" type="text" placeholder="<fmt:message key='placeholder.code'/>"/>
-			<select id="batchAddResults_statistic_packages" class="col-sm-4" style="height:33px;">
-			</select>
-			<input id="batchAddResults_statistic_begin" class="col-sm-1" type="text" placeholder="<fmt:message key='placeholder.from'/>"/>
-			<input id="batchAddResults_statistic_end" class="col-sm-1" type="text" placeholder="<fmt:message key='placeholder.to'/>"/>
-			<button id="batchAddResults_statisticBtn_get" class="btn btn-sm btn-info col-sm-1"><fmt:message key='search'/></button>
-			<button id="batchAddResults_statisticBtn_save" class="btn btn-sm btn-info col-sm-1">保存</button>
->>>>>>> origin/master
 		</div>
 		<div class="col-sm-12" style="margin-top:10px;" id="batchAddResults_statistic_table">
 		</div>
