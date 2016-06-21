@@ -624,13 +624,8 @@ $(function(){
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
 		  area:['300px','420px'],
-<<<<<<< HEAD
-		  title: $("#tatBtn").text(), // 不显示标题
-		  content: $('#tatDialog'), // 捕获的元素
-=======
 		  title: $("#tatBtn").text(),
 		  content: $('#tatDialog'),
->>>>>>> origin/master
 		  cancel: function(index){
 		    layer.close(index);
 		  }
@@ -753,11 +748,7 @@ $(function(){
 	    	});	
  			var array = jQuery.parseJSON(data);
  				for (var i=0 ; i < array.length ; i++) {    
-<<<<<<< HEAD
  					$("#batchAddResults_statistic_table").append("<div class='form-group col-xs-12'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-6'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control col-xs-4' \></div><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].unit+"</label><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].reference+"</label> </div>")
-=======
- 					$("#batchAddResults_statistic_table").append("<div class='col-sm-12' style='margin-top:5px;'><div class='col-sm-2'>&nbsp;</div><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-sm-3 no-padding-right' for='profiledescribe'>"+array[i].name+"</label><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='col-sm-5' \><div class='col-sm-2'>&nbsp;</div></div>")
->>>>>>> origin/master
  			   }
  		});
  	});
@@ -881,15 +872,9 @@ function getAuditHistory() {
 		  type: 1,
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
-<<<<<<< HEAD
 		  area:['300px','420px'],
 		  title: '审核踪迹', // 不显示标题
 		  content: $("#auditTraceDialog"), // 捕获的元素
-=======
-		  area:['490px','420px'],
-		  title: '审核踪迹', //不显示标题
-		  content: $("#auditTraceDialog"), //捕获的元素
->>>>>>> origin/master
 		  cancel: function(index){
 		    layer.close(index);
 		  }

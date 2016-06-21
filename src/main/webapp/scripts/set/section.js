@@ -239,7 +239,7 @@ $(function(){
 	$("#searchCode").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "/ajax/searchDevice",
+                url: "/ajax/searchCode",
                 dataType: "json",
                 data: {
                     name : request.term
