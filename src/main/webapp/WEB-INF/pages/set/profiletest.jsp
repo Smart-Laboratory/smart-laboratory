@@ -35,7 +35,7 @@
     </style>
 </head>
 <div class="row" id="toolbar">
-    <div class="col-xs-12">
+    <div class="col-xs-9">
         <div  style="padding-top: 5px;">
             <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="Add()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>

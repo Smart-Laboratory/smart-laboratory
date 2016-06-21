@@ -1,9 +1,7 @@
 package com.smart.webapp.controller.set;
 
-import com.smart.model.lis.Device;
 import com.smart.model.lis.ProfileTest;
 import com.smart.model.rule.Index;
-import com.smart.model.user.User;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.ProfileTestManager;
 import com.smart.service.lis.SectionManager;
@@ -13,7 +11,6 @@ import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.core.util.index.IndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.tags.Param;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

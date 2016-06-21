@@ -1,9 +1,10 @@
-package com.smart.webapp.controller.set;
+package com.smart.webapp.controller;
 
-import com.smart.model.lis.Device;
-import com.smart.model.lis.Section;
-import com.smart.service.lis.DeviceManager;
-import com.smart.service.lis.SectionManager;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,25 +14,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.smart.model.lis.Device;
+import com.smart.model.lis.Section;
+import com.smart.model.lis.SectionCode;
+import com.smart.service.lis.DeviceManager;
+import com.smart.service.lis.SectionCodeManager;
+import com.smart.service.lis.SectionManager;
 
 /**
- * Title: SetAjaxController
- * Description:基础设置类相关AJAX
+ * Title: SearchController
+ * Description:所有search AJAX
  *
- * @Author:zhou
- * @Date:2016/6/8 11:23
+ * @Author:yu
+ * @Date:2016/6/21 10:07
  * @Version:
  */
 @Controller
 @RequestMapping("/ajax")
-public class SetAjaxController {
-    @Autowired
+public class SearchAjaxController {
+	@Autowired
     private DeviceManager deviceManager = null;
     @Autowired
     private SectionManager sectionManager = null;
+    @Autowired
+    private SectionCodeManager sectionCodeManager = null;
     /**
      * 搜索仪器
      * @param request
@@ -67,6 +73,42 @@ public class SetAjaxController {
         response.getWriter().print(array.toString());
         return null;
     }
+    
+    /**
+     * 搜索仪器
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/searchCode", method = { RequestMethod.GET })
+    @ResponseBody
+    public String searchSectionCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String name = request.getParameter("name");
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+
+        List<SectionCode> codeList =  sectionCodeManager.searchCode(name);
+        if(codeList.size()>5)
+        	codeList = codeList.subList(0, 5);
+
+        JSONArray array = new JSONArray();
+        if (codeList != null) {
+            for (SectionCode sc : codeList) {
+                JSONObject  jsonObject = new JSONObject();
+                jsonObject.put("id", sc.getId());
+                jsonObject.put("code", sc.getCode());
+                jsonObject.put("describe",sc.getDescribe());
+                array.put(jsonObject);
+            }
+        }
+
+        response.setContentType("text/html; charset=UTF-8");
+        response.getWriter().print(array.toString());
+        return null;
+    }
 
     /**
      * 搜索部门
@@ -75,7 +117,7 @@ public class SetAjaxController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/searchSection", method = { RequestMethod.GET })
+    @RequestMapping(value = "/searchLab", method = { RequestMethod.GET })
     @ResponseBody
     public String searchSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

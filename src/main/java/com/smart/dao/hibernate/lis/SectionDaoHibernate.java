@@ -40,6 +40,7 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param end
      * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<Section> getSectionList(String query, String hospitalId, int start, int end,String sidx,String sord)  {
 		String sql = "from Section s where 1=1 ";
 		if(query != null && !query.equals(""))
@@ -64,6 +65,7 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 	 * @param name
 	 * @return
      */
+	@SuppressWarnings("unchecked")
 	public List<Section> getSectionList(String name) {
 		return getSession().createQuery("from Section as s where s.code like '" + name +"%' or s.name like '" +name +"%' order by s.name,s.code" ).list();
 	}

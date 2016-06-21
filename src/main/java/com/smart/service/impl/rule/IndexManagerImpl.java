@@ -29,7 +29,6 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexs(pageNum, field, isAsc);
 	}
 
-	@Override
 	public List<Index> getIndexs(String query,String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
 		String querySql = " ";
 		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
@@ -44,7 +43,6 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexs(querySql,start,end,sidx,sord);
 	}
 
-	@Override
 	public int getIndexsCount(String query, String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
 		String querySql = " ";
 		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
@@ -67,7 +65,7 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexsCount();
 	}
 	
-	public List getIndexsByIdandLab(String indexId ,String labDepartment){
+	public List<Index> getIndexsByIdandLab(String indexId ,String labDepartment){
 		return indexDao.getIndexsByIdandLab(indexId,labDepartment);
 	}
 
@@ -79,7 +77,6 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndex(indexId);
 	}
 
-	@Override
 	public List<Index> getIndexsByQuery(String query) {
 		return indexDao.getIndexsByQuery(query);
 	}

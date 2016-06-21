@@ -219,7 +219,7 @@
             return false;
         }
         //保存数据
-        $.post('/set/profiletest/saveProfileTest',
+        $.post('../../set/profiletest/saveProfileTest',
                 {profilecode:obj.profilecode,
                 profilename:obj.profilename,
                 profiledescribe:obj.profiledescribe,
@@ -402,7 +402,7 @@
     $("#sectionid").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "/ajax/searchSection",
+                url: "/ajax/searchLab",
                 dataType: "json",
                 data: {
                     name : request.term

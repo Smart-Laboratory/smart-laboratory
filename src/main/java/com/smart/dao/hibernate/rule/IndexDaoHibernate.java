@@ -32,7 +32,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.list();
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<Index> getIndexs(String query, int start, int end, String sidx, String sord) {
 		String sql = "select lab_index.* from lab_index  where 1=1";
 		sql += query;
@@ -48,7 +48,6 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.addEntity(Index.class).list();
 	}
 
-	@Override
 	public int getIndexsCount(String query, int start, int end, String sidx, String sord) {
 		String sql = "select count(1) cnt from lab_index  where 1=1";
 		if(query != null && !query.equals(""))
