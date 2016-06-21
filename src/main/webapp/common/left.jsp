@@ -51,7 +51,6 @@
 	});
 
 	$(function() {
-	
 	    $("#globalsearchbox").catcomplete({
 		    source : function(request, response) {
 		        $.ajax({

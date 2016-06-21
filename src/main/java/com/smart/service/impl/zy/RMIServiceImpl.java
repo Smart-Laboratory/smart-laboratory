@@ -565,4 +565,18 @@ public class RMIServiceImpl implements RMIService {
 		jdbcTemplate.execute(sql2);
 		
 	}
+	
+	public List<String> getExamtode(String patientId, Date from, Date to){
+		String fromStr = ymd.format(from)+" 00:00:00";
+		String toStr = ymd.format(to)+" 23:59:59";
+		String sql = "select distinct c.ylmc from YJ_YJK1 a, YJ_YJK2 b, GY_YLSF c where a.jzkh='"+patientId+"' and "
+				+ "a.yjsb=b.yjsb and "
+				+ "( c.YLXH = decode(nvl(b.TCYLXH,0),0,b.YLXH,b.TCYLXH)) and"
+				+ " (a.ZXBZ is null or a.ZXBZ = '0') and"
+				+ "( a.KDSJ between    to_date('"+fromStr+"','yyyy-MM-dd hh24:mi:ss')  AND    to_date('"+toStr+"','yyyy-MM-dd hh24:mi:ss') ) order by c.ylmc desc ";
+		
+		System.out.println(sql);
+		List<String> exam = jdbcTemplate.queryForList(sql, String.class);
+		return exam;
+	}
 }

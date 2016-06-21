@@ -146,7 +146,7 @@ public class PbszController extends PbBaseController {
 				map.put("holiday", wi.getHoliday());
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
-				map.put("isactive", wi.isActive()?"使用":"不使用");
+				map.put("isactive", wi.isActive()==1?"使用":"不使用");
 				dataRows.add(map);
 				index++;
 			}
@@ -298,7 +298,7 @@ public class PbszController extends PbBaseController {
 		int type = Integer.parseInt(request.getParameter("type"));
 		double holiday = Double.parseDouble(request.getParameter("holiday"));
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
-		boolean isActive = Boolean.parseBoolean(request.getParameter("isactive"));
+		int isActive = Integer.parseInt(request.getParameter("isactive"));
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {

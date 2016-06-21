@@ -37,7 +37,7 @@ function getData(item,event){
 				var csrq = patient.csrq;
 				$("#blh").html(patient.blh);$("#patientId").html(patient.patientId);$("#pName").html(patient.name);$("#pSex").html(patient.sex);$("#pCsrq").html(csrq.split(".")[0]);
 				if(invalidsample !=null ){
-					$("#warnLabel").html("<b>"+invalidsample+"</b>");
+					$("#warnLabel").html("不合格标本登记：<b>"+invalidsample+"</b>  ");
 				}
 				//历史抽血记录
 				if(data.size==0){
@@ -46,14 +46,29 @@ function getData(item,event){
 					$("#cxcx").html(data.size);
 					var labOrder = data.labOrder;
 					$("#cxry").html(labOrder.executor);
-					$("#cxsj").html(labOrder.executetime);
+					$("#cxsj").html(new Date(labOrder.executetime).Format('yyyy-MM-dd hh:mm:ss'));
 					$("#cxxm").html(labOrder.examitem);
+				}
+				//历史检验项目
+				var samples = data.samples;
+				if(samples != null){
+					$("#samplehis").html("");
+					for(var i=0; i<samples.length ;i++){
+						var sample = samples[i];
+						$("#samplehis").append("<div class='col-sm-2 '><span class='col-sm-6'>结果状态:</span><b>"+sample.auditStatusValue+sample.auditMarkValue+"</b></div>");
+						$("#samplehis").append("<div class='col-sm-4 '><span class='col-sm-6'>样本号:</span><b>"+sample.sampleNo+"</b></div>");
+						$("#samplehis").append("<div class='col-sm-4 '><span class='col-sm-4'>检验项目:</span><b>"+sample.inspectionName+"</b></div>");
+						$("#samplehis").append("<div class='col-sm-2 '><span class='col-sm-6'>检验科室:</span><b >"+sample.sectionId+"</b></div>");
+						$("#samplehis").append("</div>");
+					}
 				}
 			});
 			
 			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
 				if(data!=null){
 					$("#tests").html(data.html);
+					if(data.examtodo!=null)
+						$("#examtodo").html("待做项："+data.examtodo);
 				}
 			});
 		}
@@ -108,6 +123,7 @@ $(function(){
 	$("#bloodCheck").prop("checked",'true');
 	
 	$("#conform").click(function(){
+		
 		var selval="";
 		$("#tests input:checkbox").each(function(){
 			if($(this).prop("checked")==true)
@@ -117,8 +133,12 @@ $(function(){
 			alert("请选择检验项目");
 			return;
 		}
+		var selfexecute = 0;
+		if($("#selfexecute").prop("checked")==true){
+			selfexecute =1;
+		}
 //		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
-		$.get("../manage/execute/ajax/submit",{selval:selval,patientId:$("#jzkh").val(),requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
+		$.get("../manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute,patientId:$("#jzkh").val(),requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
 			data = jQuery.parseJSON(data);
 			var tests = data.laborders;
 			
@@ -160,7 +180,13 @@ $(function(){
 		$("#executeUnusualDialog").dialog("open");
 	});
 	
-	
+	$("#sampleQuery").click(function(){
+		var jzkh = $("#jzkh").val();
+		if(jzkh!=null && jzkh!=''){
+			window.location.href="../manage/patientList?patientId="+jzkh;
+		}
+			
+	});
 });
 
 function unusual(){

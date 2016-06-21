@@ -484,6 +484,8 @@ public class PatientListController extends BaseAuditController {
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
 		String text = request.getParameter("text");
+		String patientId = request.getParameter("patientId");
+		String blh = request.getParameter("blh");
 		String type = request.getParameter("type");
 		DataResponse dataResponse = new DataResponse();
 		int page = Integer.parseInt(pages);
@@ -492,7 +494,7 @@ public class PatientListController extends BaseAuditController {
 
 		List<Sample> list = new ArrayList<Sample>();
 		if (select == 1) {
-			list = sampleManager.getHistorySample(text,text,"");
+			list = sampleManager.getHistorySample(patientId,blh,"");
 		} else if (select==2 && text != null && from != null && to != null) {
 			list = sampleManager.getSampleByPatientName(from, to, text);
 		} else if (select==3) {
@@ -550,9 +552,6 @@ public class PatientListController extends BaseAuditController {
 		ModelAndView view=new ModelAndView();
 		String patientId = request.getParameter("patientId");
 		String blh = request.getParameter("blh");
-		if(patientId == null){
-			return view;
-		}
 		return view.addObject("patientId",patientId).addObject("blh", blh);
 	}
 

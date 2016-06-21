@@ -98,7 +98,7 @@
 		var isFirstTime = true;
 		var isFirstTimeForResult = true;
 		var mygrid = jQuery("#list").jqGrid({
-        	url:"../manage/patientList/data?type=1&text=" + blh, 
+        	url:"../manage/patientList/data?type=1&patientId=" + patientId +"&blh="+blh, 
         	datatype: "json", 
         	width: width, 
         	colNames:['ID', '样本号', '检验目的', '状态'], 

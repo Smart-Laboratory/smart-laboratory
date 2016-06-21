@@ -15,7 +15,7 @@ public class SectionUtil {
 	
 	//public static SectionUtil getInstance(SyncManager manager) {
 	public static SectionUtil getInstance(RMIService rmi) {
-		if (map == null) {
+		if (map == null || map.size() == 0) {
 			map = new HashMap<String, String>();
 			for (Ksdm s : rmi.getAllKsdm()) {
 				map.put(s.getId(), s.getName());

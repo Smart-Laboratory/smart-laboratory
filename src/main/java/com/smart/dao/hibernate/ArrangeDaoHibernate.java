@@ -23,7 +23,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 			s.saveOrUpdate(arrange);
 		}
 		s.flush();
-		s.close();
+//		s.close();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,6 +83,12 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getPublish(String section,String month,int state){
 		String hql = "from Arrange where date like '"+month+"%' and section like '%"+section+"%' and state = "+state;
+		return getSession().createQuery(hql).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Arrange> getBySectionMonth(String month, String section){
+		String hql = "from Arrange where date like '"+month+"%' and section like '%"+section+"%' ";
 		return getSession().createQuery(hql).list();
 	}
 }

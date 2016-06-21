@@ -24,12 +24,14 @@ import com.zju.api.model.Patient;
 import com.smart.Constants;
 import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.InvalidSample;
+import com.smart.model.lis.Sample;
 import com.smart.model.reagent.Out;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.InvalidSampleManager;
 import com.smart.service.lis.PatientManager;
+import com.smart.service.lis.SampleManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -76,6 +78,13 @@ public class ExecuteViewController {
 			map.put("size", labOrders.size());
 			map.put("labOrder", labOrders.get(0));
 		}
+		//查询历史检验结果
+		List<Sample> samples = sampleManager.getByPatientId(patientId, null);
+		if(samples!=null && samples.size()==0){
+			map.put("samples", null);
+		}else{
+			map.put("samples", samples);
+		}
 		return map;
 	}
 	
@@ -98,10 +107,26 @@ public class ExecuteViewController {
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
 		//记录最新的发票号
 		String recentInvoiceNum="";
+		//待查项目
+		String examtodo="";
+		List<String> exams = rmiService.getExamtode(patientId,from,to);
+		for(String exam : exams){
+			if(exam.contains("B超") && requestmode.equals("0")){
+				if(!examtodo.contains(exam)){
+					if(examtodo.isEmpty())
+						examtodo = exam;
+					else
+						examtodo += ";" + exam;
+				}
+			}
+		}
+		
 		for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
 			if(i==0)
 				recentInvoiceNum = e.getSfsb();
+			
+			
 //			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
 			if(i%2==1){
 				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
@@ -156,6 +181,7 @@ public class ExecuteViewController {
 		}
 		Map<String, String> map = new HashMap<String,String>();
 		map.put("html", html.toString());
+		map.put("examtodo", examtodo);
 		
 		return map;
 	}
@@ -492,4 +518,6 @@ public class ExecuteViewController {
 	private InvalidSampleManager invalidSampleManager;
 	@Autowired
 	private LabOrderManager labOrderManager;
+	@Autowired
+	private SampleManager sampleManager;
 }

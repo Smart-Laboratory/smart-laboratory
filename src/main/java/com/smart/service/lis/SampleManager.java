@@ -67,4 +67,9 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	Sample getBySfsb(String patientid, String ylxh, String sfsb);
 	
 	void insertSample(Sample s);
+	/*
+	 * 抽血是根据patientid获取历史检验项目 
+	 * lab可以为空
+	 */
+	List<Sample> getByPatientId(String patientId,String lab);
 }

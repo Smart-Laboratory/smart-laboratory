@@ -66,6 +66,7 @@ public class ExecuteController {
 		
 		String patientId = request.getParameter("patientId");
 		String mode = request.getParameter("requestmode");
+		String selfexecute = request.getParameter("selfexecute");
 		Date from=new Date(),to=new Date();
 		try {
 			from = request.getParameter("from")==null?null:ymd1.parse(request.getParameter("from"));
@@ -391,6 +392,7 @@ public class ExecuteController {
 				labOrder.setQbgdt(qbgsjdd.split("-")[1]);
 				labOrder.setRequestmode(requestmode);
 				labOrder.setSampleno(sampleno);
+				labOrder.setSelfexecute(selfexecute);
 			}
 			//记录采样次数
 			labOrder.setZxbz(++zxbz);

@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
@@ -114,7 +116,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
 		
-		if(blh != null){
+		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
 				return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' order by s.id desc").list();
 			} else {
@@ -122,6 +124,16 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 					return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId in (" + lab + ") order by s.id desc").list();
 				} else {
 					return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId=" + lab + " order by s.id desc").list();
+				}
+			}
+		}else if(patientId!=null && !patientId.isEmpty()){
+			if(lab.isEmpty()) {
+				return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' order by s.id desc").list();
+			} else {
+				if(lab.contains(",")) {
+					return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' and s.sectionId in (" + lab + ") order by s.id desc").list();
+				} else {
+					return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' and s.sectionId=" + lab + " order by s.id desc").list();
 				}
 			}
 		}
@@ -463,5 +475,15 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 				"'"+s.getPatientId()+"','','"+s.getPatientname()+"','','',0,'','"+s.getSampleNo()+"',0,'"+s.getSampleType()+"','"+s.getSectionId()+"','"+s.getSex()+"','"+s.getStayHospitalMode()+"',0,'"+s.getYlxh()+"','"+s.getInvoiceNum()+"',''	)";
 		System.out.println(sql);
 		getSession().createSQLQuery(sql).executeUpdate();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sample> getByPatientId(String patientId,String lab){
+		String hql = "from Sample where patientId = '"+patientId+"'";
+		if(lab!=null && !lab.isEmpty()){
+			hql += " and lab='"+lab+"' ";
+		}
+		hql += " and rownum <4";
+		return getSession().createQuery(hql).list();
 	}
 }

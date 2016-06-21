@@ -108,7 +108,7 @@ tr:hover{
 		</div> --%>
 
 <div class="col-sm-12">
-	<div id="sectiondataPanal" style="height:90px;margin-left:20px;margin-bottom:10px;">
+	<div id="sectiondataPanal" style="height:120px;margin-left:20px;margin-bottom:10px;">
 			<table id='sectionCount'></table>
 			<div id="sectionPager"></div>
 	</div>
