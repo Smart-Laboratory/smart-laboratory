@@ -59,7 +59,7 @@ function getBC() {
 			jsonReader : {repeatitems : false}, 
 			colNames:['ID','名称','缩写','工作时间段','科室','显示顺序',"工作量"],
 		   	colModel:[
-				{name:'id',index:'id',hidden:true,editable:false},
+				{name:'id',index:'id',hidden:true,editable:true},
 				{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
 				{name:'ab',index:'ab',width:60,editable:true,editoptions:{size:5}},
 				{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},

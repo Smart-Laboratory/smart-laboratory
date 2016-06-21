@@ -17,4 +17,6 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	 */
 	@Transactional
 	List<LabOrder> getByIds(String ids);
+	
+	List<LabOrder> getByPatientId(String patientId);
 }

@@ -21,7 +21,7 @@ public class SxArrangeDaoHibernate extends GenericDaoHibernate<SxArrange, Long> 
 			s.saveOrUpdate(sx);
 		}
 		s.flush();
-		s.close();
+//		s.close();
 	}
 	
 	

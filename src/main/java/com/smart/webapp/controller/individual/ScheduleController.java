@@ -69,8 +69,6 @@ public class ScheduleController extends PbBaseController {
 	SimpleDateFormat md = new SimpleDateFormat("MM-dd");
 	SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
 
-	//每周岗位职责
-	private Map<String, String> dMap = new HashMap<String,String>();
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -191,7 +189,7 @@ public class ScheduleController extends PbBaseController {
         		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
         			background = "style='background:#7CFC00'";
         		}
-        		if (arrMap.get(name + "-" + l) == null) {
+        		if (arrMap.get(name + "-" + l) == null || arrMap.get(name + "-" + l).getShift() == null ) {
         			String td = "";
         			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">";
         			td += "</td>";
@@ -257,7 +255,9 @@ public class ScheduleController extends PbBaseController {
         	view.addObject("arrString", arrString);
         	view.addObject("type", type);
             view.addObject("size", shifts2.length);
-        } else {
+        }else if(section.equals("1320511")){
+        	view = new ModelAndView("/pb/bpb");
+        }else {
         	String arrString = "<tr>";
         	for(int a =0;a<i+2;a++){
         		arrString = arrString + shifts[0][a];

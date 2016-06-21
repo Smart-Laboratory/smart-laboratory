@@ -22,14 +22,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.zju.api.model.ExecuteInfo;
 import com.zju.api.model.Patient;
 import com.smart.Constants;
+import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.InvalidSample;
+import com.smart.model.lis.Sample;
 import com.smart.model.reagent.Out;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.InvalidSampleManager;
 import com.smart.service.lis.PatientManager;
+import com.smart.service.lis.SampleManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
+
+import net.coobird.thumbnailator.geometry.Size;
 
 @Controller
 @RequestMapping("/manage/execute*")
@@ -52,18 +58,33 @@ public class ExecuteViewController {
 	@ResponseBody
 	public Map<String, Object>  getPatient(HttpServletRequest request, HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String,Object>();
+		//查询病人信息
 		String patientId = request.getParameter("patientId").trim();
 		Patient patient = rmiService.getPatient(patientId);
 		map.put("patient", patient);
+		//查询不合格标本记录
 		InvalidSample invalidSample = invalidSampleManager.getByPatientId(patientId);
 		if(invalidSample!=null){
 			String[] reasonList = Constants.INVALIDSAMPLE_REASON;
 			map.put("invalidsample", reasonList[invalidSample.getRejectSampleReason()]);
 		}
 		String host = request.getRemoteHost();
-		String addr = request.getRemoteAddr();
 		map.put("host", host);
-		map.put("addr", addr);
+		//查询抽血历史
+		List<LabOrder> labOrders = labOrderManager.getByPatientId(patientId);
+		if(labOrders == null || labOrders.size()==0)
+			map.put("size", 0);
+		else{
+			map.put("size", labOrders.size());
+			map.put("labOrder", labOrders.get(0));
+		}
+		//查询历史检验结果
+		List<Sample> samples = sampleManager.getByPatientId(patientId, null);
+		if(samples!=null && samples.size()==0){
+			map.put("samples", null);
+		}else{
+			map.put("samples", samples);
+		}
 		return map;
 	}
 	
@@ -86,10 +107,26 @@ public class ExecuteViewController {
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
 		//记录最新的发票号
 		String recentInvoiceNum="";
+		//待查项目
+		String examtodo="";
+		List<String> exams = rmiService.getExamtode(patientId,from,to);
+		for(String exam : exams){
+			if(exam.contains("B超") && requestmode.equals("0")){
+				if(!examtodo.contains(exam)){
+					if(examtodo.isEmpty())
+						examtodo = exam;
+					else
+						examtodo += ";" + exam;
+				}
+			}
+		}
+		
 		for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
 			if(i==0)
 				recentInvoiceNum = e.getSfsb();
+			
+			
 //			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
 			if(i%2==1){
 				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
@@ -144,6 +181,7 @@ public class ExecuteViewController {
 		}
 		Map<String, String> map = new HashMap<String,String>();
 		map.put("html", html.toString());
+		map.put("examtodo", examtodo);
 		
 		return map;
 	}
@@ -478,4 +516,8 @@ public class ExecuteViewController {
 	private RMIService rmiService;
 	@Autowired
 	private InvalidSampleManager invalidSampleManager;
+	@Autowired
+	private LabOrderManager labOrderManager;
+	@Autowired
+	private SampleManager sampleManager;
 }

@@ -4,6 +4,8 @@ import com.smart.model.user.Role;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Lookup Data Access Object (GenericDao) interface.  This is used to lookup values in
  * the database (i.e. for drop-downs).
@@ -17,5 +19,6 @@ public interface LookupDao {
      * Returns all Roles ordered by name
      * @return populated list of roles
      */
+	@Transactional
     List<Role> getRoles();
 }

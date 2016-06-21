@@ -27,5 +27,8 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 	List<Arrange> getArrangeByType(String type, String month);
 	
 	List<Arrange> getPublish(String section,String month,int state);
-	
+	/*
+	 * 根据科室、月份取排班记录
+	 */
+	List<Arrange> getBySectionMonth(String month, String section);
 }

@@ -30,4 +30,10 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		System.out.println(hqlString);
 		return getSession().createQuery(hqlString).list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LabOrder> getByPatientId(String patientId){
+		String hql = "from LabOrder where patientid = '"+patientId+"'";
+		return getSession().createQuery(hql).list();
+	}
 }

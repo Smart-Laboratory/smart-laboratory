@@ -249,14 +249,14 @@ public class PbcxController extends PbBaseController {
 	        	for(int l=1; l<j; l++) {
 	        		String name = map.get(k);
 	        		Date date = sdf1.parse(tomonth + "-" + l);
-	        		if (arrMap.get(name + "-" + l) == null) {
+	        		if (arrMap.get(name + "-" + l) == null || arrMap.get(name + "-" + l).getShift()==null) {
 	        			shifts[k][l] = ""; //<td style='background:#7CFC00'>休</td>
 	        		} else {
 	        			shifts[k][l] = arrMap.get(name + "-" + l).getShift().replace(";", ";<br>");
 	        		}
 	        		if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
 	        			shifts[k][l] = "<td style='background:#7CFC00'>" + shifts[k][l] + "</td>";
-	        		} else if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getShift().contains("公休")){
+	        		} else if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getShift()!=null && arrMap.get(name + "-" + l).getShift().contains("公休")){
 	        			shifts[k][l] = "<td  style='background:#FDFF7F;'>"+arrMap.get(name + "-" + l).getShift().replace("公休;", "").replace(";", ";<br>")+"</td>";
 	        		}  
 	        		else {

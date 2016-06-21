@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SectionDao extends GenericDao<Section,Long>{
+public interface SectionDao extends GenericDao<Section,Long> {
 
 	@Transactional
 	Section getByCode(String sectionId);

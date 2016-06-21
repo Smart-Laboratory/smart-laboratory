@@ -10,10 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.smart.model.lis.Section;
+import com.smart.model.lis.SectionCode;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.lis.SectionCodeManager;
 import com.smart.service.lis.SectionManager;
+import com.smart.util.ConvertUtil;
 
 @Controller
 @RequestMapping("/set/section*")
@@ -21,6 +25,9 @@ public class SectionController {
 	
 	@Autowired
 	private SectionManager sectionManager = null;
+	
+	@Autowired
+	private SectionCodeManager sectionCodeManager = null;
 	
 	@Autowired
 	private UserManager userManager = null;
@@ -63,6 +70,7 @@ public class SectionController {
 			map.put("id", info.getId());
 			map.put("code", info.getCode());
 			map.put("name", info.getName());
+			map.put("segment", info.getSegment());
 			map.put("hospitalId", info.getHospitalId());
 			dataRows.add(map);
 		}
@@ -71,6 +79,51 @@ public class SectionController {
 		return dataResponse;
 	}
 
+	/**
+     * 获取已选项目
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping( value = "/getCodeList*" ,method = {RequestMethod.GET,RequestMethod.POST} )
+    @ResponseBody
+    public DataResponse getIndexList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int page  = ConvertUtil.getIntValue(request.getParameter("page"));
+        int row = ConvertUtil.getIntValue(request.getParameter("rows"));
+        String code = request.getParameter("code");
+
+        int start = row * (page - 1);
+        int end = row * page;
+
+        DataResponse dataResponse = new DataResponse();
+        if(code.isEmpty()) {
+        	return null;
+        }
+        String codeId = spilt(code);
+        List<SectionCode> list = sectionCodeManager.getCode(codeId, start, end);
+        int size = list.size();
+
+        List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+        dataResponse.setRecords(size);
+        int x = size % (row == 0 ? size : row);
+        if (x != 0) {
+            x = row - x;
+        }
+        int totalPage = (size + x) / (row == 0 ? size : row);
+        dataResponse.setPage(page);
+        dataResponse.setTotal(totalPage);
+        for(SectionCode sc :list) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", sc.getId());
+            map.put("code", sc.getCode());
+            map.put("describe", sc.getDescribe());
+            dataRows.add(map);
+        }
+        dataResponse.setRows(dataRows);
+        response.setContentType("text/html;charset=UTF-8");
+        return dataResponse;
+    }
 
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
@@ -95,6 +148,16 @@ public class SectionController {
 		sectionManager.save(section);
 		return new ModelAndView("redirect:/set/section");
 	}
+	
+	@RequestMapping(method = RequestMethod.POST,value="/addCode")
+	public void addSectionCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		SectionCode sectionCode = new SectionCode();
+		String code = request.getParameter("code");
+		String describe = request.getParameter("describe");
+		sectionCode.setCode(code);
+		sectionCode.setDescribe(describe);
+		sectionCodeManager.save(sectionCode);
+	}
     
     @RequestMapping(method = RequestMethod.POST,value="/delete")
     public ModelAndView deleteSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -118,4 +181,24 @@ public class SectionController {
 			return new ModelAndView().addObject("resulut", "error");
 		}
 	}
+	
+	/**
+     * 分割字符加引号，用于SQL查询
+     * @param str
+     * @return
+     */
+    private String spilt(String str) {
+        StringBuffer sb = new StringBuffer();
+        String[] temp = str.split(",");
+        for (int i = 0; i < temp.length; i++) {
+            if (!"".equals(temp[i]) && temp[i] != null)
+                sb.append("'" + temp[i] + "',");
+        }
+        String result = sb.toString();
+        String tp = result.substring(result.length() - 1, result.length());
+        if (",".equals(tp))
+            return result.substring(0, result.length() - 1);
+        else
+            return result;
+    }
 }

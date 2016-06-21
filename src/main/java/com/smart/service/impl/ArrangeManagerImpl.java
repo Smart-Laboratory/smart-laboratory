@@ -63,4 +63,8 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 	public List<Arrange> getPublish(String section,String month,int state){
 		return arrangeDao.getPublish(section,month,state);
 	}
+	
+	public List<Arrange> getBySectionMonth(String month, String section){
+		return arrangeDao.getBySectionMonth(month, section);
+	}
 }

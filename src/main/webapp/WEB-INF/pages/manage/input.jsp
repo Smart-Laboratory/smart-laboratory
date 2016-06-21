@@ -147,13 +147,13 @@
 					<div class="col-sm-1">&nbsp;</div>
 					<div class="col-sm-2 radio">
 						<label>
-							<input name="edittype" type="radio" class="ace input-lg" value="add">
+							<input name="edittype" type="radio" class="ace input-lg" checked value="add">
 							<span class="lbl bigger-120">新增</span>
 						</label>
 					</div>
 					<div class="col-sm-2 radio">
 						<label>
-							<input name="edittype" type="radio" class="ace input-lg" checked value="edit">
+							<input name="edittype" type="radio" class="ace input-lg" value="edit">
 							<span class="lbl bigger-120">编辑</span>
 						</label>
 					</div>

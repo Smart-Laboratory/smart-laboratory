@@ -25,6 +25,7 @@ public class Section extends BaseObject {
 	private Long id;    //主键
 	private String code;
 	private String name;
+	private String segment; //检验段，CBC、CBD
 	private long hospitalId;
 	
 	/**
@@ -64,6 +65,15 @@ public class Section extends BaseObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Column
+	public String getSegment() {
+		return segment;
+	}
+
+	public void setSegment(String segment) {
+		this.segment = segment;
 	}
 
 	@Column(name="hospital_id")

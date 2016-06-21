@@ -14,20 +14,19 @@
 </head>
 <style>
 
-.widget-body span {
-	display:inline-block;
-	padding:2px 10px;
-}
-
 .sampleInfo{
 	height:70px;
-	padding:5px 5px;
+	margin-bottom:0px;
+}
+
+#tests span{
+	margin-left:10px;
 }
 
 #tests input[type=checkbox]{
 	width:50px;
 	height:50px;
-	margin-top:0px;
+	margin-top:5px;
 }
 
 </style>
@@ -38,111 +37,135 @@
 
 <div class="col-sm-12">
 	<div class="col-sm-3">
-	<div class="widget-box">
-	<div class="widget-header">
-		<h4 class="widget-title"><fmt:message key="execute.cxxx" /></h4>
-		<div class="widget-toolbar">
-			<a href="#" data-action="collapse">
-				<i class="ace-icon fa fa-chevron-up"></i>
-			</a>
-		</div>
-	</div>
-	<div class="widget-body">
-		<div class="widget-main">
-		<div>
-			<label ><fmt:message key="execute.jzkh" /></label>
-			<input type="text" id="jzkh" class="form-control" onkeypress="getData(this,event)">
-		</div>
-		<div style="padding-top:5px;">
-			<button><fmt:message key="execute.smk" /></button>
-			<button><fmt:message key="execute.jkk" /></button>
-		</div>
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" id="bloodCheck"><fmt:message key="execute.bloodSample" />
-			</label>
-		</div>
-		<div id="dateChose" style="padding:5px 0px;">
-			<span><fmt:message key="execute.date" /></span>
-			<div class="form-inline">
-				<label for="from" style="margin-left : 10px; width:50px;"><b><fmt:message key="from" /></b></label>
-				<input type="text" id="from" name="from" class="form-control date" />
+		<div class="widget-box">
+			<div class="widget-header">
+				<h4 class="widget-title"><fmt:message key="execute.cxxx" /></h4>
+				<div class="widget-toolbar">
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-up"></i>
+					</a>
+				</div>
 			</div>
-			<div class="form-inline">
-				<label for="to" style="margin-left : 10px; width:50px;" ><b><fmt:message key="to" /></b></label>
-				<input type="text" id="to" name="to" class="form-control date">
+			<div class="widget-body">
+				<div class="widget-main">
+					<div>
+						<label ><fmt:message key="execute.jzkh" /></label>
+						<input type="text" id="jzkh" class="form-control" onkeypress="getData(this,event)">
+					</div>
+					<div style="padding-top:5px;">
+						<button><fmt:message key="execute.smk" /></button>
+						<button><fmt:message key="execute.jkk" /></button>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="bloodCheck"><fmt:message key="execute.bloodSample" />
+						</label>
+					</div>
+					<div id="dateChose" style="padding:5px 0px;">
+						<span><fmt:message key="execute.date" /></span>
+						<div class="form-inline">
+							<label for="from" style="margin-left : 10px; width:50px;"><b><fmt:message key="from" /></b></label>
+							<input type="text" id="from" name="from" class="form-control date" />
+						</div>
+						<div class="form-inline">
+							<label for="to" style="margin-left : 10px; width:50px;" ><b><fmt:message key="to" /></b></label>
+							<input type="text" id="to" name="to" class="form-control date">
+						</div>
+						
+					</div>
+					<button id="conform" class="btn btn-lg center-block"><fmt:message key="button.confirm" /></button>
+					<button id="unusualRegister" class="btn btn-lg center-block">异常登记</button>
+					<div>
+						<div class="radio">
+							<label class="radio">
+			  				<input type="radio" name="select_type" id="uncheck" value="0" checked>
+			  				<fmt:message key="execute.uncheck" />
+							</label>
+						</div>
+						<div class="radio">
+							<label class="radio">
+				  			<input type="radio" name="select_type" id="all" value="100" >
+				  			<fmt:message key="execute.all" />
+							</label>
+						</div>
+						<div class="radio">
+							<label class="radio">
+				  			<input type="radio" name="select_type" id="executed" value="999" >
+				  			<fmt:message key="execute.executed" />
+							</label>
+						</div>
+					</div>
+					<div class="checkbox" style="border-top:1px solid #000000;">
+			    		<label>
+			      			<input type="checkbox" id="selfexecute" value=""> 自抽
+			    		</label>
+			    	</div>
+			    	<div class="checkbox">
+			    		<label>
+			      			<input type="checkbox" value=""> <fmt:message key="execute.printbarcode" />
+			    		</label>
+			  		</div>
+				</div>
 			</div>
-			
 		</div>
-		<button id="conform" class="btn btn-lg center-block"><fmt:message key="button.confirm" /></button>
-		<button id="unusualRegister" class="btn btn-lg center-block">异常登记</button>
-		<div>
-			<div class="radio">
-				<label class="radio">
-  				<input type="radio" name="select_type" id="uncheck" value="0" checked>
-  				<fmt:message key="execute.uncheck" />
-				</label>
+		<div class="col-sm-12" id="cxhis" style="margin:5px 0px;border:1px solid #DDD;">
+			<div class="col-sm-12 ">
+				<span class='col-sm-4'>抽血次数:</span><b id="cxcx"></b>
 			</div>
-			<div class="radio">
-				<label class="radio">
-	  			<input type="radio" name="select_type" id="all" value="100" >
-	  			<fmt:message key="execute.all" />
-				</label>
+			<span class='col-sm-12'>最后一次抽血情况:</span>
+			<div class="col-sm-12 ">
+				<span class='col-sm-4'>抽血人员:</span><b id="cxry"></b>
 			</div>
-			<div class="radio">
-				<label class="radio">
-	  			<input type="radio" name="select_type" id="executed" value="999" >
-	  			<fmt:message key="execute.executed" />
-				</label>
+			<div class="col-sm-12 ">
+				<span class='col-sm-4'>抽血时间:</span><b id="cxsj"></b>
+			</div>
+			<div class="col-sm-12 ">
+				<span class='col-sm-4'>检验项目:</span><b id="cxxm"></b>
 			</div>
 		</div>
-		<div class="checkbox" style="border-top:1px solid #000000;">
-    		<label>
-      			<input type="checkbox" value=""> <fmt:message key="execute.usebarcode" />
-    		</label>
-    	</div>
-    	<div class="checkbox">
-    		<label>
-      			<input type="checkbox" value=""> <fmt:message key="execute.printbarcode" />
-    		</label>
-  		</div>
-		</div>
-		</div>
-	</div>
 	</div>
 	<div class="col-sm-9" style="">
 		<div id="patientInfo" style="width:99%;margin:10px 5px;">
-		<div class="widget-box">
-		<div class="widget-header">
-			<h4 class="widget-title"><fmt:message key="execute.brxx" /></h4>
-			<div class="widget-toolbar">
-				<a href="#" data-action="collapse">
-					<i class="ace-icon fa fa-chevron-up"></i>
-				</a>
-			</div>
-		</div>
-		<div class="widget-body">
-			<div class="widget-main">
-				<div  style="height:20px;">
-					<div class="col-sm-2 ">
-							<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
-					</div>
-					<div class="col-sm-3 ">
-							<span class='col-sm-4'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
-					</div>
-					<div class="col-sm-2 ">
-						<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
-					</div>
-					<div class="col-sm-4 ">
-						<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
-						<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
+			<div class="widget-box">
+				<div class="widget-header">
+					<h4 class="widget-title"><fmt:message key="execute.brxx" /></h4>
+					<div class="widget-toolbar">
+						<a href="#" data-action="collapse">
+							<i class="ace-icon fa fa-chevron-up"></i>
+						</a>
 					</div>
 				</div>
-				<div id="warnLabel" class="alert alert-success" style="display: block; margin-bottom: 2px; padding: 5px 15px;">
+				<div class="widget-body" style="overflow:auto;">
+					<div class="widget-main">
+						<div  style="height:20px;">
+							<div class="col-sm-2 ">
+									<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
+							</div>
+							<div class="col-sm-3 ">
+									<span class='col-sm-4'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
+							</div>
+							<div class="col-sm-2 ">
+								<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
+							</div>
+							<div class="col-sm-3 ">
+								<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
+								<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
+							</div>
+							<button id="sampleQuery">检验结果查询</button>
+						</div>
+						<div class="col-sm-12">
+							<div id="warnLabel" class="alert alert-success col-sm-5" style="display: block; margin:5px 5px; padding: 0px 0px;">
+							</div>
+							<div id="examtodo" class="alert alert-success col-sm-6" style="display: block; margin:5px 5px; padding: 0px 0px;">
+							</div>
+						</div>
+						
+						<div class="col-sm-12" id="samplehis" style="margin:5px 5px;">
+						</div>
+						
+					</div>
 				</div>
 			</div>
-		</div>
-		</div>
 		</div>
 		<div style="width:99%; ">
 			<div class="widget-box">

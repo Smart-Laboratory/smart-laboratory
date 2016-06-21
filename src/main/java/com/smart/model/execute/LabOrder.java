@@ -48,6 +48,7 @@ public class LabOrder {
 	private String qbgsj;
 	private String qbgdt;
 	private Integer requestmode=0; //急诊标识
+	private String selfexecute;
 	
 	private String sectionStr=""; //科室名称
 	private String requestdepartmentStr="";
@@ -277,6 +278,14 @@ public class LabOrder {
 	}
 	public void setZxbz(Integer zxbz) {
 		this.zxbz = zxbz;
+	}
+	
+	@Column
+	public String getSelfexecute() {
+		return selfexecute;
+	}
+	public void setSelfexecute(String selfexecute) {
+		this.selfexecute = selfexecute;
 	}
 	
 	@Transient

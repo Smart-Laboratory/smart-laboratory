@@ -236,14 +236,9 @@ public class SampleInputAjaxController {
 		long hospitalid = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
 		List<SFXM> sfxmList = sfxmManager.searchSFXM(query.toUpperCase(), hospitalid);
 		JSONObject o = new JSONObject();
-		//JSONArray array = new JSONArray();
 		List<String> list= new ArrayList<String>();
 		for(SFXM sfxm : sfxmList) {
 			list.add(sfxm.getId() + " " + sfxm.getName() + " " + sfxm.getYblx() +" " + sfxm.getPrice());
-			/*JSONObject obj = new JSONObject();
-			obj.put("ylxh", sfxm.getId());
-			obj.put("ylmc", sfxm.getName());*/
-			//array.put(obj);
 		}
 		o.put("list", list);
 		response.setContentType("text/html; charset=UTF-8");
@@ -276,85 +271,7 @@ public class SampleInputAjaxController {
 		String ylxh = request.getParameter("ylxh");
 		String fee = request.getParameter("fee");
 		JSONObject o = new JSONObject();
-		if(operate.equals("add")) {
-			sample = new Sample();
-			process = new Process();
-			sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
-			sample.setHosSection(sectionCode);
-			sample.setSampleType(sampletype);
-			sample.setSectionId(user.getLastLab());
-			sample.setSampleNo(sampleno);
-			sample.setPatientId(patientid);
-			sample.setAge(age);
-			sample.setAgeunit(ageunit);
-			sample.setSex(sex);
-			sample.setDiagnostic(diagnostic);
-			sample.setFee(fee);
-			sample.setFeestatus(feestatus);
-			sample.setInspectionName(examinaim);
-			sample.setYlxh(ylxh);
-			sample.setPatientname(patientname);
-			sample = sampleManager.save(sample);
-			process.setSampleid(sample.getId());
-			process.setRequester(requester);
-			process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
-			process.setReceiver(user.getName());
-			process.setReceivetime(new Date());
-			process = processManager.save(process);
-			
-			SampleLog slog = new SampleLog();
-			slog.setSampleEntity(sample);
-			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			slog.setLogoperate(Constants.LOG_OPERATE_ADD);
-			slog.setLogtime(new Date());
-			slog = sampleLogManager.save(slog);
-			ProcessLog plog = new ProcessLog();
-			plog.setSampleLogId(slog.getId());
-			plog.setProcessEntity(process);
-			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			plog.setLogoperate(Constants.LOG_OPERATE_ADD);
-			plog.setLogtime(new Date());
-			processLogManager.save(plog);
-			
-		} else if (operate.equals("edit")) {
-			sample = sampleManager.get(Long.parseLong(doctadviseno));
-			process = processManager.getBySampleId(Long.parseLong(doctadviseno));
-			
-			SampleLog slog = new SampleLog();
-			slog.setSampleEntity(sample);
-			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			slog.setLogtime(new Date());
-			slog = sampleLogManager.save(slog);
-			ProcessLog plog = new ProcessLog();
-			plog.setSampleLogId(slog.getId());
-			plog.setProcessEntity(process);
-			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			plog.setLogtime(new Date());
-			processLogManager.save(plog);
-
-			sample.setSampleNo(sampleno);
-			sample.setInspectionName(examinaim);
-			sample.setYlxh(ylxh);
-			sample.setSectionId(user.getLastLab());
-			sample.setPatientname(patientname);
-			sample.setPatientId(patientid);
-			sample.setAge(age);
-			sample.setAgeunit(ageunit);
-			sample.setSex(sex);
-			sample.setFee(fee);
-			sample.setFeestatus(feestatus);
-			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-			process.setReceivetime(new Date());
-				
-			sampleManager.save(sample);
-			processManager.save(process);
-		} else if (operate.equals("delete")) {
+		if(operate.equals("delete")) {
 			sample = sampleManager.get(Long.parseLong(doctadviseno));
 			process = processManager.getBySampleId(Long.parseLong(doctadviseno));
 			
@@ -377,6 +294,86 @@ public class SampleInputAjaxController {
 			
 			sampleManager.remove(Long.parseLong(doctadviseno));
 			processManager.removeBySampleId(Long.parseLong(doctadviseno));
+		} else {
+			if(operate.equals("add") && doctadviseno.isEmpty()) {
+				sample = new Sample();
+				process = new Process();
+				sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
+				sample.setHosSection(sectionCode);
+				sample.setSampleType(sampletype);
+				sample.setSectionId(user.getLastLab());
+				sample.setSampleNo(sampleno);
+				sample.setPatientId(patientid);
+				sample.setAge(age);
+				sample.setAgeunit(ageunit);
+				sample.setSex(sex);
+				sample.setDiagnostic(diagnostic);
+				sample.setFee(fee);
+				sample.setFeestatus(feestatus);
+				sample.setInspectionName(examinaim);
+				sample.setYlxh(ylxh);
+				sample.setPatientname(patientname);
+				sample = sampleManager.save(sample);
+				process.setSampleid(sample.getId());
+				process.setRequester(requester);
+				process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
+				process.setReceiver(user.getName());
+				process.setReceivetime(new Date());
+				process = processManager.save(process);
+				
+				SampleLog slog = new SampleLog();
+				slog.setSampleEntity(sample);
+				slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+				slog.setLogoperate(Constants.LOG_OPERATE_ADD);
+				slog.setLogtime(new Date());
+				slog = sampleLogManager.save(slog);
+				ProcessLog plog = new ProcessLog();
+				plog.setSampleLogId(slog.getId());
+				plog.setProcessEntity(process);
+				plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+				plog.setLogoperate(Constants.LOG_OPERATE_ADD);
+				plog.setLogtime(new Date());
+				processLogManager.save(plog);
+				
+			} else {
+				sample = sampleManager.get(Long.parseLong(doctadviseno));
+				process = processManager.getBySampleId(Long.parseLong(doctadviseno));
+				
+				SampleLog slog = new SampleLog();
+				slog.setSampleEntity(sample);
+				slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+				slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+				slog.setLogtime(new Date());
+				slog = sampleLogManager.save(slog);
+				ProcessLog plog = new ProcessLog();
+				plog.setSampleLogId(slog.getId());
+				plog.setProcessEntity(process);
+				plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+				plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+				plog.setLogtime(new Date());
+				processLogManager.save(plog);
+
+				sample.setSampleNo(sampleno);
+				sample.setInspectionName(examinaim);
+				sample.setYlxh(ylxh);
+				sample.setSectionId(user.getLastLab());
+				sample.setPatientname(patientname);
+				sample.setPatientId(patientid);
+				sample.setAge(age);
+				sample.setAgeunit(ageunit);
+				sample.setSex(sex);
+				sample.setFee(fee);
+				sample.setFeestatus(feestatus);
+				process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				process.setReceivetime(new Date());
+					
+				sampleManager.save(sample);
+				processManager.save(process);
+			}
 		}
 		o.put("id", sample.getId());
 		o.put("sampleno", sampleno);
