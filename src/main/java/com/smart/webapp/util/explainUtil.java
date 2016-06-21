@@ -1,26 +1,31 @@
 package com.smart.webapp.util;
 
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.Dictionary;
+import com.smart.model.rule.Index;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Result;
 import com.smart.model.rule.Rule;
 import com.smart.service.DictionaryManager;
 import com.smart.service.rule.ItemManager;
 
-public class explainUtil {
+public class ExplainUtil {
 	
 	@Autowired
-	private ItemManager itemManager;
+	private ItemManager itemManager = null ;
 	@Autowired
-	private DictionaryManager dictionaryManager;
+	private DictionaryManager dictionaryManager = null;
 	
-	public static explainUtil instance = new explainUtil();
+	private Map<String, Index> idMap = new TestIdMapUtil().getInstance() ;
+	
+	public static ExplainUtil instance = new ExplainUtil();
 	
 	public String getItemStr(String id) {
 		String result = "";
@@ -30,7 +35,7 @@ public class explainUtil {
 			result = lib.getValue();
 		} else {
 			Item item = itemManager.get(ID);
-			String testName = item.getIndex().getName();
+			String testName = idMap.get(item.getIndexId()).getName();
 			String value = item.getValue();
 			if (value.contains("||")) {
 				return testName + value.replace("||", "或");
@@ -46,7 +51,7 @@ public class explainUtil {
 	public double getRank(Rule rule, Result re) {
 		double importance = 0;
 		for (Item item : rule.getItems()) {
-			String impo = item.getIndex().getImportance();
+			String impo = idMap.get(item.getIndexId()).getImportance();
 			if (impo != null && !StringUtils.isEmpty(impo)) {
 				importance = Double.parseDouble(impo) + importance;
 			}

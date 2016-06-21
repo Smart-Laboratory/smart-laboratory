@@ -14,18 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.smart.service.EvaluateManager;
+import com.smart.service.lis.CollectSampleManager;
 import com.smart.service.lis.ReasoningModifyManager;
-<<<<<<< HEAD
 import com.smart.service.lis.SampleManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.explainUtil;
+import com.smart.webapp.util.ExplainUtil;
 import com.zju.api.service.RMIService;
-=======
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.PatientUtil;
->>>>>>> origin/master
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -194,7 +190,7 @@ public class CollectDialogController extends BaseAuditController {
 //			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
-					double rank = explainUtil.instance.getRank(rule, re);
+					double rank = ExplainUtil.instance.getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());
@@ -263,7 +259,6 @@ public class CollectDialogController extends BaseAuditController {
 	}
 	
 	
-<<<<<<< HEAD
 	
 	
 	
@@ -279,54 +274,10 @@ public class CollectDialogController extends BaseAuditController {
 	@Autowired
 	private RuleManager ruleManager;
 	
-=======
-	private String getItemStr(String id) {
-		String result = "";
-		Long ID = Long.parseLong(id.substring(1));
-		if (id.startsWith("P")) {
-			Dictionary lib = PatientUtil.getInstance().getInfo(ID, dictionaryManager);
-			result = lib.getValue();
-		} else {
-			Item item = itemManager.get(ID);
-			String testName = idMap.get(item.getIndexId()).getName();
-			String value = item.getValue();
-			if (value.contains("||")) {
-				return testName + value.replace("||", "或");
-			} else if (value.contains("&&")) {
-				return testName + value.replace("&&", "且");
-			}
-			result = testName + value;
-		}
-		return result;
-	}
 	
-	private double getRank(Rule rule, Result re) {
-		double importance = 0;
-		for (Item item : rule.getItems()) {
-			String impo = idMap.get(item.getIndexId()).getImportance();
-			if (impo != null && !StringUtils.isEmpty(impo)) {
-				importance = Double.parseDouble(impo) + importance;
-			}
-		}
-		double level = 0;
-		if (re.getLevel() != null && !StringUtils.isEmpty(re.getLevel())) {
-			level = Double.parseDouble(re.getLevel());
-		}
-		double precent = 0;
-		if (re.getPercent() != null && !StringUtils.isEmpty(re.getPercent())) {
-			precent = Double.parseDouble(re.getPercent());
-		}
-		return importance * 0.5 + level * 0.3 + precent * 0.1;
-	}
-	
->>>>>>> origin/master
 	@Autowired
 	private EvaluateManager evaluateManager;
 	
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager;
-<<<<<<< HEAD
-=======
-	
->>>>>>> origin/master
 }
