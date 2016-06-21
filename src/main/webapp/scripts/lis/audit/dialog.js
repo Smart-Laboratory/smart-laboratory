@@ -428,7 +428,7 @@ $(function(){
 			var array = jQuery.parseJSON(data);
 			for (var i=0 ; i < array.length ; i++) {
 				// var html = array[i].ksdm+","+array[i].ylmc;
-					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>");
+					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text'  class='testValue span2 form-control'/></div>");
 				}
 		 });
 		$("#addTestResultDialog").dialog("open");
@@ -492,7 +492,7 @@ $(function(){
     		    			result = false;
     		    	});
     				if(result){
-    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' class='testValue span2 form-control'/></div>")
+    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div>")
     				}else{
     					alert("样本列表或者添加列表中已包含该检验项目!");
     				}
@@ -549,7 +549,7 @@ $(function(){
 	    			result = false;
 	    	});
 			if(result){
-				$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' class='testValue span2 form-control'/></div>")
+				$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div>")
 			}else{
 				alert("样本列表或者添加列表中已包含该检验项目!");
 			}
@@ -624,8 +624,13 @@ $(function(){
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
 		  area:['300px','420px'],
+<<<<<<< HEAD
+		  title: $("#tatBtn").text(), // 不显示标题
+		  content: $('#tatDialog'), // 捕获的元素
+=======
 		  title: $("#tatBtn").text(),
 		  content: $('#tatDialog'),
+>>>>>>> origin/master
 		  cancel: function(index){
 		    layer.close(index);
 		  }
@@ -736,43 +741,28 @@ $(function(){
  	/**
 	 * 张晋南2016-06-02 标本批量添加默认值
 	 */
- 	$("#batchAddResults_statisticBtn_get").click(function() {
- 		var bdate = $("#batchAddResults_statistic_date").val();
+ 	$("#batchAddResults_statistic_packages").change(function() {
+ 		$("#batchAddResults_statistic_table").html("");
  		var packages =$("#batchAddResults_statistic_packages").val();
- 		var bsc = $("#batchAddResults_statistic_code").val();
- 		var bsb = $("#batchAddResults_statistic_begin").val();
- 		var bse = $("#batchAddResults_statistic_end").val();
- 		if(""==bdate){
- 			alert("请输入日期！");
- 			return ;
- 		}
- 		if(""==bsc){
- 			alert("请输入检验段！");
- 			return ;
- 		}
- 		if(""==bsb&&bsb.length!=3){
- 			alert("请输入开始编号,并且长度为3！");
- 			return ;
- 		}
- 		if(""==bse&&bse.length!=3){
- 			alert("请输入结束编号,并且长度为3！");
- 			return ;
- 		}
- 		$.get("../audit/ajax/batchAddResults_statistic_get",{packages:packages,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse},function(data){
+ 	
+ 		$.get("../audit/ajax/batchAddResults_statistic_get",{packages:packages},function(data){
  			$("#batchAddResults_statistic_table .testValue").each(function(index,self){
 	    		if ($(self).val() != "") {
 	    			result = true;
 	    		}
 	    	});	
- 			
  			var array = jQuery.parseJSON(data);
  				for (var i=0 ; i < array.length ; i++) {    
+<<<<<<< HEAD
+ 					$("#batchAddResults_statistic_table").append("<div class='form-group col-xs-12'><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].name+"</label><div class='col-xs-6'><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control col-xs-4' \></div><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].unit+"</label><label class='col-xs-2 control-label no-padding-right' for='profiledescribe'>"+array[i].reference+"</label> </div>")
+=======
  					$("#batchAddResults_statistic_table").append("<div class='col-sm-12' style='margin-top:5px;'><div class='col-sm-2'>&nbsp;</div><input type='hidden' class='testID' value='"+array[i].id+"'/><label class='col-sm-3 no-padding-right' for='profiledescribe'>"+array[i].name+"</label><input type='text' id='"+array[i].id+"' onfocus='getDictionaries($(this).attr(\"id\"))' class='col-sm-5' \><div class='col-sm-2'>&nbsp;</div></div>")
+>>>>>>> origin/master
  			   }
  		});
  	});
  	
- 	//保存批量的结果
+ 	// 保存批量的结果
  	$("#batchAddResults_statisticBtn_save").click(function() {
  		var bdate = $("#batchAddResults_statistic_date").val();
  		var bsc = $("#batchAddResults_statistic_code").val();
@@ -891,9 +881,15 @@ function getAuditHistory() {
 		  type: 1,
 		  shade: 0.4,
 		  skin: 'layui-layer-lan',
+<<<<<<< HEAD
+		  area:['300px','420px'],
+		  title: '审核踪迹', // 不显示标题
+		  content: $("#auditTraceDialog"), // 捕获的元素
+=======
 		  area:['490px','420px'],
 		  title: '审核踪迹', //不显示标题
 		  content: $("#auditTraceDialog"), //捕获的元素
+>>>>>>> origin/master
 		  cancel: function(index){
 		    layer.close(index);
 		  }
