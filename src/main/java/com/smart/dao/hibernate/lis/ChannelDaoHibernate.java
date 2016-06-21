@@ -20,6 +20,7 @@ import java.util.List;
  */
 @Repository("channelDao")
 public class ChannelDaoHibernate extends GenericDaoHibernate<Channel,Long> implements ChannelDao {
+
     public ChannelDaoHibernate() {
         super(Channel.class);
     }
@@ -30,16 +31,26 @@ public class ChannelDaoHibernate extends GenericDaoHibernate<Channel,Long> imple
      */
     @Override
     public void saveChannels(List<Channel> channels) {
-        Session s = getSession();
+        Session session = null;
         if(channels !=null && channels.size()>0){
+            try{
+                session = getSession();     //获取session
+                session.beginTransaction(); //开启事务
                 Channel channel = null;
                 for(int i = 0; i < channels.size(); i++){
                     channel = channels.get(i);
-                    s.saveOrUpdate(channel);
+                    session.saveOrUpdate(channel);
                 }
                 // 批插入的对象立即写入数据库并释放内存
-                s.flush();
-                s.clear();
+                session.flush();
+                session.clear();
+                session.getTransaction().commit(); // 提交事务
+            }catch (Exception e){
+                log.error(e);
+                session.getTransaction().rollback(); // 出错将回滚事务
+            }finally{
+                session.close(); // 关闭Session
+            }
         }
     }
 

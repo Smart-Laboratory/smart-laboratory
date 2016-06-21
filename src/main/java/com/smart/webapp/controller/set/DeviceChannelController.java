@@ -9,8 +9,6 @@ import com.smart.service.lis.ChannelManager;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -42,12 +40,16 @@ import java.util.Map;
 public class DeviceChannelController {
     @Autowired
     private UserManager userManager = null;
+
     @Autowired
     private SectionManager sectionManager = null;
+
     @Autowired
     private DeviceManager  deviceManager = null;
+
     @Autowired
     private IndexManager indexManager = null;
+
     @Autowired
     private ChannelManager channelManager= null;
 
@@ -57,16 +59,12 @@ public class DeviceChannelController {
         ModelAndView view = new ModelAndView();
         //部门编号
         String departmentId = request.getParameter("department");
-        //departmentId="3010109";
         User operator = userManager.getUserByUsername(request.getRemoteUser()); //获取当前用户
         departmentId = operator.getLastLab();       //当前用户所选择科室
 
         String departmentName = sectionManager.getByCode(departmentId).getName(); //科室名称
         //获取仪器
-        //List<Device> devices = deviceManager.getAll();
-        //List<Index> indexes = indexManager.getAll();
-        String query = " and lab_index.labDepartment is not null or lab_index.labDepartment <>''";
-        List<Index> indexes = indexManager.getIndexsByQuery(query);
+        List<Index> indexes = indexManager.getIndexs("","",false,0,0,"","");
         JSONArray jsonArray = new JSONArray();
         String instruments = "";
         for(Index index :indexes){
@@ -74,7 +72,6 @@ public class DeviceChannelController {
             String instrument =  index.getInstrument();
             if(labDepartment==null || "".equals(labDepartment)) continue;
             if(instrument==null || "".equals(instrument)) continue;
-            //System.out.println("labDepartment==>"+labDepartment+ "=="+departmentId);
             //获取部门对应的仪器
             if(labDepartment.indexOf(departmentId)>=0){
                String lastChar = instrument.substring(instrument.length()-1,instrument.length());//
@@ -97,9 +94,8 @@ public class DeviceChannelController {
             node.put("name",entry.getValue());
             node.put("name",entry.getValue());
             jsonArray.put(node);
-            //System.out.println(entry.getKey()+"--->"+entry.getValue());
         }
-        //System.out.println(deviceMap.toString());
+       // System.out.println(jsonArray.toString());
         view.addObject("treeNodes",jsonArray);
         return  view;
     }
@@ -130,7 +126,6 @@ public class DeviceChannelController {
             channel.setTestId(testid);
             channel.setChannel(channelValue);
             channel.setSampleType(sampleType);
-
             channels.add(channel);
         }
         channelManager.saveChannels(channels);  //批量保存数据
@@ -147,22 +142,13 @@ public class DeviceChannelController {
     @RequestMapping(value = "/getData*",method = RequestMethod.POST,produces = "application/json; charset=utf-8" )
     @ResponseBody
     public String getChannelData(@RequestParam(value = "deviceid") String deviceid, HttpServletRequest request, HttpServletResponse response) throws  Exception{
-        long starTime=System.currentTimeMillis();
-        //List<Index> indexes = indexManager.getAll();    //检验项目
-        String query = " and lab_index.Instrument is not null or lab_index.Instrument <>''";
-        List<Index> indexes = indexManager.getIndexsByQuery(query);
-        String instruments = "";
+        List<Index> indexes = indexManager.getIndexs("","",false,0,0,"","");
         List<Channel> channels = new ArrayList<Channel>();
-
         JSONArray jsonArray = new JSONArray();
-
         for(Index index :indexes){
             String instrument =  index.getInstrument();
             String testid = index.getIndexId();
-
-            //System.out.println("testid==>"+testid);
             if(instrument==null || "".equals(instrument)) continue;
-
             Channel channel = null;
             JSONObject jsonObject= new JSONObject();
             //获取仪器相关检验项目
@@ -184,9 +170,6 @@ public class DeviceChannelController {
                 jsonArray.put(jsonObject);
             }
         }
-        long endTime=System.currentTimeMillis();
-        long Time=endTime-starTime;
-        System.out.println("Time==>"+Time);
         return jsonArray.toString();
     }
 }

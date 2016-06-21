@@ -105,10 +105,10 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	Index getIndex(String indexId);
 
 	/**
-	 * 按条件获取指标
-	 * @param query
+	 * 按id集合获取指标
+	 * @param ids
 	 * @return
      */
-	List<Index> getIndexsByQuery(String query);
+	List<Index> getIndexsByQueryIds(String ids);
 
 }

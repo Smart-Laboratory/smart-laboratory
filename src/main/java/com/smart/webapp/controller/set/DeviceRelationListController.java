@@ -123,7 +123,12 @@ public class DeviceRelationListController {
 
         DataResponse dataResponse = new DataResponse();
         List<Index> list = new ArrayList<Index>();
-        int size = indexManager.getIndexsCount(query,departmentid,isAdmin,start,end,sidx,sord);
+        int size = 0;
+        try{
+         size = indexManager.getIndexsCount(query,departmentid,isAdmin,start,end,sidx,sord);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         dataResponse.setRecords(size);
         int x = size % (row == 0 ? size : row);
         if (x != 0) {

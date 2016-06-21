@@ -34,28 +34,28 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 
 	@Override
 	public List<Index> getIndexs(String query, int start, int end, String sidx, String sord) {
-		String sql = "select lab_index.* from lab_index  where 1=1";
+		String sql = "from Index  where 1=1";
 		sql += query;
 
 		sidx = sidx.equals("") ? "id" : sidx;
 		sql +=" order by  " +sidx + " " + sord;
-		SQLQuery q = getSession().createSQLQuery(sql);
+		Query q = getSession().createQuery(sql);
 		//System.out.println(sql);
 		if(end !=0){
 			q.setFirstResult(start);
 			q.setMaxResults(end);
 		}
-		return q.addEntity(Index.class).list();
+		return q.list();
 	}
 
 	@Override
 	public int getIndexsCount(String query, int start, int end, String sidx, String sord) {
-		String sql = "select count(1) cnt from lab_index  where 1=1";
+		String sql = "select count(*)  from Index  where 1=1 ";
 		if(query != null && !query.equals(""))
 			sql += query;
 		sidx = sidx.equals("") ? "id" : sidx;
 		sql +=" order by  " +sidx + " " + sord;
-		Query q =  getSession().createSQLQuery(sql);
+		Query q =  getSession().createQuery(sql);
 		return new Integer(q.uniqueResult() + "");
 	}
 
@@ -126,9 +126,9 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexsByQuery(String q) {
-		String sql = "select lab_index.* from lab_index  where 1=1";
+		String sql = "from Index  where 1=1 ";
 		sql += q;
-		List<Index> list = getSession().createSQLQuery(sql).addEntity(Index.class).list();
+		List<Index> list = getSession().createQuery(sql).list();
 		return list;
 	}
 

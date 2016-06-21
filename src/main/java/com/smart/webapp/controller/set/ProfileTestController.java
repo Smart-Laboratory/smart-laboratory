@@ -1,9 +1,7 @@
 package com.smart.webapp.controller.set;
 
-import com.smart.model.lis.Device;
 import com.smart.model.lis.ProfileTest;
 import com.smart.model.rule.Index;
-import com.smart.model.user.User;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.ProfileTestManager;
 import com.smart.service.lis.SectionManager;
@@ -13,7 +11,6 @@ import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.core.util.index.IndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.tags.Param;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -69,9 +64,7 @@ public class ProfileTestController {
         String query = ConvertUtil.null2String(request.getParameter("query"));
         String sidx = request.getParameter("sidx");
         String sord = request.getParameter("sord");
-//        if(query != null){
-//            query = new String(query.getBytes("ISO-8859-1"),"UTF-8");
-//        }
+
         int start = row * (page - 1);
         int end = row * page;
 
@@ -131,8 +124,7 @@ public class ProfileTestController {
         DataResponse dataResponse = new DataResponse();
         ProfileTest profileTest = profileTestManager.get(id);
         String indexid = spilt(profileTest.getProfileTest());
-        String query = " and lab_index.index_id in("+indexid+")";
-        List<Index> list = indexManager.getIndexsByQuery(query);
+        List<Index> list = indexManager.getIndexsByQueryIds(indexid);
         int size = list.size();
 
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
@@ -189,7 +181,7 @@ public class ProfileTestController {
             try {
                 if (!indexid.equals("")) {
                     String queryIndexids = spilt(indexid);
-                    indexList = indexManager.getIndexsByQuery(" and lab_index.index_id in(" + queryIndexids + ")");
+                    indexList = indexManager.getIndexsByQueryIds(queryIndexids);
                 }
                 JSONArray arrRows = new JSONArray();
                 for(Index index:indexList){
@@ -207,7 +199,6 @@ public class ProfileTestController {
                 e.printStackTrace();
             }
         }
-
 
         return view;
     }
@@ -230,10 +221,8 @@ public class ProfileTestController {
         }else{
             profileTest = new ProfileTest();
         }
-
         profileTest.setSampleType(ConvertUtil.null2String(request.getParameter("sampletype")));
         profileTest.setProfileCode(ConvertUtil.null2String(request.getParameter("profilecode")));
-        //System.out.println(ConvertUtil.null2String(request.getParameter("profilecode")));
         profileTest.setProfileName(ConvertUtil.null2String(request.getParameter("profilename")));
         profileTest.setProfileDescribe(ConvertUtil.null2String(request.getParameter("profiledescribe")));
         profileTest.setSection(ConvertUtil.null2String(request.getParameter("sectionid")));
@@ -244,9 +233,6 @@ public class ProfileTestController {
         profileTest.setUseNow(ConvertUtil.getIntValue(request.getParameter("usenow"),1));
         String userid=request.getRemoteUser();
         profileTest.setOperator(userid);
-//        profileTest.setDataWindowName("0");
-//        profileTest.setInuredate(new Date());
-//        profileTest.setOperator("张");
         //保存
         try{
         	profileTestManager.save(profileTest);

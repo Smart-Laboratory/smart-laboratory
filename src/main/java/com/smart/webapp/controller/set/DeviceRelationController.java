@@ -57,9 +57,6 @@ public class DeviceRelationController {
         ModelAndView view = new ModelAndView();
         //部门编号
         String departmentIds = request.getParameter("department");
-        //departmentId="3010109";
-
-        //System.out.println(request.getRemoteUser());
         User operator = userManager.getUserByUsername(request.getRemoteUser());
         departmentIds = operator.getDepartment();
         List<Index> indexes = indexManager.getAll();
@@ -89,7 +86,6 @@ public class DeviceRelationController {
                     node.put("name",index.getName());
                     node.put("sampletype",index.getSampleFrom());
                     node.put("pId","p_"+departmentId[i]);
-                    //node.put("iconSkin","icon06");
                     arrTree.put(node);
                 }
 
@@ -109,8 +105,6 @@ public class DeviceRelationController {
         }
         JSONObject jsonDevice = new JSONObject(mDevices);
         JSONObject jsonDepartList = new JSONObject(departmentList);
-        JSONObject jsonSampleList = new JSONObject(sampleList);
-
         System.out.println(jsonDevice.toString());
         view.addObject("devicelist",jsonDevice);
         view.addObject("departlist",jsonDepartList);
@@ -132,8 +126,6 @@ public class DeviceRelationController {
     @RequestMapping(value = "getDataList*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public String getData(@RequestParam(value = "id",required=true) Long id, HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
-        //ModelAndView view = new ModelAndView();
-        //indexid ="3129";
         JSONObject jsonResult = new JSONObject();
         //获取仪器信息
         Index index= indexManager.get(id);
@@ -159,7 +151,7 @@ public class DeviceRelationController {
         JSONObject jsonIndex = toJSON(index);
         jsonResult.put("index",jsonIndex);
         jsonResult.put("references",jsonArray);
-        System.out.println(jsonResult.toString());
+//        System.out.println(jsonResult.toString());
         return jsonResult.toString();
     }
 
@@ -232,14 +224,8 @@ public class DeviceRelationController {
         if(!guide.equals("")) index.setGuide(guide);
         if(!type.equals("")) index.setType(type);
         if(!unit.equals("")) index.setUnit(unit);
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date outdate = sdf.parse(outDate);
-//        if(outDate != null && !outDate.equals("")) index.setOutDate(outdate);
-
         try{
             indexManager.save(index);
-            //return new ModelAndView("redirect:/set/devicerelation","result", "true");
             return new JSONObject().put("result", "true").toString();
         }catch (Exception e){
             throw  e;
@@ -272,14 +258,8 @@ public class DeviceRelationController {
         if(!decreasedHint.equals("")) index.setDecreasedHint(decreasedHint);
         if(!notes.equals("")) index.setNotes(notes);
         if(!methodName.equals("")) index.setMethodName(methodName);
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date outdate = sdf.parse(outDate);
-//        if(outDate != null && !outDate.equals("")) index.setOutDate(outdate);
-
         try{
             indexManager.save(index);
-            //return new ModelAndView("redirect:/set/devicerelation","result", "true");
             return new JSONObject().put("result", "true").toString();
         }catch (Exception e){
             throw  e;
@@ -326,7 +306,6 @@ public class DeviceRelationController {
             testReference.setRefLower(reflower);
             testReferences.add(testReference);
         }
-
         try
         {
             testReferenceManager.saveTestReferences(testReferences);  //批量保存数据

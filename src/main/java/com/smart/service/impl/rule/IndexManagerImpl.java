@@ -32,13 +32,15 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	@Override
 	public List<Index> getIndexs(String query,String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
 		String querySql = " ";
-		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
+		if(!query.equals("")) querySql += " and name like '%"+query +"%' ";
 		if(!departmentid.equals("") && !departmentid.equals("other")){
 			departmentid+=",";
-			querySql += "  and  lab_index.labdepartment like '%"+departmentid+"%'";
+			querySql += "  and  labdepartment like '%"+departmentid+"%'";
 		}else {
 			if(isAdmin){
-				querySql += "  and  (lab_index.labdepartment is null or lab_index.labdepartment='')";
+				querySql += "  and  (labdepartment is null or labdepartment='')";
+			}else {
+				querySql += "  and  (labdepartment is not null or labdepartment != '')";
 			}
 		}
 		return indexDao.getIndexs(querySql,start,end,sidx,sord);
@@ -47,13 +49,15 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	@Override
 	public int getIndexsCount(String query, String departmentid,boolean isAdmin,int start, int end, String sidx, String sord) {
 		String querySql = " ";
-		if(!query.equals("")) querySql += " and lab_index.name like '%"+query +"%' ";
+		if(!query.equals("")) querySql += " and name like '%"+query +"%' ";
 		if(!departmentid.equals("") && !departmentid.equals("other")){
 			departmentid+=",";
-			querySql += "  and  lab_index.labdepartment like '%"+departmentid+"%'";
+			querySql += "  and  labdepartment like '%"+departmentid+"%'";
 		}else {
 			if(isAdmin){
-				querySql += "  and  (lab_index.labdepartment is null or lab_index.labdepartment='')";
+				querySql += "  and  (labdepartment is null or labdepartment='')";
+			}else {
+				querySql += "  and  (labdepartment is not null or labdepartment != '')";
 			}
 		}
 		return indexDao.getIndexsCount(querySql,start,end,sidx,sord);
@@ -80,7 +84,11 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	}
 
 	@Override
-	public List<Index> getIndexsByQuery(String query) {
+	/**
+	 * 根据ID获取项目列表
+	 */
+	public List<Index> getIndexsByQueryIds(String ids) {
+		String query = " and indexId in(" + ids + ")";
 		return indexDao.getIndexsByQuery(query);
 	}
 
