@@ -379,7 +379,7 @@ $(function(){
 	$("#diseaseSelect").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../ajax/description/searchBag",
+            	url: "../ajax/searchDesBag",
                 dataType: "json",
                 data: {
                 	maxRows : 12,

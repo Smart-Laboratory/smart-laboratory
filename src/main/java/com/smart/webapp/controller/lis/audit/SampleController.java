@@ -21,6 +21,7 @@ import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -32,6 +33,9 @@ public class SampleController {
 	
 	@Autowired
 	private UserManager userManager = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 	
 	/**
 	 * 根据条件查询该检验人员的样本
@@ -78,8 +82,9 @@ public class SampleController {
 			mark = 0;
 
 		text = text.toUpperCase();
-		int size = sampleManager.getSampleCount(text, lab, mark, status, user.getLabCode());
-		list = sampleManager.getSampleList(text, lab, mark, status, user.getLabCode(), start, end);
+		String labCode = sectionManager.getByCode(user.getLastLab()).getSegment();
+		int size = sampleManager.getSampleCount(text, lab, mark, status, labCode);
+		list = sampleManager.getSampleList(text, lab, mark, status, labCode, start, end);
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);

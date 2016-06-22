@@ -10,6 +10,7 @@
    "<fmt:message key="delete.confirm"><fmt:param value="${delObject}"/></fmt:message>";
 </script>
 
+<div class="row">
 <div class="col-sm-2">
     <h2><fmt:message key="userProfile.heading"/></h2>
     <c:choose>
@@ -134,10 +135,6 @@
                     <form:input cssClass="form-control" path="department" id="department"/>
                 </div>
                 <div class="form-group">
-                    <appfuse:label styleClass="control-label" key="lab.code"/>
-                    <form:input cssClass="form-control" path="labCode" id="labCode"/>
-                </div>
-                <div class="form-group">
                     <appfuse:label styleClass="control-label" key="lab.pbcode"/>
                     <form:input cssClass="form-control" path="pbsection" id="pbsection"/>
                 </div>
@@ -226,6 +223,7 @@
 	    <img id="electronicSignature" alt="" src="${dzqm_imghtm}" border="0" width="120px" height="40px" style="border:1px solid #000000;">
 	    <div id="galleria"></div>
 	</div>
+</div>
 </div>
 <c:set var="scripts" scope="request">
 <script type="text/javascript">

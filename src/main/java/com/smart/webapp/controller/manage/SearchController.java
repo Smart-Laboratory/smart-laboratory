@@ -22,6 +22,7 @@ import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -94,7 +95,7 @@ public class SearchController {
 		case 1:
 			if(text.length()<8)
 				break;
-			String code = operator.getLabCode();
+			String code = sectionManager.getByCode(operator.getLastLab()).getSegment();
 			if(!sectionId.equals("1300000"))
 				lab = sectionId;
 			samples = sampleManager.getSampleList(text, lab, 0, -3, code, 0, 0);
@@ -208,4 +209,6 @@ public class SearchController {
 	private DictionaryManager dictionaryManager;
 	@Autowired
 	private RMIService rmiService;
+	@Autowired
+	private SectionManager sectionManager;
 }

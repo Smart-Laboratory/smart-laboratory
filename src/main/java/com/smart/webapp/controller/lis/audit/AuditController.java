@@ -63,7 +63,6 @@ import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
 import com.smart.service.EvaluateManager;
 import com.smart.service.lis.PassTraceManager;
-import com.smart.service.lis.ProfileTestManager;
 import com.smart.util.Config;
 
 @Controller
@@ -132,7 +131,7 @@ public class AuditController extends BaseAuditController {
     		String preText = sample;
     		String code;
     		if (auto == null) {
-    			code = operator.getLabCode();
+    			code = sectionManager.getByCode(operator.getLastLab()).getSegment();
     		} else {
     			code = operator.getActiveCode();
     		}
@@ -995,7 +994,6 @@ public class AuditController extends BaseAuditController {
 		for (String pftString : pfts) {
 			if(idMap.containsKey(pftString)){
 				JSONObject obj = new JSONObject();
-				Map refMap = new HashMap<String, String>();
 				fillUtil.fillReference(pftString,obj);
 				
 				Describe des = fillUtil.getDescribe(pftString);

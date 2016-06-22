@@ -10,14 +10,17 @@ public class UserUtil {
 	
 	private static UserUtil instance = new UserUtil();
 	private static Map<String, String> map = null;
+	private static Map<String, User> usermap = null;
 	
 	private UserUtil() {}
 	
 	public static UserUtil getInstance(UserManager userManager) {
-		if (map == null) {
+		if (map == null || usermap == null) {
 			map = new HashMap<String, String>();
+			usermap = new HashMap<String, User>();
 			for (User s : userManager.getAll()) {
 				map.put(s.getUsername(), s.getName());
+				usermap.put(s.getUsername(), s);
 			}
 		}
 		return instance;
@@ -38,6 +41,14 @@ public class UserUtil {
 		    }
 		}
 		return value;
+	}
+	
+	public User getUser(String key) {
+		if (usermap.containsKey(key)) {
+			return usermap.get(key);
+		} else {
+			return new User();
+		}
 	}
 
 }

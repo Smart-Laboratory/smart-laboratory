@@ -1,5 +1,6 @@
 package com.smart.webapp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,18 +9,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.model.lis.CollectSample;
+import com.smart.model.lis.ContactInfor;
 import com.smart.model.lis.Device;
 import com.smart.model.lis.Section;
 import com.smart.model.lis.SectionCode;
-import com.smart.service.lis.DeviceManager;
-import com.smart.service.lis.SectionCodeManager;
-import com.smart.service.lis.SectionManager;
+import com.smart.model.request.SFXM;
+import com.smart.model.rule.Bag;
+import com.smart.model.rule.DesBag;
+import com.smart.model.rule.Index;
+import com.smart.webapp.controller.lis.audit.BaseAuditController;
+import com.zju.api.model.Ksdm;
 
 /**
  * Title: SearchController
@@ -31,13 +36,8 @@ import com.smart.service.lis.SectionManager;
  */
 @Controller
 @RequestMapping("/ajax")
-public class SearchAjaxController {
-	@Autowired
-    private DeviceManager deviceManager = null;
-    @Autowired
-    private SectionManager sectionManager = null;
-    @Autowired
-    private SectionCodeManager sectionCodeManager = null;
+public class SearchAjaxController extends BaseAuditController {
+    
     /**
      * 搜索仪器
      * @param request
@@ -90,7 +90,7 @@ public class SearchAjaxController {
             return null;
         }
 
-        List<SectionCode> codeList =  sectionCodeManager.searchCode(name);
+        List<SectionCode> codeList =  sectionCodeManager.searchCode(name.toUpperCase());
         if(codeList.size()>5)
         	codeList = codeList.subList(0, 5);
 
@@ -119,7 +119,7 @@ public class SearchAjaxController {
      */
     @RequestMapping(value = "/searchLab", method = { RequestMethod.GET })
     @ResponseBody
-    public String searchSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String searchLab(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String name = request.getParameter("name");
         if (StringUtils.isEmpty(name)) {
@@ -144,4 +144,171 @@ public class SearchAjaxController {
         response.getWriter().print(array.toString());
         return null;
     }
+    
+    @RequestMapping(value = "/searchBAMC", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchBAMC(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+
+		List<CollectSample> csList = collectSampleManager.getCollectSampleByName(name);
+		JSONArray array = new JSONArray();
+		
+		if (csList != null) {
+			for (int i=0; i<csList.size(); i++) {
+				CollectSample cs = csList.get(i);
+				JSONObject o = new JSONObject();
+				o.put("id", i);
+				o.put("name", cs.getBamc());
+				array.put(o);
+			}
+		}
+
+		response.setContentType("charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchSection*", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Ksdm> list = rmiService.searchSection(name.toUpperCase());
+		JSONArray array = new JSONArray();
+		if (list != null) {
+			for (Ksdm s : list) {
+				JSONObject o = new JSONObject();
+				o.put("id", s.getId());
+				o.put("name", s.getName());
+				array.put(o);
+			}
+		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(array.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchContactInfo*", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchContactInfor(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<ContactInfor> list = contactManager.searchContact(name.toUpperCase());
+		JSONArray array = new JSONArray();
+		if (list != null) {
+			for (ContactInfor ci : list) {
+				JSONObject o = new JSONObject();
+				o.put("id", ci.getWORKID());
+				o.put("name", ci.getNAME());
+				array.put(o);
+			}
+		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(array.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchYlsf*", method = RequestMethod.GET)
+	public String searchYlsf(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String query = request.getParameter("query");
+		long hospitalid = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
+		List<SFXM> sfxmList = sfxmManager.searchSFXM(query.toUpperCase(), hospitalid);
+		JSONObject o = new JSONObject();
+		List<String> list= new ArrayList<String>();
+		for(SFXM sfxm : sfxmList) {
+			list.add(sfxm.getId() + " " + sfxm.getName() + " " + sfxm.getYblx() +" " + sfxm.getPrice());
+		}
+		o.put("list", list);
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(o.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchDesBag", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchDesBag(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<DesBag> bags = new ArrayList<DesBag>();
+		if(name.equals(" "))
+			bags = desBagManager.getAll();
+		else
+			bags = desBagManager.getBag(name);
+		JSONArray array = new JSONArray();
+		if (bags != null) {
+			for (DesBag b : bags) {
+				JSONObject o = new JSONObject();
+				o.put("id", b.getId());
+				o.put("name", b.getName());
+				array.put(o);
+			}
+		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchTest", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+
+		List<Index> desList =  indexManager.getIndexs(name);
+		if(desList.size()>10)
+			desList = desList.subList(0, 10);
+		JSONArray array = new JSONArray();
+		
+		if (desList != null) {
+			for (Index d : desList) {
+				
+				JSONObject o = new JSONObject();
+				o.put("id", d.getIndexId());
+				o.put("ab", d.getEnglish());
+				o.put("name", d.getName());
+				array.put(o);
+			}
+		}
+
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+    
+    @RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchBag(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Bag> bags = bagManager.getBagByName(name);
+		JSONArray array = new JSONArray();
+		if (bags != null) {
+			for (Bag b : bags) {
+				JSONObject o = new JSONObject();
+				o.put("id", b.getId());
+				o.put("name", b.getName());
+				array.put(o);
+			}
+		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
 }

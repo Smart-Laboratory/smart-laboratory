@@ -14,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -485,5 +484,10 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		hql += " and rownum <4";
 		return getSession().createQuery(hql).list();
+	}
+
+	public String getReceiveSampleno(String name, String lab, String today) {
+		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and p.receiver='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc"; 
+		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
 }

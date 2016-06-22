@@ -2,7 +2,6 @@ package com.smart.service.impl.lis;
 
 import java.util.List;
 
-import org.apache.cxf.interceptor.security.SAMLSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,5 +100,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	}
 	public List<Sample> getByPatientId(String patientId,String lab){
 		return sampleDao.getByPatientId(patientId, lab);
+	}
+
+	public String getReceiveSampleno(String name, String lab, String today) {
+		return sampleDao.getReceiveSampleno(name, lab, today);
 	}
 }

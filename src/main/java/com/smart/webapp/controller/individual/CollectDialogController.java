@@ -20,10 +20,7 @@ import com.smart.service.lis.SampleManager;
 import com.smart.service.rule.RuleManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.ExplainUtil;
-import com.zju.api.service.RMIService;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
 import com.smart.Constants;
 import com.smart.model.lis.CollectSample;
@@ -120,33 +117,6 @@ public class CollectDialogController extends BaseAuditController {
 			return true;
 		}
 		return false;
-	}
-	
-	@RequestMapping(value = "/searchBAMC", method = { RequestMethod.GET })
-	@ResponseBody
-	public String searchBAMC(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String name = request.getParameter("name");
-		if (StringUtils.isEmpty(name)) {
-			return null;
-		}
-
-		List<CollectSample> csList = collectSampleManager.getCollectSampleByName(name);
-		JSONArray array = new JSONArray();
-		
-		if (csList != null) {
-			for (int i=0; i<csList.size(); i++) {
-				CollectSample cs = csList.get(i);
-				JSONObject o = new JSONObject();
-				o.put("id", i);
-				o.put("name", cs.getBamc());
-				array.put(o);
-			}
-		}
-
-		response.setContentType("charset=UTF-8");
-		response.getWriter().print(array.toString());
-		return null;
 	}
 	
 	/**
@@ -267,9 +237,6 @@ public class CollectDialogController extends BaseAuditController {
 	
 	@Autowired
 	private SampleManager sampleManager;
-	
-	@Autowired
-	private RMIService rmiService;
 	
 	@Autowired
 	private RuleManager ruleManager;

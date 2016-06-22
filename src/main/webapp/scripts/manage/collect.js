@@ -517,7 +517,7 @@
 		$("#search_bamc").autocomplete({
 	        source: function( request, response ) {
 	            $.ajax({
-	            	url: "../collect/list/searchBAMC",
+	            	url: "../ajax/searchBAMC",
 	                dataType: "json",
 	                data: {
 	                    name : request.term

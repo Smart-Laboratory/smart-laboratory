@@ -23,7 +23,6 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.ProcessLog;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.SampleLog;
-import com.smart.model.request.SFXM;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
@@ -230,22 +229,6 @@ public class SampleInputAjaxController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/searchYlsf*", method = RequestMethod.GET)
-	public String searchYlsf(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String query = request.getParameter("query");
-		long hospitalid = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
-		List<SFXM> sfxmList = sfxmManager.searchSFXM(query.toUpperCase(), hospitalid);
-		JSONObject o = new JSONObject();
-		List<String> list= new ArrayList<String>();
-		for(SFXM sfxm : sfxmList) {
-			list.add(sfxm.getId() + " " + sfxm.getName() + " " + sfxm.getYblx() +" " + sfxm.getPrice());
-		}
-		o.put("list", list);
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(o.toString());
-		return null;
-	}
-	
 	@RequestMapping(value = "/editSample*", method = RequestMethod.POST)
 	public String editSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Sample sample = null;
@@ -294,48 +277,54 @@ public class SampleInputAjaxController {
 			
 			sampleManager.remove(Long.parseLong(doctadviseno));
 			processManager.removeBySampleId(Long.parseLong(doctadviseno));
+			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 		} else {
 			if(operate.equals("add") && doctadviseno.isEmpty()) {
-				sample = new Sample();
-				process = new Process();
-				sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
-				sample.setHosSection(sectionCode);
-				sample.setSampleType(sampletype);
-				sample.setSectionId(user.getLastLab());
-				sample.setSampleNo(sampleno);
-				sample.setPatientId(patientid);
-				sample.setAge(age);
-				sample.setAgeunit(ageunit);
-				sample.setSex(sex);
-				sample.setDiagnostic(diagnostic);
-				sample.setFee(fee);
-				sample.setFeestatus(feestatus);
-				sample.setInspectionName(examinaim);
-				sample.setYlxh(ylxh);
-				sample.setPatientname(patientname);
-				sample = sampleManager.save(sample);
-				process.setSampleid(sample.getId());
-				process.setRequester(requester);
-				process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
-				process.setReceiver(user.getName());
-				process.setReceivetime(new Date());
-				process = processManager.save(process);
-				
-				SampleLog slog = new SampleLog();
-				slog.setSampleEntity(sample);
-				slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-				slog.setLogip(InetAddress.getLocalHost().getHostAddress());
-				slog.setLogoperate(Constants.LOG_OPERATE_ADD);
-				slog.setLogtime(new Date());
-				slog = sampleLogManager.save(slog);
-				ProcessLog plog = new ProcessLog();
-				plog.setSampleLogId(slog.getId());
-				plog.setProcessEntity(process);
-				plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
-				plog.setLogip(InetAddress.getLocalHost().getHostAddress());
-				plog.setLogoperate(Constants.LOG_OPERATE_ADD);
-				plog.setLogtime(new Date());
-				processLogManager.save(plog);
+				if(sampleManager.getBySampleNo(sampleno) != null) {
+					sample = new Sample();
+					process = new Process();
+					sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
+					sample.setHosSection(sectionCode);
+					sample.setSampleType(sampletype);
+					sample.setSectionId(user.getLastLab());
+					sample.setSampleNo(sampleno);
+					sample.setPatientId(patientid);
+					sample.setAge(age);
+					sample.setAgeunit(ageunit);
+					sample.setSex(sex);
+					sample.setDiagnostic(diagnostic);
+					sample.setFee(fee);
+					sample.setFeestatus(feestatus);
+					sample.setInspectionName(examinaim);
+					sample.setYlxh(ylxh);
+					sample.setPatientname(patientname);
+					sample = sampleManager.save(sample);
+					process.setSampleid(sample.getId());
+					process.setRequester(requester);
+					process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
+					process.setReceiver(user.getName());
+					process.setReceivetime(new Date());
+					process = processManager.save(process);
+					
+					SampleLog slog = new SampleLog();
+					slog.setSampleEntity(sample);
+					slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+					slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+					slog.setLogoperate(Constants.LOG_OPERATE_ADD);
+					slog.setLogtime(new Date());
+					slog = sampleLogManager.save(slog);
+					ProcessLog plog = new ProcessLog();
+					plog.setSampleLogId(slog.getId());
+					plog.setProcessEntity(process);
+					plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+					plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+					plog.setLogoperate(Constants.LOG_OPERATE_ADD);
+					plog.setLogtime(new Date());
+					processLogManager.save(plog);
+					o.put("message", "样本号为"+ sampleno + "的标本添加成功！");
+				} else {
+					o.put("message", "样本号为"+ sampleno + "的标本已存在，不能重复添加！");
+				}
 				
 			} else {
 				sample = sampleManager.get(Long.parseLong(doctadviseno));
@@ -373,6 +362,7 @@ public class SampleInputAjaxController {
 					
 				sampleManager.save(sample);
 				processManager.save(process);
+				o.put("message", "样本号为"+ sampleno + "的标本编辑成功！");
 			}
 		}
 		o.put("id", sample.getId());

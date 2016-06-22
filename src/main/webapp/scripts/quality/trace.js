@@ -110,7 +110,7 @@ $(function() {
     $("#search_text").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../rmi/ajax/searchSection",
+            	url: "../ajax/searchSection",
                 dataType: "json",
                 data: {
                     name : request.term

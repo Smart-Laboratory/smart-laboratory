@@ -1266,9 +1266,10 @@
 			  url: "../audit/labChange?lab="+$(select).children().attr("title")
 		});
 		selectNoteAdd = true;
+		$("#lab").val($(select).children().attr("title"));
 		$("#labText").html($(select).children().html());
 		getSopSchedule($(select).children().attr("title"));
-}
+	}
 
 function getExplain(docNo){
 	var lastsel;

@@ -193,7 +193,7 @@ function labChange(select) {
 		$("#searchBtn").click(function(){
 			var text = $("#search_text").val();
 			jQuery("#s3list").jqGrid("setGridParam",{
-				url:"../set/ylsf/search?text="+text}).trigger("reloadGrid");
+				url:"../ajax/searchYlxh?text="+text}).trigger("reloadGrid");
 		});
 		
 		$("#searchProject").autocomplete({

@@ -216,7 +216,7 @@
 	</div>
 
 	<!-- 标本批量添加默认值 张晋南20160602 -->
-	<div id="batchAddResultsDialog" title="<fmt:message key='batch.add.results' />" style="text-align:left;" >
+	<div id="batchAddResultsDialog" title="<fmt:message key='batch.add.results' />" style="text-align:left;display:none;" >
 		<div >
 			<select id="batchAddResults_statistic_packages"  style="float:left;width:220px" class="form-control" >
 			</select>

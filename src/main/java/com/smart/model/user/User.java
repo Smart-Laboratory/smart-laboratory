@@ -70,7 +70,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
     
     private String department;
     private String lastLab;
-    private String labCode;
 	private String activeCode;
 	private String lastProfile;
     
@@ -339,15 +338,6 @@ public class User extends BaseObject implements Serializable, UserDetails {
 
 	public void setLastLab(String lastLab) {
 		this.lastLab = lastLab;
-	}
-	
-	@Column(name = "labcode")
-	public String getLabCode() {
-		return labCode;
-	}
-
-	public void setLabCode(String labCode) {
-		this.labCode = labCode;
 	}
 	
 	@Column(name = "activecode")

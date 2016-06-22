@@ -59,7 +59,8 @@
 					</div>
 					<label class="col-sm-1 control-label no-padding-right" for="sampleno">样本号</label>
 					<div class="col-sm-2">
-						<input type="text" class="col-sm-12" id="sampleno" onkeypress="getData(this,event)"></input>
+						<input type="text" class="col-sm-12" id="sampleno" onkeypress="getData(this,event)" value="${sampleno}"></input>
+						<input type="hidden" id="hiddenSegment" value="${segment}"/>
 					</div>
 					<label class="col-sm-1 control-label no-padding-right" for="patientid">就诊卡号</label>
 					<div class="col-sm-2">

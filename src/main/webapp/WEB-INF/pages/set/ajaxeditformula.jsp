@@ -261,7 +261,7 @@
     $("#testname").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "/ajax/searchTest",
+                url: "../ajax/searchTest",
                 dataType: "json",
                 data: {
                     name : request.term
