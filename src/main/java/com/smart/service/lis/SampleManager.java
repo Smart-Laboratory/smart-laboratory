@@ -72,4 +72,13 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	 * lab可以为空
 	 */
 	List<Sample> getByPatientId(String patientId,String lab);
+
+	/**
+	 *   获取d当天某一用户最后接收的样本号
+	 * @param name	用户名字
+	 * @param lab	用户所在部门
+	 * @param today 用户当天时间
+	 * @return
+	 */
+	String getReceiveSampleno(String name, String lab, String today);
 }

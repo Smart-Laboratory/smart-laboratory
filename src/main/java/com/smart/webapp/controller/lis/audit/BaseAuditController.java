@@ -28,11 +28,15 @@ import com.smart.service.lis.LikeLabManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ProfileTestManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionCodeManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TaskManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.service.reagent.ReagentManager;
+import com.smart.service.request.SFXMManager;
 import com.smart.service.rule.BagManager;
+import com.smart.service.rule.DesBagManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.ResultManager;
@@ -107,6 +111,18 @@ public class BaseAuditController {
 
 	@Autowired
 	protected DeviceManager deviceManager = null;
+	
+	@Autowired
+	protected SectionManager sectionManager = null;
+	
+	@Autowired
+	protected SectionCodeManager sectionCodeManager = null;
+	
+	@Autowired
+	protected SFXMManager sfxmManager = null;
+	
+	@Autowired
+	protected DesBagManager desBagManager = null;
 	
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();

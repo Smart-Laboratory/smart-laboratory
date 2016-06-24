@@ -18,6 +18,7 @@ public interface OutDao extends GenericDao<Out, Long> {
 	@Transactional
 	List<Out> getByLab(String lab);
 
-	@Transactional
 	void updateTestnum(String lab, String testid, Long rgid, Date now);
+
+	List<Out> getNeedCountList(String yesterday, String today);
 }

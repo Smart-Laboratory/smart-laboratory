@@ -22,6 +22,19 @@ function  AddCode(){
 		}
 	});
 }
+
+/**
+ * 删除检验段
+ * */
+function Delete(id){
+    //var id = $('#rightGrid').jqGrid('getGridParam', 'selrow');
+    if (id == null || id == 0) {
+        layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
+        return false;
+    }
+    $("#segment").val($("#segment").val().replace($("#codeEdit").jqGrid("getRowData", id).code + ",", ""))
+    $("#codeEdit").jqGrid('delRowData',id );
+}
 /************************************
  *  添加科室
  *  add by zcw 2015-05-16
@@ -38,7 +51,13 @@ function  AddSection(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("#addSectionForm").submit();
+			$.post('../set/section/edit', {code:$('#code').val(),
+				name : $('#name').val(), segment : $('#segment').val()
+		    },function(data){
+		    	layer.close(index);
+		    	$("#sectionList").trigger('reloadGrid');
+		    	jQuery("#sectionCode").jqGrid("clearGridData");
+	        })
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -94,6 +113,14 @@ function editSection(){
 	$('#id').val(rowData.id);
 	$('#code').val(rowData.code);
 	$('#name').val(rowData.name);
+	$('#segment').val(rowData.segment);
+	jQuery("#codeEdit").jqGrid("clearGridData");
+	jQuery("#codeEdit").jqGrid('setGridParam',{
+        url: "../set/section/getCodeList",
+        datatype : 'json',
+        postData : {"code":rowData.segment},
+        page : 1
+    }).trigger('reloadGrid');
 	layer.open({
 		type: 1,
 		area: ['800px','500px'],
@@ -104,8 +131,13 @@ function editSection(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("form").submit();
-			//layer.close(index); //如果设定了yes回调，需进行手工关闭
+			$.post('../set/section/edit', {id : $('#id').val(), code:$('#code').val(),
+				name : $('#name').val(), segment : $('#segment').val()
+		    },function(data){
+		    	layer.close(index);
+		    	$("#sectionList").trigger('reloadGrid');
+		    	jQuery("#sectionCode").jqGrid("clearGridData");
+	        })
 		}
 	});
 }
@@ -172,6 +204,7 @@ $(function(){
 		rownumWidth: 35, // the width of the row numbers columns
 		pager: "#pager",
 		onSelectRow: function(id){
+			jQuery("#sectionCode").jqGrid("clearGridData");
 			var rowData = $("#sectionList").jqGrid('getRowData',id);
             jQuery("#sectionCode").jqGrid('setGridParam',{
                  url: "../set/section/getCodeList",
@@ -214,11 +247,12 @@ $(function(){
        // rowNum:indexlist.length,
         height :300,
         width:$('#addDialog').width()*0.5,
-        colNames : [ 'id', '检验段', '检验段描述'],
+        colNames : [ 'id', '检验段', '检验段描述', '操作'],
         colModel : [
             {name : 'id',index : 'id',width : 60,hidden : true},
             {name : 'code',index : 'code',width : 80,},
-            {name : 'describe',index : 'describe',width : 160}
+            {name : 'describe',index : 'describe',width : 160},
+            {name : 'Delete',index : 'Delete',width : 60}
         ],
         gridComplete: function () {
             var ids = jQuery("#codeEdit").jqGrid('getDataIDs');
@@ -239,7 +273,7 @@ $(function(){
 	$("#searchCode").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "/ajax/searchCode",
+                url: "../ajax/searchCode",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -247,21 +281,48 @@ $(function(){
                 success: function( data ) {
                     response( $.map( data, function( result ) {
                         return {
-                            label: result.id + " : " + result.name,
-                            value: result.name,
+                            label: result.code + " : " + result.describe,
+                            value: result.code,
+                            describe: result.describe,
                             id : result.id
                         }
                     }));
-                    $("#deviceid").removeClass("ui-autocomplete-loading");
+                    $("#searchCode").removeClass("ui-autocomplete-loading");
                 }
             });
         },
         minLength: 1,
         select : function(event, ui) {
-            $("#device").val(ui.item.id);
+            //$("#addIndexId").val(ui.item.id);
+            var obj = $("#codeEdit").jqGrid("getRowData");
+            var datas = [];
+            var flag = true;
+            jQuery(obj).each(function(){
+                if(ui.item.value == this.code){
+                    flag =  false;
+                    layer.msg("数据已存在");
+                }
+                return;
+            });
+            if(!flag) return ;
+            var ids = $('#codeEdit').jqGrid('getDataIDs');
+            //console.log(ids)
+            var newId = parseInt(ids[ids.length - 1] || 0) + 1;
+            var rowData = {
+                id: ui.item.id,
+                code: ui.item.value,
+                describe: ui.item.describe
+            };
+            $("#segment").val($("#segment").val() + ui.item.value + ",");
+            $("#codeEdit").jqGrid('addRowData', newId, rowData);
+            $('#codeEdit').saveRow(newId, false, 'clientArray');
+            
+        },
+        close: function( event, ui ) {
+        	$("#searchCode").val('');
         }
     });
-
+	
 })
 function  clearData(){
 	$('#id').val('0');

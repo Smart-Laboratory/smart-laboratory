@@ -1,9 +1,6 @@
 package com.smart.webapp.controller.rule;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,20 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smart.model.rule.Bag;
 import com.smart.model.rule.DesBag;
 import com.smart.model.rule.Description;
-import com.smart.model.rule.Index;
-import com.smart.model.rule.Result;
-import com.smart.model.rule.Rule;
-import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
-import com.smart.service.rule.BagManager;
 import com.smart.service.rule.DesBagManager;
 import com.smart.service.rule.DescriptionManager;
-import com.smart.service.rule.IndexManager;
-import com.smart.service.rule.ResultManager;
-import com.smart.service.rule.RuleManager;
 
 @Controller
 @RequestMapping("/ajax/description*")
@@ -60,33 +48,6 @@ public class DescriptionAjaxController {
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(bagJson);
-		return null;
-	}
-
-	@RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
-	@ResponseBody
-	public String search(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String name = request.getParameter("name");
-		if (StringUtils.isEmpty(name)) {
-			return null;
-		}
-		List<DesBag> bags = new ArrayList<DesBag>();
-		if(name.equals(" "))
-			bags = bagManager.getAll();
-		else
-			bags = bagManager.getBag(name);
-		JSONArray array = new JSONArray();
-		if (bags != null) {
-			for (DesBag b : bags) {
-				JSONObject o = new JSONObject();
-				o.put("id", b.getId());
-				o.put("name", b.getName());
-				array.put(o);
-			}
-		}
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print(array.toString());
 		return null;
 	}
 
@@ -158,24 +119,12 @@ public class DescriptionAjaxController {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Autowired
 	private DesBagManager bagManager = null;
 	
 	@Autowired
 	private UserManager userManager = null;
 	
-	@Autowired
-	private DictionaryManager dictionaryManager = null;
 	
 	@Autowired
 	private DescriptionManager descriptionManager = null;

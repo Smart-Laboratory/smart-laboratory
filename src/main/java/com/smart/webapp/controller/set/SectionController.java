@@ -132,7 +132,7 @@ public class SectionController {
     }
 
 	@RequestMapping(method = RequestMethod.POST,value="/edit")
-	public ModelAndView editSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void editSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String id = request.getParameter("id");
 		Section section = new Section();
 		if(id ==null || id.equals("0")) {
@@ -143,10 +143,11 @@ public class SectionController {
 		}
 		String code = request.getParameter("code");
 		String name = request.getParameter("name");
+		String segment = request.getParameter("segment");
 		section.setCode(code);
 		section.setName(name);
+		section.setSegment(segment);
 		sectionManager.save(section);
-		return new ModelAndView("redirect:/set/section");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,value="/addCode")

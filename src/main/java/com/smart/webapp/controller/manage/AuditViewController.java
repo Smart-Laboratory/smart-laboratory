@@ -23,6 +23,7 @@ import com.smart.Constants;
 import com.smart.model.Code;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.service.lis.SectionManager;
 
 @Controller
 @RequestMapping("/manage/audit*")
@@ -55,7 +56,7 @@ public class AuditViewController {
 		}
 
 		Map<String, Code> actiCodeMap = new HashMap<String, Code>();
-		String labCode = operator.getLabCode();
+		String labCode = sectionManager.getByCode(operator.getLastLab()).getSegment();
 		String activeCode = operator.getActiveCode();
 		if (!StringUtils.isEmpty(labCode)) {
 			String[] codes = labCode.split(",");
@@ -109,7 +110,7 @@ public class AuditViewController {
 		request.setAttribute("activeAuto", isAuto);
 		request.setAttribute("catcherUrl", Config.getCatcherUrl());
 		request.setAttribute("today", strToday);
-		request.setAttribute("userCode", operator.getLabCode());
+		request.setAttribute("userCode", sectionManager.getByCode(operator.getLastLab()).getSegment());
 		request.setAttribute("lab", lab);
 		request.setAttribute("codeList", codeList);
 		return new ModelAndView();
@@ -117,4 +118,7 @@ public class AuditViewController {
 	
 	@Autowired
 	private UserManager userManager = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 }

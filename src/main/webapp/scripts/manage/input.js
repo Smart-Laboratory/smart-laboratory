@@ -141,6 +141,22 @@ function Pad(num, n) {
     return (Array(n).join(0) + num).slice(-n);
 }
 
+function isDate(str){
+	if(!isNaN(str.substring(0,4)) && !isNaN(str.substring(4,6)) && !isNaN(str.substring(6,8))) {
+		var year = parseInt(str.substring(0,4));
+		var month = parseInt(str.substring(4,6))-1;
+		var day = parseInt(str.substring(6,8));
+		var date=new Date(year,month,day);
+		if(date.getFullYear()==year&&date.getMonth()==month&&date.getDate()==day) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+} 
+
 function sample() {
 	var operate,shm,doct,sampleno,pid,section,sectionCode,pname,sex,age,diag,ylxh,exam,feestatus,requester,receivetime,executetime,fee;
 	operate = $("input[name='edittype']:checked").val();
@@ -178,58 +194,91 @@ function sample() {
 		receivetime = $("#receivetime").val();
 		executetime = $("#executetime").val();
 		
-		$.post("../sample/ajax/editSample", {
-			operate : operate,
-			shm : shm,
-			doct : doct,
-			sampleno : sampleno,
-			pid : pid,
-			section : section,
-			sectionCode : sectionCode,
-			pname : pname,
-			sex : sex,
-			age : age,
-			ageunit : ageunit,
-			diag : diag,
-			sampletype : sampletype,
-			fee : fee,
-			feestatus : feestatus,
-			requester : requester,
-			receivetime : receivetime,
-			executetime : executetime,
-			exam : exam,
-			ylxh : ylxh
-		},
-		function(data) {
-			var data = JSON.parse(data);
-			var sampleno = $("#sampleno").val();
-			$('#sampleForm')[0].reset();
-			$('#examinaim').data('tag').clear();
-			$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
-			var html = "<tr>";
-			html += "<td><i class='fa fa-pencil'/></td>";
-			html += "<td>" + data.sampleno + "</td>";
-			html += "<td>" + data.shm + "</td>";
-			html += "<td>" + data.pname + "</td>";
-			html += "<td>" + data.section + "</td>";
-			html += "<td>" + data.bed + "</td>";
-			html += "<td>" + data.sex + "</td>";
-			html += "<td>" + data.age + "</td>";
-			html += "<td>" + data.id + "</td>";
-			html += "<td>" + data.receivetime + "</td>";
-			html += "<td>" + data.exam + "</td>";
-			html += "<td>" + data.sampletype + "</td>";
-			html += "<td>" + data.pid + "</td>";
-			html += "<td>" + data.feestatus + "</td>";
-			html += "<td>" + data.diag + "</td>";
-			html += "<td>" + data.cycle + "</td>";
-			html += "<td>" + data.requester + "</td>";
-			html += "<td>" + data.part + "</td>";
-			html += "<td>" + data.requestmode + "</td>";
-			html += "<td>" + data.fee + "</td>";
-			html += "</tr>";
-			$("#tableBody").append(html);
-		});
+		var msg = "";
+		var post = false;
+		if(ylxh == "") {
+			msg = "检验目的不能为空！";
+			post = false;
+		}
+		if(pname == "") {
+			msg = "患者姓名不能为空！";
+			post = false;
+		}
+		if(sampleno.length != 14) {
+			msg = "样本号长度错误，格式不正确！";
+			post = false;
+		} else {
+			if(!isDate(sampleno.substring(0,8))) {
+				msg = "样本号日期格式不正确！";
+				post = false;
+			}
+			if($("#hiddenSegment").val().indexOf(sampleno.substring(8,11)) == -1) {
+				msg = "样本号检验段格式不正确！";
+				post = false;
+			}
+			if(isNaN(Number(sampleno.substring(11,14)))) {
+				msg = "样本号后3位编号不是数字！";
+				post = false;
+			}
+		}
+		
+		if(post) {
+			$.post("../sample/ajax/editSample", {
+				operate : operate,
+				shm : shm,
+				doct : doct,
+				sampleno : sampleno,
+				pid : pid,
+				section : section,
+				sectionCode : sectionCode,
+				pname : pname,
+				sex : sex,
+				age : age,
+				ageunit : ageunit,
+				diag : diag,
+				sampletype : sampletype,
+				fee : fee,
+				feestatus : feestatus,
+				requester : requester,
+				receivetime : receivetime,
+				executetime : executetime,
+				exam : exam,
+				ylxh : ylxh
+			},
+			function(data) {
+				var data = JSON.parse(data);
+				var sampleno = $("#sampleno").val();
+				$('#sampleForm')[0].reset();
+				$('#examinaim').data('tag').clear();
+				$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
+				var html = "<tr>";
+				html += "<td><i class='fa fa-pencil'/></td>";
+				html += "<td>" + data.sampleno + "</td>";
+				html += "<td>" + data.shm + "</td>";
+				html += "<td>" + data.pname + "</td>";
+				html += "<td>" + data.section + "</td>";
+				html += "<td>" + data.bed + "</td>";
+				html += "<td>" + data.sex + "</td>";
+				html += "<td>" + data.age + "</td>";
+				html += "<td>" + data.id + "</td>";
+				html += "<td>" + data.receivetime + "</td>";
+				html += "<td>" + data.exam + "</td>";
+				html += "<td>" + data.sampletype + "</td>";
+				html += "<td>" + data.pid + "</td>";
+				html += "<td>" + data.feestatus + "</td>";
+				html += "<td>" + data.diag + "</td>";
+				html += "<td>" + data.cycle + "</td>";
+				html += "<td>" + data.requester + "</td>";
+				html += "<td>" + data.part + "</td>";
+				html += "<td>" + data.requestmode + "</td>";
+				html += "<td>" + data.fee + "</td>";
+				html += "</tr>";
+				$("#tableBody").append(html);
+				layer.msg(data.message, {icon: 1, time: 1000});
+			});
+		} else {
+			layer.msg(msg, {icon: 2, time: 1000});
+		}
 	}
 }
 
@@ -239,7 +288,7 @@ $(function() {
 	$("#section").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../rmi/ajax/searchSection",
+            	url: "../ajax/searchSection",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -266,7 +315,7 @@ $(function() {
 	$("#requester").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../contact/ajax/search",
+            	url: "../ajax/searchContactInfo",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -290,7 +339,7 @@ $(function() {
 		placeholder:tag_input.attr('placeholder'),
 		style:tag_input.attr('class'),
 		source: function(query, process) {
-			$.get("../sample/ajax/searchYlsf",{query:query},function(data) {
+			$.get("../ajax/searchYlsf",{query:query},function(data) {
 				var json = jQuery.parseJSON(data);
 				process(json.list);
 			});

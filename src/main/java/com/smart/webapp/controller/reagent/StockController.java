@@ -33,11 +33,8 @@ public class StockController extends ReagentBaseController {
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
 			Reagent reagent = new Reagent();
-			if(labMap.size() == 0) {
-				initLabMap();
-			}
-			String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
-			reagent.setLab(labName);
+			String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+			reagent.setLab(lab);
 			reagent.setName(request.getParameter("name"));
 			reagent.setSpecification(request.getParameter("specification"));
 			reagent.setPlaceoforigin(request.getParameter("place"));
@@ -76,11 +73,8 @@ public class StockController extends ReagentBaseController {
 	@RequestMapping(value = "/getReagent*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
-		List<Reagent> set = reagentManager.getByLab(labName);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Reagent> set = reagentManager.getByLab(lab);
 		Map<Long,Reagent> rMap = new HashMap<Long,Reagent>();
 		String ids = "";
 		for(Reagent r : set) {

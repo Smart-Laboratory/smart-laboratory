@@ -187,8 +187,6 @@ $(function(){
 		$("#opStatusDialog").dialog("open");
 	});
 	
-	
-	
 	$("#auditUnpassBtn").click(function(){
 		$("#hiddenIsPass").val(false);
 		$("#passNotes").html("<b>未通过原因</b>");
@@ -199,7 +197,17 @@ $(function(){
 		$("#collectText").val("");
 		$("#collect_bamc").val("");
 		$("#collect_type").val("");
-		$("#collectDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['320px','350px'],
+			  title: '收藏',
+			  content: $("#collectDialog"),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	
 	$("#uploadBtn").click(function(){
@@ -207,10 +215,17 @@ $(function(){
 		$("#image_note").val("");
 		$("#galleria").html("");
 		$("#galleria").css("height", "0px");
-		$('#cellSelect option:first').attr('selected','selected');
-		$("#cellTemplateSelect").html("");
-		$("#cellTemplateSelect").css('display', 'none');
-		$("#uploadDialog").dialog("open");
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['300px','420px'],
+			  title: '上传图片', // 不显示标题
+			  content: $("#uploadDialog"), // 捕获的元素
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	
 	$("#imageBtn").click(function(){
@@ -219,7 +234,7 @@ $(function(){
 			  type: 1,
 			  shade: 0.4,
 			  skin: 'layui-layer-lan',
-			  area:['800px','700px'],
+			  area:['600px','480px'],
 			  title: '图片',
 			  content: $('#imageDialog'),
 			  cancel: function(index){
@@ -289,8 +304,12 @@ $(function(){
 			} else {
 				alert("您已收藏过该样本！");
 			}
-			$("#collectDialog").dialog("close");
+			layer.closeAll();
 		});
+	});
+	
+	$("#collectCancel").click(function() {
+		layer.closeAll();
 	});
 	
 	$("#unaudit_reason_btn").hover(function(){

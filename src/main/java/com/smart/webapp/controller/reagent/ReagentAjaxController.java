@@ -42,11 +42,8 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
-		List<Reagent> list = reagentManager.getReagents(name, labName);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Reagent> list = reagentManager.getReagents(name, lab);
 		JSONArray array = new JSONArray();
 		if (list != null) {
 			for (Reagent r : list) {
@@ -71,15 +68,12 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());		
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();		
 		JSONArray array = new JSONArray();
 		if(type == 1) {
 			
 		} else if(type == 2) {
-			List<Reagent> list = reagentManager.getReagents(name, labName);
+			List<Reagent> list = reagentManager.getReagents(name, lab);
 			if (list != null) {
 				for (Reagent r : list) {
 					JSONObject o = new JSONObject();
@@ -124,10 +118,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 	public DataResponse getInData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Long id = Long.parseLong(request.getParameter("id"));
 		int type = Integer.parseInt(request.getParameter("type"));
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		if(type == 1) {
@@ -143,7 +134,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			}
 			productcode = productSet.toString().replace(", ", "','");
 			productcode = "'" + productcode.substring(1, productcode.length()-1) + "'";
-			List<Reagent> list = reagentManager.getByProduct(productcode,labName);
+			List<Reagent> list = reagentManager.getByProduct(productcode,lab);
 			dataResponse.setRecords(list.size());
 			for(Reagent r : list) {
 				Map<String, Object> map = new HashMap<String, Object>();
@@ -310,7 +301,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
 				indata.setOperator(user.getName());
 				indata.setRgId(r.getId());
-				indata.setLab(labMap.get(user.getLastLab()));
+				indata.setLab(user.getLastLab());
 				needSaveIn.add(indata);
 			}
 			batchManager.saveAll(needSaveBatch);
@@ -369,7 +360,6 @@ public class ReagentAjaxController extends ReagentBaseController {
 					batchMap.put(b.getRgId(), bl);
 				}
 			}
-			Date now = new Date();
 			if(barcode != null) {
 				for(Reagent r : list) {
 					for(Batch b : batchMap.get(r.getId())) {
@@ -387,11 +377,9 @@ public class ReagentAjaxController extends ReagentBaseController {
 							outdata.setOperator(user.getName());
 							outdata.setOutdate(new Date());
 							outdata.setRgId(r.getId());
-							outdata.setLab(labMap.get(user.getLastLab()));
+							outdata.setLab(user.getLastLab());
 							needSaveBatch.add(b);
 							needSaveOut.add(outdata);
-							
-							outManager.updateTestnum(labMap.get(user.getLastLab()),r.getTestname(),r.getId(),now);
 						}
 					}
 				}
@@ -413,10 +401,9 @@ public class ReagentAjaxController extends ReagentBaseController {
 							outdata.setOperator(user.getName());
 							outdata.setOutdate(new Date());
 							outdata.setRgId(r.getId());
-							outdata.setLab(labMap.get(user.getLastLab()));
+							outdata.setLab(user.getLastLab());
 							needSaveBatch.add(b);
 							needSaveOut.add(outdata);
-							outManager.updateTestnum(labMap.get(user.getLastLab()),r.getTestname(),r.getId(),now);
 						}
 					}
 				}

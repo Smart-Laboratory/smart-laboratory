@@ -37,4 +37,8 @@ public class OutManagerImpl extends GenericManagerImpl<Out, Long> implements Out
 	public void updateTestnum(String lab, String testid, Long rgid, Date now) {
 		outDao.updateTestnum(lab,testid,rgid,now);
 	}
+
+	public List<Out> getNeedCountList(String yesterday, String today) {
+		return outDao.getNeedCountList(yesterday, today);
+	}
 }

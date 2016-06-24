@@ -115,11 +115,14 @@ public class YlsfController extends BaseAuditController {
 		String lab = request.getParameter("lab");
 		String ylmc = request.getParameter("ylmc");
 		List<Ylxh> list =  ylxhManager.getLabofYlmcBylike(lab,ylmc);
-		for(Iterator it = list.iterator(); it.hasNext();){
+		for(Iterator<Ylxh> it = list.iterator(); it.hasNext();){
 			Ylxh y = (Ylxh) it.next();
 			if(y.getProfiletest()==null||"".equals(y.getProfiletest()))
 				it.remove();
 		};
+		
+		if (idMap.size() == 0)
+			initMap();
 		
 		JSONArray array = new JSONArray();
 		if(null == ylmc){

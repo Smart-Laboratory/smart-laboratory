@@ -57,29 +57,6 @@ public class RuleAjaxController extends BaseAuditController {
 		return null;
 	}
 
-	@RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
-	@ResponseBody
-	public String search(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String name = request.getParameter("name");
-		if (StringUtils.isEmpty(name)) {
-			return null;
-		}
-		List<Bag> bags = bagManager.getBagByName(name);
-		JSONArray array = new JSONArray();
-		if (bags != null) {
-			for (Bag b : bags) {
-				JSONObject o = new JSONObject();
-				o.put("id", b.getId());
-				o.put("name", b.getName());
-				array.put(o);
-			}
-		}
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print(array.toString());
-		return null;
-	}
-
 	@RequestMapping(value = "/editBag", method = { RequestMethod.POST })
 	public void updateData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String action = request.getParameter("action");

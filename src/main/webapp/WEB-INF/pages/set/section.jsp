@@ -32,6 +32,9 @@
      .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
          background-color: #F5F5F6;
      }
+     .ui-autocomplete {
+         z-index: 99999999;
+     }
 </style>
 <div class="row" id="toolbar">
 	<div id="mainTable" class="col-xs-9">
@@ -74,7 +77,7 @@
 
 
 <div id="addDialog" style="display: none;width:760px;" class="main-container">
-	<form class="form-horizontal" id="addSectionForm" action="<c:url value='../set/section/edit'/>" method="post">
+	<form class="form-horizontal" id="addSectionForm" action="#" method="post">
 	<div class="row" style="padding-top: 5px;">
 		<div class="input-group col-xs-6 " style="float: right;">
 			<button type="button" class="btn btn-sm btn-primary col-xs-3" style="height:33px;" title="保存" onclick="AddCode()">
