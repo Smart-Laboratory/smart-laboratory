@@ -352,30 +352,6 @@ $(function(){
 	    height: 260
 	});
 	
-	$("#collectDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 320,
-	    height: 400
-	});
-	
-	$("#uploadDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 400,
-	    height: 500
-	});
-	
-	$("#templateDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 380,
-	    height: 460
-	});
-	
 	$("#diseaseSelect").autocomplete({
         source: function( request, response ) {
             $.ajax({
@@ -904,7 +880,7 @@ function ajaxFileUpload(){
 		fileElementId: arrId,  
 		success: function (data){
 			alert("上传成功");
-			$("#uploadDialog").dialog("close");
+			layer.closeAll();
 			jQuery("#list").trigger("reloadGrid");
 		},
 		error: function(){

@@ -210,7 +210,7 @@
 </div>
 <div class="col-sm-3">
 
-	<div id="uploadDialog" title="<fmt:message key="electronic.Signature.titel" /><fmt:message key='upload.title' />" style="text-align:left;" >
+	<div id="uploadDialog" style="text-align:left;" >
 		<fieldset style="width:95%; margin-left:4px;">
 		<legend style="margin-top:3px;"><fmt:message key='electronic.Signature.titel' /></legend>
 			<div>
@@ -232,17 +232,6 @@ function onFormSubmit(theForm) {
     return validateUser(theForm);
 }
 
-	$("#electronicSignature").click(function(){
-		$("#more").html("");
-		$("#galleria").html("");
-		$("#galleria").css("height", "0px");
-		$('#cellSelect option:first').attr('selected','selected');
-		$("#cellTemplateSelect").html("");
-		$("#cellTemplateSelect").css('display', 'none');
-		$("#uploadDialog").dialog("open");
-	});
-	
-	
 function createInput(){
     var count=1;
     var str = '<div class="col-sm-12" style="margin-top:5px;"><input type="file" contentEditable="false" id="uploads' + count + '' +

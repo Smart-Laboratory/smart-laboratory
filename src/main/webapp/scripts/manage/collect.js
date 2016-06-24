@@ -383,28 +383,27 @@
 		    height: 500
 		});
 		
-		$("#imageDialog").dialog({
-			autoOpen: false,
-			resizable: false,
-			modal:true,
-		    width: 800,
-		    height: 700
-		});
-		
 		$("#uploadBtn").click(function(){
 			$("#more").html("");
 			$("#image_note").val("");
 			$("#galleria").html("");
 			$("#galleria").css("height", "0px");
-			$('#cellSelect option:first').attr('selected','selected');
-			$("#cellTemplateSelect").html("");
-			$("#cellTemplateSelect").css('display', 'none');
 			$("#uploadDialog").dialog("open");
 		});
 		
 		$("#imageBtn").click(function(){
 			getImages($("#hiddenSampleNo").val());
-			$("#imageDialog").dialog("open");
+			layer.open({
+				  type: 1,
+				  shade: 0.4,
+				  skin: 'layui-layer-lan',
+				  area:['800px','700px'],
+				  title: '图片',
+				  content: $('#imageDialog'),
+				  cancel: function(index){
+				    layer.close(index);
+				  }
+				});
 		});
 		
 		$("#typeBtn").click(function(){

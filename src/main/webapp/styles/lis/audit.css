@@ -98,18 +98,6 @@ select {
 	width:240px;
 } */
 
-#cellSelect {
-	width:150px;
-	padding: 4px 6px;
-	margin-bottom:0px;
-}
-
-#cellTemplateSelect {
-	width:150px;
-	padding: 4px 6px;
-	margin-bottom:0px;
-}
-
 /* textarea, input[type="text"]{
 	padding: 1px;
 }

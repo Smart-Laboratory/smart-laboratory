@@ -105,27 +105,32 @@
 		<div id="chartList"></div>
 	</div>
 	
-	<div id="collectDialog" title="<fmt:message key='collect.button' />" style="text-align:left;" >
-		<h5 id="bamc"><fmt:message key='collect.bamc'/></h5>
-		<input id="collect_bamc" type="text" class="span3"/>
-		<h5 id="collectType"><fmt:message key='collect.type'/></h5>
-		<input id="collect_type" type="text" class="span3"/>
-		<h5 id="evaluate"><fmt:message key='collect.evaluate'/></h5>
-		<textarea id="collectText" rows="1" style="width:280px;height:60px;"></textarea>
-		<div style="margin-top:10px;">
-			<button id="collectConfirm" class="btn btn-info" ><fmt:message key='collect.button' /></button>
-			<button id="collectCancel" class="btn" ><fmt:message key='button.cancel' /></button>
-		</div>
-	</div>
+</div>
 	
-	<div id="uploadDialog" title="<fmt:message key='upload.title' />" style="text-align:left;" >
+	<div id="collectDialog" style="text-align:left;display:none;" >
+		<div class="col-sm-12">
+			<h5 id="bamc"><b><fmt:message key='collect.bamc'/></b></h5>
+			<input id="collect_bamc" type="text" class="span3"/>
+			<h5 id="collectType"><b><fmt:message key='collect.type'/></b></h5>
+			<input id="collect_type" type="text" class="span3"/>
+			<h5 id="evaluate"><b><fmt:message key='collect.evaluate'/></b></h5>
+			<textarea id="collectText" rows="1" style="width:280px;height:60px;"></textarea>
+			<div style="margin-top:10px;">
+				<button id="collectConfirm" class="btn btn-sm btn-info" ><fmt:message key='collect.button' /></button>
+				<button id="collectCancel" class="btn btn-sm" ><fmt:message key='button.cancel' /></button>
+			</div>
+		</div>
+		
+	</div>
+
+	<div id="uploadDialog" style="text-align:left;display:none;" >
 	    <%-- <h5><fmt:message key='image.name'/></h5>
 		<input id="image_name" type="text" class="span4"/> --%>
 		<fieldset style="width:95%; margin-left:4px;">
 		<legend style="margin-top:3px;"><fmt:message key='upload.picture' /></legend>
 			<div>
-		    <button class="btn btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
-		    <button class="btn btn-success" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
+		    <button class="btn btn-sm btn-info" onclick="createInput();"><fmt:message key='add.point'/></button>
+		    <button class="btn btn-sm btn-success" onclick="ajaxFileUpload()"><fmt:message key='upload.title'/></button>
 			<div id="more" style="float:left;"></div>
 			</div>
 		</fieldset>
@@ -133,29 +138,6 @@
 	    <textarea id="image_note" class="span4" rows="4"></textarea>
 	    <div id="galleria"></div>
 	</div>
-	
-	<div id="templateDialog" title="<fmt:message key='template.title' />" style="text-align:left;" >
-		<button class="btn" onclick="createTemp();"><fmt:message key='add.point'/></button>
-	    <button class="btn" onclick="ajaxTemplateUpload()"><fmt:message key='template.upload'/></button>
-	    <div id="more2"></div>
-		<h5><fmt:message key='image.name'/></h5>
-		<input id="template_name" type="text" class="span4"/>
-		<h5><fmt:message key='image.type'/></h5>
-		<select id="template_type">
-			<option value='0'></option>
-			<c:forEach var="cell" items="${cellList}">
-				<option value='<c:out value="${cell.id}" />'><c:out value="${cell.name}" /></option>
-			</c:forEach>
-		</select>
-		<h5><fmt:message key='image.description'/></h5>
-	    <textarea id="template_note" class="span4" rows="4"></textarea>
-	</div>
-	
-	<div id="imageDialog" title="<fmt:message key='knowledge.check10' />" style="text-align:left;" >
-	<div id="showGalleria"></div>
-	</div>
-	
-</div>
 
 	<div id="imageDialog" style="text-align:left;display:none;" >
 		<div id="showGalleria"></div>
