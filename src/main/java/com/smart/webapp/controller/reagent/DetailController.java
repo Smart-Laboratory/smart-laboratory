@@ -34,11 +34,8 @@ public class DetailController extends ReagentBaseController {
 	@RequestMapping(value = "/getIn*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
-		List<In> list = inManager.getByLab(labName);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<In> list = inManager.getByLab(lab);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
@@ -97,11 +94,8 @@ public class DetailController extends ReagentBaseController {
 	@RequestMapping(value = "/getOut*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = labMap.get(userManager.getUserByUsername(request.getRemoteUser()).getLastLab());
-		List<Out> list = outManager.getByLab(labName);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Out> list = outManager.getByLab(lab);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);

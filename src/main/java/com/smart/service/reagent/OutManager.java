@@ -15,4 +15,6 @@ public interface OutManager extends GenericManager<Out, Long> {
 	List<Out> getByLab(String lab);
 
 	void updateTestnum(String lab, String testid, Long id, Date now);
+
+	List<Out> getNeedCountList(String yesterday, String today);
 }

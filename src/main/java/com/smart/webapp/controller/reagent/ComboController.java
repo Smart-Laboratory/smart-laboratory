@@ -34,11 +34,8 @@ public class ComboController extends ReagentBaseController {
 	@RequestMapping(value = "/getCombo*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getCombo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(labMap.size() == 0) {
-			initLabMap();
-		}
-		String labName = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		List<Combo> list = comboManager.getByLab(labName);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Combo> list = comboManager.getByLab(lab);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);

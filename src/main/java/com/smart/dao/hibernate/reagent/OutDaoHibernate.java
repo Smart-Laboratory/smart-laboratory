@@ -9,6 +9,7 @@ import java.util.Set;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.reagent.OutDao;
 import com.smart.model.reagent.Out;
@@ -63,6 +64,12 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 			o.setTestnum(count);
 			s.save(o);
 			s.flush();
+			s.close();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Out> getNeedCountList(String yesterday, String today) {
+		return getSession().createQuery("from Out where outdate<to_date('"+ Constants.DATEFORMAT + "' '" + today + "') and to_date>('" + Constants.DATEFORMAT + "' '" + yesterday + "')").list();
 	}
 }
