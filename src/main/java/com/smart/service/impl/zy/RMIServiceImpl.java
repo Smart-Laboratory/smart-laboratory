@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.smart.util.ConvertUtil;
 import org.apache.commons.collections.functors.IfClosure;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -338,12 +339,20 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncResult> getWSWResult(String sampleNo) {
-		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
+		//String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
+		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_MICRO_TEST t, LAB_MICRO_RESULT r LEFT JOIN LAB_MICRO_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
+
 		return jdbcTemplate.query(sql, new RowMapper<SyncResult>() {
 			public SyncResult mapRow(ResultSet rs, int rowNum) throws SQLException {
 				SyncResult sr = new SyncResult();
 				sr.setSAMPLENO(rs.getString(7));
-				sr.setTESTID(rs.getString(3) == null ? rs.getString(1) : rs.getString(3));
+				String describe = ConvertUtil.null2String(rs.getString(3));
+				if(!describe.equals("") && describe.indexOf("自定义结果")>-1){
+					sr.setTESTID(describe);
+				}else{
+					sr.setTESTID(rs.getString(1));
+				}
+				//(rs.getString(3) == null ? rs.getString(1) : rs.getString(3));
 				sr.setSAMPLETYPE(rs.getString(9).charAt(0));
 				sr.setTESTRESULT(rs.getString(10));
 				sr.setUNIT(rs.getString(12));

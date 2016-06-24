@@ -409,7 +409,7 @@
                 },
                 success: function( data ) {
                     response( $.map( data, function( result ) {
-                        console.log(result)
+                        //console.log(result)
                         return {
                             label: result.code + " : " + result.name,
                             value: result.name,

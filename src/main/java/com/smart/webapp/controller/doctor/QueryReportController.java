@@ -1,12 +1,14 @@
 package com.smart.webapp.controller.doctor;
 
 import com.smart.Constants;
+import com.smart.model.doctor.LeftVo;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
 import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
+import com.smart.service.doctor.DoctorQueryManager;
 import com.smart.service.lis.*;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
@@ -15,6 +17,7 @@ import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.SyncResult;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -30,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -61,49 +65,78 @@ public class QueryReportController  extends BaseAuditController {
 
     @Autowired
     TestResultManager testResultManager = null;
+
+    @Autowired
+    DoctorQueryManager doctorQueryManager = null;
+
     /**
      * 返回标本列表
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/reportlist",method = RequestMethod.GET)
     public ModelAndView handRequest(HttpServletRequest request, HttpServletResponse response){
-        //sample List
         // 查询
         String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
         String toDate = ConvertUtil.null2String(request.getParameter("toDate"));
-        String searchText = ConvertUtil.null2String(request.getParameter("searchtext"));
-        int select = ConvertUtil.getIntValue(request.getParameter("type"),-1);
+        String searchText = ConvertUtil.null2String(request.getParameter("searchText"));
+        int selectType = ConvertUtil.getIntValue(request.getParameter("selectType"),-1);
 
-        //searchText="03272803";
-        //select =1;
         List<Sample> list = new ArrayList<Sample>();
-        if (select == 1) {
-            list = sampleManager.getHistorySample(searchText,searchText,"");
-        } else if (select==2 && searchText != null && fromDate != null && toDate != null) {
-            list = sampleManager.getSampleByPatientName(fromDate, toDate, searchText);
-        } else if (select==3) {
-            Sample p = sampleManager.get(Long.parseLong(searchText));
-            if (p != null) {
-                list.add(p);
+        try{
+            if (selectType == 1) {
+                list = sampleManager.getHistorySample(searchText,searchText,"");
+            } else if (selectType==2 && searchText != null && fromDate != null && toDate != null) {
+                list = sampleManager.getSampleByPatientName(fromDate, toDate, searchText);
+            } else if (selectType==3) {
+                Sample p = sampleManager.get(Long.parseLong(searchText));
+                if (p != null) {
+                    list.add(p);
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
        // info.getAuditStatus() == -1  无结果 else 有结果 info.getSampleStatus()>=6 已打印
         ModelAndView view = new ModelAndView();
         view.addObject("sampleList",list);
+        view.addObject("searchText",searchText);
+        view.addObject("fromDate",fromDate);
+        view.addObject("toDate",toDate);
+        view.addObject("selectType",selectType);
         return  view;
     }
 
+    @RequestMapping(value = "/getSampleList",method = RequestMethod.POST)
+    public ModelAndView getSampleList(HttpServletRequest request,HttpServletResponse response){
+        // 查询
+        String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
+        String toDate = ConvertUtil.null2String(request.getParameter("toDate"));
+        String searchText = ConvertUtil.null2String(request.getParameter("searchText"));
+        int selectType = ConvertUtil.getIntValue(request.getParameter("selectType"),-1);
+        ModelAndView view = new ModelAndView("redirect:/doctor/reportlist");
+        view.addObject("searchText",searchText);
+        view.addObject("fromDate",fromDate);
+        view.addObject("toDate",toDate);
+        view.addObject("selectType",selectType);
+        return  view;
+    }
+
+    /**
+     * 报表1使用，获取标本及结果信息
+     * @param request
+     * @param response
+     * @return
+     * @throws JSONException
+     * @throws Exception
+     */
     @RequestMapping(value = "/getData*",method = RequestMethod.POST)
     @ResponseBody
     public String getData(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
         //获取样本病人信息
-        String id = request.getParameter("id");
-        if (id == null) {
-            throw new NullPointerException();
-        }
-        Sample info = sampleManager.get(Long.parseLong(id));
+        Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
+        Sample info =  sampleManager.get(id);;
         JSONObject patientInfo = new JSONObject();
         patientInfo.put("id", ConvertUtil.null2String(info.getPatientId()));
         patientInfo.put("name", info.getPatientname());
@@ -117,7 +150,7 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
         JSONArray dataRows = null;
         try {
-            dataRows = getSample(info.getSampleNo());
+            dataRows = getResult(info.getSampleNo());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -129,6 +162,128 @@ public class QueryReportController  extends BaseAuditController {
 
 
     /**
+     * 报表2使用，获取样本信息
+     * @param request
+     * @param response
+     * @return
+     * @throws JSONException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getSampleData*",method = RequestMethod.POST)
+    @ResponseBody
+    public String getSampleData(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+        //获取样本病人信息
+        String patientBlh = ConvertUtil.null2String(request.getParameter("patientBlh"));
+        String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
+        String samplenos = ConvertUtil.null2String(request.getParameter("samplenos"));
+
+        Sample  info = doctorQueryManager.getSampleByPatientBlh(patientBlh,fromDate);;
+        JSONArray jsonResult  = new JSONArray();
+        JSONObject patientInfo = new JSONObject();
+
+
+        try {
+            patientInfo = getSampleInfo(info);
+
+            if(!samplenos.equals("")){
+                String[] arrSample = samplenos.split(",");
+                for(int i=0;i<arrSample.length;i++){
+
+                    Sample sampleInfo = sampleManager.getBySampleNo(arrSample[i]);
+                    List<SyncResult> microList = null;
+                    JSONArray dataRows = new JSONArray();
+                    int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
+
+                    try {
+                        if (resultType == 4) {
+                            System.out.println("sampleInfo.getSampleNo()=="+sampleInfo.getSampleNo());
+                            microList = rmiService.getWSWResult(sampleInfo.getSampleNo());
+                            dataRows = getMicroResults(microList);
+                        } else {
+                            dataRows = getResult(arrSample[i]);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    JSONObject obj = getSampleInfo(sampleInfo);
+                    //String inspectionName = sampleInfo.getInspectionName();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("type",resultType);      //类型 4：微生物
+                    jsonObject.put("sampleinfo",obj);       //标本信息
+                    jsonObject.put("datas",dataRows);       //结果信息
+
+                    jsonResult.put(jsonObject);
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        JSONObject sampleData = new JSONObject();
+        sampleData.put("patientInfo",patientInfo);
+        sampleData.put("testResult",jsonResult);
+        System.out.println(sampleData.toString());
+        return sampleData.toString();
+    }
+
+    /**
+     * 返回标本列表
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/doctorquery*",method = RequestMethod.GET)
+    public ModelAndView doctorQuery(HttpServletRequest request, HttpServletResponse response)throws Exception{
+
+        // 查询
+        String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
+        String toDate = ConvertUtil.null2String(request.getParameter("toDate"));
+        String searchText = ConvertUtil.null2String(request.getParameter("searchText"));
+        int selectType = ConvertUtil.getIntValue(request.getParameter("selectType"),-1);
+
+        List<LeftVo> list = new ArrayList<LeftVo>();
+        if(!fromDate.equals("")){
+            try{
+                list = doctorQueryManager.getReportList(searchText,selectType,fromDate,toDate);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(fromDate.equals("")){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            fromDate = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+            cal.roll(Calendar.DAY_OF_MONTH, -1);
+            toDate = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+        }
+        // info.getAuditStatus() == -1  无结果 else 有结果 info.getSampleStatus()>=6 已打印
+        ModelAndView view = new ModelAndView();
+        view.addObject("sampleList",list);
+        view.addObject("searchText",searchText);
+        view.addObject("fromDate",fromDate);
+        view.addObject("toDate",toDate);
+        view.addObject("selectType",selectType);
+        return  view;
+    }
+
+    @RequestMapping(value = "/getReportList",method = RequestMethod.POST)
+    public ModelAndView getReportList(HttpServletRequest request,HttpServletResponse response){
+        // 查询
+        String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
+        String toDate = ConvertUtil.null2String(request.getParameter("toDate"));
+        String searchText = ConvertUtil.null2String(request.getParameter("searchText"));
+        int selectType = ConvertUtil.getIntValue(request.getParameter("selectType"),-1);
+        ModelAndView view = new ModelAndView("redirect:/doctor/doctorquery");
+        view.addObject("searchText",searchText);
+        view.addObject("fromDate",fromDate);
+        view.addObject("toDate",toDate);
+        view.addObject("selectType",selectType);
+        return  view;
+    }
+
+
+    /**
      * 获取某一样本的检验数据
      *
      * @param sampleNo
@@ -136,7 +291,7 @@ public class QueryReportController  extends BaseAuditController {
      * @throws Exception
      */
 
-    private JSONArray getSample(String sampleNo) throws Exception {
+    private JSONArray getResult(String sampleNo) throws Exception {
 
         String hisDate = "";
         String sameSample = "";
@@ -155,6 +310,7 @@ public class QueryReportController  extends BaseAuditController {
         }
 
         Sample info = sampleManager.getBySampleNo(sampleNo);
+
         Process process = processManager.getBySampleId(info.getId());
         List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);
 
@@ -350,4 +506,196 @@ public class QueryReportController  extends BaseAuditController {
         return dataRows;
     }
 
+    /**
+     * 获取检验项目结果
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/searchTest", method = { RequestMethod.GET })
+    @ResponseBody
+    public String searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String name = request.getParameter("name");
+        if (org.apache.cxf.common.util.StringUtils.isEmpty(name)) {
+            return null;
+        }
+
+        List<Index> desList =  indexManager.getIndexs(name);
+        if(desList.size()>10)
+            desList = desList.subList(0, 10);
+        JSONArray array = new JSONArray();
+
+        if (desList != null) {
+            for (Index d : desList) {
+
+                JSONObject o = new JSONObject();
+                o.put("id", d.getIndexId());
+                o.put("ab", d.getEnglish());
+                o.put("name", d.getName());
+                array.put(o);
+            }
+        }
+
+        response.setContentType("text/html; charset=UTF-8");
+        response.getWriter().print(array.toString());
+        return null;
+    }
+    /**
+     * 获取微生物检验结果信息
+     * @param wswlist
+     * @return
+     */
+    private JSONArray getMicroResults(List<SyncResult> wswlist) throws JSONException {
+        StringBuilder html = new StringBuilder("");
+        Map<String, List<SyncResult>> wswMap = new HashMap<String, List<SyncResult>>();
+        for(SyncResult sr : wswlist) {
+            if(sr.getRESULTFLAG().charAt(0) == 'N') {
+                if(wswMap.containsKey("N")) {
+                    wswMap.get("N").add(sr);
+                } else {
+                    List<SyncResult> list = new ArrayList<SyncResult>();
+                    list.add(sr);
+                    wswMap.put("N", list);
+                }
+            } else if(sr.getRESULTFLAG().charAt(0) == 'O') {
+                if(wswMap.containsKey("O")) {
+                    wswMap.get("O").add(sr);
+                } else {
+                    List<SyncResult> list = new ArrayList<SyncResult>();
+                    list.add(sr);
+                    wswMap.put("O", list);
+                }
+            } else if(sr.getRESULTFLAG().charAt(0) == 'B') {
+                if(wswMap.containsKey("B")) {
+                    wswMap.get("B").add(sr);
+                } else {
+                    List<SyncResult> list = new ArrayList<SyncResult>();
+                    list.add(sr);
+                    wswMap.put("B", list);
+                }
+            } else {
+                if(wswMap.containsKey("A")) {
+                    wswMap.get("A").add(sr);
+                } else {
+                    List<SyncResult> list = new ArrayList<SyncResult>();
+                    list.add(sr);
+                    wswMap.put("A", list);
+                }
+            }
+        }
+
+        JSONArray microResults = new JSONArray();   //微生物结果集合
+        if(wswMap.containsKey("N")) {
+            List<SyncResult> list = wswMap.get("N");
+            for(SyncResult sr : list) {
+               JSONObject obj = getMicroReuslt(sr);
+                microResults.put(obj);
+            }
+        } else if (wswMap.containsKey("O")) {
+            List<SyncResult> list = wswMap.get("O");
+            for(SyncResult sr : list) {
+                JSONObject obj = getMicroReuslt(sr);
+                microResults.put(obj);
+            }
+        } else if (wswMap.containsKey("B")){
+            List<SyncResult> list = wswMap.get("B");
+            List<SyncResult> ymlist = wswMap.get("A");
+            for(SyncResult sr : list) {
+                JSONObject obj = getMicroReuslt(sr);
+
+                char num = sr.getRESULTFLAG().charAt(sr.getRESULTFLAG().length()-1);
+                boolean isFirst = true;
+                JSONArray ymDatas = new JSONArray();
+                String hasDrug = "0";
+                if(ymlist != null) {
+                    hasDrug = "1";
+                    for(SyncResult sr2 : ymlist) {
+                        if(sr2.getRESULTFLAG().charAt(sr.getRESULTFLAG().length()-1) == num) {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("testid",ConvertUtil.null2String(sr2.getTESTID()));           //抗生素名
+                            jsonObject.put("testresult",ConvertUtil.null2String(sr2.getTESTRESULT()));   //结果
+                            jsonObject.put("hint",ConvertUtil.null2String(sr2.getHINT()));             //解释
+                            jsonObject.put("reflo",ConvertUtil.null2String(sr2.getREFLO()));            //折点
+                            jsonObject.put("refhi",ConvertUtil.null2String(sr2.getREFHI()));
+                            jsonObject.put("unit",ConvertUtil.null2String(sr2.getUNIT()));             //单位
+                            ymDatas.put(jsonObject);
+                        }
+                    }
+                }
+                obj.put("hasdrug",hasDrug);     //是否包含药敏数据
+                obj.put("ymdatas",ymDatas);
+                microResults.put(obj);
+            }
+        }
+        return microResults;
+    }
+
+    private JSONObject getMicroReuslt(SyncResult syn) throws  JSONException{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", "");
+        jsonObject.put("color", "");
+        jsonObject.put("ab", "");
+        jsonObject.put("name", ConvertUtil.null2String(syn.getTESTID()));
+        jsonObject.put("result", ConvertUtil.null2String(syn.getTESTRESULT()));
+        jsonObject.put("last","");
+        jsonObject.put("last1","");
+        jsonObject.put("last2","");
+        jsonObject.put("last3","");
+        jsonObject.put("last4","");
+        jsonObject.put("checktime",syn.getMEASURETIME());
+        jsonObject.put("device", deviceMap.get(syn.getDEVICEID()));
+        jsonObject.put("scope", "");
+        jsonObject.put("unit", syn.getUNIT());
+        jsonObject.put("knowledgeName", "");
+        jsonObject.put("editMark", "");
+        jsonObject.put("lastEdit", "");
+        return jsonObject;
+    }
+
+    /**
+     * 结果类型
+     * @return
+     */
+    private int getSampleType(String sampleno,String sectionId){
+        System.out.println("sampleno==>"+sampleno);
+        int type = 0;
+        if(sampleno.substring(8, 11).equals("BAA")) {
+            type = 4;
+        } else {
+            if(sampleno.substring(8, 11).equals("MYC")) {
+                type = 3;
+            }
+            if("1300801".equals(sectionId)) {
+                type = 5;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * 获取标本信息JSON
+     * @param info
+     * @return
+     * @throws JSONException
+     */
+    private JSONObject getSampleInfo(Sample info) throws JSONException{
+        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+        JSONObject patientInfo = new JSONObject();
+        patientInfo.put("id", ConvertUtil.null2String(info.getPatientId()));
+        patientInfo.put("name", info.getPatientname());
+        patientInfo.put("sampleNo", info.getSampleNo());
+        patientInfo.put("age", ConvertUtil.null2String(info.getAge()));
+        patientInfo.put("examinaim", ConvertUtil.null2String(info.getInspectionName()));
+        patientInfo.put("diagnostic", ConvertUtil.null2String(info.getDiagnostic()));
+        patientInfo.put("section", ConvertUtil.null2String(sectionUtil.getValue(info.getSectionId())));
+        patientInfo.put("sex", ConvertUtil.null2String(info.getSexValue()));
+        patientInfo.put("medicalnumber", ConvertUtil.null2String(info.getPatientblh()));
+        patientInfo.put("bedno",ConvertUtil.null2String(info.getDepartBed()));
+        patientInfo.put("sampleStatus",ConvertUtil.null2String(info.getSampleStatus()));
+        patientInfo.put("auditStatus",ConvertUtil.null2String(info.getAuditStatus()));
+        patientInfo.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+        return  patientInfo;
+    }
 }

@@ -97,7 +97,7 @@
                 <fmt:message key="button.delete" />
             </button>
             <div class="input-group col-sm-3 " style="float: right;" >
-                <input type="text" id="query" class="form-control search-query" placeholder="输入编号或名称" />
+                <input type="text" id="query" class="form-control search-query" placeholder = "输入编号或名称" />
 			<span class="input-group-btn">
 				<button type="button" class="btn btn-purple btn-sm" onclick="search()">
                     <fmt:message key="button.search"/>

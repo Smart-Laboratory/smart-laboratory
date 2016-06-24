@@ -36,7 +36,6 @@ public class SamplePrintController extends BaseAuditController {
 	
 	@RequestMapping(value = "/sample*", method = RequestMethod.GET)
 	public ModelAndView print(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		request.setAttribute("docId", request.getParameter("docId"));
 		request.setAttribute("sampleNo", request.getParameter("sampleNo"));
 		request.setAttribute("showLast", request.getParameter("last"));

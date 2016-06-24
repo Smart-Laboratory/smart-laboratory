@@ -465,7 +465,7 @@
                     layer.msg("单位不能为空,请输入！",{icon:2,time:1000});
                     return false;
                 }
-                if($('#labdepartment').val() ==''){
+                if($('#labdepartment').val() =='' && $('select[name="departlist[]"]').val() ==''){
                     layer.msg("部门不能为空,请输入！",{icon:2,time:1000});
                     return false;
                 }

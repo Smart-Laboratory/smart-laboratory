@@ -13,7 +13,6 @@
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/My97DatePicker/WdatePicker.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
     <title>检验报告查询</title>
@@ -30,7 +29,7 @@
 
         }
         body{
-            background: #ebebeb;
+            background: #ECF0F1;
             overflow: hidden;
         }
         .container{
@@ -41,7 +40,7 @@
         .content .sample{
             float:left;
             width:350px;
-            background-color:#f5f5f5;
+            background-color:#EEF2F3;
             border:1px solid #ddd;
         }
         .content .samplelist{
@@ -126,14 +125,14 @@
             font-weight:bold;
             /*margin-bottom: 5px;*/
             text-decoration: none;
-            background:#31708F; /*#E0ECFF;*/
+            background:#2c6787; /*#E0ECFF;*/
             height: 20px;
             padding: 10px 0px 5px 15px;
         }
         .title .title-info{
             display: inline-block;
             text-indent: 8px;
-            border-left: 3px solid #FF9800;
+            border-left: 3px solid #f15a23;
             color: #fff;
             word-break: break-all;
             word-wrap: break-word;
@@ -145,7 +144,7 @@
             float: left;
         }
         .patient-body{
-            background-color: #f5f5f5;
+            background-color:#EEF2F3;
             /*color: #31708f;*/
             padding: 5px 5px;
             border-top: 1px solid #ddd;
@@ -242,7 +241,7 @@
             background-color:#EE4000;
         }
         /*阳性 */
-        .color7{
+        .color101{
             background-color:#bababa;
         }
     </style>
@@ -255,24 +254,24 @@
             <div class="title"><span class="title-info">样本列表</span></div>
             <div class=" margin-top">
                 <div class="search-form pull-left">
-                    <form id="Domain_List_SearchForm" class="form-inline" action="/core/domain/list" method="post">
+                    <form id="SearchForm" class="form-inline" action="../doctor/getSampleList" method="post">
                         <table>
                             <tr>
                                 <td>日期</td>
                                 <td>
-                                    <input type="text" id="startDate" class="text" name="startDate" value="" class="laydate-icon">
+                                    <input type="text" id="fromDate" class="text" name="fromDate" value="${fromDate}" class="laydate-icon">
                                     <span class="date-step-span">至</span>
-                                    <input type="text" id="endDate" class="text" name="endDate" value="" class="laydate-icon">
+                                    <input type="text" id="toDate" class="text" name="toDate" value="${toDate}" class="laydate-icon">
                                 </td>
-                                <td rowspan="2" style="text-align: center;padding-left:5px "><button  class="btn btn-primary" style="text-align: center">查询</button></td>
+                                <td rowspan="2" style="text-align: center;padding-left:5px "><button type="submit" class="btn btn-primary" style="text-align: center">查询</button></td>
                             </tr>
                             <tr>
-                                <td><div style="overflow:hidden;border:none;display:inline;position:relative; margin-top:3px;"><select id="orderGroupID" name="orderGroupID"  style="border:none;margin:-1px;"class="select form-control inline-block">
-                                    <option value="" selected="selected">病历号</option>
-                                    <option value="" selected="selected">姓名</option>
-                                    <option value="" selected="selected">医嘱号</option>
+                                <td><div style=""><select id="selectType" name="selectType"  style="border:none;margin:-1px;">
+                                    <option value="1" <c:if test="${selectType==1}">selected</c:if>>病历号</option>
+                                    <option value="2" <c:if test="${selectType==2}">selected</c:if>>姓名</option>
+                                    <option value="3" <c:if test="${selectType==3}">selected</c:if>>医嘱号</option>
                                 </select></div></td>
-                                <td><input type="text" style="width: 203px" id="search_text" name="search_text" value="" ></td>
+                                <td><input type="text" style="width: 203px" id="searchText" name="searchText" value="${searchText}" ></td>
                             </tr>
 
                         </table>
@@ -512,7 +511,7 @@
                 return public.getColor(val1,color)+res;
             },
             getColor:function(val1,color){
-                if(val1.indexOf("阳性")>-1)color=101;
+                if(val1.indexOf("阳")>-1) color=101;
                 switch (color) {
                     case 1:
                         return "<span class='color1'>"+val1+"</span>";
@@ -558,12 +557,14 @@
         $('.test-result').height(height-$(".test-result").offset().top-20)
 
         laydate({
-            elem: '#startDate',
-            event: 'focus'
+            elem: '#fromDate',
+            event: 'focus',
+            format: 'YYYYMMDD'
         });
         laydate({
-            elem: '#endDate',
-            event: 'focus'
+            elem: '#toDate',
+            event: 'focus',
+            format: 'YYYYMMDD'
         });
     })
 </script>
