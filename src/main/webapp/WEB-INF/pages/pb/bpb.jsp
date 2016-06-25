@@ -9,11 +9,13 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value="/styles/bootstrap-duallistbox.min.css"/>"/>
 	
 	<script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
 
 <style>
 </style>
@@ -40,7 +42,71 @@
 	<table id="pbdata" class="table" style="font-size:12px;text-align:center;" border="1px;">
 	
 	</table>
-	<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
-	<input type="text" id="bz" name="bz" class="span2" style="margin-left:20px; width:800px;" value="${bz}">
 </div>
 
+		<!--人员start-->
+        <div id="relation" class="col-sm-11" style='margin:10px 15px 50px 15px;'>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="widget-title lighter col-sm-10">
+                        <i class="ace-icon fa fa-star orange"></i>  人员选择
+                    </h4>
+                    <button class='btn btn-info' id='personSel' style='float:right;' onclick="personSave();">保存</button>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <select multiple="multiple" size="8" name="devicelist[]" id="devicelist">
+                            </select>
+                            <!--div class="hr hr-16 hr-dotted"></div-->
+                        </div>
+                    </div>
+                 </div>
+              </div>
+          </div>
+	
+		
+<script type="text/javascript">
+	/**初始化人员选择列表**/
+	 function	initPersonListBox(){
+		var personListBox = $('select[name="devicelist[]"]').bootstrapDualListbox({
+            infoText: false,
+            filterTextClear:"",
+            filterPlaceHolder: '过滤',
+            selectorMinimalHeight: 150,
+            preserveSelectionOnMove: false
+        });
+	}
+	/**加载人员选择列表**/
+	 function loadPersonListBox(){
+		$.get("../pb/bpb/getWinfo",function(data){
+			if(data!=null){
+				var selectDev = $('#devicelist');
+		        selectDev.empty();
+		        var wiList = data;
+		        alert(data);
+		        for(var i=0;i<wiList.length;i++){
+		        	var wi = wiList[i];
+		        	var option = document.createElement("option");
+		            option.value = wi.workid;
+		            option.text = wi.name;
+		            
+		            selectDev[0].options.add(option);
+		        }
+		            
+		        $('select[name="devicelist[]"]').bootstrapDualListbox("refresh");
+			}
+		});
+		
+		
+	}
+	
+	 function personSave(){
+		 alert($('select[name="devicelist[]"]').val());
+	 }
+	
+	$(function(){
+		initPersonListBox();
+		loadPersonListBox();
+	})
+
+
+</script>

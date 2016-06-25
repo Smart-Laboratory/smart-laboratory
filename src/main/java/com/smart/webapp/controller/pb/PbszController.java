@@ -146,7 +146,7 @@ public class PbszController extends PbBaseController {
 				map.put("holiday", wi.getHoliday());
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
-				map.put("isactive", wi.isActive()==1?"使用":"不使用");
+				map.put("isactive", wi.getIsActive()==1?"使用":"不使用");
 				dataRows.add(map);
 				index++;
 			}
@@ -318,7 +318,7 @@ public class PbszController extends PbBaseController {
 			wi.setOrd6(ord6);
 			wi.setHoliday(holiday);
 			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
-			wi.setActive(isActive);
+			wi.setIsActive(isActive);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi = wInfoManager.get(Long.parseLong(id));
@@ -339,7 +339,7 @@ public class PbszController extends PbBaseController {
 			wi.setHoliday(holiday);
 			wi.setDefeHoliday(wi.getDefeHoliday());
 			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
-			wi.setActive(isActive);
+			wi.setIsActive(isActive);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));
