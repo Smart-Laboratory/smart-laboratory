@@ -1,3 +1,542 @@
+function openCodeSetDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['360px','250px'],
+	  title: '写回代码配置',
+	  content: $('#codeSetDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openAllNeedWriteBackDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['580px','320px'],
+	  title: '需要写回',
+	  content: $('#allNeedWriteBackDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openWriteBackPartDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area: '480px',
+	  title: '部分写回',
+	  content: $('#writeBackPartDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openSopDetailDialog(type) {
+	switch (type) {
+	case 0:
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '通用文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
+		break;
+	case 1:
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '专业文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
+		break;
+	case 2:
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['490px','420px'],
+			  title: '仪器文档熟悉度', 
+			  content: $("#sopDetailDialog"), 
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
+		break;
+	case 3:
+		layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['490px','420px'],
+		  title: '项目文档熟悉度', 
+		  content: $("#sopDetailDialog"), 
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+		});
+		break;
+	}
+}
+function openChartDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['680px','540px'],
+	  title: '样本项目试剂信息和历史记录',
+	  content: $('#chartDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	    //关闭浏览器右键
+	    document.oncontextmenu=function(){return true;};
+	  }
+	});
+}
+function openTestModifyDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['480px','420px'],
+	  title: '样本修改', 
+	  content: $('#testModifyDialog'), 
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openKnowledgeDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['680px','360px'],
+	  title: '相关知识', 
+	  content: $("#dialog"), 
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openStatisticDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['600px','500px'],
+	  title: '统计查询',
+	  content: $('#statisticDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openAuditDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['600px','360px'],
+	  title:'手工审核',
+	  content: $('#auditDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  },
+	  end: function() {
+		  $("#isContinued").html("0");
+	  }
+	});
+}
+function openAuditPrintDialog() {
+	layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['750px','600px'],
+		  title: '打印预览',
+		  content: $("#auditPrint"),
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+	})
+}
+function openSamplePrintDialog() {
+	layer.open({
+		  type: 1,
+		  shade: 0.4,
+		  skin: 'layui-layer-lan',
+		  area:['1000px','600px'],
+		  title: '打印预览',
+		  content: $("#samplePrint"),
+		  cancel: function(index){
+		    layer.close(index);
+		  }
+	})
+}
+function openAddResultDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['340px','260px'],
+	  title: '添加新的解释',
+	  content: $("#addResultDialog"),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openCollectDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['320px','350px'],
+	  title: '收藏',
+	  content: $("#collectDialog"),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openUploadDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['300px','420px'],
+	  title: '上传图片',
+	  content: $("#uploadDialog"),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openImageDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['600px','480px'],
+	  title: '图片',
+	  content: $('#imageDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openTatDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['300px','420px'],
+	  title: $("#tatBtn").text(),
+	  content: $('#tatDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openAddTestResultDialog() {
+	layer.open({
+		type: 1,
+    	shade: 0.4,
+    	skin: 'layui-layer-lan',
+    	area: ['450', '400px'],
+    	title: '添加新的检验项',
+    	btn: ['添加', '取消'],
+    	content: $("#addTestResultDialog"),
+    	yes: function(index){
+    		var result = false;
+    		$("#addTestList .testValue").each(function(index,self){
+	    		if ($(self).val() != "") {
+	    			result = true;
+	    		}
+	    	});
+    		if (!result) {
+    			// alert("<fmt:message key='alert.input.testresult'/>");
+    		} else {
+    			var postStr = ""; var tcValue = "";
+    			var sample = $("#hiddenSampleNo").val();
+    			$("#addTestList div").each(function(index,self){
+		    		var id = $(self).find(".testID").val();
+		    		var value = $(self).find(".testValue").val();
+		    		if (value != null && value != "") {
+    		    		if (postStr != "") postStr+=";";
+    		    		postStr += id + ":" + value;
+    		    		if(tcValue!=""){
+    		    			tcValue+=",";
+    		    		}
+    		    		tcValue +=id;
+		    		}
+		    	});
+    			if (postStr != "") {
+	    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
+	    				if (data) {
+	    					$("#addTestResultDialog").dialog("close");
+	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+	    					var ret = jQuery("#list").jqGrid('getRowData',s);
+	    					
+	    					if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false) {
+	    		    			$("#twosampleTable").css('display','block');
+	    		        		$("#patientRow").css('display','none');
+	    		    				twsSampleReload(ret.sample);
+	    					} else {
+	    						$("#patientRow").css('display','block');
+	    		    			$("#twosampleTable").css('display','none');
+	    		    				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
+	    					}
+	    					
+	    				} else {
+	    					alert("Failed!");
+	    				}
+	    			});
+    			}
+    		}
+    	},
+    	cancel: function(index){
+    		layer.close(index);
+    	}
+	})
+}
+
+function openOpStatusDialog() {
+	layer.ready(function() {
+		$("#noteText").val("");
+    	$("#checkId").val("");
+    	var description;
+    	var ids="";
+    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val(),sampleNo:$("#hiddenSampleNo").val()},function(data){
+    		$("#disease").val(data.disease);
+    		$("#descriptionDiv").html("");
+    		$("#guideDiv").html("");
+    		
+    		var sample = data.sample;
+    		description = sample.description;
+    		if(description !=null && description != "") {
+    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,";\n");
+    			$("#noteText").val(description);
+    			$("#passreason").html(description);
+    		}
+    		
+    		var glist = data.guides;
+    		if(glist !=null && glist!="undefined"){
+    			var guide;
+	    		for(var j=0; j<glist.length; j++){
+	    			guide = glist[j];
+	    			var id = "R"+guide.id;
+	    			if(description !=null && description != "" && description.indexOf(guide)>=0){
+	    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
+	    				ids = ids + id+";";
+	    			}else
+	    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
+	    		}
+    		}
+    		if(data.dlist != null) {
+    			for(var i=0; i<data.dlist.length; i++){
+	    			var item = data.dlist[i];
+	    			var id = "D"+item.id;
+	    			if(description !=null && description != "" && description.indexOf(item.description)>=0){
+	    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+	    				ids = ids + id+";";
+	    			}else
+	    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' id='"+id+"' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
+                }
+    		}
+    	});
+    	if($("#hisLastResult").val() == 1) {
+    		$("#historyChart").css("display", "block");
+    		$.get("../print/historyChart",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hisLastResult").val()}, function(data) {
+    			$("#chartList").html("");
+    			data = jQuery.parseJSON(data);
+				if(data.chartlist.length > 0) {
+					for(var i = 0; i< data.chartlist.length; i++) {
+						var check = data.chartlist[i].check;
+						if(i > 1) {
+							if(check == 1) {
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%' checked></input>");
+							} else {
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%'></input>");
+							}
+							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:45%;height:200px'></div>");
+						} else {
+							if(check == 1) {
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%' checked></input>");
+							} else {
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%'></input>");
+							}
+							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='float:left;width:45%;height:200px'></div>");
+						}
+						var xset = data.chartlist[i].time;
+						var yset1 = data.chartlist[i].low;
+						var yset2 = data.chartlist[i].result;
+						var yset3 = data.chartlist[i].high;
+						var chart = new Highcharts.Chart({ 
+							title: {
+								text: data.chartlist[i].title
+							},
+							credits: {
+						          enabled:false
+							},
+							plotOptions: {
+					            line: {
+					                dataLabels: {
+					                    enabled: true
+					                },
+					                enableMouseTracking: false
+					            }
+					        },
+				            chart: {  
+				                renderTo: 'chart' + data.chartlist[i].id,  
+				                type: 'line',  
+				            },
+				            xAxis: {
+				                categories: xset  
+				            },  
+				            yAxis: {
+				                title: {
+				                    text: '结果'
+				                },
+				                plotLines: [{
+				                    value: 0,
+				                    width: 1,
+				                    color: '#808080'
+				                }]
+				            },
+				            series: [{
+				            	name: '检验结果',
+				            	data: yset2 
+				            }]  
+				        });
+					}
+				}
+			});
+    	} else {
+			$("#historyChart").css("display", "none");
+		}
+    	$.get("../audit/explain",{id:$("#hiddenSampleNo").val(),needReason:false},function(data){
+    		$("#explainDiv").html("");
+    		var rows = data.rows;
+    		if(!(rows==null || rows == undefined)){
+    			for(var i=0;i<rows.length;i++){
+	    			row = rows[i];
+	    			var id = "R"+row.id;
+	    			if(description !=null && description != "" && description.indexOf(row.result)>=0){
+	    				$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+	    				ids = ids + id+";";
+	    			}else
+	    				$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this)><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
+	    		}
+    		}
+    	});
+    	$("#checkId").val(ids);
+    }).open({
+    	type: 1,
+    	shade: 0.4,
+    	skin: 'layui-layer-lan',
+    	area: ['700px', '500px'],
+    	title: '通过/不通过',
+    	btn: ['审核', '取消'],
+    	yes: function(index){
+    		var sample = $("#hiddenSampleNo").val();
+    		var id = $("#hiddenDocId").val();
+    		var ids = $("#checkId").val();
+    		var checktest="";
+			$("#chartList :checkbox").each(function(){
+				if($(this).prop("checked")==true){
+					if(checktest=="")
+						checktest=$(this).attr("id").replace("check","");
+					else
+						checktest = checktest + ";" + $(this).attr("id").replace("check","");
+				}
+			});
+			
+    		if ($("#hiddenIsPass").val() == "true") {
+    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
+    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
+    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest,ids:ids},function(data) {
+    				if (data == true) {
+    					$("#passreason").html(text);
+    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
+    					
+    					$("#needEdit").val(false);
+    					$("#testAdd").css('display','inline');
+    	    			$("#testDelete").css('display','inline');
+    	    			$("#auditUnpassBtn").css('display','inline');
+    	    			$("#auditPassBtn").css('display','none');
+    	    			$("#collectBtn").css('display','inline');
+    	    			layer.close(index);
+    				}
+    			});
+    		} else {
+    			var text = $("#noteText").val();
+    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
+    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest,ids:ids},function(data) {
+    				if (data == true) {
+    					$("#passreason").html(text);
+    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
+    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
+    					$("#testAdd").css('display','inline');
+    	    			$("#testDelete").css('display','inline');
+    	    			$("#auditUnpassBtn").css('display','none');
+    	    			$("#auditPassBtn").css('display','inline');
+    	    			$("#collectBtn").css('display','none');
+    	    			layer.close(index);
+    				}
+    			});
+    		}
+    	},
+    	content: $("#opStatusDialog"),
+    	cancel: function(index){
+    		layer.close(index);
+    	}
+	});
+}
+function openBatchAddResultsDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area: ['800px','500px'],
+	  title: '批量添加结果',
+	  content: $('#batchAddResultsDialog'),
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+function openAuditTraceDialog() {
+	layer.open({
+	  type: 1,
+	  shade: 0.4,
+	  skin: 'layui-layer-lan',
+	  area:['300px','420px'],
+	  title: '审核踪迹', // 不显示标题
+	  content: $("#auditTraceDialog"), // 捕获的元素
+	  cancel: function(index){
+	    layer.close(index);
+	  }
+	});
+}
+
 function addtotext(i){
 	var item = $(i).parent().find("span");
 	var ids = $("#checkId").val();
@@ -54,302 +593,8 @@ $(function(){
 	    return fmt;
 	}
 	
-	$("#opStatusDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 680,
-	    height: 460,
-	    buttons:{
-	    	"审核":function() {
-	    		var sample = $("#hiddenSampleNo").val();
-	    		var id = $("#hiddenDocId").val();
-	    		var ids = $("#checkId").val();
-	    		var checktest="";
-    			$("#chartList :checkbox").each(function(){
-    				if($(this).prop("checked")==true){
-    					if(checktest=="")
-    						checktest=$(this).attr("id").replace("check","");
-    					else
-    						checktest = checktest + ";" + $(this).attr("id").replace("check","");
-    				}
-    			});
-    			
-	    		if ($("#hiddenIsPass").val() == "true") {
-	    			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
-	    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
-	    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest,ids:ids},function(data) {
-	    				if (data == true) {
-	    					$("#passreason").html(text);
-	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
-	    					jQuery("#list").jqGrid('setRowData', s, {status:"已通过"});
-	    					
-	    					$("#needEdit").val(false);
-	    					$("#testAdd").css('display','inline');
-	    	    			$("#testDelete").css('display','inline');
-	    	    			$("#auditUnpassBtn").css('display','inline');
-	    	    			$("#auditPassBtn").css('display','none');
-	    	    			$("#collectBtn").css('display','inline');
-	    	    			$("#opStatusDialog").dialog("close");
-	    				}
-	    			});
-	    		} else {
-	    			var text = $("#noteText").val();
-	    			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
-	    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest,ids:ids},function(data) {
-	    				if (data == true) {
-	    					$("#passreason").html(text);
-	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
-	    					jQuery("#list").jqGrid('setRowData', s, {status:"<font color='red'>未通过</font>"});
-	    					$("#testAdd").css('display','inline');
-	    	    			$("#testDelete").css('display','inline');
-	    	    			$("#auditUnpassBtn").css('display','none');
-	    	    			$("#auditPassBtn").css('display','inline');
-	    	    			$("#collectBtn").css('display','none');
-	    	    			$("#opStatusDialog").dialog("close");
-	    				}
-	    			});
-	    		}
-	    	},
-	    	"取消":function() {
-	    		$(this).dialog("close");
-	    	}
-	    },
-	    open:function(){
-	    	$("#noteText").val("");
-	    	$("#checkId").val("");
-	    	var description;
-	    	var ids="";
-	    	$.get("../diagnosis/getDes",{diagnosis:$("#diagnosisValue").val(),sampleNo:$("#hiddenSampleNo").val()},function(data){
-	    		$("#disease").val(data.disease);
-	    		$("#descriptionDiv").html("");
-	    		$("#guideDiv").html("");
-	    		
-	    		var sample = data.sample;
-	    		description = sample.description;
-	    		if(description !=null && description != "") {
-	    			description = description.replace(/<p>/g,"").replace(/<\/p>/g,";\n");
-	    			$("#noteText").val(description);
-	    			$("#passreason").html(description);
-	    		}
-	    		
-	    		var glist = data.guides;
-	    		if(glist !=null && glist!="undefined"){
-	    			var guide;
-		    		for(var j=0; j<glist.length; j++){
-		    			guide = glist[j];
-		    			var id = "R"+guide.id;
-		    			if(description !=null && description != "" && description.indexOf(guide)>=0){
-		    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
-		    				ids = ids + id+";";
-		    			}else
-		    				$("#guideDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) ><span  id='descriptionSelect'>"+guide+"</span>  </label></div>");
-		    		}
-	    		}
-	    		if(data.dlist != null) {
-	    			for(var i=0; i<data.dlist.length; i++){
-		    			var item = data.dlist[i];
-		    			var id = "D"+item.id;
-		    			if(description !=null && description != "" && description.indexOf(item.description)>=0){
-		    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
-		    				ids = ids + id+";";
-		    			}else
-		    				$("#descriptionDiv").append("<div class='checkbox' ><label><input type='checkbox' id='"+id+"' onclick=addtotext(this)><span  id='descriptionSelect'>"+item.description+"</span>  </label></div>");
-	                }
-	    		}
-	    	});
-	    	if($("#hisLastResult").val() == 1) {
-	    		$("#historyChart").css("display", "block");
-	    		$.get("../print/historyChart",{sampleno:$("#hiddenSampleNo").val(), haslast:$("#hisLastResult").val()}, function(data) {
-	    			$("#chartList").html("");
-	    			data = jQuery.parseJSON(data);
-					if(data.chartlist.length > 0) {
-						for(var i = 0; i< data.chartlist.length; i++) {
-							var check = data.chartlist[i].check;
-							if(i > 1) {
-								if(check == 1) {
-									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%' checked></input>");
-								} else {
-									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%'></input>");
-								}
-								$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:45%;height:200px'></div>");
-							} else {
-								if(check == 1) {
-									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%' checked></input>");
-								} else {
-									$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%'></input>");
-								}
-								$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='float:left;width:45%;height:200px'></div>");
-							}
-							var xset = data.chartlist[i].time;
-							var yset1 = data.chartlist[i].low;
-							var yset2 = data.chartlist[i].result;
-							var yset3 = data.chartlist[i].high;
-							var chart = new Highcharts.Chart({ 
-								title: {
-									text: data.chartlist[i].title
-								},
-								credits: {
-							          enabled:false
-								},
-								plotOptions: {
-						            line: {
-						                dataLabels: {
-						                    enabled: true
-						                },
-						                enableMouseTracking: false
-						            }
-						        },
-					            chart: {  
-					                renderTo: 'chart' + data.chartlist[i].id,  
-					                type: 'line',  
-					            },
-					            xAxis: {
-					                categories: xset  
-					            },  
-					            yAxis: {
-					                title: {
-					                    text: '结果'
-					                },
-					                plotLines: [{
-					                    value: 0,
-					                    width: 1,
-					                    color: '#808080'
-					                }]
-					            },
-					            series: [{
-					            	name: '检验结果',
-					            	data: yset2 
-					            }]  
-					        });
-						}
-					}
-				});
-	    	} else {
-				$("#historyChart").css("display", "none");
-			}
-	    	$.get("../audit/explain",{id:$("#hiddenSampleNo").val(),needReason:false},function(data){
-	    		$("#explainDiv").html("");
-	    		var rows = data.rows;
-	    		if(!(rows==null || rows == undefined)){
-	    			for(var i=0;i<rows.length;i++){
-		    			row = rows[i];
-		    			var id = "R"+row.id;
-		    			if(description !=null && description != "" && description.indexOf(row.result)>=0){
-		    				$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this) checked><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
-		    				ids = ids + id+";";
-		    			}else
-		    				$("#explainDiv").append("<div class='checkbox'><label><input type='checkbox' id='"+id+"' onclick=addtotext(this)><span  id='descriptionSelect'>"+row.result+"</span>  </label></div>");
-		    		}
-	    		}
-	    	});
-	    	$("#checkId").val(ids);
-	    }
-	});
-	
-	$("#auditDialog").dialog({
-		autoOpen: false,
-	    resizable: false,
-	    width: 600,
-	    height: 360,
-	    close: function(event, ui) {
-	    	$("#isContinued").html("0");
-	    }
-	});
-	$("#auditPrint").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 750,
-	    height: 600
-	});
-	$("#samplePrint").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 1000,
-	    height: 600
-	});
-	
-	$( "#dialog" ).dialog({
-        autoOpen: false,
-        modal:true,
-        width: 680,
-		height: 360
-    });
-	
-	$("#addTestResultDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 450,
-	    height: 400,
-	    buttons:{
-	    	// 张晋南1016-5-25 添加按钮获取
-	    	"添加":function() {
-	    		var result = false;
-	    		$("#addTestList .testValue").each(function(index,self){
-		    		if ($(self).val() != "") {
-		    			result = true;
-		    		}
-		    	});
-	    		if (!result) {
-	    			// alert("<fmt:message key='alert.input.testresult'/>");
-	    		} else {
-	    			var postStr = ""; var tcValue = "";
-	    			var sample = $("#hiddenSampleNo").val();
-	    			$("#addTestList div").each(function(index,self){
-    		    		var id = $(self).find(".testID").val();
-    		    		var value = $(self).find(".testValue").val();
-    		    		if (value != null && value != "") {
-	    		    		if (postStr != "") postStr+=";";
-	    		    		postStr += id + ":" + value;
-	    		    		if(tcValue!=""){
-	    		    			tcValue+=",";
-	    		    		}
-	    		    		tcValue +=id;
-    		    		}
-    		    	});
-	    			if (postStr != "") {
-		    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
-		    				if (data) {
-		    					$("#addTestResultDialog").dialog("close");
-		    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
-		    					var ret = jQuery("#list").jqGrid('getRowData',s);
-		    					
-		    					if(data.size > 30 && $("#oneColumnShowBtn").prop("checked") == false) {
-		    		    			$("#twosampleTable").css('display','block');
-		    		        		$("#patientRow").css('display','none');
-		    		    				twsSampleReload(ret.sample);
-		    					} else {
-		    						$("#patientRow").css('display','block');
-		    		    			$("#twosampleTable").css('display','none');
-		    		    				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
-		    					}
-		    					
-		    				} else {
-		    					alert("Failed!");
-		    				}
-		    			});
-	    			}
-	    		}
-	    	},
-	    	"取消":function() {
-	    		$(this).dialog("close");
-	    	}
-	    }
-	});	
-	
 	$(".ui-dialog-buttonset button").each(function(index,self){
 		$(self).addClass('btn');
-	});
-
-	$("#addResultDialog").dialog({
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 340,
-	    height: 260
 	});
 	
 	$("#diseaseSelect").autocomplete({
@@ -393,7 +638,7 @@ $(function(){
 	});
 	
 	$("#addCancel").click(function() {
-		$("#addResultDialog").dialog("close");
+		layer.closeAll();
 	});
 	
 	$("#testAdd").click(function() {
@@ -407,7 +652,7 @@ $(function(){
 					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text'  class='testValue span2 form-control'/></div>");
 				}
 		 });
-		$("#addTestResultDialog").dialog("open");
+		openAddTestResultDialog();
 //		
 // if (lastProfile != "") {
 // $.post("../audit/ajax/profileTest",{test:lastProfile,sample:$("#hiddenSampleNo").val()},function(data)
@@ -533,8 +778,6 @@ $(function(){
         }
 	});
 	
-	
-	
 	$("#testDelete").click(function() {
 		var ii = jQuery("#rowed3").jqGrid('getGridParam','selrow');
 		if (ii != null) {
@@ -595,17 +838,7 @@ $(function(){
 		$("#tat_send").html("");
 		$("#tat_ksreceive").html("");
 		$("#audit_tat").html("");
-		layer.open({
-		  type: 1,
-		  shade: 0.4,
-		  skin: 'layui-layer-lan',
-		  area:['300px','420px'],
-		  title: $("#tatBtn").text(),
-		  content: $('#tatDialog'),
-		  cancel: function(index){
-		    layer.close(index);
-		  }
-		});
+		openTatDialog();
 		var doc = $("#hiddenDocId").val();
 		$.get("../audit/tat",{id:doc},function(data){
 			data = jQuery.parseJSON(data);
@@ -673,17 +906,7 @@ $(function(){
 	});
 	
  	$("#statisticDialogBtn").click(function() {
- 		layer.open({
-		  type: 1,
-		  shade: 0.4,
-		  skin: 'layui-layer-lan',
-		  area:['600px','500px'],
-		  title: '统计查询',
-		  content: $('#statisticDialog'),
-		  cancel: function(index){
-		    layer.close(index);
-		  }
-		});
+ 		openStatisticDialog();
 	});
  	
  	/**
@@ -697,17 +920,7 @@ $(function(){
 				}
 		 });
  		$("#batchAddResults_statistic_table").html("");
- 		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area: ['800px','500px'],
-			  title: '批量添加结果',
-			  content: $('#batchAddResultsDialog'),
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+ 		openBatchAddResultsDialog();
  	});
  	/**
 	 * 张晋南2016-06-02 标本批量添加默认值
@@ -844,17 +1057,7 @@ function getAuditHistory() {
 			url:"../audit/trace?sample="+sample
 		}).trigger("reloadGrid"); 
 	}
-	layer.open({
-		  type: 1,
-		  shade: 0.4,
-		  skin: 'layui-layer-lan',
-		  area:['300px','420px'],
-		  title: '审核踪迹', // 不显示标题
-		  content: $("#auditTraceDialog"), // 捕获的元素
-		  cancel: function(index){
-		    layer.close(index);
-		  }
-		});
+	openAuditTraceDialog();
 }
 
 var count=0;

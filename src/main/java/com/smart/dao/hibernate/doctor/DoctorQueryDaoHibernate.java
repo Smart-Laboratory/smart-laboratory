@@ -39,7 +39,7 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
      */
     public List<LeftVo> getReportList(String query, int type, String fromDate, String toDate) {
         String dateFormat = "yyyymmdd";
-        String Sql = "select a.* from (select  to_char( t2.requesttime,'yyyy-mm-dd') as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
+        String Sql = "select a.* from (select  substr(sampleno, 0, 8) as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
                 " and t1.sampleno !='0'" +
                 "  and (to_date(substr(sampleno, 0, 8), '"+dateFormat+"'))  between to_date('"+fromDate+"','"+dateFormat+"') and to_date('"+toDate+"','"+dateFormat+"')" ;
         if(type == 1){
@@ -49,7 +49,7 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
         }else if(type == 3){
             Sql += " and t1.id ='"+query+"'";
         }
-        Sql += "  group by  to_char( t2.requesttime,'yyyy-mm-dd'),t1.patientblh ) a ORDER by requesttime";
+        Sql += "  group by  substr(sampleno, 0, 8),t1.patientblh ) a ORDER by requesttime";
         System.out.println(Sql);
         return jdbcTemplate.query(Sql, new RowMapper<LeftVo>() {
             public LeftVo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -77,14 +77,10 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
      */
     public Sample getSampleByPatientBlh(String patientBlh,String fromDate){
         String dateFormat = "yyyy-mm-dd hh24:mi:ss";
-        String toDate =  fromDate.equals("")?"":fromDate+" 23:59:59";
-        fromDate += fromDate.equals("")?"":" 00:00:00";
-
         String Sql = "select t1.*  from l_sample t1, l_process t2 ";
         Sql += " where t1.id = t2.sample_id and t1.sampleno != '0'";
         if(!fromDate.equals("")){
-            Sql += " and t2.requesttime between to_date('"+fromDate+"', '"+dateFormat+"')";
-            Sql += " and to_date('"+toDate+"', '"+dateFormat+"') ";
+            Sql += " and substr(sampleno, 0, 8)='" + fromDate + "'";
         }else {
             Sql += " and t2.requesttime is null";
         }

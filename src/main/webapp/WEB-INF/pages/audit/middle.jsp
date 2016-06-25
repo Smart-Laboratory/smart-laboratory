@@ -101,22 +101,20 @@
 			</div>
 			<div class="tab-content">
 				<div id="tabs-0" class="tab-pane">
-					<div style="margin:5px;">
+					<div style="margin:5px;" class="row">
 						
 						<div style="margin-right:10px;float:right;" id="reasonBtn">	
-							<button id="reason_block" class="btn btn-info" style="font-size:15px;">
+							<button id="reason_block" class="btn btn-minier btn-info" style="font-size:15px;">
 								<fmt:message key="sample.explain.block" />
 							</button>
-							<button id="reason_none" class="btn btn-info" style="font-size:15px;display:none;">
+							<button id="reason_none" class="btn btn-minier btn-info" style="font-size:15px;display:none;">
 								<fmt:message key="sample.explain.none" />
 							</button>
 						</div>
 					</div>
-					<div>
-						<div style="margin-top:30px;">
-							<div id="explainRow" style="margin-top: 6px; font-size: 13px;">
-								<table id="audit_information"></table>
-							</div>
+					<div style="margin:5px;" class="row">
+						<div id="explainRow" style="font-size: 13px;">
+							<table id="audit_information"></table>
 						</div>
 						<div style="margin-top:5px;">
 							<button id="resultAdd" class="btn btn-sm btn-success"><fmt:message key="button.add" /></button>

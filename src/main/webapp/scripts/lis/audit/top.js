@@ -28,18 +28,7 @@ $(function(){
  					sampleDiv.css('display','none');
  			});
  		});
- 		
- 		layer.open({
- 			  type: 1,
- 			  shade: 0.4,
- 			  skin: 'layui-layer-lan',
- 			  area:['580px','320px'],
- 			  title: '需要写回',
- 			  content: $('#allNeedWriteBackDialog'),
- 			  cancel: function(index){
- 			    layer.close(index);
- 			  }
- 			});
+ 		openAllNeedWriteBackDialog();
  	});
 	
 	$("#writeBackBtn").click(function() {
@@ -114,17 +103,7 @@ $(function(){
 				isFirstCliclkPart = false;
 			}
 			//getWriteBackList($("#lastDepLib").val(), "${checkOperator}");
-			layer.open({
-				  type: 1,
-				  shade: 0.4,
-				  skin: 'layui-layer-lan',
-				  area: '480px',
-				  title: '部分写回',
-				  content: $('#writeBackPartDialog'),
-				  cancel: function(index){
-				    layer.close(index);
-				  }
-				});
+			openWriteBackPartDialog();
 		}
 	});
 	
@@ -164,17 +143,7 @@ $(function(){
  		} else {
 			$("#codeSetDiv .input-ctl").removeAttr('disabled');
  		}
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['360px','250px'],
-			  title: '写回代码配置',
-			  content: $('#codeSetDialog'),
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+		openCodeSetDialog();
 	});
 	
 });

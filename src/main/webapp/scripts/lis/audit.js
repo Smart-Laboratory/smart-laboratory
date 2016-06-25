@@ -47,7 +47,7 @@ $(function(){
 		var docNo = $("#hiddenDocId").val();
 		$("#span_docNo").val(docNo);
 		$("#result_docNo").val(docNo);
-		$("#addResultDialog").dialog("open");
+		openAddResultDialog();
 	});
 	
 	$("#resultDelete").click(function() {
@@ -184,30 +184,20 @@ $(function(){
 			}
 			selectNoteAdd = false;
 		}
-		$("#opStatusDialog").dialog("open");
+		openOpStatusDialog();
 	});
 	
 	$("#auditUnpassBtn").click(function(){
 		$("#hiddenIsPass").val(false);
 		$("#passNotes").html("<b>未通过原因</b>");
-		$("#opStatusDialog").dialog("open");
+		openOpStatusDialog();
 	});
 
 	$("#collectBtn").click(function(){
 		$("#collectText").val("");
 		$("#collect_bamc").val("");
 		$("#collect_type").val("");
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['320px','350px'],
-			  title: '收藏',
-			  content: $("#collectDialog"),
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+		openCollectDialog();
 	});
 	
 	$("#uploadBtn").click(function(){
@@ -215,32 +205,12 @@ $(function(){
 		$("#image_note").val("");
 		$("#galleria").html("");
 		$("#galleria").css("height", "0px");
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['300px','420px'],
-			  title: '上传图片', // 不显示标题
-			  content: $("#uploadDialog"), // 捕获的元素
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+		openUploadDialog();
 	});
 	
 	$("#imageBtn").click(function(){
 		getImages($("#hiddenSampleNo").val());
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['600px','480px'],
-			  title: '图片',
-			  content: $('#imageDialog'),
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+		openImageDialog();
 	});
 	
 	$("#auditBtn2").click(function(){
@@ -259,7 +229,7 @@ $(function(){
 		var ret=jQuery("#list").jqGrid('getRowData',s);
 		
 		$("#auditText2").val(ret.sample);
-		$("#auditDialog").dialog("open");
+		openAuditDialog();
 		$("#isContinued").html("1");
 		getProValue();
 	});
@@ -267,18 +237,14 @@ $(function(){
 	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		$('#printFrame').empty();
-		
 		var id = $("#hiddenDocId").val();
 		var sample = $("#hiddenSampleNo").val();
 		var last = 0;
 		if ($("#hisLastResult").val() == 1) {
 			last = 1;
 		}
-		
 		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>")
-		
-		
-		$("#auditPrint").dialog("open");
+		openAuditPrintDialog();
 		$("#iframe_print").height(450);
 		
 		//alert($("#chartPanel").height());
@@ -288,8 +254,7 @@ $(function(){
 		var text = $("#gs_sample").val();
 		$('#samplePrintFrame').empty();
 		$("#samplePrintFrame").append("<iframe id='iframe_sample' name='iframe_sample' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"<c:url value='/explain/audit/samplePrint'/>?text="+text+"\" />");
-		$("#samplePrint").dialog("open");
-		
+		openSamplePrintDialog();
 	});
 	
 	$("#collectConfirm").click(function() {
