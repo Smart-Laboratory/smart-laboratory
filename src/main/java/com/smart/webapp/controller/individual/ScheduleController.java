@@ -141,7 +141,7 @@ public class ScheduleController extends PbBaseController {
 			i++;
 		}
 		List<DayShift> dshList = dayShiftManager.getBySection(section);
-		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i+2];
+		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i];
 		int state = 0;
 		if(!user.getPbsection().contains("1300000")){
 				state=1;
@@ -161,8 +161,6 @@ public class ScheduleController extends PbBaseController {
                 } else {
                 	shifts[j][0] = "<th style='background:#7FFFD4' id='day" + j + "'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
                 }
-                shifts[j][i] = "<th name='"+j+"-"+sdf2.format(date).replace("星期", "")+"'><a onclick='checkShift(" + j + ")'>验证</a></th>";
-                shifts[j][i+1] = "<th><a onclick='randomShift(" + j + ")'>随机</a></th>";
             } catch (Exception e) {
             	e.printStackTrace();	
             }
@@ -178,8 +176,6 @@ public class ScheduleController extends PbBaseController {
         for(int m=1;m<i;m++) {
         	shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
         }
-        shifts[0][i] = "<th style='background:#7FFFD4'></th>";
-        shifts[0][i+1] = "<th style='background:#7FFFD4'></th>";
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();
         	
@@ -212,7 +208,7 @@ public class ScheduleController extends PbBaseController {
         }
         
         for(int l = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+6 ;l>0;l-- ){
-        	for(int k = i+1;k>=0;k-- ){
+        	for(int k = i-1;k>=0;k-- ){
         		shifts[l][k] = shifts[l-1][k];
         	}
         }
@@ -221,8 +217,6 @@ public class ScheduleController extends PbBaseController {
         for(int m=1;m<i;m++) {
         	shifts[0][m] = "<th  style='background:#7FFFD4'>" + m + "</th>";
         }
-        shifts[0][i] = "<th style='background:#7FFFD4'></th>";
-        shifts[0][i+1] = "<th style='background:#7FFFD4'></th>";
         
         
         
@@ -230,9 +224,9 @@ public class ScheduleController extends PbBaseController {
         ModelAndView view = new ModelAndView();
         if(section.equals("1300000")) {
         	view = new ModelAndView("/pb/kspb");
-    		String[][] shifts2 = new String[i+2][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2];
+    		String[][] shifts2 = new String[i][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2];
         	for(int m=0; m<calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2; m++){  
-        		for(int n=0; n<i+2; n++){  
+        		for(int n=0; n<i; n++){  
         			shifts2[n][m]=shifts[m][n];  
         		}
         	}
@@ -244,7 +238,7 @@ public class ScheduleController extends PbBaseController {
         	
         	arrTitle += "</tr>";
         	String arrString = "";
-        	for(int a=1;a<i+2;a++){
+        	for(int a=1;a<i;a++){
         		arrString += "<tr>";
         		for(int b=0;b<j+1;b++){
         			arrString += shifts2[a][b];
@@ -259,18 +253,18 @@ public class ScheduleController extends PbBaseController {
         	view = new ModelAndView("/pb/bpb");
         }else {
         	String arrString = "<tr>";
-        	for(int a =0;a<i+2;a++){
+        	for(int a =0;a<i;a++){
         		arrString = arrString + shifts[0][a];
         	}
         	arrString += "</tr><tr>";
-        	for(int a =0;a<i+2;a++){
+        	for(int a =0;a<i;a++){
         		arrString = arrString + shifts[1][a];
         	}
         	arrString += "</tr>";
         	String arrBodyString = "";
         	for(int a=2;a<j+6;a++){
         		arrBodyString += "<tr>";
-        		for(int b=0;b<i+2;b++){
+        		for(int b=0;b<i;b++){
         			arrBodyString += shifts[a][b];
         		}
         		arrBodyString += "</tr>";

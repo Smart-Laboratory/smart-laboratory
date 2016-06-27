@@ -35,7 +35,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 				return getSession().createQuery("from WInfo where type=0 and isActive=1 order by ord2").list();
 			} 
 		}
-		return getSession().createQuery("from WInfo where section like '%"+section+"%' and type=0 order by ord2").list();
+		return getSession().createQuery("from WInfo where section like '%"+section+"%' and type=0 and isActive=1 order by ord2").list();
 	}
 
 	public WInfo getByName(String name) {

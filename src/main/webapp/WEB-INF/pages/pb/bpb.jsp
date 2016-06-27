@@ -3,8 +3,6 @@
 
 <head>
 	<title><fmt:message key="menu.pb" /></title>
-	<script type="text/javascript" src="<c:url value='../scripts/pb/pb.js'/> "></script>
-	
 	<script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.min.js'/> "></script>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/> " />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
@@ -21,13 +19,27 @@
 </style>
 </head>
 
+<input type="hidden" id="selperson" /> 
+<input type="hidden" id="weeknum" value="${week }" /> 
+
 <div class="form-inline" style="width:1024x;">
 	<input type="text" id="date" class="form-control" sytle="width:50px;">
 	<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-	<button id="shiftBtn2" class="btn btn-success form-control"><fmt:message key='button.count' /></button>
+	<button id="shiftBtn2" class="btn btn-success form-control">随机排班</button>
 	<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
 	<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
 	
+</div>
+
+<div id="weekSelect" class="form-inline" >		
+</div>
+
+<div id="shiftSelect" class="checkbox form-inline" >
+	<c:forEach items="${wshifts}" var="shift">
+		<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+    		<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
+  		</label></div>
+	</c:forEach>	
 </div>
 
 <div class="fixed">
@@ -77,16 +89,15 @@
 	}
 	/**加载人员选择列表**/
 	 function loadPersonListBox(){
-		$.get("../pb/bpb/getWinfo",function(data){
+		$.get("../pb/bpb/ajax/getWinfo",{},function(data){
 			if(data!=null){
 				var selectDev = $('#devicelist');
 		        selectDev.empty();
 		        var wiList = data;
-		        alert(data);
 		        for(var i=0;i<wiList.length;i++){
 		        	var wi = wiList[i];
 		        	var option = document.createElement("option");
-		            option.value = wi.workid;
+		            option.value = wi.name;
 		            option.text = wi.name;
 		            
 		            selectDev[0].options.add(option);
@@ -100,13 +111,90 @@
 	}
 	
 	 function personSave(){
-		 alert($('select[name="devicelist[]"]').val());
+		 var personsel = new Array();
+		 personsel = $('select[name="devicelist[]"]').val();
+		 $("#selperson").val(personsel);
+		 if(personsel != null){
+			 $("#shiftSelect").html("");
+			 var person;
+			 for(person in personsel){
+				 $("#shiftSelect").append("<div class='form-control' style='width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;''><label><input type='checkbox' name="+personsel[person]+" value="+personsel[person]+">"+personsel[person]+"</label></div>");
+			 }
+		 }
+		 
+		 
+	 }
+	 
+	 function getdata(item){
+		 var week = $(item).attr("name");
+		 window.location.href="../pb/bpb?week=" + week+"&date=" + $("#date").val();
 	 }
 	
 	$(function(){
 		initPersonListBox();
 		loadPersonListBox();
+		$("#pbhead").html($("#test").val());
+		$("#labSelect").val($("#section").val());
+		$("#selperson").val("${selperson}");
+		
+		$("#pbhead tr td").click(function(){
+			var id=this.id;
+			
+//			var month = new Date().getMonth()+1;
+//			var date = new Date().getDate();
+//			var day = id.split("-")[1];
+//			var m = $("#date").val().split("-")[1];
+//			
+//			if(m>month ||(m==month && day>=date)){
+			
+			var name = this.name;
+			var shifts=$("#"+id).html();
+			
+			$.each($("#shiftSelect input"),function(name,v){
+				if(v.checked){
+					
+					if(shifts.indexOf(v.value+";")>=0){
+						shifts=shifts.replace(v.value+";","");
+					}else{
+						shifts = shifts + v.value+";";
+					}
+				}
+			});
+			$("#"+id).html(shifts);
+//			}
+		});
+		
+		$("#date").datepicker({
+			changeMonth: true,
+		    changeYear: true,
+			dateFormat: 'yy-mm',
+			monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+			dayNamesMin: ['一','二','三','四','五','六','日'],
+			showButtonPanel: true, 
+			onClose: function(dateText, inst) { 
+			var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+			$(this).datepicker('setDate', new Date(year, month, 1)); 
+			} 
+		});
+		
+		$("#changeMonth").click(function() {
+			$.get("../pb/bpb/ajax/getWeek",{date:$("#date").val()},function(data){
+				if(data!=null){
+					$("#weekSelect").html(data);
+				}
+			});
+		});
+		$("#date").val("${month}");
+		
+		$("#shiftBtn2").click(function(){
+			var selperson = $("#selperson").val();
+			var date = $("#date").val();
+			var week = $("#weeknum").val();
+			window.location.href="../pb/bpb?week=" + week+"&date=" + date+"&selperson="+selperson;
+		});
 	})
 
+	
 
 </script>
