@@ -49,7 +49,7 @@
 				</select>
 		</div>
 		<div style="float:left;width:10%;margin-left:10px;">
-			<button type="button" onclick="modifySample()" class="btn btn-danger"><fmt:message key='sample.modify.button'/></button>
+			<button type="button" onclick="modifySample()" class="btn btn-sm btn-danger"><fmt:message key='sample.modify.button'/></button>
 		</div>
 	</div>
 	

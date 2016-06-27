@@ -5,6 +5,7 @@
     <meta name="menu" content="Individual"/>
 </head>
 
+<div class="row">
 <c:if test="${not empty searchError}">
     <div class="alert alert-danger alert-dismissable">
         <a href="#" data-dismiss="alert" class="close">&times;</a>
@@ -57,4 +58,5 @@
         <display:setProperty name="export.csv.filename" value="User List.csv"/>
         <display:setProperty name="export.pdf.filename" value="User List.pdf"/>
     </display:table>
+</div>
 </div>

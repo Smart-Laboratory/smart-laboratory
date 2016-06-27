@@ -29,6 +29,10 @@
 	margin-top:5px;
 }
 
+#cxhis span{
+	margin:2px 5px;
+}
+
 </style>
 
 <body>
@@ -58,7 +62,7 @@
 					</div>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" id="bloodCheck"><fmt:message key="execute.bloodSample" />
+							<input type="checkbox" id="bloodCheck" class="ace ace-switch ace-switch-4" ><fmt:message key="execute.bloodSample" />
 						</label>
 					</div>
 					<div id="dateChose" style="padding:5px 0px;">
@@ -137,7 +141,7 @@
 				</div>
 				<div class="widget-body" style="overflow:auto;">
 					<div class="widget-main">
-						<div  style="height:20px;">
+						<div  style="height:30px;padding-top:5px;">
 							<div class="col-sm-2 ">
 									<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
 							</div>
@@ -151,7 +155,7 @@
 								<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
 								<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
 							</div>
-							<button id="sampleQuery">检验结果查询</button>
+							<button class="btn btn-info btn-sm" id="sampleQuery" style="margin-top:-5px;">检验结果查询</button>
 						</div>
 						<div class="col-sm-12">
 							<div id="warnLabel" class="alert alert-success col-sm-5" style="display: block; margin:5px 5px; padding: 0px 0px;">

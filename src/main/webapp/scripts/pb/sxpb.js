@@ -35,7 +35,7 @@ function getSectionCount(week){
 	jQuery("#sectionCount").jqGrid({
 		url:"../pb/sxpb/sectionCount?year=2016&week="+week,
 		datatype:"json",
-		colNames:['生化室','免疫室','分子诊断','急诊','病房','门诊','内分泌','细菌室','骨髓室','输血科','手工生化','病理','术前四项','血液科','感染科','科研论文','实习机动'],
+		colNames:['生化室','免疫室','分子诊断','急诊','病房','门诊','内分泌','细菌室','骨髓室','输血科','手工生化','病理','术前四项','血液科','感染科','科研论文','实习机动','急诊科'],
 		colModel:[
 		          {name:'213',index:'sh',width:40,sortable:false},
 		          {name:'214',index:'my',width:40,sortable:false},
@@ -54,6 +54,7 @@ function getSectionCount(week){
 		          {name:'305',index:'sh',width:40,sortable:false},
 		          {name:'306',index:'sh',width:40,sortable:false},
 		          {name:'307',index:'sh',width:40,sortable:false},
+		          {name:'314',index:'sh',width:40,sortable:false}
 		          ],
 		rowNum:20,
 		width: $("#sectiondataPanal").width()*0.9,

@@ -21,21 +21,21 @@ tr:hover{
 
 
 #head  th  {
-	width:50px;
+	width:40px;
 	height:24px;
 	text-align:center;
-	padding:2px 2px;
+	padding:2px 2px  !important;
 }
 table tr th {
-	width:50px;
+	width:40px;
 	height:24px;
 	text-align:center;
-	padding:2px 2px;
+	padding:2px 2px  !important;
 }
 table tr td {
-	width:50px;
+	width:40px;
 	height:24px;
-	padding:2px 2px;
+	padding:2px 2px !important;
 }
 div .fixed{ 
 overflow-y: scroll; 

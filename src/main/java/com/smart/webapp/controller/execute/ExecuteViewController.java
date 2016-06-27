@@ -161,7 +161,7 @@ public class ExecuteViewController {
 				html.append("<div class='col-sm-4'><img src='"+bmp+"' alt='"+e.getHyfl()+"' width='30px' height='50px' /></div>");
 			}
 			if(e.getHyjg().substring(0, 1).equals("1")){
-				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;' aria-hidden='true'></span></div>");
+				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>");
 			}
 			html.append("</div>");
 			html.append("<div class='col-sm-11' style=''>");

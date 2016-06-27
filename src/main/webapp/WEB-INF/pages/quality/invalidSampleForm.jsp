@@ -29,7 +29,7 @@
     
     </script>
 </head>
-
+<div class="row">
 <div class="col-sm-10">
 <h1><fmt:message key="invalidSamplesDetail.heading"/></h1>
 <form:form commandName="invalidSample" method="post" action="invalidSampleForm" name="invalidSampleForm">
@@ -156,4 +156,5 @@
 	</div>
 </div>
 </form:form>
+</div>
 </div>

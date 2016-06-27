@@ -444,19 +444,7 @@
 				var sample=$("#hiddenSampleNo").val();
 				$.get("../audit/ajax/singleChart",{id:id, sample:sample},function(data){
 					$("#chartAlert").css("display","none");
-					layer.open({
-						  type: 1,
-						  shade: 0.4,
-						  skin: 'layui-layer-lan',
-						  area:['680px','540px'],
-						  title: '样本项目试剂信息和历史记录',
-						  content: $('#chartDialog'),
-						  cancel: function(index){
-						    layer.close(index);
-						    //关闭浏览器右键
-						    document.oncontextmenu=function(){return true;};
-						  }
-						});
+					openChartDialog();
 					$("#hmInfo").empty();
 					for (var i=0; i< data.hmList.length; i++) {
 						$("#hmInfo").append(data.hmList[i]);
@@ -1219,7 +1207,7 @@
 	  	    	document.getElementById("dialog").innerHTML = data2;
 	  	    	$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
 				$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-				$( "#dialog" ).dialog( "open" );
+				openKnowledgeDialog();
 	  	  	}
 	  	});
  	}
@@ -1362,61 +1350,8 @@ function getDetailSop(type) {
 	$.get("../sop/ajax/detail",{type:type, lab:$("#labSelect").val(), sampleno:$("#hiddenSampleNo").val()},function(data){
 		data = jQuery.parseJSON(data);
 		$("#sopDetailHtml").html(data.html);
-	});		
-	switch (type) {
-	case 0:
-		layer.open({
-		  type: 1,
-		  shade: 0.4,
-		  skin: 'layui-layer-lan',
-		  area:['490px','420px'],
-		  title: '通用文档熟悉度', 
-		  content: $("#sopDetailDialog"), 
-		  cancel: function(index){
-		    layer.close(index);
-		  }
-		});
-		break;
-	case 1:
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['490px','420px'],
-			  title: '专业文档熟悉度', 
-			  content: $("#sopDetailDialog"), 
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
-		break;
-	case 2:
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['490px','420px'],
-			  title: '仪器文档熟悉度', 
-			  content: $("#sopDetailDialog"), 
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
-		break;
-	case 3:
-		layer.open({
-		  type: 1,
-		  shade: 0.4,
-		  skin: 'layui-layer-lan',
-		  area:['490px','420px'],
-		  title: '项目文档熟悉度', 
-		  content: $("#sopDetailDialog"), 
-		  cancel: function(index){
-		    layer.close(index);
-		  }
-		});
-		break;
-	}
+	});
+	openSopDetailDialog(type);
 }
 
 function validate(formData, jqForm, options) {
@@ -1436,7 +1371,7 @@ $(function() {
 		beforeSubmit: validate,
 		success: function(data) {
 			if (data == true) {
-				$("#addResultDialog").dialog("close");
+				layer.closeAll();
 				jQuery("#audit_information").trigger("reloadGrid");
 			} else {
 				alert("Fail!!!")
@@ -1497,17 +1432,7 @@ $(function() {
 				url:"../audit/testModify?sampleNo="+$("#hiddenSampleNo").val()
 			}).trigger("reloadGrid");
 		}
-		layer.open({
-			  type: 1,
-			  shade: 0.4,
-			  skin: 'layui-layer-lan',
-			  area:['480px','420px'],
-			  title: '样本修改', 
-			  content: $('#testModifyDialog'), 
-			  cancel: function(index){
-			    layer.close(index);
-			  }
-			});
+		openTestModifyDialog();
 	});
 	$("#colorHelp").append("<span class='c_td diff_td'> </span>\u5dee\u503c <span class='c_td ratio_td'> </span>\u6bd4\u503c <span class='c_td re_td'> </span>\u590d\u68c0<span class='c_td dan_td'></span>\u5371\u6025 <span class='c_td al2_td'> </span>\u8b66\u62121 <span class='c_td al3_td'> </span>\u8b66\u62122 <span class='c_td ex_td'> </span>\u6781\u503c");
 

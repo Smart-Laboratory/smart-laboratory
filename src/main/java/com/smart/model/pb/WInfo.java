@@ -28,7 +28,7 @@ public class WInfo {
 	private String section;
 	private String phone;
 	private String shift;
-	private int ord1;
+	private int ord1=0;
 	private int ord2;
 	private int ord3;
 	private int ord4;
@@ -125,7 +125,7 @@ public class WInfo {
 		this.shift = shift;
 	}
 	
-	@Column
+	@Column(name="ord1", length = 10)
 	public int getOrd1() {
 		return ord1;
 	}
@@ -216,11 +216,11 @@ public class WInfo {
 	}
 
 	@Column(name="isactive")
-	public int isActive() {
+	public int getIsActive() {
 		return isActive;
 	}
 
-	public void setActive(int isActive) {
+	public void setIsActive(int isActive) {
 		this.isActive = isActive;
 	}
 

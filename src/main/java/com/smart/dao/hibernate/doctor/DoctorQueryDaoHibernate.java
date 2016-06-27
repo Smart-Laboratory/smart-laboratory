@@ -62,7 +62,11 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
      */
     public List<LeftVo> getReportList(String query, int type, String fromDate, String toDate) {
         String dateFormat = "yyyymmdd";
+<<<<<<< HEAD
         String Sql = "select a.* from (select substr(sampleno, 0, 8) as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
+=======
+        String Sql = "select a.* from (select  substr(sampleno, 0, 8) as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
+>>>>>>> f7329431b6759301219e9084472343acd6ae818e
                 " and t1.sampleno !='0'" +
                 "  and substr(sampleno, 0, 8) ='"+fromDate+"'" ;
         if(type == 1){
@@ -99,6 +103,7 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
      * @return
      */
     public Sample getSampleByPatientBlh(String patientBlh,String fromDate){
+<<<<<<< HEAD
         //String dateFormat = "yyyy-mm-dd hh24:mi:ss";
         //String toDate =  fromDate.equals("")?"":fromDate+" 23:59:59";
        // fromDate += fromDate.equals("")?"":" 00:00:00";
@@ -111,6 +116,16 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
 //        }else {
 //            Sql += " and t2.requesttime is null";
 //        }
+=======
+        String dateFormat = "yyyy-mm-dd hh24:mi:ss";
+        String Sql = "select t1.*  from l_sample t1, l_process t2 ";
+        Sql += " where t1.id = t2.sample_id and t1.sampleno != '0'";
+        if(!fromDate.equals("")){
+            Sql += " and substr(sampleno, 0, 8)='" + fromDate + "'";
+        }else {
+            Sql += " and t2.requesttime is null";
+        }
+>>>>>>> f7329431b6759301219e9084472343acd6ae818e
 
         Sql +=" and t1.patientblh = '"+patientBlh+"' and rownum =1" ;
         System.out.println(Sql);
