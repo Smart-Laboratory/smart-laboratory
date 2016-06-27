@@ -2,6 +2,7 @@ package com.smart.webapp.controller.doctor;
 
 import com.smart.Constants;
 import com.smart.model.doctor.LeftVo;
+import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
@@ -174,26 +175,47 @@ public class QueryReportController  extends BaseAuditController {
     public String getSampleData(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
         //获取样本病人信息
         String patientBlh = ConvertUtil.null2String(request.getParameter("patientBlh"));
-        String fromDate = ConvertUtil.null2String(request.getParameter("fromDate"));
+        String nowDate = ConvertUtil.null2String(request.getParameter("fromDate"));
         String samplenos = ConvertUtil.null2String(request.getParameter("samplenos"));
 
-        Sample  info = doctorQueryManager.getSampleByPatientBlh(patientBlh,fromDate);;
+
         JSONArray jsonResult  = new JSONArray();
         JSONObject patientInfo = new JSONObject();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date now = sdf.parse(nowDate);
+        Calendar calendar = Calendar.getInstance(); //得到日历
+        calendar.setTime(now);//把当前时间赋给日历
+        calendar.add(calendar.MONTH, -6); //设置为前3月
+        Date dBefore  = calendar.getTime(); //得到前3月的时间
+        String fromDate = sdf.format(dBefore); //格式化前3月的时间
+
+        System.out.println(fromDate);
 
         try {
+            Sample  info = doctorQueryManager.getSampleByPatientBlh(patientBlh,nowDate);
             patientInfo = getSampleInfo(info);
-
             if(!samplenos.equals("")){
                 String[] arrSample = samplenos.split(",");
+                String sampleids ="";
                 for(int i=0;i<arrSample.length;i++){
+                    if(!sampleids.equals("")) sampleids+=",";
+                    sampleids +="'" + arrSample[i]+"'";
+                }
 
+                List<Sample> sampleList = sampleManager.getBysampleNos(sampleids);
+
+
+                List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+
+
+
+
+                for(int i=0;i<arrSample.length;i++){
                     Sample sampleInfo = sampleManager.getBySampleNo(arrSample[i]);
                     List<SyncResult> microList = null;
                     JSONArray dataRows = new JSONArray();
                     int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
-
                     try {
                         if (resultType == 4) {
                             System.out.println("sampleInfo.getSampleNo()=="+sampleInfo.getSampleNo());
@@ -292,7 +314,6 @@ public class QueryReportController  extends BaseAuditController {
      */
 
     private JSONArray getResult(String sampleNo) throws Exception {
-
         String hisDate = "";
         String sameSample = "";
 
@@ -310,6 +331,7 @@ public class QueryReportController  extends BaseAuditController {
         }
 
         Sample info = sampleManager.getBySampleNo(sampleNo);
+
 
         Process process = processManager.getBySampleId(info.getId());
         List<TestResult> testResults = testResultManager.getTestBySampleNo(sampleNo);

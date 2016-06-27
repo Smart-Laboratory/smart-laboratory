@@ -15,12 +15,12 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
+    <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.3/firebug-lite.js"></script>
     <title>检验报告查询</title>
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-            outline: 0;
+        *{margin:0;padding:0;border:0;}
+        *html{
+            margin-right:-3px;
         }
         body, th, td, button, input, select, textarea {
             font-family: "Helvetica Neue","Helvetica,"Microsoft Yahei",tahoma,arial","Verdana","sans-serif","\5B8B\4F53";
@@ -33,23 +33,23 @@
             overflow: hidden;
         }
         .container{
-            margin: 15px 15px;
+            /*margin: 15px 15px;*/
             overflow: hidden;
-
         }
         .content .sample{
             float:left;
-            width:350px;
+            width:250px;
             background-color:#EEF2F3;
             border:1px solid #ddd;
+            display:inline;
         }
         .content .samplelist{
-            min-height:300px ;
-            overflow: auto;
+            width: 250px;
+            overflow: hidden;
         }
         .content .test{
             position:relative;
-            margin-left: 360px;
+            margin-left: 260px;
             /*background: #fff;*/
 
         }
@@ -64,7 +64,7 @@
             padding: 5px 5px;
             table-layout:fixed;
             width:100%;
-            overflow: hidden;
+            overflow: auto;
         }
         .table th {
             height: 30px;
@@ -142,26 +142,28 @@
             color: #fff;
             word-break: break-all;
             word-wrap: break-word;
-            line-height: 1.1;
+            line-height: 20px;
+            height: 20px;
         }
         .form-group{
             /*margin: 4px 8px 4px 0px;*/
             display: inline-block;
             float: left;
+            display:inline;
         }
         .patient-body{
             background-color:#EEF2F3;
             /*color: #31708f;*/
             padding: 5px 5px;
             border-top: 1px solid #ddd;
-
+            height: 45px;
             /*margin: 10px 2px -8px;*/
         }
         .header{
             border: 1px solid #ddd;
             background-color: #f3f3f4;
             height: 50px;
-            margin-bottom: 10px;
+            /*margin-bottom: 10px;*/
             line-height: 50px;
         }
         .row{
@@ -180,8 +182,10 @@
             width: 40px;
         }
         .test-result{
-            overflow-y: auto;
+            position: relative;
+            overflow-y: scroll;
             overflow-x: hidden;
+            width: 500px;
         }
         input{border:1px solid #dddddd;
             height: 20px;}
@@ -277,13 +281,16 @@
                     <form id="SearchForm" class="form-inline" action="../doctor/getReportList" method="post">
                         <table>
                             <tr>
-                                <td>日期</td>
+                                <td>起始日期</td>
                                 <td>
                                     <input type="text" id="fromDate" class="text" name="fromDate" value="${fromDate}" class="laydate-icon">
-                                    <span class="date-step-span">至</span>
-                                    <input type="text" id="toDate" class="text" name="toDate" value="${toDate}" class="laydate-icon">
                                 </td>
-                                <td rowspan="2" style="text-align: center;padding-left:5px "><button type="submit" class="btn btn-primary" style="text-align: center">查询</button></td>
+                                <td rowspan="3" style="text-align: center;padding-left:5px ">
+                                    <button type="submit" class="btn btn-primary" style="text-align: center">查询</button></td>
+                            </tr>
+                            <tr>
+                                <td>截止日期</td>
+                                <td><input type="text" id="toDate" class="text" name="toDate" value="${toDate}" class="laydate-icon"></td>
                             </tr>
                             <tr>
                                 <td><div style=""><select id="selectType" name="selectType"  style="border:none;margin:-1px;background-color: #ECF0F1">
@@ -291,7 +298,7 @@
                                     <option value="2" <c:if test="${selectType==2}">selected</c:if>>姓名</option>
                                     <option value="3" <c:if test="${selectType==3}">selected</c:if>>医嘱号</option>
                                 </select></div></td>
-                                <td><input type="text" style="width: 203px" id="searchText" name="searchText" value="${searchText}" ></td>
+                                <td><input type="text"  class="text" id="searchText" name="searchText" value="${searchText}" ></td>
                             </tr>
 
                         </table>
@@ -303,8 +310,8 @@
                     <tbody>
                     <tr>
                         <th style="width: 80px">时间</th>
-                        <th style="width: 80px">病历号</th>
-                        <th style="width: 120px">报告单</th>
+                        <th style="width: 60px">病历号</th>
+                        <th style="width: 80px">报告单</th>
                     </tr>
                     <c:forEach  items="${sampleList}" var="leftvo" varStatus="status">
                         <tr samplenos="${leftvo.sampleNos}" <c:choose>
@@ -321,10 +328,10 @@
             </div>
         </div>
         <div class="test">
-            <div class="row">
+            <div class="row" style="height: 100px">
                 <div class="title"><span class="title-info">病人信息</span></div>
                 <div class="patient-body">
-                    <div id="patient-info" class="alert alert-info" style="padding:0px;">
+                    <div id="patient-info" class="alert alert-info" style="padding:0px;width: 100%">
                         <table style="width: 100%">
                             <colgroup>
                                 <col width="80">
@@ -364,10 +371,14 @@
             </div>
 
             <div class="row">
-                <div class="title"><div class="title-info" style="float: left" id="resultCaption">结果信息</div><div style=" float:right;line-height: 1.1;color: #fff;margin:0 15px;cursor: pointer" onclick="$.Custom.openDiag()">自定义</div></div>
+                <div class="title">
+                    <div class="title-info" style="float: left;display:inline;" id="resultCaption">结果信息</div>
+                    <div style=" float:right;display:inline;line-height: 1.1;color: #fff;margin:0 15px;cursor: pointer" onclick="$.Custom.openDiag()">自定义</div>
+                    <div class="cl">&nbsp;</div>
+                </div>
 
                 <div class="test-result">
-                    <table class="table" id="testResultGrid" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <table class="table" id="testResultGrid" border="0" cellspacing="0" cellpadding="0">
                         <tbody>
                         <tr>
                             <th class="td1">项目</th>
@@ -387,6 +398,7 @@
                 </div>
             </div>
         </div>
+        <div class="cl">&nbsp;</div>
     </div>
 </div>
 <style>
@@ -404,7 +416,7 @@
         text-overflow:ellipsis;
         white-space:nowrap;
         vertical-align: middle;
-        display: inline-block;
+        display:inline;
     }
     .list{
         position: absolute;
@@ -417,7 +429,7 @@
         /*width:250px;*/
     }
     .tableList{
-        width:500px;
+        width:400px;
         border: 1px #eee solid;
         margin:5px 10px ;
     }
@@ -452,7 +464,7 @@
 
     </div>
     <div class="tableList">
-        <table class="table" id="testTable">
+        <table class="table" id="testTable" style="width: 100%;">
             <tr><th>名称</th><th>英文名</th><th>操作</th></tr>
         </table>
     </div>
@@ -809,9 +821,11 @@
             }
         })
         var height = $(window).height();
-        //var height = (document.documentElement.scrollHeight >document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight;
+        var width = $(window).width();
+        var height = (document.documentElement.scrollHeight >document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight;
         $('.samplelist').height(height-$('.samplelist').offset().top-20);
-        $('.test-result').height(height-$(".test-result").offset().top-20)
+        $('.test-result').height(height-$('.samplelist').offset().top-60);
+        $('.test-result').width(width-$(".samplelist").width()-20)
 
         laydate({
             elem: '#fromDate',

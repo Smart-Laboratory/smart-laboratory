@@ -8,6 +8,7 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping class="com.smart.model.doctor.SampleAndResultVo"/>
         <mapping class="com.smart.model.doctor.LeftVo"/>
         <mapping class="com.smart.model.lis.CalculateFormula"/>
         <mapping class="com.smart.model.lis.ProfileTest"/>

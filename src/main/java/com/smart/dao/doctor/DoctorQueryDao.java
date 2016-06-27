@@ -1,6 +1,7 @@
 package com.smart.dao.doctor;
 
 import com.smart.model.doctor.LeftVo;
+import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Sample;
 
 import java.util.List;
@@ -32,4 +33,10 @@ public interface DoctorQueryDao {
      * @return
      */
     Sample getSampleByPatientBlh(String patientBlh, String fromDate);
+
+    /**
+     * 标本结果集合
+     * @return
+     */
+    List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
 }

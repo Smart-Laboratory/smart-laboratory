@@ -1,6 +1,7 @@
 package com.smart.service.doctor;
 
 import com.smart.model.doctor.LeftVo;
+import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Sample;
 
 import java.util.List;
@@ -33,4 +34,6 @@ public interface DoctorQueryManager  {
      * @return
      */
     Sample getSampleByPatientBlh(String patientBlh, String fromDate);
+
+    List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
 }

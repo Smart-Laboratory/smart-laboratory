@@ -2,6 +2,7 @@ package com.smart.service.impl.doctor;
 
 import com.smart.dao.doctor.DoctorQueryDao;
 import com.smart.model.doctor.LeftVo;
+import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Sample;
 import com.smart.service.doctor.DoctorQueryManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,11 @@ public class DoctorQueryManagerImpl implements DoctorQueryManager {
     public Sample getSampleByPatientBlh(String patientBlh, String fromDate) {
         return doctorQueryDao.getSampleByPatientBlh(patientBlh,fromDate);
     }
+
+    @Override
+    public List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate) {
+        return doctorQueryDao.getSampleAndResult(patientBlh,fromDate,nowDate);
+    }
+
 
 }

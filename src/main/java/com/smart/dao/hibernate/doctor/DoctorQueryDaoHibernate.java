@@ -3,7 +3,10 @@ package com.smart.dao.hibernate.doctor;
 import com.smart.dao.doctor.DoctorQueryDao;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.doctor.LeftVo;
+import com.smart.model.doctor.SampleAndResultVo;
+import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.TestResult;
 import com.smart.model.pb.Arrange;
 import com.smart.util.ConvertUtil;
 import org.mvel2.util.Make;
@@ -27,8 +30,28 @@ import java.util.Map;
  * @Version:
  */
 @Repository("doctorQueryDao")
-public class DoctorQueryDaoHibernate implements DoctorQueryDao {
+public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResultVo, Long>  implements DoctorQueryDao {
     private JdbcTemplate jdbcTemplate;
+
+    public DoctorQueryDaoHibernate() {
+        super(SampleAndResultVo.class);
+    }
+
+    public List<SampleAndResultVo> getSampleAndResult(String patientblh,String fromDate,String toDate){
+        String sql = "select s.*,p.*,t.* from L_SAMPLE s,L_PROCESS p,L_TESTRESULT t where  s.id= p.SAMPLE_ID and s.SAMPLENO=t.SAMPLENO ";
+        sql += " and s.PATIENTBLH ='"+patientblh+"'";
+        sql += " and substr(s.sampleno, 0, 8) >='"+fromDate+"' " ;
+        sql += " and substr(s.sampleno, 0, 8) <='"+toDate+"' " ;
+        System.out.println(sql);
+        List<SampleAndResultVo> list = getSession().createSQLQuery(sql)
+                .addEntity("s",Sample.class)
+                .addEntity("p", Process.class)
+                .addEntity("t", TestResult.class)
+                .list();
+        return list;
+
+    }
+
     /**
      * 获取报告单列表
      * @param query         查询值
@@ -39,9 +62,9 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
      */
     public List<LeftVo> getReportList(String query, int type, String fromDate, String toDate) {
         String dateFormat = "yyyymmdd";
-        String Sql = "select a.* from (select  to_char( t2.requesttime,'yyyy-mm-dd') as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
+        String Sql = "select a.* from (select substr(sampleno, 0, 8) as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
                 " and t1.sampleno !='0'" +
-                "  and (to_date(substr(sampleno, 0, 8), '"+dateFormat+"'))  between to_date('"+fromDate+"','"+dateFormat+"') and to_date('"+toDate+"','"+dateFormat+"')" ;
+                "  and substr(sampleno, 0, 8) ='"+fromDate+"'" ;
         if(type == 1){
             Sql += " and t1.patientblh='"+query+"'";
         }else if(type == 2){
@@ -49,7 +72,7 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
         }else if(type == 3){
             Sql += " and t1.id ='"+query+"'";
         }
-        Sql += "  group by  to_char( t2.requesttime,'yyyy-mm-dd'),t1.patientblh ) a ORDER by requesttime";
+        Sql += "  group by  substr(sampleno, 0, 8),t1.patientblh ) a ORDER by requesttime";
         System.out.println(Sql);
         return jdbcTemplate.query(Sql, new RowMapper<LeftVo>() {
             public LeftVo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -76,18 +99,18 @@ public class DoctorQueryDaoHibernate implements DoctorQueryDao {
      * @return
      */
     public Sample getSampleByPatientBlh(String patientBlh,String fromDate){
-        String dateFormat = "yyyy-mm-dd hh24:mi:ss";
-        String toDate =  fromDate.equals("")?"":fromDate+" 23:59:59";
-        fromDate += fromDate.equals("")?"":" 00:00:00";
+        //String dateFormat = "yyyy-mm-dd hh24:mi:ss";
+        //String toDate =  fromDate.equals("")?"":fromDate+" 23:59:59";
+       // fromDate += fromDate.equals("")?"":" 00:00:00";
 
         String Sql = "select t1.*  from l_sample t1, l_process t2 ";
         Sql += " where t1.id = t2.sample_id and t1.sampleno != '0'";
-        if(!fromDate.equals("")){
-            Sql += " and t2.requesttime between to_date('"+fromDate+"', '"+dateFormat+"')";
-            Sql += " and to_date('"+toDate+"', '"+dateFormat+"') ";
-        }else {
-            Sql += " and t2.requesttime is null";
-        }
+        Sql += " and substr(t1.sampleno, 0, 8) ='"+fromDate+"'";
+//        if(!fromDate.equals("")){
+//            Sql += " and substr(t1.sampleno, 0, 8) ='"+fromDate+"'";
+//        }else {
+//            Sql += " and t2.requesttime is null";
+//        }
 
         Sql +=" and t1.patientblh = '"+patientBlh+"' and rownum =1" ;
         System.out.println(Sql);
