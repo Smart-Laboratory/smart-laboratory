@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import com.smart.dao.UserLevelDao;
 import com.smart.model.user.UserLevel;
 
-@Repository("userlevelDao")
+@Repository("userLevelDao")
 public class UserLevelDaoHibernate extends GenericDaoHibernate<UserLevel, Long> implements UserLevelDao{
 
 	public UserLevelDaoHibernate(){

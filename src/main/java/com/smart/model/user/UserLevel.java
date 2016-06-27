@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.smart.model.BaseObject;
 
 @Entity
-@Table(name="userlevel")
+@Table(name="lab_user_level")
 public class UserLevel extends BaseObject{
 
 	
@@ -43,7 +43,7 @@ public class UserLevel extends BaseObject{
 		this.id = id;
 	}
 	
-	@Column
+	@Column(name="user_level")
 	public int getLevel() {
 		return level;
 	}

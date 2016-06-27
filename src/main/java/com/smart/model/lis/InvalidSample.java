@@ -38,6 +38,7 @@ public class InvalidSample {
 	private Long sampleId;
 	private String patientName;
 	private String sex;
+	private String ageunit;
 	private int age;
 	private String sampleType;
 	
@@ -86,6 +87,13 @@ public class InvalidSample {
 		this.sex = sex;
 	}
 	
+	@Column(length=10)
+	public String getAgeunit() {
+		return ageunit;
+	}
+	public void setAgeunit(String ageunit) {
+		this.ageunit = ageunit;
+	}
 	@Column
 	public int getAge() {
 		return age;
@@ -183,6 +191,7 @@ public class InvalidSample {
 	public void setPatientid(String patientid) {
 		this.patientid = patientid;
 	}
+	
 	@Transient
 	public String getSexValue() {
 		if (sex.equals("1")) {
