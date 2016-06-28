@@ -5,7 +5,8 @@ import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Sample;
 
 import java.util.List;
-import java.util.Map;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Title: .IntelliJ IDEA
@@ -24,6 +25,7 @@ public interface DoctorQueryDao {
      * @param toDate        结束时间
      * @return
      */
+	@Transactional
     List<LeftVo> getReportList(String query, int type, String fromDate, String toDate);
 
     /**
@@ -32,11 +34,13 @@ public interface DoctorQueryDao {
      * @param fromDate      开始日期
      * @return
      */
+	@Transactional
     Sample getSampleByPatientBlh(String patientBlh, String fromDate);
 
     /**
      * 标本结果集合
      * @return
      */
+	@Transactional
     List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
 }

@@ -38,16 +38,16 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
     }
 
     public List<SampleAndResultVo> getSampleAndResult(String patientblh,String fromDate,String toDate){
-        String sql = "select s.*,p.*,t.* from L_SAMPLE s,L_PROCESS p,L_TESTRESULT t where  s.id= p.SAMPLE_ID and s.SAMPLENO=t.SAMPLENO ";
-        sql += " and s.PATIENTBLH ='"+patientblh+"'";
-        sql += " and substr(s.sampleno, 0, 8) >='"+fromDate+"' " ;
-        sql += " and substr(s.sampleno, 0, 8) <='"+toDate+"' " ;
+        String sql = "select new com.smart.model.doctor.SampleAndResultVo(s,p,t) from Sample s,Process p,TestResult t where  s.id= p.sampleid and s.sampleNo=t.sampleNo ";
+        sql += " and s.patientblh ='"+patientblh+"'";
+        sql += " and substr(s.sampleNo, 0, 8) >='"+fromDate+"' " ;
+        sql += " and substr(s.sampleNo, 0, 8) <='"+toDate+"' " ;
         System.out.println(sql);
-        List<SampleAndResultVo> list = getSession().createSQLQuery(sql)
-                .addEntity("s",Sample.class)
+        List<SampleAndResultVo> list = getSession().createQuery(sql).list();
+                /*.addEntity("s",Sample.class)
                 .addEntity("p", Process.class)
                 .addEntity("t", TestResult.class)
-                .list();
+                .list();*/
         return list;
 
     }
