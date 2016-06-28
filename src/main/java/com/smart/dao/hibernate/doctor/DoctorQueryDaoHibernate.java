@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Title: .IntelliJ IDEA
@@ -74,7 +76,7 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
         }else if(type == 3){
             Sql += " and t1.id ='"+query+"'";
         }
-        Sql += "  group by  substr(sampleno, 0, 8),t1.patientblh ) a ORDER by requesttime";
+        Sql += "  group by  substr(sampleno, 0, 8),t1.patientblh ) a ORDER by substr(sampleno, 0, 8) desc";
         System.out.println(Sql);
         return jdbcTemplate.query(Sql, new RowMapper<LeftVo>() {
             public LeftVo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -85,9 +87,17 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
                 if(reportNo.equals("")){
                     reportNo="无结果";
                 } else{
-                    reportNo = "共" +reportNo +"份报告单";
+                    reportNo = "共" +reportNo +"份";
                 }
-                leftVo.setSampleNos(rs.getString("sampleno"));
+                String samplenos = ConvertUtil.null2String(rs.getString("sampleno"));
+                leftVo.setSampleNos(samplenos);
+                Pattern p = Pattern.compile("BAA",Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(samplenos);
+                int count = 0;
+                while(m.find()){
+                    count ++;
+                };
+                leftVo.setMicroNum(count);
                 leftVo.setReportNote(reportNo);
                 return leftVo;
             }

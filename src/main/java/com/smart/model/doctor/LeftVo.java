@@ -13,6 +13,15 @@ public class LeftVo {
     private String patientBlh;      //病历号
     private String reportNote;      //报告单份数
     private String sampleNos;       //样本号集
+    private int microNum;           //微生物报告数
+
+    public int getMicroNum() {
+        return microNum;
+    }
+
+    public void setMicroNum(int microNum) {
+        this.microNum = microNum;
+    }
 
     public String getDateTime() {
         return dateTime;

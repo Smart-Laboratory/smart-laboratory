@@ -173,7 +173,7 @@ public class QueryReportController  extends BaseAuditController {
         Date dBefore  = calendar.getTime(); //得到前3月的时间
         String fromDate = sdf.format(dBefore); //格式化前3月的时间
 
-        System.out.println(fromDate);
+        //System.out.println(fromDate);
 
         try {
             Sample  info = doctorQueryManager.getSampleByPatientBlh(patientBlh,nowDate);
@@ -219,6 +219,7 @@ public class QueryReportController  extends BaseAuditController {
         }catch (Exception e){
             e.printStackTrace();
         }
+//        System.out.println(jsonResult);
         JSONObject sampleData = new JSONObject();
         sampleData.put("patientInfo",patientInfo);
         sampleData.put("testResult",jsonResult);
@@ -311,7 +312,31 @@ public class QueryReportController  extends BaseAuditController {
 				}
 			}
 		}
-		
+        //微生物处理
+        String wswsamplenos = setToString(wswSet);
+        wswsamplenos = "'" + wswsamplenos.replace(",", "','") + "'";
+        List<Sample> wswSample = sampleManager.getBysampleNos(wswsamplenos);
+        Map<String, Sample> wswSampleMap = new HashMap<String, Sample>();
+        for(Sample s : wswSample) {
+            wswSampleMap.put(s.getSampleNo(), s);
+        }
+        for(String wswsampleno : wswSet) {
+            Sample sampleInfo = wswSampleMap.get(wswsampleno);
+            int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
+            try {
+                JSONObject obj = getSampleInfo(sampleInfo);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("type",resultType);      //类型 4：微生物
+                jsonObject.put("sampleinfo",obj);       //标本信息
+                JSONArray dataRows = new JSONArray();
+                List<SyncResult> microList = rmiService.getWSWResult(sampleInfo.getSampleNo());
+                dataRows = getMicroResults(microList);
+                jsonObject.put("datas",dataRows);       //结果信息
+                jsonResult.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 		//组装jsonObject
 		for(String nowsampleno : nowtestMap.keySet()) {
 			List<SampleAndResultVo> list = sampleMap.get(nowsampleno);
@@ -383,31 +408,7 @@ public class QueryReportController  extends BaseAuditController {
 			}
 		}
 		
-		//微生物处理
-		String wswsamplenos = setToString(wswSet);
-		wswsamplenos = "'" + wswsamplenos.replace(",", "','") + "'";
-		List<Sample> wswSample = sampleManager.getBysampleNos(wswsamplenos);
-		Map<String, Sample> wswSampleMap = new HashMap<String, Sample>();
-		for(Sample s : wswSample) {
-			wswSampleMap.put(s.getSampleNo(), s);
-		}
-		for(String wswsampleno : wswSet) {
-			Sample sampleInfo = wswSampleMap.get(wswsampleno);
-			int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
-			try {
-				JSONObject obj = getSampleInfo(sampleInfo);
-	            JSONObject jsonObject = new JSONObject();
-	            jsonObject.put("type",resultType);      //类型 4：微生物
-	            jsonObject.put("sampleinfo",obj);       //标本信息
-	            JSONArray dataRows = new JSONArray();
-	            List<SyncResult> microList = rmiService.getWSWResult(sampleInfo.getSampleNo());
-	            dataRows = getMicroResults(microList);
-	            jsonObject.put("datas",dataRows);       //结果信息
-	            jsonResult.put(jsonObject);	
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
+
 	}
 
 	/**
@@ -970,7 +971,7 @@ public class QueryReportController  extends BaseAuditController {
      * @return
      */
     private int getSampleType(String sampleno,String sectionId){
-        System.out.println("sampleno==>"+sampleno);
+//          System.out.println("sampleno==>"+sampleno);
         int type = 0;
         if(sampleno.substring(8, 11).equals("BAA")) {
             type = 4;
@@ -1000,7 +1001,8 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("age", ConvertUtil.null2String(info.getAge()));
         patientInfo.put("examinaim", ConvertUtil.null2String(info.getInspectionName()));
         patientInfo.put("diagnostic", ConvertUtil.null2String(info.getDiagnostic()));
-        patientInfo.put("section", ConvertUtil.null2String(sectionUtil.getValue(info.getSectionId())));
+//        System.out.println("hossection="+info.getHosSection());
+        patientInfo.put("section", ConvertUtil.null2String(sectionUtil.getValue(info.getHosSection())));
         patientInfo.put("sex", ConvertUtil.null2String(info.getSexValue()));
         patientInfo.put("medicalnumber", ConvertUtil.null2String(info.getPatientblh()));
         patientInfo.put("bedno",ConvertUtil.null2String(info.getDepartBed()));

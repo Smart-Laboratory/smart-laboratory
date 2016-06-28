@@ -271,13 +271,21 @@
         }
         /*药敏I */
         .color102{
-            background-color:#F44336;
-            color:#FFF;
+            /*background-color:#F44336;*/
+            color:#F44336 !important;
+        }
+        .color102 TD{
+            /*background-color:#F44336;*/
+            color:#F44336 !important;
         }
         /*药敏S */
         .color103{
-            background-color:#9C27B0;
-            color:#FFF;
+            /*background-color:#9C27B0;*/
+            color:#9C27B0 !important;
+        }
+        .color103 TD{
+            /*background-color:#9C27B0;*/
+            color:#9C27B0 !important;
         }
     </style>
 </head>
@@ -331,7 +339,7 @@
                         </c:choose>>
                             <td title="${leftvo.dateTime}"  val="${leftvo.dateTime}">${leftvo.dateTime}</td>
                             <td title="${leftvo.patientBlh}" val="${leftvo.patientBlh}">${leftvo.patientBlh}</td>
-                            <td title="${leftvo.reportNote}" val="${leftvo.reportNote}">${leftvo.reportNote}</td>
+                            <td title="${leftvo.reportNote}" val="${leftvo.reportNote}">${leftvo.reportNote}<c:if test="${leftvo.microNum>0}"><font color="red">微(${leftvo.microNum})</font></c:if> </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -367,12 +375,12 @@
                                 <td class="fieldvalue" colspan="3"> <b id="pId"></b></td>
                             </tr>
                             <tr>
-                                <td class="fieldname">科室：</td>
-                                <td class="fieldvalue"><b id="pSection"></b></td>
-                                <td class="fieldname">床号：</td>
-                                <td class="fieldvalue"><b id="pBed" ></b></td>
-                                <td class="fieldname"> 诊断：</td>
-                                <td class="fieldvalue"><b id="pDiagnostic"></b></td>
+                                <%--<td class="fieldname">科室：</td>--%>
+                                <%--<td class="fieldvalue"><b id="pSection"></b></td>--%>
+                                <%--<td class="fieldname">床号：</td>--%>
+                                <%--<td class="fieldvalue"><b id="pBed" ></b></td>--%>
+                                <td class="fieldname" > 诊断：</td>
+                                <td class="fieldvalue" colspan="5"><b id="pDiagnostic"></b></td>
                             </tr>
                         </table>
                     </div>
@@ -562,9 +570,9 @@
                             //headOtherInfo='有结果';
                        }
                     }
-                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color="#FF9800">['+ sampleInfo.sampleNo+'] </font> (样本类型:' +sampleInfo.type+') ' + headOtherInfo;
+                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color=\'#FF9800\'>['+ sampleInfo.sampleNo+'] </font> (样本:' +sampleInfo.type+' 科室:'+sampleInfo.section+' 床号:'+sampleInfo.bedno+') ' + headOtherInfo;
                     //add SubHead
-                    var subHeadRow = $('<tr class="headRow show" groupid="0"><td colspan=8>'+headInfo+'</td></tr>');
+                    var subHeadRow = $('<tr class="headRow show" groupid="0" title="'+'样本:' +sampleInfo.type+' 科室:'+sampleInfo.section+' 床号:'+sampleInfo.bedno+')' +'"><td colspan=8>'+headInfo+'</td></tr>');
                     table.append(subHeadRow);
                     subHeadRow.click (function(event){
                         public.togger(this);
@@ -601,8 +609,8 @@
             },
             getColor:function(val1,color){
                 if(val1.indexOf("阳")>-1 || val1.indexOf("+") > -1) color=101;
-                if(val1.trim()=='I') color =102;    //药敏结果 中间
-                if(val1.trim()=='S') color =103;   //敏感
+                //if($.trim(val1)=='I') color =102;    //药敏结果 中间
+                //if($.trim(val1)=='S') color =103;   //敏感
 
                 switch (color) {
                     case 1:
@@ -775,9 +783,14 @@
                     row.append(rResultTD)
 
                     var rHintTD = $("<td></td>");      //解释
-                    rHintTD.html(public.getColor(drugDatas[j].hint));
+                    rHintTD.html(drugDatas[j].hint);
                     rHintTD.attr('title',drugDatas[j].hint);
                     row.append(rHintTD)
+                    if(drugDatas[j].hint=='I'){
+                        row.addClass("color102");
+                    }else if(drugDatas[j].hint=='S'){
+                        row.addClass("color103");
+                    }
 
                     var rRefhiTD = $("<td></td>");      //折点
                     var refhlo = '';
