@@ -5,29 +5,26 @@ import com.smart.model.doctor.LeftVo;
 import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
-import com.smart.model.lis.Section;
 import com.smart.model.lis.TestResult;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.rule.Index;
-import com.smart.service.DictionaryManager;
 import com.smart.service.doctor.DoctorQueryManager;
+<<<<<<< HEAD
 import com.smart.service.lis.*;
 import com.smart.service.reagent.OutManager;
 import com.smart.service.rule.IndexManager;
+=======
+>>>>>>> a8ec192613ef981114ec211c3d3147357d1f8e4d
 import com.smart.util.ConvertUtil;
-import com.smart.util.PageList;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
-import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.SyncResult;
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.mvel2.util.Make;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,23 +50,6 @@ import java.util.*;
 @Controller
 @RequestMapping("/doctor/*")
 public class QueryReportController  extends BaseAuditController {
-    @Autowired
-    private IndexManager indexManager = null;
-
-    @Autowired
-    private SampleManager sampleManager = null;
-
-    @Autowired
-    private SectionManager sectionManager = null;
-
-    @Autowired
-    DictionaryManager dictionaryManager = null;
-
-    @Autowired
-    ProcessManager processManager = null;
-
-    @Autowired
-    TestResultManager testResultManager = null;
 
     @Autowired
     DoctorQueryManager doctorQueryManager = null;
@@ -210,19 +190,22 @@ public class QueryReportController  extends BaseAuditController {
                     sampleids +="'" + arrSample[i]+"'";
                 }
 
+<<<<<<< HEAD
                 List<Sample> sampleList = sampleManager.getBysampleNos(sampleids);
 
 
                // List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+=======
+                List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+                
+                getResult(samplenos, sampleAndResultVos, jsonResult);
+>>>>>>> a8ec192613ef981114ec211c3d3147357d1f8e4d
 
-
-
-
-                for(int i=0;i<arrSample.length;i++){
+                /*for(int i=0;i<arrSample.length;i++){
                     Sample sampleInfo = sampleManager.getBySampleNo(arrSample[i]);
                     List<SyncResult> microList = null;
                     JSONArray dataRows = new JSONArray();
-                    int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
+                    int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId()); //4微生物
                     try {
                         if (resultType == 4) {
                             System.out.println("sampleInfo.getSampleNo()=="+sampleInfo.getSampleNo());
@@ -242,7 +225,7 @@ public class QueryReportController  extends BaseAuditController {
                     jsonObject.put("datas",dataRows);       //结果信息
 
                     jsonResult.put(jsonObject);
-                }
+                }*/
             }
 
         }catch (Exception e){
@@ -255,7 +238,194 @@ public class QueryReportController  extends BaseAuditController {
         return sampleData.toString();
     }
 
-    /**
+    private void getResult(String samplenos, List<SampleAndResultVo> sampleAndResultVos, JSONArray jsonResult) {
+		if(idMap.size() == 0) {
+			initMap();
+		}
+    	//数据初始化，获得每一化验单的检验项目列表
+    	Map<String, Set<String>> nowtestMap = new LinkedHashMap<String, Set<String>>();
+		Map<String, Set<String>> histestMap = new LinkedHashMap<String, Set<String>>();
+		Map<String, List<SampleAndResultVo>> sampleMap = new LinkedHashMap<String, List<SampleAndResultVo>>();
+		Set<String> wswSet = new HashSet<String>();
+		for(String sampleno : samplenos.split(",")) {
+			if(sampleno.indexOf("BAA") >= 0) {
+				wswSet.add(sampleno);
+			}
+		}
+		for(SampleAndResultVo vo : sampleAndResultVos) {
+			if(samplenos.indexOf(vo.getSample().getSampleNo()) >= 0) {
+				if(nowtestMap.containsKey(vo.getSample().getSampleNo())) {
+					nowtestMap.get(vo.getSample().getSampleNo()).add(vo.getTestResult().getTestId());
+				} else {
+					Set<String> testset = new HashSet<String>();
+					testset.add(vo.getTestResult().getTestId());
+					nowtestMap.put(vo.getSample().getSampleNo(), testset);
+				}
+			} else {
+				if(histestMap.containsKey(vo.getSample().getSampleNo())) {
+					nowtestMap.get(vo.getSample().getSampleNo()).add(vo.getTestResult().getTestId());
+				} else {
+					Set<String> testset = new HashSet<String>();
+					testset.add(vo.getTestResult().getTestId());
+					histestMap.put(vo.getSample().getSampleNo(), testset);
+				}
+			}
+			if(sampleMap.containsKey(vo.getSample().getSampleNo())) {
+				sampleMap.get(vo.getSample().getSampleNo()).add(vo);
+			} else {
+				List<SampleAndResultVo> list = new ArrayList<SampleAndResultVo>();
+				list.add(vo);
+				sampleMap.put(vo.getSample().getSampleNo(), list);
+			}
+		}
+		
+		//获取所有检验单的历史记录
+		Map<String, Map<String,List<String>>> smaplenoMap = new HashMap<String, Map<String,List<String>>>();
+		for(String now : nowtestMap.keySet()) {
+			for(String his : histestMap.keySet()) {
+				boolean isHis = false;
+				boolean isOver = false;
+				for(String testid : histestMap.get(his)) {
+					if(nowtestMap.get(now).contains(testid)) {
+						isHis = true;
+						break;
+					}
+				}
+				if(isHis) {
+					List<SampleAndResultVo> hisList = sampleMap.get(his);
+					if(smaplenoMap.containsKey(now)) {
+						Map<String,List<String>> testMap = smaplenoMap.get(now);
+						for(SampleAndResultVo vo : hisList) {
+							if(nowtestMap.get(now).contains(vo.getTestResult().getTestId())) {
+								if(testMap.containsKey(vo.getTestResult().getTestId())) {
+									if(testMap.get(vo.getTestResult().getTestId()).size() >= 3) {
+										isOver = true;
+									} else {
+										testMap.get(vo.getTestResult().getTestId()).add(vo.getTestResult().getTestResult());
+									}
+								}
+							}
+						}
+					} else {
+						Map<String,List<String>> testMap = new LinkedHashMap<String,List<String>>();
+						for(SampleAndResultVo vo : hisList) {
+							if(nowtestMap.get(now).contains(vo.getTestResult().getTestId())) {
+								List<String> testlist = new ArrayList<String>();
+								testlist.add(vo.getTestResult().getTestResult());
+								testMap.put(vo.getTestResult().getTestId(), testlist);
+							}
+						}
+					}
+				}
+				if(isOver) {
+					break;
+				}
+			}
+		}
+		
+		//组装jsonObject
+		for(String nowsampleno : nowtestMap.keySet()) {
+			List<SampleAndResultVo> list = sampleMap.get(nowsampleno);
+			Sample sampleInfo = list.get(0).getSample();
+			int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
+			Map<String, Integer> colorMap = StringToMap(sampleInfo.getMarkTests());
+			try {
+				JSONObject obj = getSampleInfo(sampleInfo);
+	            JSONObject jsonObject = new JSONObject();
+	            jsonObject.put("type",resultType);      //类型 4：微生物
+	            jsonObject.put("sampleinfo",obj);       //标本信息
+	            JSONArray dataRows = new JSONArray();
+	            int color = 0;
+	            for(SampleAndResultVo vo : list) {
+	            	TestResult re = vo.getTestResult();
+	            	if(idMap.containsKey(re.getTestId())) {
+	            		color = 0;
+		                String id = re.getTestId();
+		                if (colorMap.containsKey(id)) {
+		                    color = colorMap.get(id);
+		                }
+		            	Map<String,List<String>> testMap = smaplenoMap.get(vo.getSample().getSampleNo());
+		            	JSONObject json = new JSONObject();
+		            	json.put("id", id);
+		                json.put("color", color);
+		                json.put("ab", idMap.get(re.getTestId()).getEnglish());
+		                json.put("name", idMap.get(re.getTestId()).getName());
+		                json.put("result", re.getTestResult());
+		                json.put("last","");
+		                json.put("last1","");
+		                json.put("last2","");
+		                json.put("last3","");
+		                json.put("last4","");
+		                if(testMap != null && testMap.size() > 0) {
+		                	if(testMap.containsKey(id)) {
+		                		switch(testMap.get(id).size()) {
+		                		case 1:
+		                			json.put("last", testMap.get(id).get(0));
+		                			break;
+		                		case 2: 
+		                			json.put("last", testMap.get(id).get(0));
+		                			json.put("last1", testMap.get(id).get(1));
+		                			break;
+		                		case 3: 
+		                			json.put("last", testMap.get(id).get(0));
+		                			json.put("last1", testMap.get(id).get(1));
+		                			json.put("last2", testMap.get(id).get(2));
+		                			break;
+		                		}
+		                	}
+		                }
+		                json.put("checktime", Constants.DF5.format(re.getMeasureTime()));
+		                json.put("device", deviceMap.get(re.getDeviceId()) == null ? re.getOperator() : deviceMap.get(re.getDeviceId()));
+		                String lo = re.getRefLo();
+		                String hi = re.getRefHi();
+		                if (lo != null && hi != null) {
+		                    json.put("scope", lo + "-" + hi);
+		                } else {
+		                    json.put("scope", "");
+		                }
+		                json.put("unit", re.getUnit());
+		                json.put("knowledgeName", idMap.get(re.getTestId()).getKnowledgename());
+		                json.put("editMark", re.getEditMark());
+		                dataRows.put(json);
+	            	}
+	            }
+	            jsonObject.put("datas",dataRows);       //结果信息
+	            jsonResult.put(jsonObject);	
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//微生物处理
+		String wswsamplenos = setToString(wswSet);
+		wswsamplenos = "'" + wswsamplenos.replace(",", "','") + "'";
+		List<Sample> wswSample = sampleManager.getBysampleNos(wswsamplenos);
+		Map<String, Sample> wswSampleMap = new HashMap<String, Sample>();
+		for(Sample s : wswSample) {
+			wswSampleMap.put(s.getSampleNo(), s);
+		}
+		for(String wswsampleno : wswSet) {
+			System.out.println(wswsampleno);
+			Sample sampleInfo = wswSampleMap.get(wswsampleno);
+			int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
+			try {
+				JSONObject obj = getSampleInfo(sampleInfo);
+	            JSONObject jsonObject = new JSONObject();
+	            jsonObject.put("type",resultType);      //类型 4：微生物
+	            jsonObject.put("sampleinfo",obj);       //标本信息
+	            JSONArray dataRows = new JSONArray();
+	            List<SyncResult> microList = rmiService.getWSWResult(sampleInfo.getSampleNo());
+	            dataRows = getMicroResults(microList);
+	            jsonObject.put("datas",dataRows);       //结果信息
+	            jsonResult.put(jsonObject);	
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+    	
+	}
+
+	/**
      * 返回标本列表
      * @param request
      * @param response

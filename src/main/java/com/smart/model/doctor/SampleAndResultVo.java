@@ -16,6 +16,13 @@ public class SampleAndResultVo {
     private Sample sample;          //标本信息
     private Process process;        //时间信息
     private TestResult testResult;  //结果信息
+    
+    public SampleAndResultVo(Sample s, Process p, TestResult t) {
+    	this.sample = s;
+    	this.process = p;
+    	this.testResult = t;
+    }
+    
     public Sample getSample() {
         return sample;
     }

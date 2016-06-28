@@ -37,7 +37,6 @@ public class DoctorQueryManagerImpl implements DoctorQueryManager {
      * @param toDate        结束时间
      * @return
      */
-    @Override
     public List<LeftVo> getReportList(String query, int type, String fromDate, String toDate) {
         return doctorQueryDao.getReportList(query,type,fromDate,toDate);
     }
@@ -49,12 +48,10 @@ public class DoctorQueryManagerImpl implements DoctorQueryManager {
      * @param fromDate      开始日期
      * @return
      */
-    @Override
     public Sample getSampleByPatientBlh(String patientBlh, String fromDate) {
         return doctorQueryDao.getSampleByPatientBlh(patientBlh,fromDate);
     }
 
-    @Override
     public List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate) {
         return doctorQueryDao.getSampleAndResult(patientBlh,fromDate,nowDate);
     }
