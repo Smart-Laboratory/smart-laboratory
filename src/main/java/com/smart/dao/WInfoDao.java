@@ -28,5 +28,8 @@ public interface WInfoDao extends GenericDao<WInfo, Long> {
 	
 	@Transactional
 	WInfo getByWorkId(String workid);
+	
+	@Transactional
+	List<WInfo> getByType(int type);
 }
 

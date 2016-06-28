@@ -2,6 +2,7 @@ package com.smart.webapp.controller.pb;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.user.User;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
+import com.smart.service.UserManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -37,6 +40,10 @@ public class SxPbController {
 			return true;
 		if(yearfrom>yearto || (yearfrom == yearto && Integer.parseInt(from.split("-")[1])>Integer.parseInt(to.split("-")[1])))
 			return false;
+		String username = request.getRemoteUser();
+		User user = userManager.getUserByUsername(username);
+		
+		
 		List<SxArrange> sList = new ArrayList<SxArrange>();//需要保存或更新的排班信息
 		Map<String, SxArrange> sxMap = new HashMap<String,SxArrange>();
 		
@@ -90,6 +97,8 @@ public class SxPbController {
 			}else{
 				sxArrange.setSection(s[3]);
 			}
+			sxArrange.setOperator(user.getUsername());
+			sxArrange.setOperatetime(new Date());
 			sList.add(sxArrange);
 			
 		}
@@ -233,4 +242,6 @@ public class SxPbController {
 	private SxArrangeManager sxArrangeManager;
 	@Autowired
 	private ShiftManager shiftManager;
+	@Autowired
+	private UserManager userManager;
 }

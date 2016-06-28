@@ -50,4 +50,8 @@ public class WInfoManagerImpl extends GenericManagerImpl<WInfo, Long> implements
 	public WInfo getByWorkId(String workid){
 		return wInfoDao.getByWorkId(workid);
 	}
+	
+	public List<WInfo> getByType(int type){
+		return wInfoDao.getByType(type);
+	}
 }

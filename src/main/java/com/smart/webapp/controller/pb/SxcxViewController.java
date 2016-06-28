@@ -116,7 +116,7 @@ public class SxcxViewController {
 		}
 		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getId()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"</a></td>";
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getId()+",'"+wInfos.get(j).getName()+"')\"  title='"+wInfos.get(j).getPhone()+"'>"+wInfos.get(j).getName()+"</a></td>";
 			for(int i=1;i<maxWeek+1;i++){
 				int dweek = startweek+i-1;
 				if(dweek>yearMaxWeek)

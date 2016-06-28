@@ -112,6 +112,12 @@ public class PbcxController extends PbBaseController {
 			List<Arrange> rArranges = arrangeManager.getArrangeByType("入", tomonth);
 			List<Arrange> bArranges = arrangeManager.getArrangeByType("生帮", tomonth);
 			
+			List<WInfo> bInfos = wInfoManager.getByType(2);
+			Map<String, String> telMap = new HashMap<String, String>();
+			for(WInfo w: bInfos){
+				telMap.put(w.getName(), w.getPhone());
+			}
+			
 			String[][] shifts = new String[8][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1];
 			size = shifts.length;
 			int j = 1;
@@ -182,9 +188,9 @@ public class PbcxController extends PbBaseController {
 	    			}
 	    			String worker = "";
 	    			if(a.getState()<5){
-	    				worker = "<font style='color:red'>"+a.getWorker()+"</font>";
+	    				worker = "<span title='"+telMap.get(a.getWorker())+"'><font style='color:red'>"+a.getWorker()+"</font><span>";
 	    			}else {
-						worker = a.getWorker();
+						worker = "<span title='"+telMap.get(a.getWorker())+"'>"+a.getWorker()+"<span>";
 					}
 	    			if(arrMap.get(a.getDate().split("-")[2])!=null){
 	    				arrMap.put(a.getDate().split("-")[2], worker+";<br>  "+arrMap.get(a.getDate().split("-")[2]));

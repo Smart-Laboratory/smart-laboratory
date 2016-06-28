@@ -18,11 +18,11 @@ tr:hover{
 }
 
 table tr td {
-	width:30px;
+	width:45px;
 	height:30px;
 }
 table tr th  {
-	width:40px ;
+	width:45px ;
 	height:30px;
 	padding:0px 1px ;
 }

@@ -3,6 +3,7 @@ package com.smart.dao.hibernate;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.model.pb.WInfo;
 import com.smart.dao.WInfoDao;
@@ -77,5 +78,11 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	
 	public WInfo getByWorkId(String workid){
 		return (WInfo)getSession().createQuery("from WInfo where workid = '"+workid+"'").uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<WInfo> getByType(int type){
+		String hql = "from WInfo where type = "+type;
+		return getSession().createQuery(hql).list();
 	}
 }

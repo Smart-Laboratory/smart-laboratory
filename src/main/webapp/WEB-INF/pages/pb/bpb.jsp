@@ -41,6 +41,14 @@
   		</label></div>
 	</c:forEach>	
 </div>
+<hr>
+<div id="shiftNotSelect" class="checkbox form-inline" >
+	<c:forEach items="${nowshifts}" var="shift">
+		<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+    		<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
+  		</label></div>
+	</c:forEach>	
+</div>
 
 <div class="fixed">
 	<input id="test" value="${arrString}" type="hidden"/>
@@ -93,7 +101,7 @@
 			if(data!=null){
 				var selectDev = $('#devicelist');
 		        selectDev.empty();
-		        var wiList = data;
+		        var wiList = jQuery.parseJSON(data);
 		        for(var i=0;i<wiList.length;i++){
 		        	var wi = wiList[i];
 		        	var option = document.createElement("option");
@@ -120,8 +128,7 @@
 			 for(person in personsel){
 				 $("#shiftSelect").append("<div class='form-control' style='width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;''><label><input type='checkbox' name="+personsel[person]+" value="+personsel[person]+">"+personsel[person]+"</label></div>");
 			 }
-		 }
-		 
+		 };
 		 
 	 }
 	 

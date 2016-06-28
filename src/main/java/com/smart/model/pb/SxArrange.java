@@ -1,5 +1,7 @@
 package com.smart.model.pb;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +20,9 @@ public class SxArrange {
 	private String month;
 	private String week;
 	private String section;
+	
+	private String operator;
+	private Date operatetime;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,6 +65,22 @@ public class SxArrange {
 	}
 	public void setSection(String section) {
 		this.section = section;
+	}
+	
+	@Column
+	public String getOperator() {
+		return operator;
+	}
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+	
+	@Column
+	public Date getOperatetime() {
+		return operatetime;
+	}
+	public void setOperatetime(Date operatetime) {
+		this.operatetime = operatetime;
 	}
 	
 	

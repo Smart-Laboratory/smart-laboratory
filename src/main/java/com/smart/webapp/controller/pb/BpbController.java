@@ -15,6 +15,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.base.Function;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
@@ -33,7 +33,6 @@ import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
-import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/pb/bpb*")
@@ -67,6 +66,7 @@ public class BpbController extends PbBaseController {
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(weeknum-1));
         dateLs = c.getTime();
         
+        int startday = Integer.parseInt(md.format(dateLs).split("-")[1]);
         
 		//end
 		
@@ -96,13 +96,24 @@ public class BpbController extends PbBaseController {
 		if(type == null) {
 			type = "1"; 
 		}
+		
+		//获取科室排班人员表
+		List<WInfo> wiList = wInfoManager.getBySection(section, type);
 		//人员班次map
 		Map<String, String> wshifts = new HashMap<String,String>();
+		Map<String, String> nowshifts = new HashMap<String,String>();
 		if(selperson!=null && !selperson.isEmpty()){
 			for(String person : selperson.split(",")){
 				wshifts.put(person, person);
 			}
+			for(WInfo w:wiList){
+				if(!selperson.contains(w.getName())){
+					nowshifts.put(w.getName(), w.getName());
+				}
+			}
+			
 			request.setAttribute("wshifts", wshifts);
+			request.setAttribute("nowshifts", nowshifts);
 		}
 		//人员班次end
 		
@@ -112,8 +123,8 @@ public class BpbController extends PbBaseController {
 		request.setAttribute("section", section);
 		request.setAttribute("week", weeknum);
 		
-		/*//获取科室排班人员表
-		List<WInfo> wiList = wInfoManager.getBySection("1300000", type);
+		
+		/*
 		//备注
 		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
 		Map<String, String> wiMap = new HashMap<String,String>();
@@ -129,7 +140,7 @@ public class BpbController extends PbBaseController {
 		
 		//取B超科室班次作为行首
 		List<Shift> bshifts = shiftManager.getShiftBySection(section);
-		int i=1;
+		int i=2;
 		Map<Integer, Shift> map = new HashMap<Integer, Shift>();
 		Map<String, Arrange> arrMap = new HashMap<String, Arrange>();
 		for(Shift s : bshifts) {
@@ -137,7 +148,7 @@ public class BpbController extends PbBaseController {
 			i++;
 		}
 		
-		String[][] shifts = new String[7*2+2][i];
+		String[][] shifts = new String[5*2+1][i];
 		
 		
 		List<Arrange> arrList = arrangeManager.getBySectionMonth(month+"", section);
@@ -147,17 +158,25 @@ public class BpbController extends PbBaseController {
 		}
 		
 		int j = 1;
-        for(; j <= 7; j++){
+		int startdaytemp = startday;
+        for(; j <= 5; j++){
             try {
-            	
+            	String sday = startdaytemp<10?"0"+startdaytemp:startdaytemp+"";
                 Date date = c.getTime();
                 if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
-                	shifts[j*2-1][0] = "<th style='background:#7CFC00' id='day" + j + "-1'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "上午</th>";
-                	shifts[j*2][0] = "<th style='background:#7CFC00' id='day" + j + "-2'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "下午</th>";
+                	shifts[j*2-1][0] = "<th colspan='2' style='background:#7CFC00;text-align: center;' id='day" + sday + "-1'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
+                	shifts[j*2][0] = "";
+                	
+                	shifts[j*2-1][1] = "<th style='background:#7CFC00' id='day" + sday + "-1'>上午</th>";
+                	shifts[j*2][1] = "<th style='background:#7CFC00' id='day" + sday + "-2'>下午</th>";
                 } else {
-                	shifts[j*2-1][0] = "<th style='background:#7FFFD4' id='day" + j + "-1'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "上午</th>";
-                	shifts[j*2][0] = "<th style='background:#7FFFD4' id='day" + j + "-2'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "下午</th>";
+                	shifts[j*2-1][0] = "<th colspan='2' style='background:#7FFFD4;text-align: center;' id='day" + sday + "-1'>" + sdf3.format(date) + sdf2.format(date).replace("星期", "") + "</th>";
+                	shifts[j*2][0] = "";
+                	
+                	shifts[j*2-1][1] = "<th style='background:#7FFFD4' id='day" + sday + "-1'>上午</th>";
+                	shifts[j*2][1] = "<th style='background:#7FFFD4' id='day" + sday + "-2'>下午</th>";
                 }
+                startdaytemp++;
                 c.add(GregorianCalendar.DATE, 1);
 //                shifts[j][i] = "<th name='"+j+"-"+sdf2.format(date).replace("星期", "")+"'><a onclick='checkShift(" + j + ")'>验证</a></th>";
 //                shifts[j][i+1] = "<th><a onclick='randomShift(" + j + ")'>随机</a></th>";
@@ -166,8 +185,9 @@ public class BpbController extends PbBaseController {
             }
         }
 		
-        shifts[0][0] = "<th style='background:#7FFFD4' id='nmshow'>" + (month<10 ? "0" + month : month)+"月-"+weeknum+ "周</th>";
-        for(int m=1;m<i;m++) {
+        shifts[0][0] = "<th rowspan='2' style='background:#7FFFD4;text-align: center;' id='nmshow'>" + (month<10 ? "0" + month : month)+"月-"+weeknum+ "周</th>";
+        shifts[0][1] = "";
+        for(int m=2;m<i;m++) {
         	shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
         }
         
@@ -179,10 +199,11 @@ public class BpbController extends PbBaseController {
 		
         //获取排班记录 暂时不写
         if(arrMap.size()>0){
-	        for(int k=1; k<i; k++) {
+	        for(int k=2; k<i; k++) {
 	        	String name = map.get(k).getName();
 	        	
 	        	for(int l=1; l<j; l++) {
+	        		String sday = startday<10?"0"+startday:startday+"";
 	        		String background = "";
 //	        		Date date = sdf1.parse(tomonth + "-" + l);
 //	        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
@@ -190,31 +211,32 @@ public class BpbController extends PbBaseController {
 	        			background = "style='background:#7CFC00'";
 	        		}
 	        		//上午班
-	        		if (arrMap.get(name + "-" + l+"-1") == null || arrMap.get(name + "-" + l+"-1").getShift() == null ) {
+	        		if (arrMap.get(name + "-" + sday+"-1") == null || arrMap.get(name + "-" + sday+"-1").getShift() == null ) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "-1' "+background+">";
+	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-1' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			if(arrMap.get(name + "-" + l +"-1").getShift()!=null &&  arrMap.get(name + "-" + l +"-1").getShift().contains("公休") ){
-	        				shifts[l*2-1][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "-1'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l +"-1").getShift().replace("公休;", "")+"</td>";
+	        			if(arrMap.get(name + "-" + sday +"-1").getShift()!=null &&  arrMap.get(name + "-" + sday +"-1").getShift().contains("公休") ){
+	        				shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-1'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + sday +"-1").getShift().replace("公休;", "")+"</td>";
 	        			}else{
-	        				shifts[l*2-1][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "-1'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l +"-1").getShift()+"</td>";
+	        				shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-1'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + sday +"-1").getShift()+"</td>";
 	        			}
 	        		}
 	        		//下午班
-	        		if (arrMap.get(name + "-" + l +"-2") == null || arrMap.get(name + "-" + l).getShift() == null ) {
+	        		if (arrMap.get(name + "-" + sday +"-2") == null || arrMap.get(name + "-" + sday).getShift() == null ) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "-2' "+background+">";
+	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2][k] = td;
 	        		} else{
-	        			if(arrMap.get(name + "-" + l +"-2").getShift()!=null &&  arrMap.get(name + "-" + l +"-2").getShift().contains("公休") ){
-	            			shifts[l*2][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "-2'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l +"-2").getShift().replace("公休;", "")+"</td>";
+	        			if(arrMap.get(name + "-" + sday +"-2").getShift()!=null &&  arrMap.get(name + "-" + sday +"-2").getShift().contains("公休") ){
+	            			shifts[l*2][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-2'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + sday +"-2").getShift().replace("公休;", "")+"</td>";
 	            		} else{
-	            			shifts[l*2][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "-2' >" + arrMap.get(name + "-" + l +"-2").getShift() + "</td>";
+	            			shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' >" + arrMap.get(name + "-" + sday +"-2").getShift() + "</td>";
 	            		}
 	        		}
+	        		startday++;
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
 	//        		}
@@ -230,7 +252,8 @@ public class BpbController extends PbBaseController {
         	//生成随机排班数组
             Map<String, String> shuffleMap = generatePbMap(selperson,bshifts);
             
-            for(int k=1; k<i; k++) {
+            for(int k=2; k<i; k++) {
+            	String sday = startday<10?"0"+startday:startday+"";
 	        	String name = map.get(k).getName();
 	        	
 	        	for(int l=1; l<j; l++) {
@@ -241,23 +264,24 @@ public class BpbController extends PbBaseController {
 	        			background = "style='background:#7CFC00'";
 	        		}
 	        		//上午班
-	        		if (shuffleMap.get(name + "-" + l+"-1") == null) {
+	        		if (shuffleMap.get(name + "-" + sday+"-1") == null) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "-1' "+background+">";
+	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-1' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "-1'  "+background+">"+shuffleMap.get(name + "-" + l +"-1")+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-1'  "+background+">"+shuffleMap.get(name + "-" + sday +"-1")+"</td>";
 	        		}
 	        		//下午班
-	        		if (shuffleMap.get(name + "-" + l +"-2") == null ) {
+	        		if (shuffleMap.get(name + "-" + sday +"-2") == null ) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "-2' "+background+">";
+	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2][k] = td;
 	        		} else{
-	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "-2' >" + shuffleMap.get(name + "-" + l +"-2") + "</td>";
+	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' >" + shuffleMap.get(name + "-" + sday +"-2") + "</td>";
 	        		}
+	        		startday++;
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
 	//        		}
@@ -273,15 +297,16 @@ public class BpbController extends PbBaseController {
         
         ModelAndView view = new ModelAndView();
         
-        String arrString = "<tr>";
-        for(int a=0; a<i;a++){
-        	arrString += shifts[0][a];
-        }
-        arrString +="</tr>";
+        String arrString = "";
+//        for(int a=0; a<i;a++){
+//        	arrString += shifts[0][a];
+//        }
+//        arrString +="</tr>";
         
-        for(int b=1;b<=7*2+1;b++){
+        for(int q=0;q<i;q++){
+        	
         	arrString += "<tr>";
-        	for(int q=0;q<i;q++){
+        	for(int b=0;b<5*2+1;b++){
         		arrString += shifts[b][q];
         	}
         	arrString += "</tr>";
@@ -301,7 +326,7 @@ public class BpbController extends PbBaseController {
 		
 		List<String> persons = new ArrayList<String>();
 		persons.addAll(Arrays.asList(selperson.split(",")));
-		int num = shifts.size()*7*2;
+		int num = shifts.size()*5*2;
 		while(num>persons.size()){
 			persons.addAll(persons);
 		}
@@ -315,7 +340,7 @@ public class BpbController extends PbBaseController {
 		int index=0;
 		for(int i=0; i<shifts.size();i++){
 			String name = shifts.get(i).getName();
-			for(int j=1;j<=7;j++){
+			for(int j=1;j<=5;j++){
 				gMap.put(name+"-"+j+"-1", personsNew.get(index)+";");
 				index++;
 				gMap.put(name+"-"+j+"-2", personsNew.get(index)+";");
@@ -330,17 +355,21 @@ public class BpbController extends PbBaseController {
 	
 	@RequestMapping(value = "/ajax/getWinfo*", method = RequestMethod.GET)
 	@ResponseBody
-	public List<WInfo>  getPatient(HttpServletRequest request, HttpServletResponse response){
-		List<JSONObject> wiLists = new ArrayList<JSONObject>();
+	public String  getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		JSONArray array = new JSONArray();
 		//获取科室排班人员表
 		List<WInfo> wiList = wInfoManager.getBySection("1300600", "1");
 		
-		//		Map<String, String> wiMap = new HashMap<String,String>();
-//		for(WInfo w:wiList){
-//			wiMap.put(w.getWorkid(), w.getName());
-//		}
-//		request.setAttribute("wiList", wiList);
-		return wiList;
+		for(WInfo w:wiList){
+			JSONObject o = new JSONObject();
+			o.put("name", w.getName());
+			array.put(o);
+		}
+		
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		
+		return null;
 	}
 		
 	@RequestMapping(value = "/ajax/getWeek*", method = RequestMethod.GET)

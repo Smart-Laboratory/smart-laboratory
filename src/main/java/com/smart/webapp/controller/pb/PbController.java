@@ -124,7 +124,7 @@ public class PbController {
 				if(userShifts.containsKey(arr[0])  ){
 					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
 					if(dateValue.containsKey(arr[1]) ){
-						if(dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:"")){
+						if((dateValue.get(arr[1]).getShift()==null && arr.length>=3) || (dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:""))){
 							Arrange b = dateValue.get(arr[1]);
 							b.setShift(arr.length>=3?arr[2]:"");
 							b.setState(2);
@@ -164,6 +164,12 @@ public class PbController {
 				userShifts.get(arr[0]).put(arr[1], a);
 			}
 		}
+//		for(Arrange a:list){
+//			System.out.println("-------------------------------------");
+//			System.out.println(a.getWorker()+a.getDate());
+//		}
+		
+		
 		arrangeManager.saveAll(list);
 		System.out.println(list.size()+"保存完成");
 		return true;

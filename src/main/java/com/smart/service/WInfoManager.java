@@ -19,4 +19,6 @@ public interface WInfoManager extends GenericManager<WInfo, Long> {
 	List<WInfo> getBySection(String section);
 	
 	WInfo getByWorkId(String workid);
+	
+	List<WInfo> getByType(int type);
 }
