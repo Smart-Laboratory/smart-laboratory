@@ -10,18 +10,14 @@ import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
 import com.smart.model.rule.Index;
 import com.smart.service.doctor.DoctorQueryManager;
-<<<<<<< HEAD
-import com.smart.service.lis.*;
 import com.smart.service.reagent.OutManager;
-import com.smart.service.rule.IndexManager;
-=======
->>>>>>> a8ec192613ef981114ec211c3d3147357d1f8e4d
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.SyncResult;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -189,17 +185,8 @@ public class QueryReportController  extends BaseAuditController {
                     if(!sampleids.equals("")) sampleids+=",";
                     sampleids +="'" + arrSample[i]+"'";
                 }
-
-<<<<<<< HEAD
-                List<Sample> sampleList = sampleManager.getBysampleNos(sampleids);
-
-
-               // List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
-=======
                 List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
-                
                 getResult(samplenos, sampleAndResultVos, jsonResult);
->>>>>>> a8ec192613ef981114ec211c3d3147357d1f8e4d
 
                 /*for(int i=0;i<arrSample.length;i++){
                     Sample sampleInfo = sampleManager.getBySampleNo(arrSample[i]);
