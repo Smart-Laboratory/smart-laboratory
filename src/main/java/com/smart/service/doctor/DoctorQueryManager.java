@@ -35,5 +35,5 @@ public interface DoctorQueryManager  {
      */
     Sample getSampleByPatientBlh(String patientBlh, String fromDate);
 
-    List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
+    List<Object[]> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
 }

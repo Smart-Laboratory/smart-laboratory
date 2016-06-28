@@ -52,7 +52,7 @@ public class DoctorQueryManagerImpl implements DoctorQueryManager {
         return doctorQueryDao.getSampleByPatientBlh(patientBlh,fromDate);
     }
 
-    public List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate) {
+    public List<Object[]> getSampleAndResult(String patientBlh,String fromDate,String nowDate) {
         return doctorQueryDao.getSampleAndResult(patientBlh,fromDate,nowDate);
     }
 

@@ -42,5 +42,5 @@ public interface DoctorQueryDao {
      * @return
      */
 	@Transactional
-    List<SampleAndResultVo> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
+    List<Object[]> getSampleAndResult(String patientBlh,String fromDate,String nowDate);
 }

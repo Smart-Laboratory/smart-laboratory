@@ -185,9 +185,10 @@ public class QueryReportController  extends BaseAuditController {
                     if(!sampleids.equals("")) sampleids+=",";
                     sampleids +="'" + arrSample[i]+"'";
                 }
-                List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+                long start = System.currentTimeMillis();
+                List<Object[]> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+                
                 getResult(samplenos, sampleAndResultVos, jsonResult);
-
                 /*for(int i=0;i<arrSample.length;i++){
                     Sample sampleInfo = sampleManager.getBySampleNo(arrSample[i]);
                     List<SyncResult> microList = null;
@@ -221,11 +222,10 @@ public class QueryReportController  extends BaseAuditController {
         JSONObject sampleData = new JSONObject();
         sampleData.put("patientInfo",patientInfo);
         sampleData.put("testResult",jsonResult);
-        System.out.println(sampleData.toString());
         return sampleData.toString();
     }
 
-    private void getResult(String samplenos, List<SampleAndResultVo> sampleAndResultVos, JSONArray jsonResult) {
+    private void getResult(String samplenos, List<Object[]> sampleAndResultVos, JSONArray jsonResult) {
 		if(idMap.size() == 0) {
 			initMap();
 		}
@@ -239,8 +239,9 @@ public class QueryReportController  extends BaseAuditController {
 				wswSet.add(sampleno);
 			}
 		}
-		for(SampleAndResultVo vo : sampleAndResultVos) {
-			if(samplenos.indexOf(vo.getSample().getSampleNo()) >= 0) {
+		for(Object[] objs : sampleAndResultVos) {
+			SampleAndResultVo vo = new SampleAndResultVo((Sample)objs[0],(Process)objs[1],(TestResult)objs[2]);
+			if(samplenos.indexOf(vo.getSample().getSampleNo()) >= 0 && vo.getSample().getSampleNo().indexOf("BAA")< 0) {
 				if(nowtestMap.containsKey(vo.getSample().getSampleNo())) {
 					nowtestMap.get(vo.getSample().getSampleNo()).add(vo.getTestResult().getTestId());
 				} else {
@@ -250,7 +251,7 @@ public class QueryReportController  extends BaseAuditController {
 				}
 			} else {
 				if(histestMap.containsKey(vo.getSample().getSampleNo())) {
-					nowtestMap.get(vo.getSample().getSampleNo()).add(vo.getTestResult().getTestId());
+					histestMap.get(vo.getSample().getSampleNo()).add(vo.getTestResult().getTestId());
 				} else {
 					Set<String> testset = new HashSet<String>();
 					testset.add(vo.getTestResult().getTestId());
@@ -302,6 +303,7 @@ public class QueryReportController  extends BaseAuditController {
 								testMap.put(vo.getTestResult().getTestId(), testlist);
 							}
 						}
+						smaplenoMap.put(now, testMap);
 					}
 				}
 				if(isOver) {
@@ -341,8 +343,6 @@ public class QueryReportController  extends BaseAuditController {
 		                json.put("last","");
 		                json.put("last1","");
 		                json.put("last2","");
-		                json.put("last3","");
-		                json.put("last4","");
 		                if(testMap != null && testMap.size() > 0) {
 		                	if(testMap.containsKey(id)) {
 		                		switch(testMap.get(id).size()) {
@@ -392,7 +392,6 @@ public class QueryReportController  extends BaseAuditController {
 			wswSampleMap.put(s.getSampleNo(), s);
 		}
 		for(String wswsampleno : wswSet) {
-			System.out.println(wswsampleno);
 			Sample sampleInfo = wswSampleMap.get(wswsampleno);
 			int resultType = getSampleType(sampleInfo.getSampleNo(),sampleInfo.getSectionId());
 			try {
@@ -409,7 +408,6 @@ public class QueryReportController  extends BaseAuditController {
 				e.printStackTrace();
 			}
 		}
-    	
 	}
 
 	/**

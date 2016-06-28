@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,17 +38,17 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
         super(SampleAndResultVo.class);
     }
 
-    public List<SampleAndResultVo> getSampleAndResult(String patientblh,String fromDate,String toDate){
-        String sql = "select new com.smart.model.doctor.SampleAndResultVo(s,p,t) from Sample s,Process p,TestResult t where  s.id= p.sampleid and s.sampleNo=t.sampleNo ";
+    public List<Object[]> getSampleAndResult(String patientblh,String fromDate,String toDate){
+        String sql = "select s.*,p.*,t.* from l_sample s,l_process p,l_testresult t where  s.id= p.sample_id and s.sampleno=t.sampleno ";
         sql += " and s.patientblh ='"+patientblh+"'";
         sql += " and substr(s.sampleNo, 0, 8) >='"+fromDate+"' " ;
         sql += " and substr(s.sampleNo, 0, 8) <='"+toDate+"' " ;
         System.out.println(sql);
-        List<SampleAndResultVo> list = getSession().createQuery(sql).list();
-                /*.addEntity("s",Sample.class)
+        List<Object[]> list = getSession().createSQLQuery(sql)
+                .addEntity("s",Sample.class)
                 .addEntity("p", Process.class)
                 .addEntity("t", TestResult.class)
-                .list();*/
+                .list();
         return list;
 
     }
@@ -64,7 +65,8 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
         String dateFormat = "yyyymmdd";
         String Sql = "select a.* from (select  substr(sampleno, 0, 8) as requesttime,t1.patientblh, count(*) as cnt,LISTAGG(t1.sampleno,',') WITHIN GROUP( ORDER BY t1.id) AS SAMPLENO  from l_sample t1 ,l_process t2 where t1.id= t2.sample_id " +
                 " and t1.sampleno !='0'" +
-                "  and substr(sampleno, 0, 8) ='"+fromDate+"'" ;
+                "  and substr(sampleno, 0, 8) >='"+fromDate+"'" +
+        		"  and substr(sampleno, 0, 8) <='"+toDate+"'" ;
         if(type == 1){
             Sql += " and t1.patientblh='"+query+"'";
         }else if(type == 2){

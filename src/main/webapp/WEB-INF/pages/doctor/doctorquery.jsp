@@ -654,10 +654,10 @@
                     }
                     if(type==4){
                         var rNameTD=$("<td colspan='8'></td>");      //名称
-                        var a= $('<a href="#_"></a>');
+                        var a= $('<a href="#_" val='+rowDatas[j].name+'></a>');
                         a.append(rowDatas[j].name);
                         a.click(function(){
-                            public.show_knowledge(rowDatas[j].name);
+                        	public.show_knowledge($(this).attr('val'));
                         })
                         rNameTD.append(a);
                         //rNameTD.html('<a>'+rowDatas[j].name+'</a>');
@@ -665,10 +665,10 @@
                         row.append(rNameTD);
                     }else{
                         var rNameTD=$("<td></td>");      //名称
-                        var a= $('<a href="#_"></a>');
+                        var a= $('<a href="#_" val='+rowDatas[j].name+'></a>');
                         a.append(rowDatas[j].name);
                         a.click(function(){
-                            public.show_knowledge(rowDatas[j].name);
+                        	public.show_knowledge($(this).attr('val'));
                         })
                         rNameTD.append(a);
                         row.append(rNameTD);
@@ -760,10 +760,10 @@
                     }
 
                     var rNameTD = $("<td></td>");      //抗生素名
-                    var a= $('<a href="#_"></a>');
+                    var a= $('<a href="#_" val='+drugDatas[j].testid+'></a>');
                     a.append(drugDatas[j].testid);
                     a.click(function(){
-                        public.show_knowledge(drugDatas[j].testid);
+                    	public.show_knowledge($(this).attr('val'));
                     })
                     rNameTD.append(a);
                     rNameTD.attr('title',drugDatas[j].testid);
@@ -954,9 +954,10 @@
                     dataType: 'html',
                     success: function(data) {
                         var data2=public.dataProcess(data);
+                        console.log(data)
                         document.getElementById("dialog").innerHTML = data2;
-                        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-                        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+                        //$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+                        //$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
                         public.openKnowledgeDialog();
                     }
                 });
