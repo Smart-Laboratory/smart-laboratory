@@ -7,10 +7,13 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Section;
 import com.smart.model.lis.TestResult;
+import com.smart.model.reagent.Out;
+import com.smart.model.reagent.Reagent;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.doctor.DoctorQueryManager;
 import com.smart.service.lis.*;
+import com.smart.service.reagent.OutManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
 import com.smart.util.PageList;
@@ -34,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -69,6 +73,9 @@ public class QueryReportController  extends BaseAuditController {
 
     @Autowired
     DoctorQueryManager doctorQueryManager = null;
+
+    @Autowired
+    private OutManager outManager;
 
     /**
      * 返回标本列表
@@ -206,7 +213,7 @@ public class QueryReportController  extends BaseAuditController {
                 List<Sample> sampleList = sampleManager.getBysampleNos(sampleids);
 
 
-                List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
+               // List<SampleAndResultVo> sampleAndResultVos = doctorQueryManager.getSampleAndResult(patientBlh,fromDate,nowDate);
 
 
 
@@ -564,6 +571,133 @@ public class QueryReportController  extends BaseAuditController {
         response.getWriter().print(array.toString());
         return null;
     }
+
+    /**
+     * 历史曲线图
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/singleChart*", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getSingleChart(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String testid = request.getParameter("id");
+        String sample = request.getParameter("sample");
+        DecimalFormat deFormat = new DecimalFormat("#.##");
+
+        Sample info = sampleManager.getBySampleNo(sample);
+        Date measuretime = new Date();
+        String patientid = info.getPatientblh();
+        Set<String> sameTests = new HashSet<String>();
+        sameTests.add(testid);
+        String tests = sameTests.toString().replace("[", "'").replace("]", "'");
+        tests = tests.replaceAll(", ", "','");
+        List<TestResult> list = testResultManager.getSingleHistory(tests, patientid);
+        List<Double> loArr = new ArrayList<Double>();
+        List<Double> reArr = new ArrayList<Double>();
+        List<Double> hiArr = new ArrayList<Double>();
+        List<String> timeArr = new ArrayList<String>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        for(TestResult t: testResultManager.getPrintTestBySampleNo(info.getSampleNo())) {
+            if (testid.equals(t.getTestId())) {
+                measuretime = t.getMeasureTime();
+            }
+        }
+        List<Reagent> rlist  = reagentManager.getByTestId(testid);
+        if(rlist.size()>0) {
+            String rids = "";
+            Map<Long, Reagent> rm = new HashMap<Long, Reagent>();
+            for(Reagent r : rlist) {
+                rids += r.getId() + ",";
+                rm.put(r.getId(), r);
+            }
+            List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), Constants.SDF.format(measuretime));
+            List<String> html = new ArrayList<String>();
+            for(int i=0; i<out.size(); i++) {
+                Out o = out.get(i);
+                StringBuilder s = new StringBuilder("");
+                s.append("<p>");
+                s.append((i+1) + ". ");
+                s.append(rm.get(o.getRgId()).getName());
+                s.append(" 批号:");
+                s.append(" " + o.getBatch());
+                s.append(" 出库日期:");
+                s.append(" " + Constants.SDF.format(o.getOutdate()));
+                s.append("</p>");
+                html.add(s.toString());
+            }
+            map.put("hmList", html);
+        } else {
+            map.put("hmList", "");
+        }
+
+        if (idMap.size() == 0)
+            initMap();
+
+        if(list.size()>1) {
+            if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && idMap.containsKey(list.get(0).getTestId())) {
+                map.put("name", idMap.get(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
+            } else {
+                map.put("name", idMap.get(list.get(0).getTestId()).getName());
+            }
+            int num = list.size();
+            int count = 0;
+            Double average;
+            Double max = 0.0;
+            Double min = 100000.0;
+            Double total = 0.0;
+            Double sd;
+            List<Double> resultList = new ArrayList<Double>();
+            for (int i = 0; i < num; i++) {
+                if(StringUtils.isNumericSpace(list.get(i).getTestResult().replace(".", ""))) {
+                    double d = Double.parseDouble(list.get(i).getTestResult());
+                    if(d > max){
+                        max = d;
+                    }
+                    if(d < min){
+                        min = d;
+                    }
+                    total = total + d;
+                    count = count +1;
+                    resultList.add(d);
+                    loArr.add(Double.parseDouble(list.get(i).getRefLo()));
+                    reArr.add(Double.parseDouble(list.get(i).getTestResult()));
+                    hiArr.add(Double.parseDouble(list.get(i).getRefHi()));
+                    timeArr.add(Constants.SDF.format(list.get(i).getMeasureTime()));
+                }
+            }
+            map.put("max", max);
+            map.put("min", min);
+            map.put("num", count);
+            if (resultList.size()%2 == 0) {
+                map.put("mid", resultList.get(resultList.size()/2-1));
+            } else {
+                map.put("mid", resultList.get(resultList.size()/2));
+            }
+
+            average = (count == 0 ? 0 : total/count);
+            map.put("ave", deFormat.format(average));
+            Double variance = 0.0;
+            for (Double d : resultList) {
+                variance = variance + Math.pow(d-average, 2);
+            }
+            sd = Math.sqrt(variance/resultList.size());
+            map.put("sd", deFormat.format(sd));
+            map.put("cov", deFormat.format(sd*100/average));
+        }
+        Collections.reverse(timeArr);
+        Collections.reverse(reArr);
+        Collections.reverse(hiArr);
+        Collections.reverse(loArr);
+        map.put("lo", loArr);
+        map.put("re", reArr);
+        map.put("hi", hiArr);
+        map.put("time", timeArr);
+        return map;
+    }
+
+
     /**
      * 获取微生物检验结果信息
      * @param wswlist

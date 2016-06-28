@@ -15,7 +15,8 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
-    <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.3/firebug-lite.js"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/highcharts.js"/>"></script>
+    <%--<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.3/firebug-lite.js"></script>--%>
     <title>检验报告查询</title>
     <style>
         *{margin:0;padding:0;border:0;}
@@ -268,6 +269,16 @@
         .color101{
             background-color:#bababa;
         }
+        /*药敏I */
+        .color102{
+            background-color:#F44336;
+            color:#FFF;
+        }
+        /*药敏S */
+        .color103{
+            background-color:#9C27B0;
+            color:#FFF;
+        }
     </style>
 </head>
 <body>
@@ -353,9 +364,7 @@
                                 <td class="fieldname">病历号：</td>
                                 <td class="fieldvalue"> <b id="pBlh"></b></td>
                                 <td class="fieldname">就诊卡号：</td>
-                                <td class="fieldvalue"> <b id="pId"></b></td>
-                                <td class="fieldname">样本类型：</td>
-                                <td class="fieldvalue"><b id="pType"></b></td>
+                                <td class="fieldvalue" colspan="3"> <b id="pId"></b></td>
                             </tr>
                             <tr>
                                 <td class="fieldname">科室：</td>
@@ -384,11 +393,8 @@
                             <th class="td1">项目</th>
                             <th class="td2">结果</th>
                             <th class="td3">历史</th>
-                            <th class="td3">历史</th>
-                            <th class="td3">历史</th>
-                            <th class="td3">历史</th>
-                            <th class="td3">历史</th>
-                            <th class="td3">测定时间</th>
+                            <th class="td3">历史1</th>
+                            <th class="td3">历史2</th>
                             <th class="td3">机器号</th>
                             <th class="td3">参考值</th>
                             <th class="td3">单位</th>
@@ -447,6 +453,13 @@
         color: #fff;
     }
     input,label { vertical-align:middle;}
+    a{
+        text-decoration: none;
+        color: #222;
+    }
+    a:hover{
+        color: #fe9e19;
+    }
 </style>
 <div style="display: none" id="indeDialog">
     <div style="padding: 10px 10px">
@@ -468,6 +481,20 @@
             <tr><th>名称</th><th>英文名</th><th>操作</th></tr>
         </table>
     </div>
+</div>
+
+<div id="chartDialog" style="text-align:left;display:none;" >
+    <p class="alert alert-danger" id="chartAlert"><fmt:message key='result.chart.alert'/></p>
+    <div id="singleChartPanel" style="width:640px;height:320px"></div>
+    <table id="chartTongji" class="table">
+        <tbody>
+        <tr><th><fmt:message key='tongji.min' /></th><td><span id="tongji_min"></span></td><th><fmt:message key='tongji.max'/></th><td><span id="tongji_max"></span></td><th><fmt:message key='tongji.mid' /></th><td><span id="tongji_mid"></span></td></tr>
+        <tr><th><fmt:message key='tongji.ave'/></th><td><span id="tongji_ave"></span></td><th><fmt:message key='tongji.sd' /></th><td><span id="tongji_sd"></span></td><th><fmt:message key='tongji.cov'/></th><td><span id="tongji_cov"></span></td></tr>
+        </tbody>
+    </table>
+    <div id="hmInfo"></div>
+</div>
+<div id="dialog" align="left" style="display:none;">
 </div>
 </body>
 
@@ -509,7 +536,7 @@
                             $("#pId").html(data.patientInfo.id ||'');
                             $("#pSex").html(data.patientInfo.sex ||'');
                             $("#pSection").html(data.patientInfo.section ||'');
-                            $("#pType").html(data.patientInfo.type ||'');
+                            //$("#pType").html(data.patientInfo.type ||'');
                             $("#pDiagnostic").html(data.patientInfo.diagnostic ||'');
                             $("#pBed").html(data.patientInfo.bedno ||'');
                             public.loadGrid(data.testResult)
@@ -535,7 +562,7 @@
                             //headOtherInfo='有结果';
                        }
                     }
-                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color="#FF9800">['+ sampleInfo.sampleNo+'] </font> ' + headOtherInfo;
+                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color="#FF9800">['+ sampleInfo.sampleNo+'] </font> (样本类型:' +sampleInfo.type+') ' + headOtherInfo;
                     //add SubHead
                     var subHeadRow = $('<tr class="headRow show" groupid="0"><td colspan=8>'+headInfo+'</td></tr>');
                     table.append(subHeadRow);
@@ -546,7 +573,8 @@
                     if(rowDatas.length>0){
                         subHeadRow.attr('groupid','1');
                         if(window.console)console.log(subHeadRow.attr('groupid'))
-                        var subTable = public.loadSubGrid(sampleInfo.id,rowDatas,type);
+                        //console.log(rowDatas)
+                        var subTable = public.loadSubGrid(sampleInfo.sampleNo,rowDatas,type);
                         var subDataRow =$('<tr></tr>');
                         var subDataTd = $('<td colspan=8></td>');
                         subDataTd.append(subTable);
@@ -572,7 +600,10 @@
                 return public.getColor(val1,color)+res;
             },
             getColor:function(val1,color){
-                if(val1.indexOf("阳")>-1) color=101;
+                if(val1.indexOf("阳")>-1 || val1.indexOf("+") > -1) color=101;
+                if(val1.trim()=='I') color =102;    //药敏结果 中间
+                if(val1.trim()=='S') color =103;   //敏感
+
                 switch (color) {
                     case 1:
                         return "<span class='color1'>"+val1+"</span>";
@@ -591,6 +622,12 @@
                     case 101:
                         //阳性
                         return "<span class='color101'>"+val1+"</span>";
+                    case 102:
+                        //I
+                        return "<span class='color102'>"+val1+"</span>";
+                    case 103:
+                        //s
+                        return "<span class='color103'>"+val1+"</span>";
                     default:
                         return val1;
                 }
@@ -607,8 +644,9 @@
                 //加载子表数据
                 var subTable=$('<table class="table subtable" id='+sampleid+'></table>');
                 subTable.append(header)
+                //console.log(rowDatas);
                 for(j=0;j < rowDatas.length;j++){
-                    var row=$("<tr class='hover'></tr>");
+                    var row=$("<tr class='hover' testid="+rowDatas[j].id+" sampleid="+sampleid+"></tr>");
                     if(j%2 ==0){
                         row.addClass("light");
                     }else{
@@ -616,13 +654,23 @@
                     }
                     if(type==4){
                         var rNameTD=$("<td colspan='8'></td>");      //名称
-                        rNameTD.html(rowDatas[j].name);
+                        var a= $('<a href="#_"></a>');
+                        a.append(rowDatas[j].name);
+                        a.click(function(){
+                            public.show_knowledge(rowDatas[j].name);
+                        })
+                        rNameTD.append(a);
+                        //rNameTD.html('<a>'+rowDatas[j].name+'</a>');
                         rNameTD.attr('title',rowDatas[j].name);
                         row.append(rNameTD);
                     }else{
                         var rNameTD=$("<td></td>");      //名称
-                        rNameTD.html(rowDatas[j].name);
-                        rNameTD.attr('title',rowDatas[j].name);
+                        var a= $('<a href="#_"></a>');
+                        a.append(rowDatas[j].name);
+                        a.click(function(){
+                            public.show_knowledge(rowDatas[j].name);
+                        })
+                        rNameTD.append(a);
                         row.append(rNameTD);
 
                         var rResultTD=$("<td></td>");      //结果
@@ -659,6 +707,12 @@
                         row.bind('click',function(){
                             //alert('rowClick');
                         })
+                        row.mousedown(function(e){
+                            if(e.which == 3 ){
+                                public.showCharts($(this).attr('testid'),$(this).attr('sampleid'))
+                                //alert('rightmenu==' + $(this).attr('testid') +"  sampleid="+$(this).attr('sampleid'))
+                            }
+                        })
 
                     }
 
@@ -670,15 +724,16 @@
                             var drugDatas = rowDatas[j].ymdatas;
                             if(drugDatas && drugDatas.length>0){
                                 row.attr('groupid','1');
+                                row.addClass("show");
                                 var subDrugTable = public.loadDrugGrid(drugDatas);
                                 if(window.console)console.log(subDrugTable)
-                                var drugDataRow =$('<tr style="display: none"></tr>');
+                                var drugDataRow =$('<tr></tr>');
                                 var drugDataTd = $('<td colspan=8 ></td>');
                                 drugDataTd.append(subDrugTable);
                                 drugDataRow.append(drugDataTd);
                                 subTable.append(drugDataRow);
                                 var rowHtml = row.find("td:eq(0)").html();
-                                row.find("td:eq(0)").html('<span class="toggerLable">+</span>'+rowHtml);
+                                row.find("td:eq(0)").html('<span class="toggerLable">-</span>'+rowHtml);
                                 row.click (function(event){
                                     public.togger(this,$(this).find('.toggerLable'));
                                 });
@@ -705,7 +760,12 @@
                     }
 
                     var rNameTD = $("<td></td>");      //抗生素名
-                    rNameTD.html(drugDatas[j].testid);
+                    var a= $('<a href="#_"></a>');
+                    a.append(drugDatas[j].testid);
+                    a.click(function(){
+                        public.show_knowledge(drugDatas[j].testid);
+                    })
+                    rNameTD.append(a);
                     rNameTD.attr('title',drugDatas[j].testid);
                     row.append(rNameTD)
 
@@ -715,7 +775,7 @@
                     row.append(rResultTD)
 
                     var rHintTD = $("<td></td>");      //解释
-                    rHintTD.html(drugDatas[j].hint);
+                    rHintTD.html(public.getColor(drugDatas[j].hint));
                     rHintTD.attr('title',drugDatas[j].hint);
                     row.append(rHintTD)
 
@@ -799,6 +859,146 @@
                     }
                 })
                 ul.parent().hide();
+            },
+            showCharts:function(id,sample){
+                //关闭浏览器右键
+                document.oncontextmenu=function(){return false;};
+                $.get("../doctor/singleChart",{id:id, sample:sample},function(data){
+                    $("#chartAlert").css("display","none");
+                    public.openChartDialog();
+                    $("#hmInfo").empty();
+                    for (var i=0; i< data.hmList.length; i++) {
+                        $("#hmInfo").append(data.hmList[i]);
+                    }
+
+                    if (data.num > 1) {
+                        $("#tongji_max").html(data.max);
+                        $("#tongji_min").html(data.min);
+                        $("#tongji_mid").html(data.mid);
+                        $("#tongji_ave").html(data.ave);
+                        $("#tongji_sd").html(data.sd);
+                        $("#tongji_cov").html(data.cov);
+                        var xset = data.time;
+                        var yset1 = data.lo;
+                        var yset2 = data.re;
+                        var yset3 = data.hi;
+                        var chart = new Highcharts.Chart({
+                            title: {
+                                text: data.name
+                            },
+                            credits: {
+                                enabled:false
+                            },
+                            chart: {
+                                renderTo: 'singleChartPanel',
+                                type: 'line',
+                                marginRight: 130,
+                                marginBottom: 25
+                            },
+                            xAxis: {
+                                type: 'datetime',
+                                categories: xset
+                            },
+                            yAxis: {
+                                title: {
+                                    text: '结果'
+                                },
+                                plotLines: [{
+                                    value: 0,
+                                    width: 1,
+                                    color: '#808080'
+                                }]
+                            },
+                            legend: {
+                                layout: 'vertical',
+                                align: 'right',
+                                verticalAlign: 'middle',
+                                borderWidth: 0
+                            },
+                            series: [{
+                                name: '低值',
+                                data: yset1
+                            }, {
+                                name: '检验结果',
+                                data: yset2
+                            }, {
+                                name: '高值',
+                                data: yset3
+                            }]
+                        });
+                    } else {
+                        $("#chartAlert").css("display","block");
+                    }
+                });
+            },
+            openChartDialog:function () {
+            layer.open({
+                type: 1,
+                shade: 0.4,
+                skin: 'layui-layer-lan',
+                area:['680px','540px'],
+                title: '样本项目试剂信息和历史记录',
+                content: $('#chartDialog'),
+                cancel: function(index){
+                    layer.close(index);
+                    //关闭浏览器右键
+                    document.oncontextmenu=function(){return true;};
+                }
+            });
+        },
+            show_knowledge:function (item) {
+                //显示相关知识
+                jQuery.ajax({
+                    type:'GET',
+                    url: encodeURI('/item.jsp?page='+item),
+                    dataType: 'html',
+                    success: function(data) {
+                        var data2=public.dataProcess(data);
+                        document.getElementById("dialog").innerHTML = data2;
+                        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+                        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+                        public.openKnowledgeDialog();
+                    }
+                });
+            },
+            dataProcess:function(data){
+                var title="<ul>";
+                var dataArray = data.split('<div class="tab-');
+                for(var i=0; i<dataArray.length;i++){
+                    var str = dataArray[i].replace('">',"!@#$%^&*");
+                    if(i!=0){
+                        var arr = str.split("!@#$%^&*");
+
+                        title = title+'<li><a href="#tabs-'+i+'">'+arr[0]+'<\/a><\/li>';
+                        dataArray[i] = '<div id="tabs-'+i+'">'+arr[1];
+                    }
+                    if(i==dataArray.length-1){
+                        dataArray[i] = dataArray[i].replace("<\/div>","");
+                        dataArray[i] = dataArray[i].replace("<\/div>","");
+                    }
+                }
+                title = title + "<\/ul>";
+                var result = '<div id="tabs">'+title;
+                for(var j=0;j<dataArray.length;j++){
+                    if(j!=0){
+                        result = result + dataArray[j];
+                    }
+                }
+                result = result + "<\/div>";
+                return result;
+            },
+            openKnowledgeDialog:function() {
+                layer.open({
+                    type: 1,
+                    shade: 0.4,
+                    skin: 'layui-layer-lan',
+                    area:['680px','360px'],
+                    title: '相关知识',
+                    content: $("#dialog"),
+                    cancel: function(index){
+                        layer.close(index);
+                    }
+                });
             }
         }
         return public;
