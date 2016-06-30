@@ -81,14 +81,14 @@ display: none;
 		
 		<div class="fixed">
 		<input id="test" value="${arrString}" type="hidden"/>
-		<table id="pbhead" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
+		<table id="pbhead" style="margin-top:10px;margin-bottom:0px;font-size:12px;width:100%;text-align:center;" border="1px;">
 		
 		
 		</table>
 		</div>
 		<div class="data">
 		<input id="test1" value="${arrBodyString}" type="hidden"/>
-		<table id="pbdata" style="font-size:12px;text-align:center;" border="1px;">
+		<table id="pbdata" style="font-size:12px;text-align:center;width:100%;" border="1px;">
 		
 		</table>
 		<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>
