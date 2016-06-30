@@ -98,7 +98,7 @@ public class BpbController extends PbBaseController {
 		}
 		
 		//获取科室排班人员表
-		List<WInfo> wiList = wInfoManager.getBySection(section, type);
+		List<WInfo> wiList = wInfoManager.getBySection("1300000", type);
 		//人员班次map
 		Map<String, String> wshifts = new HashMap<String,String>();
 		Map<String, String> nowshifts = new HashMap<String,String>();
@@ -253,10 +253,11 @@ public class BpbController extends PbBaseController {
             Map<String, String> shuffleMap = generatePbMap(selperson,bshifts);
             
             for(int k=2; k<i; k++) {
-            	String sday = startday<10?"0"+startday:startday+"";
+            	String sday = "";
 	        	String name = map.get(k).getName();
 	        	
 	        	for(int l=1; l<j; l++) {
+	        		sday = startday<10?"0"+startday:startday+"";
 	        		String background = "";
 //	        		Date date = sdf1.parse(tomonth + "-" + l);
 //	        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
@@ -264,22 +265,22 @@ public class BpbController extends PbBaseController {
 	        			background = "style='background:#7CFC00'";
 	        		}
 	        		//上午班
-	        		if (shuffleMap.get(name + "-" + sday+"-1") == null) {
+	        		if (shuffleMap.get(name + "-" + l+"-1") == null) {
 	        			String td = "";
 	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-1' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-1'  "+background+">"+shuffleMap.get(name + "-" + sday +"-1")+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "-1'  "+background+">"+shuffleMap.get(name + "-" + l +"-1")+"</td>";
 	        		}
 	        		//下午班
-	        		if (shuffleMap.get(name + "-" + sday +"-2") == null ) {
+	        		if (shuffleMap.get(name + "-" + l +"-2") == null ) {
 	        			String td = "";
 	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2][k] = td;
 	        		} else{
-	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' >" + shuffleMap.get(name + "-" + sday +"-2") + "</td>";
+	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "-2' >" + shuffleMap.get(name + "-" + l +"-2") + "</td>";
 	        		}
 	        		startday++;
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
@@ -338,9 +339,9 @@ public class BpbController extends PbBaseController {
 			persons.remove(randomIndex);
 		}
 		int index=0;
-		for(int i=0; i<shifts.size();i++){
-			String name = shifts.get(i).getName();
-			for(int j=1;j<=5;j++){
+		for(int j=1;j<=5;j++){
+			for(int i=0; i<shifts.size();i++){
+				String name = shifts.get(i).getName();
 				gMap.put(name+"-"+j+"-1", personsNew.get(index)+";");
 				index++;
 				gMap.put(name+"-"+j+"-2", personsNew.get(index)+";");

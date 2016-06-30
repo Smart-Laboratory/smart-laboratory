@@ -967,7 +967,7 @@
                     dataType: 'html',
                     success: function(data) {
                         var data2=public.dataProcess(data);
-                        console.log(data)
+                       // console.log(data)
                         document.getElementById("dialog").innerHTML = data2;
                         //$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
                         //$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );

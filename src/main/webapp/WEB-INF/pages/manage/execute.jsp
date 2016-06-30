@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
     <script type="text/javascript" src="../scripts/manage/execute.js"></script>
+    <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
 </head>
 <style>
 
@@ -195,12 +196,8 @@
 
 </div>
 
-<div id="printDialog" align="left">
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
-	<div id="printFrame" style="height:400px;"></div>
-</div>
 
-<div id="executeUnusualDialog">
+<div id="executeUnusualDialog" class="col-sm-11" style="display:none;">
 	<form class="form-horizontal" role="form" style="margin-top:5px;" id="executeUnusualForm">
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="unpatientid">就诊卡号：</label>
@@ -235,7 +232,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="note">备注：</label>
 			<div class="col-sm-9">
-				<textarea id="note" rows="3" class="form-control" style="width:100%;"></textarea>
+				<textarea id="note" rows="3" class="form-control" style="width:90%;"></textarea>
 			</div>
 		</div>
 		<input type="button" id="tijiao" class="btn btn-info" onclick="unusual()" value="提交">

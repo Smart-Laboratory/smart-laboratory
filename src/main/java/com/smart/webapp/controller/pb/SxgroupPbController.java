@@ -185,6 +185,8 @@ public class SxgroupPbController {
         
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();
+        	if(name.equals("杨俊英"))
+        		System.out.println(name);
         	
         	for(int l=1; l<j; l++) {
         		String background = "";
@@ -192,7 +194,7 @@ public class SxgroupPbController {
         		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
         			background = "style='background:#7CFC00'";
         		}
-        		if (arrMap.get(name + "-" + l) == null) {
+        		if (arrMap.get(name + "-" + l) == null || arrMap.get(name + "-" + l).getShift()==null) {
         			String td = "";
         			td += "<td class='day' name='td" + l + "' id='" + name + "-" + l + "' "+background+">";
         			td += "</td>";

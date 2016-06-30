@@ -167,6 +167,17 @@
 					}
 				}
 			});
+			
+			$.each($("#shiftNotSelect input"),function(name,v){
+				if(v.checked){
+					
+					if(shifts.indexOf(v.value+";")>=0){
+						shifts=shifts.replace(v.value+";","");
+					}else{
+						shifts = shifts + v.value+";";
+					}
+				}
+			});
 			$("#"+id).html(shifts);
 //			}
 		});
