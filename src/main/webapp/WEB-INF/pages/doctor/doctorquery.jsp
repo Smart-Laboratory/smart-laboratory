@@ -720,7 +720,7 @@
 
                     if(type==4){
                         var rNameTD=$("<td colspan='8'></td>");      //名称
-                        var a= $('<a href="#_" val='+rowDatas[j].name+'></a>');
+                        var a= $('<a href="#_" val='+rowDatas[j].knowledgeName+'></a>');
                         a.append(rowDatas[j].name);
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
@@ -732,7 +732,7 @@
                         row.append(rNameTD);
                     }else{
                         var rNameTD=$("<td></td>");      //名称
-                        var a= $('<a href="#_" val='+rowDatas[j].name+'></a>');
+                        var a= $('<a href="#_" val='+rowDatas[j].knowledgeName+'></a>');
                         a.append(rowDatas[j].name);
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
