@@ -1062,7 +1062,7 @@
                         var cellName = $(tr).find('td').eq(0).text() ||'';
                         var cellResult = $(tr).find('td').eq(1).attr('title') ||'';
                         var cellUnit = $(tr).find('td').eq(7).text() ||'';
-                        if(obj.getAttribute('abnormal')=='1'){
+                        if(tr.getAttribute('abnormal')=='1'){
                             if(subtext !='') subtext +="、";
                             subtext +=cellName+' '+cellResult+cellUnit+' 低';
                         }else if(tr.getAttribute('abnormal')=='2') {
@@ -1074,7 +1074,7 @@
                         }
                     })
                     if(subtext!=''){
-                        if(text !='') text +="\n";
+                        if(text !='') text +="\r\n";
                         text += examinaim+"：" ;
                         text += subtext;
                         subtext = "";
