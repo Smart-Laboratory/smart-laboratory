@@ -226,6 +226,10 @@ public class QueryReportController  extends BaseAuditController {
         return sampleData.toString();
     }
 
+    @RequestMapping(value = "item")
+    public ModelAndView item(HttpServletRequest request,HttpServletResponse response){
+        return new ModelAndView();
+    }
     private void getResult(String samplenos, List<Object[]> sampleAndResultVos, JSONArray jsonResult) {
 		if(idMap.size() == 0) {
 			initMap();
