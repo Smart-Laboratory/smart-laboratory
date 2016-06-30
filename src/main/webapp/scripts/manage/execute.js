@@ -56,8 +56,8 @@ function getData(item,event){
 					for(var i=0; i<samples.length ;i++){
 						var sample = samples[i];
 						$("#samplehis").append("<div class='col-sm-2 '><span class='col-sm-6'>结果状态:</span><b>"+sample.auditStatusValue+sample.auditMarkValue+"</b></div>");
-						$("#samplehis").append("<div class='col-sm-4 '><span class='col-sm-6'>样本号:</span><b>"+sample.sampleNo+"</b></div>");
-						$("#samplehis").append("<div class='col-sm-4 '><span class='col-sm-4'>检验项目:</span><b>"+sample.inspectionName+"</b></div>");
+						$("#samplehis").append("<div class='col-sm-3 '><span class='col-sm-6'>样本号:</span><b>"+sample.sampleNo+"</b></div>");
+						$("#samplehis").append("<div class='col-sm-5 '><span class='col-sm-4'>检验项目:</span><b>"+sample.inspectionName+"</b></div>");
 						$("#samplehis").append("<div class='col-sm-2 '><span class='col-sm-6'>检验科室:</span><b >"+sample.sectionId+"</b></div>");
 						$("#samplehis").append("</div>");
 					}
@@ -79,22 +79,6 @@ function getData(item,event){
 }
 
 $(function(){
-	$("#printDialog").dialog({
-		title: "条码打印",
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 550,
-	    height: 500
-	});
-	$("#executeUnusualDialog").dialog({
-		title: "抽血异常登记",
-		autoOpen: false,
-		resizable: false,
-		modal:true,
-	    width: 550,
-	    height: 400,
-	});
 	
 	$(".footer").css('display','none');
 	$( "#from" ).datepicker({
@@ -149,15 +133,19 @@ $(function(){
 			}
 			$("#laborder").val(tests);
 			if(data.error == null || data.error == undefined){
-				$('#printFrame').empty();
-		    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode?tests="+testStr+"\"/>");
-				$("#printDialog").dialog("open");
+				
+				layer.open({
+		            type: 2,
+		            area: ['550px','500px'],
+		            fix: false, //不固定
+		            maxmin: true,
+		            shade:0.5,
+		            title: "条码打印",
+		            content:  "../manage/printBarcode?tests="+testStr
+		        })
 			}
 		});
 		
-//		$('#printFrame').empty();
-//    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='99%' src=\"../manage/printBarcode\"/>");
-//		$("#printDialog").dialog("open");
 	});
 	
 	
@@ -177,7 +165,18 @@ $(function(){
 				}
 			});
 		}
-		$("#executeUnusualDialog").dialog("open");
+		
+		layer.open({
+			  type: 1,
+			  shade: 0.4,
+			  skin: 'layui-layer-lan',
+			  area:['550px','440px'],
+			  title: '异常登记',
+			  content: $("#executeUnusualDialog"),
+			  cancel: function(index){
+			    layer.close(index);
+			  }
+			});
 	});
 	
 	$("#sampleQuery").click(function(){

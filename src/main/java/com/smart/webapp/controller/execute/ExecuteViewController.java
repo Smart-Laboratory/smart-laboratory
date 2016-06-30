@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.zju.api.model.ExecuteInfo;
 import com.zju.api.model.Patient;
+import com.lowagie.text.Section;
 import com.smart.Constants;
 import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.InvalidSample;
@@ -83,6 +84,13 @@ public class ExecuteViewController {
 		if(samples!=null && samples.size()==0){
 			map.put("samples", null);
 		}else{
+			SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+			for(Sample s : samples){
+				String depart = sectionUtil.getValue(s.getSectionId());
+				if(depart!=null && !depart.isEmpty()){
+					s.setSectionId(depart);
+				}
+			}
 			map.put("samples", samples);
 		}
 		return map;

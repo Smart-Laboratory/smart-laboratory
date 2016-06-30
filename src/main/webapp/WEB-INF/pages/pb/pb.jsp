@@ -19,38 +19,33 @@ tr:hover{
 	background:#87cefa;
 }
 
-
-#head  th  {
-	width:40px;
-	height:24px;
-	text-align:center;
-	padding:2px 2px  !important;
-}
 table tr th {
 	width:40px;
 	height:24px;
 	text-align:center;
-	padding:2px 2px  !important;
+	padding:0px 0px  !important;
 }
 table tr td {
 	width:40px;
 	height:24px;
-	padding:2px 2px !important;
+	padding:0px 0px !important;
 }
+
 div .fixed{ 
 overflow-y: scroll; 
 overflow-x: hidden;
-width:auto;
 height: auto; 
 border: 0px solid #009933; 
 } 
+
 div .data{ 
 overflow-y: scroll; 
 overflow-x: hidden;
-width:auto;
-height: 480px; 
+height: 550px; 
 border: 0px solid #009933; 
 } 
+
+
 
 .ui-datepicker-calendar { 
 display: none; 
@@ -86,14 +81,14 @@ display: none;
 		
 		<div class="fixed">
 		<input id="test" value="${arrString}" type="hidden"/>
-		<table id="pbhead" class="table" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
+		<table id="pbhead" style="margin-top:10px;margin-bottom:0px;font-size:12px;text-align:center;" border="1px;">
 		
 		
 		</table>
 		</div>
-		<div class="fixed data">
+		<div class="data">
 		<input id="test1" value="${arrBodyString}" type="hidden"/>
-		<table id="pbdata" class="table" style="font-size:12px;text-align:center;" border="1px;">
+		<table id="pbdata" style="font-size:12px;text-align:center;" border="1px;">
 		
 		</table>
 		<label for="bz" style="margin-top:10px;"><fmt:message key="patient.note"/></label>

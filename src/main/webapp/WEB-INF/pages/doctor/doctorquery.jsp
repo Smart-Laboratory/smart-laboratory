@@ -1026,6 +1026,10 @@
                     dataType: 'html',
                     success: function(data) {
                         var data2=public.dataProcess(data);
+<<<<<<< HEAD
+                       // console.log(data)
+=======
+>>>>>>> origin/master
                         document.getElementById("dialog").innerHTML = data2;
                         $.jqtab("#tabs",".tab_con");
                         public.openKnowledgeDialog();
