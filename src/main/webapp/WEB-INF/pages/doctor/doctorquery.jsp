@@ -14,6 +14,7 @@
     <meta charset="utf-8" />
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/highcharts.js"/>"></script>
     <%--<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.3/firebug-lite.js"></script>--%>
@@ -287,6 +288,21 @@
             /*background-color:#9C27B0;*/
             color:#9C27B0 !important;
         }
+        .hideRow{
+            display: none;
+        }
+
+        /*TAB选项卡*/
+        #tabbox{ width:600px; overflow:hidden; margin:0 auto;}
+        .tab_conbox{border: 1px solid #999;border-top: none;padding-top:20px;}
+        .tab_con{ display:none;}
+
+        .tabs{height: 32px;border-bottom:1px solid #999;border-left: 1px solid #999;width: 100%;}
+        .tabs li{height:31px;line-height:31px;float:left;border:1px solid #999;border-left:none;margin-bottom: -1px;background: #e0e0e0;overflow: hidden;position: relative;}
+        .tabs li a {display: block;padding: 0 20px;border: 1px solid #fff;outline: none;}
+        .tabs li a:hover {background: #ccc;}
+        .tabs .thistab,.tabs .thistab a:hover{background: #fff;border-bottom: 1px solid #fff;}
+        .tab_con {padding:12px;font-size: 14px; line-height:175%;}
     </style>
 </head>
 <body>
@@ -390,7 +406,7 @@
             <div class="row">
                 <div class="title">
                     <div class="title-info" style="float: left;display:inline;" id="resultCaption">结果信息</div>
-                    <div style=" float:right;display:inline;line-height: 1.1;color: #fff;margin:0 15px;cursor: pointer" onclick="$.Custom.openDiag()">自定义</div>
+                    <div style=" float:right;display:inline;line-height: 1.1;color: #fff;margin:0 15px;cursor: pointer"><input type="checkbox" value="0" id="abnormal" name="abnormal"><label for="abnormal">显示异常值</label><span style="padding-left: 5px" onclick="$.Custom.openAbnormalDialog()"> 检验摘要</span></div>
                     <div class="cl">&nbsp;</div>
                 </div>
 
@@ -418,9 +434,11 @@
 <style>
     ul{
         list-style: none;
+    }
+    .testlist ul{
         width:450px;
     }
-    li{
+    .testlist li{
         list-style-type:none;
         float: left;
         padding: 0px 5px;
@@ -478,7 +496,7 @@
             <div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">
                 <a id="btnChose" class="btnChose" onclick="$.Custom.choseItem()">选择</a>
             </div>
-            <ul id="testList">
+            <ul id="testList" class="testlist">
             </ul>
 
         </div>
@@ -503,6 +521,9 @@
     <div id="hmInfo"></div>
 </div>
 <div id="dialog" align="left" style="display:none;">
+</div>
+<div id="textDialog" align="left" style="display:none;">
+    <textarea rows="" cols="" id="abnormalNote" style="width:600px;height:200px;padding:10px 10px"></textarea>
 </div>
 </body>
 
@@ -533,7 +554,6 @@
                     dataType:"json",
                     data:{patientBlh:patientBlh,fromDate:fromDate,samplenos:samplenos},
                     success:function(data){
-                        if(window.console) window.console.log(data)
                         if(data && data.patientInfo){
                             $("#sampleTitle").html(data.patientInfo.examinaim ||'');
                             //$("#resultCaption").html(data.patientInfo.examinaim ||'');
@@ -580,9 +600,7 @@
                     //add subDetailGrid
                     if(rowDatas.length>0){
                         subHeadRow.attr('groupid','1');
-                        if(window.console)console.log(subHeadRow.attr('groupid'))
-                        //console.log(rowDatas)
-                        var subTable = public.loadSubGrid(sampleInfo.sampleNo,rowDatas,type);
+                        var subTable = public.loadSubGrid(sampleInfo.sampleNo,sampleInfo.examinaim,rowDatas,type);
                         var subDataRow =$('<tr></tr>');
                         var subDataTd = $('<td colspan=8></td>');
                         subDataTd.append(subTable);
@@ -640,7 +658,32 @@
                         return val1;
                 }
             },
-            loadSubGrid:function(sampleid,rowDatas,type){
+            getAbnormal:function(val1,val2){
+                //获取高低标记
+                //flag:0正常 1低 2 高 3 阳
+                val2 = val2 ||'';
+                var flag = "0";
+
+                if(val2 != ''){
+                    var hl = val2.split("-");
+                    var h = parseFloat(hl[1]);
+                    var l = parseFloat(hl[0]);
+                    var va = parseFloat(val1);
+                    if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
+                        if (va < l) {
+                            flag = "1";
+                        } else if (va > h) {
+                            flag = "2";
+                        }
+                    }
+                }else{
+                    if(val1.indexOf("阳")>-1 || val1.indexOf("+") > -1) {
+                        flag  ="3";
+                    }
+                }
+                return flag;
+            },
+            loadSubGrid:function(sampleid,examinaim,rowDatas,type){
                 //add sub header
                 var header = $('<tr></tr>');
                 for(i=0;i < public.gridHead.length; i++){
@@ -650,16 +693,31 @@
                     header.append("<th class='td"+i+"' width='"+width+"'>"+public.gridHead[i].name+"</th>");
                 }
                 //加载子表数据
-                var subTable=$('<table class="table subtable" id='+sampleid+'></table>');
+                var subTable=$('<table class="table subtable" id='+sampleid+' examinaim='+examinaim+'></table>');
                 subTable.append(header)
-                //console.log(rowDatas);
-                for(j=0;j < rowDatas.length;j++){
-                    var row=$("<tr class='hover' testid="+rowDatas[j].id+" sampleid="+sampleid+"></tr>");
-                    if(j%2 ==0){
+                for(j=0;j < rowDatas.length;j++) {
+                    var row = $("<tr class='hover' testid=" + rowDatas[j].id + " sampleid=" + sampleid + " abnormal=''></tr>");
+                    if (j % 2 == 0) {
                         row.addClass("light");
-                    }else{
+                    } else {
                         row.addClass("dark");
                     }
+                    var flag = public.getAbnormal(rowDatas[j].result, rowDatas[j].scope);
+
+                    if (flag =='1' || flag =='2' || flag == '3') {
+                        row.attr('abnormal', flag);
+                        if ($('#abnormal').attr('checked')) {
+                            row.addClass('showAbnormal');
+                        }
+                    }else{
+                        row.attr('abnormal', flag);
+                        if ($('#abnormal').attr('checked')) {
+                            row.addClass('hideRow');
+                        }else{
+                            row.removeClass('hideRow');
+                        }
+                    }
+
                     if(type==4){
                         var rNameTD=$("<td colspan='8'></td>");      //名称
                         var a= $('<a href="#_" val='+rowDatas[j].name+'></a>');
@@ -667,6 +725,7 @@
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
                         })
+                        row.attr('abnormal', '');
                         rNameTD.append(a);
                         //rNameTD.html('<a>'+rowDatas[j].name+'</a>');
                         rNameTD.attr('title',rowDatas[j].name);
@@ -724,6 +783,7 @@
 
                     }
 
+
                     subTable.append(row);
                     //微生物结果加载药敏
                     if(type == 4){
@@ -734,7 +794,6 @@
                                 row.attr('groupid','1');
                                 row.addClass("show");
                                 var subDrugTable = public.loadDrugGrid(drugDatas);
-                                if(window.console)console.log(subDrugTable)
                                 var drugDataRow =$('<tr></tr>');
                                 var drugDataTd = $('<td colspan=8 ></td>');
                                 drugDataTd.append(subDrugTable);
@@ -849,7 +908,6 @@
                         name :key
                     },
                     success: function( data ) {
-                        if(window.console)console.log(data);
                         var ul = $('#testList');
                         ul.empty();
                         for(i=0;i< data.length;i++){
@@ -963,43 +1021,88 @@
                 //显示相关知识
                 jQuery.ajax({
                     type:'GET',
+                    //url: encodeURI('../doctor/item.jsp?page='+item),
                     url: encodeURI('/item.jsp?page='+item),
                     dataType: 'html',
                     success: function(data) {
                         var data2=public.dataProcess(data);
+<<<<<<< HEAD
                        // console.log(data)
+=======
+>>>>>>> origin/master
                         document.getElementById("dialog").innerHTML = data2;
-                        //$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-                        //$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+                        $.jqtab("#tabs",".tab_con");
                         public.openKnowledgeDialog();
                     }
                 });
             },
             dataProcess:function(data){
-                var title="<ul>";
-                var dataArray = data.split('<div class="tab-');
-                for(var i=0; i<dataArray.length;i++){
-                    var str = dataArray[i].replace('">',"!@#$%^&*");
-                    if(i!=0){
-                        var arr = str.split("!@#$%^&*");
-
-                        title = title+'<li><a href="#tabs-'+i+'">'+arr[0]+'<\/a><\/li>';
-                        dataArray[i] = '<div id="tabs-'+i+'">'+arr[1];
-                    }
-                    if(i==dataArray.length-1){
-                        dataArray[i] = dataArray[i].replace("<\/div>","");
-                        dataArray[i] = dataArray[i].replace("<\/div>","");
-                    }
-                }
-                title = title + "<\/ul>";
-                var result = '<div id="tabs">'+title;
-                for(var j=0;j<dataArray.length;j++){
-                    if(j!=0){
-                        result = result + dataArray[j];
-                    }
-                }
+                var title=$('<ul class="tabs" id="tabs"></ul>');
+                var content=$("<ul class='tab_conbox' id='tab_conbox'></ul>");
+                $(data).find('.tabbedSection').children('div').each(function(i,obj){
+                    var classname=$(obj).attr("class").replace('tab-','');
+                    var li=$('<li><a href="#_"  tab="tab'+i+'">'+classname+'</a></li>');
+                    var licontent =$('<li id="tab'+i+'" class="tab_con" tabname='+classname+'>'+$(obj).html()+'<\/li>');
+                    title.append(li);
+                    content.append(licontent);
+                })
+                var result = '<div id="tabbox">'+title.prop("outerHTML")+content.prop("outerHTML");
                 result = result + "<\/div>";
                 return result;
+            },
+            openAbnormalDialog:function(){
+                var text='';
+                $('#testResultGrid').find('.subtable').each(function(i,obj){
+                    var examinaim = $(obj).attr('examinaim') || '';
+                    if(examinaim !=''){
+                        var index = examinaim.indexOf('（');
+                        if(index>0){
+                            examinaim = examinaim.substring(0,index);
+                        }
+
+                    }
+                    var subtext ="";
+                    $(obj).find(' tr.hover').each(function(j,tr){
+                        var cellName = $(tr).find('td').eq(0).text() ||'';
+                        var cellResult = $(tr).find('td').eq(1).attr('title') ||'';
+                        var cellUnit = $(tr).find('td').eq(7).text() ||'';
+                        if(tr.getAttribute('abnormal')=='1'){
+                            if(subtext !='') subtext +="、";
+                            subtext +=cellName+' '+cellResult+cellUnit+' 低';
+                        }else if(tr.getAttribute('abnormal')=='2') {
+                            if(subtext !='') subtext +="、";
+                            subtext +=cellName+' '+cellResult+cellUnit+' 高';
+                        }else if(tr.getAttribute('abnormal')=='3'){
+                            if(subtext !='') subtext +="、";
+                            subtext +=cellName+' '+cellResult+cellUnit+' 阳性';
+                        }
+                    })
+                    if(subtext!=''){
+                        if(text !='') text +="\r\n";
+                        text += examinaim+"：" ;
+                        text += subtext;
+                        subtext = "";
+                    }
+                    $('#abnormalNote').html(text);
+                })
+                layer.open({
+                    type: 1,
+                    shade: 0.4,
+                    area:['680px','360px'],
+                    title: '相关知识',
+                    content: $("#textDialog"),
+                    btn:['复制','取消'],
+                    yes:function(index){
+                        //复制
+                        var note=document.getElementById("abnormalNote");
+                        note.select(); // 选择对象
+                        document.execCommand("Copy"); // 执行浏览器复制命令
+                        alert('复制成功!');
+                    },
+                    cancel: function(index){
+                        layer.close(index);
+                    }
+                });
             },
             openKnowledgeDialog:function() {
                 layer.open({
@@ -1014,6 +1117,7 @@
                     }
                 });
             }
+
         }
         return public;
     })();
@@ -1021,7 +1125,6 @@
     $(function(){
         $(".samplelist tr").bind("click",function(){
             $(".samplelist tr").removeClass('active');
-
             var fromDate = this.cells[0].getAttribute("val") || '';
             var patientBlh = this.cells[1].getAttribute("val") || '';
             var samplenos = this.getAttribute("samplenos") || '';
@@ -1058,7 +1161,42 @@
                 $.Custom.loadAutocomplete($('#secarchText').val()||'');
             }, 400);
         });
+        $("#abnormal").bind("click", function () {
+            if( $("#abnormal").attr('checked')=='checked'){
+                $('#testResultGrid').find('.subtable tr').each(function(i,obj){
+                    obj=$(obj);
+                    var abnormal = obj.attr('abnormal') ||'';
+                    if(obj.attr('abnormal')=='0'){
+                        obj.addClass("hideRow");
+                    }else {
+                        obj.removeClass("hideRow");
+                    }
+                })
+                $(this).siblings('label').text('显示全部')
+            }else{
+                $('#testResultGrid .hideRow').removeClass("hideRow");
+                $(this).siblings('label').text('显示异常值')
+            }
+            //obj.click();
+        });
     })
+
+    jQuery.jqtab = function(tabtit,tabcon) {
+
+        $(tabcon).hide();
+        $(tabtit+" li:first").addClass("thistab").show();
+        $(tabcon+":first").show();
+
+        $(tabtit+" li").click(function() {
+            $(tabtit+" li").removeClass("thistab");
+            $(this).addClass("thistab");
+            $(tabcon).hide();
+            var activeTab = $(this).find("a").attr("tab");
+            $("#"+activeTab).fadeIn();
+            return false;
+        });
+
+    };
 
 </script>
 </html>
