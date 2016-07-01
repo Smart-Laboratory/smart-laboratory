@@ -82,7 +82,7 @@ public class SampleController {
 			mark = 0;
 
 		text = text.toUpperCase();
-		String labCode = sectionManager.getByCode(user.getLastLab()).getSegment();
+		String labCode = sectionManager.getByCode(lab).getSegment();
 		int size = sampleManager.getSampleCount(text, lab, mark, status, labCode);
 		list = sampleManager.getSampleList(text, lab, mark, status, labCode, start, end);
 		

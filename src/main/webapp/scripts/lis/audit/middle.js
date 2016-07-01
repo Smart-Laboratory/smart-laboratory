@@ -1248,7 +1248,7 @@
 	labChange = function(select) {
 		$("#lastDepLab").val($(select).children().attr("title"));
 		jQuery("#list").jqGrid("setGridParam",{
-			url:"../audit/data?lab="+$(select).children().attr("title")+"&text="+$("#strToday").val()}).trigger("reloadGrid");
+			url:"../audit/data?lab="+$(select).children().attr("title")+"&sample="+$("#gs_sample").val()}).trigger("reloadGrid");
 		$.ajax({
 			  type: 'POST',
 			  url: "../audit/labChange?lab="+$(select).children().attr("title")

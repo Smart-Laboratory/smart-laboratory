@@ -263,6 +263,8 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		case 11:
 			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
 				sql += "and s.sampleNo like '" + text + "%'";
+			} else {
+				sql += "and s.sampleNo like '" + text.substring(0, 8) + "%'";
 			}
 			break;
 		case 14:
