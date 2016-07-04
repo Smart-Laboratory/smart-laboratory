@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../scripts/galleria-1.3.5.min.js"></script>
 	<script type="text/javascript" src="../scripts/galleria.classic.min.js"></script>
 	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
+	<script type="text/javascript" src="../scripts/layer/extend/layer.ext.js"></script>
 	<script type="text/javascript" src="../scripts/lis/audit.js"></script>
 
 <style>
