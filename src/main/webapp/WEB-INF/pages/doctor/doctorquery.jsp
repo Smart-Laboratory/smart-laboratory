@@ -523,7 +523,7 @@
 <div id="dialog" align="left" style="display:none;">
 </div>
 <div id="textDialog" align="left" style="display:none;">
-    <textarea rows="" cols="" id="abnormalNote" style="width:600px;height:200px;padding:10px 10px"></textarea>
+    <textarea rows="" cols="" id="abnormalNote" style="width:650px;height:200px;padding:10px 10px"></textarea>
 </div>
 </body>
 
@@ -693,10 +693,10 @@
                     header.append("<th class='td"+i+"' width='"+width+"'>"+public.gridHead[i].name+"</th>");
                 }
                 //加载子表数据
-                var subTable=$('<table class="table subtable" id='+sampleid+' examinaim='+examinaim+'></table>');
+                var subTable=$('<table class="table subtable testdetail" id='+sampleid+' examinaim='+examinaim+'></table>');
                 subTable.append(header)
                 for(j=0;j < rowDatas.length;j++) {
-                    var row = $("<tr class='hover' testid=" + rowDatas[j].id + " sampleid=" + sampleid + " abnormal=''></tr>");
+                    var row = $("<tr class='hover testitem' testid=" + rowDatas[j].id + " sampleid=" + sampleid + " abnormal=''></tr>");
                     if (j % 2 == 0) {
                         row.addClass("light");
                     } else {
@@ -738,7 +738,9 @@
                         	public.show_knowledge($(this).attr('val'));
                         })
                         rNameTD.append(a);
+                        rNameTD.attr('title',rowDatas[j].name);
                         row.append(rNameTD);
+
 
                         var rResultTD=$("<td></td>");      //结果
                         rResultTD.html(public.getHLLable(rowDatas[j].result,rowDatas[j].scope,rowDatas[j].color));
@@ -1027,7 +1029,7 @@
                     success: function(data) {
                         var data2=public.dataProcess(data);
                         document.getElementById("dialog").innerHTML = data2;
-                        $.jqtab("#tabs",".tab_con");
+                        public.jqTab("#tabs",".tab_con");
                         public.openKnowledgeDialog();
                     }
                 });
@@ -1048,30 +1050,27 @@
             },
             openAbnormalDialog:function(){
                 var text='';
-                $('#testResultGrid').find('.subtable').each(function(i,obj){
+                var sampledate = '';
+                $('#testResultGrid').find('.testdetail').each(function(i,obj){
                     var examinaim = $(obj).attr('examinaim') || '';
+                    var sampleno = $(obj).attr('id') || '';
+                    if(sampleno != ''){
+                        sampledate = sampleno.substring(0,8);
+                    }
                     if(examinaim !=''){
                         var index = examinaim.indexOf('（');
                         if(index>0){
                             examinaim = examinaim.substring(0,index);
                         }
-
                     }
                     var subtext ="";
-                    $(obj).find(' tr.hover').each(function(j,tr){
-                        var cellName = $(tr).find('td').eq(0).text() ||'';
+                    $(obj).find('tr.testitem').each(function(j,tr){
+                        //console.log(tr)
+                        var cellName = $(tr).find('td').eq(0).attr('title') ||'';
                         var cellResult = $(tr).find('td').eq(1).attr('title') ||'';
                         var cellUnit = $(tr).find('td').eq(7).text() ||'';
-                        if(tr.getAttribute('abnormal')=='1'){
-                            if(subtext !='') subtext +="、";
-                            subtext +=cellName+' '+cellResult+cellUnit+' 低';
-                        }else if(tr.getAttribute('abnormal')=='2') {
-                            if(subtext !='') subtext +="、";
-                            subtext +=cellName+' '+cellResult+cellUnit+' 高';
-                        }else if(tr.getAttribute('abnormal')=='3'){
-                            if(subtext !='') subtext +="、";
-                            subtext +=cellName+' '+cellResult+cellUnit+' 阳性';
-                        }
+                        if(subtext !='') subtext +="、";
+                        subtext +=cellName+' '+cellResult+cellUnit;
                     })
                     if(subtext!=''){
                         if(text !='') text +="\r\n";
@@ -1079,8 +1078,9 @@
                         text += subtext;
                         subtext = "";
                     }
-                    $('#abnormalNote').html(text);
                 })
+                text = sampledate +'查'+text;
+                $('#abnormalNote').text(text);
                 layer.open({
                     type: 1,
                     shade: 0.4,
@@ -1111,6 +1111,19 @@
                     cancel: function(index){
                         layer.close(index);
                     }
+                });
+            },
+            jqTab:function(tabtit,tabcon){
+                $(tabcon).hide();
+                $(tabtit+" li:first").addClass("thistab").show();
+                $(tabcon+":first").show();
+                $(tabtit+" li").click(function() {
+                    $(tabtit+" li").removeClass("thistab");
+                    $(this).addClass("thistab");
+                    $(tabcon).hide();
+                    var activeTab = $(this).find("a").attr("tab");
+                    $("#"+activeTab).fadeIn();
+                    return false;
                 });
             }
 
@@ -1176,23 +1189,6 @@
             //obj.click();
         });
     })
-
-    jQuery.jqtab = function(tabtit,tabcon) {
-
-        $(tabcon).hide();
-        $(tabtit+" li:first").addClass("thistab").show();
-        $(tabcon+":first").show();
-
-        $(tabtit+" li").click(function() {
-            $(tabtit+" li").removeClass("thistab");
-            $(this).addClass("thistab");
-            $(tabcon).hide();
-            var activeTab = $(this).find("a").attr("tab");
-            $("#"+activeTab).fadeIn();
-            return false;
-        });
-
-    };
 
 </script>
 </html>
