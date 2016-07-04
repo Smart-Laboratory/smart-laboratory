@@ -73,7 +73,7 @@ function getList(text, lab) {
     		}
     	},
     	loadComplete: function() {
-    		jQuery("#list").jqGrid("setGridParam",{url:"../audit/data?lab=" + $("#lab").val()});
+    		jQuery("#list").jqGrid("setGridParam",{url:"../audit/data?lab=" + $("#lastDepLab").val()});
     		
     		var firstDocId, firstSampleNo;
     		var length = jQuery('#list').jqGrid('getCol','id', false).length;
