@@ -133,7 +133,7 @@ public class PbszController extends PbBaseController {
 				map.put("name", wi.getName());
 				map.put("sex", wi.getSexString());
 				map.put("section", wi.getSection());
-				map.put("worktime", sdf.format(wi.getWorktime()));
+				map.put("worktime", wi.getWorktime()==null?"":sdf.format(wi.getWorktime()));
 				map.put("type", wi.getTypeString());
 				map.put("phone", wi.getPhone());
 				map.put("shift", wi.getShift());
@@ -147,6 +147,7 @@ public class PbszController extends PbBaseController {
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
 				map.put("isactive", wi.getIsActive()==1?"使用":"不使用");
+				map.put("school", wi.getSchool()==null?"":wi.getSchool());
 				dataRows.add(map);
 				index++;
 			}
@@ -299,6 +300,7 @@ public class PbszController extends PbBaseController {
 		double holiday = Double.parseDouble(request.getParameter("holiday"));
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		int isActive = Integer.parseInt(request.getParameter("isactive"));
+		String school = request.getParameter("school");
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -319,6 +321,7 @@ public class PbszController extends PbBaseController {
 			wi.setHoliday(holiday);
 			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
+			wi.setSchool(school);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi = wInfoManager.get(Long.parseLong(id));
@@ -340,6 +343,7 @@ public class PbszController extends PbBaseController {
 			wi.setDefeHoliday(wi.getDefeHoliday());
 			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
+			wi.setSchool(school);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));

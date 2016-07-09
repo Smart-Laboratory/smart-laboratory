@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
@@ -43,6 +44,8 @@ table tr th {
 		<option value="1300600"><fmt:message key="labDepartment.1300600"/></option>
 		<option value="1300700"><fmt:message key="labDepartment.1300700"/></option>
 		<option value="1300800"><fmt:message key="labDepartment.1300800"/></option>
+		<option value="1400100">超声医学科（医生）</option>
+		<option value="1400200">超声医学科（报告）</option>
 	</select>
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>

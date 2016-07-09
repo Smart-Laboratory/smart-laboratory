@@ -2,6 +2,8 @@ package com.smart.dao.hibernate;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +59,14 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' order by ord2").list();
 	}
+	
+	public List<String> getNameBySection(String section){
+		String hql = "select name from workinfo where section like '%"+section+"%' order by ord2";
+		JdbcTemplate jdbcTemplate =
+                new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
+		return jdbcTemplate.queryForList(hql, String.class);
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section, String sidx, String sord) {

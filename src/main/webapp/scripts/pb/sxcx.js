@@ -93,6 +93,9 @@ $(function() {
 		window.location.href="../pb/sxgroupPbcx?date=" + $("#from").val()+"&section="+$("#section").val();
 	});
 	
+	$("#ksCount").click(function() {
+		window.open("../pb/kscount?from=" + $("#from").val()+"&to="+$("#to").val());
+	});
 	
 	var page = $("#page").val();
 	var pages = $("#pages").val();

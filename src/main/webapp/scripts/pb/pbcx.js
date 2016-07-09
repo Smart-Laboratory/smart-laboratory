@@ -28,6 +28,8 @@ $(function() {
 	$("#searchPB").click(function() {
 		if($("#typeSel").val()==2){
 			window.location.href="../pb/sxcx";
+		}else if($("#sectionSel").val().indexOf('1400')>=0){
+			window.location.href="../pb/bpbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val()
 		}else
 			window.location.href="../pb/pbcx?date=" + $("#date").val() + "&section=" + $("#sectionSel").val() + "&type=" + $("#typeSel").val();
 		//$.get("<c:url value='/pb/pbcx'/>",{date:$("#date").val(),section:$("#section").val()},function() {});
@@ -37,7 +39,9 @@ $(function() {
 		$("#section").val($("#sectionSel").val());
 		if($("#sectionSel").val() == '1300000') {
 			$("#typeSel").css("display","block");
-		} else {
+		}else if($("#sectionSel").val().indexOf('1400')>=0){
+			window.location.href="../pb/bpbcx?date=" + $("#date").val()+"&section="+$("#sectionSel").val();
+		}else {
 			$("#typeSel").css("display","none");
 		}
 	});

@@ -54,8 +54,9 @@ display: none;
     
 </head>
 
+<input id="weeks" type="hidden" value="${weeks }" />
 
-<div class="form-inline" style="width:100%;margin-left:50px;">
+<div class="form-inline" style="width:90%;margin-left:50px;">
 			<label for="from" style="margin-left : 20px;"><b><fmt:message key="from" /></b></label>
 			<input type="text" id="from" name="from" class="form-control"  value="${from }"/>
 			<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
@@ -63,15 +64,19 @@ display: none;
 			
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			
-			
+			<button id="print" type="button" class="btn btn-info btn-sm" style="float:right;margin-right:15px;" onclick='pbprint()'><fmt:message key='audit.print'/></button>
 </div>
+
+<div id="weekSelect" class="form-inline" style="margin-top:10px;">		
+</div>
+
 	<div style="margin-top:20px;font-size:50px;">
 		<p><b><fmt:message key="pb.kscount.detail"/></b></p>
 	</div>
 
 <div class = "col-sm-12  data" style="margin-top:20px; margin-left:50px;">
 	<input id="pbtext" value="${pbdate}" type="hidden"/>
-	<table id="pbdata" class=" table-hover" style="font-size:12px;text-align:center;" border="1px;">
+	<table id="pbdata" class=" table-hover" style="font-size:12px;text-align:center;width:90%" border="1px;">
 	</table>
 
 </div>

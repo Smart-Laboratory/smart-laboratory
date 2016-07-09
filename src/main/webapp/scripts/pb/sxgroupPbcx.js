@@ -1,42 +1,27 @@
-
+function pbprint(){
+	$(".noprint").css("display","none");
+	window.print();
+}
 
 $(function() {
 	$("#labSelect").val($("#section").val()); 
 	$("#sectionSelect").val($("#section").val());
 	$("#pbdata").html($("#pbtext").val());
 	
-	$("#pbdata tr td").click(function(){
-		var id=this.id;
-		
-		var name = this.name;
-		var shifts=$("#"+id).html();
-		
-		$.each($("#shiftSelect input"),function(name,v){
-			if(v.checked){
-				
-				if(shifts.indexOf(v.value+";")>=0){
-					shifts=shifts.replace(v.value+";","");
-				}else{
-					shifts = shifts + v.value+";";
-				}
-			}
-		});
-		$("#"+id).html(shifts);
-//		}
-	});
+	$("#daypb").html($("#html").val());
 	
 	$("#date").datepicker({
 		changeMonth: true,
 	    changeYear: true,
-		dateFormat: 'yy-mm',
+		dateFormat: 'yy-mm-dd',
 		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
 		dayNamesMin: ['一','二','三','四','五','六','日'],
 		showButtonPanel: true, 
-		onClose: function(dateText, inst) { 
-		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
-		var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
-		$(this).datepicker('setDate', new Date(year, month, 1)); 
-		} 
+//		onClose: function(dateText, inst) { 
+//		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+//		var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+//		$(this).datepicker('setDate', new Date(year, month, 1)); 
+//		} 
 	});
 	
 
@@ -81,6 +66,7 @@ $(function() {
 		});
 		
 	}
+	
 		
 });
 

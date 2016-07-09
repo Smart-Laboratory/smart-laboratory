@@ -60,7 +60,6 @@ public class PbController {
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
 	
-	private Map<String, Double> shiftTime = new HashMap<String,Double>();
 	
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
@@ -261,131 +260,92 @@ public class PbController {
 		return true;
 	}
 	
-	@RequestMapping(method = RequestMethod.GET,value = "/workCount*")
+	@RequestMapping(value = "/bpbsubmit*", method = RequestMethod.POST)
 	@ResponseBody
-	public List<WorkCount> handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		List<WorkCount> wList = new ArrayList<WorkCount>();
-		if(shiftTime == null || shiftTime.isEmpty())
-			initMap();
+	public boolean bpbsubmit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
+		String text = request.getParameter("text");
+		String month = request.getParameter("date");
+		List<Arrange> list = new ArrayList<Arrange>();
 		String section = request.getParameter("section");
-		String month = request.getParameter("month");
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, Integer.parseInt(month.substring(0,4)));
-		calendar.set(Calendar.MONTH, Integer.parseInt(month.substring(5,7))-1);
-		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+//		if(ksArrange!=null && ksArrange.getState()>1){
+//			return false;
+//		}
+		//map<班次，排班>
+		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
+		List<Shift> shifts = shiftManager.getShiftBySection(section);
 		
-		
-		List<WInfo> wInfos = wInfoManager.getBySection(section, "0");
-		
-		for(WInfo w : wInfos){
-			List<Arrange> arranges = arrangeManager.getMonthArrangeByName(w.getName(), month);
-			Set<String> workdate = new HashSet<String>();
-			
-			WorkCount workCount = workCountManager.getPersonByMonth(w.getName(),month,section);
-			if(workCount==null){
-				workCount = new WorkCount();
-				workCount.setSection(section);
-			}else if(!workCount.getSection().contains(section)){
-				workCount.setSection(workCount.getSection()+","+section);
+		for(Shift shift : shifts){
+			Map<String, Arrange> dateValue = new HashMap<String,Arrange>(); //map<日期，排班>
+			//获取B超3个月内的排班记录
+			List<Arrange> monthArray = arrangeManager.getMonthArrangeByshift(shift.getAb(), month);
+			for(Arrange a: monthArray){
+				dateValue.put(a.getDate(), a);
 			}
-			double holiday = 0;
-			double worktime = 0;
-			double monthOff = 0;
-			
-			String shifts = "";
-			for(Arrange arrange : arranges){
-				try {
-					Date date = sdf1.parse(arrange.getDate());
-					if(!arrange.getShift().trim().isEmpty()){
-						workdate.add(arrange.getDate());
-						shifts += arrange.getShift();
-						if(arrange.getShift().contains("公休")){
-							if(arrange.getShift().replace("公休;", "").isEmpty())
-								monthOff += 1;
-						}
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("date trans error!");
-				}
-				
-			}
-			
-			for(String shift : shifts.split(";")){
-				if(shiftTime.containsKey(shift)){
-					worktime += shiftTime.get(shift);
-				}
-				if(shift=="年休"){
-					holiday +=1;
-				}
-				if(shift.contains("休") && !shift.contains("公休")){
-					monthOff += 1;
-				}				
-			}
-			//计算积修
-			double yjx = 0;
-			int j = 1;
-			//统计本月公休
-			List<String> gxList = arrangeManager.getGXcount(month);
-			if(gxList != null && gxList.size()>0){
-				yjx += gxList.size();
-			}
-			
-	        for(; j <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
-	            try {
-	            	String day = j + "";
-	            	if(j<10)
-	            		day = "0"+day;
-	                Date date = sdf1.parse(month + "-" + day);
-	                if (sdf2.format(date).contains("六") || sdf2.format(date).contains("日")) {
-	                	if(gxList != null && gxList.size()>0 && gxList.contains(month + "-" + day)){
-	        				
-	        			}else{
-	        				yjx+=1;
-	        			}
-	                }
-	            } catch (Exception e) {
-	            	e.printStackTrace();	
-	            }
-	        }
-	        yjx = yjx - (days - worktime);
-	        workCount.setHoliday(holiday);
-			workCount.setWorkTime(worktime);
-			workCount.setWorker(w.getName());
-			workCount.setMonthOff(days-workdate.size()+monthOff);
-			workCount.setYjx(yjx);
-			workCount.setWorkMonth(month);
-			wList.add(workCount);
-			
-			workCountManager.save(workCount);
-	        
-	        String defeholiday = w.getDefeHoliday();
-	        if(defeholiday == null){
-	        	defeholiday = month+":"+yjx+";";
-	        }
-	        else if(defeholiday.contains(month)){
-	        	for(String jx : defeholiday.split(";")){
-	        		if(jx.contains(month)){
-	        			defeholiday = defeholiday.replace(jx, month+":"+yjx);
-	        		}
-	        	}
-	        }
-	        else{
-	        	defeholiday += month+":"+yjx+";";
-	        }
-	        w.setDefeHoliday(defeholiday);
-	        
-	        //计算年休
-			double nx = w.getHolidayNum()-workCountManager.getYearCount(month.substring(0, 4),w.getName());
-			w.setHoliday(w.getHolidayNum() - nx);
-	        wInfoManager.save(w);
-			
+			userShifts.put(shift.getAb(), dateValue);
 		}
 		
-		return wList;
+		
+		System.out.println("数据获取完成");
+		
+		if(text != "") {
+			for(String str : text.split(",")) {
+				String[] arr = str.split(":");
+				
+				Arrange a = null;
+				if(userShifts.containsKey(arr[0])  ){
+					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
+					if(dateValue.containsKey(arr[1]) ){
+						if((dateValue.get(arr[1]).getShift()==null && arr.length>=3) || (dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:""))){
+							Arrange b = dateValue.get(arr[1]);
+							b.setWorker(arr.length>=3?arr[2]:"");
+							b.setState(2);
+							b.setOperator(user.getUsername());
+							b.setOperatime(new Date());
+							if(!b.getSection().contains(section)){
+								b.setSection(b.getSection()+","+section);
+							}
+							list.add(b);
+							continue;
+						}
+						else{
+							continue;
+						}
+						
+					}
+					else if((arr.length>=3?arr[2]:"")!="" ){
+						a  = new Arrange();
+					}
+					else{
+						continue;
+					}
+				} else {
+					System.out.println("未搜索到到班次："+arr[0]);
+					continue;
+				}
+				a.setSection(section);
+				a.setShift(arr[0]);
+				a.setDate(arr[1]);
+				a.setOperator(user.getUsername());
+				a.setOperatime(new Date());
+				a.setState(2);
+				if(arr.length>=3)
+					a.setWorker(arr[2]);
+				else 
+					a.setWorker("");
+				list.add(a);
+				userShifts.get(arr[0]).put(arr[0], a);
+			}
+		}
+		
+		
+		arrangeManager.saveAll(list);
+		System.out.println(list.size()+"保存完成");
+		return true;
 	}
+	
 	
 	@RequestMapping(method = RequestMethod.GET,value = "/getWorkCount*")
 	@ResponseBody
@@ -400,12 +360,6 @@ public class PbController {
         
 	}
 	
-	public void initMap(){
-		List<Shift> shifts = shiftManager.getAll();
-		for(Shift shift : shifts){
-			shiftTime.put(shift.getAb(), shift.getDays());
-		}
-	}
 	
 	@RequestMapping(method = RequestMethod.GET,value = "/getholiday*")
 	@ResponseBody
@@ -485,7 +439,7 @@ public class PbController {
 		List<WInfo> wInfos = new ArrayList<WInfo>();
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-				if(sectionMap.get(a.getSection()).equals(section)){
+				if(a.getSection()!=null && sectionMap.get(a.getSection()).equals(section)){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
 					
 					wInfos.add(wInfo);

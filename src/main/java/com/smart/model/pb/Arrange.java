@@ -125,4 +125,9 @@ public class Arrange {
 			return this.worker + "-" + this.date;
 		}
 	}
+	
+	@Transient
+	public String getKey3() {
+		return this.shift + "-" + this.date;
+	}
 }

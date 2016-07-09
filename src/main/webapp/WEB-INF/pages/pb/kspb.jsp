@@ -91,7 +91,7 @@ function changeType(select) {
 
 $(function() {
 	$("#kstable").html($("#tabledata").val());
-	$("#labSelect").val($("#section").val());
+	$("#labText").html('${sectionStr}');
 	
 	$("#ksTitle").html($("#tableTitle").val());
 	

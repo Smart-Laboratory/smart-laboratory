@@ -8,7 +8,7 @@ function getWI() {
 			url:"../pb/sz/ajax/getWinfo",
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休'],
+			colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','所在学校'],
 		   	colModel:[
 				{name:'id',index:'id',hidden:true,editable:true},
 				{name:'isactive',index:'isactive',width:30,editable:true,edittype:"select",editoptions:{value:"0:不使用;1:使用"}},
@@ -24,7 +24,7 @@ function getWI() {
 		   		{name:'type',index:'type',width:40,editable:true,edittype:"select",editoptions:{value:"0:在职;1:进修;2:实习;3:工人"}},
 		   		{name:'phone',index:'phone',width:60,editable:true,editoptions:{size:20} ,sortable:false,search:false},
 		   		{name:'shift',index:'shift',width:200,editable:true,editoptions:{size:30} ,sortable:false,search:false},
-		   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 50},editoptions:{size:10}},
+		   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0},editoptions:{size:10}},
 		   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
 		   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
 		   		{name:'ord4',index:'ord4',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
@@ -32,7 +32,8 @@ function getWI() {
 		   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 		   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
 		   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
-		   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true}
+		   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true},
+		   		{name:'school',index:'school',width:60,search:false,editable:true}
 		   	],
 		   	rowNum:15,
 		   	pager: '#wipager',
@@ -63,7 +64,7 @@ function getBC() {
 				{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
 				{name:'ab',index:'ab',width:60,editable:true,editoptions:{size:5}},
 				{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},
-				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4"}},
+				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4;1320511:B超医生"}},
 				{name:'order',index:'order',width:40,editable:true,editoptions:{size:10}},
 				{name:'days',index:'days',width:40,editable:true}
 		   	],
@@ -113,33 +114,30 @@ function getDBC() {
 }
 
 var kqFirst = true;
-function getKQ() {
+function getWorkcout() {
 	if (kqFirst) {
 		kqFirst = false;
-		jQuery("#kqtable").jqGrid({
-			url:"../pb/sz/ajax/getAtype",
+		jQuery("#workData").jqGrid({
+			url:"../pb/pb/ajax/countWorkall?section="+$("#section").val()+"&from="+$("#from").val()+"&to="+$("#to").val(),
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','姓名','缩写','类型','状态','显示顺序'],
+			colNames:['姓名','工作量','休息时间','班次'],
 		   	colModel:[
-				{name:'id',index:'id',hidden:true,editable:false},
-				{name:'name',index:'name',width:100,editable:true,editoptions:{size:10}},
-		   		{name:'ab',index:'ab',width:30,editable:true,editoptions:{size:5}},
-		   		{name:'type',index:'type',width:120,editable:true,edittype:"select",editoptions:{value:"0:\u51fa\u52e4;1:\u7f3a\u52e4;2:\u4f11\u5047"}},
-		   		{name:'iscancel',index:'iscancel',width:200,editable:true,edittype:"select",editoptions:{value:"0:\u662f;1:\u5426"}},
-		   		{name:'order',index:'order',width:200,editable:true}
+				{name:'name',index:'name',width:100,editable:false},
+		   		{name:'worktime',index:'worktime',width:30,editable:false},
+		   		{name:'monthOff',index:'monthOff',width:120,editable:false},
+		   		{name:'shift',index:'shift',width:1000,editable:false},
 		   	],
-		   	rowNum:15,
-		   	pager: '#kqpager',
+		   	rowNum:20,
+		   	pager: '#workpager',
 		   	viewrecords: true,
 		   	rownumbers: true,
 		   	height: '100%',
-		   	editurl: "../pb/sz/kqedit"
 		});
-		jQuery("#kqtable").jqGrid('navGrid','#kqpager',{});
+		jQuery("#workData").jqGrid('navGrid','#workpager',{});
 	} else {
-		jQuery("#kqtable").jqGrid("setGridParam",{
-			url:"../pb/sz/ajax/getAtype"
+		jQuery("#workData").jqGrid("setGridParam",{
+			url:"../pb/pb/ajax/countWorkall?section="+$("#section").val()+"&from="+$("#from").val()+"&to="+$("#to").val()
 		}).trigger("reloadGrid");
 	}
 }
@@ -158,7 +156,7 @@ $(function() {
 			} else if(id == "tabs-3") {
 				getDBC();
 			} else if(id == "tabs-4") {
-				getKQ();
+				getWorkcout();
 			} else{
 				getWI();
 			}
@@ -166,6 +164,8 @@ $(function() {
 	});
 	
 	getWI();
+	getBC();
+	getWorkcout();
 	
 	$("#resetHoliday").click(function(){
 		$.get("../pb/sz/resetHoliday");
@@ -177,10 +177,71 @@ $(function() {
 			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 			  success:function(){
 				  $("#labText").html($(select).children().html());
+				  $("#section").val($(select).children().attr("title"));
 					jQuery("#witable").jqGrid("setGridParam",{
 						url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
 			  }
 		});
 		
 	}
+	
+	
+	$("#workCount").click(function(){
+//		$.get("../pb/pb/countWorkall",{from:$("#from").val(),to:$("#to").val(),section:$("#section").val()},function(data){
+//			
+//		});
+		getWorkcout();
+	});
+	$( "#from" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:"yy-mm",
+		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		showButtonPanel: true, 
+		onClose: function(dateText, inst) { 
+		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+		var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+		$(this).datepicker('setDate', new Date(year, month, 1)); 
+//		$( "#to" ).datepicker( "option", "minDate", new Date(year, month, 1) );
+		} 
+		
+	});
+	$( "#to" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:"yy-mm",
+		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		showButtonPanel: true, 
+		onClose: function(dateText, inst) { 
+			var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+			$(this).datepicker('setDate', new Date(year, month, 1));
+//			$( "#from" ).datepicker( "option", "maxDate", new Date(year, month, 1) );
+		} 
+	});
+	if($("#from").val()==null || $("#from").val()==''){
+		$( "#from" ).val(new Date().Format("yyyy-MM"));
+		$( "#to" ).val(new Date().Format("yyyy-MM"));
+	}
 });
+
+Date.prototype.Format = function(fmt)   
+{ //author: meizz   
+  var o = {   
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  return fmt;   
+} 

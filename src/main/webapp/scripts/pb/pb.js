@@ -6,8 +6,14 @@ $(function(){
 			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 			  success:function(data){
 				  selectNoteAdd = true;
-					$("#labText").html($(select).children().html());
-					window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+				  var section = $(select).children().attr("title");
+				  $("#labText").html($(select).children().html());
+				  if(section == '1320511'){
+					  window.location.href="../pb/bpb?date=" + $("#date").val()+"&section=" + section;
+				  }else{
+					  window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+				  }
+				  
 			  }
 		});
 		

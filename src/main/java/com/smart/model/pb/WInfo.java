@@ -40,6 +40,7 @@ public class WInfo {
 	private String defeHoliday;//积休
 	private double defeholidayhis;//历年积休
 	private double lxsy;//历休使用
+	private String school;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -233,6 +234,15 @@ public class WInfo {
 		this.lxsy = lxsy;
 	}
 	
+	@Column(name="school",length=50)
+	public String getSchool() {
+		return school;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
+	}
+
 	@Transient
 	public String getTypeString() {
 		String value = "";

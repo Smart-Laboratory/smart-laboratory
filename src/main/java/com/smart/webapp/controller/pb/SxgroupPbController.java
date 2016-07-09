@@ -273,7 +273,8 @@ public class SxgroupPbController {
 				}
 				if(sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section)){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
-					
+					if(wInfo==null)
+						continue;
 					String days = getweekDays(tomonth, Integer.parseInt(a.getWeek()));
 					if(sxMap.get(wInfo)!=null){
 //						System.out.println(sxMap.get(wInfo));

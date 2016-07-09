@@ -54,4 +54,8 @@ public class WInfoManagerImpl extends GenericManagerImpl<WInfo, Long> implements
 	public List<WInfo> getByType(int type){
 		return wInfoDao.getByType(type);
 	}
+	
+	public List<String> getNameBySection(String section){
+		return wInfoDao.getNameBySection(section);
+	}
 }
