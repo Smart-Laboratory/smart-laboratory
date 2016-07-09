@@ -71,4 +71,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	String getReceiveSampleno(String name, String lab, String today);
+
+	@Transactional
+	List<Sample> getReceiveList(String text, String lab);
 }

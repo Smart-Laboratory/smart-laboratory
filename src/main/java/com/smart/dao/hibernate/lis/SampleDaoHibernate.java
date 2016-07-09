@@ -492,4 +492,11 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and p.receiver='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc"; 
 		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Sample> getReceiveList(String text, String lab) {
+		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";  
+		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' order by p.receivetime desc";
+		return getSession().createQuery(sql).list();
+	}
 }
