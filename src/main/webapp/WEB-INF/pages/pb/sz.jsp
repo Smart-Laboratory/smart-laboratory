@@ -27,7 +27,7 @@
 	<ul>
 		<li><a href="#tabs-1"><fmt:message key="pb.wi"/></a></li>
 		<li><a href="#tabs-2"><fmt:message key="pb.bc"/></a></li>
-		<li><a href="#tabs-3"><fmt:message key="pb.dbc"/></a></li>
+		<li><a href="#tabs-3">实习生学校</a></li>
 		<li><a href="#tabs-4">工作统计</a></li>
 	</ul>
 	<div id="tabs-1">
@@ -40,8 +40,8 @@
 		<div id="bcpager"></div>
 	</div>
 	<div id="tabs-3">
-		<table id="dbctable"></table>
-		<div id="dbcpager"></div>
+		<table id="sxschooltable"></table>
+		<div id="sxschoolpager"></div>
 	</div>
 	<div id="tabs-4">
 	<div class="form-inline">
@@ -66,3 +66,5 @@
 		</p>
 		<p><fmt:message key="pb.sort"/></p>
 </div>
+
+

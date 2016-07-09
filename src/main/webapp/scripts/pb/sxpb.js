@@ -12,10 +12,11 @@ function getHisList(id){
 	jQuery("#hisList").jqGrid({
 		url:"../pb/sxpb/hisdata?id="+id,
 		datatype:"json",
-		colNames:['科室','次数'],
+		colNames:['科室','次数','学校规章'],
 		colModel:[
 		          {name:'section',index:'section',width:80,sortable:false},
 		          {name:'num',index:'num',width:40,sortable:false},
+		          {name:'schoolnum',index:'schoolnum',width:40,sortable:false}
 		          ],
 		rowNum:20,
 		height:'100%',

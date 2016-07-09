@@ -61,7 +61,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	}
 	
 	public List<String> getNameBySection(String section){
-		String hql = "select name from workinfo where section like '%"+section+"%' order by ord2";
+		String hql = "select name from workinfo where section like '%"+section+"%' and type=0 order by ord2";
 		JdbcTemplate jdbcTemplate =
                 new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 		return jdbcTemplate.queryForList(hql, String.class);

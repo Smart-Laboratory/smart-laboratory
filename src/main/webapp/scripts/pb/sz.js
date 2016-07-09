@@ -4,45 +4,54 @@ var wiFirst = true;
 function getWI() {
 	if (wiFirst) {
 		wiFirst = false;
-		jQuery("#witable").jqGrid({
-			url:"../pb/sz/ajax/getWinfo",
-			datatype: "json",
-			jsonReader : {repeatitems : false}, 
-			colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','所在学校'],
-		   	colModel:[
-				{name:'id',index:'id',hidden:true,editable:true},
-				{name:'isactive',index:'isactive',width:30,editable:true,edittype:"select",editoptions:{value:"0:不使用;1:使用"}},
-				{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10},search:true,sopt:'eq'},
-				{name:'name',index:'name',width:50,editable:true,editoptions:{size:10},sortable:false,search:true,sopt:('eq','cn')},
-		   		{name:'sex',index:'sex',width:30,editable:true,edittype:"select",editoptions:{value:"0:\u7537;1:\u5973"} ,sortable:false,search:false},
-		   		{name:'section',index:'section',width:120,editable:true,search:false},
-		   		{name:'worktime',index:'worktime',width:80,editable:true, sortable:false,search:false, edittype:"text", editrules:{date: true},editoptions:{ size: 10, maxlengh: 10,  
-	            	dataInit: function(element) {  
-	                	$(element).datepicker({dateFormat: 'yy-mm-dd'});  
-	            	}  
-	         	}},
-		   		{name:'type',index:'type',width:40,editable:true,edittype:"select",editoptions:{value:"0:在职;1:进修;2:实习;3:工人"}},
-		   		{name:'phone',index:'phone',width:60,editable:true,editoptions:{size:20} ,sortable:false,search:false},
-		   		{name:'shift',index:'shift',width:200,editable:true,editoptions:{size:30} ,sortable:false,search:false},
-		   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0},editoptions:{size:10}},
-		   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
-		   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
-		   		{name:'ord4',index:'ord4',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-		   		{name:'ord5',index:'ord5',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-		   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-		   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
-		   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
-		   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true},
-		   		{name:'school',index:'school',width:60,search:false,editable:true}
-		   	],
-		   	rowNum:15,
-		   	pager: '#wipager',
-		   	viewrecords: true,
-		   	rownumbers: true,
-		   	height: '100%',
-		   	editurl: "../pb/sz/wiedit"
-		});
-		jQuery("#witable").jqGrid('navGrid','#wipager',{});
+		var schools="";
+		$.get("../pb/sz/ajax/getSchool",function(data){
+			success:{
+				data = jQuery.parseJSON(data);
+				schools = data.schools;
+				jQuery("#witable").jqGrid({
+					url:"../pb/sz/ajax/getWinfo",
+					datatype: "json",
+					jsonReader : {repeatitems : false}, 
+					colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','所在学校'],
+				   	colModel:[
+						{name:'id',index:'id',hidden:true,editable:true},
+						{name:'isactive',index:'isactive',width:30,editable:true,edittype:"select",editoptions:{value:"0:不使用;1:使用"}},
+						{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10},search:true,sopt:'eq'},
+						{name:'name',index:'name',width:50,editable:true,editoptions:{size:10},sortable:false,search:true,sopt:('eq','cn')},
+				   		{name:'sex',index:'sex',width:30,editable:true,edittype:"select",editoptions:{value:"0:\u7537;1:\u5973"} ,sortable:false,search:false},
+				   		{name:'section',index:'section',width:120,editable:true,search:false},
+				   		{name:'worktime',index:'worktime',width:80,editable:true, sortable:false,search:false, edittype:"text", editrules:{date: true},editoptions:{ size: 10, maxlengh: 10,  
+			            	dataInit: function(element) {  
+			                	$(element).datepicker({dateFormat: 'yy-mm-dd'});  
+			            	}  
+			         	}},
+				   		{name:'type',index:'type',width:40,editable:true,edittype:"select",editoptions:{value:"0:在职;1:进修;2:实习;3:工人"}},
+				   		{name:'phone',index:'phone',width:60,editable:true,editoptions:{size:20} ,sortable:false,search:false},
+				   		{name:'shift',index:'shift',width:200,editable:true,editoptions:{size:30} ,sortable:false,search:false},
+				   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0},editoptions:{size:10}},
+				   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
+				   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
+				   		{name:'ord4',index:'ord4',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
+				   		{name:'ord5',index:'ord5',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
+				   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
+				   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
+				   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
+				   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true},
+				   		{name:'school',index:'school',width:60,search:false,editable:true,edittype:'select',editoptions:{value:schools}}
+				   	],
+				   	rowNum:15,
+				   	pager: '#wipager',
+				   	viewrecords: true,
+				   	rownumbers: true,
+				   	height: '100%',
+				   	editurl: "../pb/sz/wiedit"
+				});
+				jQuery("#witable").jqGrid('navGrid','#wipager',{});
+			}
+		})
+		
+		
 	} else {
 		jQuery("#witable").jqGrid("setGridParam",{
 			url:"../pb/sz/ajax/getWinfo"
@@ -87,27 +96,28 @@ var dbcFirst = true;
 function getDBC() {
 	if (dbcFirst) {
 		dbcFirst = false;
-		jQuery("#dbctable").jqGrid({
+		jQuery("#sxschooltable").jqGrid({
 			url:"../pb/sz/ajax/getDShift",
 			datatype: "json",
 			jsonReader : {repeatitems : false}, 
-			colNames:['ID','星期','科室','班次'],
+			colNames:['ID','学校名称','电话','地址','制度'],
 		   	colModel:[
-				{name:'id',index:'id',hidden:true,editable:false},
-				{name:'week',index:'week',width:60,editable:true,editoptions:{size:10}},
-				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4"}},
-				{name:'shift',index:'shift',width:200,editable:true,editoptions:{size:30}}
+				{name:'id',index:'id',hidden:true,editable:true},
+				{name:'name',index:'name',width:100,editable:true},
+				{name:'phone',index:'phone',width:100,editable:true},
+				{name:'address',index:'address',width:200,editable:true},
+				{name:'system',index:'system',width:200,editable:true}
 		   	],
 		   	rowNum:15,
-		   	pager: '#dbcpager',
+		   	pager: '#sxschoolpager',
 		   	viewrecords: true,
 		   	rownumbers: true,
 		   	height: '100%',
 		   	editurl: "../pb/sz/dbcedit"
 		});
-		jQuery("#dbctable").jqGrid('navGrid','#dbcpager',{});
+		jQuery("#sxschooltable").jqGrid('navGrid','#sxschoolpager',{});
 	} else {
-		jQuery("#dbctable").jqGrid("setGridParam",{
+		jQuery("#sxschooltable").jqGrid("setGridParam",{
 			url:"../pb/sz/ajax/getDShift"
 		}).trigger("reloadGrid");
 	}

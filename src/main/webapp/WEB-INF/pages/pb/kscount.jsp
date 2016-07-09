@@ -64,7 +64,7 @@ display: none;
 			
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			
-			<button id="print" type="button" class="btn btn-info btn-sm" style="float:right;margin-right:15px;" onclick='pbprint()'><fmt:message key='audit.print'/></button>
+			<button id="print" type="button" class="btn btn-info btn-sm" style="float:right;margin-right:15px;" onclick='return print()'><fmt:message key='audit.print'/></button>
 </div>
 
 <div id="weekSelect" class="form-inline" style="margin-top:10px;">		

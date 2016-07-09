@@ -38,7 +38,7 @@ table tr th {
 	text-align:center;
 }
 table tr td {
-	width:100px;
+	width:50px;
 	height:24px;
 }
 

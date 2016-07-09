@@ -209,7 +209,7 @@ public class PbszCountController extends PbBaseController{
 			rownum = 20;
 		else
 			rownum = Integer.parseInt(row);
-		if(from==null || to ==null)
+		if(from==null|| from.isEmpty() || to ==null)
 			return null;
 		
 		List<String> workername = wInfoManager.getNameBySection(section);

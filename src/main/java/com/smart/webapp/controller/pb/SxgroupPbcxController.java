@@ -112,8 +112,8 @@ public class SxgroupPbcxController extends PbBaseController{
 			
 			String html = "";
 			for(Shift shift : pbShifts){
-				html += "<div class='col-sm-12'>";
-				html += "<span>"+shift.getName()+"</span>";
+				html += "<div class='col-sm-12'><div class='col-sm-1' style='text-align: right;'>";
+				html += "<span>"+shift.getName()+"</span></div>";
 				
 				List<WInfo> sxnames = sxks.get(shift.getAb());
 				if(sxnames==null){
@@ -124,16 +124,26 @@ public class SxgroupPbcxController extends PbBaseController{
 //				String td = "<td>班次</td>";
 				String th = "";
 				String td = "";
+				String tr = "";
+				int i =0;
 				for(WInfo str : sxnames){
-					th += "<th style='background:#7FFFD4;padding:0px 0px;'>"+str.getName()+"("+(str.getSchool()==null?"":str.getSchool())+")"+"<br>"
+					if(i%8==0){
+						tr+="<tr>";
+					}
+					tr += "<th style='background:#7FFFD4;padding:0px 0px;'>"+str.getName()+"("+(str.getSchool()==null?"":str.getSchool())+")"+"<br>"
 							+(str.getPhone()==null?"":str.getPhone())+"</th>";
-					String bc = arrangeInfo.get(str)==null?"":arrangeInfo.get(str);
-					td += "<td>"+bc+"</td>";
+					String bc = arrangeInfo.get(str.getName())==null?"":arrangeInfo.get(str.getName());
+					tr += "<td>"+bc+"</td>";
+					if(i%8==7){
+						tr+="</tr>";
+					}
+					i++;
 				}
-				html += "<table class='table table-hover' style='font-size:8px;text-align:center;margin-bottom:5px;' border='1px;'>";
-				html += "<thread>"+ th + "</thread>";
-				html += "<tr>"+ td + "</tr>";
-				html += "</table>";
+				html += "<div class='col-sm-11'><table class=' table-hover' style='font-size:8px;text-align:center;margin-bottom:5px;' border='1px;'>";
+//				html += "<thread>"+ th + "</thread>";
+//				html += "<tr>"+ td + "</tr>";
+				html += tr;
+				html += "</table></div>";
 				
 				html += "</div>";
 			}

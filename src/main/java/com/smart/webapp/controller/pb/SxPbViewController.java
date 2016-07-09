@@ -126,7 +126,7 @@ public class SxPbViewController {
 		}
 		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"</a></td>";
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"("+(wInfos.get(j).getSchool()==null?"":wInfos.get(j).getSchool())+")"+"</a></td>";
 			for(int i=1;i<maxWeek+1;i++){
 				int dweek = startweek+i-1;
 				if(dweek>yearMaxWeek)

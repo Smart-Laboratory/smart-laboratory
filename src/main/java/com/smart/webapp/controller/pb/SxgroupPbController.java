@@ -185,8 +185,6 @@ public class SxgroupPbController {
         
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();
-        	if(name.equals("杨俊英"))
-        		System.out.println(name);
         	
         	for(int l=1; l<j; l++) {
         		String background = "";
