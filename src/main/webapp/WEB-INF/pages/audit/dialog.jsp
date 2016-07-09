@@ -4,13 +4,11 @@
 <div id="auditDialog" style="text-align:left;display:none;">
 	<div id="searchPanel" align="left">
 		<div style="display:none;" id="isContinued">0</div>
-		<div class="form-inline" style="margin-bottom:5px;">
-			<input id="auditText2" type="text" class="span4" style="margin-left:0px;" placeholder="20120829SGB001-999"/>
-			<button id="auditBtn2" class="btn" style="width:60px;margin-left:10px;margin-right:15px;"><fmt:message key='audit'/></button>
-			<input type="checkbox" id="auditAllbtn" style="margin-top:-2px;margin-right:10px;"><fmt:message key='reaudit'/>
+		<div style="border-bottom:1px solid #E1E1E1;">
+			<input id="auditText2" type="text" style="margin:5px;height:34px;" placeholder="20120829SGB001-999"/>
+			<button id="auditBtn2" class="btn btn-sm btn-info" style="margin:5px;"><fmt:message key='audit'/></button>
+			<input type="checkbox" id="auditAllbtn" style="margin-top:-2px;margin-right:5px;"><fmt:message key='reaudit'/>
 		</div>
-		
-		<div style="border-top:1px solid #E1E1E1;margin-bottom:10px;margin-top:10px;"></div>
 	</div>
 </div>
 

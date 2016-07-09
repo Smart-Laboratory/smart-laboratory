@@ -90,44 +90,48 @@ function getData(obj,event) {
 			if(obj.id == 'sampleno') {
 				type = 2;
 			}
-			$.get("../sample/ajax/get",{id:id,type:type},function(data) {
-				if(data != "") {
-					var data = JSON.parse(data);
-					$("#stayhospitalmode").val(data.stayhospitalmode);
-					$("#doctadviseno").val(data.doctadviseno);
-					if(data.sampleno != '0') {
-						$("#sampleno").val(data.sampleno);
-					}
-					$("#patientid").val(data.patientid);
-					$("#section").val(data.section);
-					$("#sectionCode").val(data.sectionCode);
-					$("#patientname").val(data.patientname);
-					$("#sex").val(data.sex);
-					$("#age").val(data.age);
-					$("#diagnostic").val(data.diagnostic);
-					var $tag_obj = $('#examinaim').data('tag');
-					$tag_obj.clear();
-					var ylxhMap = data.ylxhMap;
-					var feeMap = data.feeMap;
-					for(var key in ylxhMap) {
-						$tag_obj.add(ylxhMap[key], key, feeMap[key]);
-					}
-					$("#sampletype").val(data.sampletype);
-					$("#fee").val(data.fee);
-					$("#feestatus").val(data.feestatus);
-					$("#requester").val(data.requester);
-					$("#receivetime").val(data.receivetime);
-					$("#executetime").val(data.executetime);
-				} else {
-					if(type == 1) {
-						layer.msg("医嘱号为" + id + "的标本不存在！", {icon: 0, time: 1000});
-					} else {
-						layer.msg("样本号为" + id + "的标本不存在！", {icon: 0, time: 1000});
-					}
-				}
-			});
+			getSampleData(id, type);
 			break;
 	}
+}
+
+function getSampleData(id, type) {
+	$.get("../sample/ajax/get",{id:id,type:type},function(data) {
+		if(data != "") {
+			var data = JSON.parse(data);
+			$("#stayhospitalmode").val(data.stayhospitalmode);
+			$("#doctadviseno").val(data.doctadviseno);
+			if(data.sampleno != '0') {
+				$("#sampleno").val(data.sampleno);
+			}
+			$("#patientid").val(data.patientid);
+			$("#section").val(data.section);
+			$("#sectionCode").val(data.sectionCode);
+			$("#patientname").val(data.patientname);
+			$("#sex").val(data.sex);
+			$("#age").val(data.age);
+			$("#diagnostic").val(data.diagnostic);
+			var $tag_obj = $('#examinaim').data('tag');
+			$tag_obj.clear();
+			var ylxhMap = data.ylxhMap;
+			var feeMap = data.feeMap;
+			for(var key in ylxhMap) {
+				$tag_obj.add(ylxhMap[key], key, feeMap[key]);
+			}
+			$("#sampletype").val(data.sampletype);
+			$("#fee").val(data.fee);
+			$("#feestatus").val(data.feestatus);
+			$("#requester").val(data.requester);
+			$("#receivetime").val(data.receivetime);
+			$("#executetime").val(data.executetime);
+		} else {
+			if(type == 1) {
+				layer.msg("医嘱号为" + id + "的标本不存在！", {icon: 0, time: 1000});
+			} else {
+				layer.msg("样本号为" + id + "的标本不存在！", {icon: 0, time: 1000});
+			}
+		}
+	});
 }
 
 function getPatient(obj,event) {
@@ -343,6 +347,7 @@ function editSample() {
         layer.msg('请先选择要修改的数据', {icon: 2, time: 1000});
         return false;
     }
+    getSampleData(id,1);
 	layer.open({
 		type: 1,
 		area: ['1000px','360px'],
@@ -363,6 +368,7 @@ function deleteSample() {
         layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
         return false;
     }
+    getSampleData(id,1);
 	layer.open({
 		type: 1,
 		area: ['1000px','360px'],

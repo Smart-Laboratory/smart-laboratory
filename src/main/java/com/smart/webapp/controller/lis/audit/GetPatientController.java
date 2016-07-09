@@ -113,6 +113,7 @@ public class GetPatientController extends BaseAuditController {
 					}
 				}
 			}
+			map.put("reason", note);
 			map.put("description", info.getDescription());
 			map.put("mark", info.getAuditMark());
 			map.put("sex", info.getSexValue());

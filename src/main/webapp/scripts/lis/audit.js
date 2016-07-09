@@ -217,7 +217,7 @@ $(function(){
 		var text = $("#auditText2").val();
 		if (text != "") {
 			var reaudit = false;
-			if (!!$("#auditAllbtn").attr("checked")) {
+			if ($("#auditAllbtn").prop("checked")) {
 				reaudit = true;
 			}
 			$.get("../audit/result",{sample:text,reaudit:reaudit},function() {});
@@ -365,14 +365,14 @@ function getProValue() {
 				/* if (text.length > 11) {
 					text=text.slice(0,11)+"...";
 				} */
-				var content = "<div><table style='margin:0px;'><tr><td><div class='proRatio'></div></td><td><div class='proId'>"
+				var content = "<div><table style='margin:10px;'><tr><td style='width:30%'><div class='proRatio'></div></td><td style='width:5%'><div class='proId'>"
 				+ array[i].id
-				+ "</div></td><td><div style='width:320px;'><div class='proStart'>"
-				+ "</div><div class='proEnd'></div></div></td><td></td></tr><tr><td style='width:150px;display:block;'><span>"
+				+ "</div></td><td style='width:50%'><div><div class='proStart'>"
+				+ "</div><div class='proEnd'></div></div></td><td style='width:15%'></td></tr><tr><td style='width:30%;'><span>"
 				+ text
-				+ "</span></td><td>"
-				+ "<div class='proStatus'></div><input class='hiddenValue' type='hidden' value='100' ></td><td><div class='proValue'>"
-				+ "</div></td><td><input type='button' class='stopAudit btn' value='\u505c\u6b62'/></td></tr>"
+				+ "</span></td><td style='width:5%'>"
+				+ "<div class='proStatus'></div><input class='hiddenValue' type='hidden' value='100' ></td><td style='width:50%'><div class='proValue'>"
+				+ "</div></td><td style='width:15%;text-align:center;'><input type='button' class='stopAudit btn btn-xs' value='\u505c\u6b62'/></td></tr>"
 				+ "</table><div style='border-top: 1px solid #E1E1E1;margin-bottom:10px;'></div></div>";
 				//$("#auditDialog").prepend(content);
 				$(content).insertAfter($("#searchPanel"));
