@@ -371,18 +371,18 @@ function openOpStatusDialog() {
 						var check = data.chartlist[i].check;
 						if(i > 1) {
 							if(check == 1) {
-								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%' checked></input>");
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:40px;' checked></input>");
 							} else {
-								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:5%'></input>");
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:40px;'></input>");
 							}
-							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:45%;height:200px'></div>");
+							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='margin-top:10px;float:left;width:360px;height:200px'></div>");
 						} else {
 							if(check == 1) {
-								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%' checked></input>");
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:40px;' checked></input>");
 							} else {
-								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:5%'></input>");
+								$("#chartList").append("<input type='checkbox' id='check" + data.chartlist[i].id + "' style='float:left;width:40px;'></input>");
 							}
-							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='float:left;width:45%;height:200px'></div>");
+							$("#chartList").append("<div id='chart" + data.chartlist[i].id + "' style='float:left;width:360px;height:200px'></div>");
 						}
 						var xset = data.chartlist[i].time;
 						var yset1 = data.chartlist[i].low;
@@ -451,7 +451,7 @@ function openOpStatusDialog() {
     	type: 1,
     	shade: 0.4,
     	skin: 'layui-layer-lan',
-    	area: ['700px', '500px'],
+    	area: ['800px', '600px'],
     	title: '通过/不通过',
     	btn: ['审核', '取消'],
     	yes: function(index){
@@ -1082,7 +1082,7 @@ function ajaxFileUpload(){
 		secureuri:false,
 		fileElementId: arrId,  
 		success: function (data){
-			alert("上传成功");
+			//alert("上传成功");
 			layer.closeAll();
 			jQuery("#list").trigger("reloadGrid");
 		},
@@ -1110,9 +1110,9 @@ function savePDF(){
 	}
 	$.post("../audit/ajax/saveHtml",{sampleNo:sample,lastNo:last,docIdNo:docId},function(data) {
 		if (data == true) {
-			alert("保存成功！");
+			//alert("保存成功！");
 		} else {
-			alert("保存失败！");
+			//alert("保存失败！");
 		}
 	});
 }

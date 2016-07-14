@@ -160,7 +160,7 @@ public class CollectDialogController extends BaseAuditController {
 //			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
-					double rank = ExplainUtil.instance.getRank(rule, re);
+					double rank = new ExplainUtil(itemManager, dictionaryManager, idMap).getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());

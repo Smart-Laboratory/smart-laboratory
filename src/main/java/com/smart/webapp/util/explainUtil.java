@@ -1,12 +1,10 @@
 package com.smart.webapp.util;
 
-
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.smart.model.Dictionary;
 import com.smart.model.rule.Index;
@@ -18,14 +16,16 @@ import com.smart.service.rule.ItemManager;
 
 public class ExplainUtil {
 	
-	@Autowired
 	private ItemManager itemManager = null ;
-	@Autowired
 	private DictionaryManager dictionaryManager = null;
+	private Map<String, Index> idMap = null;
 	
-	private Map<String, Index> idMap = new TestIdMapUtil().getInstance() ;
-	
-	public static ExplainUtil instance = new ExplainUtil();
+	public ExplainUtil(ItemManager item, DictionaryManager d,
+			Map<String, Index> map) {
+		itemManager = item;
+		dictionaryManager = d;
+		idMap = map;
+	}
 	
 	public String getItemStr(String id) {
 		String result = "";

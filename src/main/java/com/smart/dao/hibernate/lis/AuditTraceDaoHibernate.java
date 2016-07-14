@@ -24,7 +24,7 @@ public class AuditTraceDaoHibernate extends GenericDaoHibernate<AuditTrace, Long
 	}
 
 	public void saveAll(List<AuditTrace> updateAuditTrace) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(AuditTrace at : updateAuditTrace) {
 			s.saveOrUpdate(at);
 		}

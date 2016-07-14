@@ -330,7 +330,10 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 
 	public int getSampleCount(String text, String lab, int mark, int status, String code) {
 		String sql = "select count(s.id) from Sample s where s.sectionId in (" + lab + ") ";
-		String[] cds = code.split(",");
+		String[] cds = new String[0];
+		if(code != null) {
+			cds = code.split(",");
+		}
 		switch (text.length()) {
 		case 8:
 			if (StringUtils.isNumeric(text)) {

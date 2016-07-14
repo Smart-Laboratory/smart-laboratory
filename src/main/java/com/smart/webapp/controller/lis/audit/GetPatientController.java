@@ -103,7 +103,7 @@ public class GetPatientController extends BaseAuditController {
 					if (rule.getType() == 3 || rule.getType() == 4
 							|| rule.getType() == 5 || rule.getType() == 6
 							|| rule.getType() == 7) {
-	 					String reason = ExplainUtil.instance.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
+	 					String reason = new ExplainUtil(itemManager, dictionaryManager, idMap).getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 						String result = rule.getResultName();
 						if (note != null && !note.isEmpty()) {
 							note = note + "<br>" + reason + ", <font color='red'>" + result + "</font>";

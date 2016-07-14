@@ -74,14 +74,16 @@ public class ExplainController extends BaseAuditController {
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
-
+		if (idMap.size() == 0)
+			initMap();
+		ExplainUtil explainUtil = new ExplainUtil(itemManager, dictionaryManager, idMap);
 		for (Rule rule : rules) {
 			String reason = "";
 			if(needReason)
-				reason = ExplainUtil.instance.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
+				reason = explainUtil.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
-					double rank = ExplainUtil.instance.getRank(rule, re);
+					double rank = explainUtil.getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());

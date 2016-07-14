@@ -75,29 +75,31 @@
 	</form>
 </div>
 
-<div id="opStatusDialog" style="text-align:left;display:none;" >
-	<h5 id="passNotes"></h5>
-	<div id="selectNoteDiv" class="clearfix"></div>
-	<h5 id="guide" style="border-top:1px solid #000000;padding-top:5px;"><b><fmt:message key='rule.guide'/></b></h5>
-	<div id="guideDiv"></div>
-	<div class="form-inline" style="border-top:1px solid #000000;padding-top:5px;">
-		<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
-		<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='placeholder.szm'/>"/>
-		<label for="disease" style="margin-left:20px;"><fmt:message key='des.disease' /></label>
-		<span type="text" id="disease" />
+<div id="opStatusDialog" style="text-align:left;display:none;">
+	<div class="col-sm-12">
+		<h5 id="passNotes"></h5>
+		<div id="selectNoteDiv" class="clearfix"></div>
+		<h5 id="guide" style="border-top:1px solid #000000;padding-top:5px;"><b><fmt:message key='rule.guide'/></b></h5>
+		<div id="guideDiv"></div>
+		<div class="form-inline" style="border-top:1px solid #000000;padding-top:5px;">
+			<label for="diseaseSelect"><fmt:message key='des.diseaseSelect' /></label>
+			<input type="text" class="form-control" id="diseaseSelect" placeholder="<fmt:message key='placeholder.szm'/>"/>
+			<label for="disease" style="margin-left:20px;"><fmt:message key='des.disease' /></label>
+			<span type="text" id="disease" />
+		</div>
+		<div id="descriptionDiv"></div>
+		<div style="border-top:1px solid #000000;margin-top:10px;">
+			<h5 id="explainSelect"><b><fmt:message key='audit.infomation'/></b></h5>
+			<div id="explainDiv"></div>
+		</div>
+		<h5 id="passNotes"><b><fmt:message key='audit.checkerOpinion'/></b></h5>
+		<input type="hidden" id="checkId" />
+		<textarea id="noteText" rows="3" class="form-control" style="width:100%;"></textarea>
+		<input type="hidden" id="noteHidden" />
+		<div id="historyChart" style="float:left;width:100%;margin-top:5px;padding-top:5px;border-top:1px solid #000000;"></div>
+		<p><b><fmt:message key="sample.history.chart"/></b></p>
+		<div id="chartList"></div>
 	</div>
-	<div id="descriptionDiv"></div>
-	<div style="border-top:1px solid #000000;margin-top:10px;">
-		<h5 id="explainSelect"><b><fmt:message key='audit.infomation'/></b></h5>
-		<div id="explainDiv"></div>
-	</div>
-	<h5 id="passNotes"><b><fmt:message key='audit.checkerOpinion'/></b></h5>
-	<input type="hidden" id="checkId" />
-	<textarea id="noteText" rows="3" class="form-control" style="width:100%;"></textarea>
-	<input type="hidden" id="noteHidden" />
-	<div id="historyChart" style="float:left;width:100%;margin-top:5px;padding-top:5px;border-top:1px solid #000000;"></div>
-	<p><b><fmt:message key="sample.history.chart"/></b></p>
-	<div id="chartList"></div>
 </div>
 
 <div id="collectDialog" style="text-align:left;display:none;" >

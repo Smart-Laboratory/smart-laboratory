@@ -19,7 +19,7 @@ public class TestIdMapUtil {
 	public Map<String, Index> getInstance() {
 		if(instance.idMap == null){
 			synchronized (instance) {
-				instance.initMap();
+				initMap();
 			}
 		}
 		return idMap;
