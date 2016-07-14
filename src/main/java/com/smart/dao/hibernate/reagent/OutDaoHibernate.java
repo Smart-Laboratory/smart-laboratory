@@ -22,7 +22,7 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 	}
 
 	public void saveAll(List<Out> needSaveOut) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(Out o : needSaveOut) {
 			s.saveOrUpdate(o);
 		}

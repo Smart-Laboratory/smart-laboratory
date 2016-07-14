@@ -17,7 +17,7 @@ public class BatchDaoHibernate extends GenericDaoHibernate<Batch, Long> implemen
 	}
 
 	public void saveAll(List<Batch> needSaveBatch) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(Batch b : needSaveBatch) {
 			s.saveOrUpdate(b);
 		}

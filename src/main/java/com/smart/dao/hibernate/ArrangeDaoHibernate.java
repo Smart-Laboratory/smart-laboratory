@@ -18,12 +18,12 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	}
 
 	public void saveAll(List<Arrange> list) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(Arrange arrange : list) {
 			s.saveOrUpdate(arrange);
 		}
 		s.flush();
-//		s.close();
+		s.close();
 	}
 
 	@SuppressWarnings("unchecked")

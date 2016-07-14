@@ -16,12 +16,12 @@ public class SxArrangeDaoHibernate extends GenericDaoHibernate<SxArrange, Long> 
 	}
 	
 	public void saveAll(List<SxArrange> list){
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(SxArrange sx : list) {
 			s.saveOrUpdate(sx);
 		}
 		s.flush();
-//		s.close();
+		s.close();
 	}
 	
 	

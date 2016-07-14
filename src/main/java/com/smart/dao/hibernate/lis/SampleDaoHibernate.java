@@ -104,7 +104,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	public void saveAll(List<Sample> updateSample) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(Sample sample : updateSample) {
 			s.saveOrUpdate(sample);
 		}
