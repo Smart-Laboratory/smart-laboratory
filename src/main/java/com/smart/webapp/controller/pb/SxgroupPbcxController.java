@@ -23,10 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.pb.SxSchool;
 import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
+import com.smart.service.SxSchoolManager;
 import com.smart.service.WInfoManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
@@ -91,6 +93,13 @@ public class SxgroupPbcxController extends PbBaseController{
 				arrangeInfo.put(arrange.getWorker(), arrange.getShift());
 			}
 			
+			//实习生学校map
+			Map<Long, String> sxschoolMap = new HashMap<Long,String>();
+			List<SxSchool> schools = sxSchoolManager.getAll();
+			for(SxSchool s : schools){
+				sxschoolMap.put(s.getId(), s.getNamesx());
+			}
+			
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.YEAR, Integer.parseInt(yearAndMonth.split("-")[0]));
 			cal.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.split("-")[1])-1);
@@ -105,7 +114,8 @@ public class SxgroupPbcxController extends PbBaseController{
 					List<WInfo> sxnames = new ArrayList<WInfo>();//workids
 					if(sxks.get(sxArrange.getSection())!=null)
 						sxnames = sxks.get(sxArrange.getSection());
-					sxnames.add(winfoMap.get(sxArrange.getWorker()));
+					if(winfoMap.get(sxArrange.getWorker())!=null && winfoMap.get(sxArrange.getWorker()).getIsActive()==1)
+						sxnames.add(winfoMap.get(sxArrange.getWorker()));
 					sxks.put(sxArrange.getSection(), sxnames);
 				}
 			}
@@ -127,10 +137,12 @@ public class SxgroupPbcxController extends PbBaseController{
 				String tr = "";
 				int i =0;
 				for(WInfo str : sxnames){
+					if(str==null)
+						continue;
 					if(i%8==0){
 						tr+="<tr>";
 					}
-					tr += "<th style='background:#7FFFD4;padding:0px 0px;'>"+str.getName()+"("+(str.getSchool()==null?"":str.getSchool())+")"+"<br>"
+					tr += "<th style='background:#7FFFD4;padding:0px 0px;'>"+str.getName()+"("+(str.getSchool()==null?"":sxschoolMap.get(Long.parseLong(str.getSchool())))+")"+"<br>"
 							+(str.getPhone()==null?"":str.getPhone())+"</th>";
 					String bc = arrangeInfo.get(str.getName())==null?"":arrangeInfo.get(str.getName());
 					tr += "<td>"+bc+"</td>";
@@ -382,4 +394,6 @@ public class SxgroupPbcxController extends PbBaseController{
 	
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
+	@Autowired
+	private SxSchoolManager sxSchoolManager;
 }

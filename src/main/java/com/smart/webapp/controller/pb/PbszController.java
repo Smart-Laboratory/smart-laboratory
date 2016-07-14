@@ -84,7 +84,13 @@ public class PbszController extends PbBaseController {
 				}
 			}
 		}
+		Map<String, String> sxshifts = new HashMap<String,String>();
+		List<Shift> sx = shiftManager.getSx();
+		for(Shift shift : sx){
+			sxshifts.put(shift.getAb(), shift.getName());
+		}
 		
+		request.setAttribute("sxshifts", sxshifts);
 		request.setAttribute("departList", departList);
 		request.setAttribute("section", section);
 		return new ModelAndView();
@@ -280,6 +286,7 @@ public class PbszController extends PbBaseController {
 			map.put("id", dsh.getId());
 			map.put("phone", dsh.getPhone());
 			map.put("name", dsh.getName());
+			map.put("namesx", dsh.getNamesx());
 			map.put("address", dsh.getAddress());
 			map.put("system", dsh.getSystem());
 			dataRows.add(map);
@@ -305,16 +312,16 @@ public class PbszController extends PbBaseController {
 		String workid = request.getParameter("workid");
 		String phone = request.getParameter("phone");
 		String shift = request.getParameter("shift");
-		int ord1 = Integer.parseInt(request.getParameter("ord1"));
-		int ord2 = Integer.parseInt(request.getParameter("ord2"));
-		int ord3 = Integer.parseInt(request.getParameter("ord3"));
-		int ord4 = Integer.parseInt(request.getParameter("ord4"));
-		int ord5 = Integer.parseInt(request.getParameter("ord5"));
-		int ord6 = Integer.parseInt(request.getParameter("ord6"));
+		String ord1 = request.getParameter("ord1");
+		String ord2 = request.getParameter("ord2");
+		String ord3 = request.getParameter("ord3");
+		String ord4 = request.getParameter("ord4");
+		String ord5 = request.getParameter("ord5");
+		String ord6 = request.getParameter("ord6");
 		Date worktime = sdf.parse(request.getParameter("worktime"));
 		System.out.println(worktime.getTime());
 		int type = Integer.parseInt(request.getParameter("type"));
-		double holiday = Double.parseDouble(request.getParameter("holiday"));
+		String holiday = request.getParameter("holiday");
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		int isActive = Integer.parseInt(request.getParameter("isactive"));
 		String school = request.getParameter("school");
@@ -331,14 +338,14 @@ public class PbszController extends PbBaseController {
 			wi.setWorkid(workid);
 			wi.setPhone(phone);
 			wi.setShift(getShift(section));
-			wi.setOrd1(ord1);
-			wi.setOrd2(ord2);
-			wi.setOrd3(ord3);
-			wi.setOrd4(ord4);
-			wi.setOrd5(ord5);
-			wi.setOrd6(ord6);
-			wi.setHoliday(holiday);
-			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
+			wi.setOrd1(ord1==null?0:Integer.parseInt(ord1));
+			wi.setOrd2(ord2==null?0:Integer.parseInt(ord2));
+			wi.setOrd3(ord3==null?0:Integer.parseInt(ord3));
+			wi.setOrd4(ord4==null?0:Integer.parseInt(ord4));
+			wi.setOrd5(ord5==null?0:Integer.parseInt(ord5));
+			wi.setOrd6(ord6==null?0:Integer.parseInt(ord6));
+			wi.setHoliday(holiday==null?0:Double.parseDouble(holiday));
+			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
 			wi.setSchool(school);
 			wInfoManager.save(wi);
@@ -352,15 +359,15 @@ public class PbszController extends PbBaseController {
 			wi.setWorkid(workid);
 			wi.setPhone(phone);
 			wi.setShift(shift);
-			wi.setOrd1(ord1);
-			wi.setOrd2(ord2);
-			wi.setOrd3(ord3);
-			wi.setOrd4(ord4);
-			wi.setOrd5(ord5);
-			wi.setOrd6(ord6);
-			wi.setHoliday(holiday);
+			wi.setOrd1(ord1==null?0:Integer.parseInt(ord1));
+			wi.setOrd2(ord2==null?0:Integer.parseInt(ord2));
+			wi.setOrd3(ord3==null?0:Integer.parseInt(ord3));
+			wi.setOrd4(ord4==null?0:Integer.parseInt(ord4));
+			wi.setOrd5(ord5==null?0:Integer.parseInt(ord5));
+			wi.setOrd6(ord6==null?0:Integer.parseInt(ord6));
+			wi.setHoliday(holiday==null?0:Double.parseDouble(holiday));
 			wi.setDefeHoliday(wi.getDefeHoliday());
-			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
+			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
 			wi.setSchool(school);
 			wInfoManager.save(wi);
@@ -458,6 +465,7 @@ public class PbszController extends PbBaseController {
 		String oper = request.getParameter("oper");
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
+		String namesx = request.getParameter("namesx");
 		String phone = request.getParameter("phone");
 		String address = request.getParameter("address");
 		String system = request.getParameter("system");
@@ -465,6 +473,7 @@ public class PbszController extends PbBaseController {
 		SxSchool dsh = new SxSchool();
 		if(oper.equals("add")) {
 			dsh.setName(name);
+			dsh.setNamesx(namesx);
 			dsh.setPhone((phone==null||phone.isEmpty())?0:Integer.parseInt(phone));
 			dsh.setAddress(address);
 			dsh.setSystem(system);
@@ -472,6 +481,7 @@ public class PbszController extends PbBaseController {
 		} else if (oper.equals("edit")) {
 			dsh.setId(Long.parseLong(id));
 			dsh.setName(name);
+			dsh.setNamesx(namesx);
 			dsh.setPhone((phone==null||phone.isEmpty())?0:Integer.parseInt(phone));
 			dsh.setAddress(address);
 			dsh.setSystem(system);

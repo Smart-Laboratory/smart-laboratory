@@ -269,6 +269,7 @@ public class PbController {
 		String month = request.getParameter("date");
 		List<Arrange> list = new ArrayList<Arrange>();
 		String section = request.getParameter("section");
+		String special = request.getParameter("special");
 		
 //		if(ksArrange!=null && ksArrange.getState()>1){
 //			return false;
@@ -298,7 +299,7 @@ public class PbController {
 				if(userShifts.containsKey(arr[0])  ){
 					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
 					if(dateValue.containsKey(arr[1]) ){
-						if((dateValue.get(arr[1]).getShift()==null && arr.length>=3) || (dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:""))){
+						if( (dateValue.get(arr[1]).getWorker()==null && arr.length>=3) || (dateValue.get(arr[1]).getWorker()!=null && !dateValue.get(arr[1]).getWorker().equals(arr.length>=3?arr[2]:""))){
 							Arrange b = dateValue.get(arr[1]);
 							b.setWorker(arr.length>=3?arr[2]:"");
 							b.setState(2);
@@ -307,6 +308,8 @@ public class PbController {
 							if(!b.getSection().contains(section)){
 								b.setSection(b.getSection()+","+section);
 							}
+							if(special.contains(arr[0]+"-"+arr[1]))
+								b.setState(5);
 							list.add(b);
 							continue;
 						}
@@ -335,6 +338,8 @@ public class PbController {
 					a.setWorker(arr[2]);
 				else 
 					a.setWorker("");
+				if(special.contains(arr[0]+"-"+arr[1]))
+					a.setState(5);
 				list.add(a);
 				userShifts.get(arr[0]).put(arr[0], a);
 			}

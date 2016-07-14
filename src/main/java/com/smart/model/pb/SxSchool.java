@@ -14,8 +14,9 @@ public class SxSchool {
 
 	private Long id;
 	private String name;
+	private String namesx;
 	private String address;
-	private int phone;
+	private int phone=0;
 	private String system;
 	
 	@Id
@@ -34,6 +35,14 @@ public class SxSchool {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Column
+	public String getNamesx() {
+		return namesx;
+	}
+	public void setNamesx(String namesx) {
+		this.namesx = namesx;
 	}
 	
 	@Column
