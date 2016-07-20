@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name="lab_description")
 public class Description {
 
-private Long id;
+	private Long id;
 	
 	private String name; 
 	private String bagId;  //包含该贵的的包 id集合，用"，"隔开

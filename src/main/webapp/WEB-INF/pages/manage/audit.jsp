@@ -24,6 +24,10 @@
 	<script type="text/javascript" src="../scripts/layer/extend/layer.ext.js"></script>
 	<script type="text/javascript" src="../scripts/lis/audit.js"></script>
 
+	<script language="javascript" src="../scripts/LodopFuncs.js"></script>
+	<object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+	       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+	</object>
 <style>
 .ui-tabs-anchor {
 	width:60px;
@@ -31,6 +35,9 @@
 }
 p{
 	margin-bottom:1px;
+}
+.ui-autocomplete {
+    z-index: 99999999;
 }
 </style>
 </head>
