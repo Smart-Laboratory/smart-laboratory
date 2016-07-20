@@ -21,4 +21,6 @@ public interface WInfoManager extends GenericManager<WInfo, Long> {
 	WInfo getByWorkId(String workid);
 	
 	List<WInfo> getByType(int type);
+	
+	List<String> getNameBySection(String section);
 }

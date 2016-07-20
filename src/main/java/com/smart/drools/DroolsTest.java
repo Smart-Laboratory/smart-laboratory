@@ -63,6 +63,8 @@ public class DroolsTest {
 		builder.append("c.setMinute(0); \n");
 		builder.append("update(c); \n");
 		builder.append("end");  
+		
+		System.out.println(builder.toString());
 		Reader reader = new StringReader(builder.toString());
 		KieServices ks = KieServices.Factory.get(); 
 		
@@ -81,7 +83,9 @@ public class DroolsTest {
 		
 		Clock c = new Clock(); 
 		kSession.insert(c);  
+		System.out.println(c.getHour() + " " + c.getMinute() + " " + c.getSecond());
         kSession.fireAllRules();
+        System.out.println(c.getHour() + " " + c.getMinute() + " " + c.getSecond());
         kSession.dispose(); 
           
     }

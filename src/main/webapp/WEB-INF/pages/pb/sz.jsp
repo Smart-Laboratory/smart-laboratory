@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
@@ -26,8 +27,8 @@
 	<ul>
 		<li><a href="#tabs-1"><fmt:message key="pb.wi"/></a></li>
 		<li><a href="#tabs-2"><fmt:message key="pb.bc"/></a></li>
-		<li><a href="#tabs-3"><fmt:message key="pb.dbc"/></a></li>
-		<li><a href="#tabs-4"><fmt:message key="pb.kq"/></a></li>
+		<li><a href="#tabs-3">实习生学校</a></li>
+		<li><a href="#tabs-4">工作统计</a></li>
 	</ul>
 	<div id="tabs-1">
 		<button id="resetHoliday" class="bth btn-success"  ><fmt:message key="pb.resetHoliday"/></button>
@@ -38,13 +39,32 @@
 		<table id="bctable"></table>
 		<div id="bcpager"></div>
 	</div>
-	<div id="tabs-3">
-		<table id="dbctable"></table>
-		<div id="dbcpager"></div>
+	<div id="tabs-3" class="colsm-12">
+		<div class="col-sm-10">
+			<table id="sxschooltable"></table>
+			<div id="sxschoolpager"></div>
+		</div>
+		<div class="col-sm-2">
+			<c:forEach items="${sxshifts }" var ="shift">
+				<div>
+					<span>${shift.key } = ${shift.value }</span>
+				</div>
+			</c:forEach>
+		</div>
+		
 	</div>
 	<div id="tabs-4">
-		<table id="kqtable"></table>
-		<div id="kqpager"></div>
+	<div class="form-inline">
+		<label for="from" style="margin-left : 20px;"><b><fmt:message key="from" /></b></label>
+		<input type="text" id="from" name="from" class="form-control"  value="${from }"/>
+		<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
+		<input type="text" id="to" name="to" class="form-control" value="${to }">
+		
+		<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
+		<button id="workCount" class="btn btn-success form-control">工作量统计</button>
+	</div>	
+		<table id="workData" class=" table" style="font-size:12px;text-align:center;" border="1px;">
+		<div id="workpager"></div>
 	</div>
 </div>
 <div style="margin-top:10px;font-size:15px;">
@@ -56,3 +76,5 @@
 		</p>
 		<p><fmt:message key="pb.sort"/></p>
 </div>
+
+

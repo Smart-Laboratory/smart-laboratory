@@ -31,4 +31,12 @@ public interface ArrangeManager extends GenericManager<Arrange, Long> {
 	 * 根据科室、月份取排班记录
 	 */
 	List<Arrange> getBySectionMonth(String month, String section);
+	
+	/*
+	 * 获取B超3个月内的排班记录
+	 */
+	List<Arrange> getMonthArrangeByshift(String shift, String month);
+	
+	List<Arrange> getByDay(String day);
+	
 }

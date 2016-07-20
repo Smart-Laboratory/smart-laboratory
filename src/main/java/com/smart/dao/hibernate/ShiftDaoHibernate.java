@@ -39,17 +39,17 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<Shift> getShiftBySection(String section) {
 		List<Shift> shifts = new LinkedList<Shift>();
-		if(section=="1300000"){
+		if(section=="1300000" || !section.contains("1300")){
 			shifts = getSession().createQuery("from Shift where section='"+section+"' and showord>0 order by showord").list();
-		} else{
-		List<Shift> shifts1 = getSession().createQuery("from Shift where section='"+section+"' order by showord").list();
-		List<Shift> shifts2 = getSession().createQuery("from Shift where section='1300000' and showord = 0 order by showord").list();
-		for(Shift s : shifts1){
-			shifts.add(s);
-		}
-		for(Shift s : shifts2){
-			shifts.add(s);
-		}
+		}else{
+			List<Shift> shifts1 = getSession().createQuery("from Shift where section='"+section+"' order by showord").list();
+			List<Shift> shifts2 = getSession().createQuery("from Shift where section='1300000' and showord = 0 order by showord").list();
+			for(Shift s : shifts1){
+				shifts.add(s);
+			}
+			for(Shift s : shifts2){
+				shifts.add(s);
+			}
 		}
 		return shifts;
 	}

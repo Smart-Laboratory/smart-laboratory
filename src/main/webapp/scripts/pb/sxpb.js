@@ -12,10 +12,11 @@ function getHisList(id){
 	jQuery("#hisList").jqGrid({
 		url:"../pb/sxpb/hisdata?id="+id,
 		datatype:"json",
-		colNames:['科室','次数'],
+		colNames:['科室','次数','学校规章'],
 		colModel:[
 		          {name:'section',index:'section',width:80,sortable:false},
 		          {name:'num',index:'num',width:40,sortable:false},
+		          {name:'schoolnum',index:'schoolnum',width:40,sortable:false}
 		          ],
 		rowNum:20,
 		height:'100%',
@@ -143,10 +144,12 @@ $(function() {
 		$("#nextBtn").addClass("disabled");
 	}
 	$("#preBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page)+"&week="+($("#week").val());
+		if(page!=1)
+			window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page)+"&week="+($("#week").val());
 	});
 	$("#nextBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page)+"&week="+($("#week").val());
+		if(pages!=1)
+			window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page)+"&week="+($("#week").val());
 	});
 	
 	

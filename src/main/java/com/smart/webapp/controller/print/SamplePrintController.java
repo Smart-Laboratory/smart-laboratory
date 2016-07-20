@@ -41,7 +41,7 @@ public class SamplePrintController extends BaseAuditController {
 		request.setAttribute("showLast", request.getParameter("last"));
 		Sample s = sampleManager.getBySampleNo(request.getParameter("sampleNo"));
 		//PDFConverterUtil.getInstance().processFile("c://", s.getSampleNo(), "");
-		if("1300801".equals(s.getSectionId())){
+		if("1300000".equals(s.getSectionId()) && "CHR".equals(s.getSampleNo().substring(8, 11))){
 			return new ModelAndView("print/chromosome");
 		}else{
 			return new ModelAndView("print/sample");

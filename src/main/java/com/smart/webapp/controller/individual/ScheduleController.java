@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.pb.Arrange;
@@ -85,9 +86,7 @@ public class ScheduleController extends PbBaseController {
 		String department = user.getPbsection();
 		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
-		if(section==null && user.getLastLab() != null) {
-			section = user.getLastLab();
-		}
+		
 		initLabMap();
 		if (department != null) {
 			for (String s : department.split(",")) {
@@ -96,9 +95,16 @@ public class ScheduleController extends PbBaseController {
 					section = s;
 			}
 		}
+		
+		
+		if(user.getLastLab() != null) {
+			section = user.getLastLab();
+		}
 		if(section == null || section.isEmpty())
 			return new ModelAndView();
 		
+		if(section.equals("1320511"))
+			return new ModelAndView("pb/bpb").addObject("section", section);
 		String type = request.getParameter("type");
 		
 		
@@ -114,6 +120,14 @@ public class ScheduleController extends PbBaseController {
 		}
 		List<WInfo> wiList = wInfoManager.getBySection(section, type);
 		
+		
+		request.setAttribute("departList", depart);
+		request.setAttribute("month", tomonth);
+		request.setAttribute("section", section);
+		request.setAttribute("sectionStr", labMap.get(section));
+		if(section.equals("1400100") || section.equals("1400200")){
+        	return new ModelAndView("/pb/bpb");
+		}
 		//获取科室排班选项表
 		Map<String, String> wshifts = new LinkedHashMap<String,String>();
 		List<Shift> ss = shiftManager.getShiftBySection(section);
@@ -123,9 +137,6 @@ public class ScheduleController extends PbBaseController {
 		//备注
 		Arrange bzArrange = arrangeManager.getByUser(section, tomonth);
 		request.setAttribute("wshifts", wshifts);
-		request.setAttribute("departList", depart);
-		request.setAttribute("month", tomonth);
-		request.setAttribute("section", section);
 		if(bzArrange!=null && bzArrange.getShift()!=null)
 			request.setAttribute("bz", bzArrange.getShift());
 		if(wiList==null || wiList.size() == 0) {
@@ -249,7 +260,7 @@ public class ScheduleController extends PbBaseController {
         	view.addObject("arrString", arrString);
         	view.addObject("type", type);
             view.addObject("size", shifts2.length);
-        }else if(section.equals("1320511")){
+        }else if(section.equals("1400100") || section.equals("1400200")){
         	view = new ModelAndView("/pb/bpb");
         }else {
         	String arrString = "<tr>";

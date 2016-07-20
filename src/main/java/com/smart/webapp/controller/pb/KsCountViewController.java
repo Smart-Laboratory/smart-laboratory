@@ -38,6 +38,7 @@ public class KsCountViewController {
     public ModelAndView kscountRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
+		String week = request.getParameter("week");
 		if(from==null){
 			from = ym.format(new Date());
 		}
@@ -58,6 +59,11 @@ public class KsCountViewController {
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		int yearMaxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
 		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
+		
+        if(week!=null && !week.isEmpty()){
+        	startweek = Integer.parseInt(week);
+        	maxWeek=1;
+        }
 		Calendar c = new GregorianCalendar();
 		c.setFirstDayOfWeek(Calendar.MONDAY);
 		c.set(Calendar.YEAR, Integer.parseInt(from.split("-")[0]));
@@ -70,7 +76,7 @@ public class KsCountViewController {
 		
         int year = Integer.parseInt(from.split("-")[0]);
 		String[][] shifts = new String[pbsection.size()+1][maxWeek+1];
-		shifts[0][0] = "<th style='width:120px;'>"+year+"</th>";
+		shifts[0][0] = "<th style='width:80px;'>"+year+"</th>";
 		for(int i=1;i<=maxWeek;i++){
 			int dweek = startweek+i-1;
 			if(dweek>yearMaxWeek)
@@ -80,7 +86,7 @@ public class KsCountViewController {
 			String startDate = md.format(c.getTime());
 			c.add(GregorianCalendar.DATE, 6);
 			String endDate = md.format(c.getTime());
-			shifts[0][i]="<th name='"+startDate.split("-")[0]+"' style='width:120px;'>第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</th>" ;
+			shifts[0][i]="<th name='"+startDate.split("-")[0]+"' style='width:80px;'>第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</th>" ;
 			
 		}
 		
@@ -128,7 +134,9 @@ public class KsCountViewController {
 		request.setAttribute("year", year);
 		request.setAttribute("from", from);
 		request.setAttribute("to", to);
-		
+		//当月包含的科室
+		String weeks = getWeek(from);
+		request.setAttribute("weeks", weeks);
 		
 		ModelAndView view = new ModelAndView();
 		view.addObject("pbdate", arrDate);
@@ -170,6 +178,58 @@ public class KsCountViewController {
 			students.put(wInfo.getWorkid(), wInfo.getName());
 		}
 	}
+	
+	public String  getWeek(String date){
+		if(date==null || date.isEmpty())
+			return null;
+		int maxWeek = getMaxWeek(date, date);
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, Integer.parseInt(date.split("-")[0]));
+		cal.set(Calendar.MONTH, Integer.parseInt(date.split("-")[1])-1);
+		cal.set(Calendar.DATE, 1);
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
+		int yearMaxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
+		int startweek = cal.get(Calendar.WEEK_OF_YEAR);
+//		System.out.println(ymd.format(cal.getTime()));
+		Date datetime = cal.getTime();
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.set(Calendar.YEAR, Integer.parseInt(date.split("-")[0]));
+		c.set(Calendar.MONTH, 0);
+		c.set(Calendar.DATE, 1);
+//		System.out.println(ymd.format(c.getTime()));
+		datetime = c.getTime();
+        c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
+        c.add(GregorianCalendar.DAY_OF_MONTH, 7*(startweek-1));
+        
+//        System.out.println(ymd.format(c.getTime()));
+        datetime = c.getTime();
+        int year = Integer.parseInt(date.split("-")[0]);
+//        System.out.println(wInfos.size()+":"+maxWeek);
+        
+        String html = "";
+		int yeartemp = year;
+		for(int i=1;i<=maxWeek;i++){
+			int dweek = startweek+i-1;
+			if(dweek>yearMaxWeek){
+				dweek-=yearMaxWeek;
+				yeartemp+=1;
+			}
+			if(i>1)
+				c.add(GregorianCalendar.DATE, 1);
+			String startDate = md.format(c.getTime());
+			c.add(GregorianCalendar.DATE, 6);
+			String endDate = md.format(c.getTime());
+			
+			html+="<input type='button' class='btn btn-info' style='margin-left:10px;' name='"+dweek+"' value='"+startDate+"||"+endDate+"' onclick='getdata(this)'/>";
+		}
+		
+		
+		
+		return html;
+		
+	}
+	
 	
 	@Autowired
 	private ShiftManager shiftManager;

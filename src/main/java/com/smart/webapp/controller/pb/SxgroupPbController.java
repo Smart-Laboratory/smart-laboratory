@@ -185,8 +185,6 @@ public class SxgroupPbController {
         
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();
-        	if(name.equals("杨俊英"))
-        		System.out.println(name);
         	
         	for(int l=1; l<j; l++) {
         		String background = "";
@@ -273,7 +271,8 @@ public class SxgroupPbController {
 				}
 				if(sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section)){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
-					
+					if(wInfo==null)
+						continue;
 					String days = getweekDays(tomonth, Integer.parseInt(a.getWeek()));
 					if(sxMap.get(wInfo)!=null){
 //						System.out.println(sxMap.get(wInfo));

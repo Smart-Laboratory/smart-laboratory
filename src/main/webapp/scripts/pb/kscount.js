@@ -1,5 +1,11 @@
+function getdata(item){
+	 var week = $(item).attr("name");
+	 window.location.href="../pb/kscount?week=" + week+"&from=" + $("#from").val()+"&to="+$("#to").val();
+ }
+
 $(function(){
-	$("#footer").css('display','none');
+	$("#weekSelect").html($("#weeks").val());
+	$(".footer").css('display','none');
 		$("#pbdata").html($("#pbtext").val());
 		$("#changeMonth").click(function(){
 			window.location.href="../pb/kscount?from=" + $("#from").val()+"&to="+$("#to").val();

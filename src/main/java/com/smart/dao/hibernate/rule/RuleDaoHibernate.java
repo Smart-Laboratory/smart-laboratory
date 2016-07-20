@@ -109,10 +109,9 @@ public class RuleDaoHibernate extends GenericDaoHibernate<Rule, Long> implements
 
 	@SuppressWarnings("unchecked")
 	public List<Index> getUsedIndex(Long id) {
-		Query query = getSession().createSQLQuery(
+		return getSession().createSQLQuery(
 			"select b.* from lab_rule a, lab_index b, lab_item c, lab_rule_item d where a.id=" + id + " and a.id=d.rule_id and d.item_id=c.id and b.index_id=c.indexid"
-		);
-		return query.list();
+		).addEntity("b", Index.class).list();
 	}
 
 	@SuppressWarnings("unchecked")

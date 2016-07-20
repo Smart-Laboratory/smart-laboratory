@@ -74,6 +74,7 @@ display: none;
 			<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 			
 			<div class="form-inline" style="float:right;">
+			<button id="ksCount" class="btn btn-success btn-sm" ><fmt:message key='pb.kscount' /></button>
 			<button id="stuPb" class="btn btn-success btn-sm" style="margin-right:20px;" ><fmt:message key='pb.stuPb' /></button>
 			<button id="preBtn" class="btn btn-success btn-sm" ><fmt:message key='pb.pre' /></button>
 			<button id="nextBtn" class="btn btn-success btn-sm"><fmt:message key='pb.next' /></button>

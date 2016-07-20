@@ -21,6 +21,8 @@
 
 <input type="hidden" id="selperson" /> 
 <input type="hidden" id="weeknum" value="${week }" /> 
+<input id="section" value="${section }" type="hidden"/>
+<input id="month" value="${month }" type="hidden"/>
 
 <div class="form-inline" style="width:1024x;">
 	<input type="text" id="date" class="form-control" sytle="width:50px;">
@@ -40,6 +42,13 @@
     		<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
   		</label></div>
 	</c:forEach>	
+	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+   		<input type="checkbox" id="special" value="">特殊班
+	</label></div>
+	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+   		<input type="checkbox" name="cleartd" value="">清空数据
+	</label></div>
+	<button class="btn btn-info btn-sm" id="clearall">清空所有数据</button>
 </div>
 <hr>
 <div id="shiftNotSelect" class="checkbox form-inline" >
@@ -67,7 +76,7 @@
 		<!--人员start-->
         <div id="relation" class="col-sm-11" style='margin:10px 15px 50px 15px;'>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="">
                     <h4 class="widget-title lighter col-sm-10">
                         <i class="ace-icon fa fa-star orange"></i>  人员选择
                     </h4>
@@ -85,6 +94,26 @@
 	
 		
 <script type="text/javascript">
+
+labChange=function(select){
+	$.ajax({
+		  type: 'POST',
+		  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+		  success:function(data){
+			  selectNoteAdd = true;
+			  var section = $(select).children().attr("title");
+			  if(section == '1320511'){
+				  window.location.href="../pb/bpb?date=" + $("#date").val()+"&section=" + section;
+			  }
+			  $("#labText").html($(select).children().html());
+			  window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
+		  }
+	});
+	
+}
+
+
+
 	/**初始化人员选择列表**/
 	 function	initPersonListBox(){
 		var personListBox = $('select[name="devicelist[]"]').bootstrapDualListbox({
@@ -97,7 +126,7 @@
 	}
 	/**加载人员选择列表**/
 	 function loadPersonListBox(){
-		$.get("../pb/bpb/ajax/getWinfo",{},function(data){
+		$.get("../pb/bpb/ajax/getWinfo",{section:$("#section").val()},function(data){
 			if(data!=null){
 				var selectDev = $('#devicelist');
 		        selectDev.empty();
@@ -134,7 +163,7 @@
 	 
 	 function getdata(item){
 		 var week = $(item).attr("name");
-		 window.location.href="../pb/bpb?week=" + week+"&date=" + $("#date").val();
+		 window.location.href="../pb/bpb?week=" + week+"&date=" + $("#date").val()+"&section=" + $("#section").val();
 	 }
 	
 	$(function(){
@@ -144,30 +173,45 @@
 		$("#labSelect").val($("#section").val());
 		$("#selperson").val("${selperson}");
 		
+		if('${query}'=='1'){
+			$("#relation").css("display","none");
+		}
+		
+		$("#clearall").click(function(){
+			$("td[name^='td']").each(function(i){
+				var id = $(this).attr("id");
+				$("#"+id).html("");
+			});
+		});
+		
 		$("#pbhead tr td").click(function(){
 			var id=this.id;
 			
-//			var month = new Date().getMonth()+1;
-//			var date = new Date().getDate();
-//			var day = id.split("-")[1];
-//			var m = $("#date").val().split("-")[1];
-//			
-//			if(m>month ||(m==month && day>=date)){
-			
-			var name = this.name;
 			var shifts=$("#"+id).html();
+			if($("#special").prop("checked")==true){
+				$("#"+id).css("background","greenyellow");
+				$("#"+id).addClass("sp");
+			}			
 			
 			$.each($("#shiftSelect input"),function(name,v){
 				if(v.checked){
+					var name = $(v).attr("name");
+					if(name=="cleartd"){
+						$("#"+id).html("");
+						shifts=null;
+						return;
+					}
+						
 					
 					if(shifts.indexOf(v.value+";")>=0){
 						shifts=shifts.replace(v.value+";","");
-					}else{
+					}else if(v.value!=""){
 						shifts = shifts + v.value+";";
 					}
 				}
 			});
-			
+			if(shifts == null)
+				return;
 			$.each($("#shiftNotSelect input"),function(name,v){
 				if(v.checked){
 					
@@ -209,7 +253,44 @@
 			var selperson = $("#selperson").val();
 			var date = $("#date").val();
 			var week = $("#weeknum").val();
-			window.location.href="../pb/bpb?week=" + week+"&date=" + date+"&selperson="+selperson;
+			window.location.href="../pb/bpb?week=" + week+"&date=" + date+"&selperson="+selperson+"&section=" + $("#section").val()+"&random=1";
+		});
+		
+		//提交
+		$("#shiftBtn").click(function() {
+			var ischecked = true;
+			if (ischecked) {
+				var section = $("#section").val();
+				var text = "";
+				var date = $("#month").val();
+				
+				var special = "";
+				$("td[name^='td']").each(function(i){
+					var id = $(this).attr("id");
+					var array = $(this).attr("id").split("-");
+					var day = "";
+					day = id.replace(array[0]+"-","");
+					var temp = "";
+					var value = $(this).html();
+					//记录特殊班次
+					
+					if($(this).attr("class").indexOf("sp")>=0)
+						special += id+";";
+					
+					temp = array[0] + ":" + day + ":" + value +",";
+					text = text + temp;
+				});
+				$.post("../pb/pb/bpbsubmit",{text:text,section:section,date:date,special:special},function(data) {
+					if(data){
+						alert("Success!");
+				//		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+					}else{
+						alert("Fail!")
+					}
+					
+				});
+				
+			}
 		});
 	})
 

@@ -1,6 +1,5 @@
 package com.smart.dao.hibernate.lis;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.TestResultDao;
-import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.lis.TestResultPK;
 
@@ -107,9 +105,10 @@ public class TestResultDaoHibernate extends
 						+ "')").list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public TestResult getListByTestId(String sampleNo,
 			String testId) {
-		 List  tList = getSession().createQuery(
+		 List<TestResult>  tList = getSession().createQuery(
 				"from TestResult where sampleNo='" + sampleNo
 						+ "' and testId  ='" + testId+ "'").list();
 		 if(null!=tList&&tList.size()>0){
@@ -156,7 +155,7 @@ public class TestResultDaoHibernate extends
 	}
 
 	public void saveAll(List<TestResult> list) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for (TestResult tr : list) {
 			s.merge(tr);
 		}
@@ -165,7 +164,7 @@ public class TestResultDaoHibernate extends
 	}
 	
 	public void deleteAll(List<TestResult> list){
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for (TestResult tr : list) {
 			s.delete(tr);
 		}

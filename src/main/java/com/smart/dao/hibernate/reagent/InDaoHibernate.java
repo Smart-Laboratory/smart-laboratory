@@ -18,7 +18,7 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 	}
 
 	public void saveAll(List<In> needSaveIn) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(In i : needSaveIn) {
 			s.saveOrUpdate(i);
 		}

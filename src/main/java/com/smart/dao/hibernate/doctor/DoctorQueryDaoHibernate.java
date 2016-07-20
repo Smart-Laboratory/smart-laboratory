@@ -41,10 +41,10 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
     }
 
     public List<Object[]> getSampleAndResult(String patientblh,String fromDate,String toDate){
-        String sql = "select s.*,p.*,t.* from l_sample s,l_process p,l_testresult t where  s.id= p.sample_id and s.sampleno=t.sampleno ";
+        String sql = "select s.*,p.*,t.* from l_sample s,l_process p,l_testresult t, l_testdescribe d where  s.id= p.sample_id and s.sampleno=t.sampleno ";
         sql += " and s.patientblh ='"+patientblh+"'";
         sql += " and substr(s.sampleNo, 0, 8) >='"+fromDate+"' " ;
-        sql += " and substr(s.sampleNo, 0, 8) <='"+toDate+"' " ;
+        sql += " and substr(s.sampleNo, 0, 8) <='"+toDate+"' and t.isprint=1 and t.testid=d.testid order by d.printord asc" ;
         System.out.println(sql);
         List<Object[]> list = getSession().createSQLQuery(sql)
                 .addEntity("s",Sample.class)

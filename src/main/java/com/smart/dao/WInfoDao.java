@@ -31,5 +31,8 @@ public interface WInfoDao extends GenericDao<WInfo, Long> {
 	
 	@Transactional
 	List<WInfo> getByType(int type);
+	
+	@Transactional
+	List<String> getNameBySection(String section);
 }
 

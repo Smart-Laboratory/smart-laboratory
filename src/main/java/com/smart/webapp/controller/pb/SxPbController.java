@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.pb.SxSchool;
+import com.smart.model.pb.WInfo;
 import com.smart.model.user.User;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
+import com.smart.service.SxSchoolManager;
 import com.smart.service.UserManager;
+import com.smart.service.WInfoManager;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -63,15 +67,18 @@ public class SxPbController {
 				sxMap.put(a.getWorker()+":"+a.getMonth().split("-")[0]+":"+a.getWeek(), a);//姓名：年：周
 			}
 		}
-		int year = yearfrom;
+		int year = 0;
 		String[] list = text.split(",");
 		for(int i=0;i<list.length;i++){
 			String arr=list[i];
 			String[] s = arr.split(":");
-			if(Integer.parseInt(s[2])==1&& i!=0){
-				year = yearfrom+1;
+//			if(Integer.parseInt(s[2])==1&& i!=0){
+//				year = yearfrom+1;
+//			}
+			year = Integer.parseInt(s[1].substring(0, 4));
+			if(s[1].substring(4, 6).equals("12") && s[2].equals("1")){
+				year = year+1;
 			}
-			
 			String nameweek = s[0]+":"+year+":"+s[2];
 //			System.out.println(nameweek);
 			SxArrange sxArrange = null;
@@ -79,7 +86,9 @@ public class SxPbController {
 			if(!sxMap.isEmpty() && sxMap.containsKey(nameweek)){
 //				System.out.println("+++++++++++++"+nameweek);
 				sxArrange = sxMap.get(nameweek);
-				if(sxArrange.getSection().equals(s.length<4?"":s[3]))
+				if(sxArrange.getSection()==null && s.length<4)
+					continue;
+				if(sxArrange.getSection()!=null && sxArrange.getSection().equals(s.length<4?"":s[3]))
 					continue;
 			}else if(s.length>=4){
 				sxArrange = new SxArrange();
@@ -87,10 +96,10 @@ public class SxPbController {
 				continue;
 			}
 			sxArrange.setWorker(s[0]);
-			if(s[1].equals("12") && s[2].equals("1")){
-				sxArrange.setMonth(year+"-01"+";"+(year-1)+"-"+s[1]);
+			if(s[1].substring(4, 6).equals("12") && s[2].equals("1")){
+				sxArrange.setMonth(year+"-01"+";"+(year-1)+"-"+s[1].substring(4, 6));
 			}else
-				sxArrange.setMonth(year+"-"+s[1]);
+				sxArrange.setMonth(year+"-"+s[1].substring(4, 6));
 			sxArrange.setWeek(s[2]);
 			if(s.length==3){
 				sxArrange.setSection("");
@@ -102,11 +111,33 @@ public class SxPbController {
 			sList.add(sxArrange);
 			
 		}
+		for(SxArrange sx : sList){
+			System.out.println(sx.getSection()+sx.getWeek()+sx.getWorker()+sx.getMonth());
+		}
 		System.out.println("保存或更新size: "+sList.size());
 		sxArrangeManager.saveAll(sList);
 		
 		
 		return true;
+	}
+	
+	Map<Long, Map<String, String>> schools = new HashMap<Long, Map<String, String>>();
+	public void inintSchoolsMap(){
+		List<SxSchool> sxSchools = sxSchoolManager.getAll();
+		for(SxSchool s : sxSchools){
+			String system = s.getSystem();
+			if(system==null || system.isEmpty())
+				continue;
+			Map<String, String> systems = new HashMap<String,String>();
+			if(schools.get(s.getId())!=null)
+				systems = schools.get(s.getId());
+			for(String str : system.split(";")){
+				if(str == null)
+					continue;
+				systems.put(str.split("=")[0], str.split("=")[1]);
+			}
+			schools.put(s.getId(), systems);
+		}
 	}
 	
 	@RequestMapping(value = "/hisdata*", method = RequestMethod.GET)
@@ -122,6 +153,11 @@ public class SxPbController {
 	
 		if(id.isEmpty())
 			return null;
+		inintSchoolsMap();
+		WInfo wInfo = wInfoManager.getByWorkId(id);
+		Map<String, String> systems = new HashMap<String,String>();
+		if(wInfo.getSchool()!=null)
+			systems = schools.get(Long.parseLong(wInfo.getSchool()));
 		
 		List<SxArrange> sxArranges = sxArrangeManager.getByName(id);
 		
@@ -156,6 +192,8 @@ public class SxPbController {
 			Map<String, Object> datarow = new HashMap<String, Object>();
 				datarow.put("section", a.getKey());
 				datarow.put("num", a.getValue());
+				if(systems!=null)
+					datarow.put("schoolnum", systems.get(a.getKey())==null?0:systems.get(a.getKey()));
 				datarows.add(datarow);
 		}
 		
@@ -244,4 +282,8 @@ public class SxPbController {
 	private ShiftManager shiftManager;
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private WInfoManager wInfoManager;
+	@Autowired
+	private SxSchoolManager sxSchoolManager;
 }

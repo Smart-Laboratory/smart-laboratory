@@ -145,42 +145,23 @@ public class SampleInputAjaxController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/old*", method = RequestMethod.GET)
+	@RequestMapping(value = "/getReceived*", method = RequestMethod.GET)
 	@ResponseBody
 	public DataResponse getOldData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String pages = request.getParameter("page");
-		String rows = request.getParameter("rows");
-		int page = Integer.parseInt(pages);
-		int row = Integer.parseInt(rows);
-		int start = row * (page - 1);
-		int end = row * page;
 		DataResponse dataResponse = new DataResponse();
 		String today = Constants.DF3.format(new Date());
 		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		int size  = sampleManager.getSampleCount(today, lab, 0, -3, "");
-		List<Sample> list = sampleManager.getSampleList(today, lab, 0, -3, "", start, end);
+		List<Sample> list = sampleManager.getReceiveList(today, lab);
 		if(list == null || list.size() == 0) {
 			return null;
 		}
-		String ids = "";
-		for(Sample s : list) {
-			ids += s.getId() + ",";
-		}
-		ids = ids.substring(0, ids.length()-1);
-		List<Process> processList = processManager.getHisProcess(ids);
+		List<Process> processList = processManager.getBySampleCondition(today, lab);
 		Map<Long, Process> processMap = new HashMap<Long, Process>();
 		for(Process p : processList) {
 			processMap.put(p.getSampleid(), p);
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(size);
-		int x = size % (row == 0 ? size : row);
-		if (x != 0) {
-			x = row - x;
-		}
-		int totalPage = (size + x) / (row == 0 ? size : row);
-		dataResponse.setPage(page);
-		dataResponse.setTotal(totalPage);
+		dataResponse.setRecords(list.size());
 		for(Sample sample : list) {
 			Process process = processMap.get(sample.getId());
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -278,6 +259,7 @@ public class SampleInputAjaxController {
 			sampleManager.remove(Long.parseLong(doctadviseno));
 			processManager.removeBySampleId(Long.parseLong(doctadviseno));
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
+			o.put("success", true);
 		} else {
 			if(operate.equals("add") && doctadviseno.isEmpty()) {
 				if(sampleManager.getBySampleNo(sampleno) != null) {
@@ -322,8 +304,10 @@ public class SampleInputAjaxController {
 					plog.setLogtime(new Date());
 					processLogManager.save(plog);
 					o.put("message", "样本号为"+ sampleno + "的标本添加成功！");
+					o.put("success", true);
 				} else {
 					o.put("message", "样本号为"+ sampleno + "的标本已存在，不能重复添加！");
+					o.put("success", false);
 				}
 				
 			} else {
@@ -363,6 +347,7 @@ public class SampleInputAjaxController {
 				sampleManager.save(sample);
 				processManager.save(process);
 				o.put("message", "样本号为"+ sampleno + "的标本编辑成功！");
+				o.put("success", true);
 			}
 		}
 		o.put("id", sample.getId());
@@ -384,6 +369,80 @@ public class SampleInputAjaxController {
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
 		o.put("requester", process.getRequester());
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(o.toString());
+		return null;
+	}
+	
+	@RequestMapping(value = "/receive*", method = RequestMethod.GET)
+	public String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Sample sample = null;
+		Process process = null;
+		String code = request.getParameter("id");
+		String sampleno = request.getParameter("sampleno");
+		if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
+			code = code.substring(0,code.length()-1);
+		}
+		JSONObject o = new JSONObject();
+		try {
+			sample = sampleManager.get(Long.parseLong(code));
+		} catch(Exception e) {
+			sample = null;
+		}
+		if(sample == null) {
+			o.put("success", 1);
+			o.put("message", "医嘱号为"+ code + "的标本不存在！");
+		} else if(!sample.getSampleNo().equals("0")) {
+			process = processManager.getBySampleId(Long.parseLong(code));
+			o.put("success", 2);
+			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
+		} else {
+			process = processManager.getBySampleId(Long.parseLong(code));
+			SampleLog slog = new SampleLog();
+			slog.setSampleEntity(sample);
+			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			slog.setLogtime(new Date());
+			slog = sampleLogManager.save(slog);
+			ProcessLog plog = new ProcessLog();
+			plog.setSampleLogId(slog.getId());
+			plog.setProcessEntity(process);
+			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			plog.setLogtime(new Date());
+			processLogManager.save(plog);
+			sample.setSampleNo(sampleno);
+			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			process.setReceivetime(new Date());
+			sampleManager.save(sample);
+			processManager.save(process);
+			o.put("success", 3);
+			o.put("message", "医嘱号为"+ code + "的标本接收成功！");
+		}
+		if(sample != null) {
+			o.put("id", sample.getId());
+			o.put("sampleno", sample.getSampleNo());
+			o.put("pid", sample.getPatientId());
+			o.put("pname", sample.getPatientname());
+			o.put("sex", sample.getSexValue());
+			o.put("age", sample.getAge() + sample.getAgeunit());
+			o.put("diag", sample.getDiagnostic());
+			o.put("exam", sample.getInspectionName());
+			o.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
+			o.put("cycle", sample.getCycle());
+			o.put("fee", sample.getFee() + "");
+			o.put("feestatus", sample.getFeestatus());
+			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
+			o.put("shm", sample.getStayHospitalModelValue());
+			o.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
+			o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			o.put("part", sample.getPart() == null ? "" : sample.getPart());
+			o.put("requestmode", sample.getRequestMode());
+			o.put("requester", process.getRequester());
+		}
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
 		return null;

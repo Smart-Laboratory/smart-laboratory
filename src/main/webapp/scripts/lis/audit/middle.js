@@ -1203,14 +1203,46 @@
 			url: encodeURI('/item.jsp?page='+item),
 	  		dataType: 'html',
 	  		success: function(data) {
-				var data2=dataProcess(data);
+	  			openKnowledgeLayer(data);
+				/*var data2=dataProcess(data);
 	  	    	document.getElementById("dialog").innerHTML = data2;
 	  	    	$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
 				$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-				openKnowledgeDialog();
+				openKnowledgeDialog();*/
 	  	  	}
 	  	});
  	}
+	
+	function openKnowledgeLayer(data) {
+		var dataArray = data.split('<div class="tab-');
+		var title = new Array();
+		for(var i=0; i<dataArray.length;i++){
+			var str = dataArray[i].replace('">',"!@#$%^&*");
+			if(i!=0){
+				var arr = str.split("!@#$%^&*");
+				title[i] = arr[0];
+				dataArray[i] = arr[1].replace("<\/div>",""); 
+			}
+			if(i==dataArray.length-1){
+				dataArray[i] = dataArray[i].replace("<\/div>","");
+				dataArray[i] = dataArray[i].replace("<\/div>","");
+			}
+		}
+		var jsonArr = new Array();
+		for(var j=0;j<dataArray.length;j++){
+			if(j!=0) {
+				var jsonObj = {};
+				jsonObj["title"] = title[j];
+				jsonObj["content"] = dataArray[j];
+				jsonArr.push(jsonObj)
+			}
+		}
+		layer.tab({
+		  area: ['1000px', '360px'],
+		  tab: jsonArr
+		});
+		
+	}
 	
 	function dataProcess(data){
 		var title="<ul>";

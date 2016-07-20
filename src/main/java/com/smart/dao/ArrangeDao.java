@@ -41,4 +41,10 @@ public interface ArrangeDao extends GenericDao<Arrange, Long> {
 	
 	@Transactional
 	List<Arrange> getBySectionMonth(String month, String section);
+	
+	@Transactional
+	List<Arrange> getMonthArrangeByshift(String shift, String month);
+	
+	@Transactional
+	List<Arrange> getByDay(String day);
 }

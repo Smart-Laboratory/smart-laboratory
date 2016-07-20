@@ -158,13 +158,22 @@ h2 {
 	border-top-width:0px !important;
 }
 
+#gs_lisPass {
+	padding:0px 0px 0px;
+}
+
 #gs_sample {
-	height: 100%;
-	font-size:12px;
-	font-weight:700;
-	margin:0px;
-	color:#000000;
-	padding:1px,1px;
+	padding:0px 0px 0px;
+}
+
+#gs_mark {
+	height:28px;
+	padding: 0px 0px;
+}
+
+#gs_status {
+	height:28px;
+	padding: 0px 0px;
 }
 
 #gview_s3list .ui-jqgrid-htable th {

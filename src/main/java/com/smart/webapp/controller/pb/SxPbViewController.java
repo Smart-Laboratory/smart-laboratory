@@ -20,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.pb.SxSchool;
 import com.smart.model.pb.WInfo;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
+import com.smart.service.SxSchoolManager;
 import com.smart.service.WInfoManager;
 
 @Controller
@@ -96,20 +98,20 @@ public class SxPbViewController {
         int year = Integer.parseInt(from.split("-")[0]);
 //        System.out.println(wInfos.size()+":"+maxWeek);
 		String[][] shifts = new String[wInfos.size()+1][maxWeek+1];
-		shifts[0][0] = "<th style='width:120px;'>"+year+"</th>";
+		shifts[0][0] = "<th style='width:180px;'>"+year+"</th>";
 		int yeartemp = year;
 		for(int i=1;i<=maxWeek;i++){
 			int dweek = startweek+i-1;
 			if(dweek>yearMaxWeek){
 				dweek-=yearMaxWeek;
-				yeartemp+=1;
+				yeartemp=year+1;
 			}
 			if(i>1)
 				c.add(GregorianCalendar.DATE, 1);
-			String startDate = md.format(c.getTime());
+			String startDate = ymd.format(c.getTime());
 			c.add(GregorianCalendar.DATE, 6);
-			String endDate = md.format(c.getTime());
-			shifts[0][i]="<th name='"+startDate.split("-")[0]+"week' style='width:120px;'> <a onclick=\"sectionInfo("+dweek+","+yeartemp+")\">第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</a></th>" ;
+			String endDate = ymd.format(c.getTime());
+			shifts[0][i]="<th name='"+startDate.split("-")[0]+startDate.split("-")[1]+"week' style='width:180px;'> <a onclick=\"sectionInfo("+dweek+","+yeartemp+")\">第 "+dweek+" 周<br>("+startDate+"-"+endDate+")</a></th>" ;
 			
 		}
 		
@@ -121,19 +123,35 @@ public class SxPbViewController {
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
 //				System.out.println(a.getWorker()+":"+a.getWeek()+":"+a.getSection()+a.getMonth());
-				sxMap.put(a.getWorker()+":"+a.getWeek(), a);
+				sxMap.put(a.getWorker()+":"+a.getMonth().substring(0, 4)+a.getWeek(), a);
 			}
 		}
 		
+		//实习生学校map
+		Map<Long, String> sxschoolMap = new HashMap<Long,String>();
+		List<SxSchool> schools = sxSchoolManager.getAll();
+		for(SxSchool s : schools){
+			sxschoolMap.put(s.getId(), s.getNamesx());
+		}
+		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"</a></td>";
+			
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\">"+wInfos.get(j).getName()+"("+(wInfos.get(j).getSchool()==null?"":sxschoolMap.get(Long.parseLong(wInfos.get(j).getSchool())))+")"+"</a></td>";
+			yeartemp = year;
+			
+			
 			for(int i=1;i<maxWeek+1;i++){
 				int dweek = startweek+i-1;
-				if(dweek>yearMaxWeek)
+				if(dweek>yearMaxWeek){
 					dweek-=yearMaxWeek;
-				String month = shifts[0][i].substring(10,12);
-				if(sxMap.containsKey(wInfos.get(j).getWorkid()+":"+dweek) && sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()!=null){
-					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getWorkid()+":"+dweek).getSection()+"</td>";
+					yeartemp=year+1;
+				}
+//				if(wInfos.get(j).getWorkid().equals("9022") && dweek==23){
+//					SxArrange a = sxMap.get(wInfos.get(j).getWorkid()+":"+yeartemp+dweek);
+//				}
+				String month = shifts[0][i].substring(10,16);
+				if(sxMap.containsKey(wInfos.get(j).getWorkid()+":"+yeartemp+dweek) && sxMap.get(wInfos.get(j).getWorkid()+":"+yeartemp+dweek).getSection()!=null){
+					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'>"+sxMap.get(wInfos.get(j).getWorkid()+":"+yeartemp+dweek).getSection()+"</td>";
 				}else{
 					shifts[j+1][i] = "<td name='td' id='"+wInfos.get(j).getWorkid()+"-"+dweek+"-"+month+"'></td>";
 				}
@@ -215,4 +233,6 @@ public class SxPbViewController {
 	private ShiftManager shiftManager;
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
+	@Autowired
+	private SxSchoolManager sxSchoolManager;
 }

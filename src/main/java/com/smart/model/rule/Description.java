@@ -173,7 +173,7 @@ private Long id;
 	/**
 	 * 使用次数
 	 */
-	@Column(name = "number")
+	@Column(name = "count")
 	public int getNumber() {
 		return number;
 	}

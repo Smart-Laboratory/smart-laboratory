@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.pb;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.zju.api.service.RMIService;
 import com.smart.model.pb.Shift;
+import com.smart.model.pb.SxSchool;
 import com.smart.service.ShiftManager;
-
+import com.smart.service.SxSchoolManager;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.model.pb.DayShift;
@@ -57,6 +60,15 @@ public class PbszController extends PbBaseController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private String section = "";
 	
+	private Map<Long, String> schoolMap = new HashMap<Long,String>();
+	
+	public void initSchoolMap(){
+		List<SxSchool> schools = sxSchoolManager.getAll();
+		for(SxSchool s : schools){
+			schoolMap.put(s.getId(), s.getName());
+		}
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user = userManager.getUserByUsername(request.getRemoteUser());
@@ -72,7 +84,13 @@ public class PbszController extends PbBaseController {
 				}
 			}
 		}
+		Map<String, String> sxshifts = new HashMap<String,String>();
+		List<Shift> sx = shiftManager.getSx();
+		for(Shift shift : sx){
+			sxshifts.put(shift.getAb(), shift.getName());
+		}
 		
+		request.setAttribute("sxshifts", sxshifts);
 		request.setAttribute("departList", departList);
 		request.setAttribute("section", section);
 		return new ModelAndView();
@@ -92,6 +110,8 @@ public class PbszController extends PbBaseController {
 			section = sec;
 		}
 		List<WInfo> list = null;
+		if(schoolMap.size()==0)
+			initSchoolMap();
 		
 		if(search.equals("true")){
 			String searchField = request.getParameter("searchField");
@@ -133,7 +153,7 @@ public class PbszController extends PbBaseController {
 				map.put("name", wi.getName());
 				map.put("sex", wi.getSexString());
 				map.put("section", wi.getSection());
-				map.put("worktime", sdf.format(wi.getWorktime()));
+				map.put("worktime", wi.getWorktime()==null?"":sdf.format(wi.getWorktime()));
 				map.put("type", wi.getTypeString());
 				map.put("phone", wi.getPhone());
 				map.put("shift", wi.getShift());
@@ -147,6 +167,7 @@ public class PbszController extends PbBaseController {
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
 				map.put("isactive", wi.getIsActive()==1?"使用":"不使用");
+				map.put("school", wi.getSchool()==null?"无":schoolMap.get(Long.parseLong(wi.getSchool())));
 				dataRows.add(map);
 				index++;
 			}
@@ -240,7 +261,9 @@ public class PbszController extends PbBaseController {
 	public DataResponse getDayShift(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int page = Integer.parseInt(request.getParameter("page"));
 		int row = Integer.parseInt(request.getParameter("rows"));
-		List<DayShift> list = dayShiftManager.getBySection(section);
+
+		List<SxSchool> list = sxSchoolManager.getAll();
+		
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 
@@ -259,11 +282,13 @@ public class PbszController extends PbBaseController {
 		int index = 0;
 		while (index < row && (start + index) < listSize) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			DayShift dsh = list.get(start + index);
+			SxSchool dsh = list.get(start + index);
 			map.put("id", dsh.getId());
-			map.put("week", dsh.getWeek());
-			map.put("section", labMap.get(dsh.getSection()));
-			map.put("shift", dsh.getShift());
+			map.put("phone", dsh.getPhone());
+			map.put("name", dsh.getName());
+			map.put("namesx", dsh.getNamesx());
+			map.put("address", dsh.getAddress());
+			map.put("system", dsh.getSystem());
 			dataRows.add(map);
 			index++;
 		}
@@ -287,18 +312,21 @@ public class PbszController extends PbBaseController {
 		String workid = request.getParameter("workid");
 		String phone = request.getParameter("phone");
 		String shift = request.getParameter("shift");
-		int ord1 = Integer.parseInt(request.getParameter("ord1"));
-		int ord2 = Integer.parseInt(request.getParameter("ord2"));
-		int ord3 = Integer.parseInt(request.getParameter("ord3"));
-		int ord4 = Integer.parseInt(request.getParameter("ord4"));
-		int ord5 = Integer.parseInt(request.getParameter("ord5"));
-		int ord6 = Integer.parseInt(request.getParameter("ord6"));
+		String ord1 = request.getParameter("ord1");
+		String ord2 = request.getParameter("ord2");
+		String ord3 = request.getParameter("ord3");
+		String ord4 = request.getParameter("ord4");
+		String ord5 = request.getParameter("ord5");
+		String ord6 = request.getParameter("ord6");
 		Date worktime = sdf.parse(request.getParameter("worktime"));
 		System.out.println(worktime.getTime());
 		int type = Integer.parseInt(request.getParameter("type"));
-		double holiday = Double.parseDouble(request.getParameter("holiday"));
+		String holiday = request.getParameter("holiday");
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		int isActive = Integer.parseInt(request.getParameter("isactive"));
+		String school = request.getParameter("school");
+		if(school.equals(0))
+			school = null;
 		
 		WInfo wi = new WInfo();
 		if(oper.equals("add")) {
@@ -310,15 +338,16 @@ public class PbszController extends PbBaseController {
 			wi.setWorkid(workid);
 			wi.setPhone(phone);
 			wi.setShift(getShift(section));
-			wi.setOrd1(ord1);
-			wi.setOrd2(ord2);
-			wi.setOrd3(ord3);
-			wi.setOrd4(ord4);
-			wi.setOrd5(ord5);
-			wi.setOrd6(ord6);
-			wi.setHoliday(holiday);
-			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
+			wi.setOrd1(ord1==null?0:Integer.parseInt(ord1));
+			wi.setOrd2(ord2==null?0:Integer.parseInt(ord2));
+			wi.setOrd3(ord3==null?0:Integer.parseInt(ord3));
+			wi.setOrd4(ord4==null?0:Integer.parseInt(ord4));
+			wi.setOrd5(ord5==null?0:Integer.parseInt(ord5));
+			wi.setOrd6(ord6==null?0:Integer.parseInt(ord6));
+			wi.setHoliday(holiday==null?0:Double.parseDouble(holiday));
+			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
+			wi.setSchool(school);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi = wInfoManager.get(Long.parseLong(id));
@@ -330,16 +359,17 @@ public class PbszController extends PbBaseController {
 			wi.setWorkid(workid);
 			wi.setPhone(phone);
 			wi.setShift(shift);
-			wi.setOrd1(ord1);
-			wi.setOrd2(ord2);
-			wi.setOrd3(ord3);
-			wi.setOrd4(ord4);
-			wi.setOrd5(ord5);
-			wi.setOrd6(ord6);
-			wi.setHoliday(holiday);
+			wi.setOrd1(ord1==null?0:Integer.parseInt(ord1));
+			wi.setOrd2(ord2==null?0:Integer.parseInt(ord2));
+			wi.setOrd3(ord3==null?0:Integer.parseInt(ord3));
+			wi.setOrd4(ord4==null?0:Integer.parseInt(ord4));
+			wi.setOrd5(ord5==null?0:Integer.parseInt(ord5));
+			wi.setOrd6(ord6==null?0:Integer.parseInt(ord6));
+			wi.setHoliday(holiday==null?0:Double.parseDouble(holiday));
 			wi.setDefeHoliday(wi.getDefeHoliday());
-			wi.setDefeholidayhis(Double.parseDouble(defeHolidayhis));
+			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
+			wi.setSchool(school);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));
@@ -434,22 +464,28 @@ public class PbszController extends PbBaseController {
 	public boolean dbcedit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String oper = request.getParameter("oper");
 		String id = request.getParameter("id");
-		String week = request.getParameter("week");
-		String section = request.getParameter("section");
-		String shift = request.getParameter("shift");
+		String name = request.getParameter("name");
+		String namesx = request.getParameter("namesx");
+		String phone = request.getParameter("phone");
+		String address = request.getParameter("address");
+		String system = request.getParameter("system");
 		
-		DayShift dsh = new DayShift();
+		SxSchool dsh = new SxSchool();
 		if(oper.equals("add")) {
-			dsh.setWeek(week);
-			dsh.setSection(section);
-			dsh.setShift(getShift(section));
-			dayShiftManager.save(dsh);
+			dsh.setName(name);
+			dsh.setNamesx(namesx);
+			dsh.setPhone((phone==null||phone.isEmpty())?0:Integer.parseInt(phone));
+			dsh.setAddress(address);
+			dsh.setSystem(system);
+			sxSchoolManager.save(dsh);
 		} else if (oper.equals("edit")) {
 			dsh.setId(Long.parseLong(id));
-			dsh.setWeek(week);
-			dsh.setSection(section);
-			dsh.setShift(shift);
-			dayShiftManager.save(dsh);
+			dsh.setName(name);
+			dsh.setNamesx(namesx);
+			dsh.setPhone((phone==null||phone.isEmpty())?0:Integer.parseInt(phone));
+			dsh.setAddress(address);
+			dsh.setSystem(system);
+			sxSchoolManager.save(dsh);
 		} else {
 			dayShiftManager.remove(Long.parseLong(id));
 		}
@@ -479,4 +515,25 @@ public class PbszController extends PbBaseController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "/ajax/getSchool*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSchool(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		List<SxSchool> schools = sxSchoolManager.getAll();
+		String sname="0:无;";
+		for(SxSchool s : schools){
+			sname += s.getId()+":"+s.getName()+";";
+		}
+		sname = sname.substring(0,sname.length()-1);
+		
+		JSONObject o = new JSONObject();
+		o.put("schools", sname);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(o.toString());
+		return null;
+	}
+	
+	@Autowired
+	private SxSchoolManager sxSchoolManager;
 }

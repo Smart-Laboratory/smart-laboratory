@@ -105,4 +105,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public String getReceiveSampleno(String name, String lab, String today) {
 		return sampleDao.getReceiveSampleno(name, lab, today);
 	}
+
+	public List<Sample> getReceiveList(String text, String lab) {
+		return sampleDao.getReceiveList(text, lab);
+	}
 }

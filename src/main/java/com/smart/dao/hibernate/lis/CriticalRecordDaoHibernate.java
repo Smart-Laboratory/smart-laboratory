@@ -17,7 +17,7 @@ public class CriticalRecordDaoHibernate extends GenericDaoHibernate<CriticalReco
 	}
 
 	public void saveAll(List<CriticalRecord> updateCriticalRecord) {
-		Session s = getSession();
+		Session s = getSessionFactory().openSession();
 		for(CriticalRecord cr : updateCriticalRecord) {
 			s.saveOrUpdate(cr);
 		}
