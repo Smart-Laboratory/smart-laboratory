@@ -267,7 +267,6 @@ public class SearchAjaxController extends BaseAuditController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-
 		List<Index> desList =  indexManager.getIndexs(name);
 		if(desList.size()>10)
 			desList = desList.subList(0, 10);
@@ -288,8 +287,45 @@ public class SearchAjaxController extends BaseAuditController {
 		response.getWriter().print(array.toString());
 		return null;
 	}
-    
-    @RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
+
+	/**
+	 * 抗生素
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+     */
+	@RequestMapping(value = "/searchAntibiotic", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchAntibiotic(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Index> desList =  indexManager.getAntibioticList(name,0,0,"","");
+		if(desList.size()>10)
+			desList = desList.subList(0, 10);
+		JSONArray array = new JSONArray();
+
+		if (desList != null) {
+			for (Index d : desList) {
+
+				JSONObject o = new JSONObject();
+				o.put("id", d.getId());
+				o.put("indexid", d.getIndexId());
+				o.put("ab", d.getEnglish());
+				o.put("name", d.getName());
+				array.put(o);
+			}
+		}
+
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+
+	@RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
 	@ResponseBody
 	public String searchBag(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

@@ -29,11 +29,11 @@ public class WInfo {
 	private String phone;
 	private String shift;
 	private int ord1=0;
-	private int ord2;
-	private int ord3;
-	private int ord4;
-	private int ord5;
-	private int ord6;
+	private int ord2=0;
+	private int ord3=0;
+	private int ord4=0;
+	private int ord5=0;
+	private int ord6=0;
 	private int isActive;
 	
 	private double holiday;//年休

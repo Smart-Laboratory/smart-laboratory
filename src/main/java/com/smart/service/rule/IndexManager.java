@@ -111,4 +111,62 @@ public interface IndexManager extends GenericManager<Index, Long> {
      */
 	List<Index> getIndexsByQueryIds(String ids);
 
+	/**
+	 * 获取细菌列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	List<Index> getBacteriaList(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 获取细菌列表记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	int getBacteriaListCount(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 细菌
+	 * @param id
+	 * @return
+     */
+	Index getBacteriaById(String id);
+
+	/**
+	 * 抗生素列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	List<Index> getAntibioticList(String query, int start, int end, String sidx, String sord) ;
+
+	/**
+	 * 抗生素记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	int getAntibioticListCount(String query, int start, int end, String sidx, String sord);
+
+	/**
+	 * 抗生素
+	 * @param id
+	 * @return
+     */
+	Index getAntibioticById(String id);
+
 }

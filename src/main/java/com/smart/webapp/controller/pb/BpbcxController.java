@@ -179,21 +179,31 @@ public class BpbcxController extends PbBaseController{
         //获取排班记录 暂时不写
         for(int l=1; l<j; l++) {
         	Date date = c.getTime();
+        	String sday = sdf1.format(date);
         	for(int k=2; k<i; k++) {
         		String name = map.get(k).getName();
-        		String sday = sdf1.format(date);
+        		
         		String background = "";
-        		if(l==6 || l==7){
-        			background = "style='background:#7CFC00'";
+//        		Date date = sdf1.parse(tomonth + "-" + l);
+//        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
+        		if(arrMap.get(name + "-" + sday+"d1")!=null && arrMap.get(name + "-" + sday+"d1").getState()==5){
+        			background = "style='background:greenyellow'";
         		}
         		//上午班
+        		if((name + "-" + sday).equals("9号-2016-07-21")){
+        			Arrange a = arrMap.get(name + "-" + sday+"d1");
+        		}
         		if (arrMap.get(name + "-" + sday+"d1") == null || arrMap.get(name + "-" + sday+"d1").getWorker() == null ) {
         			String td = "";
         			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">";
         			td += "</td>";
         			shifts[l*2-1][k] = td;
         		} else{
-        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
+        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
+        		}
+        		background="";
+        		if(arrMap.get(name + "-" + sday+"d2")!=null && arrMap.get(name + "-" + sday+"d2").getState()==5){
+        			background = "style='background:greenyellow'";
         		}
         		//下午班
         		if (arrMap.get(name + "-" + sday +"d2") == null || arrMap.get(name + "-" + sday +"d2").getWorker() == null ) {
@@ -204,10 +214,17 @@ public class BpbcxController extends PbBaseController{
         		} else{
             		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' >" + arrMap.get(name + "-" + sday +"d2").getWorker() + "</td>";
         		}
-        		startday++;
+//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
+//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
 //        		}
             }
         	c.add(GregorianCalendar.DATE, 1);
+        	//月休、月班、年休
+//        	shifts[j][k] = "<th class='nx' name='nx"+name+"' id='nx"+name + "' >"+map.get(k).getHoliday()+"</th>";
+//        	shifts[j+1][k] = "<th class='jx' name='jx"+name+"' id='jx"+name + "' >"+map.get(k).getDefeHolidayNum()+"</th>";
+//        	shifts[j+2][k] = "<th class='yx' name='yx"+name+"' id='yx"+name + "' ></th>";
+//        	shifts[j+3][k] = "<th class='yb' name='yb"+name+"' id='yb"+name + "' ></th>";
+//        	shifts[j+4][k] = "<th class='yjx' name='yjx"+name+"' id='yjx"+name + "' ></th>";
         }
         
         ModelAndView view = new ModelAndView();

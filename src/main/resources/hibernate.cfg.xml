@@ -8,6 +8,10 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping class="com.smart.model.micro.DrugGroupDetails"/>
+        <mapping class="com.smart.model.micro.DrugGroup"/>
+        <mapping class="com.smart.model.micro.CultureMedium"/>
+        <mapping class="com.smart.model.micro.MicroItemInfo"/>
         <mapping class="com.smart.model.doctor.SampleAndResultVo"/>
         <mapping class="com.smart.model.doctor.LeftVo"/>
         <mapping class="com.smart.model.lis.CalculateFormula"/>

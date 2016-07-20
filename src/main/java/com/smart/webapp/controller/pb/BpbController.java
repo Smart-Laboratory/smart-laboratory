@@ -87,6 +87,8 @@ public class BpbController extends PbBaseController {
 		//人员班次map
 		Map<String, String> wshifts = new HashMap<String,String>();
 		Map<String, String> nowshifts = new HashMap<String,String>();
+		
+		String notselPerson = "";//没有选中的排班人员
 		if(selperson!=null && !selperson.isEmpty()){
 			for(String person : selperson.split(",")){
 				wshifts.put(person, person);
@@ -94,6 +96,7 @@ public class BpbController extends PbBaseController {
 			for(WInfo w:wiList){
 				if(!selperson.contains(w.getName())){
 					nowshifts.put(w.getName(), w.getName());
+					notselPerson += w.getName() + ",";
 				}
 			}
 		}else{
@@ -228,14 +231,15 @@ public class BpbController extends PbBaseController {
         if(arrMap.size()>0 && random.equals("0")){
 	        for(int l=1; l<j; l++) {
 	        	Date date = c.getTime();
+	        	String sday = sdf1.format(date);
 	        	for(int k=2; k<i; k++) {
 	        		String name = map.get(k).getName();
-	        		String sday = sdf1.format(date);
+	        		
 	        		String background = "";
 //	        		Date date = sdf1.parse(tomonth + "-" + l);
 //	        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
-	        		if(l==6 || l==7){
-	        			background = "style='background:#7CFC00'";
+	        		if(arrMap.get(name + "-" + sday+"d1")!=null && arrMap.get(name + "-" + sday+"d1").getState()==5){
+	        			background = "style='background:greenyellow'";
 	        		}
 	        		//上午班
 	        		if((name + "-" + sday).equals("9号-2016-07-21")){
@@ -247,7 +251,11 @@ public class BpbController extends PbBaseController {
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
+	        		}
+	        		background="";
+	        		if(arrMap.get(name + "-" + sday+"d2")!=null && arrMap.get(name + "-" + sday+"d2").getState()==5){
+	        			background = "style='background:greenyellow'";
 	        		}
 	        		//下午班
 	        		if (arrMap.get(name + "-" + sday +"d2") == null || arrMap.get(name + "-" + sday +"d2").getWorker() == null ) {
@@ -258,7 +266,6 @@ public class BpbController extends PbBaseController {
 	        		} else{
 	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' >" + arrMap.get(name + "-" + sday +"d2").getWorker() + "</td>";
 	        		}
-	        		startday++;
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
 	//        		}
@@ -273,15 +280,19 @@ public class BpbController extends PbBaseController {
 	        }
         }else {
         	//生成随机排班数组
-            Map<String, String> shuffleMap = generatePbMap(selperson,bshifts);
+            Map<String, String> shuffleMap = new HashMap<String,String>();
+            if(random.equals("1")){
+            	shuffleMap = generatePbMap(notselPerson.substring(0, notselPerson.length()-1),bshifts);
+            }
             
             for(int l=1; l<j; l++) {
             	String sday = "";
 	        	
             	Date date = c.getTime();
+            	sday = sdf1.format(date);
 	        	for(int k=2; k<i; k++) {
 	        		String name = map.get(k).getName();
-	        		sday = sdf1.format(date);
+	        		
 	        		String background = "";
 //	        		Date date = sdf1.parse(tomonth + "-" + l);
 //	        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
@@ -289,16 +300,22 @@ public class BpbController extends PbBaseController {
 	        			background = "style='background:#7CFC00'";
 	        		}
 	        		//上午班
-	        		if (shuffleMap.get(name + "-" + l+"d1") == null) {
+	        		if(arrMap.get(name + "-" + sday+"d1") != null && arrMap.get(name + "-" + sday+"d1").getWorker() != null){
+	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+arrMap.get(name + "-" + sday+"d1").getWorker()+"</td>";
+	        		}
+	        		else if(shuffleMap.get(name + "-" + l+"d1") == null) {
 	        			String td = "";
 	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day gx' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+shuffleMap.get(name + "-" + l +"d1")+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+shuffleMap.get(name + "-" + l +"d1")+"</td>";
 	        		}
 	        		//下午班
-	        		if (shuffleMap.get(name + "-" + l +"d2") == null ) {
+	        		if(arrMap.get(name + "-" + sday+"d2") != null && arrMap.get(name + "-" + sday+"d2").getWorker() != null){
+	        			shifts[l*2][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2'  "+background+">"+arrMap.get(name + "-" + sday+"d2").getWorker()+"</td>";
+	        		}
+	        		else if (shuffleMap.get(name + "-" + l +"d2") == null ) {
 	        			String td = "";
 	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' "+background+">";
 	        			td += "</td>";
@@ -306,7 +323,6 @@ public class BpbController extends PbBaseController {
 	        		} else{
 	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' >" + shuffleMap.get(name + "-" + l +"d2") + "</td>";
 	        		}
-	        		startday++;
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
 	//        		}

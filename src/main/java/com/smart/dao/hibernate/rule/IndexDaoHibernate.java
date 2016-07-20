@@ -58,6 +58,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return new Integer(q.uniqueResult() + "");
 	}
 
+
 	// 待增加疾病种类和检验专业的搜索
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexsByCategory(String sample, int pageNum, String field, boolean isAsc) {
@@ -134,7 +135,131 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	public int getIndexsByNameCount(String name) {
 		return ((Number)getSession().createQuery("select count(*) from Index where name like '"+name+"%'").iterate().next()).intValue();
 	}
-	
-	
 
+	/**
+	 * 获取细菌列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	public List<Index> getBacteriaList(String query, int start, int end, String sidx, String sord) {
+		return getIndexs("细菌",query,start,end,sidx,sord);
+	}
+
+	/**
+	 * 获取细菌记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	public int getBacteriaListCount(String query, int start, int end, String sidx, String sord) {
+		return getIndexsCount("细菌",query,start,end,sidx,sord);
+	}
+
+	/**
+	 * 获取细菌
+	 * @param id
+     * @return
+     */
+	public Index getBacteriaById(String id){
+		return getIndex("细菌",id);
+	}
+
+	/**
+	 * 获取抗生素列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+	 * @return
+	 */
+	public List<Index> getAntibioticList(String query, int start, int end, String sidx, String sord) {
+		return getIndexs("抗生素",query,start,end,sidx,sord);
+	}
+
+	/**
+	 * 获取抗生素记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+	 * @return
+	 */
+	public int getAntibioticCount(String query, int start, int end, String sidx, String sord) {
+		return getIndexsCount("抗生素",query,start,end,sidx,sord);
+	}
+
+	/**
+	 * 获取抗生素
+	 * @param id
+	 * @return
+	 */
+	public Index getAntibioticById(String id){
+		return getIndex("抗生素",id);
+	}
+
+	/**
+	 *
+	 * @param query
+	 * @param type  类别
+	 * @param start
+	 * @param end
+	 * @param sidx
+     * @param sord
+     */
+	private int getIndexsCount(String type,String query, int start, int end, String sidx, String sord){
+		String sql = "select count(*)  from Index  where 1=1 and testClass=:testClass";
+		if(query != null && !query.equals(""))
+			sql += " and name like:name" ;
+		sidx = sidx.equals("") ? "id" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		Query q =  getSession().createQuery(sql);
+		q.setString("testClass",type);
+		if(query != null && !query.equals("")){
+			q.setString("name","%" + query + "%");
+		}
+
+
+		return new Integer(q.uniqueResult() + "");
+	}
+
+	private List<Index> getIndexs(String type,String query,int start, int end, String sidx, String sord) {
+		String sql = "from Index  where 1=1 and testClass=:testClass";
+		if(query != null && !query.equals(""))
+			sql += " and name like:name" ;
+		sidx = sidx.equals("") ? "id" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		Query q = getSession().createQuery(sql);
+		if(query != null && !query.equals("")){
+			q.setString("name","%" + query + "%");
+		}
+		q.setString("testClass",type);
+		//System.out.println(sql);
+		if(end !=0){
+			q.setFirstResult(start);
+			q.setMaxResults(end);
+		}
+		return q.list();
+	}
+
+	private Index getIndex(String type,String id) {
+		String sql = "from Index where id =:id and testClass=:testClass";
+		Query query = getSession().createQuery(sql);
+		query.setString("id",id);
+		query.setString("testClass",type);
+		List indexs = query.list();
+		if (indexs == null || indexs.isEmpty()) {
+			return null;
+		} else {
+			return (Index)indexs.get(0);
+		}
+	}
 }

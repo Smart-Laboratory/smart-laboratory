@@ -56,7 +56,7 @@ public class DictionaryController {
         List<Dictionary> list = new ArrayList<Dictionary>();
         int size = dictionaryManager.getDictionaryCount(query,type);
 
-        System.out.println("type--->"+type);
+        //System.out.println("type--->"+type);
         list =dictionaryManager.getDictionaryList(query,type,start,end,sidx,sord);
 
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();

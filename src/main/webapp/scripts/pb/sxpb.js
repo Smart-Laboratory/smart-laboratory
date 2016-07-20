@@ -144,10 +144,12 @@ $(function() {
 		$("#nextBtn").addClass("disabled");
 	}
 	$("#preBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page)+"&week="+($("#week").val());
+		if(page!=1)
+			window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(--page)+"&week="+($("#week").val());
 	});
 	$("#nextBtn").click(function() {
-		window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page)+"&week="+($("#week").val());
+		if(pages!=1)
+			window.location.href="../pb/sxpb?from=" + $("#from").val()+"&to="+$("#to").val()+"&page="+(++page)+"&week="+($("#week").val());
 	});
 	
 	

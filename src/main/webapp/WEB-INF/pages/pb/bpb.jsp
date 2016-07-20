@@ -43,8 +43,12 @@
   		</label></div>
 	</c:forEach>	
 	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+   		<input type="checkbox" id="special" value="">特殊班
+	</label></div>
+	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
    		<input type="checkbox" name="cleartd" value="">清空数据
 	</label></div>
+	<button class="btn btn-info btn-sm" id="clearall">清空所有数据</button>
 </div>
 <hr>
 <div id="shiftNotSelect" class="checkbox form-inline" >
@@ -107,6 +111,9 @@ labChange=function(select){
 	});
 	
 }
+
+
+
 	/**初始化人员选择列表**/
 	 function	initPersonListBox(){
 		var personListBox = $('select[name="devicelist[]"]').bootstrapDualListbox({
@@ -170,28 +177,41 @@ labChange=function(select){
 			$("#relation").css("display","none");
 		}
 		
+		$("#clearall").click(function(){
+			$("td[name^='td']").each(function(i){
+				var id = $(this).attr("id");
+				$("#"+id).html("");
+			});
+		});
+		
 		$("#pbhead tr td").click(function(){
 			var id=this.id;
 			
 			var shifts=$("#"+id).html();
+			if($("#special").prop("checked")==true){
+				$("#"+id).css("background","greenyellow");
+				$("#"+id).addClass("sp");
+			}			
 			
 			$.each($("#shiftSelect input"),function(name,v){
 				if(v.checked){
 					var name = $(v).attr("name");
 					if(name=="cleartd"){
 						$("#"+id).html("");
+						shifts=null;
 						return;
 					}
 						
 					
 					if(shifts.indexOf(v.value+";")>=0){
 						shifts=shifts.replace(v.value+";","");
-					}else{
+					}else if(v.value!=""){
 						shifts = shifts + v.value+";";
 					}
 				}
 			});
-			
+			if(shifts == null)
+				return;
 			$.each($("#shiftNotSelect input"),function(name,v){
 				if(v.checked){
 					
@@ -243,6 +263,8 @@ labChange=function(select){
 				var section = $("#section").val();
 				var text = "";
 				var date = $("#month").val();
+				
+				var special = "";
 				$("td[name^='td']").each(function(i){
 					var id = $(this).attr("id");
 					var array = $(this).attr("id").split("-");
@@ -250,11 +272,15 @@ labChange=function(select){
 					day = id.replace(array[0]+"-","");
 					var temp = "";
 					var value = $(this).html();
+					//记录特殊班次
+					
+					if($(this).attr("class").indexOf("sp")>=0)
+						special += id+";";
 					
 					temp = array[0] + ":" + day + ":" + value +",";
 					text = text + temp;
 				});
-				$.post("../pb/pb/bpbsubmit",{text:text,section:section,date:date},function(data) {
+				$.post("../pb/pb/bpbsubmit",{text:text,section:section,date:date,special:special},function(data) {
 					if(data){
 						alert("Success!");
 				//		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();

@@ -39,9 +39,19 @@
 		<table id="bctable"></table>
 		<div id="bcpager"></div>
 	</div>
-	<div id="tabs-3">
-		<table id="sxschooltable"></table>
-		<div id="sxschoolpager"></div>
+	<div id="tabs-3" class="colsm-12">
+		<div class="col-sm-10">
+			<table id="sxschooltable"></table>
+			<div id="sxschoolpager"></div>
+		</div>
+		<div class="col-sm-2">
+			<c:forEach items="${sxshifts }" var ="shift">
+				<div>
+					<span>${shift.key } = ${shift.value }</span>
+				</div>
+			</c:forEach>
+		</div>
+		
 	</div>
 	<div id="tabs-4">
 	<div class="form-inline">
