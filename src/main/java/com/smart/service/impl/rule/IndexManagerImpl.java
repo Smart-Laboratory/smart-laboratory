@@ -91,11 +91,53 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		return indexDao.getIndexsByQuery(query);
 	}
 
+	/**
+	 * 微生物列表
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	public List<Index> getBacteriaList(String query, int start, int end, String sidx, String sord) {
+		return indexDao.getBacteriaList(query,start,end,sidx,sord);
+	}
+
+	/**
+	 * 微生物记录数
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	public int getBacteriaListCount(String query, int start, int end, String sidx, String sord) {
+		return indexDao.getBacteriaListCount(query,start,end,sidx,sord);
+	}
+
 	public List<Index> getIndexsByName(String name, int pageNum, String field, boolean isAsc) {
 		return indexDao.getIndexsByName(name, pageNum, field, isAsc);
 	}
 
 	public int getIndexsByNameCount(String name) {
 		return indexDao.getIndexsByNameCount(name);
+	}
+
+	public Index getBacteriaById(String id){
+		return indexDao.getBacteriaById(id);
+	}
+
+	public List<Index> getAntibioticList(String query, int start, int end, String sidx, String sord) {
+		return indexDao.getAntibioticList(query,start,end,sidx,sord);
+	}
+
+	public int getAntibioticListCount(String query, int start, int end, String sidx, String sord) {
+		return indexDao.getAntibioticCount(query,start,end,sidx,sord);
+	}
+
+	public Index getAntibioticById(String id){
+		return indexDao.getAntibioticById(id);
 	}
 }

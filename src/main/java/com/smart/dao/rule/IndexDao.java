@@ -112,4 +112,62 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	 */
 	@Transactional
 	int getIndexsByNameCount(String name);
+
+	/**
+	 * 细菌信息
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	List<Index> getBacteriaList(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 细菌记录
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+     * @return
+     */
+	int getBacteriaListCount(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 细菌信息
+	 * @param id
+	 * @return
+     */
+	Index getBacteriaById(String id);
+
+	/**
+	 * 抗生素信息
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+	 * @return
+	 */
+	List<Index> getAntibioticList(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 抗生素记录
+	 * @param query
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+	 * @return
+	 */
+	int getAntibioticCount(String query,int start, int end, String sidx, String sord);
+
+	/**
+	 * 抗生素信息
+	 * @param id
+	 * @return
+	 */
+	Index getAntibioticById(String id);
 }

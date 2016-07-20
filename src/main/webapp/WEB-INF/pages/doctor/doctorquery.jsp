@@ -370,33 +370,27 @@
                         <table style="width: 100%">
                             <colgroup>
                                 <col width="80">
-                                <col width="250">
+                                <col width="150">
                                 <col width="80">
-                                <col width="100">
+                                <col width="150">
                                 <col width="80">
                                 <col width="*">
                             </colgroup>
                             <tr>
                                 <td class="fieldname">姓名：</td>
-                                <td class="fieldvalue"><b id="pName"></b></td>
+                                <td class="fieldvalue"><b id="pName">&nbsp;</b></td>
                                 <td class="fieldname">性别：</td>
-                                <td class="fieldvalue"><b id="pSex"></b></td>
+                                <td class="fieldvalue"><b id="pSex">&nbsp;</b></td>
                                 <td class="fieldname">年龄：</td>
-                                <td class="fieldvalue"><b id="pAge"></b></td>
+                                <td class="fieldvalue"><b id="pAge">&nbsp;</b></td>
                             </tr>
                             <tr>
                                 <td class="fieldname">病历号：</td>
-                                <td class="fieldvalue"> <b id="pBlh"></b></td>
+                                <td class="fieldvalue"> <b id="pBlh">&nbsp;</b></td>
                                 <td class="fieldname">就诊卡号：</td>
-                                <td class="fieldvalue" colspan="3"> <b id="pId"></b></td>
-                            </tr>
-                            <tr>
-                                <%--<td class="fieldname">科室：</td>--%>
-                                <%--<td class="fieldvalue"><b id="pSection"></b></td>--%>
-                                <%--<td class="fieldname">床号：</td>--%>
-                                <%--<td class="fieldvalue"><b id="pBed" ></b></td>--%>
-                                <td class="fieldname" > 诊断：</td>
-                                <td class="fieldvalue" colspan="5"><b id="pDiagnostic"></b></td>
+                                <td class="fieldvalue"> <b id="pId">&nbsp;</b></td>
+                                <td class="fieldname"> 诊断：</td>
+                                <td class="fieldvalue"><b id="pDiagnostic">&nbsp;</b></td>
                             </tr>
                         </table>
                     </div>
