@@ -339,13 +339,8 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncResult> getWSWResult(String sampleNo) {
-<<<<<<< HEAD
 		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG asc";
 		//String sql = "select t.CHINESENAME, o.*, r.*  from LAB_MICRO_TEST t, LAB_MICRO_RESULT r LEFT JOIN LAB_MICRO_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
-=======
-		//String sql = "select t.CHINESENAME, o.*, r.*  from LAB_TEST t, LAB_RESULT r LEFT JOIN LAB_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
-		String sql = "select t.CHINESENAME, o.*, r.*  from LAB_MICRO_TEST t, LAB_MICRO_RESULT r LEFT JOIN LAB_MICRO_RESULT_OTHER o on r.spno=o.spno where t.TESTID=r.TESTID and r.SPNO='" + sampleNo + "' order by r.RESULTFLAG desc";
->>>>>>> origin/master
 
 		return jdbcTemplate.query(sql, new RowMapper<SyncResult>() {
 			public SyncResult mapRow(ResultSet rs, int rowNum) throws SQLException {
