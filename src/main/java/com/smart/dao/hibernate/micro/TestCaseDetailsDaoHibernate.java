@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Title: .IntelliJ IDEA
+ * Title: 微生物培养基方案
  * Description:
  *
  * @Author:zhou
@@ -62,7 +62,7 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
 
     @Override
     public List<Object[]> getDetails(String testCaseId, int start, int end, String sidx, String sord) {
-        String sql = "from TestCaseDetails c,Index i where c.cultureMediumId = i.id and i.testClass='培养基' and c.testCaseId=:testCaseId  ";
+        String sql = "from TestCaseDetails c,CultureMedium i where c.cultureMediumId = i.id and c.testCaseId=:testCaseId  ";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
         Query q = getSession().createQuery(sql);
@@ -73,15 +73,6 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
             q.setMaxResults(end);
         }
         return q.list();
-    }
-
-    @Override
-    public List<TestCaseDetails> getByTestCaseId(String testCaseId) {
-        String sql = "from TestCaseDetails c where   c.testCaseId=:testCaseId  ";
-        Query q = getSession().createQuery(sql);
-        q.setString("testCaseId",testCaseId);
-        List<TestCaseDetails> list =  q.list();
-        return list;
     }
 
     @Override

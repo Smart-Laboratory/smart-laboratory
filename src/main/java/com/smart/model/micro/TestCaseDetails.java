@@ -1,6 +1,7 @@
 package com.smart.model.micro;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
@@ -28,6 +29,7 @@ public class TestCaseDetails {
     private String orderId;
     private int isDefault;
 
+    @Id
     public String getTestCaseId() {
         return testCaseId;
     }
@@ -36,6 +38,7 @@ public class TestCaseDetails {
         this.testCaseId = testCaseId;
     }
 
+    @Id
     public String getCultureMediumId() {
         return cultureMediumId;
     }

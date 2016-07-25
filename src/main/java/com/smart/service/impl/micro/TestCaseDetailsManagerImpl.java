@@ -44,11 +44,6 @@ public class TestCaseDetailsManagerImpl extends GenericManagerImpl<TestCaseDetai
         return testCaseDetailsDao.getDetails(indexId,start,end,sidx,sord);
     }
 
-    @Override
-    public List<TestCaseDetails> getByTestCaseId(String testCaseId) {
-        return testCaseDetailsDao.getByTestCaseId(testCaseId);
-    }
-
     public void removeById(String testCaseId,String detailId){
         testCaseDetailsDao.removeById(testCaseId,detailId);
     }

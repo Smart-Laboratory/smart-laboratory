@@ -25,7 +25,7 @@ public class TestCaseDaoHibernate extends GenericDaoHibernate<TestCase, Long> im
 
     @Override
     public int getTestCaseCount(String query, int start, int end, String sidx, String sord) {
-        String sql = "select count(c.*)  from TestCase c,Index i where 1=1 c.testId = i.indexId ";
+        String sql = "select count(c.*)  from TestCase c,Ylxh i where 1=1 c.testId = i.ylxh ";
         if(query != null && !query.equals(""))
             sql += " and i.name like '%" + query+"%'" ;
         sidx = sidx.equals("") ? "id" : sidx;
@@ -37,7 +37,7 @@ public class TestCaseDaoHibernate extends GenericDaoHibernate<TestCase, Long> im
     @Override
     public List<TestCase> getTestCaseList(String query, int start, int end, String sidx, String sord) {
         Index i = new Index();
-        String sql = "from TestCase c,Index i where 1=1 c.testId = i.indexId ";
+        String sql = "from TestCase c,Ylxh i where 1=1 c.testId = i.ylxh ";
         if(query != null && !query.equals(""))
             sql += " and i.name like '%" + query+"%'" ;
         sidx = sidx.equals("") ? "id" : sidx;

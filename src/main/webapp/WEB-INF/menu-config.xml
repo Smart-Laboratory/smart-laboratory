@@ -59,5 +59,15 @@
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
         </Menu>
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+        
+        
+        
+        <!--DrugGroup-START-->
+        <Menu name="DrugGroupMenu" title="drugGroupList.title" page="/drugGroup"/>
+        <!--DrugGroup-END-->
     </Menus>
+
+
+
+
 </MenuConfig>

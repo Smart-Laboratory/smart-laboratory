@@ -15,9 +15,12 @@ import java.util.List;
  */
 public interface TestCaseDetailsManager extends GenericManager<TestCaseDetails, Long> {
     void saveDetails(List<TestCaseDetails> testCaseDetailsList);
+
     int getDetailsCount(String testCaseId, int start, int end, String sidx, String sord);
+
     List<Object[]>  getDetails(String testCaseId, int start, int end, String sidx, String sord);
-    List<TestCaseDetails> getByTestCaseId(String testCaseId);
+
     void removeById(String testCaseId,String detailId);
+
     void removeByTestCaseId(String testCaseId);
 }

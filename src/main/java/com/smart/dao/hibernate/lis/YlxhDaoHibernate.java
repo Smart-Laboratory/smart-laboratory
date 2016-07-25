@@ -23,12 +23,26 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	
 	@SuppressWarnings("unchecked")
 	public List<Ylxh> getTest(String lab){
-		return getSession().createQuery("from Ylxh where ksdm='"+lab+"' order by profiletest").list();
+		String labs = "";
+		if(!lab.equals("")){
+			for (String s : lab.split(",")) {
+				if(!labs.equals("")) labs += ",";
+				labs +="'"+s+"'";
+			}
+		}
+		return getSession().createQuery("from Ylxh where ksdm in ("+labs+") order by profiletest").list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Ylxh> getLabofYlmcBylike(String lab,String ylmc){
-		return getSession().createQuery("from Ylxh where ksdm='"+lab+"' and ylmc like '%"+ylmc+"%'order by profiletest").list();
+		String labs = "";
+		if(!lab.equals("")){
+			for (String s : lab.split(",")) {
+				if(!labs.equals("")) labs += ",";
+				labs +="'"+s+"'";
+			}
+		}
+		return getSession().createQuery("from Ylxh where ksdm in("+labs+") and ylmc like '%"+ylmc+"%'order by profiletest").list();
 	}
 
 	@SuppressWarnings("unchecked")
