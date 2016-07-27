@@ -67,12 +67,16 @@ $(function() {
     <menu:displayMenu name="Quality"/>
     <menu:displayMenu name="Individual"/>
     <menu:displayMenu name="Logout"/>
-    
-    
-    
-    <!--DrugGroup-START-->
     <menu:displayMenu name="DrugGroupMenu"/>
-    <!--DrugGroup-END-->
+</ul>
+<ul id="hospital" class="nav navbar-nav" style="display:none;float:right;">
+	<li><a href="#" id="userText"></a></li>
+	<li class="dropdown">
+		<a href="#" id="labText" class="dropdown-toggle" data-toggle="dropdown"></a>
+		<ul class="dropdown-menu" id="labSelect" style="height:200px;overflow:auto;">
+		</ul>
+	</li>
+	<li><a href="#" id="hospitalText"></a></li>
 </ul>
 </div>
 
