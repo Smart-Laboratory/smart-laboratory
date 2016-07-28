@@ -8,8 +8,14 @@
 
 <hibernate-configuration>
     <session-factory>
+<<<<<<< HEAD
         <mapping class="com.smart.model.qc.QcTest"/>
         <mapping class="com.smart.model.qc.QcBatch"/>
+=======
+    	<mapping class="com.smart.model.qc.QcData"/>
+    	<mapping class="com.smart.model.qc.QcRule"/>
+    	<mapping class="com.smart.model.qc.QcOutControl"/>
+>>>>>>> 689d58325e9f1e6fd04ce15c5d6d3b96fbbe1f55
         <mapping class="com.smart.model.micro.TestCaseDetails"/>
         <mapping class="com.smart.model.micro.DrugGroupDetails"/>
         <mapping class="com.smart.model.micro.DrugGroup"/>

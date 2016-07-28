@@ -43,6 +43,9 @@
         	<Item name="InvalidForm" title="menu.quality.form" page="/quality/invalidSampleForm" />
         	<Item name="InvalidList" title="menu.quality.list" page="/quality/invalidSamples" />
         	<Item name="SampleTrace" title="menu.quality.trace" page="/quality/sampleTrace" />
+        	<Item name="QcData" title="menu.quality.qc.data" page="/qc/data" />
+        	<Item name="QcRule" title="menu.quality.qc.rule" page="/qc/rule" />
+        	<Item name="QcOutControl" title="menu.quality.qc.outcontrol" page="/qc/outControl" />
         </Menu>
         <Menu name="Individual" title="individual.title" page="/userform" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
             <Item name="EditUser" title="menu.user" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>
@@ -59,12 +62,6 @@
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
         </Menu>
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
-        
-        
-        
-        <!--DrugGroup-START-->
-        <Menu name="DrugGroupMenu" title="drugGroupList.title" page="/drugGroup"/>
-        <!--DrugGroup-END-->
     </Menus>
 
 
