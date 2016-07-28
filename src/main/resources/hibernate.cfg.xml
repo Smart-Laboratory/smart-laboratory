@@ -4,15 +4,15 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">-->
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
     <session-factory>
         <mapping class="com.smart.model.qc.QcTest"/>
         <mapping class="com.smart.model.qc.QcBatch"/>
-    	<mapping class="com.smart.model.qc.QcData"/>
-    	<mapping class="com.smart.model.qc.QcRule"/>
-    	<mapping class="com.smart.model.qc.QcOutControl"/>
+        <mapping class="com.smart.model.qc.QcData"/>
+        <mapping class="com.smart.model.qc.QcRule"/>
+        <mapping class="com.smart.model.qc.QcOutControl"/>
         <mapping class="com.smart.model.micro.TestCaseDetails"/>
         <mapping class="com.smart.model.micro.DrugGroupDetails"/>
         <mapping class="com.smart.model.micro.DrugGroup"/>
@@ -24,8 +24,8 @@
         <mapping class="com.smart.model.lis.ProfileTest"/>
         <mapping class="com.smart.model.lis.TestReference"/>
         <mapping class="com.smart.model.lis.Channel"/>
-    	<mapping class="com.smart.model.Dictionary"/>
-    	<mapping class="com.smart.model.lis.Hospital"/>
+        <mapping class="com.smart.model.Dictionary"/>
+        <mapping class="com.smart.model.lis.Hospital"/>
         <mapping class="com.smart.model.user.User"/>
         <mapping class="com.smart.model.user.Role"/>
         <mapping class="com.smart.model.lis.CriticalRecord"/>
@@ -51,7 +51,7 @@
         <mapping class="com.smart.model.reagent.Batch"/>
         <mapping class="com.smart.model.reagent.Combo"/>
         <mapping class="com.smart.model.reagent.In"/>
-        <mapping class="com.smart.model.reagent.Out"/> 
+        <mapping class="com.smart.model.reagent.Out"/>
         <mapping class="com.smart.model.lis.CollectSample"/>
         <mapping class="com.smart.model.lis.SOPIndex"/>
         <mapping class="com.smart.model.lis.ReasoningModify"/>
