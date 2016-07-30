@@ -1,7 +1,5 @@
 package com.smart.model.lis;
 
-import com.smart.model.Dictionary;
-
 import javax.persistence.*;
 
 @Entity

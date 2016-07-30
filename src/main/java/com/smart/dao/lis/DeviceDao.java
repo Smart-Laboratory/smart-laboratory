@@ -47,4 +47,12 @@ public interface DeviceDao extends GenericDao<Device, Long> {
 	@Transactional
     Device getDeviceByCode(String code);
 
+	/**
+     * 根据实验室部门代号获取仪器信息
+     * @param lab  //实验室部门代号
+     * @return
+     */
+	@Transactional
+	List<Device> getDeviceByLab(String lab);
+
 }

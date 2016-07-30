@@ -10,7 +10,6 @@
     <session-factory>
     	<mapping class="com.smart.model.qc.QcData"/>
     	<mapping class="com.smart.model.qc.QcRule"/>
-    	<mapping class="com.smart.model.qc.QcOutControl"/>
         <mapping class="com.smart.model.micro.TestCaseDetails"/>
         <mapping class="com.smart.model.micro.DrugGroupDetails"/>
         <mapping class="com.smart.model.micro.DrugGroup"/>

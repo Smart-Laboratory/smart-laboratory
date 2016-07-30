@@ -67,7 +67,6 @@ $(function() {
     <menu:displayMenu name="Quality"/>
     <menu:displayMenu name="Individual"/>
     <menu:displayMenu name="Logout"/>
-    <menu:displayMenu name="DrugGroupMenu"/>
 </ul>
 <ul id="hospital" class="nav navbar-nav" style="display:none;float:right;">
 	<li><a href="#" id="userText"></a></li>

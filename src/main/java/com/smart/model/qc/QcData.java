@@ -28,6 +28,13 @@ public class QcData {
 	private String sampleType;
 	private String labDepart;
 	private String analyser;
+	private String inquality;
+	
+	private String outrule;
+	private String reason;
+	private String deal;
+	private String prevent;
+	private String dealperson;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -129,5 +136,59 @@ public class QcData {
 	
 	public void setAnalyser(String analyser) {
 		this.analyser = analyser;
+	}
+	
+	@Column
+	public String getInquality() {
+		return inquality;
+	}
+
+	public void setInquality(String inquality) {
+		this.inquality = inquality;
+	}
+
+	@Column
+	public String getOutrule() {
+		return outrule;
+	}
+
+	public void setOutrule(String outrule) {
+		this.outrule = outrule;
+	}
+
+	@Column
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	@Column
+	public String getDeal() {
+		return deal;
+	}
+
+	public void setDeal(String deal) {
+		this.deal = deal;
+	}
+
+	@Column
+	public String getPrevent() {
+		return prevent;
+	}
+
+	public void setPrevent(String prevent) {
+		this.prevent = prevent;
+	}
+
+	@Column
+	public String getDealperson() {
+		return dealperson;
+	}
+
+	public void setDealperson(String dealperson) {
+		this.dealperson = dealperson;
 	}
 }
