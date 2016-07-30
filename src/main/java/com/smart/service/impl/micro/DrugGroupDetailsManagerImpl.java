@@ -27,22 +27,18 @@ public class DrugGroupDetailsManagerImpl extends GenericManagerImpl<DrugGroupDet
         this.drugGroupDetailsDao = drugGroupDetailsDao;
     }
 
-    @Override
     public void saveDetails(List<DrugGroupDetails> drugGroupDetailsList) {
         drugGroupDetailsDao.saveDetails(drugGroupDetailsList);
     }
 
-    @Override
     public int getDrugDetailsCount(String groupId, int start, int end, String sidx, String sord) {
         return drugGroupDetailsDao.getDrugDetailsCount(groupId,start,end,sidx,sord);
     }
 
-    @Override
     public List<Object[]>  getDrugDetails(String groupId, int start, int end, String sidx, String sord) {
         return drugGroupDetailsDao.getDrugDetails(groupId,start,end,sidx,sord);
     }
 
-    @Override
     public List<DrugGroupDetails> getByGroupId(String groupId) {
         return drugGroupDetailsDao.getByGroupId(groupId);
     }
@@ -50,6 +46,7 @@ public class DrugGroupDetailsManagerImpl extends GenericManagerImpl<DrugGroupDet
     public void removeById(String groupId,String drugId){
         drugGroupDetailsDao.removeById(groupId,drugId);
     }
+    
     public void removeByGroupId(String groupId){
         drugGroupDetailsDao.removeByGroupId(groupId);
     }

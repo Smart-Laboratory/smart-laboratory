@@ -5,6 +5,8 @@ import com.smart.model.micro.TestCase;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Title: .IntelliJ IDEA
  * Description:
@@ -14,6 +16,10 @@ import java.util.List;
  * @Version:
  */
 public interface TestCaseDao extends GenericDao<TestCase, Long> {
-    int getTestCaseCount(String query, int start, int end, String sidx, String sord);
-    List<TestCase> getTestCaseList(String query, int start, int end, String sidx, String sord);
+	
+	@Transactional
+	int getTestCaseCount(String query, int start, int end, String sidx, String sord);
+
+	@Transactional
+	List<TestCase> getTestCaseList(String query, int start, int end, String sidx, String sord);
 }

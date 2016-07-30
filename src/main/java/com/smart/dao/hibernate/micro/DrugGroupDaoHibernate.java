@@ -26,8 +26,8 @@ public class DrugGroupDaoHibernate extends GenericDaoHibernate<DrugGroup, Long> 
         return new Integer(q.uniqueResult() + "");
     }
 
-    @Override
-    public List<DrugGroup> getDrugGroups(String query, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<DrugGroup> getDrugGroups(String query, int start, int end, String sidx, String sord) {
         String sql = "from DrugGroup c where 1=1  ";
         if(query != null && !query.equals(""))
             sql += " and c.name like '%" + query+"%'" ;

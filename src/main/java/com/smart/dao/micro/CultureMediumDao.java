@@ -5,6 +5,8 @@ import com.smart.model.micro.CultureMedium;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Title: .IntelliJ IDEA
  * Description:培养基信息
@@ -14,6 +16,10 @@ import java.util.List;
  * @Version:
  */
 public interface CultureMediumDao extends GenericDao<CultureMedium, Long> {
+	
+	@Transactional
     int getCultureMediumsCount(String query, int start, int end, String sidx, String sord);
-    List<CultureMedium> getCultureMediums(String query, int start, int end, String sidx, String sord);
+    
+	@Transactional
+	List<CultureMedium> getCultureMediums(String query, int start, int end, String sidx, String sord);
 }

@@ -1,6 +1,5 @@
 package com.smart.service.impl.micro;
 
-import com.smart.dao.micro.CultureMediumDao;
 import com.smart.dao.micro.DrugGroupDao;
 import com.smart.model.micro.DrugGroup;
 import com.smart.service.micro.DrugGroupManager;
@@ -20,12 +19,11 @@ public class DrugGroupManagerImpl extends GenericManagerImpl<DrugGroup, Long> im
         this.dao = drugGroupDao;
         this.drugGroupDao = drugGroupDao;
     }
-    @Override
+
     public int getDrugGroupsCount(String query, int start, int end, String sidx, String sord) {
         return drugGroupDao.getDrugGroupsCount(query,start,end,sidx,sord);
     }
 
-    @Override
     public List<DrugGroup> getDrugGroups(String query, int start, int end, String sidx, String sord) {
         return drugGroupDao.getDrugGroups(query,start,end,sidx,sord);
     }

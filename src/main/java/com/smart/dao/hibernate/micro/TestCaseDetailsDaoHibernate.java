@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.micro;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.micro.TestCaseDetailsDao;
-import com.smart.model.micro.TestCase;
 import com.smart.model.micro.TestCaseDetails;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,7 +23,6 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
         super(TestCaseDetails.class);
     }
 
-    @Override
     public void saveDetails(List<TestCaseDetails> testCaseDetailsList) {
 
         Session session = null;
@@ -50,7 +48,6 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
         }
     }
 
-    @Override
     public int getDetailsCount(String testCaseId, int start, int end, String sidx, String sord) {
         String sql = "select count(*)  from TestCaseDetails  c where c.testCaseId=:testCaseId";
         sidx = sidx.equals("") ? "id" : sidx;
@@ -60,8 +57,8 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
         return new Integer(q.uniqueResult() + "");
     }
 
-    @Override
-    public List<Object[]> getDetails(String testCaseId, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<Object[]> getDetails(String testCaseId, int start, int end, String sidx, String sord) {
         String sql = "from TestCaseDetails c,CultureMedium i where c.cultureMediumId = i.id and c.testCaseId=:testCaseId  ";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
@@ -75,7 +72,6 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
         return q.list();
     }
 
-    @Override
     public void removeById(String testCaseId, String cultureMediumId) {
         String sql = "delete  TestCaseDetails d where d.testCaseId=:testCaseId and d.cultureMediumId=:cultureMediumId ";
         Query q = getSession().createQuery(sql);
@@ -84,7 +80,6 @@ public class TestCaseDetailsDaoHibernate extends GenericDaoHibernate<TestCaseDet
         q.executeUpdate();
     }
 
-    @Override
     public void removeByTestCaseId(String testCaseId) {
         String sql = "delete  TestCaseDetails d where d.testCaseId=:testCaseId  ";
         Query q = getSession().createQuery(sql);
