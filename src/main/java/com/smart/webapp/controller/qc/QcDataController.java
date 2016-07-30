@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.Constants;
 import com.smart.service.UserManager;
 import com.smart.service.lis.DeviceManager;
+import com.smart.service.qc.QcBatchManager;
 import com.smart.model.lis.Device;
 import com.smart.model.pb.SxSchool;
 import com.smart.model.qc.QcBatch;
@@ -50,7 +51,7 @@ public class QcDataController {
 	public String getSchool(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
 		String deviceid = request.getParameter("deviceid");
-		List<QcBatch> list = qcBatchManager
+		List<QcBatch> list = qcBatchManager.getByDevice(deviceid);
 		JSONObject o = new JSONObject();
 		
 		response.setContentType("text/html; charset=UTF-8");
