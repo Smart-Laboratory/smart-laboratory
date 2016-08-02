@@ -46,5 +46,12 @@ public class WorkCountDaoHibernate extends GenericDaoHibernate<WorkCount, Long> 
 		}
 		return count;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<WorkCount> getByWorker(String worker){
+		String hql = "from WorkCount where worker = '"+worker+"' and defeholiday>0";
+		System.out.println(hql);
+		return getSession().createQuery(hql).list();
+	}
 }
 

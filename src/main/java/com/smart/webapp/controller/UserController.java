@@ -69,10 +69,13 @@ public class UserController {
     		department = user.getPbsection();
     	}
     	Map<String, String> labMap = new HashMap<String, String>();
-    	for(String labcode : department.split(",")) {
-//    		System.out.println(sectionUtil.getValue(labcode));
-    		labMap.put(labcode, sectionUtil.getValue(labcode));
+    	if(department!=null && !department.isEmpty()){
+    		for(String labcode : department.split(",")) {
+//    			System.out.println(sectionUtil.getValue(labcode));
+    			labMap.put(labcode, sectionUtil.getValue(labcode));
+    		}
     	}
+    	
     	obj.put("username", user.getName());
     	obj.put("hospital", hospitalManager.get(user.getHospitalId()).getName());
     	obj.put("lab", sectionUtil.getValue(user.getLastLab()));

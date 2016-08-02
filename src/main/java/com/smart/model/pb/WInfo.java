@@ -41,6 +41,7 @@ public class WInfo {
 	private double defeholidayhis;//历年积休
 	private double lxsy;//历休使用
 	private String school;
+	private String usercomment; //备注
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -242,6 +243,14 @@ public class WInfo {
 	public void setSchool(String school) {
 		this.school = school;
 	}
+	
+	@Column
+	public String getUsercomment() {
+		return usercomment;
+	}
+	public void setUsercomment(String usercomment) {
+		this.usercomment = usercomment;
+	}
 
 	@Transient
 	public String getTypeString() {
@@ -321,7 +330,7 @@ public class WInfo {
 				}
 			}
 		}
-		return num;
+		return num+defeholidayhis;
 	}
 	
 	@Transient

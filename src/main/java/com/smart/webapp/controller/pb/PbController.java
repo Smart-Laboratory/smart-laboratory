@@ -214,7 +214,8 @@ public class PbController {
 				if(userShifts.containsKey(arr[0])  ){
 					Map<String, Arrange> dateValue = userShifts.get(arr[0]);
 					if(dateValue.containsKey(arr[1]) ){
-						if(dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:"")){
+						Arrange test = dateValue.get(arr[1]);
+						if((dateValue.get(arr[1]).getShift()==null && arr.length>=3) || (dateValue.get(arr[1]).getShift()!=null && !dateValue.get(arr[1]).getShift().equals(arr.length>=3?arr[2]:""))){
 							Arrange b = dateValue.get(arr[1]);
 							b.setShift(arr.length>=3?arr[2]:"");
 							b.setState(0);
@@ -270,10 +271,23 @@ public class PbController {
 		List<Arrange> list = new ArrayList<Arrange>();
 		String section = request.getParameter("section");
 		String special = request.getParameter("special");
+		String selperson = request.getParameter("selperson");
 		
-//		if(ksArrange!=null && ksArrange.getState()>1){
-//			return false;
-//		}
+		if(selperson!=null && !selperson.isEmpty()){
+			Arrange ksArrange = arrangeManager.getByUser(section, month);
+			if(ksArrange == null){
+				ksArrange = new Arrange();
+				ksArrange.setState(2);
+			}
+			ksArrange.setDate(month);
+			ksArrange.setSection(section);
+			ksArrange.setWorker(section);
+			ksArrange.setShift(selperson);
+			
+			ksArrange.setOperator(user.getUsername());
+			ksArrange.setOperatime(new Date());
+			list.add(ksArrange);
+		}
 		//map<班次，排班>
 		Map<String, Map<String, Arrange>> userShifts = new HashMap<String, Map<String, Arrange>>();
 		List<Shift> shifts = shiftManager.getShiftBySection(section);
@@ -281,7 +295,7 @@ public class PbController {
 		for(Shift shift : shifts){
 			Map<String, Arrange> dateValue = new HashMap<String,Arrange>(); //map<日期，排班>
 			//获取B超3个月内的排班记录
-			List<Arrange> monthArray = arrangeManager.getMonthArrangeByshift(shift.getAb(), month);
+			List<Arrange> monthArray = arrangeManager.getMonthArrangeByshift(shift.getAb(), month,section);
 			for(Arrange a: monthArray){
 				dateValue.put(a.getDate(), a);
 			}
@@ -305,11 +319,11 @@ public class PbController {
 							b.setState(2);
 							b.setOperator(user.getUsername());
 							b.setOperatime(new Date());
-							if(!b.getSection().contains(section)){
-								b.setSection(b.getSection()+","+section);
-							}
+							b.setSection(section);
 							if(special.contains(arr[0]+"-"+arr[1]))
 								b.setState(5);
+							else
+								b.setState(2);
 							list.add(b);
 							continue;
 						}
@@ -340,6 +354,8 @@ public class PbController {
 					a.setWorker("");
 				if(special.contains(arr[0]+"-"+arr[1]))
 					a.setState(5);
+				else
+					a.setState(2);
 				list.add(a);
 				userShifts.get(arr[0]).put(arr[0], a);
 			}

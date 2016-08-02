@@ -68,7 +68,9 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
+		initLabMap();
 		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();		
+		lab = labMap.get(lab);
 		JSONArray array = new JSONArray();
 		if(type == 1) {
 			

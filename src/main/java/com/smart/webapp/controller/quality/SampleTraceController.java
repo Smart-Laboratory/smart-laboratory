@@ -136,6 +136,8 @@ public class SampleTraceController {
 			map.put("age", String.valueOf(p.getAge()));
 			map.put("diagnostic", p.getDIAGNOSTIC());
 			map.put("section", sectionutil.getValue(p.getSECTION()));
+			map.put("sjSection", sectionutil.getValue(p.getLABDEPARTMENT()));
+			map.put("cxxx", rmiService.getYlsf(p.getYLXH()).getHyfl());
 
 			map.put("sex", p.getSexValue());
 			if (StringUtils.isEmpty(p.getBLH())) {

@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 
 	public List<Process> getBySampleCondition(String text, String lab) {
 		return processDao.getBySampleCondition(text, lab);
+	}
+	
+	public List<Process> getOutList(String sender, Date starttime){
+		return processDao.getOutList(sender, starttime);
 	}
 	
 }

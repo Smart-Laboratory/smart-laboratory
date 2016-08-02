@@ -103,8 +103,6 @@ public class ScheduleController extends PbBaseController {
 		if(section == null || section.isEmpty())
 			return new ModelAndView();
 		
-		if(section.equals("1320511"))
-			return new ModelAndView("pb/bpb").addObject("section", section);
 		String type = request.getParameter("type");
 		
 		
@@ -183,9 +181,14 @@ public class ScheduleController extends PbBaseController {
         shifts[j+3][0] = "<th style='background:#7FFFD4' id='yb'>月班</th>";
         shifts[j+4][0] = "<th style='background:#7FFFD4' id='yb'>月积休</th>";
         
+        String color = "";
         shifts[0][0] = "<th style='background:#7FFFD4' id='nmshow'>" + (month<10 ? "0" + month : month) + "</th>";
         for(int m=1;m<i;m++) {
-        	shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
+        	if(map.get(m).getUsercomment()!=null && !map.get(m).getUsercomment().isEmpty()){
+        		shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'><font color='red' title='"+map.get(m).getUsercomment()+"'>" + map.get(m).getName() + "</font></th>";
+        	}else{
+        		shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
+        	}
         }
         for(int k=1; k<i; k++) {
         	String name = map.get(k).getName();

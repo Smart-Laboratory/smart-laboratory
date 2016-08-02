@@ -56,16 +56,19 @@ public class InController {
 		List<InBarcode> ibList = new ArrayList<InBarcode>();
 		List<In> inList = new ArrayList<In>();
 		if(request.getParameter("id") == null) {
-			Date indate = new Date(Long.parseLong(request.getParameter("time")));
+			String indate = request.getParameter("inIds");
 			inList = inManager.getByInDate(indate);
-			System.out.println(inList.size());
+//			System.out.println(indate);
+//			System.out.println(inList.size());
 		} else {
 			inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));
 		}
 		String rgIds = "";
+		
 		for(In in : inList) {
 			rgIds += in.getRgId() + ",";
 		}
+//		System.out.println("id="+rgIds);
 		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
 		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
 		for(Reagent r : rglist) {

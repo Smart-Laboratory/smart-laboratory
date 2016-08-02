@@ -16,6 +16,24 @@
     <script type="text/javascript" src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
 
 <style>
+.sp{
+	background:greenyellow;
+}
+td{
+	width:50px;
+	padding:0px 0px;
+	text-align:center;
+}
+th{
+	width:50px;
+	padding:0px 0px;
+	text-align:center;
+}
+
+.moning{
+	font-weight:bold !important;
+}
+
 </style>
 </head>
 
@@ -28,8 +46,8 @@
 	<input type="text" id="date" class="form-control" sytle="width:50px;">
 	<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 	<button id="shiftBtn2" class="btn btn-success form-control">随机排班</button>
-	<button id="shiftBtn" class="btn btn-success form-control"><fmt:message key='button.submit' /></button>
-	<button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button>
+	<button id="shiftBtn" class="btn btn-success form-control" onclick="save()"><fmt:message key='button.submit' /></button>
+	<%-- <button id="publish" class="btn btn-danger form-control"><fmt:message key='button.publish' /></button> --%>
 	
 </div>
 
@@ -37,13 +55,18 @@
 </div>
 
 <div id="shiftSelect" class="checkbox form-inline" >
-	<c:forEach items="${wshifts}" var="shift">
-		<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
-    		<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
-  		</label></div>
-	</c:forEach>	
+	<div id="shSelect" class="checkbox form-inline">
+		<c:forEach items="${wshifts}" var="shift">
+			<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+	    		<input type="checkbox" name="${shift.key }" value="${shift.key }"> ${shift.value } 
+	  		</label></div>
+		</c:forEach>	
+	</div>
 	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
-   		<input type="checkbox" id="special" value="">特殊班
+   		<input type="checkbox" id="mulsel" name="mulsel" value="">多选
+	</label></div>
+	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
+   		<input type="checkbox" id="special" name="special" value="">特殊班
 	</label></div>
 	<div class="form-control" style="width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;"><label >
    		<input type="checkbox" name="cleartd" value="">清空数据
@@ -152,10 +175,10 @@ labChange=function(select){
 		 personsel = $('select[name="devicelist[]"]').val();
 		 $("#selperson").val(personsel);
 		 if(personsel != null){
-			 $("#shiftSelect").html("");
+			 $("#shSelect").html("");
 			 var person;
 			 for(person in personsel){
-				 $("#shiftSelect").append("<div class='form-control' style='width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;''><label><input type='checkbox' name="+personsel[person]+" value="+personsel[person]+">"+personsel[person]+"</label></div>");
+				 $("#shSelect").append("<div class='form-control' style='width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;''><label><input type='checkbox' name="+personsel[person]+" value="+personsel[person]+">"+personsel[person]+"</label></div>");
 			 }
 		 };
 		 
@@ -166,6 +189,44 @@ labChange=function(select){
 		 window.location.href="../pb/bpb?week=" + week+"&date=" + $("#date").val()+"&section=" + $("#section").val();
 	 }
 	
+	 function save() {
+			var ischecked = true;
+			if (ischecked) {
+				var section = $("#section").val();
+				var text = "";
+				var date = $("#month").val();
+				
+				var special = "";
+				$("td[name^='td']").each(function(i){
+					var id = $(this).attr("id");
+					var array = $(this).attr("id").split("-");
+					var day = "";
+					day = id.replace(array[0]+"-","");
+					var temp = "";
+					var value = $(this).html();
+					//记录特殊班次
+					
+					if($(this).attr("class").indexOf("sp")>=0)
+						special += id+";";
+					
+					temp = array[0] + ":" + day + ":" + value +",";
+					text = text + temp;
+				});
+				$.post("../pb/pb/bpbsubmit",{text:text,section:section,date:date,special:special,selperson:$("#selperson").val()},function(data) {
+					if(data){
+						alert("Success!");
+						return "true";
+				//		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+					}else{
+						alert("Fail!")
+					}
+					
+				});
+				
+			}
+		};
+		
+	 
 	$(function(){
 		initPersonListBox();
 		loadPersonListBox();
@@ -181,16 +242,54 @@ labChange=function(select){
 			$("td[name^='td']").each(function(i){
 				var id = $(this).attr("id");
 				$("#"+id).html("");
+				$("#"+id).removeClass("sp");
 			});
 		});
-		
+		$(document).on("click", "label", function() {
+			var state = $(this).children("input").prop("checked");
+			var sname = $(this).children("input").attr("name");
+			if(state){
+				$(this).addClass("moning");
+				if($("#mulsel").prop("checked")==false){
+					
+				$.each($("#shiftSelect input"),function(name,v){
+					if(v.checked){
+						var name = v.name;
+						if(name!=sname){
+							$("[name='"+name+"']").prop("checked",false);
+							$("[name='"+name+"']").parent("label").removeClass("moning");
+						}
+								
+					}
+				});
+				$.each($("#shiftNotSelect input"),function(name,v){
+					if(v.checked){
+						var name = v.name;
+						if(name!=sname){
+							$("[name='"+name+"']").prop("checked",false);
+							$("[name='"+name+"']").parent("label").removeClass("moning");
+						}
+								
+					}
+				});
+				}
+			}
+			else
+				$(this).removeClass("moning");
+				
+		});
 		$("#pbhead tr td").click(function(){
 			var id=this.id;
 			
 			var shifts=$("#"+id).html();
 			if($("#special").prop("checked")==true){
-				$("#"+id).css("background","greenyellow");
-				$("#"+id).addClass("sp");
+				var spclass = $(this).attr("class");
+				if(spclass.indexOf("sp")>=0){
+					$(this).removeClass("sp");
+				}else{
+					$("#"+id).addClass("sp");
+				}
+				
 			}			
 			
 			$.each($("#shiftSelect input"),function(name,v){
@@ -250,48 +349,15 @@ labChange=function(select){
 		$("#date").val("${month}");
 		
 		$("#shiftBtn2").click(function(){
-			var selperson = $("#selperson").val();
-			var date = $("#date").val();
-			var week = $("#weeknum").val();
-			window.location.href="../pb/bpb?week=" + week+"&date=" + date+"&selperson="+selperson+"&section=" + $("#section").val()+"&random=1";
-		});
-		
-		//提交
-		$("#shiftBtn").click(function() {
-			var ischecked = true;
-			if (ischecked) {
-				var section = $("#section").val();
-				var text = "";
-				var date = $("#month").val();
-				
-				var special = "";
-				$("td[name^='td']").each(function(i){
-					var id = $(this).attr("id");
-					var array = $(this).attr("id").split("-");
-					var day = "";
-					day = id.replace(array[0]+"-","");
-					var temp = "";
-					var value = $(this).html();
-					//记录特殊班次
-					
-					if($(this).attr("class").indexOf("sp")>=0)
-						special += id+";";
-					
-					temp = array[0] + ":" + day + ":" + value +",";
-					text = text + temp;
-				});
-				$.post("../pb/pb/bpbsubmit",{text:text,section:section,date:date,special:special},function(data) {
-					if(data){
-						alert("Success!");
-				//		window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
-					}else{
-						alert("Fail!")
-					}
-					
-				});
-				
+			var result = save();
+			if(result = "true"){
+				var selperson = $("#selperson").val();
+				var date = $("#date").val();
+				var week = $("#weeknum").val();
+				window.location.href="../pb/bpb?week=" + week+"&date=" + date+"&selperson="+selperson+"&section=" + $("#section").val()+"&random=1";
 			}
 		});
+		
 	})
 
 	

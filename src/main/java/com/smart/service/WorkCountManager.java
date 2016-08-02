@@ -14,4 +14,5 @@ public interface WorkCountManager extends GenericManager<WorkCount, Long> {
 	
 	List<WorkCount> getMonthBySection(String section, String month);
 	
+	List<WorkCount> getByWorker(String worker);
 }

@@ -29,7 +29,7 @@ $(function() {
 	    changeYear: true,
 		dateFormat: 'yy-mm',
 		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-		dayNamesMin: ['一','二','三','四','五','六','日'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
 		showButtonPanel: true, 
 		onClose: function(dateText, inst) { 
 		var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 

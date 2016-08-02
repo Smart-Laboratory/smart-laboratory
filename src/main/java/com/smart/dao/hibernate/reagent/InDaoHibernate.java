@@ -27,13 +27,14 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<In> getByInDate(Date indate) {
-		return getSession().createQuery("from In where indate=" + indate).list();
+	public List<In> getByInDate(String indate) {
+		return getSession().createQuery("from In where id in (" + indate + ")").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<In> getByLab(String lab) {
-		return getSession().createQuery("from In where lab='" + lab + "'").list();
+		return getSession().createQuery("from In where lab='" + lab + "' order by indate desc").list();
 	}
+
 
 }

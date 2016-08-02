@@ -63,9 +63,12 @@
 		<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
 		<button id="workCount" class="btn btn-success form-control">工作量统计</button>
 	</div>	
-		<table id="workData" class=" table" style="font-size:12px;text-align:center;" border="1px;">
+	<div>
+		<table id="workData" class=" table" style="font-size:12px;text-align:center;" border="1px;"></table>
 		<div id="workpager"></div>
 	</div>
+	</div>
+	
 </div>
 <div style="margin-top:10px;font-size:15px;">
 		<p>1300000-<fmt:message key="labDepartment.1300000"/>;  1300100-<fmt:message key="labDepartment.1300100"/>; 1300400-<fmt:message key="labDepartment.1300400"/>;

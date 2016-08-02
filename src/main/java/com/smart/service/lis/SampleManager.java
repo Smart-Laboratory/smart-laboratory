@@ -1,5 +1,6 @@
 package com.smart.service.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import com.smart.model.lis.Sample;
@@ -83,4 +84,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	String getReceiveSampleno(String name, String lab, String today);
 
 	List<Sample> getReceiveList(String text, String lab);
+	
+	List<Sample> getOutList(String sender,Date sendtime);
 }

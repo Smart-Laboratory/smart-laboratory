@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
+import com.smart.model.lis.Process;
 import com.smart.model.util.NeedWriteCount;
 
 
@@ -500,6 +501,13 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getReceiveList(String text, String lab) {
 		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";  
 		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' order by p.receivetime desc";
+		return getSession().createQuery(sql).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Sample> getOutList(String sender,Date sendtime){
+		String sql = "select s from Sample s, Process p where s.id=p.sampleid and p.sender='"+sender+"' and p.sendtime > "
+				+ "to_date('"+ymd.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
 		return getSession().createQuery(sql).list();
 	}
 }

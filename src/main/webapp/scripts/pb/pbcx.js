@@ -14,14 +14,19 @@ function preview1() {
 
 $(function() {
 	$(".footer").css('display','none');
-	$("#data").html($("#cxdata").val());
+	if($("#size").val()==999){
+		$("#tabledata").html($("#cxdata").val());
+	}else{
+		$("#data").html($("#cxdata").val());
+	}
+	
 	
 	$("#date").datepicker({
 		changeMonth: true,
 	    changeYear: true,
-		dateFormat: 'yy-mm',
+		dateFormat: 'yy-mm-dd',
 		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-		dayNamesMin: ['一','二','三','四','五','六','日']
+		dayNamesMin: ['日','一','二','三','四','五','六']
 	});
 	
 	
@@ -67,6 +72,8 @@ $(function() {
 	if(section == '1300000') {
 		$("#typeSel").css("display","block");
 	}
+	
+	
 	
 	$("#daochu").click(function(){
 		/*$.post("../pb/pbcx/daochu",{date:$("#date").val(),section:$("#sectionSel").val(),type:$("#typeSel").val()},function(data){

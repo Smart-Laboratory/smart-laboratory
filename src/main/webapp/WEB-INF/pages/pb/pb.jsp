@@ -20,13 +20,13 @@ tr:hover{
 }
 
 table tr th {
-	width:40px;
+	width:50px;
 	height:24px;
 	text-align:center;
 	padding:0px 0px  !important;
 }
 table tr td {
-	width:40px;
+	width:50px;
 	height:24px;
 	padding:0px 0px !important;
 }

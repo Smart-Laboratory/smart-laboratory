@@ -31,6 +31,7 @@ table tr th {
 <input id="section" value="${section }" type="hidden"/>
 <input id="month" value="${month}" type="hidden"/>
 <input id="type" value="${type }" type="hidden"/>
+<input id="size" value="${size }" type="hidden"/>
 
 <div class="form-inline">
 	<input type="text" id="date" class="form-control" style="margin-left:20px;float:left;">
@@ -49,6 +50,7 @@ table tr th {
 	</select>
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
+			<option value="4" >按天查询</option>
 			<option value="7" ><fmt:message key="pb.sy"/></option>
 			<option value="2" ><fmt:message key="menu.pb.sxcx"/></option>
 			<option value="3" ><fmt:message key="pb.sxgroupcx"/></option>
@@ -76,11 +78,14 @@ table tr th {
 		<div class="col-sm-12" style="">
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
 			<p><fmt:message key="pb.annotation"/></p>
-			
 			<input id="cxdata" value="${arrString }" type="hidden"/>
-			<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+			<div id="tabledata">
 				
-			</table>
+				<table id="data" class="table-hover" style="margin-top:10px;font-size:12px;text-align:center;" border="1px;">
+					
+				</table>
+			</div>
+			
 		</div>
 		<!--endprint-->
 	</c:otherwise>

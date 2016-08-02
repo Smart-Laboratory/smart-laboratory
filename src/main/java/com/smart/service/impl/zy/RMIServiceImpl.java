@@ -25,6 +25,7 @@ import com.zju.api.model.Reference;
 import com.zju.api.model.SyncPatient;
 import com.zju.api.model.SyncReagent;
 import com.zju.api.model.SyncResult;
+import com.zju.api.model.YLSF;
 import com.zju.api.service.RMIService;
 
 public class RMIServiceImpl implements RMIService {
@@ -32,6 +33,7 @@ public class RMIServiceImpl implements RMIService {
     private JdbcTemplate jdbcTemplate;
     
     private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat ymdh = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     
 	public List<Ksdm> getAllKsdm() {
 		String sql ="select KSDM,KSMC from gy_ksdm";
@@ -258,7 +260,7 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncPatient> getSampleBySection(String from, String to, String section) {
-		String sql = "select * from l_patientinfo where section='" + section + "' and receivetime between to_date('" + from + " 00:00:00','"
+		String sql = "select * from l_patientinfo where labdepartment='" + section + "' and receivetime between to_date('" + from + " 00:00:00','"
                 + Constants.DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + Constants.DATEFORMAT
                 + "') order by doctadviseno desc";
 		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
@@ -321,6 +323,10 @@ public class RMIServiceImpl implements RMIService {
 
 	public void sampleReceive(long doct, String operator) {
 		jdbcTemplate.update("update l_patientinfo set ksreceivetime=sysdate, ksreceiver='" + operator + "' where doctadviseno=" + doct);
+	}
+	
+	public void sampleOut(long doct, String operator) {
+		jdbcTemplate.update("update l_patientinfo set sendtime=sysdate, sender='" + operator + "' where doctadviseno=" + doct);
 	}
 
 	public List<SyncReagent> getSyncReagent(String barcode) {
@@ -587,5 +593,32 @@ public class RMIServiceImpl implements RMIService {
 		System.out.println(sql);
 		List<String> exam = jdbcTemplate.queryForList(sql, String.class);
 		return exam;
+	}
+	
+	public YLSF getYlsf(String ylxh){
+		String sql = "select * from gy_ylsf where ylxh ="+ylxh;
+		List<YLSF> ylsfs = jdbcTemplate.query(sql, new RowMapper<YLSF>() {
+		    public YLSF mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        YLSF p = new YLSF();
+		        setField(rs, p);
+		        return p;
+		    }
+		});
+		if(ylsfs != null)
+			return ylsfs.get(0);
+		return null;
+	}
+	
+	public List<SyncPatient> getOutList(String sender,Date sendtime){
+		String sql = "select * from l_patientinfo p where p.sender='"+sender+"' and p.sendtime between "
+				+ "to_date('"+ymdh.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+ymd.format(sendtime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
+		System.out.println(sql);
+		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
+		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        SyncPatient p = new SyncPatient();
+		        setField(rs, p);
+		        return p;
+		    }
+		});
 	}
 }

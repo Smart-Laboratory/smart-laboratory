@@ -63,13 +63,18 @@
 				var batch = $("#" + selectids[i] + "_batch").val();
 				var num = $("#" + selectids[i] + "_num").val();
 				var exedate = $("#" + selectids[i] + "_exedate").val();
-				 str += id + ":" + batch + ":" + num + ":" + exedate +";";
+				if(batch=="" || exedate==""){
+					alert("请输入批号/失效日期！");
+					return;
+				}
+				str += id + ":" + batch + ":" + num + ":" + exedate +";";
 			}
 			if(str == "") {
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
 		    	$.post("../ajax/reagent/savein",{text:str},function(data) {
 		    		$('#printFrame').empty();
+		    		alert("入库成功！");
 			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"../reagent/print?time=" + data + "\"/>");
 					$("#printDialog").dialog("open");
 				});

@@ -9,6 +9,8 @@ function getSample(docNo) {
     	$("#pSection").html(data.section);
     	$("#pType").html(data.type);
     	$("#diagnostic").html(data.diagnostic);
+    	$("#sjSection").html(data.sjSection);
+    	$("#cxxx").html(data.cxxx);
     	
     	$("#tat_request").html(data.request);
 		$("#tat_execute").html(data.execute);

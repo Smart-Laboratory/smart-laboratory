@@ -1,5 +1,6 @@
 package com.smart.dao.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,4 +22,6 @@ public interface ProcessDao extends GenericDao<Process, Long> {
 	@Transactional
 	List<Process> getBySampleCondition(String text, String lab);
 
+	@Transactional
+	List<Process> getOutList(String sender, Date starttime);
 }

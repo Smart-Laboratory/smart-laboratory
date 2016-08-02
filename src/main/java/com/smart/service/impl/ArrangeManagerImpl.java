@@ -68,8 +68,8 @@ public class ArrangeManagerImpl extends GenericManagerImpl<Arrange, Long> implem
 		return arrangeDao.getBySectionMonth(month, section);
 	}
 	
-	public List<Arrange> getMonthArrangeByshift(String shift, String month){
-		return arrangeDao.getMonthArrangeByshift(shift, month);
+	public List<Arrange> getMonthArrangeByshift(String shift, String month,String section){
+		return arrangeDao.getMonthArrangeByshift(shift, month,section);
 	}
 	
 	public List<Arrange> getByDay(String day){

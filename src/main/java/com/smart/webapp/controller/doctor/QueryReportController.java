@@ -772,7 +772,8 @@ public class QueryReportController  extends BaseAuditController {
                 rids += r.getId() + ",";
                 rm.put(r.getId(), r);
             }
-            List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), Constants.SDF.format(measuretime));
+//            List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), Constants.SDF.format(measuretime));
+            List<Out> out = outManager.getLastHMs(rids.substring(0, rids.length()-1), measuretime);
             List<String> html = new ArrayList<String>();
             for(int i=0; i<out.size(); i++) {
                 Out o = out.get(i);

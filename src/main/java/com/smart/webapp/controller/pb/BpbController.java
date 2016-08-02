@@ -88,6 +88,11 @@ public class BpbController extends PbBaseController {
 		Map<String, String> wshifts = new HashMap<String,String>();
 		Map<String, String> nowshifts = new HashMap<String,String>();
 		
+		Arrange ksArrange = arrangeManager.getByUser(section, yearAndMonth);
+		if(selperson==null && ksArrange!=null && ksArrange.getShift()!=null)
+			selperson = ksArrange.getShift();
+		
+		
 		String notselPerson = "";//没有选中的排班人员
 		if(selperson!=null && !selperson.isEmpty()){
 			for(String person : selperson.split(",")){
@@ -175,7 +180,7 @@ public class BpbController extends PbBaseController {
 		List<Arrange> arrList = new ArrayList<Arrange>();
 		for(Shift shift : bshifts){
 			//获取B超3个月内的排班记录
-			arrList = arrangeManager.getMonthArrangeByshift(shift.getAb(), tomonth+"");
+			arrList = arrangeManager.getMonthArrangeByshift(shift.getAb(), tomonth+"",section);
 			if(arrList==null || arrList.size()==0)
 				continue;
 			for(Arrange a: arrList){
@@ -235,11 +240,11 @@ public class BpbController extends PbBaseController {
 	        	for(int k=2; k<i; k++) {
 	        		String name = map.get(k).getName();
 	        		
-	        		String background = "";
+	        		String spclass = "";
 //	        		Date date = sdf1.parse(tomonth + "-" + l);
 //	        		if(sdf2.format(date).contains("六") || sdf2.format(date).contains("日")){
 	        		if(arrMap.get(name + "-" + sday+"d1")!=null && arrMap.get(name + "-" + sday+"d1").getState()==5){
-	        			background = "style='background:greenyellow'";
+	        			spclass = " sp";
 	        		}
 	        		//上午班
 	        		if((name + "-" + sday).equals("9号-2016-07-21")){
@@ -247,24 +252,24 @@ public class BpbController extends PbBaseController {
 	        		}
 	        		if (arrMap.get(name + "-" + sday+"d1") == null || arrMap.get(name + "-" + sday+"d1").getWorker() == null ) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">";
+	        			td += "<td class='day moning"+spclass+"' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+">";
 	        			td += "</td>";
-	        			shifts[l*2-1][k] = td;
+	        			shifts[l*2-1][k] = td; 
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day moning' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+">"+arrMap.get(name + "-" + sday +"d1").getWorker()+"</td>";
 	        		}
-	        		background="";
+	        		spclass="";
 	        		if(arrMap.get(name + "-" + sday+"d2")!=null && arrMap.get(name + "-" + sday+"d2").getState()==5){
-	        			background = "style='background:greenyellow'";
+	        			spclass = " sp";
 	        		}
 	        		//下午班
 	        		if (arrMap.get(name + "-" + sday +"d2") == null || arrMap.get(name + "-" + sday +"d2").getWorker() == null ) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' "+background+">";
+	        			td += "<td class='day"+spclass+"' name='td" + sday + "' id='" + name + "-" + sday + "d2' "+">";
 	        			td += "</td>";
 	        			shifts[l*2][k] = td;
 	        		} else{
-	            		shifts[l*2][k] = "<td "+background+" class='day' name='td" + sday + "' id='" + name + "-" + sday + "d2' >" + arrMap.get(name + "-" + sday +"d2").getWorker() + "</td>";
+	            		shifts[l*2][k] = "<td "+" class='day"+spclass+"' name='td" + sday + "' id='" + name + "-" + sday + "d2' >" + arrMap.get(name + "-" + sday +"d2").getWorker() + "</td>";
 	        		}
 	//        		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
 	//        			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
@@ -301,15 +306,15 @@ public class BpbController extends PbBaseController {
 	        		}
 	        		//上午班
 	        		if(arrMap.get(name + "-" + sday+"d1") != null && arrMap.get(name + "-" + sday+"d1").getWorker() != null){
-	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+arrMap.get(name + "-" + sday+"d1").getWorker()+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day  moning' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+arrMap.get(name + "-" + sday+"d1").getWorker()+"</td>";
 	        		}
 	        		else if(shuffleMap.get(name + "-" + l+"d1") == null) {
 	        			String td = "";
-	        			td += "<td class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">";
+	        			td += "<td class='day  moning' name='td" + sday + "' id='" + name + "-" + sday + "d1' "+background+">";
 	        			td += "</td>";
 	        			shifts[l*2-1][k] = td;
 	        		} else{
-	        			shifts[l*2-1][k] = "<td  class='day' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+shuffleMap.get(name + "-" + l +"d1")+"</td>";
+	        			shifts[l*2-1][k] = "<td  class='day  moning' name='td" + sday + "' id='" + name + "-" + sday + "d1'  "+background+">"+shuffleMap.get(name + "-" + l +"d1")+"</td>";
 	        		}
 	        		//下午班
 	        		if(arrMap.get(name + "-" + sday+"d2") != null && arrMap.get(name + "-" + sday+"d2").getWorker() != null){

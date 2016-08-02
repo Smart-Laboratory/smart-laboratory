@@ -13,7 +13,7 @@ function getWI() {
 					url:"../pb/sz/ajax/getWinfo",
 					datatype: "json",
 					jsonReader : {repeatitems : false}, 
-					colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','所在学校'],
+					colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','积休使用','所在学校','备注'],
 				   	colModel:[
 						{name:'id',index:'id',hidden:true,editable:true},
 						{name:'isactive',index:'isactive',width:30,editable:true,search:false,edittype:"select",editoptions:{value:"0:不使用;1:使用"}},
@@ -30,15 +30,17 @@ function getWI() {
 				   		{name:'phone',index:'phone',width:60,editable:true,editoptions:{size:20} ,sortable:false,search:false},
 				   		{name:'shift',index:'shift',width:100,editable:true,editoptions:{size:30} ,sortable:false,search:false},
 				   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0},editoptions:{size:10}},
-				   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
-				   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 100},editoptions:{size:10}},
+				   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 300},editoptions:{size:10}},
+				   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 300},editoptions:{size:10}},
 				   		{name:'ord4',index:'ord4',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 				   		{name:'ord5',index:'ord5',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 				   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
 				   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
 				   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
 				   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true},
-				   		{name:'school',index:'school',width:100,search:false,editable:true,edittype:'select',editoptions:{value:schools}}
+				   		{name:'lxsy',index:'lxsy',width:60,search:false,editable:false},
+				   		{name:'school',index:'school',width:100,search:false,editable:true,edittype:'select',editoptions:{value:schools}},
+				   		{name:'usercomment',index:'usercomment',width:60,search:false,editable:true}
 				   	],
 				   	rowNum:15,
 				   	pager: '#wipager',
@@ -73,7 +75,7 @@ function getBC() {
 				{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
 				{name:'ab',index:'ab',width:60,editable:true,editoptions:{size:5}},
 				{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},
-				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4;1320511:B超医生"}},
+				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4;1400100:超声医学科(医生);1400200:超声医学科(报告)"}},
 				{name:'order',index:'order',width:40,editable:true,editoptions:{size:10}},
 				{name:'days',index:'days',width:40,editable:true}
 		   	],
@@ -191,6 +193,8 @@ $(function() {
 				  $("#section").val($(select).children().attr("title"));
 					jQuery("#witable").jqGrid("setGridParam",{
 						url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
+					getBC();
+					
 			  }
 		});
 		
