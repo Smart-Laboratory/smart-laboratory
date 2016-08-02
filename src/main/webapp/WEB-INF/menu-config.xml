@@ -43,6 +43,8 @@
         	<Item name="InvalidForm" title="menu.quality.form" page="/quality/invalidSampleForm" />
         	<Item name="InvalidList" title="menu.quality.list" page="/quality/invalidSamples" />
         	<Item name="SampleTrace" title="menu.quality.trace" page="/quality/sampleTrace" />
+        	<Item name="QcData" title="menu.quality.qc.data" page="/qc/data" />
+        	<Item name="QcRule" title="menu.quality.qc.rule" page="/qc/rule" />
         </Menu>
         <Menu name="Individual" title="individual.title" page="/userform" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
             <Item name="EditUser" title="menu.user" page="/userform" roles="ROLE_ADMIN,ROLE_USER"/>
@@ -60,4 +62,8 @@
         </Menu>
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
     </Menus>
+
+
+
+
 </MenuConfig>

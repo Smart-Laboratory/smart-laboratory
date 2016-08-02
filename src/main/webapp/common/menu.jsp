@@ -68,14 +68,6 @@ $(function() {
     <menu:displayMenu name="Individual"/>
     <menu:displayMenu name="Logout"/>
 </ul>
-
-
-<!-- <div id="hospital" style="display:none;float:right;height:30px;padding-top:8px;" class="col-sm-3">
-	<div id="userText" class="col-sm-3" style="padding-top: 8px;"></div>
-	<ul id="labSelect" style="float:left;" onchange="labChange(this)" class="col-sm-5 dropdown"></ul>
-	
-	<div id="hospitalText" class="col-sm-4" style="padding-top: 8px;"></div>
-</div> -->
 <ul id="hospital" class="nav navbar-nav" style="display:none;float:right;">
 	<li><a href="#" id="userText"></a></li>
 	<li class="dropdown">

@@ -1,0 +1,213 @@
+/**
+ * Created by zhou on 2016/7/5.
+ * 微生物基础信息Script
+ */
+
+var TSLAB=TSLAB ||{}
+TSLAB.Custom=(function(){
+    var cache = {
+        listUrl:"../micro/culturemedium/getList"
+    }
+    var public = {
+        initGrid:function(){
+            $('#tableList').jqGrid({
+                caption: "培养基设置",
+                url:cache.listUrl ,
+                //postData:{type:typeid},
+                mtype: "GET",
+                datatype: "json",
+                colNames: ['id','名称','简称','温度','湿度','空气','周期','接种方法','培养方法','染色方法','使用状态'],
+                colModel: [
+                    { name: 'id', index: 'id', width: 60,hidden:true},
+                    { name: 'name', index: 'name', width: 200},
+                    { name: 'shortname', index: 'shortname', width: 100},
+                    { name: 'temperature', index: 'temperature', width: 100},
+                    { name: 'humidity', index: 'humidity', width: 100},
+                    { name: 'air', index: 'air', width: 100 },
+                    { name: 'cycle', index: 'cycle', width: 100},
+                    { name: 'vaccinateMethod', index: 'vaccinateMethod', width: 100},
+                    { name: 'cultureMethod', index: 'cultureMethod', width: 100},
+                    { name: 'stainingMethod', index: 'stainingMethod', width: 100},
+                    { name: 'state', index: 'state', width: 100,formatter:public.stateFmatter}
+                ],
+                loadComplete : function() {
+                    var table = this;
+                    setTimeout(function(){
+                        updatePagerIcons(table);
+                    }, 0);
+                },
+                ondblClickRow: function(id){
+                    public.Edit();
+                },
+                viewrecords: true,
+                //multiselect: true,
+                shrinkToFit: true,
+                altRows:true,
+                autowidth:true,
+                //height: 300,
+                height: "100%",
+                rowNum: 10,
+                rowList:[10,30,50],
+                rownumbers: true, // 显示行号
+                rownumWidth: 35, // the width of the row numbers columns
+                pager: "#pager",//分页控件的id
+                subGrid: false//是否启用子表格
+            });
+        },
+        stateFmatter:function(cellvalue, options, rowObject){
+            if(cellvalue==0){
+                return "使用中";
+            }else{
+                return "停用";
+            }
+        },
+        updatePagerIcons:function(table){
+            var replacement =
+            {
+                'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+                'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+                'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+                'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+            })
+        },
+        search: function () {
+            var query = $('#query').val()||'';
+            $('#tableList').jqGrid('setGridParam',{
+                url: cache.listUrl,
+                datatype : 'json',
+                //发送数据
+                postData : {"query":query },
+                page : 1
+            }).trigger('reloadGrid');//重新载入
+        },
+        Add:function(){
+            public.clearData();
+            layer.open({
+                type: 1,
+                area: ['520px','320px'],
+                fix: false, //不固定
+                maxmin: false,
+                shade:0.6,
+                title: "添加培养基",
+                content: $("#addDialog"),
+                btn:["保存","取消"],
+                yes: function(index, layero){
+                    //$("#addForm").submit();
+                    $.ajax({
+                        url:'../micro/culturemedium/save',
+                        type:"POST",
+                        dataType:"json",
+                        data:$('#addForm').serialize(),
+                        success:function(data){
+                            console.log(data);
+                            if(parseInt(data.success)==0){
+                                layer.close(index);
+                                public.search();
+                            }else{
+                                layer.alert(data.success);
+                            }
+                        }
+                    })
+                    //layer.close(index); //如果设定了yes回调，需进行手工关闭
+                }
+            });
+        },
+        Edit:function(){
+            var rowId = $("#tableList").jqGrid('getGridParam','selrow');
+            var rowData = $("#tableList").jqGrid('getRowData',rowId);
+            if(!rowId || rowId =='' || rowId==null){
+                layer.msg("请先选择要编辑的数据",{icon:2});
+                return false;
+            }
+            //设置数据
+
+            $('#id').val(rowData.id);
+            $('#name').val(rowData.name);
+            $('#shortname').val(rowData.shortname);
+            $('#air').val(rowData.air);
+            $('#temperature').val(rowData.temperature);
+            $('#humidity').val(rowData.humidity);
+            $('#vaccinateMethod').val(rowData.vaccinateMethod);
+            $('#stainingMethod').val(rowData.stainingMethod);
+            $('#cycle').val(rowData.cycle);
+            $('#isVaccinate').val(rowData.isVaccinate);
+            $('#isCulture').val(rowData.isCulture);
+            $('#isSmear').val(rowData.isSmear);
+            $('#isInstrument').val(rowData.isInstrument);
+            $('#isIdentification').val(rowData.isIdentification);
+            $('#state').val(rowData.state);
+            layer.open({
+                type: 1,
+                area: ['520px','320px'],
+                fix: false, //不固定
+                maxmin: false,
+                shade:0.6,
+                title: "编辑数据",
+                content: $("#addDialog"),
+                btn:["保存","取消"],
+                yes: function(index, layero){
+                    $("#id").removeAttr("disabled");
+                    $.ajax({
+                        url:'../micro/culturemedium/save',
+                        type:"POST",
+                        dataType:"json",
+                        data:$('#addForm').serialize(),
+                        success:function(data){
+                            if(parseInt(data.success)==0){
+                                layer.close(index);
+                                public.search();
+                            }else{
+                                layer.alert(data.success);
+                            }
+                        }
+                    })
+                    //layer.close(index); //如果设定了yes回调，需进行手工关闭
+                }
+            });
+        },
+        Delete:function(){
+            var id = $('#tableList').jqGrid('getGridParam','selrow');
+            if(id==null || id==''){
+                layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
+                return false;
+            }
+            layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
+                $.post('../micro/culturemedium/delete',{id:id},function(data) {
+                    jQuery("#tableList").jqGrid('delRowData',id);
+                });
+                layer.close(index);
+            });
+        },
+        clearData:function(){
+            $("#addDialog").find("input,textarea").each(function(){
+                this.value = "";
+            });
+        }
+
+    }
+    return public;
+})()
+
+
+$(function(){
+    var height = document.documentElement.clientHeight;
+
+    //alert(1)
+    if(height>150) $('#ullist').height(height-150);
+    var isfirst = true;
+
+    //keyPress 回车检索
+    $("#query").keypress(function(e){
+        if (e.keyCode == 13){
+            TSLAB.Custom.search();
+        }
+    });
+    TSLAB.Custom.initGrid();
+    //$(window).triggerHandler('resize.jqGrid');
+
+})

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.lis.*;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -14,11 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.smart.model.lis.CollectSample;
-import com.smart.model.lis.ContactInfor;
-import com.smart.model.lis.Device;
-import com.smart.model.lis.Section;
-import com.smart.model.lis.SectionCode;
 import com.smart.model.request.SFXM;
 import com.smart.model.rule.Bag;
 import com.smart.model.rule.DesBag;
@@ -267,7 +263,6 @@ public class SearchAjaxController extends BaseAuditController {
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-
 		List<Index> desList =  indexManager.getIndexs(name);
 		if(desList.size()>10)
 			desList = desList.subList(0, 10);
@@ -288,8 +283,79 @@ public class SearchAjaxController extends BaseAuditController {
 		response.getWriter().print(array.toString());
 		return null;
 	}
-    
-    @RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
+
+	/**
+	 * 抗生素
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+     */
+	@RequestMapping(value = "/searchAntibiotic", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchAntibiotic(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Index> desList =  indexManager.getAntibioticList(name,0,0,"","");
+		if(desList.size()>10)
+			desList = desList.subList(0, 10);
+		JSONArray array = new JSONArray();
+
+		if (desList != null) {
+			for (Index d : desList) {
+				JSONObject o = new JSONObject();
+				o.put("id", d.getId());
+				o.put("indexid", d.getIndexId());
+				o.put("ab", d.getEnglish());
+				o.put("name", d.getName());
+				array.put(o);
+			}
+		}
+
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+
+	/**
+	 * 搜索微生物检验目的
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+     */
+	@RequestMapping(value = "/searchMicroTest", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchMicroTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+		List<Ylxh> desList =  ylxhManager.getLabofYlmcBylike("1160703,3120401",name);
+		if(desList.size()>10)
+			desList = desList.subList(0, 10);
+		JSONArray array = new JSONArray();
+
+		if (desList != null) {
+			for (Ylxh info : desList) {
+				JSONObject o = new JSONObject();
+				o.put("id",info.getYlxh());
+				o.put("indexid", info.getYlmc());
+				o.put("lab", info.getKsdm());
+				array.put(o);
+			}
+		}
+
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+
+	@RequestMapping(value = "/searchBag", method = { RequestMethod.GET })
 	@ResponseBody
 	public String searchBag(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

@@ -4,6 +4,7 @@ public class P {
 	private String id;
 	private char s;
 	private char l;
+	private String diag;
 
 	public char getS() {
 		return s;
@@ -43,5 +44,13 @@ public class P {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getDiag() {
+		return diag;
+	}
+
+	public void setDiag(String diag) {
+		this.diag = diag;
 	}
 }

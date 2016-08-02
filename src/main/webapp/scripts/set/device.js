@@ -173,7 +173,7 @@ function updatePagerIcons(table) {
 
 function initGrid(typeid){
 	$("#tableList").jqGrid({
-		caption: "设置",
+		caption: "仪器设置",
 		url: "../set/device/getDeviceList",
 		//postData:{type:typeid},
 		mtype: "GET",
