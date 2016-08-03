@@ -1,7 +1,7 @@
 package com.smart.dao.hibernate.qc;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
-import com.smart.dao.qc.QcBathDao;
+import com.smart.dao.qc.QcBatchDao;
 import com.smart.model.qc.QcBatch;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,9 +20,9 @@ import java.util.List;
  */
 
 @Repository("qcBathDao")
-public class QcBathDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> implements QcBathDao {
+public class QcBatchDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> implements QcBatchDao {
 
-    public QcBathDaoHibernate() {
+    public QcBatchDaoHibernate() {
         super(QcBatch.class);
     }
 

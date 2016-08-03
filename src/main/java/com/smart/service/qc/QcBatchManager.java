@@ -13,7 +13,7 @@ import java.util.List;
  * @Date:2016/7/27 11:13
  * @Version:
  */
-public interface QcBathManager extends GenericManager<QcBatch, Long> {
+public interface QcBatchManager extends GenericManager<QcBatch, Long> {
     void saveDetails(List<QcBatch> qcBatchList);
     int getCount(String qcBatch, int start, int end, String sidx, String sord);
     List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);

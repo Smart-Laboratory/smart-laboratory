@@ -67,21 +67,14 @@ function  AddSection(){
  *  add by zcw 2015-05-16
  * **********************************/
 function deleteSection(){
-	var ids = [];
-	ids=$('#sectionList').jqGrid('getGridParam','selarrrow');
-	if(ids==null || ids.length==0){
+	var id = $('#sectionList').jqGrid('getGridParam','selrow');
+	if(id==null || id.length==0){
 		layer.msg('请先选择要删除的数据', {icon: 2,time: 1000});
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post('section/bathremove',{ids:ids},function(data) {
-			if(data && data.result=='success'){
-				var len = ids.length;
-				for(var i = 0;i < len ;i ++) {
-					$("#sectionList").jqGrid("delRowData", ids[0]);
-				}
-			}
-		});
+		$.post('section/remove',{id:id},function(data) {});
+		$("#sectionList").trigger('reloadGrid');
 		layer.close(index);
 	});
 }
@@ -193,6 +186,9 @@ $(function(){
 			setTimeout(function(){
 				updatePagerIcons(table);
 			}, 0);
+		},
+		ondblClickRow: function (id) {
+			editSection();
 		},
 		viewrecords: true,
 		shrinkToFit: true,

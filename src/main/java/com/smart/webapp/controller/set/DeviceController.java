@@ -154,7 +154,7 @@ public class DeviceController {
         String id = request.getParameter("id");
         JSONObject success = new JSONObject();
         String method = request.getParameter("method");
-        System.out.println("method==>"+method);
+        //System.out.println("method==>"+method);
         if("add".equals(method)) {
             device.setStatus(1);
             if (deviceManager.getDeviceByCode(device.getId()) != null) {
