@@ -4,7 +4,7 @@
 		   	url:'../reagent/getReagent?q=1',
 			datatype: "json",
 			width:width,
-		   	colNames:['','名称','规格','产地', '品牌', '单位','单价','存放位置','环境条件','当前温度','自制试剂'],
+		   	colNames:['','名称','规格','配套仪器', '品牌', '单位','单价','存放位置','环境条件','当前温度','总量'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'name',index:'name', width:"20%"},

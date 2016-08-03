@@ -6,10 +6,16 @@ import com.smart.model.micro.DrugGroup;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * An interface that provides a data management interface to the DrugGroup table.
  */
 public interface DrugGroupDao extends GenericDao<DrugGroup, Long> {
-    int getDrugGroupsCount(String query, int start, int end, String sidx, String sord);
-    List<DrugGroup> getDrugGroups(String query, int start, int end, String sidx, String sord);
+	
+	@Transactional
+	int getDrugGroupsCount(String query, int start, int end, String sidx, String sord);
+    
+	@Transactional
+	List<DrugGroup> getDrugGroups(String query, int start, int end, String sidx, String sord);
 }

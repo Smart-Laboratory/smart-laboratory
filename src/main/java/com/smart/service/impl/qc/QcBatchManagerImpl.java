@@ -18,7 +18,11 @@ import java.util.List;
  * @Version:
  */
 @Service("qcBatchManager")
+<<<<<<< HEAD:src/main/java/com/smart/service/impl/qc/QcBathManagerImpl.java
 public class QcBathManagerImpl  extends GenericManagerImpl<QcBatch, Long> implements QcBatchManager {
+=======
+public class QcBatchManagerImpl  extends GenericManagerImpl<QcBatch, Long> implements QcBatchManager {
+>>>>>>> origin/master:src/main/java/com/smart/service/impl/qc/QcBatchManagerImpl.java
 
     private QcBatchDao qcBatchDao = null;
 
@@ -41,5 +45,9 @@ public class QcBathManagerImpl  extends GenericManagerImpl<QcBatch, Long> implem
     public List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord){
         return qcBatchDao.getDetails(qcBatch,start,end,sidx,sord);
     }
+
+	public List<QcBatch> getByDevice(String deviceid) {
+		return qcBatchDao.getByDevice(deviceid);
+	}
 
 }

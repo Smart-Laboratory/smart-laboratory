@@ -20,6 +20,7 @@ import com.smart.Constants;
 import com.smart.model.reagent.In;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
+import com.smart.model.user.User;
 import com.smart.webapp.util.DataResponse;
 
 @Controller
@@ -34,10 +35,38 @@ public class DetailController extends ReagentBaseController {
 	@RequestMapping(value = "/getIn*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		List<In> list = inManager.getByLab(lab);
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String labName = user.getLastLab();
+		if(labName==null || labName.isEmpty()){
+			labName=user.getDepartment().split(",")[0];
+		}
+		labName = labMap.get(labName);
+		
+		List<In> list = inManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
+		
+		List<Reagent> rglist = reagentManager.getAll();
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rglist) {
+			rMap.put(r.getId(), r);
+		}
+		
+		String isSearch = request.getParameter("_search");
+		String searchField = request.getParameter("searchField");
+		String searchString = request.getParameter("searchString");
+		if(isSearch.equals("true")){
+			for(int i=list.size()-1;i>=0;i--){
+				if(!rMap.get(list.get(i).getRgId()).getName().contains(searchString))
+					list.remove(i);
+			}
+		}
+		
+		
+		
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
@@ -64,11 +93,7 @@ public class DetailController extends ReagentBaseController {
 				ids.add(in.getRgId());
 			}
 		}
-		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
-		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
-		for(Reagent r : rglist) {
-			rMap.put(r.getId(), r);
-		}
+		
 		for(In i : list) {
 			if(index >= start && index < end) {
 				Reagent r = rMap.get(i.getRgId());
@@ -94,10 +119,36 @@ public class DetailController extends ReagentBaseController {
 	@RequestMapping(value = "/getOut*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		List<Out> list = outManager.getByLab(lab);
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String labName = user.getLastLab();
+		if(labName==null || labName.isEmpty()){
+			labName=user.getDepartment().split(",")[0];
+		}
+		labName = labMap.get(labName);
+		
+		List<Out> list = outManager.getByLab(labName);
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
+		
+		List<Reagent> rglist = reagentManager.getAll();
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rglist) {
+			rMap.put(r.getId(), r);
+		}
+		
+		String isSearch = request.getParameter("_search");
+		String searchField = request.getParameter("searchField");
+		String searchString = request.getParameter("searchString");
+		if(isSearch.equals("true")){
+			for(int i=list.size()-1;i>=0;i--){
+				if(!rMap.get(list.get(i).getRgId()).getName().contains(searchString))
+					list.remove(i);
+			}
+		}
+		
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
@@ -124,11 +175,7 @@ public class DetailController extends ReagentBaseController {
 				ids.add(o.getRgId());
 			}
 		}
-		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
-		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
-		for(Reagent r : rglist) {
-			rMap.put(r.getId(), r);
-		}
+		
 		for(Out o: list) {
 			if(index >= start && index < end) {
 				Reagent r = rMap.get(o.getRgId());

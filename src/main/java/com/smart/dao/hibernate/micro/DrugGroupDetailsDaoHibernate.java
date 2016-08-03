@@ -1,14 +1,10 @@
 package com.smart.dao.hibernate.micro;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
-import com.smart.dao.micro.DrugGroupDao;
 import com.smart.dao.micro.DrugGroupDetailsDao;
-import com.smart.model.micro.DrugGroup;
 import com.smart.model.micro.DrugGroupDetails;
-import com.smart.model.rule.Index;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,7 +51,6 @@ public class DrugGroupDetailsDaoHibernate extends GenericDaoHibernate<DrugGroupD
         }
     }
 
-    @Override
     public int getDrugDetailsCount(String groupId, int start, int end, String sidx, String sord) {
         String sql = "select count(*)  from DrugGroupDetails  c where c.groupId=:groupId";
         sidx = sidx.equals("") ? "id" : sidx;
@@ -65,8 +60,8 @@ public class DrugGroupDetailsDaoHibernate extends GenericDaoHibernate<DrugGroupD
         return new Integer(q.uniqueResult() + "");
     }
 
-    @Override
-    public List<Object[]>  getDrugDetails(String groupId, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<Object[]>  getDrugDetails(String groupId, int start, int end, String sidx, String sord) {
         String sql = "from DrugGroupDetails c,Index i where c.drugId = i.id and i.testClass='抗生素' and c.groupId=:groupId  ";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
@@ -95,8 +90,8 @@ public class DrugGroupDetailsDaoHibernate extends GenericDaoHibernate<DrugGroupD
         q.executeUpdate();
     }
 
-    @Override
-    public List<DrugGroupDetails> getByGroupId(String groupId) {
+    @SuppressWarnings("unchecked")
+	public List<DrugGroupDetails> getByGroupId(String groupId) {
         String sql = "from DrugGroupDetails c where   c.groupId=:groupId  ";
         Query q = getSession().createQuery(sql);
         q.setString("groupId",groupId);

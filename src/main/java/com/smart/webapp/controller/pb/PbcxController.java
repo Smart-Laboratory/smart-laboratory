@@ -12,6 +12,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.velocity.convert.WebMacro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.model.pb.Arrange;
+import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
@@ -64,7 +66,7 @@ public class PbcxController extends PbBaseController {
 		User user = null;
 		if(request.getRemoteUser() != null)
 			user = userManager.getUserByUsername(request.getRemoteUser());
-		String yearAndMonth = request.getParameter("date");
+		String day = request.getParameter("date");
 		String section = request.getParameter("section");
 		String type = request.getParameter("type");
 		
@@ -74,7 +76,7 @@ public class PbcxController extends PbBaseController {
 				view.addObject("size", 0);
 				return view;
 			}
-			section = user.getLastLab();
+			section = "1300000";
 		}
 		if(type == null) {
 			type = "1"; 
@@ -87,9 +89,9 @@ public class PbcxController extends PbBaseController {
         SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
 		
-		if(yearAndMonth != null){
-			calendar.set(Calendar.YEAR, Integer.parseInt(yearAndMonth.substring(0,4)));
-			month=Integer.parseInt(yearAndMonth.split("-")[1])-1;
+		if(day != null){
+			calendar.set(Calendar.YEAR, Integer.parseInt(day.substring(0,4)));
+			month=Integer.parseInt(day.split("-")[1])-1;
 			calendar.set(Calendar.MONTH, month);
 			System.out.println(calendar.get(Calendar.MONTH));
 			year = calendar.get(Calendar.YEAR);
@@ -104,7 +106,8 @@ public class PbcxController extends PbBaseController {
 
 		String arrString = "";
 		int size;
-		if(section.equals("1300000") && !type.equals("7")){
+		initLabMap();
+		if(section.equals("1300000") && type.equals("1")){
 			List<Arrange> yArranges = arrangeManager.getArrangeByType("夜", tomonth);
 			List<Arrange> lArranges = arrangeManager.getArrangeByType("良", tomonth);
 			List<Arrange> wArranges = arrangeManager.getArrangeByType("9", tomonth);
@@ -218,6 +221,82 @@ public class PbcxController extends PbBaseController {
 	        	arrString += "</tr>";
 	        }
 			
+		}else if(section.equals("1300000") && type.equals("4")){
+			List<Arrange> arranges = arrangeManager.getByDay(day);
+			Map<String, String> pMap = new HashMap<String,String>();
+			for(Arrange a : arranges){
+				pMap.put(a.getWorker(), a.getShift());
+			}
+			
+			List<WInfo> wInfos = wInfoManager.getByType(0);
+			if(wInfos==null)
+				size=0;
+			else
+				size = 999;
+			Map<String, String> wMap = new HashMap<String,String>();
+			for(WInfo w : wInfos){
+				if(w.getSection()!=null){
+					String sec = w.getSection();
+					if(sec.contains("1400"))
+						continue;
+					if(sec.contains(",")){
+						for(String s:sec.split(",")){
+							if(s!=null){
+								if(wMap.get(s)!=null)
+									wMap.put(s, wMap.get(s)+","+w.getName());
+								else {
+									wMap.put(s, w.getName());
+								}
+							}
+						}
+					}else{
+						if(wMap.get(sec)!=null)
+							wMap.put(sec, wMap.get(sec)+","+w.getName());
+						else {
+							wMap.put(sec, w.getName());
+						}
+					}
+				}
+			}
+			String html = "";
+			for(String s : wMap.keySet()){
+				html += "<div class='col-sm-12'><div class='col-sm-1' style='text-align: right;'>";
+				html += "<span>"+labMap.get(s)+"</span></div>";
+				
+				String winames = wMap.get(s);
+				if(winames==null){
+					html += "</div>";
+					continue;
+				}
+//				String th = "<th style='background:#7FFFD4'>"+shift.getAb()+"</th>";
+//				String td = "<td>班次</td>";
+				String th = "";
+				String td = "";
+				String tr = "";
+				int i =0;
+				for(String str : winames.split(",")){
+					if(str==null)
+						continue;
+					if(i%8==0){
+						tr+="<tr>";
+					}
+					tr += "<th style='background:#7FFFD4;padding:0px 0px;'>"+str+"</th>";
+					tr += "<td>"+(pMap.get(str)==null?"":pMap.get(str))+"</td>";
+					if(i%8==7){
+						tr+="</tr>";
+					}
+					i++;
+				}
+				html += "<div class='col-sm-11'><table class=' table-hover' style='font-size:8px;text-align:center;margin-bottom:5px;' border='1px;'>";
+				html += tr;
+				html += "</table></div>";
+				
+				html += "</div>";
+				
+				
+			}
+			arrString=html;
+			
 		}else{
 			String wiNames = "";
 			int i=1;
@@ -286,7 +365,7 @@ public class PbcxController extends PbBaseController {
 		}
         ModelAndView view = new ModelAndView();
         view.addObject("section", section);
-        view.addObject("month", tomonth);
+        view.addObject("month", day);
         view.addObject("type", type);
         view.addObject("arrString", arrString);
         view.addObject("size", size);

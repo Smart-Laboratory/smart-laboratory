@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface ChannelDao  extends GenericDao<Channel, Long> {
 
-	@Transactional
     public void saveChannels(List<Channel> channels);
 
+    @Transactional
 	public Channel getChannel(String deviceid,String testid);
 }

@@ -2,7 +2,6 @@ package com.smart.dao.hibernate.qc;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.qc.QcTestDao;
-import com.smart.model.qc.QcBatch;
 import com.smart.model.qc.QcTest;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -49,7 +48,8 @@ public class QcTestDaoHibernate  extends GenericDaoHibernate<QcTest, Long> imple
      * @param sord
      * @return
      */
-    public List<QcTest> getDetails(String qcBatch, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<QcTest> getDetails(String qcBatch, int start, int end, String sidx, String sord) {
         String sql = "from QcTest c where c.qcBatch=:qcBatch ";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;

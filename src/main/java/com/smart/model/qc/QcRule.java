@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 质控规则基本信息
@@ -57,5 +58,10 @@ public class QcRule {
 	
 	public void setInuse(int inuse) {
 		this.inuse = inuse;
+	}
+	
+	@Transient
+	public String getUseInfo() {
+		return inuse == 1 ? "是" : "否";
 	}
 }

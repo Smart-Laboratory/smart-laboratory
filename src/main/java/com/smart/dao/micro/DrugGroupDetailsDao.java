@@ -1,7 +1,6 @@
 package com.smart.dao.micro;
 
 import com.smart.dao.GenericDao;
-import com.smart.model.micro.DrugGroup;
 import com.smart.model.micro.DrugGroupDetails;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -70,6 +70,7 @@ public class Sample extends BaseObject {
 	private String patientblh;
 	private String charttest;
 	private String ageunit;
+	private int symstatus;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -531,6 +532,15 @@ public class Sample extends BaseObject {
 
 	public void setInvoiceNum(int invoiceNum) {
 		this.invoiceNum = invoiceNum;
+	}
+	
+	@Column(name="symstatus")
+	public int getSymstatus() {
+		return symstatus;
+	}
+
+	public void setSymstatus(int symstatus) {
+		this.symstatus = symstatus;
 	}
 
 	@Transient

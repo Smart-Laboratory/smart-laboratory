@@ -76,7 +76,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getArrangeByType(String type, String month){
-		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' ";
+		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' and section like '1300%' ";
 		return getSession().createQuery(hql).list();
 	}
 	
@@ -94,21 +94,21 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getByDay(String day){
-		String hql = "from Arrange where date = '"+day+"' ";
+		String hql = "from Arrange where date = '"+day+"' and section like '1300%' ";
 		return getSession().createQuery(hql).list();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Arrange> getMonthArrangeByshift(String shift, String month){
+	public List<Arrange> getMonthArrangeByshift(String shift, String month,String section){
 		if(!month.contains("-")){
 			return null;
 		}
 		int year = Integer.parseInt(month.split("-")[0]);
 		int m = Integer.parseInt(month.split("-")[1]);
-		String monthbefore = m==1? (year-1)+"-"+12 : year+"-"+(m-1);
-		String monthafter = m==12? (year+1)+"-"+1 : year+"-"+(m-1);
+		String monthbefore = m==1? (year-1)+"-"+12 : year+"-"+ ((m-1)<10?"0"+(m-1):(m-1));
+		String monthafter = m==12? (year+1)+"-"+1 : year+"-"+((m+1)<10?"0"+(m+1):(m+1));
 		
-		String hql = "from Arrange where shift = '"+shift+"' and (date like '"+month+"%' or date like '"+monthbefore+"%' or date like '"+monthafter+"%') ";
+		String hql = "from Arrange where section = '"+section+"' and shift = '"+shift+"' and (date like '"+month+"%' or date like '"+monthbefore+"%' or date like '"+monthafter+"%') ";
 		return getSession().createQuery(hql).list();
 	}
 }

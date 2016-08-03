@@ -36,4 +36,8 @@ public class WorkCountManagerImpl extends GenericManagerImpl<WorkCount, Long> im
 	public double getYearCount(String year,String name ){
 		return workCountDao.getYearCount(year,name);
 	}
+	
+	public List<WorkCount> getByWorker(String worker){
+		return workCountDao.getByWorker(worker);
+	}
 }

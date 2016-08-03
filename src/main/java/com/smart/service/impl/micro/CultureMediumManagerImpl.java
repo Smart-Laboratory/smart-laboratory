@@ -28,12 +28,10 @@ public class CultureMediumManagerImpl extends GenericManagerImpl<CultureMedium, 
         this.cultureMediumDao = cultureMediumDao;
     }
 
-    @Override
     public int getCultureMediumsCount(String query, int start, int end, String sidx, String sord) {
         return cultureMediumDao.getCultureMediumsCount(query,start,end,sidx,sord);
     }
 
-    @Override
     public List<CultureMedium> getCultureMediums(String query, int start, int end, String sidx, String sord) {
         return cultureMediumDao.getCultureMediums(query,start,end,sidx,sord);
     }

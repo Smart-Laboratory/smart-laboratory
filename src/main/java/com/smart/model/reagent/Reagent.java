@@ -45,6 +45,9 @@ public class Reagent extends BaseObject implements Serializable {
 	private int isselfmade;				// 是否为自制试剂
 	
 	private String lab;
+	
+	private boolean isStockout;
+	private String totalNum;
 
 	/**
 	 * 主键
@@ -256,6 +259,30 @@ public class Reagent extends BaseObject implements Serializable {
 		this.lab = lab;
 	}
 
+	/**
+	 * 是否缺货
+	 */
+	@Transient
+	public boolean isStockout() {
+		return isStockout;
+	}
+
+	public void setStockout(boolean isStockout) {
+		this.isStockout = isStockout;
+	}
+
+	/**
+	 * 库存总量
+	 */
+	@Transient
+	public String getTotalNum() {
+		return totalNum;
+	}
+
+	public void setTotalNum(String totalNum) {
+		this.totalNum = totalNum;
+	}
+	
 	/**
 	 * 温度
 	 */

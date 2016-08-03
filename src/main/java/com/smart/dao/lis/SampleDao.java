@@ -1,5 +1,6 @@
 package com.smart.dao.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -74,4 +75,8 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	List<Sample> getReceiveList(String text, String lab);
+	
+	@Transactional
+	List<Sample> getOutList(String sender,Date sendtime);
+	
 }

@@ -71,6 +71,7 @@ public class SampleLog extends BaseObject {
 	private String patientblh;
 	private String charttest;
 	private String ageunit;
+	private int symstatus;
 	
 	private String logger;
 	private Date logtime;
@@ -507,6 +508,15 @@ public class SampleLog extends BaseObject {
 
 	public void setLogoperate(String logoperate) {
 		this.logoperate = logoperate;
+	}
+	
+	@Column(name="symstatus")
+	public int getSymstatus() {
+		return symstatus;
+	}
+
+	public void setSymstatus(int symstatus) {
+		this.symstatus = symstatus;
 	}
 
 	@Transient

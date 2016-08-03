@@ -56,7 +56,7 @@ public class SamplePrintController extends BaseAuditController {
 		int hasLast = Integer.parseInt(request.getParameter("haslast"));
 		int type = 1;
 		JSONObject info = new JSONObject();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		Sample s = sampleManager.getBySampleNo(sampleno);
 		Process process = processManager.getBySampleId(s.getId());
 		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());

@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,5 +109,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 
 	public List<Sample> getReceiveList(String text, String lab) {
 		return sampleDao.getReceiveList(text, lab);
+	}
+	
+	public List<Sample> getOutList(String sender,Date sendtime){
+		return sampleDao.getOutList(sender, sendtime);
 	}
 }

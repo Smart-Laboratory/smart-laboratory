@@ -19,4 +19,7 @@ public interface WorkCountDao extends GenericDao<WorkCount, Long> {
 	
 	@Transactional
 	List<WorkCount> getMonthBySection(String section, String month);
+
+	@Transactional
+	List<WorkCount> getByWorker(String worker);
 }

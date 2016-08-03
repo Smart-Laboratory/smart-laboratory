@@ -20,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
+import com.smart.model.pb.SxSchool;
 import com.smart.model.pb.WInfo;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
+import com.smart.service.SxSchoolManager;
 import com.smart.service.WInfoManager;
 
 @Controller
@@ -115,8 +117,15 @@ public class SxcxViewController {
 			}
 		}
 		
+		//实习生学校map
+				Map<Long, String> sxschoolMap = new HashMap<Long,String>();
+				List<SxSchool> schools = sxSchoolManager.getAll();
+				for(SxSchool s : schools){
+					sxschoolMap.put(s.getId(), s.getNamesx());
+				}
+		
 		for(int j=0;j<wInfos.size();j++){
-			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getId()+",'"+wInfos.get(j).getName()+"')\"  title='"+wInfos.get(j).getPhone()+"'>"+wInfos.get(j).getName()+"</a></td>";
+			shifts[j+1][0]= "<td><a onclick=\"stuInfo("+wInfos.get(j).getWorkid()+",'"+wInfos.get(j).getName()+"')\"  title='"+wInfos.get(j).getPhone()+"'>"+wInfos.get(j).getName()+"("+(wInfos.get(j).getSchool()==null?"":sxschoolMap.get(Long.parseLong(wInfos.get(j).getSchool())))+")"+"</a></td>";
 			for(int i=1;i<maxWeek+1;i++){
 				int dweek = startweek+i-1;
 				if(dweek>yearMaxWeek)
@@ -203,4 +212,6 @@ public class SxcxViewController {
 	private ShiftManager shiftManager;
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
+	@Autowired
+	private SxSchoolManager sxSchoolManager;
 }

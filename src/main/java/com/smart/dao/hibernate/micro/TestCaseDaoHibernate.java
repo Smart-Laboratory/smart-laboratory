@@ -3,7 +3,6 @@ package com.smart.dao.hibernate.micro;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.micro.TestCaseDao;
 import com.smart.model.micro.TestCase;
-import com.smart.model.rule.Index;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +22,6 @@ public class TestCaseDaoHibernate extends GenericDaoHibernate<TestCase, Long> im
         super(TestCase.class);
     }
 
-    @Override
     public int getTestCaseCount(String query, int start, int end, String sidx, String sord) {
         String sql = "select count(c.*)  from TestCase c,Ylxh i where 1=1 c.testId = i.ylxh ";
         if(query != null && !query.equals(""))
@@ -34,9 +32,8 @@ public class TestCaseDaoHibernate extends GenericDaoHibernate<TestCase, Long> im
         return new Integer(q.uniqueResult() + "");
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public List<TestCase> getTestCaseList(String query, int start, int end, String sidx, String sord) {
-        Index i = new Index();
         String sql = "from TestCase c,Ylxh i where 1=1 c.testId = i.ylxh ";
         if(query != null && !query.equals(""))
             sql += " and i.name like '%" + query+"%'" ;

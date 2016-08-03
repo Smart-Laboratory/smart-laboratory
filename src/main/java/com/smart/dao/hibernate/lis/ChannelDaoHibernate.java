@@ -2,8 +2,6 @@ package com.smart.dao.hibernate.lis;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.lis.ChannelDao;
 import com.smart.model.lis.Channel;
-import com.smart.model.lis.Device;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -29,7 +27,6 @@ public class ChannelDaoHibernate extends GenericDaoHibernate<Channel,Long> imple
      * 批量保存仪器通道数据
      * @param channels  //仪器通道List
      */
-    @Override
     public void saveChannels(List<Channel> channels) {
         Session session = null;
         if(channels !=null && channels.size()>0){
@@ -60,8 +57,8 @@ public class ChannelDaoHibernate extends GenericDaoHibernate<Channel,Long> imple
      * @param testid    //项目ID
      * @return
      */
-    @Override
-    public Channel getChannel(String deviceid, String testid){
+    @SuppressWarnings("unchecked")
+	public Channel getChannel(String deviceid, String testid){
         String sql = "from Channel s where s.deviceId =:deviceid and s.testId =:testid";
         Query query= getSession().createQuery(sql);
         query.setString("deviceid",deviceid);

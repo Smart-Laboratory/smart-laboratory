@@ -1,5 +1,6 @@
 package com.smart.service.lis;
 
+import java.util.Date;
 import java.util.List;
 
 import com.smart.model.lis.Process;
@@ -14,5 +15,7 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 	List<Process> getHisProcess(String substring);
 
 	List<Process> getBySampleCondition(String text, String lab);
+	
+	List<Process> getOutList(String sender, Date starttime);
 
 }

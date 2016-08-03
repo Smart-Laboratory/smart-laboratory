@@ -10,7 +10,7 @@ public interface OutManager extends GenericManager<Out, Long> {
 
 	void saveAll(List<Out> needSaveOut);
 	
-	List<Out> getLastHMs(String ids, String string);
+	List<Out> getLastHMs(String ids, Date string);
 
 	List<Out> getByLab(String lab);
 

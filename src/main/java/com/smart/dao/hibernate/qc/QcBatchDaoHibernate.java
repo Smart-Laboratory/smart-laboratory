@@ -5,7 +5,6 @@ import com.smart.dao.qc.QcBatchDao;
 import com.smart.model.qc.QcBatch;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,7 +52,8 @@ public class QcBatchDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> imp
      * @param sord
      * @return
      */
-    public List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord) {
         String sql = "from QcBatch c where c.qcBatch=:qcBatch ";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
@@ -93,4 +93,9 @@ public class QcBatchDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> imp
             }
         }
     }
+
+	@SuppressWarnings("unchecked")
+	public List<QcBatch> getByDevice(String deviceid) {
+		return getSession().createQuery("from QcBatch where deviceid like '%" + deviceid + "%'").list();
+	}
 }

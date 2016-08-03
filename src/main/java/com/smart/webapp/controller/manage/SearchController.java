@@ -43,16 +43,16 @@ public class SearchController {
 		if (operator.getLastLab() != null) {
 			lab = operator.getLastLab();
 		}
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		if (department != null) {
 			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
+				depart.put(s, sectionutil.getLabValue(s));
 				if (StringUtils.isEmpty(lab)) {
 					lab = s;
 				}
 			}
 		}
-		depart.put("1300000", "所有科室");
+		//depart.put("1300000", "所有科室");
 		Map<String, String> sampleTypes = SampleUtil.getInstance().getSampleList(dictionaryManager);
 		
 		request.setAttribute("departList", depart);
@@ -163,11 +163,11 @@ public class SearchController {
 		}
 		
 		Map<String, String> sMap = SampleUtil.getInstance().getSampleList(dictionaryManager);
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		
 		
 		for(Sample info :samples) {
-			String section = sectionutil.getValue(info.getSectionId());
+			String section = sectionutil.getLabValue(info.getSectionId());
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());

@@ -36,6 +36,7 @@ import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ReceivePointManager;
 import com.smart.service.lis.SampleLogManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TestResultLogManager;
 import com.smart.service.lis.TestResultManager;
 import com.smart.webapp.util.DataResponse;
@@ -78,6 +79,9 @@ public class ModifyController {
 	@Autowired
 	private RMIService rmiService = null;
 
+	@Autowired
+	private SectionManager sectionManager = null;
+	
 	private Map<String, String> pointMap = new HashMap<String, String>();
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -153,8 +157,8 @@ public class ModifyController {
 			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sl.getSampleType()));
 			map.put("fee", sl.getFee());
 			map.put("diag", sl.getDiagnostic());
-			map.put("section", SectionUtil.getInstance(rmiService).getValue(sl.getHosSection()));
-			map.put("lab", SectionUtil.getInstance(rmiService).getValue(sl.getSectionId()));
+			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getValue(sl.getHosSection()));
+			map.put("lab", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sl.getSectionId()));
 			map.put("requester", pl.getRequester());
 			map.put("receiver", pl.getReceiver());
 			map.put("receivetime", pl.getReceivetime());

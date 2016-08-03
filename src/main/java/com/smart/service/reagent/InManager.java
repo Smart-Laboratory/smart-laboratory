@@ -10,7 +10,7 @@ public interface InManager extends GenericManager<In, Long> {
 
 	void saveAll(List<In> needSaveIn);
 
-	List<In> getByInDate(Date indate);
+	List<In> getByInDate(String indate);
 
 	List<In> getByLab(String lab);
 }

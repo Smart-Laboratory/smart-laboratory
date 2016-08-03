@@ -1,7 +1,5 @@
 package com.smart.dao.hibernate.lis;
 
-
-import com.smart.model.Dictionary;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -27,6 +25,7 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
      * @param sord
      * @return
      */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Device> getDeviceList(String query,String type,int start, int end, String sidx, String sord) {
 		String sql = "  from Device d where 1=1 ";
@@ -68,7 +67,7 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
 	 * @param code  //编号
 	 * @return
      */
-	@Override
+	@SuppressWarnings("unchecked")
 	public Device getDeviceByCode(String code) {
 		Query query = getSession().createQuery("from Device d where d.id=:code");
 		query.setString("code",code);
@@ -78,8 +77,14 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
 		}
 		return null;
 	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Device> getDeviceList(String name){
-		List<Device> devices = getSession().createQuery("from Device where name like '" + name + "%'  or id like '"+name+"%' order by name,id").list();
-		return devices;
+		return getSession().createQuery("from Device where name like '" + name + "%'  or id like '"+name+"%' order by name,id").list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Device> getDeviceByLab(String lab) {
+		return getSession().createQuery("from Device where lab='" + lab + "' order by id").list();
 	}
 }

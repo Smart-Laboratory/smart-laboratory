@@ -39,6 +39,7 @@ import com.smart.service.execute.SampleNoBuilderManager;
 import com.smart.service.impl.zy.RMIServiceImpl;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.ExecuteInfo;
@@ -569,12 +570,12 @@ public class ExecuteController {
 		if(list==null || list.size()==0)
 			return null;
 		
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		for(LabOrder l : list){
 			html.append("<div style='background:#999;width:450px;height:350px;padding:10px 10px;margin:15px 10px;float:left;'>");
 			html.append("<div id='top' style='text-align:center;'>"+
 							"<p><span >浙一医院 门诊 检验回执单</span></p>"+
-							"<p><span >检验部门:<b name='section'>"+sectionUtil.getValue(l.getLabdepartment().toString())+"</b></span></p>"+
+							"<p><span >检验部门:<b name='section'>"+sectionUtil.getLabValue(l.getLabdepartment().toString())+"</b></span></p>"+
 						"</div>");
 			html.append("<div id='patient'>");
 			html.append("<div class='col-sm-12' style='width:100%;float:left;'><div class='col-sm-4' style='width:33.3%;float:left;'>"+
@@ -647,7 +648,7 @@ public class ExecuteController {
 							+"<span class='col-sm-2 sfont' id='sDate' name='sampletype' style='width:20%;float:left;'>"+sampleTypeMap.get(l.getSampletype())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:99%;float:left;'>"
-							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getLabdepartment().toString())+"</span>"
+							+"<span class='sfont' name='hosSection'>"+sectionUtil.getLabValue(l.getLabdepartment().toString())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:99%;float:left;'>"
 							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getRequestdepartment().toString())+"</span>"
@@ -758,5 +759,7 @@ public class ExecuteController {
 	private DictionaryManager dictionaryManager;
 	@Autowired
 	private ExecuteUnusualManager executeUnusualManager;
+	@Autowired
+	private SectionManager sectionManager;
 	
 }

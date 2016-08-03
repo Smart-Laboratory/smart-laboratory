@@ -78,9 +78,11 @@ public class BpbcxController extends PbBaseController{
 		
 //		request.setAttribute("departList", depart);
 		request.setAttribute("section", section);
+		initLabMap();
+		request.setAttribute("sectionStr", labMap.get(section));
 		
 		if(week == null || week.isEmpty())
-			return new ModelAndView();
+			return new ModelAndView().addObject("size", 0);
 		week=week.replace("week", "");
 		int weeknum = Integer.parseInt(week);
 		//计算开始时间-结束时间
@@ -134,7 +136,7 @@ public class BpbcxController extends PbBaseController{
 		List<Arrange> arrList = new ArrayList<Arrange>();
 		for(Shift shift : bshifts){
 			//获取B超3个月内的排班记录
-			arrList = arrangeManager.getMonthArrangeByshift(shift.getAb(), tomonth+"");
+			arrList = arrangeManager.getMonthArrangeByshift(shift.getAb(), tomonth+"",section);
 			if(arrList==null || arrList.size()==0)
 				continue;
 			for(Arrange a: arrList){
@@ -170,8 +172,8 @@ public class BpbcxController extends PbBaseController{
         	shifts[0][m] = "<th id='nmshow' name='nm"+map.get(m).getName()+"' style='background:#7FFFD4'>" + map.get(m).getName() + "</th>";
         }
         
-        
-        
+        if(arrMap.size()==0)
+        	return new ModelAndView().addObject("size", 0);        
         
         //随机排版end
         

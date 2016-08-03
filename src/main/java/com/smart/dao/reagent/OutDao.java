@@ -13,7 +13,7 @@ public interface OutDao extends GenericDao<Out, Long> {
 	void saveAll(List<Out> needSaveOut);
 	
 	@Transactional
-	List<Out> getLastHMs(String ids, String measuretime);
+	List<Out> getLastHMs(String ids, Date measuretime);
 
 	@Transactional
 	List<Out> getByLab(String lab);

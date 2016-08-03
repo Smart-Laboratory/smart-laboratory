@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.Constants;
 import com.smart.model.reagent.Batch;
 import com.smart.model.reagent.Reagent;
+import com.smart.model.user.User;
 import com.smart.webapp.util.DataResponse;
 
 
@@ -33,8 +34,17 @@ public class StockController extends ReagentBaseController {
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
 			Reagent reagent = new Reagent();
-			String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-			reagent.setLab(lab);
+			if(labMap.size() == 0) {
+				initLabMap();
+			}
+			User user = userManager.getUserByUsername(request.getRemoteUser());
+			String labName = user.getLastLab();
+			if(labName==null || labName.isEmpty()){
+				labName=user.getDepartment().split(",")[0];
+			}
+			labName = labMap.get(labName);
+			
+			reagent.setLab(labName);
 			reagent.setName(request.getParameter("name"));
 			reagent.setSpecification(request.getParameter("specification"));
 			reagent.setPlaceoforigin(request.getParameter("place"));
@@ -73,8 +83,17 @@ public class StockController extends ReagentBaseController {
 	@RequestMapping(value = "/getReagent*", method = { RequestMethod.GET })
 	@ResponseBody
 	public DataResponse getJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		List<Reagent> set = reagentManager.getByLab(lab);
+		if(labMap.size() == 0) {
+			initLabMap();
+		}
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String labName = user.getLastLab();
+		if(labName==null || labName.isEmpty()){
+			labName=user.getDepartment().split(",")[0];
+		}
+		labName = labMap.get(labName);
+		
+		List<Reagent> set = reagentManager.getByLab(labName);
 		Map<Long,Reagent> rMap = new HashMap<Long,Reagent>();
 		String ids = "";
 		for(Reagent r : set) {
@@ -102,27 +121,70 @@ public class StockController extends ReagentBaseController {
 				}
 			}
 		}
+		for(Reagent r: set){
+			if(numMap.get(r.getId())==null){
+				r.setTotalNum("<font color='red'>0</font>");
+				r.setStockout(true);
+			}else if(r.getSubtnum()>1) {
+				if(numMap.get(r.getId()) <= r.getMargin()*r.getSubtnum()) {
+					r.setTotalNum("<font color='red'>" + numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit() + "</font>");
+					r.setStockout(true);
+				} else {
+					r.setTotalNum(numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit());
+					r.setStockout(false);
+				}
+			} else {
+				if(numMap.get(r.getId()) <= r.getMargin()) {
+					r.setTotalNum("<font color='red'>" +numMap.get(r.getId()) + r.getUnit() + "</font>");
+					r.setStockout(true);
+				} else {
+					r.setTotalNum(numMap.get(r.getId()) + r.getUnit());
+					r.setStockout(false);
+				}
+			}
+		}
+		String isSearch = request.getParameter("_search");
+		String searchField = request.getParameter("searchField");
+		String searchString = request.getParameter("searchString");
+		
+		List<Reagent> newset = new ArrayList<Reagent>();
+		if(isSearch.equals("true")){
+			for(Reagent r:set){
+				if(r.getName().contains(searchString))
+					newset.add(r);
+			}
+		}else{
+			for(Reagent r: set){
+				if(r.isStockout())
+					newset.add(r);
+			}
+			for(Reagent r: set){
+				if(!r.isStockout())
+					newset.add(r);
+			}
+		}
+		
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		dataResponse.setRecords(set.size());
-		int x = set.size() % (row == 0 ? set.size() : row);
+		dataResponse.setRecords(newset.size());
+		int x = newset.size() % (row == 0 ? newset.size() : row);
 		if (x != 0) {
 			x = row - x;
 		}
-		int totalPage = (set.size() + x) / (row == 0 ? set.size() : row);
+		int totalPage = (newset.size() + x) / (row == 0 ? newset.size() : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int end = row * page;
-		if(end > set.size()) {
-			end = set.size();
+		if(end > newset.size()) {
+			end = newset.size();
 		}
 		int index = 0;
-		for(Reagent r : set) {
+		for(Reagent r : newset) {
 			if(index >= start && index < end) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", r.getId());
@@ -140,28 +202,13 @@ public class StockController extends ReagentBaseController {
 				map.put("condition", r.getStorageCondition());
 				map.put("pcode", r.getProductcode());
 				map.put("temp", r.getTemperature());
-				if(numMap.containsKey(r.getId())) {
-					if(r.getSubtnum()>1) {
-						if(numMap.get(r.getId()) <= r.getMargin()*r.getSubtnum()) {
-							map.put("totalnum", "<red>" + numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit() + "</red>");
-						} else {
-							map.put("totalnum", numMap.get(r.getId())/r.getSubtnum() + r.getUnit() + numMap.get(r.getId())%r.getSubtnum() + r.getSubunit());
-						}
-					} else {
-						if(numMap.get(r.getId()) <= r.getMargin()) {
-							map.put("totalnum", "<red>" +numMap.get(r.getId()) + r.getUnit() + "</red>");
-						} else {
-							map.put("totalnum", numMap.get(r.getId()) + r.getUnit());
-						}
-					}
-				} else {
-					map.put("totalnum", "<red>0</red>");
-				}
+				map.put("totalnum", r.getTotalNum());
 				map.put("isself", r.getIsselfmade() == 1 ? Constants.TRUE : Constants.FALSE);
 				dataRows.add(map);
 			}
 			index++;
 		}
+		
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");
 		return dataResponse;

@@ -31,8 +31,8 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Out> getLastHMs(String rgId, String measuretime) {
-		List<Out> list = getSession().createQuery("from Out where rgId in (" + rgId + ") and outdate<"+measuretime+" order by outdate desc").list();
+	public List<Out> getLastHMs(String rgId, Date measuretime) {
+		List<Out> list = getSession().createQuery("from Out where rgId in (" + rgId + ") and outdate<'"+measuretime+"' order by outdate desc").list();
 	
 		Set<Long> ids = new HashSet<Long>();
 		List<Out> out = new ArrayList<Out>();
@@ -47,24 +47,22 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 
 	@SuppressWarnings("unchecked")
 	public List<Out> getByLab(String lab) {
-		return getSession().createQuery("from Out where lab='" + lab + "'").list();
+		return getSession().createQuery("from Out where lab='" + lab + "' order by outdate desc").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void updateTestnum(String lab, String testid, Long rgid, Date now) {
 		Session s = getSession();
 		
-		//String sql = "from Out where rgId=" + rgid + " and outdate<'" + Constants.SDF.format(now) + "' and lab='" + lab + "' order by outdate desc";
-		String sql = "from Out where rgId=" + rgid + " and outdate<" + now + " and lab='" + lab + "' order by outdate desc";
+		String sql = "from Out where rgId=" + rgid + " and outdate<'" + Constants.SDF.format(now) + "' and lab='" + lab + "' order by outdate desc";
 		List<Out> list = s.createQuery(sql).list();
 		if (list != null && list.size() > 0) {
 			Out o = list.get(0);
-			String sql2 = "select count(*) from l_testresult t, l_sample p where p.sampleno=t.sampleno and t.testid in (" + testid + ") and t.measuretime>" + o.getOutdate() +" and t.measuretime<" + now + " and p.sectionId='" + lab + "'";
-			int count = (Integer)s.createSQLQuery(sql2).uniqueResult();
+			String sql2 = "select count(*) from TestResult t, Sample p where p.sampleNo=t.sampleNo and t.testId in (" + testid + ") and t.measureTime>'" + Constants.SDF.format(o.getOutdate()) +"' and t.measureTime<'" + Constants.SDF.format(now) +"'";
+			int count = ((Number)s.createQuery(sql2).uniqueResult()).intValue();
 			o.setTestnum(count);
 			s.save(o);
 			s.flush();
-			s.close();
 		}
 	}
 

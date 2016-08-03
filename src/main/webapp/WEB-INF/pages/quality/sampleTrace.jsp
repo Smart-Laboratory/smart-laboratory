@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 
@@ -12,6 +13,12 @@
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" /> 
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
 </head>
+<style>
+.pLabel{
+	margin-left:10px;
+}
+
+</style>
 
 <div class="form-inline">
 	<label for="from" style="margin-left: 20px;"><b><fmt:message key="from" /></b></label>
@@ -31,39 +38,64 @@
 </div>
 
 <div style="margin-top: 10px;">
-	<div id="searchHeader" style="float: left; width: 400px;">
+	<div id="searchHeader" style="float: left;margin-left：15px; width: 40%;">
 		<div id="sampleListPanel">
 			<table id="s3list"></table>
 			<div id="s3pager"></div>
 		</div>
 	</div>
 	<div id="midContent"
-		style="float: left; width: 600px; margin-left: 30px; display: none;">
+		style="float: left; width: 50%; margin-left: 30px; display: none;">
 		<div class="clearfix">
-			<div id="patient-info" class="alert alert-info" style="margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
-				<div class="pItem">
-					<span class="pLabel"><fmt:message key="patient.name" /></span>
-					<span class="pText"><b id="pName"></b></span>
-					<span class="pLabel"><fmt:message key="patient.sex" /></span>
-					<span class="pText"><b id="pSex"></b></span>
-					<span class="pLabel"><fmt:message key="patient.age" /></span>
-					<span class="pText"><b id="pAge"></b></span>
-					<span class="pLabel"><fmt:message key="patient.sampleType" /></span>
-					<span class="pText"><b id="pType"></b></span>
+			<div id="patient-info" class="alert alert-info col-sm-12" style="margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
+				<div class="pItem col-sm-12 form-inline">
+					<div class="col-sm-3">
+						<span class="pLabel"><fmt:message key="patient.name" />:</span>
+						<span class="pText"><b id="pName"></b></span>
+					</div>
+					<div class="col-sm-3">
+						<span class="pLabel"><fmt:message key="patient.sex" />:</span>
+						<span class="pText"><b id="pSex"></b></span>
+					</div>
+					<div class="col-sm-3">
+						<span class="pLabel"><fmt:message key="patient.age" />:</span>
+						<span class="pText"><b id="pAge"></b></span>
+					</div>
+					<div class="col-sm-3">
+						<span class="pLabel"><fmt:message key="patient.sampleType" />:</span>
+						<span class="pText"><b id="pType"></b></span>
+					</div>
 				</div>
-				
 				<div class="pItem">
-					<span class="pLabel"><fmt:message key="patient.blh" /></span>
-					<span class="pText"><b id="blh"></b></span>
-					<span class="pLabel"><fmt:message key="patient.patientId" /></span>
-					<span class="pText"><b id="pId"></b></span>
+					<div class="col-sm-5">
+						<span class="pLabel"><fmt:message key="patient.blh" />:</span>
+						<span class="pText"><b id="blh"></b></span>
+					</div>
+					<div class="col-sm-7">
+						<span class="pLabel"><fmt:message key="patient.patientId" />:</span>
+						<span class="pText"><b id="pId"></b></span>
+					</div>
 				</div>
 
 				<div class="pItem">
-					<span class="pLabel"><fmt:message key="patient.section"/>&nbsp;</span>
-					<span class="pText"><b id="pSection"></b></span>
-					<span class="pLabel"><fmt:message key="diagnostic"/>&nbsp;</span>
-					<span class="pText"><b id="diagnostic"></b></span>
+					<div class="col-sm-5">
+						<span class="pLabel"><fmt:message key="patient.section"/>:&nbsp;</span>
+						<span class="pText"><b id="pSection"></b></span>
+					</div>
+					<div class="col-sm-7">
+						<span class="pLabel"><fmt:message key="diagnostic"/>:&nbsp;</span>
+						<span class="pText"><b id="diagnostic"></b></span>
+					</div>
+				</div>
+				<div class="pItem">
+					<div class="col-sm-5">
+						<span class="pLabel">送检科室:&nbsp;</span>
+						<span class="pText"><b id="sjSection"></b></span>
+					</div>
+					<div class="col-sm-7">
+						<span class="pLabel">抽血信息:&nbsp;</span>
+						<span class="pText"><b id="cxxx"></b></span>
+					</div>
 				</div>
 			</div>
 		</div>

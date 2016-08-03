@@ -61,7 +61,8 @@ public class MicroItemInfoDaoHibernate extends GenericDaoHibernate<MicroItemInfo
         return new Integer(q.uniqueResult() + "");
     }
 
-    public List<MicroItemInfo> getMicroItemInfos(String className, String query, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<MicroItemInfo> getMicroItemInfos(String className, String query, int start, int end, String sidx, String sord) {
         String sql = "from MicroItemInfo  where className=:className";
         if(query != null && !query.equals(""))
             sql += " and name like:name" ;
@@ -78,29 +79,31 @@ public class MicroItemInfoDaoHibernate extends GenericDaoHibernate<MicroItemInfo
         return q.list();
     }
 
-    public MicroItemInfo getMicroItemInfo(String className,Long id) {
+    @SuppressWarnings("unchecked")
+	public MicroItemInfo getMicroItemInfo(String className,Long id) {
         String sql = "from MicroItemInfo where id=:id and className=:className";
         Query query = getSession().createQuery(sql);
         query.setLong("id",id);
         query.setString("className",className);
-        List microItemInfos  = query.list();
+        List<MicroItemInfo> microItemInfos  = query.list();
         if (microItemInfos == null || microItemInfos.isEmpty()) {
             return null;
         } else {
-            return (MicroItemInfo)microItemInfos.get(0);
+            return microItemInfos.get(0);
         }
     }
 
-    public MicroItemInfo getMicroItemInfo(String className,String indexId) {
+    @SuppressWarnings("unchecked")
+	public MicroItemInfo getMicroItemInfo(String className,String indexId) {
         String sql = "from MicroItemInfo where indexId=:indexId and className=:className";
         Query query = getSession().createQuery(sql);
         query.setString("indexId",indexId);
         query.setString("className",className);
-        List microItemInfos  = query.list();
+        List<MicroItemInfo> microItemInfos  = query.list();
         if (microItemInfos == null || microItemInfos.isEmpty()) {
             return null;
         } else {
-            return (MicroItemInfo)microItemInfos.get(0);
+            return microItemInfos.get(0);
         }
     }
 }

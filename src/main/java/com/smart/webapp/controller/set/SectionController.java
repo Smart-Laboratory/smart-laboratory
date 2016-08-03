@@ -174,6 +174,7 @@ public class SectionController {
 	 * @return
      * @throws Exception
      */
+<<<<<<< HEAD
 	@RequestMapping(value = "/remove")
 	public void Remove(HttpServletRequest request, HttpServletResponse response)throws Exception{
 		try{
@@ -181,6 +182,14 @@ public class SectionController {
 			sectionManager.remove(id);
 		}catch (Exception e){
 			e.printStackTrace();
+=======
+	@RequestMapping(value = "/batchremove")
+	public ModelAndView bathRemove(@RequestParam(value = "ids[]") long[] ids,HttpServletRequest request, HttpServletResponse response)throws Exception{
+		if(sectionManager.batchRemove(ids)){
+			return new ModelAndView().addObject("resulut", "success");
+		}else{
+			return new ModelAndView().addObject("resulut", "error");
+>>>>>>> origin/master
 		}
 	}
 	

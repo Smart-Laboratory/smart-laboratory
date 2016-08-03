@@ -166,8 +166,10 @@ public class PbszController extends PbBaseController {
 				map.put("holiday", wi.getHoliday());
 				map.put("defeHoliday", wi.getDefeHolidayNum());
 				map.put("defeHolidayhis", wi.getDefeholidayhis());
+				map.put("lxsy", wi.getLxsy());
 				map.put("isactive", wi.getIsActive()==1?"使用":"不使用");
 				map.put("school", wi.getSchool()==null?"无":schoolMap.get(Long.parseLong(wi.getSchool())));
+				map.put("usercomment", wi.getUsercomment()==null?"":wi.getUsercomment());
 				dataRows.add(map);
 				index++;
 			}
@@ -325,6 +327,7 @@ public class PbszController extends PbBaseController {
 		String defeHolidayhis = request.getParameter("defeHolidayhis");
 		int isActive = Integer.parseInt(request.getParameter("isactive"));
 		String school = request.getParameter("school");
+		String usercomment = request.getParameter("usercomment");
 		if(school.equals(0))
 			school = null;
 		
@@ -348,6 +351,7 @@ public class PbszController extends PbBaseController {
 			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
 			wi.setSchool(school);
+			wi.setUsercomment(usercomment);
 			wInfoManager.save(wi);
 		} else if (oper.equals("edit")) {
 			wi = wInfoManager.get(Long.parseLong(id));
@@ -370,6 +374,7 @@ public class PbszController extends PbBaseController {
 			wi.setDefeholidayhis(defeHolidayhis==null?0:Double.parseDouble(defeHolidayhis));
 			wi.setIsActive(isActive);
 			wi.setSchool(school);
+			wi.setUsercomment(usercomment);
 			wInfoManager.save(wi);
 		} else {
 			wInfoManager.remove(Long.parseLong(id));

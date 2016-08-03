@@ -22,7 +22,6 @@ public class CultureMediumDaoHibernate  extends GenericDaoHibernate<CultureMediu
         super(CultureMedium.class);
     }
 
-    @Override
     public int getCultureMediumsCount(String query, int start, int end, String sidx, String sord) {
         String sql = "select count(*)  from CultureMedium  c where 1=1 ";
         if(query != null && !query.equals(""))
@@ -33,8 +32,8 @@ public class CultureMediumDaoHibernate  extends GenericDaoHibernate<CultureMediu
         return new Integer(q.uniqueResult() + "");
     }
 
-    @Override
-    public List<CultureMedium> getCultureMediums(String query, int start, int end, String sidx, String sord) {
+    @SuppressWarnings("unchecked")
+	public List<CultureMedium> getCultureMediums(String query, int start, int end, String sidx, String sord) {
         String sql = "from CultureMedium c where 1=1  ";
         if(query != null && !query.equals(""))
             sql += " and c.name like '%" + query+"%'" ;

@@ -10,6 +10,7 @@ import com.smart.Constants;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.HospitalManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -44,7 +45,10 @@ public class UserController {
 	private HospitalManager hospitalManager = null;
 	
 	@Autowired
-    protected RMIService rmiService = null;
+	private RMIService rmiService = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(@RequestParam(required = false, value = "q") String query) throws Exception {
@@ -62,20 +66,23 @@ public class UserController {
     	String ispb = request.getParameter("ispb");
     	
     	JSONObject obj = new JSONObject();
-    	SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+    	SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
     	User user = userManager.getUserByUsername(request.getRemoteUser());
     	String department = user.getDepartment();
     	if(ispb!=null && ispb.equals("1")){
     		department = user.getPbsection();
     	}
     	Map<String, String> labMap = new HashMap<String, String>();
-    	for(String labcode : department.split(",")) {
-//    		System.out.println(sectionUtil.getValue(labcode));
-    		labMap.put(labcode, sectionUtil.getValue(labcode));
+    	if(department!=null && !department.isEmpty()){
+    		for(String labcode : department.split(",")) {
+//    			System.out.println(sectionUtil.getValue(labcode));
+    			labMap.put(labcode, sectionUtil.getLabValue(labcode));
+    		}
     	}
+    	
     	obj.put("username", user.getName());
     	obj.put("hospital", hospitalManager.get(user.getHospitalId()).getName());
-    	obj.put("lab", sectionUtil.getValue(user.getLastLab()));
+    	obj.put("lab", sectionUtil.getLabValue(user.getLastLab()));
     	obj.put("labMap", labMap);
     	response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(obj.toString());
