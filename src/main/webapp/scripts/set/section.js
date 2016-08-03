@@ -73,19 +73,8 @@ function deleteSection(){
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-<<<<<<< HEAD
 		$.post('section/remove',{id:id},function(data) {});
 		$("#sectionList").trigger('reloadGrid');
-=======
-		$.post('../section/batchremove',{ids:ids},function(data) {
-			if(data && data.result=='success'){
-				var len = ids.length;
-				for(var i = 0;i < len ;i ++) {
-					$("#sectionList").jqGrid("delRowData", ids[0]);
-				}
-			}
-		});
->>>>>>> origin/master
 		layer.close(index);
 	});
 }

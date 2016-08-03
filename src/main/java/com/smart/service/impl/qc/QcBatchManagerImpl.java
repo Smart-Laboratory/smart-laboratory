@@ -18,12 +18,7 @@ import java.util.List;
  * @Version:
  */
 @Service("qcBatchManager")
-<<<<<<< HEAD:src/main/java/com/smart/service/impl/qc/QcBathManagerImpl.java
-public class QcBathManagerImpl  extends GenericManagerImpl<QcBatch, Long> implements QcBatchManager {
-=======
 public class QcBatchManagerImpl  extends GenericManagerImpl<QcBatch, Long> implements QcBatchManager {
->>>>>>> origin/master:src/main/java/com/smart/service/impl/qc/QcBatchManagerImpl.java
-
     private QcBatchDao qcBatchDao = null;
 
     @Autowired
