@@ -998,7 +998,7 @@ public class QueryReportController  extends BaseAuditController {
      * @throws JSONException
      */
     private JSONObject getSampleInfo(Sample info) throws JSONException{
-        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
         JSONObject patientInfo = new JSONObject();
         patientInfo.put("id", ConvertUtil.null2String(info.getPatientId()));
         patientInfo.put("name", info.getPatientname());

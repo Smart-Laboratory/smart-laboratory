@@ -31,6 +31,7 @@ import com.smart.service.lis.ProcessLogManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleLogManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.request.SFXMManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
@@ -64,6 +65,8 @@ public class SampleInputAjaxController {
 	private SampleLogManager sampleLogManager = null;
 	@Autowired
 	private ProcessLogManager processLogManager = null;
+	@Autowired
+	private SectionManager sectionManager = null;
 	
 	@RequestMapping(value = "/get*", method = RequestMethod.GET)
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -74,7 +77,7 @@ public class SampleInputAjaxController {
 				code = code.substring(0,code.length()-1);
 			}
 		}
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		YLSFXMUtil ylsfxmUtil = YLSFXMUtil.getInstance(sfxmManager);
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
@@ -167,7 +170,7 @@ public class SampleInputAjaxController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", sample.getId());
 			map.put("shm", sample.getStayHospitalModelValue());
-			map.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
+			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
 			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
 			map.put("sampleno", sample.getSampleNo());
 			map.put("pid", sample.getPatientId());
@@ -364,7 +367,7 @@ public class SampleInputAjaxController {
 		o.put("feestatus", sample.getFeestatus());
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		o.put("shm", sample.getStayHospitalModelValue());
-		o.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
+		o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
 		o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
@@ -437,7 +440,7 @@ public class SampleInputAjaxController {
 			o.put("feestatus", sample.getFeestatus());
 			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			o.put("shm", sample.getStayHospitalModelValue());
-			o.put("section", SectionUtil.getInstance(rmiService).getValue(sample.getSectionId()));
+			o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
 			o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
 			o.put("part", sample.getPart() == null ? "" : sample.getPart());
 			o.put("requestmode", sample.getRequestMode());

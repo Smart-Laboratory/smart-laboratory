@@ -174,7 +174,7 @@ public class SectionController {
 	 * @return
      * @throws Exception
      */
-	@RequestMapping(value = "/bathremove")
+	@RequestMapping(value = "/batchremove")
 	public ModelAndView bathRemove(@RequestParam(value = "ids[]") long[] ids,HttpServletRequest request, HttpServletResponse response)throws Exception{
 		if(sectionManager.batchRemove(ids)){
 			return new ModelAndView().addObject("resulut", "success");

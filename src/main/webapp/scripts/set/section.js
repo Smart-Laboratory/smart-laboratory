@@ -74,7 +74,7 @@ function deleteSection(){
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post('section/bathremove',{ids:ids},function(data) {
+		$.post('../section/batchremove',{ids:ids},function(data) {
 			if(data && data.result=='success'){
 				var len = ids.length;
 				for(var i = 0;i < len ;i ++) {

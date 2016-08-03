@@ -20,6 +20,7 @@ import com.smart.model.lis.Ward;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.ReceivePointManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.WardManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.SyncPatient;
@@ -37,6 +38,9 @@ public class ReceiveController {
 	
 	@Autowired
 	private RMIService rmiService = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 	
 	@Autowired
 	private ReceivePointManager receivePointManager = null;
@@ -65,7 +69,7 @@ public class ReceiveController {
 			long doct = Long.parseLong(request.getParameter("doct"));
 			String operator = request.getParameter("operator");
 			String lab = pointMap.get(operator.substring(operator.indexOf("(")+1, operator.indexOf(")")));
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 			
 			SyncPatient sp = rmiService.getSampleByDoct(doct);
 			if(sp == null) {
@@ -75,7 +79,7 @@ public class ReceiveController {
 				obj.put("name", sp.getPATIENTNAME());
 				obj.put("sex", sp.getSEX());
 				obj.put("age", sp.getAge());
-				obj.put("lab", sectionutil.getValue(sp.getLABDEPARTMENT()));
+				obj.put("lab", sectionutil.getLabValue(sp.getLABDEPARTMENT()));
 				String section = sectionutil.getValue(sp.getSECTION());
 				obj.put("section", section);
 				if(sp.getSTAYHOSPITALMODE() == 2) {

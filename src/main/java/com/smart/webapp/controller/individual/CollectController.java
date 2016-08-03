@@ -142,7 +142,7 @@ public class CollectController extends BaseAuditController {
 		Sample info = sampleManager.getBySampleNo(sample);
 		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		if (info != null) {
 			map.put("id", info.getId());
 			map.put("name", info.getPatientname());
@@ -154,7 +154,7 @@ public class CollectController extends BaseAuditController {
 			map.put("examinaim", ex);
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("stayhospitalmode", info.getStayHospitalMode()==1 ? "门诊":"住院");
-			map.put("section", sectionutil.getValue(info.getSectionId()));
+			map.put("section", sectionutil.getLabValue(info.getSectionId()));
 
 			String note = info.getNotes();
 			if (!StringUtils.isEmpty(info.getRuleIds())) {
