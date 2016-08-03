@@ -18,3 +18,5 @@ lab.iml
 pom.xml
 src/main/resources/applicationContext-resources.xml
 src/main/resources/applicationContext-resources.xml
+.mymetadata
+src/main/webapp/META-INF/MANIFEST.MF
