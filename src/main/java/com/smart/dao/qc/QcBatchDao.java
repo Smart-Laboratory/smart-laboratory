@@ -5,6 +5,8 @@ import com.smart.model.qc.QcBatch;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Title: QcBathDao
  * Description:
@@ -14,7 +16,15 @@ import java.util.List;
  * @Version:
  */
 public interface QcBatchDao extends GenericDao<QcBatch, Long> {
+	
     void saveDetails(List<QcBatch> qcBatchList);
+    
+    @Transactional
     int getCount(String qcBatch, int start, int end, String sidx, String sord);
+    
+    @Transactional
     List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+    
+    @Transactional
+	List<QcBatch> getByDevice(String deviceid);
 }

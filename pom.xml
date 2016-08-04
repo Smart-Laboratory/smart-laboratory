@@ -1141,7 +1141,7 @@
         <jdbc.artifactId>ojdbc14</jdbc.artifactId>
         <jdbc.version>10.2.0.4.0</jdbc.version>
         <jdbc.driverClassName>oracle.jdbc.OracleDriver</jdbc.driverClassName> 
-        <jdbc.url>jdbc:oracle:thin:@192.168.150.106:1521:orcl</jdbc.url>
+        <jdbc.url>jdbc:oracle:thin:@10.31.96.38:1521:orcl</jdbc.url>
         <jdbc.username>lab</jdbc.username>
         <jdbc.password>lab</jdbc.password>
         <jdbc.validationQuery>SELECT 1 + 1 from DUAL</jdbc.validationQuery>
