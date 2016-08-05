@@ -22,6 +22,7 @@ $(function() {
 	           for(var key in json.labMap) {
 	        	   $("#labSelect").append("<li onclick='labChange(this)'><a title='" + key + "'>" + json.labMap[key] + "</a></li>");
 	           }
+	           $("#nowLab").val(json.labCode);
 	           $("#labText").html(json.lab);
 	           $("#hospitalText").append(json.hospital);
 	           $("#hospital").css("display","block");
@@ -77,6 +78,7 @@ $(function() {
 	</li>
 	<li><a href="#" id="hospitalText"></a></li>
 </ul>
+<input type="hidden" id="nowLab">
 </div>
 
 </menu:useMenuDisplayer>

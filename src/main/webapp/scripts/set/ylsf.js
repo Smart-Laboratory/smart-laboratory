@@ -1,17 +1,3 @@
-function labChange(select) {
-//		$("#lastDepLab").val(select.value);
-		jQuery("#s3list").jqGrid("setGridParam",{
-			url:"../set/ylsf/data?lab="+select.value}).trigger("reloadGrid");
-		
-//		$.ajax({
-//			  type: 'POST',
-//			  url: "../audit/labChange?lab="+select.value
-//		});
-//		selectNoteAdd = true;
-		
-//		getSopSchedule(select.value);
-}
-
 	function getList(lab) {
 		var isFirstTime = true;
 		var mygrid = jQuery("#s3list").jqGrid({
@@ -54,7 +40,7 @@ function labChange(select) {
 	    		}); 
 	    		$("#s3list").setSelection(firstId, true);
 	    	}
-	    }).trigger("reloadGrid"); 
+	    }); 
 		jQuery("#s3list").jqGrid('navGrid','#s3pager',{edit:false,add:false,del:false,search:false,refresh:false});
 	    jQuery("#s3list").jqGrid('navButtonAdd',"#s3pager",{caption:"",title:"", buttonicon :'ui-icon-pin-s', onClickButton:function(){ mygrid[0].toggleToolbar() } });
 	}
@@ -283,6 +269,22 @@ function labChange(select) {
 				e.preventDefault();
 			}
 		});
-		getList($("#labSelect").val());
+		alert($("#labText").html());
+		getList($("#labText").html());
+		
+		labChange = function(select) {
+			$("#lastDepLab").val($(select).children().attr("title"));
+			$.ajax({
+				  type: 'POST',
+				  url: "../audit/labChange?lab="+$(select).children().attr("title")
+			});
+			$("#nowLab").val($(select).children().attr("title"));
+			$("#labText").html($(select).children().html());
+			
+			jQuery("#s3list").jqGrid({
+		    	url:"../set/ylsf/data?lab="+$(select).children().attr("title")
+			}).trigger("reloadGrid");
+			//getSopSchedule($(select).children().attr("title"));
+		}
 	});
 	

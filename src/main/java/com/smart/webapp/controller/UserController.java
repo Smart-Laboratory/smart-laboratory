@@ -72,8 +72,12 @@ public class UserController {
     	if(ispb!=null && ispb.equals("1")){
     		department = user.getPbsection();
     	}
+    	String labCode = user.getLastLab();
     	Map<String, String> labMap = new HashMap<String, String>();
     	if(department!=null && !department.isEmpty()){
+    		if(labCode == null || labCode.isEmpty()) {
+        		labCode = department.substring(0, department.indexOf(","));
+        	}
     		for(String labcode : department.split(",")) {
 //    			System.out.println(sectionUtil.getValue(labcode));
     			labMap.put(labcode, sectionUtil.getLabValue(labcode));
@@ -82,7 +86,8 @@ public class UserController {
     	
     	obj.put("username", user.getName());
     	obj.put("hospital", hospitalManager.get(user.getHospitalId()).getName());
-    	obj.put("lab", sectionUtil.getLabValue(user.getLastLab()));
+    	obj.put("labCode", labCode);
+    	obj.put("lab", sectionUtil.getLabValue(labCode));
     	obj.put("labMap", labMap);
     	response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(obj.toString());

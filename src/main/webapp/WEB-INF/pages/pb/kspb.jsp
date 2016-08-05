@@ -49,10 +49,6 @@ border: 0px solid #009933;
 </style>
 
 <script type="text/javascript">
-function labChange(item){
-	window.location.href="../pb/pb?section=" + $(item).val()+"&date=" + $("#date").val();
-}
-
 
 function randomShift(day) {
 	var week = $("#day" + day).html().substr(-1);
@@ -189,9 +185,9 @@ $(function() {
 			  type: 'POST',
 			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 			  success:function(){
+				  $("#nowLab").val($(select).children().attr("title"));
 				  $("#labText").html($(select).children().html());
-					
-					window.location.href="../pb/pb?section=" + $(select).children().attr("title")+"&date=" + $("#date").val();
+				  window.location.href="../pb/pb?section=" + $(select).children().attr("title")+"&date=" + $("#date").val();
 			  }	
 		});
 		

@@ -21,16 +21,6 @@
 <div class="col-sm-10">
 
 <div id="searchHeader" class="col-sm-7">
-	<div class="form-inline" style="margin-bottom:15px;">
-	<label for="search_text" style=""><b></b></label>
-	<input type="text" id="search_text" name="search_text" class="form-control"  style="width:150px;" placeholder="<fmt:message key="placeholder1"></fmt:message>" />
-	<button id="searchBtn" class="btn btn-info" ><fmt:message key="search" /></button>
-	<select id="labSelect" onchange="labChange(this)" class="form-control" style="margin-left:10px; width:180px;">
-		<span><c:forEach var="depart" items="${departList}">
-			<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-		</c:forEach></span>
-	</select>
-	</div>
 	<div id="sampleListPanel">
 		<table id="s3list"></table>
 		<div id="s3pager"></div>
@@ -56,7 +46,6 @@
 		<table id="tlist2"></table>
 	</div>
 </div>
-
 
 
 </div>

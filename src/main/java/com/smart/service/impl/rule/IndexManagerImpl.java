@@ -34,12 +34,12 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 		if(!query.equals("")) querySql += " and name like '%"+query +"%' ";
 		if(!departmentid.equals("") && !departmentid.equals("other")){
 			departmentid+=",";
-			querySql += "  and  labdepartment like '%"+departmentid+"%'";
+			querySql += " and labdepartment like '%"+departmentid+"%'";
 		}else {
 			if(isAdmin){
-				querySql += "  and  (labdepartment is null or labdepartment='')";
+				querySql += " and (labdepartment is null or labdepartment='')";
 			}else {
-				querySql += "  and  (labdepartment is not null or labdepartment != '')";
+				querySql += " and (labdepartment is not null or labdepartment != '')";
 			}
 		}
 		return indexDao.getIndexs(querySql,start,end,sidx,sord);

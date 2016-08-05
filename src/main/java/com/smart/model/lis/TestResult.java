@@ -40,6 +40,7 @@ public class TestResult extends BaseObject{
     private int isprint;
     private int editMark;
     private String method;
+    private String hint;
     
     /**
 	 * 主键、检验样本号
@@ -240,6 +241,15 @@ public class TestResult extends BaseObject{
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	@Column(name = "HINT")
+	public String getHint() {
+		return hint;
+	}
+
+	public void setHint(String hint) {
+		this.hint = hint;
 	}
 
 	/**

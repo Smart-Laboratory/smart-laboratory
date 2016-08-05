@@ -125,7 +125,7 @@ public class DeviceRelationListController {
         List<Index> list = new ArrayList<Index>();
         int size = 0;
         try{
-         size = indexManager.getIndexsCount(query,departmentid,isAdmin,start,end,sidx,sord);
+        	size = indexManager.getIndexsCount(query,departmentid,isAdmin,start,end,sidx,sord);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -224,12 +224,13 @@ public class DeviceRelationListController {
                 jsonObject.put("testname", ConvertUtil.null2String(index.getName()));
                 jsonObject.put("sex", ConvertUtil.null2String(t.getSex()));
                 jsonObject.put("sampletype", ConvertUtil.null2String(t.getSampleType()));
-                jsonObject.put("age", ConvertUtil.null2String(t.getAge()));
-                jsonObject.put("ageunit", ConvertUtil.null2String(t.getAgeUnit()));
+                jsonObject.put("ageLow", ConvertUtil.null2String(t.getAgeLow()));
+                jsonObject.put("ageHigh", ConvertUtil.null2String(t.getAgeHigh()));
+                jsonObject.put("ageLowUnit", ConvertUtil.null2String(t.getAgeLowUnit()));
+                jsonObject.put("ageHighUnit", ConvertUtil.null2String(t.getAgeHighUnit()));
                 jsonObject.put("deviceid", ConvertUtil.null2String(t.getDeviceId()));
                 jsonObject.put("direct", ConvertUtil.null2String(t.getDirect()));
-                jsonObject.put("refhigh", ConvertUtil.null2String(t.getRefHigh()));
-                jsonObject.put("reflower", ConvertUtil.null2String(t.getRefLower()));
+                jsonObject.put("reference", ConvertUtil.null2String(t.getReference()));
                 jsonObject.put("orderno", ConvertUtil.null2String(t.getOrderNo()));
                 jsonRefArray.put(jsonObject);
             }
@@ -351,24 +352,26 @@ public class DeviceRelationListController {
             String testid =  ConvertUtil.null2String(obj.getString("testid"));              //检验项目ID
             String sampletype = ConvertUtil.null2String(obj.getString("sampletype"));       //标本类型
             int sex = ConvertUtil.getIntValue(obj.getString("sex"), 0);                     //性别
-            int age = ConvertUtil.getIntValue(obj.getString("age"));
-            String ageunit = ConvertUtil.null2String(obj.getString("ageunit"));//年龄
+            int ageLow = ConvertUtil.getIntValue(obj.getString("ageLow"));
+            int ageHigh = ConvertUtil.getIntValue(obj.getString("ageHigh"));
+            String ageLowUnit = ConvertUtil.null2String(obj.getString("ageLowUnit"));//年龄
+            String ageHighUnit = ConvertUtil.null2String(obj.getString("ageHighUnit"));//年龄
             int orderno = ConvertUtil.getIntValue(obj.getString("orderno"), 0);              //序号
             int direct = ConvertUtil.getIntValue(obj.getString("direct"), 0);
-            String reflower = ConvertUtil.null2String(obj.getString("reflower"));          //低值
-            String refhigh = ConvertUtil.null2String(obj.getString("refhigh"));             //高值
+            String reference = ConvertUtil.null2String(obj.getString("reference"));          //参考值
 
             TestReference testReference = new TestReference();
             testReference.setDeviceId(deviceid);
             testReference.setTestId(testid);
             testReference.setSampleType(sampletype);
             testReference.setSex(sex);
-            testReference.setAge(age);
-            testReference.setAgeUnit(ageunit);
+            testReference.setAgeLow(ageLow);
+            testReference.setAgeHigh(ageHigh);
+            testReference.setAgeLowUnit(ageLowUnit);
+            testReference.setAgeHighUnit(ageHighUnit);
             testReference.setOrderNo(orderno);
             testReference.setDirect(direct);
-            testReference.setRefHigh(refhigh);
-            testReference.setRefLower(reflower);
+            testReference.setReference(reference);
             testReferences.add(testReference);
         }
 

@@ -591,19 +591,20 @@
                     datatype:'local',
                     rowNum:references.length,
                     data:references,
-                    colNames: ['testid', '项目名称', '标本名称', '性别', '年龄','年龄单位', '序号', '设备ID', '周期', '参考范围低值', '参考范围高值'],
+                    colNames: ['testid', '项目名称', '标本名称', '性别', '年龄低限','年龄低限单位','年龄高限','年龄高限单位', '序号', '设备ID', '周期', '参考范围值'],
                     colModel: [
                         {name: 'testid', index: 'testid', width: 60, hidden: true},
                         {name: 'testname', index: 'testname', width: 200},
                         {name: 'sampletype', index: 'sampletype', width: 100},
                         {name: 'sex',index: 'sex',width: 60,editable: true,formatter: "select",edittype: "select",editoptions: {value: "0:男;1:女;2:其他"}},
-                        {name: 'age', index: 'age', width: 60, editable: true},
-                        {name: 'ageunit', index: 'ageunit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
+                        {name: 'ageLow', index: 'ageLow', width: 60, editable: true},
+                        {name: 'ageLowUnit', index: 'ageLowUnit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
+                        {name: 'ageHigh', index: 'ageHigh', width: 60, editable: true},
+                        {name: 'ageHighUnit', index: 'ageHighUnit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
                         {name: 'orderno', index: 'orderno', width: 60, editable: true},
                         {name: 'deviceid', index: 'deviceid', width: 60, editable: true},
                         {name: 'direct', index: 'direct', width: 60, editable: true},
-                        {name: 'reflower', index: 'reflower', width: 120, editable: true},
-                        {name: 'refhigh', index: 'refhigh', width: 120, editable: true}
+                        {name: 'reference', index: 'reference', width: 120, editable: true}
                     ],
                     onSelectRow: function (id) {
                         if (id && id !== cache.lastsel) {
@@ -633,13 +634,14 @@
                         testname: $('#name').val()||'',
                         sampletype: $('#samplefrom').val(),
                         sex: "0",
-                        age: "0",
-                        ageunit:'岁',
+                        ageLow: "0",
+                        ageLowUnit:'岁',
+                        ageHigh: "120",
+                        ageHighUnit:'岁',
                         orderno: "0",
                         deviceid: "",
                         direct: "0",
-                        reflower: "",
-                        refhigh: ""
+                        reference: ""
                     };
                     cache.refTable.jqGrid('addRowData', newId, rowData);
                 });

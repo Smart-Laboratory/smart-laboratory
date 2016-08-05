@@ -3,6 +3,7 @@ package com.smart.dao.hibernate.lis;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -77,5 +78,28 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 			return str;
 		}
 		return null;
+	}
+
+	
+	public int getSizeByLab(String lab, int start, int end, String sidx, String sord) {
+		String sql = "select count(*)  from Ylxh where ksdm='" + lab + "'";
+		sidx = sidx.equals("") ? "ylxh" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		Query q =  getSession().createQuery(sql);
+		return new Integer(q.uniqueResult() + "");
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Ylxh> getYlxhByLab(String lab, int start, int end, String sidx, String sord) {
+		String sql = "from Ylxh where ksdm='" + lab + "'";
+		sidx = sidx.equals("") ? "ylxh" : sidx;
+		sql +=" order by  " +sidx + " " + sord;
+		Query q = getSession().createQuery(sql);
+		System.out.println(sql);
+		if(end !=0){
+			q.setFirstResult(start);
+			q.setMaxResults(end);
+		}
+		return q.list();
 	}
 }

@@ -7,6 +7,7 @@
 				  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 				  success:function(data){
 					  selectNoteAdd = true;
+					  $("#nowLab").val($(select).children().attr("title"));
 					  var section = $(select).children().attr("title");
 					  $("#labText").html($(select).children().html());
 					  window.location.href="../reagent/set?section=" + $(select).children().attr("title");

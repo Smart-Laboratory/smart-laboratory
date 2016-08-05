@@ -14,15 +14,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.smart.model.lis.Section;
-import com.smart.service.lis.SectionManager;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.model.lis.Ylxh;
 import com.smart.webapp.util.DataResponse;
@@ -36,20 +33,11 @@ import java.util.List;
 public class YlsfController extends BaseAuditController {
 	
 	private static Log log = LogFactory.getLog(YlsfController.class);
-	@Autowired
-	private SectionManager sectionManager;
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<Section> section = sectionManager.getAll();
-		Map<String, String> depart = new HashMap<String, String>();
-		if (section != null && section.size()>0) {
-			for (Section s : section) {
-				depart.put(s.getCode(), s.getName());
-			}
-		}
-		request.setAttribute("departList", depart);
-        return new ModelAndView();
+        
+		return new ModelAndView().addObject("lab","lab");
     }
 	
 	@RequestMapping(value = "/data*", method = RequestMethod.GET)
@@ -59,37 +47,37 @@ public class YlsfController extends BaseAuditController {
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		String lab = request.getParameter("lab");
-		int page = Integer.parseInt(pages);
-		int row = Integer.parseInt(rows);
-		
-		if (idMap.size() == 0)
-			initMap();
+		String sidx = request.getParameter("sidx");
+        String sord = request.getParameter("sord");
+        int page = Integer.parseInt(pages);
+        int row = Integer.parseInt(rows);
+        int start = row * (page - 1);
+        int end = row * page;
 
+        List<Ylxh> list = new ArrayList<Ylxh>();
+        int size = 0;
+        try{
+        	size = ylxhManager.getSizeByLab(lab,start,end,sidx,sord);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 		DataResponse dataResponse = new DataResponse();
-		List<Ylxh> list = ylxhManager.getTest(lab);
+		list = ylxhManager.getYlxhByLab(lab,start,end,sidx,sord);
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		int listSize = 0;
-		if (list != null)
-			listSize = list.size();
-		dataResponse.setRecords(listSize);
-		int x = listSize % (row == 0 ? listSize : row);
-		if (x != 0) {
-			x = row - x;
-		}
-		int totalPage = (listSize + x) / (row == 0 ? listSize : row);
-		dataResponse.setPage(page);
-		dataResponse.setTotal(totalPage);
-		int start = row * (page - 1);
-		int index = 0;
-		while (index < row && (start + index) < listSize) {
+		dataResponse.setRecords(size);
+		int x = size % (row == 0 ? size : row);
+        if (x != 0) {
+            x = row - x;
+        }
+        int totalPage = (size + x) / (row == 0 ? size : row);
+        dataResponse.setPage(page);
+        dataResponse.setTotal(totalPage);
+		for(Ylxh y : list) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			Ylxh y = list.get(start + index);
 			map.put("id", y.getYlxh());
 			map.put("ylmc", y.getYlmc());
 			map.put("ptest", y.getProfiletest());
-			
 			dataRows.add(map);
-			index++;
 		}
 
 		dataResponse.setRows(dataRows);

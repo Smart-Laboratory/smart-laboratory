@@ -72,11 +72,12 @@ labChange=function(select){
 		  type: 'POST',
 		  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 		  success:function(data){
-			  selectNoteAdd = true;
+
 			  var section = $(select).children().attr("title");
 			  if(section == '1320511'){
 				  window.location.href="../pb/bpbcx?date=" + $("#date").val()+"&section=" + section;
 			  }
+			  $("#nowLab").val(section);
 			  $("#labText").html($(select).children().html());
 			  window.location.href="../pb/pbcx?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
 		  }

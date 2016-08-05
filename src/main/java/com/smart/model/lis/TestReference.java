@@ -22,12 +22,13 @@ public class TestReference implements Serializable {
     private int sex;                //性别 : 0男、1女
     private int orderNo;            //序号
     private String sampleType;      //标本类型
-    private int age;                    //年龄
-    private String ageUnit;          //年龄单位; 岁、月、周、天
+    private int ageLow;             //参考年龄低限
+    private int ageHigh;            //参考年龄高限
+    private String ageLowUnit;      //参考年龄低限单位; 岁、月、周、天
+    private String ageHighUnit;      //参考年龄高限单位; 岁、月、周、天
     private String deviceId;        //设备ID
     private int direct;
-    private String refHigh;         //参考范围高值
-    private String refLower;        //参考范围低值
+    private String reference;         //参考值
 
     @Id
     @Column(name = "testid")
@@ -67,14 +68,6 @@ public class TestReference implements Serializable {
         this.sampleType = sampleType;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public String getDeviceId() {
         return deviceId;
     }
@@ -91,29 +84,43 @@ public class TestReference implements Serializable {
         this.direct = direct;
     }
 
-    public String getRefHigh() {
-        return refHigh;
-    }
+	public int getAgeLow() {
+		return ageLow;
+	}
 
-    public void setRefHigh(String refHign) {
-        this.refHigh = refHign;
-    }
+	public void setAgeLow(int ageLow) {
+		this.ageLow = ageLow;
+	}
 
-    public String getRefLower() {
-        return refLower;
-    }
+	public int getAgeHigh() {
+		return ageHigh;
+	}
 
-    public void setRefLower(String refLower) {
-        this.refLower = refLower;
-    }
+	public void setAgeHigh(int ageHigh) {
+		this.ageHigh = ageHigh;
+	}
 
+	public String getAgeLowUnit() {
+		return ageLowUnit;
+	}
 
-    public String getAgeUnit() {
-        return ageUnit;
-    }
+	public void setAgeLowUnit(String ageLowUnit) {
+		this.ageLowUnit = ageLowUnit;
+	}
 
-    public void setAgeUnit(String ageUnit) {
-        this.ageUnit = ageUnit;
-    }
+	public String getAgeHighUnit() {
+		return ageHighUnit;
+	}
 
+	public void setAgeHighUnit(String ageHighUnit) {
+		this.ageHighUnit = ageHighUnit;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
 }

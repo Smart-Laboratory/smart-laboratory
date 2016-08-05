@@ -24,4 +24,10 @@ public interface YlxhDao extends GenericDao<Ylxh, Long> {
 	
 	@Transactional
 	List<Ylxh> getLabofYlmcBylike(String lab ,String ylmc);
+
+	@Transactional
+	int getSizeByLab(String lab, int start, int end, String sidx, String sord);
+
+	@Transactional
+	List<Ylxh> getYlxhByLab(String lab, int start, int end, String sidx, String sord);
 }

@@ -3,7 +3,6 @@ package com.smart.dao.hibernate.rule;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -231,6 +230,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return new Integer(q.uniqueResult() + "");
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Index> getIndexs(String type,String query,int start, int end, String sidx, String sord) {
 		String sql = "from Index  where 1=1 and testClass=:testClass";
 		if(query != null && !query.equals(""))
@@ -250,12 +250,13 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		return q.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	private Index getIndex(String type,String id) {
 		String sql = "from Index where id =:id and testClass=:testClass";
 		Query query = getSession().createQuery(sql);
 		query.setString("id",id);
 		query.setString("testClass",type);
-		List indexs = query.list();
+		List<Index> indexs = query.list();
 		if (indexs == null || indexs.isEmpty()) {
 			return null;
 		} else {
