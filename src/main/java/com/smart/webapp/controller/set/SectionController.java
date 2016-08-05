@@ -167,19 +167,20 @@ public class SectionController {
     }
 
 	/**
-	 * 批量删除
-	 * @param ids
+	 * 删除
+	 * @param id
 	 * @param request
 	 * @param response
 	 * @return
      * @throws Exception
      */
-	@RequestMapping(value = "/bathremove")
-	public ModelAndView bathRemove(@RequestParam(value = "ids[]") long[] ids,HttpServletRequest request, HttpServletResponse response)throws Exception{
-		if(sectionManager.batchRemove(ids)){
-			return new ModelAndView().addObject("resulut", "success");
-		}else{
-			return new ModelAndView().addObject("resulut", "error");
+	@RequestMapping(value = "/remove")
+	public void Remove(HttpServletRequest request, HttpServletResponse response)throws Exception{
+		try{
+			Long id = ConvertUtil.getLongValue(request.getParameter("id"));
+			sectionManager.remove(id);
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 	

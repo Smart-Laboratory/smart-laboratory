@@ -19,7 +19,6 @@ import java.util.List;
  */
 @Service("qcBatchManager")
 public class QcBatchManagerImpl  extends GenericManagerImpl<QcBatch, Long> implements QcBatchManager {
-
     private QcBatchDao qcBatchDao = null;
 
     @Autowired

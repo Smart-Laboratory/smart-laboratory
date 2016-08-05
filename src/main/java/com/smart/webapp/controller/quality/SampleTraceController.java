@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -31,6 +32,9 @@ public class SampleTraceController {
 	
 	@Autowired
 	private RMIService rmiService = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 	
 	@Autowired
 	private DictionaryManager dictionaryManager = null;
@@ -129,14 +133,14 @@ public class SampleTraceController {
 		SyncPatient p = rmiService.getSampleByDoct(Long.parseLong(id));
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		if (p != null) {
 			map.put("id", p.getPATIENTID());
 			map.put("name", p.getPATIENTNAME());
 			map.put("age", String.valueOf(p.getAge()));
 			map.put("diagnostic", p.getDIAGNOSTIC());
 			map.put("section", sectionutil.getValue(p.getSECTION()));
-			map.put("sjSection", sectionutil.getValue(p.getLABDEPARTMENT()));
+			map.put("sjSection", sectionutil.getLabValue(p.getLABDEPARTMENT()));
 			map.put("cxxx", rmiService.getYlsf(p.getYLXH()).getHyfl());
 
 			map.put("sex", p.getSexValue());

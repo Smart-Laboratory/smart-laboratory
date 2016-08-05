@@ -33,6 +33,7 @@ import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.InvalidSampleManager;
 import com.smart.service.lis.PatientManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -84,7 +85,7 @@ public class ExecuteViewController {
 		if(samples!=null && samples.size()==0){
 			map.put("samples", null);
 		}else{
-			SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+			SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 			for(Sample s : samples){
 				String depart = sectionUtil.getValue(s.getSectionId());
 				if(depart!=null && !depart.isEmpty()){
@@ -112,7 +113,7 @@ public class ExecuteViewController {
 		List<ExecuteInfo> eList = rmiService.gExecuteInfo(patientId, requestmode, from, to);
 		StringBuilder html = new StringBuilder();
 		ExecuteInfo e = new ExecuteInfo();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
 		//待查项目
@@ -519,8 +520,6 @@ public class ExecuteViewController {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private PatientManager patientManager;
-	@Autowired
 	private RMIService rmiService;
 	@Autowired
 	private InvalidSampleManager invalidSampleManager;
@@ -528,4 +527,6 @@ public class ExecuteViewController {
 	private LabOrderManager labOrderManager;
 	@Autowired
 	private SampleManager sampleManager;
+	@Autowired
+	private SectionManager sectionManager;
 }

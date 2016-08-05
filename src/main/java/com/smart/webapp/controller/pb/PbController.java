@@ -33,6 +33,7 @@ import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -59,6 +60,9 @@ public class PbController {
 	
 	@Autowired
 	private SxArrangeManager sxArrangeManager;
+	
+	@Autowired
+	private SectionManager sectionManager;
 	
 	
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -439,7 +443,7 @@ public class PbController {
 	
 	
 	public List<WInfo> getWinfoBySection(String tomonth, String section){
-		section = SectionUtil.getInstance(rmiService).getValue(section);
+		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);

@@ -22,9 +22,10 @@ function  Add(){
 				dataType:"json",
 				data:$('#addForm').serialize()+"&method=add",
 				success:function(data){
-					console.log(data);
+					//console.log(data);
 					if(parseInt(data.success)==0){
 						layer.close(index);
+						search();
 					}else{
 						layer.alert(data.success);
 					}
@@ -47,7 +48,7 @@ function Delete(){
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
 		$.post('../set/device/deleteDevice',{id:id},function(data) {
-			console.log("id-->"+id)
+			//console.log("id-->"+id)
 			jQuery("#tableList").jqGrid('delRowData',id);
 		});
 		layer.close(index);
@@ -109,9 +110,10 @@ function Edit(){
 				dataType:"json",
 				data:$('#addForm').serialize(),
 				success:function(data){
-					console.log(data);
+					//onsole.log(data);
 					if(parseInt(data.success)==0){
 						layer.close(index);
+						search();
 					}else{
 						layer.alert(data.success);
 					}
@@ -178,13 +180,14 @@ function initGrid(typeid){
 		//postData:{type:typeid},
 		mtype: "GET",
 		datatype: "json",
-		colNames: ['编号', '类型ID', '类型名称','名称','实验室','COM口','波特率','数据位','奇偶位','停止位','握手','数据窗口'],
+		colNames: ['编号', '类型ID', '类型名称','名称','labid','实验室','COM口','波特率','数据位','奇偶位','停止位','握手','数据窗口'],
 		colModel: [
 			{ name: 'id', index: 'id', width: 60},
 			{ name: 'type', index: 'type', width: 60,hidden:true},
 			{ name: 'typename', index: 'typename', width: 60},
 			{ name: 'name', index: 'name', width: 200 },
-			{ name: 'lab', index: 'lab', width: 100},
+			{ name: 'lab', index: 'lab', width: 100,hidden:true},
+			{ name: 'labname', index: 'labname', width: 100},
 			{ name: 'comport', index: 'comport', width: 60},
 			{ name: 'baudrate', index: 'baudrate', width: 60},
 			{ name: 'databit', index: 'databit', width: 60},
@@ -198,6 +201,9 @@ function initGrid(typeid){
 			setTimeout(function(){
 				updatePagerIcons(table);
 			}, 0);
+		},
+		ondblClickRow: function (id) {
+			Edit();
 		},
 		viewrecords: true,
 		//multiselect: true,

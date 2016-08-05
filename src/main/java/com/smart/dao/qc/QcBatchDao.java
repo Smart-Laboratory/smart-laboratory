@@ -16,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @Version:
  */
 public interface QcBatchDao extends GenericDao<QcBatch, Long> {
-
-	void saveDetails(List<QcBatch> qcBatchList);
+	
+    void saveDetails(List<QcBatch> qcBatchList);
     
-	@Transactional
-	int getCount(String qcBatch, int start, int end, String sidx, String sord);
-   
-	@Transactional
-	List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);
-
-	@Transactional
+    @Transactional
+    int getCount(String qcBatch, int start, int end, String sidx, String sord);
+    
+    @Transactional
+    List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+    
+    @Transactional
 	List<QcBatch> getByDevice(String deviceid);
 }

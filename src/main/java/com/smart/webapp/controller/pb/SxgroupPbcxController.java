@@ -30,6 +30,7 @@ import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
 import com.smart.service.SxSchoolManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -45,6 +46,9 @@ public class SxgroupPbcxController extends PbBaseController{
 	
 	@Autowired
 	private ShiftManager shiftManager;
+	
+	@Autowired
+	private SectionManager sectionManager;
 	
 	@Autowired
 	private RMIService rmiService;
@@ -132,8 +136,6 @@ public class SxgroupPbcxController extends PbBaseController{
 				}
 //				String th = "<th style='background:#7FFFD4'>"+shift.getAb()+"</th>";
 //				String td = "<td>班次</td>";
-				String th = "";
-				String td = "";
 				String tr = "";
 				int i =0;
 				for(WInfo str : sxnames){
@@ -320,7 +322,7 @@ public class SxgroupPbcxController extends PbBaseController{
 		
 	private Map<WInfo, String> getSxWinfoList(String section,String tomonth){
 		
-		section = SectionUtil.getInstance(rmiService).getValue(section);
+		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);
@@ -370,7 +372,6 @@ public class SxgroupPbcxController extends PbBaseController{
 		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
-		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(week-1));
         String[] startDate = md.format(c.getTime()).split("-");

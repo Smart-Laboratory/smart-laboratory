@@ -2,7 +2,6 @@
 
 <head>
     <title><fmt:message key="drugGroupList.title"/></title>
-    <meta name="menu" content="DrugGroupMenu"/>
 </head>
 
 <c:if test="{'$'}{not empty searchError}">

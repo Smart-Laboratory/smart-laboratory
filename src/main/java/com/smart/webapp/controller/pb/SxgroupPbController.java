@@ -26,11 +26,11 @@ import com.smart.model.pb.SxArrange;
 import com.smart.model.pb.WInfo;
 import com.smart.model.user.User;
 import com.smart.service.ArrangeManager;
-import com.smart.service.DayShiftManager;
 import com.smart.service.ShiftManager;
 import com.smart.service.SxArrangeManager;
 import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -53,6 +53,9 @@ public class SxgroupPbController {
 	@Autowired
 	private RMIService rmiService;
 	
+	@Autowired
+	private SectionManager sectionManager;
+	
 	SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat md = new SimpleDateFormat("MM-dd");
 	SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
@@ -71,7 +74,7 @@ public class SxgroupPbController {
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
 		
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		String department = user.getPbsection();
 		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
@@ -80,7 +83,7 @@ public class SxgroupPbController {
 		}
 		if (department != null) {
 			for (String s : department.split(",")) {
-				depart.put(s, sectionutil.getValue(s));
+				depart.put(s, sectionutil.getLabValue(s));
 				if(section==null || section.isEmpty())
 					section = s;
 			}
@@ -105,7 +108,6 @@ public class SxgroupPbController {
 			for(Map.Entry<WInfo, String> entry : sxList.entrySet()){
 				if(entry.getValue()==null || entry.getValue().isEmpty())
 					continue;
-				WInfo wInfo = entry.getKey();
 				if(entry.getKey().getIsActive()==0)
 					continue;
 //				System.out.println(entry.getKey().getName()+entry.getValue());
@@ -245,7 +247,7 @@ public class SxgroupPbController {
 		
 	private Map<WInfo, String> getSxWinfoList(String section,String tomonth){
 		
-		section = SectionUtil.getInstance(rmiService).getValue(section);
+		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);
@@ -296,7 +298,6 @@ public class SxgroupPbController {
 		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
-		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
         c.add(GregorianCalendar.DAY_OF_MONTH, 7*(week-1));
         String[] startDate = md.format(c.getTime()).split("-");

@@ -35,6 +35,7 @@ import com.smart.service.lis.ContactManager;
 import com.smart.service.lis.CriticalRecordManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.WardManager;
 import com.smart.webapp.util.SectionUtil;
 
@@ -73,7 +74,7 @@ public class CriticalController {
 				crMap.put(cr.getSampleid(), cr);
 			}
 			int index = 0;
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 			for (Sample sample : samples) {
 				if(crMap.get(sample.getId()) != null) {
 					Critical ctl = new Critical();
@@ -170,7 +171,7 @@ public class CriticalController {
 			for (com.zju.api.model.Patient p : patients) {
 				patientMap.put(p.getPatientId(), p);
 			}
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 			int index = 0;
 			for (Sample sample : samples) {
 				if (crMap.get(sample.getId()) != null) {
@@ -311,7 +312,7 @@ public class CriticalController {
 			
 			if (info.getStayHospitalMode() == 2) {
 				root.put("isInHospital", true);
-				SectionUtil sectionutil = SectionUtil.getInstance(rmiService);
+				SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 				String section = sectionutil.getValue(info.getHosSection());
 				root.put("wardSection", section);
 				String[] array = section.split("\\(");
@@ -371,4 +372,7 @@ public class CriticalController {
 	
 	@Autowired
 	private ProcessManager processManager = null;
+	
+	@Autowired
+	private SectionManager sectionManager = null;
 }

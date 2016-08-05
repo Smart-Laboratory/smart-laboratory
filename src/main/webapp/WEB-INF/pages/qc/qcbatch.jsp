@@ -5,12 +5,241 @@
   Time: 11:38
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+<%@ include file="/common/taglibs.jsp" %>
+<head>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/bootstrap-datetimepicker.min.css"/>" />
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+    <script type="text/javascript" src="../scripts/layer/layer.js"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-ui.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/i18n/grid.locale-cn.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
+
+    <style>
+        .ui-jqgrid {
+            border: 1px solid #ddd;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #F5F5F5
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            background-color: #F5F5F5
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #999
+        }
+        .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+            background-color: #F5F5F6;
+        }
+        .bootstrap-duallistbox-container .buttons{
+            display: none;
+        }
+        .bootstrap-duallistbox-container .info-container{
+            display: none;
+        }
+        .ui-autocomplete{
+            z-index: 9999;
+        }
+        li {list-style-type:none;}
+        #addForm.form-horizontal{
+            margin: 10px 50px;
+        }
+        /*#addForm.form-horizontal .form-group{*/
+            /*margin-bottom: 10px !important;*/
+        /*}*/
+
+        .testlist{
+            /*width:450px;*/
+            list-style: none;
+            margin-left: 5px !important;
+        }
+        .testlist li{
+            list-style-type:none;
+            float: left;
+            padding: 0px 5px;
+            width:200px;
+            line-height: 20px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            vertical-align: middle;
+            display:inline;
+        }
+        .list{
+            position: absolute;
+            border: 1px solid #c9cbce;
+            z-index: 999999;
+            background:#fff;
+            height:200px;
+            top: 32px;
+            right: 5px;
+            left:5px;
+            overflow-y: auto;
+            overflow-x:hidden;
+            /*width:250px;*/
+        }
+        .tableList{
+            width:400px;
+            border: 1px #eee solid;
+            margin:5px 10px ;
+        }
+        .btnCancelChose{
+            height: 28px;
+            line-height: 28px;
+            border: 1px solid #dedede;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 5px 15px;
+            font-weight: 400;
+            cursor: pointer;
+            border-color: #4898d5;
+            background-color: #d15b47;
+            color: #fff;
+        }
+        .btnChose{
+            height: 28px;
+            line-height: 28px;
+            border: 1px solid #dedede;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 5px 15px;
+            font-weight: 400;
+            cursor: pointer;
+            border-color: #4898d5;
+            background-color: #2e8ded;
+            color: #fff;
+        }
+    </style>
+</head>
+<div class="row" id="toolbar">
+    <div class="col-xs-12">
+        <div  style="padding-top: 5px;">
+            <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="TSLAB.Custom.Add()">
+                <i class="ace-icon fa fa-fire bigger-110"></i>
+                <fmt:message key="button.add" />
+            </button>
+            <button type="button" class="btn btn-sm  btn-success" title="编辑" onclick="TSLAB.Custom.Edit()">
+                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                <fmt:message key="button.edit" />
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" title="删除" onclick="TSLAB.Custom.Delete()">
+                <i class="ace-icon fa fa-times bigger-110"></i>
+                <fmt:message key="button.delete" />
+            </button>
+            <div class="input-group col-sm-3 " style="float: right;" >
+                <input type="text" id="query" class="form-control search-query" placeholder="输入编号或名称" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-purple btn-sm" onclick="search()">
+                    <fmt:message key="button.search"/>
+                    <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                </button>
+			</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row" id="maincontent">
+    <div class="col-xs-3 leftContent">
+        <table id="leftGrid"></table>
+        <div id="leftPager"></div>
+    </div>
+    <div class="col-xs-9 rightContent">
+        <table id="rightGrid"></table>
+        <div id="rightPager"></div>
+    </div>
+</div>
+
+
+<div style="clear: both"></div>
+<div id="addDialog" style="display: none;overflow: hidden">
+    <form id="addForm" class="form-horizontal" action="<c:url value='../micro/cultureresult/save'/>" method="post">
+        <input type="hidden" id="id" name="id" />
+        <div class="form-group">
+            <div class="space-2"></div>
+            <label class="col-xs-2 control-label no-padding-right" for="qcBatch">质控批号 </label>
+            <div class="col-xs-4">
+                <input type="text" id="qcBatch" name="qcBatch" placeholder="质控批号" class="col-xs-12"/>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="sampleType">样本类型 </label>
+            <div class="col-xs-4">
+                <input type="text" id="sampleType" name="sampleType" placeholder="样本类型" class="col-xs-12"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="deviceid">质控品名称 </label>
+            <div class="col-xs-4">
+                <input type="text" id="qcBatchName" name="qcBatchName" placeholder="质控品名称" class="col-xs-12"/>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="device">仪器 </label>
+            <div class="col-xs-4">
+                <input type="hidden" id="deviceid" name="deviceid" placeholder="仪器ID" class="col-xs-12" />
+                <input type="text" id="device" name="device" placeholder="仪器" class="col-xs-12"/>
+                <div class="list" style="display: none">
+                    <div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">
+                        <a id="btnCancelChose" class="btnCancelChose" onclick="TSLAB.Custom.cancelChose()">取消</a><a id="btnChose" class="btnChose" onclick="TSLAB.Custom.choseItem()">选择</a>
+                    </div>
+                    <ul id="testList" class="testlist">
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="qcLevel">质控水平 </label>
+            <div class="col-xs-4">
+                <select id="qcLevel" name="qcLevel" class="col-xs-12">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="qcCode">质控编号 </label>
+            <div class="col-xs-4">
+                <input type="text" id="qcCode" name="qcCode" placeholder="质控编号" class="col-xs-12"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="factory">厂商 </label>
+            <div class="col-xs-4">
+                <input type="text" id="factory" name="factory" placeholder="厂商" class="col-xs-12"/>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="labdepart">实验室部门 </label>
+            <div class="col-xs-4">
+                <input type="text" id="labdepart"  name="labdepart" placeholder="实验室部门" value="" class="col-xs-12 text"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="indate">入库时间 </label>
+            <div class="col-xs-4">
+                <input type="text" id="indate" name="indate" placeholder="入库时间" value="" class="col-xs-12 text"/>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="outdate">出库时间 </label>
+            <div class="col-xs-4">
+                <input type="text" id="outdate"  name="outdate" placeholder="出库时间" value="" class="col-xs-12 text"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="medthod">方法学 </label>
+            <div class="col-xs-4">
+                <input type="text" id="medthod" name="medthod" placeholder="方法学" value="" class="col-xs-12 text"/>
+            </div>
+            <label class="col-xs-2 control-label no-padding-right" for="expDate">失效日期 </label>
+            <div class="col-xs-4">
+                <input type="text" id="expDate"  name="expDate" placeholder="失效日期" value="" class="col-xs-12 text"/>
+            </div>
+        </div>
+    </form>
+</div>
+<textarea name="antibiotics" id="antibiotics" style="display: none">${antibiotics}</textarea>
+<script type="text/javascript" src="<c:url value="/scripts/qc/qcbatch.js"/>"></script>

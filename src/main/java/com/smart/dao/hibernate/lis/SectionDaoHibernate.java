@@ -2,6 +2,7 @@ package com.smart.dao.hibernate.lis;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
@@ -77,14 +78,15 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
      */
 	public boolean batchRemove(long[] ids) {
 		StringBuilder  sql = new StringBuilder(" delete from Section p where p.id in (?");
-		Transaction tx = getSession().beginTransaction();
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
 		try {
 
 			for(int i=1;i <ids.length;i++){
 				sql.append( ",?");
 			}
 			sql.append(")");
-			Query q = getSession().createQuery(sql.toString());
+			Query q = session.createQuery(sql.toString());
 			for(int i=0;i<ids.length;i++) {
 				q.setLong(i, ids[i]);
 			}
@@ -94,6 +96,8 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 			tx.rollback();
 			System.out.print(e.getMessage());
 			log.error(e.getMessage());
+		} finally {
+			session.close();
 		}
 		return true;
 	}
