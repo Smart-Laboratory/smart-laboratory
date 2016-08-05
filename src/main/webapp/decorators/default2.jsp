@@ -99,12 +99,13 @@
             <c:if test="${pageContext.request.remoteUser != null}">
             | <fmt:message key="user.status"/> ${pageContext.request.remoteUser}
             </c:if>
-            | <a target="_blank" href="<fmt:message key="update.url"/>"><fmt:message key="update.name"/></a>
+            | <a target="_blank" href="http://192.168.15.73/lab"><fmt:message key="update.name"/></a>
        	    | <a target="_blank" href="<fmt:message key="wsdjk.url"/>"><fmt:message key="wsdjk.name"/></a>
    		</span>
-   		<span class="col-sm-2" style="float:right">
-       		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="<fmt:message key="company.url"/>"><fmt:message key="company.name"/></a>
+   		<span style="float: right;">
+       		 &copy; <fmt:message key="copyright.year"/> <a target="_blank" href="http://192.168.15.73/zhishi"><fmt:message key="company.name"/></a>
         </span>
+        </div>
     </div>
 <%= (request.getAttribute("scripts") != null) ?  request.getAttribute("scripts") : "" %>
 </body>
