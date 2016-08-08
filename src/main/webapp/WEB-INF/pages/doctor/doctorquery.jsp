@@ -575,7 +575,9 @@
                     var type = resultDatas[i].type;
 
                     var headOtherInfo = '';
-                    if(sampleInfo.sampleStatus>=6) {
+                    if(sampleInfo.sampleNo.indexOf("BAA")>=0){
+                    	
+                    }else if(sampleInfo.sampleStatus>=6) {
                         headOtherInfo = '已打印';
                     }else{
                         if(sampleInfo.auditStatus <= -1){
@@ -714,7 +716,7 @@
 
                     if(type==4){
                         var rNameTD=$("<td colspan='8'></td>");      //名称
-                        var a= $('<a href="#_" val='+rowDatas[j].knowledgeName+'></a>');
+                        var a= $('<a href="#_" val="'+rowDatas[j].knowledgeName+'" style="color: green;"></a>');
                         a.append(rowDatas[j].name);
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
