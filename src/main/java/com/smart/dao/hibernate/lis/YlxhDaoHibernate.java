@@ -81,17 +81,21 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	}
 
 	
-	public int getSizeByLab(String lab, int start, int end, String sidx, String sord) {
+	public int getSizeByLab(String query, String lab) {
 		String sql = "select count(*)  from Ylxh where ksdm='" + lab + "'";
-		sidx = sidx.equals("") ? "ylxh" : sidx;
-		sql +=" order by  " +sidx + " " + sord;
+		if(query!= null && !query.isEmpty()) {
+			sql +=" and (ylmc like '" + query + "%' or pinyin like '" + query + "%' or wubi like '" + query + "%')";
+		}
 		Query q =  getSession().createQuery(sql);
 		return new Integer(q.uniqueResult() + "");
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Ylxh> getYlxhByLab(String lab, int start, int end, String sidx, String sord) {
+	public List<Ylxh> getYlxhByLab(String query, String lab, int start, int end, String sidx, String sord) {
 		String sql = "from Ylxh where ksdm='" + lab + "'";
+		if(query!= null && !query.isEmpty()) {
+			sql +=" and (ylmc like '" + query + "%' or pinyin like '" + query + "%' or wubi like '" + query + "%')";
+		}
 		sidx = sidx.equals("") ? "ylxh" : sidx;
 		sql +=" order by  " +sidx + " " + sord;
 		Query q = getSession().createQuery(sql);

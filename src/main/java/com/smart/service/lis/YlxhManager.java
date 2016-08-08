@@ -17,8 +17,8 @@ public interface YlxhManager extends GenericManager<Ylxh, Long> {
 	
 	List<Ylxh> getLabofYlmcBylike(String lab ,String ylmc);
 
-	int getSizeByLab(String lab, int start, int end, String sidx, String sord);
+	int getSizeByLab(String lab, String sidx);
 
-	List<Ylxh> getYlxhByLab(String lab, int start, int end, String sidx, String sord);
+	List<Ylxh> getYlxhByLab(String query, String lab, int start, int end, String sidx, String sord);
 
 }

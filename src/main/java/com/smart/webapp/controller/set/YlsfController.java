@@ -3,7 +3,6 @@ package com.smart.webapp.controller.set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +26,7 @@ import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.UserUtil;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
+import com.smart.util.ConvertUtil;
 
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class YlsfController extends BaseAuditController {
 		String lab = request.getParameter("lab");
 		String sidx = request.getParameter("sidx");
         String sord = request.getParameter("sord");
+        String query = request.getParameter("query");
         int page = Integer.parseInt(pages);
         int row = Integer.parseInt(rows);
         int start = row * (page - 1);
@@ -72,12 +74,12 @@ public class YlsfController extends BaseAuditController {
         List<Ylxh> list = new ArrayList<Ylxh>();
         int size = 0;
         try{
-        	size = ylxhManager.getSizeByLab(lab,start,end,sidx,sord);
+        	size = ylxhManager.getSizeByLab(query,lab);
         }catch (Exception e){
             e.printStackTrace();
         }
 		DataResponse dataResponse = new DataResponse();
-		list = ylxhManager.getYlxhByLab(lab,start,end,sidx,sord);
+		list = ylxhManager.getYlxhByLab(query,lab,start,end,sidx,sord);
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);
@@ -89,9 +91,22 @@ public class YlsfController extends BaseAuditController {
         dataResponse.setTotal(totalPage);
 		for(Ylxh y : list) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", y.getYlxh());
+			map.put("ylxh", y.getYlxh());
 			map.put("ylmc", y.getYlmc());
-			map.put("ptest", y.getProfiletest());
+			map.put("english", y.getEnglish());
+			map.put("mzpb", y.getMzpb());
+			map.put("zypb", y.getZypb());
+			map.put("mzpbStr", y.getMzpb() == 1 ? "是" : "否");
+			map.put("zypbStr", y.getZypb() == 1 ? "是" : "否");
+			map.put("price", y.getPrice());
+			map.put("qbgdd", y.getQbgdd());
+			map.put("qbgsj", y.getQbgsj());
+			map.put("yblx", y.getYblx());
+			map.put("bbl", y.getBbl());
+			map.put("sglx", y.getSglx());
+			map.put("ptest", ConvertUtil.null2String(y.getProfiletest()));
+			map.put("ptest2", ConvertUtil.null2String(y.getProfiletest2()));
+			map.put("ptest3", ConvertUtil.null2String(y.getProfiletest3()));
 			dataRows.add(map);
 		}
 
@@ -100,171 +115,58 @@ public class YlsfController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
-	/**
-	 * 张晋南2016-5-25
-	 * 修改
-	 * 新增getLabofYlmcBylike方法
-	 * lab 科室代码
-	 * ylmc 输入需要查询的套餐
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/ajax/ylsfList*", method = RequestMethod.GET)
-	@ResponseBody
-	public String getYlshList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		String lab = request.getParameter("lab");
-		String ylmc = request.getParameter("ylmc");
-		List<Ylxh> list =  ylxhManager.getLabofYlmcBylike(lab,ylmc);
-		for(Iterator<Ylxh> it = list.iterator(); it.hasNext();){
-			Ylxh y = (Ylxh) it.next();
-			if(y.getProfiletest()==null||"".equals(y.getProfiletest()))
-				it.remove();
-		};
-		
-		if (idMap.size() == 0)
-			initMap();
-		
-		JSONArray array = new JSONArray();
-		if(null == ylmc){
-			User user =	userManager.getUserByUsername(request.getRemoteUser());
-			String lastProfile = user.getLastProfile();
-			
-		    	for(String lpf:lastProfile.split(",")){
-    				JSONObject obj = new JSONObject();
-    				obj.put("test", lpf);
-    				obj.put("name", idMap.get(lpf).getName());
-    				array.put(obj);
-			 }
-		}else{
-			for (Ylxh y : list) {
-				JSONObject obj = new JSONObject();
-				obj.put("ylxh", y.getYlxh());
-				obj.put("ylmc", y.getYlmc());
-				obj.put("profiletest", y.getProfiletest());
-				array.put(obj);
-			}
-		}
-		response.setContentType("text/html;charset=UTF-8");
-		response.getWriter().print(array.toString());
-		return null;
-	}
 	
-	@RequestMapping(value = "/test*", method = RequestMethod.GET)
+	@RequestMapping(value = "/editYlsf*", method = RequestMethod.POST)
 	@ResponseBody
-	public DataResponse getTestList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String xhStr = request.getParameter("ylsf");
-		long ylxh = Long.parseLong(xhStr);
-		
-		if (idMap.size() == 0)
-			initMap();
-
-		DataResponse dataResponse = new DataResponse();
-		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		Ylxh y = ylxhManager.get(ylxh);
-		int size = 0;
-		if(y.getProfiletest() != null) {
-			for (String s : y.getProfiletest().split(",")) {
-				if (s != null && idMap.containsKey(s)) {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("id", s);
-					map.put("name", idMap.get(s) == null ? s : idMap.get(s).getName());
-					map.put("english", idMap.get(s).getEnglish()==null ? "":idMap.get(s).getEnglish());
-					dataRows.add(map);
-					size++;
-				}
-			}
-		}
-		
-		dataResponse.setRecords(size);
-		dataResponse.setRows(dataRows);
-
-		response.setContentType("text/html;charset=UTF-8");
-		return dataResponse;
-	}
-	
-	@RequestMapping(value = "/test2*", method = RequestMethod.GET)
-	@ResponseBody
-	public DataResponse getTestList2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String xhStr = request.getParameter("ylsf");
-		long ylxh = Long.parseLong(xhStr);
-		
-		if (idMap.size() == 0)
-			initMap();
-
-		DataResponse dataResponse = new DataResponse();
-		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		Ylxh y = ylxhManager.get(ylxh);
-		int size = 0;
-		if(y.getProfiletest2() != null) {
-			for (String s : y.getProfiletest2().trim().split(",")) {
-				if (s != null) {
-//					System.out.println(y.getYlxh()+" : "+s);
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("id", s);
-					map.put("name", idMap.get(s) == null ? s : idMap.get(s).getName());
-					map.put("english", (idMap.get(s) == null || idMap.get(s).getEnglish()==null) ? "":idMap.get(s).getEnglish());
-					dataRows.add(map);
-					size++;
-				}
-			}
-		}
-		
-		dataResponse.setRecords(size);
-		dataResponse.setRows(dataRows);
-
-		response.setContentType("text/html;charset=UTF-8");
-		return dataResponse;
-	}
-	
-	@RequestMapping(value = "/add*", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean addTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+	public String editYlxh(@ModelAttribute("ylxh") Ylxh ylxh) throws Exception {
+		JSONObject success = new JSONObject();
 		try {
-			String addTest = request.getParameter("add");
-			long ylxh = Long.parseLong(request.getParameter("id"));
-			if(addTest==null)
-				return false;
-			Ylxh y = ylxhManager.get(ylxh);
-			if (y.getProfiletest() != null) {
-				y.setProfiletest(y.getProfiletest() + addTest + ",");
-			} else {
-				y.setProfiletest(addTest + ",");
-			}
-			ylxhManager.save(y);
+			ylxhManager.save(ylxh);
+			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return false;
+			success.put("success", "失败");
 		}
-		return true;
+		return success.toString();
 	}
 	
-	@RequestMapping(value = "/add2*", method = RequestMethod.POST)
+	@RequestMapping(value = "/editProfile*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean addTest2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+	public String editProfile(HttpServletRequest request) throws Exception {
+		JSONObject success = new JSONObject();
 		try {
-			String addTest = request.getParameter("add");
-			long ylxh = Long.parseLong(request.getParameter("id"));
-			if(addTest==null)
-				return false;
+			Long ylxh = Long.parseLong(request.getParameter("ylxh"));
+			int type = Integer.parseInt(request.getParameter("type"));
+			String edit = request.getParameter("edit");
+			String indexId = request.getParameter("index");
 			Ylxh y = ylxhManager.get(ylxh);
-			if (y.getProfiletest2() != null) {
-				y.setProfiletest2(y.getProfiletest2() + addTest + ",");
+			String profiletest = "";
+			if(type == 1) {
+				profiletest = ConvertUtil.null2String(y.getProfiletest());
+			} else if(type == 2) {
+				profiletest = ConvertUtil.null2String(y.getProfiletest2());
 			} else {
-				y.setProfiletest2(addTest + ",");
+				profiletest = ConvertUtil.null2String(y.getProfiletest3());
+			}
+			if(edit.equals("add")) {
+				profiletest += indexId + ",";
+			} else {
+				profiletest = profiletest.replace(indexId + ",", "");
+			}
+			if(type == 1) {
+				y.setProfiletest(profiletest);
+			} else if(type == 2) {
+				y.setProfiletest2(profiletest);
+			} else {
+				y.setProfiletest3(profiletest);
 			}
 			ylxhManager.save(y);
+			success.put("success", profiletest);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			return false;
+			success.put("success", "0");
 		}
-		return true;
+		return success.toString();
 	}
 	
 	@RequestMapping(value = "/delete*", method = RequestMethod.POST)

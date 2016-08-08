@@ -77,7 +77,6 @@ labChange=function(select){
 			  if(section == '1320511'){
 				  window.location.href="../pb/bpbcx?date=" + $("#date").val()+"&section=" + section;
 			  }
-			  $("#nowLab").val(section);
 			  $("#labText").html($(select).children().html());
 			  window.location.href="../pb/pbcx?date=" + $("#date").val()+"&section=" + $(select).children().attr("title");
 		  }

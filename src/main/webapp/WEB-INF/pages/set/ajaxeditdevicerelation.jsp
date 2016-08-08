@@ -746,7 +746,7 @@
         $("#labdepartmentshow").autocomplete({
             source: function( request, response ) {
                 $.ajax({
-                    url: "../ajax/searchLab",
+                    url: "../../ajax/searchLab",
                     dataType: "json",
                     data: {
                         name : request.term

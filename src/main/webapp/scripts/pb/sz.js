@@ -189,12 +189,11 @@ $(function() {
 			  type: 'POST',
 			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 			  success:function(){
-				  $("#nowLab").val($(select).children().attr("title"));
 				  $("#labText").html($(select).children().html());
 				  $("#section").val($(select).children().attr("title"));
-					jQuery("#witable").jqGrid("setGridParam",{
+				  jQuery("#witable").jqGrid("setGridParam",{
 						url:"../pb/sz/ajax/getWinfo?section="+$(select).children().attr("title")}).trigger("reloadGrid");
-					getBC();
+				  getBC();
 					
 			  }
 		});

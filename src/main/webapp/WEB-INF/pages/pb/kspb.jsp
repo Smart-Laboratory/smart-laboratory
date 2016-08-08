@@ -185,7 +185,6 @@ $(function() {
 			  type: 'POST',
 			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 			  success:function(){
-				  $("#nowLab").val($(select).children().attr("title"));
 				  $("#labText").html($(select).children().html());
 				  window.location.href="../pb/pb?section=" + $(select).children().attr("title")+"&date=" + $("#date").val();
 			  }	

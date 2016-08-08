@@ -7,7 +7,6 @@ $(function(){
 			  success:function(data){
 				  selectNoteAdd = true;
 				  var section = $(select).children().attr("title");
-				  $("#nowLab").val($(select).children().attr("title"));
 				  $("#labText").html($(select).children().html());
 				  if(section == '1320511'){
 					  window.location.href="../pb/bpb?date=" + $("#date").val()+"&section=" + section;

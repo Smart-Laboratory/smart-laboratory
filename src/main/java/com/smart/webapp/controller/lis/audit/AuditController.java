@@ -54,6 +54,7 @@ import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.FormulaUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.smart.webapp.util.TaskManagerUtil;
+import com.smart.webapp.util.UserUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.smart.model.lis.AuditTrace;
@@ -62,6 +63,7 @@ import com.smart.model.user.Evaluate;
 import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
 import com.smart.service.EvaluateManager;
+import com.smart.service.UserManager;
 import com.smart.service.lis.PassTraceManager;
 import com.smart.util.Config;
 
@@ -460,6 +462,7 @@ public class AuditController extends BaseAuditController {
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		operator.setLastLab(lab);
 		userManager.saveUser(operator);
+		UserUtil.rebuild(operator);
 		return true;
 	}
     

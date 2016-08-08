@@ -41,12 +41,12 @@ public class YlxhManagerImpl extends GenericManagerImpl<Ylxh, Long> implements Y
 		return ylxhDao.getRelativeTest(ylxh);
 	}
 
-	public int getSizeByLab(String lab, int start, int end, String sidx, String sord) {
-		return ylxhDao.getSizeByLab(lab, start, end, sidx, sord);
+	public int getSizeByLab(String query, String lab) {
+		return ylxhDao.getSizeByLab(query, lab);
 	}
 
-	public List<Ylxh> getYlxhByLab(String lab, int start, int end, String sidx, String sord) {
-		return ylxhDao.getYlxhByLab(lab, start, end, sidx, sord);
+	public List<Ylxh> getYlxhByLab(String query, String lab, int start, int end, String sidx, String sord) {
+		return ylxhDao.getYlxhByLab(query, lab, start, end, sidx, sord);
 	}
 	
 }
