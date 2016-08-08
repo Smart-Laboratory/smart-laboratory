@@ -75,9 +75,13 @@ public class UserController {
     	String labCode = user.getLastLab();
     	Map<String, String> labMap = new HashMap<String, String>();
     	if(department!=null && !department.isEmpty()){
-    		if(labCode == null || labCode.isEmpty()) {
-        		labCode = department.substring(0, department.indexOf(","));
-        	}
+    		if(labCode.isEmpty()) {
+				if(department.indexOf(",") > 0) {
+					labCode = department.substring(0, department.indexOf(","));
+				} else {
+					labCode = department;
+				}
+			}
     		for(String labcode : department.split(",")) {
 //    			System.out.println(sectionUtil.getValue(labcode));
     			labMap.put(labcode, sectionUtil.getLabValue(labcode));

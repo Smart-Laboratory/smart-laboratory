@@ -1,5 +1,6 @@
 package com.smart.webapp.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -194,9 +195,12 @@ public class FillFieldUtil {
 					if (reflo != null) {
 						if (reflo.contains(".") && reflo.split("[.]").length > 1) {
 							int round = reflo.split("[.]")[1].length();
-							double f = Double.parseDouble(value);
-							double p = Math.pow(10, round);
-							value = String.valueOf((double)(Math.round(f*p))/p);
+							StringBuilder sb = new StringBuilder("#0.");
+							for(int i = 0; i < round; i++) {
+								sb.append("0");
+							}
+							DecimalFormat df  = new DecimalFormat(sb.toString());
+							value = df.format(Double.parseDouble(value));
 						} else {
 							value = value.split("[.]")[0];
 						}

@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.model.lis.Ylxh;
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.UserUtil;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
 
@@ -36,8 +37,22 @@ public class YlsfController extends BaseAuditController {
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-		return new ModelAndView().addObject("lab","lab");
+        User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+        String lab = "";
+		String department = user.getDepartment();
+		if (user.getLastLab() != null) {
+			lab = user.getLastLab();
+		}
+		if (department != null) {
+			if(lab.isEmpty()) {
+				if(department.indexOf(",") > 0) {
+					lab = department.substring(0, department.indexOf(","));
+				} else {
+					lab = department;
+				}
+			}
+		}
+        return new ModelAndView().addObject("lab", lab);
     }
 	
 	@RequestMapping(value = "/data*", method = RequestMethod.GET)

@@ -95,7 +95,6 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 		sidx = sidx.equals("") ? "ylxh" : sidx;
 		sql +=" order by  " +sidx + " " + sord;
 		Query q = getSession().createQuery(sql);
-		System.out.println(sql);
 		if(end !=0){
 			q.setFirstResult(start);
 			q.setMaxResults(end);

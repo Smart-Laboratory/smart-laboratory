@@ -48,9 +48,11 @@ public class AuditViewController {
 			lab = operator.getLastLab();
 		}
 		if (department != null) {
-			for (String s : department.split(",")) {
-				if (StringUtils.isEmpty(lab)) {
-					lab = s;
+			if(lab.isEmpty()) {
+				if(department.indexOf(",") > 0) {
+					lab = department.substring(0, department.indexOf(","));
+				} else {
+					lab = department;
 				}
 			}
 		}

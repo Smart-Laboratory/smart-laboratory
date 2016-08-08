@@ -47,6 +47,6 @@
 	</div>
 </div>
 
-
+<input type="hidden" id="lab" value="${lab}">
 </div>
 </body>

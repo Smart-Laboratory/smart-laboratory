@@ -269,22 +269,22 @@
 				e.preventDefault();
 			}
 		});
-		alert($("#labText").html());
-		getList($("#labText").html());
+		getList($("#lab").val());
 		
 		labChange = function(select) {
-			$("#lastDepLab").val($(select).children().attr("title"));
+			var code = $(select).children().attr("title");
 			$.ajax({
 				  type: 'POST',
-				  url: "../audit/labChange?lab="+$(select).children().attr("title")
+				  url: "../audit/labChange?lab="+code
 			});
-			$("#nowLab").val($(select).children().attr("title"));
+			$("#nowLab").val(code);
 			$("#labText").html($(select).children().html());
-			
-			jQuery("#s3list").jqGrid({
-		    	url:"../set/ylsf/data?lab="+$(select).children().attr("title")
-			}).trigger("reloadGrid");
-			//getSopSchedule($(select).children().attr("title"));
+			jQuery("#s3list").jqGrid('setGridParam',{
+				url:"../set/ylsf/data="+code,
+				datatype : 'json',
+				postData : {"lab":code},
+				page : 1
+			}).trigger('reloadGrid');
 		}
 	});
 	
