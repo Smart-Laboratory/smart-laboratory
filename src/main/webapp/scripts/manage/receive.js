@@ -8,8 +8,8 @@ $(function() {
 
 function getData(obj,event) {
 	var e=e||event;
-	var key=event.keyCode;;
-	if(navigator.appName=="Netscape"){
+    var key = event.keyCode;
+    if(navigator.appName=="Netscape"){
 		key=e.which;
 	}else{
 		key=event.keyCode;

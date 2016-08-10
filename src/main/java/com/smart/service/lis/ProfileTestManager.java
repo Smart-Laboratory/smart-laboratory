@@ -28,7 +28,7 @@ public interface ProfileTestManager extends GenericManager<ProfileTest,Long> {
 	
 	List <ProfileTest> getByProfileName(String profileName);
 
-    public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
-    public int getProfileTestSize(String query);
+    List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
+    int getProfileTestSize(String query);
 
 }

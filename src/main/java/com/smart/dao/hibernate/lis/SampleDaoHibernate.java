@@ -461,10 +461,8 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public boolean existSampleNo(String sampleno){
 		String sql = "select count(*) from Sample where sampleno = '"+sampleno+"'";
 		Query q = getSession().createQuery(sql);
-		if(((Number)(q.uniqueResult())).intValue()==0)
-			return false;
-		return true;
-	}
+        return ((Number) (q.uniqueResult())).intValue() != 0;
+    }
 	
 	@SuppressWarnings("unchecked")
 	public Sample getBySfsb(String patientid, String ylxh, String sfsb){

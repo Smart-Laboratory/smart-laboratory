@@ -5,7 +5,7 @@ function validateRequired(form) {
     var bValid = true;
     var focusField = null;
     var i = 0;
-    var fields = new Array();
+    var fields = [];
     oRequired = new required();
 
     for (x in oRequired) {

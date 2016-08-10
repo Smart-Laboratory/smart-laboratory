@@ -46,11 +46,8 @@ public class TaskManagerUtil {
 	}
 	
 	private boolean codeIsAuditing(String code) {
-		if (codeOnAuditing.contains(code)) {
-			return true;
-		}
-		return false;
-	}
+        return codeOnAuditing.contains(code);
+    }
 	
 	private void addCode(String code) {
 		codeOnAuditing.add(code);
@@ -96,11 +93,8 @@ public class TaskManagerUtil {
 	}
 	
 	public boolean isAuditing(String name) {
-		if (operatorOnAuditing.contains(name)) {
-			return true;
-		}
-		return false;
-	}
+        return operatorOnAuditing.contains(name);
+    }
 	
 	public void addOperatorName(String name) {
 		operatorOnAuditing.add(name);

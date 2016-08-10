@@ -106,9 +106,9 @@
 </table>
 <div>
 	<input type="button" id="editBtn" class="btn btn-info" name="edit" value="<fmt:message key="button.edit"/>" onclick="location.href='../quality/invalidSampleForm?id=<c:out value="${invalidSample.sampleId}" />'"/> 
-	<input type="button" id="deleteBtn" class="btn btn-danger" name="delete" onclick="javascipt:deleteConfirm()"
+	<input type="button" id="deleteBtn" class="btn btn-danger" name="delete" onclick="deleteConfirm()"
 	    value="<fmt:message key="button.delete"/>" />
-	<input type="button" class="btn btn-info" name="cancel" value="<fmt:message key="button.return"/>" onclick="javascript:history.go(-1)"/>
+	<input type="button" class="btn btn-info" name="cancel" value="<fmt:message key="button.return"/>" onclick="history.go(-1)"/>
 </div>
 </div>
 </form:form>

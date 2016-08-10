@@ -1,15 +1,13 @@
 // ** I18N
-Calendar._DN = new Array
-("Zondag",
+Calendar._DN = ["Zondag",
  "Maandag",
  "Dinsdag",
  "Woensdag",
  "Donderdag",
  "Vrijdag",
  "Zaterdag",
- "Zondag");
-Calendar._MN = new Array
-("Januari",
+ "Zondag"];
+Calendar._MN = ["Januari",
  "Februari",
  "Maart",
  "April",
@@ -20,7 +18,7 @@ Calendar._MN = new Array
  "September",
  "Oktober",
  "November",
- "December");
+ "December"];
 
 // tooltips
 Calendar._TT = {};

@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<div id="mid" class="col-sm-10">
+<div id="mid" class="col-sm-12">
 <ul class="nav nav-pills">
   <li id="inpre" role="presentation" class="active"><a onclick="changeTab('in')"><fmt:message key="reagent.detail.in"/></a></li>
   <li id="outpre" role="presentation"><a onclick="changeTab('out')"><fmt:message key="reagent.detail.out"/></a></li>
@@ -33,7 +33,7 @@
 </div>
 
 <div id="printDialog" align="left">
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
+	<button class="btn btn-success" onclick="document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
 	<div id="printFrame" style="height:500px;"></div>
 </div>
 </body>

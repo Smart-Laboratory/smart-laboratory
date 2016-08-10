@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.UserUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,17 +35,7 @@ public class StockController extends ReagentBaseController {
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
 			Reagent reagent = new Reagent();
-			if(labMap.size() == 0) {
-				initLabMap();
-			}
-			User user = userManager.getUserByUsername(request.getRemoteUser());
-			String labName = user.getLastLab();
-			if(labName==null || labName.isEmpty()){
-				labName=user.getDepartment().split(",")[0];
-			}
-			labName = labMap.get(labName);
-			
-			reagent.setLab(labName);
+			reagent.setLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
 			reagent.setName(request.getParameter("name"));
 			reagent.setSpecification(request.getParameter("specification"));
 			reagent.setPlaceoforigin(request.getParameter("place"));
@@ -86,14 +77,7 @@ public class StockController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		String labName = user.getLastLab();
-		if(labName==null || labName.isEmpty()){
-			labName=user.getDepartment().split(",")[0];
-		}
-		labName = labMap.get(labName);
-		
-		List<Reagent> set = reagentManager.getByLab(labName);
+		List<Reagent> set = reagentManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
 		Map<Long,Reagent> rMap = new HashMap<Long,Reagent>();
 		String ids = "";
 		for(Reagent r : set) {

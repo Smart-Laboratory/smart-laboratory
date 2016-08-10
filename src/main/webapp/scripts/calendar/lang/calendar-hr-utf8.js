@@ -3,17 +3,15 @@
 * Feel free to use this script under the terms of the GNU Lesser General
 * Public License, as long as you do not remove or alter this notice.
 */
-Calendar._DN = new Array
-("Nedjelja",
+Calendar._DN = ["Nedjelja",
  "Ponedjeljak",
  "Utorak",
  "Srijeda",
  "Četvrtak",
  "Petak",
  "Subota",
- "Nedjelja");
-Calendar._MN = new Array
-("Siječanj",
+ "Nedjelja"];
+Calendar._MN = ["Siječanj",
  "Veljača",
  "Ožujak",
  "Travanj",
@@ -24,7 +22,7 @@ Calendar._MN = new Array
  "Rujan",
  "Listopad",
  "Studeni",
- "Prosinac");
+ "Prosinac"];
 
 // tooltips
 Calendar._TT = {};

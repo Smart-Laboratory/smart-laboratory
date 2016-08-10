@@ -176,7 +176,7 @@ public class DeviceRelationListController {
      */
     @RequestMapping(value = "ajaxeditdevicerelation*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView getDevicerelation( HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
+    public ModelAndView getDevicerelation( HttpServletRequest request, HttpServletResponse response) throws Exception{
         ModelAndView view = new ModelAndView("set/ajaxeditdevicerelation");
         Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
         String method = ConvertUtil.null2String(request.getParameter("method"));    //add or edit
@@ -399,7 +399,7 @@ public class DeviceRelationListController {
      */
     @RequestMapping(value = "/deleteIndex*",method =RequestMethod.POST)
     @ResponseBody
-    public String deleteIndex(@RequestParam(value = "id") Long id, HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception {
+    public String deleteIndex(@RequestParam(value = "id") Long id, HttpServletRequest request,HttpServletResponse response) throws Exception {
         try {
             indexManager.remove(id);
             return  new JSONObject().put("result","true").toString();
@@ -419,7 +419,7 @@ public class DeviceRelationListController {
      */
     @RequestMapping(value = "/deleteReference*",method =RequestMethod.POST)
     @ResponseBody
-    public String deleteReference(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception {
+    public String deleteReference(HttpServletRequest request,HttpServletResponse response) throws Exception {
         String testid = ConvertUtil.null2String(request.getParameter("testid"));
         int sex = ConvertUtil.getIntValue(request.getParameter("sex"),-1);
         int orderno = ConvertUtil.getIntValue(request.getParameter("orderno"),-1);

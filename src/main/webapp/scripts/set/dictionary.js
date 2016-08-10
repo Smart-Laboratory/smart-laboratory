@@ -92,7 +92,7 @@ $(function(){
 	 * */
 	$.post('../set/dictionaryType/getList', function(data){
 		if(data){
-			var ul = $('#ullist')
+			var ul = $('#ullist');
 			for (i=0; i< data.length; i++) {
 				var li = $('<li typeid="'+data[i].id+'" ></li>');
 				li.html('<a href="#_" title="'+ data [i].name+'">'+data[i].name+'</a>');
@@ -106,12 +106,12 @@ $(function(){
 					} else {
 						reloadGrid($(this).attr("typeid"));
 					}
-				})
+				});
 				ul.append(li);
 			}
 			ul.children("li").eq(0).click();
 		}
-	})
+	});
 
 	//$('#ullist').children("li").eq(0).click();
 	//表单校验
@@ -127,7 +127,7 @@ $(function(){
 
 	//$(window).triggerHandler('resize.jqGrid');
 
-})
+});
 
 function  clearData(){
 	$('#id').val('0');

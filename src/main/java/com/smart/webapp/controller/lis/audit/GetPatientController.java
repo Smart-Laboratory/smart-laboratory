@@ -117,7 +117,7 @@ public class GetPatientController extends BaseAuditController {
 			map.put("description", info.getDescription());
 			map.put("mark", info.getAuditMark());
 			map.put("sex", info.getSexValue());
-			map.put("hasImages", info.getHasimages() == 0 ? false : true);
+			map.put("hasImages", info.getHasimages() != 0);
 			map.put("blh", info.getPatientblh());
 			
 			String code = info.getSampleNo().substring(8, 11);

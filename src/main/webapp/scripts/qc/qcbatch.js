@@ -3,7 +3,7 @@
  * 质控项目设定 Script
  */
 
-var TSLAB=TSLAB ||{}
+var TSLAB=TSLAB ||{};
 TSLAB.Custom=(function(){
     var cache = {
         listUrl:"../micro/testcase/getList",
@@ -74,7 +74,7 @@ TSLAB.Custom=(function(){
                 success:function(data){
                     cache.antiSelected = data;
                 }
-            })
+            });
             if(!rowId || rowId =='' || rowId==null){
                 layer.msg("请先选择要编辑的数据",{icon:2});
                 return false;
@@ -199,7 +199,7 @@ TSLAB.Custom=(function(){
                     deviceId.push(checkObj.attr('testid'));
                     deviceName.push(checkObj.attr('testname'));
                 }
-            })
+            });
             $('#deviceid').val(deviceId.join(","));
             $('#device').val(deviceName.join(","));
             ul.parent().hide();
@@ -212,7 +212,7 @@ TSLAB.Custom=(function(){
             $(window).on('resize.jqGrid', function () {
                 cache.drugGrid.jqGrid('setGridWidth', $(".leftContent").width(),false);
                 cache.drugDetailGrid.jqGrid('setGridWidth', $(".rightContent").width(),false);
-            })
+            });
             var clientHeight= $(window).innerHeight();
             var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
 
@@ -450,10 +450,10 @@ TSLAB.Custom=(function(){
             //});
         }
 
-    }
+    };
 
     return public;
-})()
+})();
 
 
 $(function(){
@@ -468,4 +468,4 @@ $(function(){
     });
     TSLAB.Custom.init();
 
-})
+});

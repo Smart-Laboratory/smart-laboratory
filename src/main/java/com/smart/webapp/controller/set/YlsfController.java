@@ -168,86 +168,61 @@ public class YlsfController extends BaseAuditController {
 		}
 		return success.toString();
 	}
-	
-	@RequestMapping(value = "/delete*", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/ajax/getTests*", method = RequestMethod.GET)
 	@ResponseBody
-	public boolean deleteTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String getTests(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject obj = new JSONObject();
 
-		try {
-			String deleteTest = request.getParameter("del");
-			long ylxh = Long.parseLong(request.getParameter("id"));
-			Ylxh y = ylxhManager.get(ylxh);
-			y.setProfiletest(y.getProfiletest().replace(deleteTest +",", ""));
-			ylxhManager.save(y);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return false;
-		}
-		return true;
-	}
-
-	@RequestMapping(value = "/delete2*", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean deleteTest2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		try {
-			String deleteTest = request.getParameter("del");
-			long ylxh = Long.parseLong(request.getParameter("id"));
-			Ylxh y = ylxhManager.get(ylxh);
-			y.setProfiletest2(y.getProfiletest2().replace(deleteTest +",", ""));
-			ylxhManager.save(y);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return false;
-		}
-		return true;
-	}
-	
-	@RequestMapping(value = "/search*", method = RequestMethod.GET)
-	@ResponseBody
-	public DataResponse getSearchData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		String pages = request.getParameter("page");
-		String rows = request.getParameter("rows");
-		String text = request.getParameter("text");
-		int page = Integer.parseInt(pages);
-		int row = Integer.parseInt(rows);
-		
-		if (idMap.size() == 0)
+		Long ylxh = Long.parseLong(request.getParameter("ylxh"));
+		Ylxh y = ylxhManager.get(ylxh);
+		if(idMap == null || idMap.size() == 0) {
 			initMap();
-
-		DataResponse dataResponse = new DataResponse();
-		List<Ylxh> list = ylxhManager.getSearchData(text);
-		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		int listSize = 0;
-		if (list != null)
-			listSize = list.size();
-		dataResponse.setRecords(listSize);
-		int x = listSize % (row == 0 ? listSize : row);
-		if (x != 0) {
-			x = row - x;
 		}
-		int totalPage = (listSize + x) / (row == 0 ? listSize : row);
-		dataResponse.setPage(page);
-		dataResponse.setTotal(totalPage);
-		int start = row * (page - 1);
-		int index = 0;
-		while (index < row && (start + index) < listSize) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Ylxh y = list.get(start + index);
-			map.put("id", y.getYlxh());
-			map.put("ylmc", y.getYlmc());
-			map.put("ptest", y.getProfiletest());
-			
-			dataRows.add(map);
-			index++;
+		String profiletest = ConvertUtil.null2String(y.getProfiletest());
+		String profiletest2 = ConvertUtil.null2String(y.getProfiletest2());
+		String profiletest3 = ConvertUtil.null2String(y.getProfiletest3());
+		if(!profiletest.isEmpty()) {
+			JSONArray jsonArray = new JSONArray();
+			for(String s : profiletest.split(",")) {
+				if(idMap.containsKey(s)) {
+					JSONObject o = new JSONObject();
+					o.put("id", s);
+					o.put("name", idMap.get(s).getName());
+					jsonArray.put(o);
+				}
+			}
+			obj.put("profiletest", jsonArray);
 		}
-
-		dataResponse.setRows(dataRows);
-
-		response.setContentType("text/html;charset=UTF-8");
-		return dataResponse;
+		if(!profiletest2.isEmpty()) {
+			JSONArray jsonArray = new JSONArray();
+			for(String s : profiletest2.split(",")) {
+				if(idMap.containsKey(s)) {
+					JSONObject o = new JSONObject();
+					o.put("id", s);
+					o.put("name", idMap.get(s).getName());
+					jsonArray.put(o);
+				}
+			}
+			obj.put("profiletest2", jsonArray);
+		}
+		if(!profiletest3.isEmpty()) {
+			JSONArray jsonArray = new JSONArray();
+			for(String s : profiletest3.split(",")) {
+				if(idMap.containsKey(s)) {
+					JSONObject o = new JSONObject();
+					o.put("id", s);
+					o.put("name", idMap.get(s).getName());
+					jsonArray.put(o);
+				}
+			}
+			obj.put("profiletest3", jsonArray);
+		}
+        response.setContentType("text/html;charset=UTF-8");
+        response.getWriter().print(obj.toString());
+        return null;
 	}
+	
 	/**
 	 * 张晋南 2016-05-25
 	 * test 用户上一次选择的项目，多次添加时默认上次的项目

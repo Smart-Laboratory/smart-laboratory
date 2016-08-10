@@ -5,8 +5,8 @@ function deleteYlxh(obj) {
 
 function receive(obj,event) {
 	var e=e||event;
-	var key=event.keyCode;;
-	if(navigator.appName=="Netscape"){
+    var key = event.keyCode;
+    if(navigator.appName=="Netscape"){
 		key=e.which;
 	}else{
 		key=event.keyCode;
@@ -77,8 +77,8 @@ function receive(obj,event) {
 
 function getData(obj,event) {
 	var e=e||event;
-	var key=event.keyCode;;
-	if(navigator.appName=="Netscape"){
+    var key = event.keyCode;
+    if(navigator.appName=="Netscape"){
 		key=e.which;
 	}else{
 		key=event.keyCode;
@@ -136,8 +136,8 @@ function getSampleData(id, type) {
 
 function getPatient(obj,event) {
 	var e=e||event;
-	var key=event.keyCode;;
-	if(navigator.appName=="Netscape"){
+    var key = event.keyCode;
+    if(navigator.appName=="Netscape"){
 		key=e.which;
 	}else{
 		key=event.keyCode;
@@ -448,7 +448,7 @@ $(function() {
 				process(json.list);
 			});
 		}
-	})
+	});
 	var $tag_obj = $('#examinaim').data('tag');
 	//$tag_obj.add('Programmatically Added');
 	

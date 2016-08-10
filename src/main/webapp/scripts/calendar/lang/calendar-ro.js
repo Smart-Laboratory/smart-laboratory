@@ -1,16 +1,14 @@
 // ** I18N
-Calendar._DN = new Array
-("Duminică",
+Calendar._DN = ["Duminică",
  "Luni",
  "Marţi",
  "Miercuri",
  "Joi",
  "Vineri",
  "Sâmbătă",
- "Duminică");
+ "Duminică"];
 Calendar._SDN_len = 2;
-Calendar._MN = new Array
-("Ianuarie",
+Calendar._MN = ["Ianuarie",
  "Februarie",
  "Martie",
  "Aprilie",
@@ -21,7 +19,7 @@ Calendar._MN = new Array
  "Septembrie",
  "Octombrie",
  "Noiembrie",
- "Decembrie");
+ "Decembrie"];
 
 // tooltips
 Calendar._TT = {};

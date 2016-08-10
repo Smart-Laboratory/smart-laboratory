@@ -690,7 +690,7 @@
                 }
                 //加载子表数据
                 var subTable=$('<table class="table subtable testdetail" id='+sampleid+' examinaim='+examinaim+'></table>');
-                subTable.append(header)
+                subTable.append(header);
                 for(j=0;j < rowDatas.length;j++) {
                     var row = $("<tr class='hover testitem' testid=" + rowDatas[j].id + " sampleid=" + sampleid + " abnormal=''></tr>");
                     if (j % 2 == 0) {
@@ -720,7 +720,7 @@
                         a.append(rowDatas[j].name);
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
-                        })
+                        });
                         row.attr('abnormal', '');
                         rNameTD.append(a);
                         //rNameTD.html('<a>'+rowDatas[j].name+'</a>');
@@ -732,7 +732,7 @@
                         a.append(rowDatas[j].name);
                         a.click(function(){
                         	public.show_knowledge($(this).attr('val'));
-                        })
+                        });
                         rNameTD.append(a);
                         rNameTD.attr('title',rowDatas[j].name);
                         row.append(rNameTD);
@@ -771,10 +771,10 @@
 
                         row.bind('click',function(){
                             //alert('rowClick');
-                        })
+                        });
                         row.mousedown(function(e){
                             if(e.which == 3 ){
-                                public.showCharts($(this).attr('testid'),$(this).attr('sampleid'))
+                                public.showCharts($(this).attr('testid'),$(this).attr('sampleid'));
                                 //alert('rightmenu==' + $(this).attr('testid') +"  sampleid="+$(this).attr('sampleid'))
                             }
                         })
@@ -815,7 +815,7 @@
                 var header = $('<tr><td width="220px">抗生素名</td><td>结果</td><td>解释</td><td>折点</td><td>单位</td></tr>');
                 //加载子表数据
                 var drugTable=$('<table class="table subtable"></table>');
-                drugTable.append(header)
+                drugTable.append(header);
                 for(j=0;j < drugDatas.length;j++) {
                     var row = $("<tr class='hover'></tr>");
                     if (j % 2 == 0) {
@@ -829,20 +829,20 @@
                     a.append(drugDatas[j].testid);
                     a.click(function(){
                     	public.show_knowledge($(this).attr('val'));
-                    })
+                    });
                     rNameTD.append(a);
                     rNameTD.attr('title',drugDatas[j].testid);
-                    row.append(rNameTD)
+                    row.append(rNameTD);
 
                     var rResultTD = $("<td></td>");      //结果
                     rResultTD.html(drugDatas[j].testresult);
                     rResultTD.attr('title',drugDatas[j].testresult);
-                    row.append(rResultTD)
+                    row.append(rResultTD);
 
                     var rHintTD = $("<td></td>");      //解释
                     rHintTD.html(drugDatas[j].hint);
                     rHintTD.attr('title',drugDatas[j].hint);
-                    row.append(rHintTD)
+                    row.append(rHintTD);
                     if(drugDatas[j].hint=='I'){
                         row.addClass("color102");
                     }else if(drugDatas[j].hint=='S'){
@@ -855,7 +855,7 @@
                         refhlo = drugDatas[j].reflo +'~' +drugDatas[j].refhi;
                     }
                     rRefhiTD.html(refhlo);
-                    row.append(rRefhiTD)
+                    row.append(rRefhiTD);
 
                     var rUnitTD = $("<td></td>");      //单位
                     rUnitTD.html(drugDatas[j].unit);
@@ -921,12 +921,12 @@
                 var ul = $('#testList');
                 var table = $('#testTable');
                 ul.children('li').each(function(index,obj){
-                    var checkObj = $(obj).children('input')
+                    var checkObj = $(obj).children('input');
                     if(checkObj.attr("checked")){
-                        var tr ='<tr><td>'+checkObj.attr('testname')+'</td><td>'+checkObj.attr('testab')+'</td><td>删除</td></tr>'
+                        var tr ='<tr><td>'+checkObj.attr('testname')+'</td><td>'+checkObj.attr('testab')+'</td><td>删除</td></tr>';
                         table.append(tr);
                     }
-                })
+                });
                 ul.parent().hide();
             },
             showCharts:function(id,sample){
@@ -1039,7 +1039,7 @@
                     var licontent =$('<li id="tab'+i+'" class="tab_con" tabname='+classname+'>'+$(obj).html()+'<\/li>');
                     title.append(li);
                     content.append(licontent);
-                })
+                });
                 var result = '<div id="tabbox">'+title.prop("outerHTML")+content.prop("outerHTML");
                 result = result + "<\/div>";
                 return result;
@@ -1067,14 +1067,14 @@
                         var cellUnit = $(tr).find('td').eq(7).text() ||'';
                         if(subtext !='') subtext +="、";
                         subtext +=cellName+' '+cellResult+cellUnit;
-                    })
+                    });
                     if(subtext!=''){
                         if(text !='') text +="\r\n";
                         text += examinaim+"：" ;
                         text += subtext;
                         subtext = "";
                     }
-                })
+                });
                 text = sampledate +'查'+text;
                 $('#abnormalNote').text(text);
                 layer.open({
@@ -1123,7 +1123,7 @@
                 });
             }
 
-        }
+        };
         return public;
     })();
 
@@ -1141,13 +1141,13 @@
             }else{
                 $(this).addClass('active')
             }
-        })
+        });
         var height = $(window).height();
         var width = $(window).width();
         var height = (document.documentElement.scrollHeight >document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight;
         $('.samplelist').height(height-$('.samplelist').offset().top-20);
         $('.test-result').height(height-$('.samplelist').offset().top-60);
-        $('.test-result').width(width-$(".samplelist").width()-20)
+        $('.test-result').width(width-$(".samplelist").width()-20);
 
         laydate({
             elem: '#fromDate',
@@ -1176,7 +1176,7 @@
                     }else {
                         obj.removeClass("hideRow");
                     }
-                })
+                });
                 $(this).siblings('label').text('显示全部')
             }else{
                 $('#testResultGrid .hideRow').removeClass("hideRow");

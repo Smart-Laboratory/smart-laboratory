@@ -19,10 +19,8 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		String hql = "select count(*) from LabOrder where laborder = '"+sampleid+"'";
 		
 		int count = ((Number)getSession().createQuery(hql).uniqueResult()).intValue();
-		if(count>0)
-			return true;
-		return false;
-	}
+        return count > 0;
+    }
 	
 	@SuppressWarnings("unchecked")
 	public List<LabOrder> getByIds(String ids){

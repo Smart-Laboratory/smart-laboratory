@@ -64,7 +64,7 @@
 	    showLog("[ " + getTime() + " eonDrop ]&nbsp;&nbsp;&nbsp;&nbsp; moveType:"
 	            + moveType);
 	    showLog("target: " + (targetNode ? targetNode.name : "root") + "  -- is "
-	            + (isCopy == null ? "cancel" : isCopy ? "copy" : "move"))
+	            + (isCopy == null ? "cancel" : isCopy ? "copy" : "move"));
 	    edataToController("drag" + moveType, treeNodes[0].id, targetNode.id);
 	}
 	
@@ -95,9 +95,8 @@
 	            getData();
 	            return false;
 	        });
-	};
-	
-	function selectDesAll() {
+    }
+    function selectDesAll() {
 	    var zTree = $.fn.zTree.getZTreeObj("etree");
 	    zTree.setting.edit.editNameSelectAll = $("#selectAll").attr("checked");
 	}

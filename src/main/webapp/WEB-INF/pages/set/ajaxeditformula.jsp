@@ -174,7 +174,7 @@
             initGrid:function(){
                 $(window).on('resize.jqGrid', function () {
                     public.indexGrid.jqGrid('setGridWidth', $("#leftContent").width(),false);
-                })
+                });
                 public.indexGrid.jqGrid({
                     url: '/set/devicerelationlist/getList',
                     datatype: "json",
@@ -245,9 +245,9 @@
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             }
-        }
+        };
         return public;
-    })()
+    })();
 
     $(function(){
         jQuery.Custom.initGrid();
@@ -256,7 +256,7 @@
                 jQuery.Custom.search();
             }
         });
-    })
+    });
 
     $("#testname").autocomplete({
         source: function( request, response ) {
@@ -288,7 +288,7 @@
     var Calculate = (function(){
         var  jsFormula=($('#jsFormula').val()=='')?'': eval("("+$('#jsFormula').val()+")");
         var public ={
-            _string:new Array(),
+            _string:[],
             _type:null,
             formula:(jsFormula.formula && jsFormula.formula.length>0)?jsFormula.formula:[],
             formulaDescribe:(jsFormula.formulaDescribe && jsFormula.formulaDescribe.length>0)?jsFormula.formulaDescribe:[],
@@ -302,7 +302,7 @@
                     $('#formuladescribe').text($('#formuladescribe').text()+num);
                     public.formulaDescribe.push(num);
                 }
-                public.formula.push(num)
+                public.formula.push(num);
                 //public.formula += num;
             },
             replacename:function(tag,value){
@@ -345,9 +345,9 @@
                         break;
                 }
             }
-        }
+        };
         return public;
-    })()
+    })();
     // JavaScript Document
     //window.document.onkeydown = disableRefresh;
 //    function disableRefresh(evt){

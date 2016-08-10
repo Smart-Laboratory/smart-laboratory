@@ -97,7 +97,7 @@
             }
 
         }, zNodes);
-    })
+    });
 
     function save(){
         var ids = $("#tableList").jqGrid('getGridParam','selarrrow');

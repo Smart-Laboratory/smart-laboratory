@@ -14,8 +14,8 @@ import java.util.List;
  * @Version:
  */
 public interface TestReferenceManager  extends GenericManager<TestReference,Long> {
-    public void saveTestReferences(List<TestReference> testReferences)  throws Exception;
-    public List<TestReference> getTestRefenreceListByTestId(String testid);
-    public TestReference getTestReference(String testid, int sex, int orderno);
-    public void deleteTestReference(String testid, int sex, int orderno) throws Exception;
+    void saveTestReferences(List<TestReference> testReferences)  throws Exception;
+    List<TestReference> getTestRefenreceListByTestId(String testid);
+    TestReference getTestReference(String testid, int sex, int orderno);
+    void deleteTestReference(String testid, int sex, int orderno) throws Exception;
 }

@@ -159,11 +159,11 @@
 				<fmt:message key="button.edit" /></button>
 				
 				<button id="deleteBtn" class="btn"  
-				onclick="javascript:deleteConfirm()">
+				onclick="deleteConfirm()">
 				<fmt:message key="button.delete" /></button>
 			</c:if>	
 				<button id="returnBtn" class="btn" 
-				onclick="javascript:history.go(-1)">
+				onclick="history.go(-1)">
 				<fmt:message key="button.return" /></button>
 			</div>
 			</td>

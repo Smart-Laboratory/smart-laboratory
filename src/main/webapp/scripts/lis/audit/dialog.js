@@ -564,8 +564,8 @@ function addtotext(i){
 			$("#checkId").val(ids);
 		}
 	}
-	
-};
+
+}
 function setDefaultValue(){
 // var date = new Date().Format("yyyyMMdd");
 		$("#batchAddResults_statistic_date").val(new Date().Format("yyyyMMdd"));
@@ -591,7 +591,7 @@ $(function(){
 	    for (var k in o)
 	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 	    return fmt;
-	}
+	};
 	
 	$(".ui-dialog-buttonset button").each(function(index,self){
 		$(self).addClass('btn');

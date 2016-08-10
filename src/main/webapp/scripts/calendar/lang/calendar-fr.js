@@ -12,15 +12,14 @@
 // Translator: David Duret, <pilgrim@mala-template.net> from previous french version
 
 // full day names
-Calendar._DN = new Array
-("Dimanche",
+Calendar._DN = ["Dimanche",
  "Lundi",
  "Mardi",
  "Mercredi",
  "Jeudi",
  "Vendredi",
  "Samedi",
- "Dimanche");
+ "Dimanche"];
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -35,34 +34,31 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("Dim",
+Calendar._SDN = ["Dim",
  "Lun",
  "Mar",
  "Mar",
  "Jeu",
  "Ven",
  "Sam",
- "Dim");
+ "Dim"];
 
 // full month names
-Calendar._MN = new Array
-("Janvier",
- "Février",
+Calendar._MN = ["Janvier",
+ "Fï¿½vrier",
  "Mars",
  "Avril",
  "Mai",
  "Juin",
  "Juillet",
- "Août",
+ "Aoï¿½t",
  "Septembre",
  "Octobre",
  "Novembre",
- "Décembre");
+ "Dï¿½cembre"];
 
 // short month names
-Calendar._SMN = new Array
-("Jan",
+Calendar._SMN = ["Jan",
  "Fev",
  "Mar",
  "Avr",
@@ -73,7 +69,7 @@ Calendar._SMN = new Array
  "Sep",
  "Oct",
  "Nov",
- "Dec");
+ "Dec"];
 
 // tooltips
 Calendar._TT = {};
@@ -83,7 +79,7 @@ Calendar._TT["ABOUT"] =
 "DHTML Date/Heure Selecteur\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "Pour la derniere version visitez : http://www.dynarch.com/projects/calendar/\n" +
-"Distribué par GNU LGPL.  Voir http://gnu.org/licenses/lgpl.html pour les details." +
+"Distribuï¿½ par GNU LGPL.  Voir http://gnu.org/licenses/lgpl.html pour les details." +
 "\n\n" +
 "Selection de la date :\n" +
 "- Utiliser les bouttons \xab, \xbb  pour selectionner l\'annee\n" +
@@ -95,13 +91,13 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- ou Maj-clic pour decrementer\n" +
 "- ou clic et glisser-deplacer pour une selection plus rapide";
 
-Calendar._TT["PREV_YEAR"] = "Année préc. (maintenir pour menu)";
-Calendar._TT["PREV_MONTH"] = "Mois préc. (maintenir pour menu)";
+Calendar._TT["PREV_YEAR"] = "Annï¿½e prï¿½c. (maintenir pour menu)";
+Calendar._TT["PREV_MONTH"] = "Mois prï¿½c. (maintenir pour menu)";
 Calendar._TT["GO_TODAY"] = "Atteindre la date du jour";
 Calendar._TT["NEXT_MONTH"] = "Mois suiv. (maintenir pour menu)";
-Calendar._TT["NEXT_YEAR"] = "Année suiv. (maintenir pour menu)";
-Calendar._TT["SEL_DATE"] = "Sélectionner une date";
-Calendar._TT["DRAG_TO_MOVE"] = "Déplacer";
+Calendar._TT["NEXT_YEAR"] = "Annï¿½e suiv. (maintenir pour menu)";
+Calendar._TT["SEL_DATE"] = "Sï¿½lectionner une date";
+Calendar._TT["DRAG_TO_MOVE"] = "Dï¿½placer";
 Calendar._TT["PART_TODAY"] = " (Aujourd'hui)";
 
 // the following is to inform that "%s" is to be the first day of week

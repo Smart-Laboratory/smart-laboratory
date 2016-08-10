@@ -96,7 +96,7 @@ public class DoctorQueryDaoHibernate extends GenericDaoHibernate<SampleAndResult
                 int count = 0;
                 while(m.find()){
                     count ++;
-                };
+                }
                 leftVo.setMicroNum(count);
                 leftVo.setReportNote(reportNo);
                 return leftVo;

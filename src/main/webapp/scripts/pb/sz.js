@@ -6,51 +6,174 @@ function getWI() {
 		wiFirst = false;
 		var schools="";
 		$.get("../pb/sz/ajax/getSchool",function(data){
-			success:{
-				data = jQuery.parseJSON(data);
-				schools = data.schools;
-				jQuery("#witable").jqGrid({
-					url:"../pb/sz/ajax/getWinfo",
-					datatype: "json",
-					jsonReader : {repeatitems : false}, 
-					colNames:['ID','使用','工号','姓名','性别','科室','开始工作时间','类型','电话','班次','组内顺序','夜班顺序','良渚班','外出班','海创园','入院','年休','积休','历年积休','积休使用','所在学校','备注'],
-				   	colModel:[
-						{name:'id',index:'id',hidden:true,editable:true},
-						{name:'isactive',index:'isactive',width:30,editable:true,search:false,edittype:"select",editoptions:{value:"0:不使用;1:使用"}},
-						{name:'workid',index:'workid',width:50,editable:true,editoptions:{size:10},sopt:'eq'},
-						{name:'name',index:'name',width:50,editable:true,editoptions:{size:10},sortable:false,search:true,sopt:('eq','cn')},
-				   		{name:'sex',index:'sex',width:30,editable:true,edittype:"select",editoptions:{value:"0:\u7537;1:\u5973"} ,sortable:false,search:false},
-				   		{name:'section',index:'section',width:120,editable:true,search:false},
-				   		{name:'worktime',index:'worktime',width:80,editable:true, sortable:false,search:false, edittype:"text", editrules:{date: true},editoptions:{ size: 10, maxlengh: 10,  
-			            	dataInit: function(element) {  
-			                	$(element).datepicker({dateFormat: 'yy-mm-dd'});  
-			            	}  
-			         	}},
-				   		{name:'type',index:'type',width:40,editable:true,edittype:"select",editoptions:{value:"0:在职;1:进修;2:实习;3:工人"}},
-				   		{name:'phone',index:'phone',width:60,editable:true,editoptions:{size:20} ,sortable:false,search:false},
-				   		{name:'shift',index:'shift',width:100,editable:true,editoptions:{size:30} ,sortable:false,search:false},
-				   		{name:'ord2',index:'ord2',width:40,search:false,editable:true,editrules: {required: true, integer: true, minValue: 0},editoptions:{size:10}},
-				   		{name:'ord1',index:'ord1',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 300},editoptions:{size:10}},
-				   		{name:'ord3',index:'ord3',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 300},editoptions:{size:10}},
-				   		{name:'ord4',index:'ord4',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-				   		{name:'ord5',index:'ord5',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-				   		{name:'ord6',index:'ord6',width:40,search:false,editable:true,editrules: {integer: true, minValue: 0, maxValue: 80},editoptions:{size:10}},
-				   		{name:'holiday',index:'holiday',width:40,search:false,editable:true},
-				   		{name:'defeHoliday',index:'defeHoliday',width:40,search:false,editable:false},
-				   		{name:'defeHolidayhis',index:'defeHolidayhis',width:60,search:false,editable:true},
-				   		{name:'lxsy',index:'lxsy',width:60,search:false,editable:false},
-				   		{name:'school',index:'school',width:100,search:false,editable:true,edittype:'select',editoptions:{value:schools}},
-				   		{name:'usercomment',index:'usercomment',width:60,search:false,editable:true}
-				   	],
-				   	rowNum:15,
-				   	pager: '#wipager',
-				   	viewrecords: true,
-				   	rownumbers: true,
-				   	height: '100%',
-				   	editurl: "../pb/sz/wiedit"
-				});
-				jQuery("#witable").jqGrid('navGrid','#wipager',{});
-			}
+			{
+                data = jQuery.parseJSON(data);
+                schools = data.schools;
+                jQuery("#witable").jqGrid({
+                    url: "../pb/sz/ajax/getWinfo",
+                    datatype: "json",
+                    jsonReader: {repeatitems: false},
+                    colNames: ['ID', '使用', '工号', '姓名', '性别', '科室', '开始工作时间', '类型', '电话', '班次', '组内顺序', '夜班顺序', '良渚班', '外出班', '海创园', '入院', '年休', '积休', '历年积休', '积休使用', '所在学校', '备注'],
+                    colModel: [
+                        {name: 'id', index: 'id', hidden: true, editable: true},
+                        {
+                            name: 'isactive',
+                            index: 'isactive',
+                            width: 30,
+                            editable: true,
+                            search: false,
+                            edittype: "select",
+                            editoptions: {value: "0:不使用;1:使用"}
+                        },
+                        {
+                            name: 'workid',
+                            index: 'workid',
+                            width: 50,
+                            editable: true,
+                            editoptions: {size: 10},
+                            sopt: 'eq'
+                        },
+                        {
+                            name: 'name',
+                            index: 'name',
+                            width: 50,
+                            editable: true,
+                            editoptions: {size: 10},
+                            sortable: false,
+                            search: true,
+                            sopt: ('eq', 'cn')
+                        },
+                        {
+                            name: 'sex',
+                            index: 'sex',
+                            width: 30,
+                            editable: true,
+                            edittype: "select",
+                            editoptions: {value: "0:\u7537;1:\u5973"},
+                            sortable: false,
+                            search: false
+                        },
+                        {name: 'section', index: 'section', width: 120, editable: true, search: false},
+                        {
+                            name: 'worktime',
+                            index: 'worktime',
+                            width: 80,
+                            editable: true,
+                            sortable: false,
+                            search: false,
+                            edittype: "text",
+                            editrules: {date: true},
+                            editoptions: {
+                                size: 10, maxlengh: 10,
+                                dataInit: function (element) {
+                                    $(element).datepicker({dateFormat: 'yy-mm-dd'});
+                                }
+                            }
+                        },
+                        {
+                            name: 'type',
+                            index: 'type',
+                            width: 40,
+                            editable: true,
+                            edittype: "select",
+                            editoptions: {value: "0:在职;1:进修;2:实习;3:工人"}
+                        },
+                        {
+                            name: 'phone',
+                            index: 'phone',
+                            width: 60,
+                            editable: true,
+                            editoptions: {size: 20},
+                            sortable: false,
+                            search: false
+                        },
+                        {
+                            name: 'shift',
+                            index: 'shift',
+                            width: 100,
+                            editable: true,
+                            editoptions: {size: 30},
+                            sortable: false,
+                            search: false
+                        },
+                        {
+                            name: 'ord2',
+                            index: 'ord2',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {required: true, integer: true, minValue: 0},
+                            editoptions: {size: 10}
+                        },
+                        {
+                            name: 'ord1',
+                            index: 'ord1',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {integer: true, minValue: 0, maxValue: 300},
+                            editoptions: {size: 10}
+                        },
+                        {
+                            name: 'ord3',
+                            index: 'ord3',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {integer: true, minValue: 0, maxValue: 300},
+                            editoptions: {size: 10}
+                        },
+                        {
+                            name: 'ord4',
+                            index: 'ord4',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {integer: true, minValue: 0, maxValue: 80},
+                            editoptions: {size: 10}
+                        },
+                        {
+                            name: 'ord5',
+                            index: 'ord5',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {integer: true, minValue: 0, maxValue: 80},
+                            editoptions: {size: 10}
+                        },
+                        {
+                            name: 'ord6',
+                            index: 'ord6',
+                            width: 40,
+                            search: false,
+                            editable: true,
+                            editrules: {integer: true, minValue: 0, maxValue: 80},
+                            editoptions: {size: 10}
+                        },
+                        {name: 'holiday', index: 'holiday', width: 40, search: false, editable: true},
+                        {name: 'defeHoliday', index: 'defeHoliday', width: 40, search: false, editable: false},
+                        {name: 'defeHolidayhis', index: 'defeHolidayhis', width: 60, search: false, editable: true},
+                        {name: 'lxsy', index: 'lxsy', width: 60, search: false, editable: false},
+                        {
+                            name: 'school',
+                            index: 'school',
+                            width: 100,
+                            search: false,
+                            editable: true,
+                            edittype: 'select',
+                            editoptions: {value: schools}
+                        },
+                        {name: 'usercomment', index: 'usercomment', width: 60, search: false, editable: true}
+                    ],
+                    rowNum: 15,
+                    pager: '#wipager',
+                    viewrecords: true,
+                    rownumbers: true,
+                    height: '100%',
+                    editurl: "../pb/sz/wiedit"
+                });
+                jQuery("#witable").jqGrid('navGrid', '#wipager', {});
+            }
 		})
 		
 		
@@ -198,7 +321,7 @@ $(function() {
 			  }
 		});
 		
-	}
+	};
 	
 	
 	$("#workCount").click(function(){
@@ -259,4 +382,4 @@ Date.prototype.Format = function(fmt)
     if(new RegExp("("+ k +")").test(fmt))   
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
-} 
+};

@@ -17,7 +17,7 @@ function  AddCode(){
 				describe : $('#describe').val()
 		    },function(data){
 		    	layer.close(index);
-	        })
+	        });
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -32,7 +32,7 @@ function Delete(id){
         layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
         return false;
     }
-    $("#segment").val($("#segment").val().replace($("#codeEdit").jqGrid("getRowData", id).code + ",", ""))
+    $("#segment").val($("#segment").val().replace($("#codeEdit").jqGrid("getRowData", id).code + ",", ""));
     $("#codeEdit").jqGrid('delRowData',id );
 }
 /************************************
@@ -57,7 +57,7 @@ function  AddSection(){
 		    	layer.close(index);
 		    	$("#sectionList").trigger('reloadGrid');
 		    	jQuery("#sectionCode").jqGrid("clearGridData");
-	        })
+	        });
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -164,7 +164,7 @@ $(function(){
 	$(window).on('resize.jqGrid', function () {
         $('#sectionList').jqGrid('setGridWidth', $(".leftContent").width(),false);
         $('#sectionCode').jqGrid('setGridWidth', $(".rightContent").width(),false);
-    })
+    });
     var clientHeight= $(window).innerHeight();
     var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
     
@@ -298,7 +298,7 @@ $(function(){
                     flag =  false;
                     layer.msg("数据已存在");
                 }
-                return;
+
             });
             if(!flag) return ;
             var ids = $('#codeEdit').jqGrid('getDataIDs');
@@ -319,7 +319,7 @@ $(function(){
         }
     });
 	
-})
+});
 function  clearData(){
 	$('#id').val('0');
 	$('#code').val('');

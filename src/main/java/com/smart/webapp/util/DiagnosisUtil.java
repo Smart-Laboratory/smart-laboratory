@@ -15,9 +15,9 @@ public class DiagnosisUtil {
 	
 	private static DiagnosisUtil instance = new DiagnosisUtil();
 	
-	public DiagnosisUtil() {};
-	
-	public DiagnosisUtil getInstance() {
+	public DiagnosisUtil() {}
+
+    public DiagnosisUtil getInstance() {
 		if(instance.map == null){
 			synchronized (instance) {
 				instance.initMap();

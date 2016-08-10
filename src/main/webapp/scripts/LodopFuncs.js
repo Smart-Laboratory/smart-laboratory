@@ -29,12 +29,13 @@ function needCLodop(){
 		if ( verChrome !== null ) {
 			verChrome = verChrome[0].match(/\d+/);
 			if (verChrome[0]>=42) return true;
-		};
-	};
+        }
+    }
         return false;
-    } catch(err) {return true;};
-};
-
+    } catch (err) {
+        return true;
+    }
+}
 //====页面引用CLodop云打印必须的JS文件：====
 if (needCLodop()) {
 	var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
@@ -45,8 +46,7 @@ if (needCLodop()) {
 	/*oscript = document.createElement("script");
 	oscript.src ="http://localhost:8001/CLodopfuncs.js?priority=2";
 	head.insertBefore( oscript,head.firstChild );*/
-};
-
+}
 //====获取LODOP对象的主过程：====
 function getLodop(oOBJECT,oEMBED){
     var strHtmInstall="<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
@@ -61,8 +61,14 @@ function getLodop(oOBJECT,oEMBED){
     try{
         var isIE = (navigator.userAgent.indexOf('MSIE')>=0) || (navigator.userAgent.indexOf('Trident')>=0);
         if (needCLodop()) {
-            try{ LODOP=getCLodop();} catch(err) {};
-	    if (!LODOP && document.readyState!=="complete") {alert("C-Lodop没准备好，请稍后再试！"); return;};
+            try {
+                LODOP = getCLodop();
+            } catch (err) {
+            }
+            if (!LODOP && document.readyState !== "complete") {
+                alert("C-Lodop没准备好，请稍后再试！");
+                return;
+            }
             if (!LODOP) {
 		 if (isIE) document.write(strCLodopInstall); else
 		 document.documentElement.innerHTML=strCLodopInstall+document.documentElement.innerHTML;
@@ -72,10 +78,11 @@ function getLodop(oOBJECT,oEMBED){
 	         if (CLODOP.CVERSION<"2.0.5.3") { 
 			if (isIE) document.write(strCLodopUpdate); else
 			document.documentElement.innerHTML=strCLodopUpdate+document.documentElement.innerHTML;
-		 };
-		 if (oEMBED && oEMBED.parentNode) oEMBED.parentNode.removeChild(oEMBED);
-		 if (oOBJECT && oOBJECT.parentNode) oOBJECT.parentNode.removeChild(oOBJECT);	
-	    };
+             }
+                if (oEMBED && oEMBED.parentNode) oEMBED.parentNode.removeChild(oEMBED);
+		 if (oOBJECT && oOBJECT.parentNode) oOBJECT.parentNode.removeChild(oOBJECT);
+
+    }
         } else {
             var is64IE  = isIE && (navigator.userAgent.indexOf('x64')>=0);
             //=====如果页面有Lodop就直接使用，没有则新建:==========
@@ -101,8 +108,8 @@ function getLodop(oOBJECT,oEMBED){
                  if (isIE)   document.write(strHtmInstall);    else
                      document.documentElement.innerHTML=strHtmInstall+document.documentElement.innerHTML;
                  return LODOP;
-            };
-        };
+            }
+        }
         if (LODOP.VERSION<"6.2.0.4") {
             if (needCLodop())
             document.documentElement.innerHTML=strCLodopUpdate+document.documentElement.innerHTML; else
@@ -110,11 +117,13 @@ function getLodop(oOBJECT,oEMBED){
             if (isIE) document.write(strHtmUpdate); else
             document.documentElement.innerHTML=strHtmUpdate+document.documentElement.innerHTML;
             return LODOP;
-        };
+        }
         //===如下空白位置适合调用统一功能(如注册语句、语言选择等):===
 
         //===========================================================
         return LODOP;
-    } catch(err) {alert("getLodop出错:"+err);};
-};
+    } catch (err) {
+        alert("getLodop出错:" + err);
+    }
+}
 

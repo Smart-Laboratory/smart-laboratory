@@ -12,7 +12,8 @@
     <script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
     <script type="text/javascript" src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../scripts/set/ylsf.js"></script>
-    
+
+	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
 
 	<style>

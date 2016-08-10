@@ -7,30 +7,27 @@
 // Distributed under the same terms as the calendar itself.
 
 // full day names
-Calendar._DN = new Array
-("NedeÄľa",
+Calendar._DN = ["NedeÄľa",
  "Pondelok",
  "Utorok",
  "Streda",
  "Ĺ tvrtok",
  "Piatok",
  "Sobota",
- "NedeÄľa");
+ "NedeÄľa"];
 
 // short day names
-Calendar._SDN = new Array
-("Ned",
+Calendar._SDN = ["Ned",
  "Pon",
  "Uto",
  "Str",
  "Ĺ tv",
  "Pia",
  "Sob",
- "Ned");
+ "Ned"];
 
 // full month names
-Calendar._MN = new Array
-("JanuĂˇr",
+Calendar._MN = ["JanuĂˇr",
  "FebruĂˇr",
  "Marec",
  "AprĂ­l",
@@ -41,11 +38,10 @@ Calendar._MN = new Array
  "September",
  "OktĂłber",
  "November",
- "December");
+ "December"];
 
 // short month names
-Calendar._SMN = new Array
-("Jan",
+Calendar._SMN = ["Jan",
  "Feb",
  "Mar",
  "Apr",
@@ -56,7 +52,7 @@ Calendar._SMN = new Array
  "Sep",
  "Okt",
  "Nov",
- "Dec");
+ "Dec"];
 
 // tooltips
 Calendar._TT = {};

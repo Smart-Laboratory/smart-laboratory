@@ -45,12 +45,12 @@
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'name',index:'name', width:"24%"},
-		   		{name:'batch',index:'batch', width:"8%", sortable:false},
+		   		{name:'batch',index:'batch', width:"10%", sortable:false},
 		   		{name:'exdate',index:'exdate', width:"8%", sortable:false},
 		   		{name:'isqualified',index:'isqualified', width:"10%", align:"center", sortable:false},
-		   		{name:'num',index:'num', width:"8%", align:"center", sortable:false},		
-		   		{name:'operator',index:'operaator', width:"10%", align:"center", sortable:false},
-		   		{name:'indate',index:'indate', width:"10%", sortable:false},
+		   		{name:'num',index:'num', width:"6%", align:"center", sortable:false},
+		   		{name:'operator',index:'operaator', width:"8%", align:"center", sortable:false},
+		   		{name:'indate',index:'indate', width:"12%", sortable:false},
 		   		{name:'reprint',index:'reprint', width:"12%", align:"center", sortable:false}
 		   	],
 		   	rowNum: 15,

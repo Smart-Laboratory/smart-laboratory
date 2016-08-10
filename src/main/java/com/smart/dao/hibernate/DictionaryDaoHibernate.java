@@ -76,5 +76,5 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 	@SuppressWarnings("unchecked")
 	public List<Dictionary> getDeviceType(){
 		return  getSession().createQuery("from Dictionary where type = 3").list();
-	};
+	}
 }

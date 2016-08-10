@@ -29,7 +29,7 @@ public class In extends BaseObject implements Serializable {
 	private String batch;
 	private int isqualified;
 	private String operator;
-	private Date indate;
+	private String indate;
 	private String exdate;
 	private String notes;
 	private int num;
@@ -77,11 +77,11 @@ public class In extends BaseObject implements Serializable {
 	}
 
 	@Column
-	public Date getIndate() {
+	public String getIndate() {
 		return indate;
 	}
 
-	public void setIndate(Date indate) {
+	public void setIndate(String indate) {
 		this.indate = indate;
 	}
 

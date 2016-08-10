@@ -236,7 +236,7 @@
 	    var zTree = $.fn.zTree.getZTreeObj("tree");
 	    zTree.selectNode(treeNode);
 	    return confirm("\u786e\u8ba4\u5220\u9664 \u8282\u70b9 -- " + treeNode.name
-	            + " \u5417\uff1fŸ");
+	            + " \u5417\uff1fï¿½");
 	}
 	function onRemove(e, treeId, treeNode) {
 	    showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; "
@@ -267,7 +267,7 @@
 	    showLog("[ " + getTime() + " onDrop ]&nbsp;&nbsp;&nbsp;&nbsp; moveType:"
 	            + moveType);
 	    showLog("target: " + (targetNode ? targetNode.name : "root") + "  -- is "
-	            + (isCopy == null ? "cancel" : isCopy ? "copy" : "move"))
+	            + (isCopy == null ? "cancel" : isCopy ? "copy" : "move"));
 	    dataToController("drag" + moveType, treeNodes[0].id, targetNode.id);
 	}
 	function onExpand(event, treeId, treeNode) {
@@ -317,11 +317,11 @@
 	            getData();
 	            return false;
 	        });
-	};
-	function removeHoverDom(treeId, treeNode) {
+    }
+    function removeHoverDom(treeId, treeNode) {
 	    $("#addBtn_" + treeNode.id).unbind().remove();
-	};
-	function selectAll() {
+    }
+    function selectAll() {
 	    var zTree = $.fn.zTree.getZTreeObj("tree");
 	    zTree.setting.edit.editNameSelectAll = $("#selectAll").attr("checked");
 	}

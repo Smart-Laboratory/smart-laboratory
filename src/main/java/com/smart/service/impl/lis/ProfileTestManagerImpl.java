@@ -49,7 +49,7 @@ public class ProfileTestManagerImpl extends GenericManagerImpl<ProfileTest,Long>
      */
     public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord){
         return profileTestDao.getProfileTestList(query,start,end,sidx,sord);
-    };
+    }
 
     /**
      * 组合试验记录数
@@ -58,5 +58,5 @@ public class ProfileTestManagerImpl extends GenericManagerImpl<ProfileTest,Long>
      */
     public int getProfileTestSize(String query){
         return profileTestDao.getProfileTestSize(query);
-    };
+    }
 }

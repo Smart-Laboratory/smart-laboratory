@@ -152,7 +152,7 @@
 	</div>
 	<div class="col-sm-12"style="margin-top:10px;">
 		<input type="button" class="btn btn-info" name="save" value="<fmt:message key="button.save"/>" onclick="submit()"/>
-		<input type="button" class="btn btn-info" name="cancel" value="<fmt:message key="button.cancel"/>" onclick="javascript:history.go(-1)"/>
+		<input type="button" class="btn btn-info" name="cancel" value="<fmt:message key="button.cancel"/>" onclick="history.go(-1)"/>
 	</div>
 </div>
 </form:form>

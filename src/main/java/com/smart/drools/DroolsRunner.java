@@ -43,10 +43,7 @@ public class DroolsRunner {
 	}
 	
 	public boolean isBaseInited() {
-		if (kbase == null)
-			return false;
-		else 
-			return true;
+        return kbase != null;
 	}
 	
 	public void buildKnowledgeBase(Reader reader) {

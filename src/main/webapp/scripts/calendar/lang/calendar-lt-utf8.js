@@ -10,15 +10,14 @@
 // include your contact information in the header, as can be seen above.
 
 // full day names
-Calendar._DN = new Array
-("Sekmadienis",
+Calendar._DN = ["Sekmadienis",
  "Pirmadienis",
  "Antradienis",
  "Trečiadienis",
  "Ketvirtadienis",
  "Pentadienis",
  "Šeštadienis",
- "Sekmadienis");
+ "Sekmadienis"];
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -33,19 +32,17 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("Sek",
+Calendar._SDN = ["Sek",
  "Pir",
  "Ant",
  "Tre",
  "Ket",
  "Pen",
  "Šeš",
- "Sek");
+ "Sek"];
 
 // full month names
-Calendar._MN = new Array
-("Sausis",
+Calendar._MN = ["Sausis",
  "Vasaris",
  "Kovas",
  "Balandis",
@@ -56,11 +53,10 @@ Calendar._MN = new Array
  "Rugsėjis",
  "Spalis",
  "Lapkritis",
- "Gruodis");
+ "Gruodis"];
 
 // short month names
-Calendar._SMN = new Array
-("Sau",
+Calendar._SMN = ["Sau",
  "Vas",
  "Kov",
  "Bal",
@@ -71,7 +67,7 @@ Calendar._SMN = new Array
  "Rgs",
  "Spa",
  "Lap",
- "Gru");
+ "Gru"];
 
 // tooltips
 Calendar._TT = {};

@@ -3,11 +3,11 @@
  * 微生物基础信息Script
  */
 
-var TSLAB=TSLAB ||{}
+var TSLAB=TSLAB ||{};
 TSLAB.Custom=(function(){
     var cache = {
         listUrl:"../micro/antibiotic/getList"
-    }
+    };
     var public = {
         initGrid:function(){
             $('#tableList').jqGrid({
@@ -99,7 +99,7 @@ TSLAB.Custom=(function(){
                                 layer.alert(data.success);
                             }
                         }
-                    })
+                    });
                     //layer.close(index); //如果设定了yes回调，需进行手工关闭
                 }
             });
@@ -141,7 +141,7 @@ TSLAB.Custom=(function(){
                                 layer.alert(data.success);
                             }
                         }
-                    })
+                    });
                     //layer.close(index); //如果设定了yes回调，需进行手工关闭
                 }
             });
@@ -165,9 +165,9 @@ TSLAB.Custom=(function(){
             });
         }
 
-    }
+    };
     return public;
-})()
+})();
 
 
 $(function(){
@@ -186,4 +186,4 @@ $(function(){
     TSLAB.Custom.initGrid();
     //$(window).triggerHandler('resize.jqGrid');
 
-})
+});

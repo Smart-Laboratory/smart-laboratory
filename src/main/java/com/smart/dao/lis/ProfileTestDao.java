@@ -24,8 +24,8 @@ public interface ProfileTestDao extends GenericDao<ProfileTest, Long> {
 	List <ProfileTest> getByProfileName(String profileName);
     
 	@Transactional
-	public List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
+    List<ProfileTest> getProfileTestList(String query, int start, int end, String sidx, String sord);
     
 	@Transactional
-	public int getProfileTestSize(String query);
+    int getProfileTestSize(String query);
 }

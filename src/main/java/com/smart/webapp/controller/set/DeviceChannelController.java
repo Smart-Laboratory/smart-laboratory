@@ -110,7 +110,7 @@ public class DeviceChannelController {
      */
     @RequestMapping(value = "/save*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public void save(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+    public void save(HttpServletRequest request,HttpServletResponse response) throws Exception{
         String datas = request.getParameter("datas");
         JSONArray jsonArray = new JSONArray(datas);
         List<Channel> channels = new ArrayList<Channel>();

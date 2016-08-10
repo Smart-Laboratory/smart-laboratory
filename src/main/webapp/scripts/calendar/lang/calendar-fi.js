@@ -6,30 +6,27 @@
 // Distributed under the same terms as the calendar itself.
 
 // full day names
-Calendar._DN = new Array
-("Sunnuntai",
+Calendar._DN = ["Sunnuntai",
  "Maanantai",
  "Tiistai",
  "Keskiviikko",
  "Torstai",
  "Perjantai",
  "Lauantai",
- "Sunnuntai");
+ "Sunnuntai"];
 
 // short day names
-Calendar._SDN = new Array
-("Su",
+Calendar._SDN = ["Su",
  "Ma",
  "Ti",
  "Ke",
  "To",
  "Pe",
  "La",
- "Su");
+ "Su"];
 
 // full month names
-Calendar._MN = new Array
-("Tammikuu",
+Calendar._MN = ["Tammikuu",
  "Helmikuu",
  "Maaliskuu",
  "Huhtikuu",
@@ -40,11 +37,10 @@ Calendar._MN = new Array
  "Syyskuu",
  "Lokakuu",
  "Marraskuu",
- "Joulukuu");
+ "Joulukuu"];
 
 // short month names
-Calendar._SMN = new Array
-("Tam",
+Calendar._SMN = ["Tam",
  "Hel",
  "Maa",
  "Huh",
@@ -55,7 +51,7 @@ Calendar._SMN = new Array
  "Syy",
  "Lok",
  "Mar",
- "Jou");
+ "Jou"];
 
 // tooltips
 Calendar._TT = {};

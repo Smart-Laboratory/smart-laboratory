@@ -11,15 +11,14 @@
 // include your contact information in the header, as can be seen above.
 
 // full day names
-Calendar._DN = new Array
-("\u5468\u65e5",//\u5468\u65e5
+Calendar._DN = ["\u5468\u65e5",//\u5468\u65e5
  "\u5468\u4e00",//\u5468\u4e00
  "\u5468\u4e8c",//\u5468\u4e8c
  "\u5468\u4e09",//\u5468\u4e09
  "\u5468\u56db",//\u5468\u56db
  "\u5468\u4e94",//\u5468\u4e94
  "\u5468\u516d",//\u5468\u516d
- "\u5468\u65e5");//\u5468\u65e5
+ "\u5468\u65e5"];//\u5468\u65e5
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -34,19 +33,17 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("\u5468\u65e5",
+Calendar._SDN = ["\u5468\u65e5",
  "\u5468\u4e00",
  "\u5468\u4e8c",
  "\u5468\u4e09",
  "\u5468\u56db",
  "\u5468\u4e94",
  "\u5468\u516d",
- "\u5468\u65e5");
+ "\u5468\u65e5"];
 
 // full month names
-Calendar._MN = new Array
-("\u4e00\u6708",
+Calendar._MN = ["\u4e00\u6708",
  "\u4e8c\u6708",
  "\u4e09\u6708",
  "\u56db\u6708",
@@ -57,11 +54,10 @@ Calendar._MN = new Array
  "\u4e5d\u6708",
  "\u5341\u6708",
  "\u5341\u4e00\u6708",
- "\u5341\u4e8c\u6708");
+ "\u5341\u4e8c\u6708"];
 
 // short month names
-Calendar._SMN = new Array
-("\u4e00\u6708",
+Calendar._SMN = ["\u4e00\u6708",
  "\u4e8c\u6708",
  "\u4e09\u6708",
  "\u56db\u6708",
@@ -72,7 +68,7 @@ Calendar._SMN = new Array
  "\u4e5d\u6708",
  "\u5341\u6708",
  "\u5341\u4e00\u6708",
- "\u5341\u4e8c\u6708");
+ "\u5341\u4e8c\u6708"];
 
 // tooltips
 Calendar._TT = {};

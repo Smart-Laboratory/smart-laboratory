@@ -102,7 +102,7 @@ public class AnalyticUtil {
 		for (Result r : rule.getResults()) {
 			if (reasonSet.contains(r.getId().toString())) {
 				builder.append("\tinsert(new SI(\"");
-				builder.append((long) (90000 + r.getId()));
+				builder.append(90000 + r.getId());
 				builder.append("\",\"");
 				builder.append(r.getContent());
 				builder.append("\"));\n");

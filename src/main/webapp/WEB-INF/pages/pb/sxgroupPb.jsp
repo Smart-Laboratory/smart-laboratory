@@ -89,7 +89,7 @@ table td.sx{
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='window.print()'><fmt:message key='audit.print'/></button>
 		<div class = "col-sm-12  data" style="margin-top:20px;">
 			<input id="pbtext" value="${pbdate}" type="hidden"/>
 			<table id="pbdata" class=" table-hover" style="font-size:12px;text-align:center;" border="1px;">

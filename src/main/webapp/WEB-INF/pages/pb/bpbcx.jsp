@@ -27,7 +27,7 @@
 <div class="form-inline" style="width:1024x;">
 	<input type="text" id="date" class="form-control" sytle="width:50px;">
 	<button id="changeMonth" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key='pb.changemonth' /></button>
-	<button id="print" type="button" class="btn btn-info btn-sm" style=" margin-left:15px;" onclick='javascript:preview1()'><fmt:message key='audit.print'/></button>
+	<button id="print" type="button" class="btn btn-info btn-sm" style=" margin-left:15px;" onclick='preview1()'><fmt:message key='audit.print'/></button>
 </div>
 
 <div id="weekSelect" class="form-inline" >		
@@ -39,7 +39,7 @@
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:preview1()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='preview1()'><fmt:message key='audit.print'/></button>
 		<!--startprint-->
 		<div class="fixed">
 			<h2 style="text-align:center;"><b>${sectionStr} ${month } 第 ${week } 周排班 </b></h2>
@@ -82,7 +82,7 @@ labChange=function(select){
 		  }
 	});
 	
-}
+};
 	 
 	 function getdata(item){
 		 var week = $(item).attr("name");
@@ -121,7 +121,7 @@ labChange=function(select){
 			$("#date").val(new Date().Format("yyyy-MM"));
 		}
 		
-	})
+	});
 
 	
 Date.prototype.Format = function(fmt)   

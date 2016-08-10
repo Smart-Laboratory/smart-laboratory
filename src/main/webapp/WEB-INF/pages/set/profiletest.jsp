@@ -127,7 +127,7 @@
         $(window).on('resize.jqGrid', function () {
             $('#leftGrid').jqGrid('setGridWidth', $(".leftContent").width(),false);
             $('#rightGrid').jqGrid('setGridWidth', $(".rightContent").width(),false);
-        })
+        });
         var clientHeight= $(window).innerHeight();
         var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
 

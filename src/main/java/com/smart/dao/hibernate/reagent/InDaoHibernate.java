@@ -28,7 +28,7 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 
 	@SuppressWarnings("unchecked")
 	public List<In> getByInDate(String indate) {
-		return getSession().createQuery("from In where id in (" + indate + ")").list();
+		return getSession().createQuery("from In where indate='" + indate + "'").list();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -30,7 +30,7 @@ function  Add(){
 						layer.alert(data.success);
 					}
 				}
-			})
+			});
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -118,7 +118,7 @@ function Edit(){
 						layer.alert(data.success);
 					}
 				}
-			})
+			});
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -145,7 +145,7 @@ $(function(){
 
 	//$(window).triggerHandler('resize.jqGrid');
 
-})
+});
 
 function  clearData(){
 	$("#id").removeAttr("disabled");

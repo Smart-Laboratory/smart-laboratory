@@ -112,7 +112,7 @@ $(function(){
 				isFirst = false;
 			}
 			else{
-				var array = new Array();
+				var array = [];
 				$.ajaxSetup({
 					async:false
 				});
@@ -248,7 +248,7 @@ $(function(){
 		if ($("#hisLastResult").val() == 1) {
 			last = 1;
 		}
-		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>")
+		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>");
 		openAuditPrintDialog();
 		$("#iframe_print").height(450);
 		
@@ -350,7 +350,7 @@ function getProValue() {
  			get : function(key){return this[key]},
  			contains : function(key){return this[key] == null?false:true},
  			remove : function(key){delete this[key]}
- 		}
+ 		};
 		
 		$("#auditDialog div.proId").each(function(index,self) {
 			ids.put($(self).html(),$(self).html())
@@ -361,7 +361,7 @@ function getProValue() {
 				get : function(key){return this[key]},
 				contains : function(key){return this[key] == null?false:true},
 				remove : function(key){delete this[key]}
-			}
+			};
 		var array = jQuery.parseJSON(data);
 		for (var i=0 ; i < array.length ; i++) {
 			map.put(array[i].id,i);

@@ -16,6 +16,6 @@ import java.util.List;
  */
 
 public interface ChannelManager extends GenericManager<Channel, Long> {
-    public void saveChannels(List<Channel> channels);
-    public Channel getChannel(String deviceid, String testid);
+    void saveChannels(List<Channel> channels);
+    Channel getChannel(String deviceid, String testid);
 }

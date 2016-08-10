@@ -117,10 +117,10 @@ public class QueryReportController  extends BaseAuditController {
      */
     @RequestMapping(value = "/getData*",method = RequestMethod.POST)
     @ResponseBody
-    public String getData(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+    public String getData(HttpServletRequest request,HttpServletResponse response) throws Exception{
         //获取样本病人信息
         Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
-        Sample info =  sampleManager.get(id);;
+        Sample info =  sampleManager.get(id);
         JSONObject patientInfo = new JSONObject();
         patientInfo.put("id", ConvertUtil.null2String(info.getPatientId()));
         patientInfo.put("name", info.getPatientname());
@@ -155,7 +155,7 @@ public class QueryReportController  extends BaseAuditController {
      */
     @RequestMapping(value = "/getSampleData*",method = RequestMethod.POST)
     @ResponseBody
-    public String getSampleData(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+    public String getSampleData(HttpServletRequest request,HttpServletResponse response) throws Exception{
         //获取样本病人信息
         String patientBlh = ConvertUtil.null2String(request.getParameter("patientBlh"));
         String nowDate = ConvertUtil.null2String(request.getParameter("fromDate"));
@@ -169,7 +169,7 @@ public class QueryReportController  extends BaseAuditController {
         Date now = sdf.parse(nowDate);
         Calendar calendar = Calendar.getInstance(); //得到日历
         calendar.setTime(now);//把当前时间赋给日历
-        calendar.add(calendar.MONTH, -6); //设置为前3月
+        calendar.add(Calendar.MONTH, -6); //设置为前3月
         Date dBefore  = calendar.getTime(); //得到前3月的时间
         String fromDate = sdf.format(dBefore); //格式化前3月的时间
 

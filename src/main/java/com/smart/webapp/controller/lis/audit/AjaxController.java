@@ -263,7 +263,7 @@ public class AjaxController extends BaseAuditController {
 			}
 		//获取多个file
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
-			String key = (String) it.next();
+			String key = it.next();
 			MultipartFile imgFile = multipartRequest.getFile(key);
 			if (imgFile.getOriginalFilename().length() > 0) {
 				String fileName = imgFile.getOriginalFilename();
@@ -331,7 +331,7 @@ public class AjaxController extends BaseAuditController {
 			}
 		//获取多个file
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
-			String key = (String) it.next();
+			String key = it.next();
 			MultipartFile imgFile = multipartRequest.getFile(key);
 			if (imgFile.getOriginalFilename().length() > 0) {
 				String fileName = imgFile.getOriginalFilename();

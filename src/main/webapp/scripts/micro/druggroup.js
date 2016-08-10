@@ -3,7 +3,7 @@
  * 微生物基础信息Script
  */
 
-var TSLAB=TSLAB ||{}
+var TSLAB=TSLAB ||{};
 TSLAB.Custom=(function(){
     var cache = {
         listUrl:"../micro/druggroup/getList",
@@ -74,7 +74,7 @@ TSLAB.Custom=(function(){
                 success:function(data){
                     cache.antiSelected = data;
                 }
-            })
+            });
             if(!rowId || rowId =='' || rowId==null){
                 layer.msg("请先选择要编辑的数据",{icon:2});
                 return false;
@@ -176,7 +176,7 @@ TSLAB.Custom=(function(){
             $(window).on('resize.jqGrid', function () {
                cache.drugGrid.jqGrid('setGridWidth', $(".leftContent").width(),false);
                cache.drugDetailGrid.jqGrid('setGridWidth', $(".rightContent").width(),false);
-            })
+            });
             var clientHeight= $(window).innerHeight();
             var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
 
@@ -374,10 +374,10 @@ TSLAB.Custom=(function(){
             public.loadDualListbox();
         }
 
-    }
+    };
 
     return public;
-})()
+})();
 
 
 $(function(){
@@ -393,4 +393,4 @@ $(function(){
     });
     TSLAB.Custom.init();
 
-})
+});

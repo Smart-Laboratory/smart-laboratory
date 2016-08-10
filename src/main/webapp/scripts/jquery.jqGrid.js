@@ -12031,8 +12031,8 @@ addSubGrid : function( pos, sind ) {
 						if(ts.p.subGridOptions.reloadOnExpand === true) {
 							$r.remove(".ui-subgrid");
 						} else if($r.hasClass('ui-subgrid')) { // incase of dynamic deleting
-							$r.hide().addClass("ui-sg-collapsed").removeClass("ui-sg-expanded");;
-						}
+                            $r.hide().addClass("ui-sg-collapsed").removeClass("ui-sg-expanded");
+                        }
 						$(this).html("<a style='cursor:pointer;'><span class='ui-icon "+ts.p.subGridOptions.plusicon+"'></span></a>").removeClass("sgexpanded").addClass("sgcollapsed");
 						if(ts.p.subGridOptions.selectOnCollapse) {
 							$(ts).jqGrid('setSelection',_id);

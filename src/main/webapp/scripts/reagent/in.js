@@ -21,7 +21,7 @@
 	
 	function getData(obj,event) {
 		var e=e||event;
-		var key=event.keyCode;;
+		var key = event.keyCode;
 		if(navigator.appName=="Netscape"){
 			key=e.which;
 		}else{
@@ -64,17 +64,16 @@
 				var num = $("#" + selectids[i] + "_num").val();
 				var exedate = $("#" + selectids[i] + "_exedate").val();
 				if(batch=="" || exedate==""){
-					alert("请输入批号/失效日期！");
+					layer.alert("请输入批号/失效日期！",{icon:0,title:"提示"});
 					return;
 				}
 				str += id + ":" + batch + ":" + num + ":" + exedate +";";
 			}
 			if(str == "") {
-		    	alert("请至少选择一种需要出/入库的试剂耗材！");
+				layer.alert("请至少选择一种需要出/入库的试剂耗材！",{icon:0,title:"提示"});
 		    } else {
 		    	$.post("../ajax/reagent/savein",{text:str},function(data) {
 		    		$('#printFrame').empty();
-		    		alert("入库成功！");
 			    	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"../reagent/print?time=" + data + "\"/>");
 					$("#printDialog").dialog("open");
 				});
@@ -91,7 +90,7 @@
 		                	type : $("#reagent_select").val(),
 		                    name : request.term
 		                },
-		                success: function( data ) {$(this).children('option:selected').val()
+		                success: function( data ) {$(this).children('option:selected').val();
 		                	response( $.map( data, function( result ) {
 		                		return {
 		                            label: result.name,

@@ -9,7 +9,7 @@
 	}
 	
 	function twoSampleReload(sample){
-		var array = new Array();
+		var array = [];
 		$.ajaxSetup({
 			async:false
 		});
@@ -138,7 +138,7 @@
         	if(data.diagnosticKnow == "") {
         		$("#diagnostic").html(data.diagnostic);
         	} else {
-        		$("#diagnostic").html("<a href='#' onclick='javascript:show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
+        		$("#diagnostic").html("<a href='#' onclick='show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
         	}
         	$("#diagnosisValue").val(data.diagnostic);
         	if(data.description != null) {
@@ -747,7 +747,7 @@
 	}
 	
 	function getTwoSample(sampleNo) {
-		var array = new Array();
+		var array = [];
 		$.ajaxSetup({
 			async:false
 		});
@@ -1215,7 +1215,7 @@
 	
 	function openKnowledgeLayer(data) {
 		var dataArray = data.split('<div class="tab-');
-		var title = new Array();
+		var title = [];
 		for(var i=0; i<dataArray.length;i++){
 			var str = dataArray[i].replace('">',"!@#$%^&*");
 			if(i!=0){
@@ -1228,7 +1228,7 @@
 				dataArray[i] = dataArray[i].replace("<\/div>","");
 			}
 		}
-		var jsonArr = new Array();
+		var jsonArr = [];
 		for(var j=0;j<dataArray.length;j++){
 			if(j!=0) {
 				var jsonObj = {};
@@ -1289,7 +1289,7 @@
 		$("#lab").val($(select).children().attr("title"));
 		$("#labText").html($(select).children().html());
 		getSopSchedule($(select).children().attr("title"));
-	}
+	};
 
 function getExplain(docNo){
 	var lastsel;

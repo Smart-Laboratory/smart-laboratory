@@ -44,7 +44,7 @@ public class ResultViewController {
 		}
 		if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(dir)) {
 			criterion = sort;
-			isAsc = "asc".equals(dir) ? true : false;
+			isAsc = "asc".equals(dir);
 		}
 		
 		List<Result> results = resultManager.getResults(pageNumber, criterion, isAsc);

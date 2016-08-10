@@ -113,11 +113,10 @@ function search_printBtn(SampleNo) {
 	if ($("#hisLastResult").val() == 1) {
 		last = 1;
 	}
-	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + SampleNo + "&last=" + last + "\"/>")
+	$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + SampleNo + "&last=" + last + "\"/>");
 	$("#searchPrint").dialog("open");
 	$("#iframe_print").height(450);
-};
-
+}
 //------------------------------------------
 Date.prototype.Format = function(fmt)   
 { //author: meizz   
@@ -136,4 +135,4 @@ Date.prototype.Format = function(fmt)
     if(new RegExp("("+ k +")").test(fmt))   
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
-}  
+};

@@ -56,10 +56,8 @@ public class InController {
 		List<InBarcode> ibList = new ArrayList<InBarcode>();
 		List<In> inList = new ArrayList<In>();
 		if(request.getParameter("id") == null) {
-			String indate = request.getParameter("inIds");
+			String indate = request.getParameter("time");
 			inList = inManager.getByInDate(indate);
-//			System.out.println(indate);
-//			System.out.println(inList.size());
 		} else {
 			inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));
 		}
@@ -81,7 +79,7 @@ public class InController {
 				ib.setName(rMap.get(in.getRgId()).getNameAndSpecification());
 				ib.setBatch(in.getBatch());
 				ib.setExdate(in.getExdate());
-				ib.setIndate(Constants.DF2.format(in.getIndate()));
+				ib.setIndate(in.getIndate());
 				ib.setCondition(rMap.get(in.getRgId()).getStorageCondition());
 				ibList.add(ib);
 			}

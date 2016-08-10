@@ -131,7 +131,7 @@
                 search();
             }
         });
-    })
+    });
 
     /**
      * 新增指标项目
@@ -192,7 +192,7 @@
         //设置表格宽度
         $(window).on('resize.jqGrid', function () {
             $('#dataGrid').jqGrid('setGridWidth', $(".leftContent").width(),false);
-        })
+        });
         $("#dataGrid").jqGrid({
             url: '../set/calculateformula/getList',
             datatype: "json",

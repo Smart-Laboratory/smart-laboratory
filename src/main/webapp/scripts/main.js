@@ -1815,7 +1815,7 @@
                 c && (s[h] = c)),
                 n.result
             }
-            return
+
         },
         dispatch: function(n) {
             n = v.event.fix(n || e.event);
@@ -5686,7 +5686,7 @@ function validateRequired(form) {
     var bValid = true;
     var focusField = null ;
     var i = 0;
-    var fields = new Array();
+    var fields = [];
     oRequired = new required();
     for (x in oRequired) {
         if ((form[oRequired[x][0]].type == 'text' || form[oRequired[x][0]].type == 'textarea' || form[oRequired[x][0]].type == 'select-one' || form[oRequired[x][0]].type == 'radio' || form[oRequired[x][0]].type == 'password') && form[oRequired[x][0]].value == '') {
@@ -5720,4 +5720,3 @@ function confirmMessage(obj) {
     ans = confirm(msg);
     return ans;
 }
-;

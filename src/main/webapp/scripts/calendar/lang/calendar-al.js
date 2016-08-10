@@ -2,30 +2,27 @@
 //author Rigels Gordani rige@hotmail.com
 
 // ditet
-Calendar._DN = new Array
-("E Diele",
+Calendar._DN = ["E Diele",
 "E Hene",
 "E Marte",
 "E Merkure",
 "E Enjte",
 "E Premte",
 "E Shtune",
-"E Diele");
+"E Diele"];
 
 //ditet shkurt
-Calendar._SDN = new Array
-("Die",
+Calendar._SDN = ["Die",
 "Hen",
 "Mar",
 "Mer",
 "Enj",
 "Pre",
 "Sht",
-"Die");
+"Die"];
 
 // muajt
-Calendar._MN = new Array
-("Janar",
+Calendar._MN = ["Janar",
 "Shkurt",
 "Mars",
 "Prill",
@@ -36,11 +33,10 @@ Calendar._MN = new Array
 "Shtator",
 "Tetor",
 "Nentor",
-"Dhjetor");
+"Dhjetor"];
 
 // muajte shkurt
-Calendar._SMN = new Array
-("Jan",
+Calendar._SMN = ["Jan",
 "Shk",
 "Mar",
 "Pri",
@@ -51,7 +47,7 @@ Calendar._SMN = new Array
 "Sht",
 "Tet",
 "Nen",
-"Dhj");
+"Dhj"];
 
 // ndihmesa
 Calendar._TT = {};
@@ -89,8 +85,8 @@ Calendar._TT["WEEKEND"] = "0,6";
 
 Calendar._TT["CLOSE"] = "Mbyll";
 Calendar._TT["TODAY"] = "Sot";
-Calendar._TT["TIME_PART"] = "Kliko me (Shift-)ose terhiqe per te ndryshuar 
-vleren";
+Calendar._TT["TIME_PART"] = "Kliko me (Shift-)ose terhiqe per te ndryshuar ;
+vleren";;
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";

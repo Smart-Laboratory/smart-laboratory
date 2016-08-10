@@ -212,7 +212,7 @@ public class ProfileTestController {
      */
     @RequestMapping(value = "/saveProfileTest*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public void saveProfileTest(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception{
+    public void saveProfileTest(HttpServletRequest request,HttpServletResponse response) throws Exception{
         //获取组合试验JSON
         ProfileTest profileTest = null;
         Long id = ConvertUtil.getLongValue(request.getParameter("id"),-1l);
@@ -243,7 +243,7 @@ public class ProfileTestController {
 
     @RequestMapping(value = "/remove*",method = RequestMethod.POST)
     @ResponseBody
-    public void Delete(@RequestParam(value = "id") Long id , HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
+    public void Delete(@RequestParam(value = "id") Long id , HttpServletRequest request, HttpServletResponse response) throws Exception{
         profileTestManager.remove(id);
     }
     /**

@@ -637,8 +637,7 @@ public class ModifyController {
 										+ String.format(
 												"%" + snumBegin.length() + "d",
 												i).replace(" ", "0");
-								;
-								sampleNoSet.add(sampleNoNew);
+                                sampleNoSet.add(sampleNoNew);
 							}
 						} else {
 							return null;
@@ -677,8 +676,7 @@ public class ModifyController {
 									+ String.format(
 											"%" + snumBegin.length() + "d", i)
 											.replace(" ", "0");
-							;
-							sampleNoSet.add(sampleNoNew);
+                            sampleNoSet.add(sampleNoNew);
 						}
 					} else {
 						return null;

@@ -73,7 +73,7 @@ table tr th {
 	</div>
 	</c:when>
 	<c:otherwise>
-		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:preview1()'><fmt:message key='audit.print'/></button>
+		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='preview1()'><fmt:message key='audit.print'/></button>
 		<!--startprint-->
 		<div class="col-sm-12" style="">
 			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		

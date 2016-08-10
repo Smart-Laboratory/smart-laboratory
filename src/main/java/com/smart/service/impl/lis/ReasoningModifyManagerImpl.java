@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.smart.model.lis.ReasoningModify;
 import com.smart.service.impl.GenericManagerImpl;
 import com.smart.service.lis.ReasoningModifyManager;
-import com.smart.dao.lis.ReasoningModifyDao;;
+import com.smart.dao.lis.ReasoningModifyDao;
 
 @Service("reasoningModifyManager")
 public class ReasoningModifyManagerImpl extends GenericManagerImpl<ReasoningModify, Long> implements ReasoningModifyManager {

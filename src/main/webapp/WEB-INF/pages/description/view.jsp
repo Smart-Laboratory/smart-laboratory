@@ -71,11 +71,11 @@ th {
 					<fmt:message key="button.edit" /></button>
 					
 					<button id="deleteBtn" class="btn btn-danger" 
-					onclick="javascipt:deleteConfirm()">
+					onclick="deleteConfirm()">
 					<fmt:message key="button.delete" /></button>
 				</c:if>
 					<button id="returnBtn" class="btn btn-info" 
-					onclick="javascript:history.go(-1)">
+					onclick="history.go(-1)">
 					<fmt:message key="button.return" /></button>
 				</td>
 			</tr>

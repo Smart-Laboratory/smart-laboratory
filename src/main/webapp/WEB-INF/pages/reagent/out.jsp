@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<div id="mid" class="col-sm-10">
+<div id="mid" class="col-sm-12">
 <ul class="nav nav-pills">
   <li role="presentation"><a href="../reagent/in"><fmt:message key="reagent.in"/></a></li>
   <li role="presentation" class="active"><a href="#"><fmt:message key="reagent.out"/></a></li>

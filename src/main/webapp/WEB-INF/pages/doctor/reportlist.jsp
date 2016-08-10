@@ -416,7 +416,7 @@
                     dataType:"json",
                     data:{id:sampleNo},
                     success:function(data){
-                       if(window.console) window.console.log(data)
+                       if(window.console) window.console.log(data);
                         if(data && data.patientInfo){
                             $("#sampleTitle").html(data.patientInfo.examinaim ||'');
                             $("#resultCaption").html(data.patientInfo.examinaim ||'');
@@ -447,7 +447,7 @@
                     header.append("<th class='td"+i+"' width='"+width+"'>"+public.gridHead[i].name+"</th>");
                 }
                 if(window.console)window.console.log(rowDatas);
-                table.append(header)
+                table.append(header);
                 for(var i=1;i<rowDatas.length;i++){
                     var row=$("<tr></tr>");
                     if(i%2 ==0){
@@ -458,39 +458,39 @@
                     var rNameTD=$("<td></td>");      //名称
                     rNameTD.html(rowDatas[i].name);
                     rNameTD.addClass("td0");
-                    row.append(rNameTD)
+                    row.append(rNameTD);
 
                     var rResultTD=$("<td></td>");      //结果
                     rResultTD.html(public.getHLLable(rowDatas[i].result,rowDatas[i].scope,rowDatas[i].color));
-                    row.append(rResultTD)
+                    row.append(rResultTD);
 
                     var rLastTD=$("<td></td>");      //历史
                     rLastTD.html(rowDatas[i].last);
-                    row.append(rLastTD)
+                    row.append(rLastTD);
 
                     var rLast1TD=$("<td></td>");      //历史1
                     rLast1TD.html(rowDatas[i].last1);
-                    row.append(rLast1TD)
+                    row.append(rLast1TD);
 
                     var rLast2TD=$("<td></td>");      //历史2
                     rLast2TD.html(rowDatas[i].last2);
-                    row.append(rLast2TD)
+                    row.append(rLast2TD);
 
                     var rDeviceTD=$("<td></td>");      //机器
                     rDeviceTD.html(rowDatas[i].device);
-                    row.append(rDeviceTD)
+                    row.append(rDeviceTD);
 
                     var rSopeTD=$("<td></td>");      //参考范围
                     rSopeTD.html(rowDatas[i].scope);
-                    row.append(rSopeTD)
+                    row.append(rSopeTD);
 
                     var rUnitTD=$("<td></td>");      //单位
                     rUnitTD.html(rowDatas[i].unit);
-                    row.append(rUnitTD)
+                    row.append(rUnitTD);
 
                     row.bind('click',function(){
                         //alert('rowClick');
-                    })
+                    });
                     table.append(row);
                 }
             },
@@ -534,7 +534,7 @@
                         return val1;
                 }
             }
-        }
+        };
         return public;
     })();
 
@@ -550,11 +550,11 @@
             }else{
                 $(this).addClass('active')
             }
-        })
+        });
         var height = $(window).height();
         //var height = (document.documentElement.scrollHeight >document.documentElement.clientHeight) ? document.documentElement.scrollHeight : document.documentElement.clientHeight;
         $('.samplelist').height(height-$('.samplelist').offset().top-20);
-        $('.test-result').height(height-$(".test-result").offset().top-20)
+        $('.test-result').height(height-$(".test-result").offset().top-20);
 
         laydate({
             elem: '#fromDate',

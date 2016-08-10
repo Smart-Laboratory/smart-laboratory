@@ -4,28 +4,25 @@
 * Public License, as long as you do not remove or alter this notice.
 */
  // full day names
-Calendar._DN = new Array
-("Nedelja",
+Calendar._DN = ["Nedelja",
  "Ponedeljek",
  "Torek",
  "Sreda",
  "Četrtek",
  "Petek",
  "Sobota",
- "Nedelja");
+ "Nedelja"];
  // short day names
- Calendar._SDN = new Array
-("Ned",
+ Calendar._SDN = ["Ned",
  "Pon",
  "Tor",
  "Sre",
  "Čet",
  "Pet",
  "Sob",
- "Ned");
+ "Ned"];
 // short month names
-Calendar._SMN = new Array
-("Jan",
+Calendar._SMN = ["Jan",
  "Feb",
  "Mar",
  "Apr",
@@ -36,10 +33,9 @@ Calendar._SMN = new Array
  "Sep",
  "Okt",
  "Nov",
- "Dec");
+ "Dec"];
   // full month names
-Calendar._MN = new Array
-("Januar",
+Calendar._MN = ["Januar",
  "Februar",
  "Marec",
  "April",
@@ -50,7 +46,7 @@ Calendar._MN = new Array
  "September",
  "Oktober",
  "November",
- "December");
+ "December"];
 
 // tooltips
 // tooltips

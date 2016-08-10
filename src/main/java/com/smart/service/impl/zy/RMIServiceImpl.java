@@ -504,9 +504,9 @@ public class RMIServiceImpl implements RMIService {
 	        }
 		}));
 		return eList;
-	};
-	
-	public List<ExecuteInfo> getSelectInfo(String yjsbs,String ylxhs){
+	}
+
+    public List<ExecuteInfo> getSelectInfo(String yjsbs,String ylxhs){
 		
 		List<ExecuteInfo> eList = new ArrayList<ExecuteInfo>();
 		String sql = "SELECT distinct YJ_YJK1.YJSB yjsb, YJ_YJK1.JZKH jzkh, "+

@@ -43,5 +43,5 @@ public class DictionaryManagerImpl extends GenericManagerImpl<Dictionary, Long> 
      */
 	public List<Dictionary> getDeviceType(){
 		return dictionaryDao.getDeviceType();
-	};
+	}
 }

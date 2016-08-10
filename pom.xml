@@ -383,10 +383,10 @@
             <artifactId>commons-collections</artifactId>
             <version>${commons.collections.version}</version>
         </dependency>
-		<dependency>
-        	<groupId>com.oracle</groupId>
-        	<artifactId>ojdbc14</artifactId>
-        	<version>10.2.0.4.0</version>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.4.0</version>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -809,6 +809,21 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>3.14</version>
+        </dependency>
 		<dependency>
 			<groupId>com.zju.api</groupId>
 			<artifactId>zju-api</artifactId>

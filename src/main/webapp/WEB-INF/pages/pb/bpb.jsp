@@ -132,7 +132,7 @@ labChange=function(select){
 		  }
 	});
 	
-}
+};
 
 
 
@@ -170,7 +170,7 @@ labChange=function(select){
 	}
 	
 	 function personSave(){
-		 var personsel = new Array();
+		 var personsel = [];
 		 personsel = $('select[name="devicelist[]"]').val();
 		 $("#selperson").val(personsel);
 		 if(personsel != null){
@@ -179,9 +179,8 @@ labChange=function(select){
 			 for(person in personsel){
 				 $("#shSelect").append("<div class='form-control' style='width:110px;padding:1px 2px;height:25px;margin-bottom: 1px;''><label><input type='checkbox' name="+personsel[person]+" value="+personsel[person]+">"+personsel[person]+"</label></div>");
 			 }
-		 };
-		 
-	 }
+         }
+     }
 	 
 	 function getdata(item){
 		 var week = $(item).attr("name");
@@ -223,10 +222,8 @@ labChange=function(select){
 				});
 				
 			}
-		};
-		
-	 
-	$(function(){
+     }
+$(function(){
 		initPersonListBox();
 		loadPersonListBox();
 		$("#pbhead").html($("#test").val());

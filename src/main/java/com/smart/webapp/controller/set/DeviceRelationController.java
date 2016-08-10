@@ -125,7 +125,7 @@ public class DeviceRelationController {
      */
     @RequestMapping(value = "getDataList*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public String getData(@RequestParam(value = "id",required=true) Long id, HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
+    public String getData(@RequestParam(value = "id",required=true) Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
         JSONObject jsonResult = new JSONObject();
         //获取仪器信息
         Index index= indexManager.get(id);
@@ -277,7 +277,7 @@ public class DeviceRelationController {
      */
     @RequestMapping(value = "/saveReference*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public String save(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception {
+    public String save(HttpServletRequest request,HttpServletResponse response) throws Exception {
         String datas = request.getParameter("datas");
         JSONArray jsonArray = new JSONArray(datas);
         List<TestReference> testReferences = new ArrayList<TestReference>();
@@ -329,7 +329,7 @@ public class DeviceRelationController {
      */
     @RequestMapping(value = "/deleteReference*",method =RequestMethod.POST)
     @ResponseBody
-    public String deleteReference(HttpServletRequest request,HttpServletResponse response) throws JSONException,Exception {
+    public String deleteReference(HttpServletRequest request,HttpServletResponse response) throws Exception {
         String testid = ConvertUtil.null2String(request.getParameter("testid"));
         int sex = ConvertUtil.getIntValue(request.getParameter("sex"),-1);
         int orderno = ConvertUtil.getIntValue(request.getParameter("orderno"),-1);

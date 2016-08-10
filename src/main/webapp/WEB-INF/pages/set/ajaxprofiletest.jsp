@@ -192,7 +192,7 @@
 
         var rowDatas = $("#rightGrid").jqGrid("getRowData");
 
-        console.log(rowDatas)
+        console.log(rowDatas);
         //return false;
         var datas = [];
         jQuery(rowDatas).each(function(){
@@ -265,7 +265,7 @@
 
         //加载数据
         if(profileInfo){
-            console.log(profileInfo)
+            console.log(profileInfo);
             $('#profilecode').val(profileInfo.profileCode);
             $('#profilename').val(profileInfo.profileName);
             $('#profiledescribe').val(profileInfo.profileDescribe);
@@ -351,7 +351,7 @@
                     flag =  false;
                     layer.msg("数据已存在");
                 }
-                return;
+
             });
             if(!flag) return ;
             var ids = $('#rightGrid').jqGrid('getDataIDs');

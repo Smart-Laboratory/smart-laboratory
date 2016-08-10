@@ -13,15 +13,14 @@
 
 // full day names
 
-Calendar._DN = new Array
-("일요일",
+Calendar._DN = ["일요일",
  "월요일",
  "화요일",
  "수요일",
  "목요일",
  "금요일",
  "토요일",
- "일요일");
+ "일요일"];
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -36,19 +35,17 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("일",
+Calendar._SDN = ["일",
  "월",
  "화",
  "수",
  "목",
  "금",
  "토",
- "일");
+ "일"];
 
 // full month names
-Calendar._MN = new Array
-("1월",
+Calendar._MN = ["1월",
  "2월",
  "3월",
  "4월",
@@ -59,11 +56,10 @@ Calendar._MN = new Array
  "9월",
  "10월",
  "11월",
- "12월");
+ "12월"];
 
 // short month names
-Calendar._SMN = new Array
-("1",
+Calendar._SMN = ["1",
  "2",
  "3",
  "4",
@@ -74,7 +70,7 @@ Calendar._SMN = new Array
  "9",
  "10",
  "11",
- "12");
+ "12"];
 
 // tooltips
 Calendar._TT = {};

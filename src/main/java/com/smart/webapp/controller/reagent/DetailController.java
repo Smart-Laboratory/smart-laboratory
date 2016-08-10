@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.UserUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,14 +39,8 @@ public class DetailController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		String labName = user.getLastLab();
-		if(labName==null || labName.isEmpty()){
-			labName=user.getDepartment().split(",")[0];
-		}
-		labName = labMap.get(labName);
-		
-		List<In> list = inManager.getByLab(labName);
+
+		List<In> list = inManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		
@@ -105,7 +100,7 @@ public class DetailController extends ReagentBaseController {
 				map.put("isqualified", Constants.TRUE);
 				map.put("num", i.getNum() + r.getUnit());
 				map.put("operator", i.getOperator());
-				map.put("indate", Constants.DF.format(i.getIndate()));
+				map.put("indate", i.getIndate());
 				map.put("reprint", "<a onclick='reprint(" + i.getId() + ")' style='color:blue;'>重新打印条码</a>");
 				dataRows.add(map);
 			}
@@ -122,14 +117,7 @@ public class DetailController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		String labName = user.getLastLab();
-		if(labName==null || labName.isEmpty()){
-			labName=user.getDepartment().split(",")[0];
-		}
-		labName = labMap.get(labName);
-		
-		List<Out> list = outManager.getByLab(labName);
+		List<Out> list = outManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		

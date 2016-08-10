@@ -10,15 +10,14 @@
 // include your contact information in the header, as can be seen above.
 
 // full day names
-Calendar._DN = new Array
-("Diumenge",
+Calendar._DN = ["Diumenge",
  "Dilluns",
  "Dimarts",
  "Dimecres",
  "Dijous",
  "Divendres",
  "Dissabte",
- "Diumenge");
+ "Diumenge"];
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -33,21 +32,19 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("Diu",
+Calendar._SDN = ["Diu",
  "Dil",
  "Dmt",
  "Dmc",
  "Dij",
  "Div",
  "Dis",
- "Diu");
+ "Diu"];
 
 // full month names
-Calendar._MN = new Array
-("Gener",
+Calendar._MN = ["Gener",
  "Febrer",
- "Març",
+ "Marï¿½",
  "Abril",
  "Maig",
  "Juny",
@@ -56,11 +53,10 @@ Calendar._MN = new Array
  "Setembre",
  "Octubre",
  "Novembre",
- "Desembre");
+ "Desembre"];
 
 // short month names
-Calendar._SMN = new Array
-("Gen",
+Calendar._SMN = ["Gen",
  "Feb",
  "Mar",
  "Abr",
@@ -71,7 +67,7 @@ Calendar._SMN = new Array
  "Set",
  "Oct",
  "Nov",
- "Des");
+ "Des"];
 
 // tooltips
 Calendar._TT = {};
@@ -83,21 +79,21 @@ Calendar._TT["ABOUT"] =
 "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
 "Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
 "\n\n" +
-"Sel.lecció de Dates:\n" +
+"Sel.lecciï¿½ de Dates:\n" +
 "- Fes servir els botons \xab, \xbb per sel.leccionar l'any\n" +
 "- Fes servir els botons " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " per se.lecciconar el mes\n" +
-"- Manté el ratolí apretat en qualsevol dels anteriors per sel.lecció ràpida.";
+"- Mantï¿½ el ratolï¿½ apretat en qualsevol dels anteriors per sel.lecciï¿½ rï¿½pida.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "Time selection:\n" +
 "- claca en qualsevol de les parts de la hora per augmentar-les\n" +
 "- o Shift-click per decrementar-la\n" +
-"- or click and arrastra per sel.lecció ràpida.";
+"- or click and arrastra per sel.lecciï¿½ rï¿½pida.";
 
 Calendar._TT["PREV_YEAR"] = "Any anterior (Mantenir per menu)";
 Calendar._TT["PREV_MONTH"] = "Mes anterior (Mantenir per menu)";
 Calendar._TT["GO_TODAY"] = "Anar a avui";
-Calendar._TT["NEXT_MONTH"] = "Mes següent (Mantenir per menu)";
-Calendar._TT["NEXT_YEAR"] = "Any següent (Mantenir per menu)";
+Calendar._TT["NEXT_MONTH"] = "Mes segï¿½ent (Mantenir per menu)";
+Calendar._TT["NEXT_YEAR"] = "Any segï¿½ent (Mantenir per menu)";
 Calendar._TT["SEL_DATE"] = "Sel.leccionar data";
 Calendar._TT["DRAG_TO_MOVE"] = "Arrastrar per moure";
 Calendar._TT["PART_TODAY"] = " (avui)";

@@ -112,7 +112,7 @@ public class TestResultDaoHibernate extends
 				"from TestResult where sampleNo='" + sampleNo
 						+ "' and testId  ='" + testId+ "'").list();
 		 if(null!=tList&&tList.size()>0){
-			 return (TestResult) tList.get(0);
+			 return tList.get(0);
 		 }else{
 			 return null;
 		 }

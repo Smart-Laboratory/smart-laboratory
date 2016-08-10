@@ -102,12 +102,12 @@
 		<div id="auditPrint" align="left"
 			title='<fmt:message key="audit.preview" />'>
 			<button class="btn btn-success"
-				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				onclick="document.getElementById('iframe_print').contentWindow.print();">
 				<fmt:message key="audit.print" />
 			</button>
 			<div id="printFrame"></div>
 			<button class="btn btn-success"
-				onclick="javascript:document.getElementById('iframe_print').contentWindow.print();">
+				onclick="document.getElementById('iframe_print').contentWindow.print();">
 				<fmt:message key="audit.print" />
 			</button>
 		</div>

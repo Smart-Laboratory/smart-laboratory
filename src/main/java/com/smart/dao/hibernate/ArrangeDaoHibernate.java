@@ -36,7 +36,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 		
 		List<Arrange> list = getSession().createQuery("from Arrange where worker = '"+ name +"' and date = '"+ day +"' and type=0 order by worker asc, date asc").list();
 		if(list !=null && list.size()>0)
-			return (Arrange)list.get(0);
+			return list.get(0);
 		else
 			return null;
 	}

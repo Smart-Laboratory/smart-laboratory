@@ -57,7 +57,7 @@ public class BayesUtil {
 			if (!isFloat(result)) continue;
 			sex = (sex !=2) ? 1 : 2; 
 			float val = Float.parseFloat(result);
-			boolean isPass = info.getAuditStatus() == 1 ? true : false;
+			boolean isPass = info.getAuditStatus() == 1;
 			List<Distribute> disList = getDistributes(testId);
 			for (Distribute dis : disList) {
 				if (dis.getSEX() == sex && dis.isIn(val)) {
@@ -82,7 +82,7 @@ public class BayesUtil {
 			if (!isFloat(result)) continue;
 			sex = (sex !=2) ? 1 : 2; 
 			float val = Float.parseFloat(result);
-			boolean isPass = info.getAuditStatus() == 1 ? true : false;
+			boolean isPass = info.getAuditStatus() == 1;
 			List<Distribute> disList = getDistributes(testId);
 			for (Distribute dis : disList) {
 				if (dis.getSEX() == sex && dis.isIn(val)) {

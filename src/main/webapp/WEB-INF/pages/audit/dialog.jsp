@@ -13,16 +13,16 @@
 </div>
 
 <div id="auditPrint" align="left" style="display:none;">
-	<button class="btn btn-success" onclick="savePDF();javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="savePDF();document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
 	<div id="printFrame"></div>
-	<button class="btn btn-success" onclick="savePDF();javascript:document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="savePDF();document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="audit.print" /></button>
 </div>
 
 <div id="samplePrint" align="left" style="display:none;">
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_sample').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="document.getElementById('iframe_sample').contentWindow.print();"><fmt:message key="audit.print" /></button>
 	<div id="samplePrintFrame" style="height:480px;">
 	</div>
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_sample').contentWindow.print();"><fmt:message key="audit.print" /></button>
+	<button class="btn btn-success" onclick="document.getElementById('iframe_sample').contentWindow.print();"><fmt:message key="audit.print" /></button>
 </div>
 
 <div id="dialog" align="left" style="display:none;">

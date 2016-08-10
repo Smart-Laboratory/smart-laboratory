@@ -1,15 +1,13 @@
 // ** I18N Afrikaans
-Calendar._DN = new Array
-("Sondag",
+Calendar._DN = ["Sondag",
  "Maandag",
  "Dinsdag",
  "Woensdag",
  "Donderdag",
  "Vrydag",
  "Saterdag",
- "Sondag");
-Calendar._MN = new Array
-("Januarie",
+ "Sondag"];
+Calendar._MN = ["Januarie",
  "Februarie",
  "Maart",
  "April",
@@ -20,7 +18,7 @@ Calendar._MN = new Array
  "September",
  "Oktober",
  "November",
- "Desember");
+ "Desember"];
 
 // tooltips
 Calendar._TT = {};

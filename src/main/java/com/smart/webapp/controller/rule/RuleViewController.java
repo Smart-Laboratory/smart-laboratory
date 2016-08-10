@@ -58,7 +58,7 @@ public class RuleViewController {
 		}
 		if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(dir)) {
 			criterion = sort;
-			isAsc = "asc".equals(dir) ? true : false;
+			isAsc = "asc".equals(dir);
 		}
 		
 		User user = userManager.getUserByUsername(request.getRemoteUser());

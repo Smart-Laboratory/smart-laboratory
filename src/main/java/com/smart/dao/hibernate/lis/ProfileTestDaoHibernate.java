@@ -60,7 +60,7 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
             q.setMaxResults(end);
         }
         return q.list();
-    };
+    }
 
     /**
      * 试验组合记录数
@@ -73,5 +73,5 @@ public class ProfileTestDaoHibernate extends GenericDaoHibernate<ProfileTest, Lo
             sql += " and  d.profileDescribe like '%" +query +"%'";
         Query q =  getSession().createSQLQuery(sql);
         return new Integer(q.uniqueResult() + "");
-    };
+    }
 }

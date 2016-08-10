@@ -3,17 +3,13 @@
 // Author: Artur Filipiak, <imagen@poczta.fm>
 // January, 2004
 // Encoding: UTF-8
-Calendar._DN = new Array
-("Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela");
+Calendar._DN = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
 
-Calendar._SDN = new Array
-("N", "Pn", "Wt", "Śr", "Cz", "Pt", "So", "N");
+Calendar._SDN = ["N", "Pn", "Wt", "Śr", "Cz", "Pt", "So", "N"];
 
-Calendar._MN = new Array
-("Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień");
+Calendar._MN = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
 
-Calendar._SMN = new Array
-("Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru");
+Calendar._SMN = ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"];
 
 // tooltips
 Calendar._TT = {};

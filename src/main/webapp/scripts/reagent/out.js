@@ -20,8 +20,8 @@
 
 	function getData(obj,event) {
 		var e=e||event;
-		var key=event.keyCode;;
-		if(navigator.appName=="Netscape"){
+        var key = event.keyCode;
+        if(navigator.appName=="Netscape"){
 			key=e.which;
 		}else{
 			key=event.keyCode;
@@ -88,7 +88,7 @@
 	                	type : $("#reagent_select").val(),
 	                    name : request.term
 	                },
-	                success: function( data ) {$(this).children('option:selected').val()
+	                success: function( data ) {$(this).children('option:selected').val();
 	                	response( $.map( data, function( result ) {
 	                		return {
 	                            label: result.name,

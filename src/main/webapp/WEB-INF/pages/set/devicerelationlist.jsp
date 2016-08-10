@@ -176,7 +176,7 @@
                 search();
             }
         });
-    })
+    });
 
     /**
      * 新增指标项目
@@ -236,7 +236,7 @@ function Edit(){
         //设置表格宽度
         $(window).on('resize.jqGrid', function () {
             $('#rightGrid').jqGrid('setGridWidth', $(".leftContent").width(),false);
-        })
+        });
         $("#rightGrid").jqGrid({
             url: '../set/devicerelationlist/getList',
             datatype: "json",

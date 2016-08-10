@@ -260,7 +260,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 		if (indexs == null || indexs.isEmpty()) {
 			return null;
 		} else {
-			return (Index)indexs.get(0);
+			return indexs.get(0);
 		}
 	}
 }

@@ -110,18 +110,19 @@ function addTest() {
 			} else if(type =='2') {
 				layer.msg(rowData.ylmc + "的可选项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000}); 
 			} else {
-				layer.msg(rowData.ylmc + "的关联项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000}); 
-			};
-		} else {
+				layer.msg(rowData.ylmc + "的关联项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
+
+}
+        } else {
 			if(type == '1') {
-				$("#s3list").jqGrid('setCell',rowid,'ptest',data.success); 
-				$("#testTable").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(event,'"+ $("#searchIndex").val() + "','" +$("#searchIndexId").val() + "')'>删除</button></td></tr>");;
+				$("#s3list").jqGrid('setCell',rowId,'ptest',data.success);
+				$("#testTable").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 			} else if(type =='2') {
-				$("#s3list").jqGrid('setCell',rowid,'ptest2',data.success); 
-				$("#testTable2").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(event,'"+ $("#searchIndex").val() + "','" +$("#searchIndexId").val() + "')'>删除</button></td></tr>");;
+				$("#s3list").jqGrid('setCell',rowId,'ptest2',data.success);
+				$("#testTable2").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 			} else {
-				$("#s3list").jqGrid('setCell',rowid,'ptest3',data.success); 
-				$("#testTable3").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(event,'"+ $("#searchIndex").val() + "','" +$("#searchIndexId").val() + "')'>删除</button></td></tr>");
+				$("#s3list").jqGrid('setCell',rowId,'ptest3',data.success);
+				$("#testTable3").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 			}
 			$("#searchIndexId").val('');
 			$("#searchIndex").val('');
@@ -130,7 +131,7 @@ function addTest() {
 	
 }
 
-function removeTest(event, index, indexid) {
+function removeTest(obj, index, indexid) {
 	var rowId = $("#s3list").jqGrid('getGridParam','selrow');
 	if(!rowId || rowId =='' || rowId==null){
 		layer.alert("请先选择要编辑的数据",{icon:1,title:"提示"});
@@ -150,23 +151,20 @@ function removeTest(event, index, indexid) {
 			} else if(type =='2') {
 				layer.msg(rowData.ylmc + "的可选项目"+ index +"删除失败",{icon:2,time: 1000}); 
 			} else {
-				layer.msg(rowData.ylmc + "的关联项目"+ index +"删除失败",{icon:2,time: 1000}); 
-			};
-		} else {
+				layer.msg(rowData.ylmc + "的关联项目"+ index +"删除失败",{icon:2,time: 1000});
+
+}
+        } else {
 			if(type == '1') {
-				$("#s3list").jqGrid('setCell',rowid,'ptest',data.success); 
-				$(this).parent().parent().remove();
+				$("#s3list").jqGrid('setCell',rowId,'ptest',data.success);
 			} else if(type =='2') {
-				$("#s3list").jqGrid('setCell',rowid,'ptest2',data.success); 
-				$(this).parent().parent().remove();
+				$("#s3list").jqGrid('setCell',rowId,'ptest2',data.success);
 			} else {
-				$("#s3list").jqGrid('setCell',rowid,'ptest3',data.success); 
-				$(this).parent().parent().remove();
+				$("#s3list").jqGrid('setCell',rowId,'ptest3',data.success);
 			}
+			$(obj).parent().parent().remove();
 		}
-		
 	});
-	
 }
 
 function search(){
@@ -199,7 +197,7 @@ function getList(lab) {
 		url: "../set/ylsf/data?lab="+lab,
 		mtype: "GET",
 		datatype: "json",
-		width:$('.leftContent').width(),
+		width:$('.leftContent').width()-10,
 		colNames:['检验目的序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','PTEST','PTEST2','PTEST3','MZPB','ZYPB'], 
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:false},
@@ -226,21 +224,37 @@ function getList(lab) {
             }, 0);
         },
         onSelectRow: function(id) {
-        	var ret = $("#s3list").jqGrid('getRowData',rowId);
-        	var html='', html2='', html3='';
-    		if(ret.ptest != '') {
-    			html.append("<tr><th>必做项目</th><th>&nbsp;</th></tr>");
-    			$("#testTable").html(html);
-    		}
-    		if(ret.ptest2 != '') {
-    			html2.append("<tr><th>可选项目</th><th>&nbsp;</th></tr>");
-    			$("#testTable2").html(html2);
-    		}
-    		if(ret.ptest3 != '') {
-    			html3.append("<tr><th>关联项目</th><th>&nbsp;</th></tr>");
-    			$("#testTable3").html(html3);
-    		}
-    		
+        	var ret = $("#s3list").jqGrid('getRowData',id);
+			$("#testTable").empty();
+			$("#testTable2").empty();
+			$("#testTable3").empty();
+			var html='', html2='', html3='';
+			$.get('../set/ylsf/ajax/getTests',{ylxh:ret.ylxh},function(data) {
+				var json = jQuery.parseJSON(data);
+				if(json.profiletest) {
+					html += "<tr><th>必做项目</th><th>&nbsp;</th></tr>";
+					for(var i in json.profiletest) {
+						html += "<tr><td>" + json.profiletest[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest[i].name + "\",\"" + json.profiletest[i].id + "\")'>删除</button></td></tr>"
+					}
+					$("#testTable").html(html);
+				}
+
+				if(json.profiletest2) {
+					html2 += "<tr><th>可选项目</th><th>&nbsp;</th></tr>";
+					for(var i in json.profiletest2) {
+						html2 += "<tr><td>" + json.profiletest2[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest2[i].name + "\",\"" + json.profiletest2[i].id + "\")'>删除</button></td></tr>"
+					}
+					$("#testTable2").html(html2);
+				}
+
+				if(json.profiletest3) {
+					html3 += "<tr><th>关联项目</th><th>&nbsp;</th></tr>";
+					for(var i in json.profiletest3) {
+						html3 += "<tr><td>" + json.profiletest3[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest3[i].name + "\",\"" + json.profiletest3[i].id + "\")'>删除</button></td></tr>"
+					}
+					$("#testTable3").html(html3);
+				}
+			});
     	},
 		viewrecords: true,
 		shrinkToFit: true,
@@ -311,7 +325,7 @@ $(function() {
 					$("#s3list").setGridParam({page:page}).trigger("reloadGrid");
 				}
 			}
-			e.preventDefault();
+			e.prthisDefault();
 		} else if (e.keyCode == 38) {
 			var s = jQuery("#s3list").jqGrid('getGridParam','selrow');
 			var prev = $("#"+s).prev("tr").attr("id");
@@ -320,7 +334,7 @@ $(function() {
 				$("#s3list").setSelection(s, false);
 				$("#s3list").setSelection(prev, true);
 			}
-			e.preventDefault();
+			e.prthisDefault();
 		}
 	});
 	getList($("#lab").val());
@@ -341,4 +355,3 @@ $(function() {
 		}).trigger('reloadGrid');
 	}
 });
-	

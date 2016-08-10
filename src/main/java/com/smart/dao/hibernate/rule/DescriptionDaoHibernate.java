@@ -9,7 +9,7 @@ import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.dao.rule.DescriptionDao;
 import com.smart.model.rule.Description;
-import com.smart.model.rule.DesBag;;
+import com.smart.model.rule.DesBag;
 
 @Repository("descriptionDao")
 public class DescriptionDaoHibernate extends GenericDaoHibernate<Description, Long> implements DescriptionDao{

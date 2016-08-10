@@ -30,11 +30,8 @@ public class CollectSampleDaoHibernate extends GenericDaoHibernate<CollectSample
 		Query q = getSession().createQuery("from CollectSample where username='" + username +"' and sampleno='" + sampleno +"'");
 		
 		List<CollectSample> list = q.list();
-		if(list.size()>0) {
-			return true;
-		}
-		return false;
-	}
+        return list.size() > 0;
+    }
 	
 	@SuppressWarnings("unchecked")
 	public List<CollectSample> getAllCollectSample() {

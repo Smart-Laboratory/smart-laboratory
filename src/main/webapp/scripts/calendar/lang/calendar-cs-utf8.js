@@ -7,10 +7,10 @@
 */
 
 // ** I18N
-Calendar._DN  = new Array('Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota','Neděle');
-Calendar._SDN = new Array('Ne','Po','Út','St','Čt','Pá','So','Ne');
-Calendar._MN  = new Array('Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec');
-Calendar._SMN = new Array('Led','Úno','Bře','Dub','Kvě','Črv','Čvc','Srp','Zář','Říj','Lis','Pro');
+Calendar._DN  = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota','Neděle'];
+Calendar._SDN = ['Ne','Po','Út','St','Čt','Pá','So','Ne'];
+Calendar._MN  = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+Calendar._SMN = ['Led','Úno','Bře','Dub','Kvě','Črv','Čvc','Srp','Zář','Říj','Lis','Pro'];
 
 // tooltips
 Calendar._TT = {};

@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.UserUtil;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -69,13 +70,11 @@ public class ReagentAjaxController extends ReagentBaseController {
 			return null;
 		}
 		initLabMap();
-		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();		
-		lab = labMap.get(lab);
 		JSONArray array = new JSONArray();
 		if(type == 1) {
 			
 		} else if(type == 2) {
-			List<Reagent> list = reagentManager.getReagents(name, lab);
+			List<Reagent> list = reagentManager.getReagents(name, UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
 			if (list != null) {
 				for (Reagent r : list) {
 					JSONObject o = new JSONObject();
@@ -255,12 +254,17 @@ public class ReagentAjaxController extends ReagentBaseController {
 		response.setContentType("text/html; charset=UTF-8");
 		return dataResponse;
 	}
+
+	@RequestMapping(value = "/readExcel*", method = RequestMethod.POST)
+	@ResponseBody
+	public String readExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return "";
+	}
 	
 	@RequestMapping(value = "/savein*", method = RequestMethod.POST)
 	@ResponseBody
 	public String savein(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		long nowtime = System.currentTimeMillis();
-		Date now = new Date(nowtime);
+		Date now = new Date();
 		try {
 			String text = request.getParameter("text");
 			User user = userManager.getUserByUsername(request.getRemoteUser());
@@ -280,7 +284,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			for(Reagent r : list) {
 				boolean needNew = true;
 				for(Batch b : batchManager.getByRgId(r.getId())) {
-					if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
+					if(b.getBatch().equals(inmap.get(r.getId()).get("batch"))) {
 						b.setNum(b.getNum() + (Integer)inmap.get(r.getId()).get("num"));
 						needNew = false;
 						needSaveBatch.add(b);
@@ -298,10 +302,10 @@ public class ReagentAjaxController extends ReagentBaseController {
 				In indata = new In();
 				indata.setBatch((String)inmap.get(r.getId()).get("batch"));
 				indata.setExdate((String)inmap.get(r.getId()).get("exedate"));
-				indata.setIndate(now);
+				indata.setIndate(Constants.SDF.format(now));
 				indata.setIsqualified(1);
 				indata.setNum((Integer)inmap.get(r.getId()).get("num"));
-				indata.setOperator(user.getName());
+				indata.setOperator(user.getUsername());
 				indata.setRgId(r.getId());
 				indata.setLab(user.getLastLab());
 				needSaveIn.add(indata);
@@ -311,7 +315,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Long.toString(nowtime);
+		return Constants.SDF.format(now);
 	}
 	
 	@RequestMapping(value = "/saveout*", method = RequestMethod.POST)
@@ -389,7 +393,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			if(text != null) {
 				for(Reagent r : list) {
 					for(Batch b : batchMap.get(r.getId())) {
-						if(b.getBatch().equals((String)inmap.get(r.getId()).get("batch"))) {
+						if(b.getBatch().equals(inmap.get(r.getId()).get("batch"))) {
 							Out outdata = new Out();
 							if(r.getSubtnum() > 1) {
 								int num = r.getSubtnum() * b.getNum() + b.getSubnum();

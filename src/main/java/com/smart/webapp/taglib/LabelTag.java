@@ -225,13 +225,13 @@ public class LabelTag extends TagSupport {
                 .getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         ValidatorFactory factory = null;
         try {
-            factory = (ValidatorFactory) BeanFactoryUtils
+            factory = BeanFactoryUtils
                     .beanOfTypeIncludingAncestors(ctx, ValidatorFactory.class, true, true);
         } catch (NoSuchBeanDefinitionException e) {
             // look in main application context (i.e. applicationContext.xml)
             ctx = WebApplicationContextUtils
                     .getRequiredWebApplicationContext(pageContext.getServletContext());
-            factory = (ValidatorFactory) BeanFactoryUtils
+            factory = BeanFactoryUtils
                     .beanOfTypeIncludingAncestors(ctx, ValidatorFactory.class, true, true);
         }
         return factory.getValidatorResources();

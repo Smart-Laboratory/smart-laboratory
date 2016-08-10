@@ -111,8 +111,12 @@
 </div>
 
 <div id="print" align="left" title='<fmt:message key="audit.preview" />'>
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_sample').contentWindow.print();;"><fmt:message key="audit.print" /></button>
-	<div id="samplePrintFrame" style="height:480px;">
+    <button class="btn btn-success"
+            onclick="document.getElementById('iframe_sample').contentWindow.print();"><fmt:message
+            key="audit.print"/></button>
+    <div id="samplePrintFrame" style="height:480px;">
 	</div>
-	<button class="btn btn-success" onclick="javascript:document.getElementById('iframe_sample').contentWindow.print();;"><fmt:message key="audit.print" /></button>
+    <button class="btn btn-success"
+            onclick="document.getElementById('iframe_sample').contentWindow.print();"><fmt:message
+            key="audit.print"/></button>
 </div>

@@ -117,6 +117,6 @@ $(function() {
 				<span class='col-sm-6'><fmt:message key="pb.worktime" />:</span><b id="pWorkdays"></b>
 			</div>
 	</div>
-	<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='javascript:window.print()'><fmt:message key='audit.print'/></button>
+	<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='window.print()'><fmt:message key='audit.print'/></button>
 </div>
 <div id='calendar'></div>

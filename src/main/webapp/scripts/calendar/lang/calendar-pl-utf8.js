@@ -6,26 +6,23 @@
 // Encoding: utf-8
 // Distributed under the same terms as the calendar itself.
 
-Calendar._DN = new Array
-("Niedziela",
+Calendar._DN = ["Niedziela",
  "Poniedziałek",
  "Wtorek",
  "Środa",
  "Czwartek",
  "Piątek",
  "Sobota",
- "Niedziela");
-Calendar._SDN = new Array
-("Nie",
+ "Niedziela"];
+Calendar._SDN = ["Nie",
  "Pn",
  "Wt",
  "Śr",
  "Cz",
  "Pt",
  "So",
- "Nie");
-Calendar._MN = new Array
-("Styczeń",
+ "Nie"];
+Calendar._MN = ["Styczeń",
  "Luty",
  "Marzec",
  "Kwiecień",
@@ -36,9 +33,8 @@ Calendar._MN = new Array
  "Wrzesień",
  "Październik",
  "Listopad",
- "Grudzień");
-Calendar._SMN = new Array
-("Sty",
+ "Grudzień"];
+Calendar._SMN = ["Sty",
  "Lut",
  "Mar",
  "Kwi",
@@ -49,7 +45,7 @@ Calendar._SMN = new Array
  "Wrz",
  "Paź",
  "Lis",
- "Gru");
+ "Gru"];
 
 // tooltips
 Calendar._TT = {};

@@ -567,7 +567,7 @@
 
 
     jQuery(function ($) {
-        initGrid()
+        initGrid();
         $('#outdate').datetimepicker().next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
@@ -582,7 +582,7 @@
                 search(this.value);
             }
         });
-    })
+    });
 
     /********************************
      * 搜索树形节点
@@ -602,7 +602,7 @@
         if (arr.length) {
             $.fn.zTree.init($("#treeList"), setting, arr);
         } else {
-            layer.msg("对不起，没有找到数据")
+            layer.msg("对不起，没有找到数据");
             //$.fn.zTree.init($("#treeList"), "", zNodes);
         }
     }
@@ -736,7 +736,7 @@
                 refhigh: ""
             };
             $("#tableList").jqGrid('addRowData', newId, rowData);
-        })
+        });
         //删除表格数据
         $('#delete').bind('click', function () {
             var id = $('#tableList').jqGrid('getGridParam', 'selrow');
@@ -751,7 +751,7 @@
                 $.post('../set/devicerelation/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
                     var data = eval("("+data+")");
                     if(data && data.result=='true'){
-                        layer.msg("删除成功！")
+                        layer.msg("删除成功！");
                         $("#tableList").jqGrid('delRowData',id );
                     }else{
                         layer.msg("删除失败！",{icon:2});

@@ -85,11 +85,7 @@ public class IndexMapUtil {
 	}
 	
 	public boolean isNeedMap(String indexId) {
-		if (map.containsKey(indexId)) {
-			return true;
-		} else {
-			return false;
-		}
+        return map.containsKey(indexId);
 	}
 }
 

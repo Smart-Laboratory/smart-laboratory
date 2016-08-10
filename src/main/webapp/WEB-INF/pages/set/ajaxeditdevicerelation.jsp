@@ -423,7 +423,7 @@
             saveUrl:'../devicerelationlist/saveInfo',
             lastsel:'0',
             lastsel2:'0'
-        }
+        };
         var public = {
             getMethod:function(){
                 return cache.method;
@@ -508,7 +508,7 @@
                 $(dicData).each(function(){
                     if(dicDatas != '')dicDatas +=";";
                     dicDatas += this.textkey +":"+ this.textvalue;
-                })
+                });
                 console.log(dicDatas);
                 //dicDatas = public.arrayToJson(dicDatas);
                 $('#dictionariesData').text(dicDatas);
@@ -659,7 +659,7 @@
                         $.post('../set/devicerelationlist/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
                             var data = eval("("+data+")");
                             if(data && data.result=='true'){
-                                layer.msg("删除成功！")
+                                layer.msg("删除成功！");
                                 cache.refTable.jqGrid('delRowData',id );
                             }else{
                                 layer.msg("删除失败！",{icon:2});
@@ -722,9 +722,9 @@
                     cache.dicTable.jqGrid('delRowData',id );
                 })
             },
-        }
+        };
         return public;
-    })()
+    })();
 
    jQuery(function ($) {
         //编号部门不允许编辑

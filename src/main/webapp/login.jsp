@@ -56,7 +56,7 @@
     </div>
     <div class="banner-control" id="js_ban_button_box"> <a href="javascript:;" class="left">左</a> <a href="javascript:;" class="right">右</a> </div>
     <script type="text/javascript">
-        ;(function(){
+        (function () {
             var defaultInd = 0;
             var list = $('#js_ban_content').children();
             var count = 0;
@@ -78,7 +78,7 @@
                         callback && callback();
                     }
                 });
-            }
+            };
 
             var next = function(callback){
                 var newInd = defaultInd + 1;
@@ -86,7 +86,7 @@
                     newInd = 0;
                 }
                 change(newInd, callback);
-            }
+            };
 
             var start = function(){
                 if(start.timer) window.clearTimeout(start.timer);
@@ -95,7 +95,7 @@
                         start();
                     });
                 }, 8000);
-            }
+            };
 
             start();
 

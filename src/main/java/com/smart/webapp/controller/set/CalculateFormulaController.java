@@ -109,7 +109,7 @@ public class CalculateFormulaController {
      */
     @RequestMapping(value = "/ajaxeditdformula*",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView editFormula( HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception{
+    public ModelAndView editFormula( HttpServletRequest request, HttpServletResponse response) throws Exception{
         ModelAndView view = new ModelAndView("set/ajaxeditformula");
         String testId = ConvertUtil.null2String(request.getParameter("testid"));
         try {
@@ -204,7 +204,7 @@ public class CalculateFormulaController {
      */
     @RequestMapping(value = "/deleteFormula*",method =RequestMethod.POST)
     @ResponseBody
-    public String deleteIndex(@RequestParam(value = "testid") String testid, HttpServletRequest request, HttpServletResponse response) throws JSONException,Exception {
+    public String deleteIndex(@RequestParam(value = "testid") String testid, HttpServletRequest request, HttpServletResponse response) throws Exception {
         try {
             CalculateFormula calculateFormula =  calculateFormulaManager.getCalculateFormulaByTestId(testid).getCalculateFormula();
             calculateFormulaManager.remove(calculateFormula);

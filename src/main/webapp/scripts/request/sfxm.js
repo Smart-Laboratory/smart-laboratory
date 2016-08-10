@@ -1,5 +1,5 @@
 function format(cellvalue) {
-	alert(1)
+	alert(1);
 	if(cellvalue == '1') {
 		return "是";
 	} else {
@@ -59,7 +59,7 @@ $(function(){
 	});
 	jQuery("#sfxmList").jqGrid('navGrid',"#pager",{edit:false,add:false,del:false});
 	//$(window).triggerHandler('resize.jqGrid');
-})
+});
 function enableTooltips(table) {
 	$('.navtable .ui-pg-button').tooltip({container:'body'});
 	$(table).find('.ui-pg-div').tooltip({container:'body'});

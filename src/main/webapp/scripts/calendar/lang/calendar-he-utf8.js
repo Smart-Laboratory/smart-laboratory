@@ -10,15 +10,14 @@
 // include your contact information in the header, as can be seen above.
 
 // full day names
-Calendar._DN = new Array
-("ראשון",
+Calendar._DN = ["ראשון",
  "שני",
  "שלישי",
  "רביעי",
  "חמישי",
  "שישי",
  "שבת",
- "ראשון");
+ "ראשון"];
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -33,19 +32,17 @@ Calendar._DN = new Array
 // this feature.
 
 // short day names
-Calendar._SDN = new Array
-("א",
+Calendar._SDN = ["א",
  "ב",
  "ג",
  "ד",
  "ה",
  "ו",
  "ש",
- "א");
+ "א"];
 
 // full month names
-Calendar._MN = new Array
-("ינואר",
+Calendar._MN = ["ינואר",
  "פברואר",
  "מרץ",
  "אפריל",
@@ -56,11 +53,10 @@ Calendar._MN = new Array
  "ספטמבר",
  "אוקטובר",
  "נובמבר",
- "דצמבר");
+ "דצמבר"];
 
 // short month names
-Calendar._SMN = new Array
-("ינא",
+Calendar._SMN = ["ינא",
  "פבר",
  "מרץ",
  "אפר",
@@ -71,7 +67,7 @@ Calendar._SMN = new Array
  "ספט",
  "אוק",
  "נוב",
- "דצמ");
+ "דצמ"];
 
 // tooltips
 Calendar._TT = {};
@@ -83,7 +79,7 @@ Calendar._TT["ABOUT"] =
 "הגירסא האחרונה זמינה ב: http://www.dynarch.com/projects/calendar/\n" +
 "מופץ תחת זיכיון ה GNU LGPL.  עיין ב http://gnu.org/licenses/lgpl.html לפרטים נוספים." +
 "\n\n" +
-בחירת תאריך:\n" +
+בחירת; תאריך:\n" +;;
 "- השתמש בכפתורים \xab, \xbb לבחירת שנה\n" +
 "- השתמש בכפתורים " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " לבחירת חודש\n" +
 "- החזק העכבר לחוץ מעל הכפתורים המוזכרים לעיל לבחירה מהירה יותר.";

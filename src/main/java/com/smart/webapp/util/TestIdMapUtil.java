@@ -14,9 +14,9 @@ public class TestIdMapUtil {
 	
 	private static TestIdMapUtil instance = new TestIdMapUtil();
 	
-	public TestIdMapUtil() {};
-	
-	public Map<String, Index> getInstance() {
+	public TestIdMapUtil() {}
+
+    public Map<String, Index> getInstance() {
 		if(instance.idMap == null){
 			synchronized (instance) {
 				initMap();

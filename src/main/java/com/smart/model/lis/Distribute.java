@@ -34,11 +34,7 @@ public class Distribute {
 	}
 
 	public boolean isIn(float value) {
-		if (value > SCOPELO && value <= SCOPEHI) {
-			return true;
-		} else {
-			return false;
-		}
+        return value > SCOPELO && value <= SCOPEHI;
 	}
 
 	/**
