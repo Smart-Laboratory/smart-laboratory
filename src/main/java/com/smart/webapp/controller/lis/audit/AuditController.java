@@ -459,7 +459,7 @@ public class AuditController extends BaseAuditController {
 	@ResponseBody
 	public boolean labChange(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String lab = request.getParameter("lab");
-		User operator = userManager.getUserByUsername(request.getRemoteUser());
+		User operator = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 		operator.setLastLab(lab);
 		userManager.saveUser(operator);
 		UserUtil.rebuild(operator);

@@ -33,7 +33,7 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 
 	@SuppressWarnings("unchecked")
 	public List<In> getByLab(String lab) {
-		return getSession().createQuery("from In where lab='" + lab + "' order by indate desc").list();
+		return getSession().createQuery("from In where lab='" + lab + "' or lab='22' order by indate desc").list();
 	}
 
 

@@ -12,6 +12,7 @@
 
 </head>
 <body>
+<div class="row">
 <div id="mid" class="col-sm-12">
 <input type="hidden" id="sectionval" value="${section}" >
 <div style="margin-top:5px;">
@@ -22,6 +23,6 @@
 <div id="pager"></div>
 </div>
 
-
+</div>
 </div>
 </body>

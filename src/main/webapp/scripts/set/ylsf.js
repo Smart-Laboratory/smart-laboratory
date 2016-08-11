@@ -348,7 +348,7 @@ $(function() {
 		$("#lab").val(code);
 		$("#labText").html($(select).children().html());
 		jQuery("#s3list").jqGrid('setGridParam',{
-			url:"../set/ylsf/data="+code,
+			url:"../set/ylsf/data",
 			datatype : 'json',
 			postData : {"lab":code},
 			page : 1

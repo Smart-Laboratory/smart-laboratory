@@ -51,11 +51,7 @@ public class UserUtil {
 		}
 	}
 
-	public void rebuild() {
-		
-	}
-
-	public static void rebuild(User user) {
+	public static void rebuild( User user) {
 		map.put(user.getUsername(), user.getName());
 		usermap.put(user.getUsername(), user);
 	}

@@ -53,6 +53,20 @@
 	        }
 		});
 		jQuery("#list").jqGrid('navGrid','#pager',{edit:false,add:false,del:false});
+
+		labChange = function(select) {
+			var code = $(select).children().attr("title");
+			$.ajax({
+				type: 'POST',
+				url: "../audit/labChange?lab="+code
+			});
+			$("#labText").html($(select).children().html());
+			jQuery("#list").jqGrid('setGridParam',{
+				url:'../reagent/getReagent?q=1',
+				datatype : 'json',
+				page : 1
+			}).trigger('reloadGrid');
+		}
 		
 	});
 	

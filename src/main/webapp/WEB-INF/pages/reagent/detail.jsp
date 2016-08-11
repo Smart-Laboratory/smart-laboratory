@@ -16,6 +16,7 @@
 
 </head>
 <body>
+<div class="row">
 <div id="mid" class="col-sm-12">
 <ul class="nav nav-pills">
   <li id="inpre" role="presentation" class="active"><a onclick="changeTab('in')"><fmt:message key="reagent.detail.in"/></a></li>
@@ -35,5 +36,6 @@
 <div id="printDialog" align="left">
 	<button class="btn btn-success" onclick="document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
 	<div id="printFrame" style="height:500px;"></div>
+</div>
 </div>
 </body>

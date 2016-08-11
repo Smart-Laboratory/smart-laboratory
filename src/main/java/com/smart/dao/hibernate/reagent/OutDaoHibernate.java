@@ -47,7 +47,7 @@ public class OutDaoHibernate extends GenericDaoHibernate<Out, Long> implements O
 
 	@SuppressWarnings("unchecked")
 	public List<Out> getByLab(String lab) {
-		return getSession().createQuery("from Out where lab='" + lab + "' order by outdate desc").list();
+		return getSession().createQuery("from Out where lab='" + lab + "' or lab='22' order by outdate desc").list();
 	}
 
 	@SuppressWarnings("unchecked")

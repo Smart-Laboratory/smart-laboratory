@@ -17,6 +17,7 @@
 
 </head>
 <body>
+<div class="row">
 <div id="mid" class="col-sm-12">
 <ul class="nav nav-pills">
   <li role="presentation"><a href="../reagent/in"><fmt:message key="reagent.in"/></a></li>
@@ -36,6 +37,6 @@
 <div style="margin-top:10px;">
 <table id="list" class="table table-condensed table-striped"></table>
 </div>
-
+</div>
 </div>
 </body>
