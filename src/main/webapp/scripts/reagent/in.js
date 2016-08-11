@@ -10,7 +10,7 @@
         				$("#list").jqGrid("addRowData", data.rows[i].id, data.rows[i]);
         			} else {
         				if(type == 1) {
-        					alert($("#list").jqGrid("getRowData", data.rows[i].id)["name"] + "已存在，无需重复选取！");
+							layer.alert($("#list").jqGrid("getRowData", data.rows[i].id)["name"] + "已存在，无需重复选取！",{icon:0,title:"提示"});
         				}
         			}
         		}
@@ -18,7 +18,7 @@
         });
 		
 	}
-	
+
 	function getData(obj,event) {
 		var e=e||event;
 		var key = event.keyCode;
@@ -33,6 +33,21 @@
 					addRow(obj.value, $("#reagent_select").val());
 				}
 		}
+	}
+
+	//JS校验form表单信息
+	function checkData(){
+		var fileDir = $("#fileUpload").val();
+		var suffix = fileDir.substr(fileDir.lastIndexOf("."));
+		if("" == fileDir){
+			layer.alert("选择需要导入的Excel文件！",{icon:0,title:"提示"});
+			return false;
+		}
+		if(".xls" != suffix && ".xlsx" != suffix ){
+			layer.alert("选择Excel格式的文件导入！",{icon:0,title:"提示"});
+			return false;
+		}
+		return true;
 	}
 
 	$(function() {
@@ -79,7 +94,40 @@
 				});
 		    }
 		});
-		
+
+		$("#readExcel").click(function(){
+			if(checkData()){
+				var uplist = $("input[name^=fileUpload]");
+				var arrId = [];
+				for (var i=0; i< uplist.length; i++){
+					if(uplist[i].value){
+						arrId[i] = uplist[i].id;
+					}
+				}
+				$.ajaxFileUpload({
+					url:'../ajax/reagent/readExcel',
+					fileElementId: arrId,
+					dataType: 'json',
+					success: function (data, status){
+						for(var i = 0; i < data.length; i++) {
+							if(typeof($("#list").jqGrid("getRowData", data[i].id)["id"]) == 'undefined') {
+								data[i].batch = "<input type='text' id='" + data[i].id + "_batch' style='height:18px;width:98%' value='" + data[i].batch + "'/>";
+								data[i].num = "<input type='text' id='" + data[i].id  + "_num' style='height:18px;width:98%' value='" + data[i].num + "'/>";
+								data[i].exedate = "<input type='text' id='" + data[i].id + "_exedate' style='height:18px;width:98%' value='" + data[i].exedate + "'/>";
+
+								$("#list").jqGrid("addRowData", data[i].id, data[i]);
+							} else {
+								layer.msg($("#list").jqGrid("getRowData", data[i].id)["name"] + "已存在，无需重复选取！", {icon: 2, time: 1000});
+							}
+						}
+					},
+					error: function () {
+						layer.alert("导入excel出错，请核对Excel格式后重新导入！",{icon:2,title:"提示"});
+					}
+				});
+			}
+		});
+
 		$("#reagentdes").autocomplete({
 	        source: function( request, response ) {
 	        	if($("#reagent_select").val() > 1) {

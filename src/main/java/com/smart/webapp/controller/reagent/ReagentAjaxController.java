@@ -1,5 +1,6 @@
 package com.smart.webapp.controller.reagent;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smart.webapp.util.UserUtil;
 import org.apache.cxf.common.util.StringUtils;
+import org.apache.poi.ss.usermodel.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,8 @@ import com.smart.model.reagent.Reagent;
 import com.smart.model.user.User;
 import com.smart.webapp.util.DataResponse;
 import com.zju.api.model.SyncReagent;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
 @RequestMapping("/ajax/reagent*")
@@ -142,14 +146,14 @@ public class ReagentAjaxController extends ReagentBaseController {
 				SyncReagent sr = srMap.get(r.getProductcode());
 				map.put("id", r.getId());
 				map.put("name", r.getNameAndSpecification());
-				map.put("batch", "<input type='text' id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%' value='" + sr.getProduct_lot() + "'>" + "</input>");
+				map.put("batch", "<input type='text' id='" + r.getId() + "_batch' style='height:18px;width:98%' value='" + sr.getProduct_lot() + "'>" + "</input>");
 				map.put("place", r.getPlaceoforigin());
 				map.put("brand", r.getBrand());
 				map.put("baozhuang", r.getBaozhuang());
 				map.put("price", r.getPrice());
-				map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='" + sr.getQuantity() + "'>" + "</input>");
+				map.put("num", "<input type='text' id='" + r.getId() + "_num' style='height:18px;width:98%' value='" + sr.getQuantity() + "'>" + "</input>");
 				map.put("isqualified", "是");
-				map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' class='editable' style='height:18px;width:98%' value='" + sr.getExpired_date() + "'>" + "</input>");
+				map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' style='height:18px;width:98%' value='" + sr.getExpired_date() + "'>" + "</input>");
 				dataRows.add(map);
 			}
 		} else if(type == 2) {
@@ -157,14 +161,14 @@ public class ReagentAjaxController extends ReagentBaseController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", r.getId());
 			map.put("name", r.getNameAndSpecification());
-			map.put("batch", "<input type='text' id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>" + "</input>");
+			map.put("batch", "<input type='text' id='" + r.getId() + "_batch' style='height:18px;width:98%'>" + "</input>");
 			map.put("place", r.getPlaceoforigin());
 			map.put("brand", r.getBrand());
 			map.put("baozhuang", r.getBaozhuang());
 			map.put("price", r.getPrice());
-			map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='1'>" + "</input>");
+			map.put("num", "<input type='text' id='" + r.getId() + "_num' style='height:18px;width:98%' value='1'>" + "</input>");
 			map.put("isqualified", "是");
-			map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' class='editable' style='height:18px;width:98%'>" + "</input>");
+			map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' style='height:18px;width:98%'>" + "</input>");
 			dataRows.add(map);
 			dataResponse.setRecords(1);
 		} else {
@@ -174,16 +178,17 @@ public class ReagentAjaxController extends ReagentBaseController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", r.getId());
 				map.put("name", r.getNameAndSpecification());
-				map.put("batch", "<input type='text' id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>" + "</input>");
+				map.put("batch", "<input type='text' id='" + r.getId() + "_batch' style='height:18px;width:98%'>" + "</input>");
 				map.put("place", r.getPlaceoforigin());
 				map.put("brand", r.getBrand());
 				map.put("baozhuang", r.getBaozhuang());
 				map.put("price", r.getPrice());
-				map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='1'>" + "</input>");
+				map.put("num", "<input type='text' id='" + r.getId() + "_num' style='height:18px;width:98%' value='1'>" + "</input>");
 				map.put("isqualified", "是");
-				map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' class='editable' style='height:18px;width:98%'>" + "</input>");
+				map.put("exedate", "<input type='text' id='" + r.getId() + "_exedate' style='height:18px;width:98%'>" + "</input>");
 				dataRows.add(map);
 			}
+			dataResponse.setRecords(dataRows.size());
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");
@@ -204,7 +209,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", r.getId());
 			map.put("name", r.getNameAndSpecification());
-			String batch = "<select id='" + r.getId() + "_batch' class='editable' style='height:18px;width:98%'>";
+			String batch = "<select id='" + r.getId() + "_batch' style='height:18px;width:98%'>";
 			for(Batch b : batchManager.getByRgId(r.getId())) {
 				if(b.getNum() > 0 || b.getSubnum() > 0) {
 					if(r.getSubtnum() > 1) {
@@ -220,7 +225,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			map.put("brand", r.getBrand());
 			map.put("baozhuang", r.getBaozhuang());
 			map.put("price", r.getPrice());
-			map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='1'>" + "</input>");
+			map.put("num", "<input type='text' id='" + r.getId() + "_num' style='height:18px;width:98%' value='1'>" + "</input>");
 			dataRows.add(map);
 			dataResponse.setRecords(1);
 		} else {
@@ -230,7 +235,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", r.getId());
 				map.put("name", r.getNameAndSpecification());
-				String batch = "<select id='" + r.getId() + "_batch class='editable' style='height:18px;width:98%'>";
+				String batch = "<select id='" + r.getId() + "_batch style='height:18px;width:98%'>";
 				for(Batch b : batchManager.getByRgId(r.getId())) {
 					if(b.getNum() > 0) {
 						if(r.getSubtnum() > 1) {
@@ -246,21 +251,65 @@ public class ReagentAjaxController extends ReagentBaseController {
 				map.put("brand", r.getBrand());
 				map.put("baozhuang", r.getBaozhuang());
 				map.put("price", r.getPrice());
-				map.put("num", "<input type='text' id='" + r.getId() + "_num' class='editable' style='height:18px;width:98%' value='1'>" + "</input>");
+				map.put("num", "<input type='text' id='" + r.getId() + "_num' style='height:18px;width:98%' value='1'>" + "</input>");
 				dataRows.add(map);
 			}
+			dataResponse.setRecords(dataRows.size());
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html; charset=UTF-8");
 		return dataResponse;
 	}
 
-	@RequestMapping(value = "/readExcel*", method = RequestMethod.POST)
+	@RequestMapping(value = "/readExcel*", method = RequestMethod.POST )
 	@ResponseBody
-	public String readExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return "";
+	public String readExcel(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
+		InputStream in =null;
+		JSONArray jsonArray = new JSONArray();
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		MultipartFile file = multipartRequest.getFile("fileUpload");
+		if(file.isEmpty()){
+			throw new Exception("文件不存在！");
+		}
+		in = file.getInputStream();
+		//创建Excel工作薄
+		Workbook work = WorkbookFactory.create(in);
+		if(null == work){
+			throw new Exception("创建Excel工作薄为空！");
+		}
+		Sheet sheet = work.getSheet("试剂入库");
+		Row row = null;
+		Cell cell = null;
+		System.out.println("总行数：" + sheet.getLastRowNum());
+		//遍历当前sheet中的所有行
+		for (int i = sheet.getFirstRowNum(); i <= sheet.getLastRowNum(); i++) {
+			row = sheet.getRow(i);
+			System.out.println("行：" + i);
+			System.out.println("列：" + row.getCell(0).getStringCellValue() + " " + row.getCell(1).getStringCellValue());
+			if(row==null||row.getFirstCellNum()==i){
+				continue;
+			} else {
+				JSONObject object = new JSONObject();
+				object.put("id", row.getCell(0).getStringCellValue());
+				object.put("name", row.getCell(1).getStringCellValue());
+				object.put("batch", row.getCell(2).getStringCellValue());
+				object.put("place", row.getCell(3).getStringCellValue());
+				object.put("brand", row.getCell(4).getStringCellValue());
+				object.put("baozhuang", row.getCell(5).getStringCellValue());
+				object.put("price", row.getCell(6).getStringCellValue());
+				object.put("num", row.getCell(7).getStringCellValue());
+				object.put("isqualified", "是");
+				object.put("exedate", row.getCell(8).getStringCellValue());
+				jsonArray.put(object);
+			}
+		}
+		work.close();
+		in.close();
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(jsonArray.toString());
+		return null;
 	}
-	
+
 	@RequestMapping(value = "/savein*", method = RequestMethod.POST)
 	@ResponseBody
 	public String savein(HttpServletRequest request, HttpServletResponse response) throws Exception {
