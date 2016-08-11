@@ -19,8 +19,8 @@ public class DrugGroup {
     private String spellCode;       //拼音码
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
-    @SequenceGenerator(name = "SEQ_TRACE", sequenceName = "druggroup_sequences", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DRUGGROUP")
+    @SequenceGenerator(name = "SEQ_DRUGGROUP", sequenceName = "druggroup_sequences", allocationSize = 1)
     public Long getId() {
         return id;
     }

@@ -11,4 +11,7 @@ public interface ReceivePointDao extends GenericDao<ReceivePoint, Long> {
 
 	@Transactional
 	List<ReceivePoint> getByType(int type);
+	
+	@Transactional
+	List<ReceivePoint> getByName(String name);
 }

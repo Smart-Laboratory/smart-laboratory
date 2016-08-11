@@ -249,7 +249,7 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncPatient> getSampleByPid(String patientid) {
-		String sql = "select * from l_patientinfo where patientid='" + patientid + "' order by doctadviseno desc";
+		String sql = "select * from l_patientinfo where (patientid='" + patientid + "' or blh='" + patientid + "') order by doctadviseno desc";
 		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
             public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
                 SyncPatient p = new SyncPatient();
@@ -604,7 +604,7 @@ public class RMIServiceImpl implements RMIService {
 		        return p;
 		    }
 		});
-		if(ylsfs != null)
+		if(ylsfs != null && ylsfs.size()>0)
 			return ylsfs.get(0);
 		return null;
 	}

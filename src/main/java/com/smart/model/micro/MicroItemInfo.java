@@ -23,8 +23,8 @@ public class MicroItemInfo {
     private String className;           //类别名称    培养结果、涂片结果
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
-    @SequenceGenerator(name = "SEQ_TRACE", sequenceName = "iteminfo_sequences", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMINFO")
+    @SequenceGenerator(name = "SEQ_ITEMINFO", sequenceName = "iteminfo_sequences", allocationSize = 1)
     public long getId() {
         return id;
     }

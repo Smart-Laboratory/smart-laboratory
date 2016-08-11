@@ -39,6 +39,7 @@
         <mapping class="com.smart.model.lis.Ylxh"/>
         <mapping class="com.smart.model.lis.ContactInfor"/>
         <mapping class="com.smart.model.lis.Ward"/>
+        <mapping class="com.smart.model.lis.SampleLogistic"/>
         <mapping class="com.smart.model.rule.Bag"/>
         <mapping class="com.smart.model.rule.Index"/>
         <mapping class="com.smart.model.rule.Item"/>

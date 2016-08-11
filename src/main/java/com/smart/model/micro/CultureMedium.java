@@ -41,8 +41,8 @@ public class CultureMedium {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
-    @SequenceGenerator(name = "SEQ_TRACE", sequenceName = "culturemedium_sequences", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CULTUREMEDIUM")
+    @SequenceGenerator(name = "SEQ_CULTUREMEDIUM", sequenceName = "culturemedium_sequences", allocationSize = 1)
     public Long getId() {
         return id;
     }

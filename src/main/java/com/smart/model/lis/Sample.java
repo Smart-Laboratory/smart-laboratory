@@ -70,7 +70,7 @@ public class Sample extends BaseObject {
 	private String patientblh;
 	private String charttest;
 	private String ageunit;
-	private int symstatus;
+	private int symstatus=0;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)

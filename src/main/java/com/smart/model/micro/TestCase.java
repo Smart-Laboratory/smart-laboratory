@@ -20,8 +20,8 @@ public class TestCase {
     private int autoReportDays;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRACE")
-    @SequenceGenerator(name = "SEQ_TRACE", sequenceName = "testcase_sequences", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TESTCASE")
+    @SequenceGenerator(name = "SEQ_TESTCASE", sequenceName = "testcase_sequences", allocationSize = 1)
     public Long getId() {
         return id;
     }

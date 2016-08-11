@@ -25,5 +25,7 @@ public class ReceivePointManagerImpl extends GenericManagerImpl<ReceivePoint, Lo
 		return receivePointDao.getByType(type);
 	}
 	
-	
+	public List<ReceivePoint> getByName(String name){
+		return receivePointDao.getByName(name);
+	}
 }

@@ -1,5 +1,5 @@
 function getSample(docNo) {
-	$.get("../quality/sampleTrace/sample",{id:docNo},function(data){
+	$.get("../doctor/sampleTrace/sample",{id:docNo},function(data){
 		$("#midContent").css('display','block');
     	$("#pName").html(data.name);
     	$("#pAge").html(data.age);
@@ -16,15 +16,29 @@ function getSample(docNo) {
 		$("#tat_execute").html(data.execute);
 		$("#tat_receive").html(data.receive);
 		$("#tat_audit").html(data.audit);
-		$("#tat_send").html(data.send);
-		$("#tat_ksreceive").html(data.ksreceive);
+		
+//		$("#tat_send").html(data.send);
+//		$("#tat_sender").html(data.sender);
+//		$("#tat_ksreceive").html(data.ksreceive);
+//		$("#tat_ksreceiver").html(data.ksreceiver);
+		var logisticlist = data.logisticList;
+		var html="";
+		for(var i=0 ;i<logisticlist.length;i++){
+			var logistic = logisticlist[i];
+			html += "<tr><th>"+logistic.operatetype+"</th><td></td>"+
+			"<th>时间</th><td>"+logistic.operatetime+"</td>"+
+			"<th>操作者</th><td>"+logistic.operator+"</td>"+
+			"<th>地点</th><td>"+logistic.location+"</td></tr>";
+		}
+		$("#logistic").html(html);
+		
 		
 		$("#tat_requester").html(data.requester);
 		$("#tat_executor").html(data.executor);
 		$("#tat_receiver").html(data.receiver);
 		$("#tat_auditor").html(data.auditor);
-		$("#tat_sender").html(data.sender);
-		$("#tat_ksreceiver").html(data.ksreceiver);
+		
+		
 		$("#tat_tester").html(data.tester);
 		var time = parseInt(data.tat);
 		var tStr = "";
@@ -53,23 +67,27 @@ function getSample(docNo) {
 }
 
 function getList(from, to, name, type) {
-	
+	var width=$("#searchHeader").width();
 	var mygrid = jQuery("#s3list").jqGrid({
-    	url:"../quality/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" + type, 
+    	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" + type, 
     	datatype: "json", 
-    	width: 400, 
-    	colNames:['医嘱号', '样本号', '检验目的'], 
+    	width: width, 
+    	colNames:['ID','医嘱号', '样本号', '检验目的','操作时间'], 
     	colModel:[ 
-    		{name:'id',index:'id', width:80, sortable:false},
-    		{name:'sample',index:'sample',width:120, sortable:false},
-    		{name:'examinaim',index:'examinaim',width:200, sortable:false}], 
-    	rowNum:10,
+    		{name:'id',index:'id', width:width*0.1, sortable:false,hidden:true},
+    		{name:'doctadviseno',index:'doctadviseno', width:width*0.1, sortable:false},
+    		{name:'sample',index:'sample',width:width*0.2, sortable:false},
+    		{name:'examinaim',index:'examinaim',width:width*0.2, sortable:false},
+    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false}
+    		], 
+    	rowNum:20,
     	height: '100%',
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
     	pager: '#s3pager',
-    	onSelectRow: function(id) {    
-    		getSample(id);
+    	onSelectRow: function(id) {  
+    		var ret = jQuery("#s3list").jqGrid('getRowData',id);
+    		getSample(ret.doctadviseno);
     		
     	},
     	loadComplete: function() {
@@ -90,6 +108,17 @@ function getList(from, to, name, type) {
 $(function() {
 	$.ajaxSetup({cache:false});
 	
+//	laydate({
+//        elem: '#fromDate',
+//        event: 'focus',
+//        format: 'YYYYMMDD'
+//    });
+//    laydate({
+//        elem: '#toDate',
+//        event: 'focus',
+//        format: 'YYYYMMDD'
+//    });
+    
 	$( "#from" ).datepicker({
       changeMonth: true,
       dateFormat:"yy-mm-dd",
@@ -112,7 +141,7 @@ $(function() {
     $("#search_text").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../ajax/searchSection",
+            	url: "../doctor/sampleTrace/ajax/searchSection",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -122,7 +151,7 @@ $(function() {
                 	response( $.map( data, function( result ) {
                         return {
                             label: result.id + " : " + result.name,
-                            value: result.id,
+                            value: result.name,
                             id : result.id
                         }
                     }));
@@ -132,10 +161,12 @@ $(function() {
         },
         minLength: 1
 	});
-    $( "#search_text" ).autocomplete( "disable" );
+    if($('#search_select').val() !=1){
+    	$( "#search_text" ).autocomplete( "disable" );
+    }
     
     $('#search_select').change(function(){
-		if($(this).children('option:selected').val() == 2) {
+		if($(this).children('option:selected').val() == 1) {
 			$( "#search_text" ).autocomplete( "enable" );
 		} else {
 			$( "#search_text" ).autocomplete( "disable" );
@@ -144,7 +175,7 @@ $(function() {
     
     var isFirst = true;
 	$("#searchBtn").click(function() {
-		
+		$("#midContent").css("display","none");
 		var from = $("#from").val();
 		var to = $("#to").val();
 		var name = $("#search_text").val();
@@ -156,7 +187,7 @@ $(function() {
 		}
 
 		jQuery("#s3list").jqGrid("setGridParam",{
-			url:"../quality/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type
+			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type
 		}).trigger("reloadGrid"); 
 		
 	});
