@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
@@ -52,7 +53,7 @@ public class BpbController extends PbBaseController {
 		String random = request.getParameter("random");
 		if(random==null)
 			random="0";
-		if(section.equals("1300000"))
+		if(section.equals(""+Constants.LaboratoryCode+""))
 			section="1400100";
 		
 		

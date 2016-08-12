@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.model.pb.WInfo;
+import com.smart.Constants;
 import com.smart.dao.WInfoDao;
 
 @Repository("wInfoDao")
@@ -20,22 +21,22 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section, String type) {
 		if(section=="" || section ==null)
-			return getSession().createQuery("from WInfo where type = '"+type+"' and isActive=1 and section like '1300%' order by ord2").list();
-		if(section.equals("1300000")) {
+			return getSession().createQuery("from WInfo where type = '"+type+"' and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2").list();
+		if(section.equals(""+Constants.LaboratoryCode+"")) {
 			if(type.equals("1")) {
-				return getSession().createQuery("from WInfo where ord1>0 and isActive=1 and section like '1300%'  order by ord1").list();
+				return getSession().createQuery("from WInfo where ord1>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%'  order by ord1").list();
 			} else if (type.equals("2")) {
-				return getSession().createQuery("from WInfo where ord3>0 and isActive=1 and section like '1300%' order by ord3").list();
+				return getSession().createQuery("from WInfo where ord3>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord3").list();
 			} else if (type.equals("3")) {
-				return getSession().createQuery("from WInfo where ord4>0 and isActive=1 and section like '1300%' order by ord4").list();
+				return getSession().createQuery("from WInfo where ord4>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord4").list();
 			}else if (type.equals("5")) {
-				return getSession().createQuery("from WInfo where ord5>0 and isActive=1 and section like '1300%' order by ord5").list();
+				return getSession().createQuery("from WInfo where ord5>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord5").list();
 			} else if (type.equals("6")) {
-				return getSession().createQuery("from WInfo where ord6>0 and isActive=1 and section like '1300%' order by ord6").list();
+				return getSession().createQuery("from WInfo where ord6>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord6").list();
 			}  else if (type.equals("4")) {
-				return getSession().createQuery("from WInfo where (type=1  or type=2) and ord2>0 and isActive=1 and section like '1300%' order by ord2 asc").list();
+				return getSession().createQuery("from WInfo where (type=1  or type=2) and ord2>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2 asc").list();
 			} else {
-				return getSession().createQuery("from WInfo where type=0 and isActive=1 and section like '1300%' order by ord2").list();
+				return getSession().createQuery("from WInfo where type=0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2").list();
 			} 
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' and type=0 and isActive=1 order by ord2").list();
@@ -54,7 +55,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section) {
-		if(section.equals("1300000")){
+		if(section.equals(""+Constants.LaboratoryCode+"")){
 			return getSession().createQuery("from WInfo order by ord1").list();
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' order by ord2").list();
@@ -70,7 +71,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section, String sidx, String sord) {
-		if(section.equals("1300000")){
+		if(section.equals(""+Constants.LaboratoryCode+"")){
 			return getSession().createQuery("from WInfo order by "+sidx+" "+sord).list();
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' order by "+sidx+" "+sord).list();

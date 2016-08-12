@@ -42,7 +42,7 @@ $(function() {
 	
 	$("#sectionSel").change(function() {
 		$("#section").val($("#sectionSel").val());
-		if($("#sectionSel").val() == '1300000') {
+		if($("#sectionSel").val() == '22') {
 			$("#typeSel").css("display","block");
 		}else if($("#sectionSel").val().indexOf('1400')>=0){
 			window.location.href="../pb/bpbcx?date=" + $("#date").val()+"&section="+$("#sectionSel").val();
@@ -69,7 +69,7 @@ $(function() {
 	$("#sectionSel").val($("#section").val());
 	
 	var section = $("#sectionSel").val();
-	if(section == '1300000') {
+	if(section == '22') {
 		$("#typeSel").css("display","block");
 	}
 	

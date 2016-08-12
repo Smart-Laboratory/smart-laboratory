@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
@@ -96,7 +97,7 @@ public class SearchController {
 			if(text.length()<8)
 				break;
 			String code = sectionManager.getByCode(operator.getLastLab()).getSegment();
-			if(!sectionId.equals("1300000"))
+			if(!sectionId.equals(""+Constants.LaboratoryCode+""))
 				lab = sectionId;
 			samples = sampleManager.getSampleList(text, lab, 0, -3, code, 0, 0);
 			break;
@@ -128,7 +129,7 @@ public class SearchController {
 				}
 			}
 		}
-		if(type!=1 && !sectionId.equals("1300000")){
+		if(type!=1 && !sectionId.equals(""+Constants.LaboratoryCode+"")){
 			for(int i=0;i<samples.size();i++){
 				if(!samples.get(i).getSectionId().equals(sectionId)){
 					samples.remove(i);

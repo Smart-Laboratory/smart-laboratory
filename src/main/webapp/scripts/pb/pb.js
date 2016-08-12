@@ -72,7 +72,7 @@ function changeType(select) {
 
 function getHoliday(){
 	var section = $("#section").val();
-	$.get("../pb/pb/getholiday",{section:1300600},function(data){
+	$.get("../pb/pb/getholiday",{section:section},function(data){
 		alert(11);
 		for(var i=0;i<data.length;i++){
 			var name = data[i].name;

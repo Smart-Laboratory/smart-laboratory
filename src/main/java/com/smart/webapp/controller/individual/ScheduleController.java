@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.Shift;
@@ -152,7 +153,7 @@ public class ScheduleController extends PbBaseController {
 		List<DayShift> dshList = dayShiftManager.getBySection(section);
 		String[][] shifts = new String[calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+7][i];
 		int state = 0;
-		if(!user.getPbsection().contains("1300000")){
+		if(!user.getPbsection().contains(""+Constants.LaboratoryCode+"")){
 				state=1;
 		}
 		
@@ -236,7 +237,7 @@ public class ScheduleController extends PbBaseController {
         
         
         ModelAndView view = new ModelAndView();
-        if(section.equals("1300000")) {
+        if(section.equals(""+Constants.LaboratoryCode+"")) {
         	view = new ModelAndView("/pb/kspb");
     		String[][] shifts2 = new String[i][calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2];
         	for(int m=0; m<calendar.getActualMaximum(Calendar.DAY_OF_MONTH)+2; m++){  

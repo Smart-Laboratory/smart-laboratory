@@ -36,17 +36,13 @@ table tr th {
 <div class="form-inline">
 	<input type="text" id="date" class="form-control" style="margin-left:20px;float:left;">
 	<select id="sectionSel" class="form-control" style="margin-left:20px;float:left;">
-		<option value="1300000"><fmt:message key="labDepartment.1300000"/></option>
-		<option value="1300100"><fmt:message key="labDepartment.1300100"/></option>
-		<option value="1300200"><fmt:message key="labDepartment.1300200"/></option>
-		<option value="1300400"><fmt:message key="labDepartment.1300400"/></option>
-		<option value="1300500"><fmt:message key="labDepartment.1300500"/></option>
-		<option value="1300501"><fmt:message key="labDepartment.1300501"/></option>
-		<option value="1300600"><fmt:message key="labDepartment.1300600"/></option>
-		<option value="1300700"><fmt:message key="labDepartment.1300700"/></option>
-		<option value="1300800"><fmt:message key="labDepartment.1300800"/></option>
-		<option value="1400100">超声医学科（医生）</option>
-		<option value="1400200">超声医学科（报告）</option>
+		<option value="22">检验科</option>
+		<option value="220100">临检组</option>
+		<option value="220200">生化组</option>
+		<option value="220300">免疫组</option>
+		<option value="220400">微生物组</option>
+		<option value="220600">血库组</option>
+		<option value="220700">分子实验室</option>
 	</select>
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
@@ -76,7 +72,7 @@ table tr th {
 		<button id="print" type="button" class="btn btn-info" style="float:right;margin-top:-20px; margin-right:15px;" onclick='preview1()'><fmt:message key='audit.print'/></button>
 		<!--startprint-->
 		<div class="col-sm-12" style="">
-			<h3 style="margin-left:320px;"><c:out value="${month}"/><fmt:message key="labDepartment.${section}"/><fmt:message key="pb.biaoti"/></h3>		
+			<h3 style="margin-left:320px;"><c:out value="${month}"/>检验科<fmt:message key="pb.biaoti"/></h3>		
 			<p><fmt:message key="pb.annotation"/></p>
 			<input id="cxdata" value="${arrString }" type="hidden"/>
 			<div id="tabledata">

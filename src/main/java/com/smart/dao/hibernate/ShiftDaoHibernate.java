@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.pb.Shift;
+import com.smart.Constants;
 import com.smart.dao.ShiftDao;
 
 @Repository("shiftDao")
@@ -23,7 +24,7 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Shift> getShift(String section) {
-		return getSession().createQuery("from Shift where section='"+section+"' or section='1300000'").list();
+		return getSession().createQuery("from Shift where section='"+section+"' or section='"+Constants.LaboratoryCode+"'").list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,11 +40,11 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<Shift> getShiftBySection(String section) {
 		List<Shift> shifts = new LinkedList<Shift>();
-		if(section=="1300000" || !section.contains("1300")){
+		if(section==""+Constants.LaboratoryCode+"" || !section.contains("1300")){
 			shifts = getSession().createQuery("from Shift where section='"+section+"' and showord>0 order by showord").list();
 		}else{
 			List<Shift> shifts1 = getSession().createQuery("from Shift where section='"+section+"' order by showord").list();
-			List<Shift> shifts2 = getSession().createQuery("from Shift where section='1300000' and showord = 0 order by showord").list();
+			List<Shift> shifts2 = getSession().createQuery("from Shift where section='"+Constants.LaboratoryCode+"' and showord = 0 order by showord").list();
 			for(Shift s : shifts1){
 				shifts.add(s);
 			}
@@ -55,7 +56,7 @@ public class ShiftDaoHibernate extends GenericDaoHibernate<Shift, Long> implemen
 	}
 	@SuppressWarnings("unchecked")
 	public List<Shift> getSx(){
-		List<Shift> shifts = getSession().createQuery("from Shift where section = '1300000' and order = '99' ").list();
+		List<Shift> shifts = getSession().createQuery("from Shift where section = '"+Constants.LaboratoryCode+"' and order = '99' ").list();
 		if(shifts == null || shifts.isEmpty())
 			return null;
 		return shifts;

@@ -279,4 +279,9 @@ public final class Constants {
 	public final static String LOG_OPERATE_REDUCE = "标本编号减少";
 	public final static String LOG_OPERATE_INVERSION = "标本编号倒置";
 	public final static String LOG_OPERATE_REPLACE = "标本编号替换";
+	
+	/**
+	 * 医学检验科编号
+	 */
+	public final static String LaboratoryCode = "22";
 }

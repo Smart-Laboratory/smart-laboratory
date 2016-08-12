@@ -69,15 +69,13 @@ table td.sx{
 			
 			
 			<select id="sectionSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
-				<option value="1300000"><fmt:message key="labDepartment.1300000"/></option>
-				<option value="1300100"><fmt:message key="labDepartment.1300100"/></option>
-				<option value="1300200"><fmt:message key="labDepartment.1300200"/></option>
-				<option value="1300400"><fmt:message key="labDepartment.1300400"/></option>
-				<option value="1300500"><fmt:message key="labDepartment.1300500"/></option>
-				<option value="1300501"><fmt:message key="labDepartment.1300501"/></option>
-				<option value="1300600"><fmt:message key="labDepartment.1300600"/></option>
-				<option value="1300700"><fmt:message key="labDepartment.1300700"/></option>
-				<option value="1300800"><fmt:message key="labDepartment.1300800"/></option>
+				<option value="22">检验科</option>
+				<option value="220100">临检组</option>
+				<option value="220200">生化组</option>
+				<option value="220300">免疫组</option>
+				<option value="220400">微生物组</option>
+				<option value="220600">血库组</option>
+				<option value="220700">分子实验室</option>
 			</select>
 			<button id="print" type="button" class="btn btn-info btn-sm" style="float:right;margin-right:15px;" onclick='pbprint()'><fmt:message key='audit.print'/></button>
 		</div>

@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
@@ -76,7 +77,7 @@ public class PbcxController extends PbBaseController {
 				view.addObject("size", 0);
 				return view;
 			}
-			section = "1300000";
+			section = ""+Constants.LaboratoryCode+"";
 		}
 		if(type == null) {
 			type = "1"; 
@@ -107,7 +108,7 @@ public class PbcxController extends PbBaseController {
 		String arrString = "";
 		int size;
 		initLabMap();
-		if(section.equals("1300000") && type.equals("1")){
+		if(section.equals(""+Constants.LaboratoryCode+"") && type.equals("1")){
 			List<Arrange> yArranges = arrangeManager.getArrangeByType("夜", tomonth);
 			List<Arrange> lArranges = arrangeManager.getArrangeByType("良", tomonth);
 			List<Arrange> wArranges = arrangeManager.getArrangeByType("9", tomonth);
@@ -221,7 +222,7 @@ public class PbcxController extends PbBaseController {
 	        	arrString += "</tr>";
 	        }
 			
-		}else if(section.equals("1300000") && type.equals("4")){
+		}else if(section.equals(""+Constants.LaboratoryCode+"") && type.equals("4")){
 			List<Arrange> arranges = arrangeManager.getByDay(day);
 			Map<String, String> pMap = new HashMap<String,String>();
 			for(Arrange a : arranges){
@@ -382,7 +383,7 @@ public class PbcxController extends PbBaseController {
 		if(date == "" || date == null )
 			return null;
 		if(section == "" || section ==null){
-			section = "1300000";
+			section = ""+Constants.LaboratoryCode+"";
 		}
 		if(type==null)
 			type="1";

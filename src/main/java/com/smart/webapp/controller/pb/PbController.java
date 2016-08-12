@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
@@ -187,7 +188,7 @@ public class PbController {
 		String type = request.getParameter("type");
 		String month = request.getParameter("date");
 		List<Arrange> list = new ArrayList<Arrange>();
-		String section = "1300000";
+		String section = ""+Constants.LaboratoryCode+"";
 		System.out.println("开始");
 		
 		Arrange ksArrange = arrangeManager.getByUser(section, month);

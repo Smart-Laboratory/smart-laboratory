@@ -8,6 +8,7 @@ import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.model.pb.Arrange;
+import com.smart.Constants;
 import com.smart.dao.ArrangeDao;
 
 @Repository("arrangeDao")
@@ -76,7 +77,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getArrangeByType(String type, String month){
-		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' and section like '1300%' ";
+		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' and section like '"+Constants.LaboratoryCode+"%' ";
 		return getSession().createQuery(hql).list();
 	}
 	
@@ -94,7 +95,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getByDay(String day){
-		String hql = "from Arrange where date = '"+day+"' and section like '1300%' ";
+		String hql = "from Arrange where date = '"+day+"' and section like '"+Constants.LaboratoryCode+"%' ";
 		return getSession().createQuery(hql).list();
 	}
 	

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
@@ -72,13 +73,13 @@ public class SxgroupPbcxController extends PbBaseController{
 		
 		String section = request.getParameter("section");
 		if(section == null || section.isEmpty())
-			section = "1300000";
+			section = ""+Constants.LaboratoryCode+"";
 		
 		if(labMap==null || labMap.size()==0)
 			initLabMap();
 		ModelAndView v = new ModelAndView();
 		//如果选择医学检验科，则按天显示各组的实习生排班情况
-		if(section.equals("1300000")){
+		if(section.equals(""+Constants.LaboratoryCode+"")){
 			if(yearAndMonth==null)
 				yearAndMonth = ymd.format(new Date());
 			if(yearAndMonth.split("-").length==2)
