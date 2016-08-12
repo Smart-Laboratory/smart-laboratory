@@ -186,4 +186,17 @@
 		    sortorder: "asc",
 		    caption: "<h5><b>试剂入库</b></h5>"
 		});
+
+		labChange=function(select){
+			$.ajax({
+				type: 'POST',
+				url: "../audit/labChange?lab="+$(select).children().attr("title"),
+				success:function(data){
+					var section = $(select).children().attr("title");
+					$("#labText").html($(select).children().html());
+					jQuery("#list").trigger("reloadGrid");
+				}
+			});
+
+		};
 	});

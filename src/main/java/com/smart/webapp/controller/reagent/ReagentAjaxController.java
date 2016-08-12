@@ -286,20 +286,20 @@ public class ReagentAjaxController extends ReagentBaseController {
 			row = sheet.getRow(i);
 			System.out.println("行：" + i);
 			System.out.println("列：" + row.getCell(0).getStringCellValue() + " " + row.getCell(1).getStringCellValue());
-			if(row==null||row.getFirstCellNum()==i){
+			if(row==null||row.getFirstCellNum()==i || row.getCell(0) == null){
 				continue;
 			} else {
 				JSONObject object = new JSONObject();
 				object.put("id", row.getCell(0).getStringCellValue());
-				object.put("name", row.getCell(1).getStringCellValue());
-				object.put("batch", row.getCell(2).getStringCellValue());
-				object.put("place", row.getCell(3).getStringCellValue());
-				object.put("brand", row.getCell(4).getStringCellValue());
-				object.put("baozhuang", row.getCell(5).getStringCellValue());
-				object.put("price", row.getCell(6).getStringCellValue());
-				object.put("num", row.getCell(7).getStringCellValue());
+				object.put("name", row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue());
+				object.put("batch", row.getCell(2) == null ? "" : row.getCell(2).getStringCellValue());
+				object.put("place", row.getCell(3) == null ? "" : row.getCell(3).getStringCellValue());
+				object.put("brand", row.getCell(4) == null ? "" : row.getCell(4).getStringCellValue());
+				object.put("baozhuang", row.getCell(5) == null ? "" : row.getCell(5).getStringCellValue());
+				object.put("price", row.getCell(6) == null ? "" : row.getCell(6).getStringCellValue());
+				object.put("num", row.getCell(7) == null ? "" : row.getCell(7).getStringCellValue());
 				object.put("isqualified", "是");
-				object.put("exedate", row.getCell(8).getStringCellValue());
+				object.put("exedate", row.getCell(8) == null ? "" : row.getCell(8).getStringCellValue());
 				jsonArray.put(object);
 			}
 		}
@@ -312,11 +312,11 @@ public class ReagentAjaxController extends ReagentBaseController {
 
 	@RequestMapping(value = "/savein*", method = RequestMethod.POST)
 	@ResponseBody
-	public String savein(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String saveIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Date now = new Date();
 		try {
 			String text = request.getParameter("text");
-			User user = userManager.getUserByUsername(request.getRemoteUser());
+			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 			Map<Long, Map<String, Object>> inmap = new HashMap<Long, Map<String, Object>>();
 			for(String s : text.split(";")) {
 				String[] idNum = s.split(":");
@@ -369,13 +369,14 @@ public class ReagentAjaxController extends ReagentBaseController {
 	
 	@RequestMapping(value = "/saveout*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean saveout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		boolean success = true;
+	public String saveOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject success = new JSONObject();
+		success.put("success","success");
 		try {
 			String text = request.getParameter("text");
 			String barcode = request.getParameter("barcode");
 			String barcodeBatch = "";
-			User user = userManager.getUserByUsername(request.getRemoteUser());
+			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 			List<Batch> needSaveBatch = new ArrayList<Batch>();
 			List<Out> needSaveOut = new ArrayList<Out>();
 			List<Reagent> list = new ArrayList<Reagent>();
@@ -417,24 +418,41 @@ public class ReagentAjaxController extends ReagentBaseController {
 			}
 			if(barcode != null) {
 				for(Reagent r : list) {
+					int num = 0;
+					boolean isOut = true;
 					for(Batch b : batchMap.get(r.getId())) {
 						if(b.getBatch().equals(barcodeBatch)) {
-							Out outdata = new Out();
 							if(r.getSubtnum() > 1) {
-								int num = r.getSubtnum() * b.getNum() + b.getSubnum();
-								b.setNum((num- 1)/r.getSubtnum());
-								b.setSubnum((num- 1)%r.getSubtnum());
+								num = r.getSubtnum() * b.getNum() + b.getSubnum();
+								if(num -1 >= 0) {
+									b.setNum((num- 1)/r.getSubtnum());
+									b.setSubnum((num- 1)%r.getSubtnum());
+								} else {
+									isOut = false;
+									success.put("success", "error");
+                                    success.put("error", "批号为" + b.getBatch() + "的试剂" + r.getName() + "小于出库量，出库失败！");
+								}
 							} else {
-								b.setNum(b.getNum() - 1);
+								num = b.getNum();
+								if(num - 1 >= 0) {
+									b.setNum(num - 1);
+								} else {
+									isOut = false;
+									success.put("success", "error");
+                                    success.put("error", "批号为" + b.getBatch() + "的试剂" + r.getName() + "小于出库量，出库失败！");
+								}
 							}
-							outdata.setNum(1);
-							outdata.setBatch(b.getBatch());
-							outdata.setOperator(user.getName());
-							outdata.setOutdate(new Date());
-							outdata.setRgId(r.getId());
-							outdata.setLab(user.getLastLab());
-							needSaveBatch.add(b);
-							needSaveOut.add(outdata);
+							if(isOut) {
+                                Out outData = new Out();
+								outData.setNum(1);
+								outData.setBatch(b.getBatch());
+								outData.setOperator(user.getUsername());
+								outData.setOutdate(new Date());
+								outData.setRgId(r.getId());
+								outData.setLab(user.getLastLab());
+								needSaveBatch.add(b);
+								needSaveOut.add(outData);
+							}
 						}
 					}
 				}
@@ -442,23 +460,40 @@ public class ReagentAjaxController extends ReagentBaseController {
 			if(text != null) {
 				for(Reagent r : list) {
 					for(Batch b : batchMap.get(r.getId())) {
+					    int num = 0;
+                        boolean isOut = true;
 						if(b.getBatch().equals(inmap.get(r.getId()).get("batch"))) {
-							Out outdata = new Out();
 							if(r.getSubtnum() > 1) {
-								int num = r.getSubtnum() * b.getNum() + b.getSubnum();
-								b.setNum((num- (Integer)inmap.get(r.getId()).get("num"))/r.getSubtnum());
-								b.setSubnum((num- (Integer)inmap.get(r.getId()).get("num"))%r.getSubtnum());
+								num = r.getSubtnum() * b.getNum() + b.getSubnum();
+                                if(num- (Integer)inmap.get(r.getId()).get("num") >= 0) {
+                                    b.setNum((num- (Integer)inmap.get(r.getId()).get("num"))/r.getSubtnum());
+                                    b.setSubnum((num- (Integer)inmap.get(r.getId()).get("num"))%r.getSubtnum());
+                                } else {
+                                    isOut = false;
+									success.put("success", "error");
+                                    success.put("error", "批号为" + b.getBatch() + "的试剂" + r.getName() + "小于出库量，出库失败！");
+                                }
 							} else {
-								b.setNum(b.getNum() - (Integer)inmap.get(r.getId()).get("num"));
+								num = b.getNum();
+                                if(num- (Integer)inmap.get(r.getId()).get("num") >= 0) {
+                                    b.setNum(b.getNum() - (Integer)inmap.get(r.getId()).get("num"));
+                                } else {
+                                    isOut = false;
+									success.put("success", "error");
+                                    success.put("error", "批号为" + b.getBatch() + "的试剂" + r.getName() + "小于出库量，出库失败！");
+                                }
 							}
-							outdata.setNum((Integer)inmap.get(r.getId()).get("num"));
-							outdata.setBatch(b.getBatch());
-							outdata.setOperator(user.getName());
-							outdata.setOutdate(new Date());
-							outdata.setRgId(r.getId());
-							outdata.setLab(user.getLastLab());
-							needSaveBatch.add(b);
-							needSaveOut.add(outdata);
+							if(isOut) {
+                                Out outData = new Out();
+                                outData.setNum((Integer)inmap.get(r.getId()).get("num"));
+                                outData.setBatch(b.getBatch());
+                                outData.setOperator(user.getUsername());
+                                outData.setOutdate(new Date());
+                                outData.setRgId(r.getId());
+                                outData.setLab(user.getLastLab());
+                                needSaveBatch.add(b);
+                                needSaveOut.add(outData);
+                            }
 						}
 					}
 				}
@@ -466,15 +501,16 @@ public class ReagentAjaxController extends ReagentBaseController {
 			batchManager.saveAll(needSaveBatch);
 			outManager.saveAll(needSaveOut);
 		} catch (Exception e) {
-			success = false;
+			success.put("success", "error");
+			success.put("error", "出库未成功");
 			e.printStackTrace();
 		}
-		return success;
+		return success.toString();
 	}
 	
 	@RequestMapping(value = "/cancelout*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean cancelout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public boolean cancelOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		boolean success = true;
 		try {
 			Out out = outManager.get(Long.parseLong(request.getParameter("id")));

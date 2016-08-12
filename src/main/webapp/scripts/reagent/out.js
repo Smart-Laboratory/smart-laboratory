@@ -33,11 +33,22 @@
 					barcode = barcode.substring(0,10);
 				}
 				$.ajax({
-					  type: 'POST',
-					  url: "../ajax/reagent/saveout?barcode=" + barcode
+					type: 'POST',
+					url: "../ajax/reagent/saveout?barcode=" + barcode,
+					dataType: "json",
+					success: function(data){
+						if(data.success == "success") {
+							$("#alert").css("display","block");
+							$("#alert").prop("class","alert alert-success");
+							$("#alert").html("条码为<b>" + barcode + "</b>的试剂已出库！");
+						} else {
+							$("#alert").css("display","block");
+							$("#alert").prop("class","alert alert-danger");
+							$("#alert").html(data.error);
+						}
+					}
 				});
-				$("#alert").css("display","block");
-				$("#alert").html("条码为<b>" + barcode + "</b>的试剂已出库！");
+
 		}
 	}
 	
@@ -65,17 +76,25 @@
 		    	alert("请至少选择一种需要出/入库的试剂耗材！");
 		    } else {
 		    	$.ajax({
-					  type: 'POST',
-					  url: "../ajax/reagent/saveout?text=" + str
+					type: 'POST',
+					url: "../ajax/reagent/saveout?text=" + str,
+					dataType: "json",
+					success: function(data){
+						if(data.success == "success") {
+							$("#alert").css("display","block");
+							$("#alert").prop("class","alert alert-success");
+							if($("#reagent_select").val() == 2) {
+								$("#alert").html("单项试剂已出库！");
+							} else {
+								$("#alert").html("套餐试剂已出库！");
+							}
+						} else {
+							$("#alert").css("display","block");
+							$("#alert").prop("class","alert alert-danger");
+							$("#alert").html(data.error);
+						}
+					}
 				});
-		    	$("#alert").css("display","block");
-		    	if($("#reagent_select").val() == 2) {
-		    		$("#alert").css("display","block");
-					$("#alert").html("单项试剂已出库！");
-		    	} else {
-		    		$("#alert").css("display","block");
-					$("#alert").html("套餐试剂已出库！");
-		    	}
 		    }
 		});
 		
@@ -133,4 +152,17 @@
 		    sortorder: "asc",
 		    caption: "<h5><b>试剂入库</b></h5>"
 		});
+
+		labChange=function(select){
+			$.ajax({
+				type: 'POST',
+				url: "../audit/labChange?lab="+$(select).children().attr("title"),
+				success:function(data){
+					var section = $(select).children().attr("title");
+					$("#labText").html($(select).children().html());
+					jQuery("#list").trigger("reloadGrid");
+				}
+			});
+
+		};
 	});

@@ -91,6 +91,20 @@
 		jQuery("#list2").jqGrid('navGrid','#pager2',{edit:false,add:false,del:false});
 		
 		$("#outdiv").css("display","none");
+
+		labChange=function(select){
+			$.ajax({
+				type: 'POST',
+				url: "../audit/labChange?lab="+$(select).children().attr("title"),
+				success:function(data){
+					var section = $(select).children().attr("title");
+					$("#labText").html($(select).children().html());
+					jQuery("#list").trigger("reloadGrid");
+					jQuery("#list2").trigger("reloadGrid");
+				}
+			});
+
+		};
 	});
 	
 	

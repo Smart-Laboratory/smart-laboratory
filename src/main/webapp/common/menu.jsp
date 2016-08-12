@@ -5,14 +5,10 @@ function labChange() {
 
 $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
-		var url = window.location.href;
+		var url = "<%=request.getContextPath()%>/users/ajax/hospital";
 		if(url.indexOf("pb")>=0){
-			url = "../users/ajax/hospital?ispb=1";
+			url = url + "?ispb=1";
 		}
-		else{
-			url = "../users/ajax/hospital";
-		}
-		
 		$.ajax({
 	        type : "GET",
 	        url : url,

@@ -1,27 +1,24 @@
 	$(function() {
-		$("#labSelect").val($("#sectionval").val());
-		
 		labChange=function(select){
 			$.ajax({
 				  type: 'POST',
 				  url: "../audit/labChange?lab="+$(select).children().attr("title"),
 				  success:function(data){
-					  selectNoteAdd = true;
 					  var section = $(select).children().attr("title");
 					  $("#labText").html($(select).children().html());
-					  window.location.href="../reagent/set?section=" + $(select).children().attr("title");
+					  getReagentSet();
 					  
 				  }
 			});
 			
 		};
-		getCome();
+		getReagentSet();
 	});
 	
-	var isfirst = true;
-	function getCome(){
-		if(isfirst){
-			isfirst = false;
+	var isFirst = true;
+	function getReagentSet(){
+		if(isFirst){
+			isFirst = false;
 			var width = $("#mid").width();
 			jQuery("#list").jqGrid({
 			   	url:'../reagent/getReagent',
@@ -60,7 +57,7 @@
 		}
 		else{
 			jQuery("#list").jqGrid("setGridParam",{
-				url:"../reagent/getReagent"
+				page : 1
 			}).trigger("reloadGrid");
 		}
 		

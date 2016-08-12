@@ -39,7 +39,8 @@ public class DetailController extends ReagentBaseController {
 			initLabMap();
 		}
 
-		List<In> list = inManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+		UserUtil userUtil = UserUtil.getInstance(userManager);
+		List<In> list = inManager.getByLab(userUtil.getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		
@@ -98,7 +99,7 @@ public class DetailController extends ReagentBaseController {
 				map.put("exdate", i.getExdate());
 				map.put("isqualified", Constants.TRUE);
 				map.put("num", i.getNum() + r.getUnit());
-				map.put("operator", i.getOperator());
+				map.put("operator", userUtil.getUser(i.getOperator()).getName());
 				map.put("indate", i.getIndate());
 				map.put("reprint", "<a onclick='reprint(" + i.getId() + ")' style='color:blue;'>重新打印条码</a>");
 				dataRows.add(map);
@@ -116,7 +117,8 @@ public class DetailController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		List<Out> list = outManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+		UserUtil userUtil = UserUtil.getInstance(userManager);
+		List<Out> list = outManager.getByLab(userUtil.getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		
@@ -175,7 +177,7 @@ public class DetailController extends ReagentBaseController {
 				} else {
 					map.put("num", o.getNum() + r.getUnit());
 				}
-				map.put("operator", o.getOperator());
+				map.put("operator", userUtil.getUser(o.getOperator()).getName());
 				map.put("outdate", Constants.DF.format(o.getOutdate()));
 				map.put("testnum", o.getTestnum());
 				map.put("cancel", "<a onclick='cancel(" + o.getId() + ")' style='color:blue;'>作废该记录</a>");

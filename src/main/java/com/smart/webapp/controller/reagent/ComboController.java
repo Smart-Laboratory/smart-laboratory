@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.UserUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +38,7 @@ public class ComboController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		User user = userManager.getUserByUsername(request.getRemoteUser());
+		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 		String labName = user.getLastLab();
 		if(labName==null || labName.isEmpty()){
 			labName=user.getDepartment().split(",")[0];
@@ -84,7 +85,7 @@ public class ComboController extends ReagentBaseController {
 	@RequestMapping(method = RequestMethod.POST, value="/editCombo*")
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
-			User user = userManager.getUserByUsername(request.getRemoteUser());
+			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 			Combo c = new Combo();
 			c.setName(request.getParameter("name"));
 			c.setCreatetime(new Date());

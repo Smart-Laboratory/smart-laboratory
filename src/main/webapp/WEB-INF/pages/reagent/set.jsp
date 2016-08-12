@@ -14,10 +14,7 @@
 <body>
 <div class="row">
 <div id="mid" class="col-sm-12">
-<input type="hidden" id="sectionval" value="${section}" >
-<div style="margin-top:5px;">
 
-</div>
 <div style="margin-top:5px;" >
 <table id="list" class="table table-condensed table-striped"></table>
 <div id="pager"></div>

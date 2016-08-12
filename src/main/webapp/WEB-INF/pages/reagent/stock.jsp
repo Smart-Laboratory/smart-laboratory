@@ -15,11 +15,9 @@
 </head>
 <body>
 <div class="row">
-<div id="mid" class="col-sm-12">
-
-<table id="list" class="table table-condensed table-striped"></table>
-<div id="pager"></div>
-
-</div>
+    <div id="mid" class="col-sm-12">
+        <table id="list" class="table table-condensed table-striped"></table>
+        <div id="pager"></div>
+    </div>
 </div>
 </body>

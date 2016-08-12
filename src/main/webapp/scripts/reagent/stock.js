@@ -3,17 +3,17 @@
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getReagent?q=1',
 			datatype: "json",
-			width:width,
+			width:width*0.99,
 		   	colNames:['','名称','规格','配套仪器', '品牌', '单位','单价','存放位置','环境条件','当前温度','总量'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name', width:"20%"},
-		   		{name:'specification',index:'specification', width:"12%"},
+		   		{name:'name',index:'name', width:"24%"},
+		   		{name:'specification',index:'specification', width:"10%"},
 		   		{name:'place',index:'place', width:"8%", sortable:false},
 		   		{name:'brand',index:'brand', width:"8%", sortable:false},
 		   		{name:'baozhuang',index:'baozhuang', width:"8%", align:"right", sortable:false},
 		   		{name:'price',index:'price', width:"8%", align:"right", sortable:false},		
-		   		{name:'address',index:'address', width:"12%", sortable:false},		
+		   		{name:'address',index:'address', width:"10%", sortable:false},
 		   		{name:'condition',index:'condition', width:"8%", sortable:false},
 		   		{name:'temp',index:'temp', width:"8%", align:"center", sortable:false},
 		   		{name:'totalnum',index:'totalnum', width:"8%", align:"center", sortable:false}
@@ -62,8 +62,6 @@
 			});
 			$("#labText").html($(select).children().html());
 			jQuery("#list").jqGrid('setGridParam',{
-				url:'../reagent/getReagent?q=1',
-				datatype : 'json',
 				page : 1
 			}).trigger('reloadGrid');
 		}

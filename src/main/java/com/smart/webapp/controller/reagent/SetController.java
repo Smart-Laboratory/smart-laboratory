@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.model.reagent.Reagent;
-import com.smart.model.user.User;
 
 import jxl.Workbook;
 import jxl.write.Label;
@@ -33,31 +32,6 @@ public class SetController extends ReagentBaseController{
 	
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		User user = userManager.getUserByUsername(request.getRemoteUser());
-		initLabMap();
-		
-		String department = user.getDepartment();
-		Map<String, String> depart = new HashMap<String, String>();
-//		String section = request.getParameter("section");
-		if (department != null) {
-			for (String s : department.split(",")) {
-				depart.put(s, labMap.get(s));
-//				if(section==null || section.isEmpty())
-//					section = s;
-			}
-		}
-		String section =request.getParameter("section");
-		if(section==null || section.isEmpty()){
-			if(user.getLastLab()!=null){
-				section=user.getLastLab();
-			}else{
-				section=user.getDepartment().split(",")[0];
-			}
-		}
-//		System.out.println(section);
-		request.setAttribute("section", section);
-		
-		request.setAttribute("departList", depart);
         return new ModelAndView();
     }
 	

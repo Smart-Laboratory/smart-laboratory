@@ -204,7 +204,7 @@
                                         <div class="form-group controls controls-row">
                                             <label class="col-sm-1 control-label" for="unit">单位</label>
                                             <div class="col-sm-5">
-                                                <input class="form-control" id="unit" name="unit" type="text" value="${index.unit}" placeholder="单位" datatype="*" nullmsg="单位不能为空"/>
+                                                <input class="form-control" id="unit" name="unit" type="text" value="${index.unit}" placeholder="单位"/>
                                             </div>
                                             <label class="col-sm-1 control-label" for="defaultvalue">默认结果</label>
                                             <div class="col-sm-5">
