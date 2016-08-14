@@ -57,12 +57,13 @@ $(function() {
     </c:if>
 
     <menu:displayMenu name="SampleManage"/>
-    <menu:displayMenu name="SampleSet"/>
-    <menu:displayMenu name="Reagent"/>
-    <menu:displayMenu name="Statistic"/>
-    <menu:displayMenu name="Quality"/>
-    <menu:displayMenu name="Individual"/>
-    <menu:displayMenu name="Logout"/>
+	<menu:displayMenu name="SampleSet"/>
+	<menu:displayMenu name="Reagent"/>
+	<menu:displayMenu name="Statistic"/>
+	<menu:displayMenu name="Quality"/>
+	<menu:displayMenu name="Individual"/>
+	<menu:displayMenu name="CustomerManage"/>
+	<menu:displayMenu name="Logout"/>
 </ul>
 <ul id="hospital" class="nav navbar-nav" style="display:none;float:right;">
 	<li><a href="#" id="userText"></a></li>

@@ -60,8 +60,13 @@
             <Item name="StuPbCx" title="pb.sxgroupcx" page="/pb/sxgroupPbcx" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
         </Menu>
+
+        <Menu name="CustomerManage" title="customerManage.title" page="/customer" roles="ROLE_ADMIN">
+            <Item name="EditCustomer" title="menu.customer" page="/customer/viewCustomer" roles="ROLE_ADMIN"/>
+        </Menu>
+
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
-    </Menus>
+        </Menus>
 
 
 

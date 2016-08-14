@@ -81,5 +81,7 @@
         <mapping class="com.smart.model.lis.ProcessLog"/>
         <mapping class="com.smart.model.lis.SampleLog"/>
         <mapping class="com.smart.model.lis.TestResultLog"/>
+        <mapping class="com.smart.model.dsf.CustomerInfo"/>
+        <mapping class="com.smart.model.dsf.CustomerInfoDetails"/>
     </session-factory>
 </hibernate-configuration>
