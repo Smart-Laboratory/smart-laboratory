@@ -185,9 +185,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="handshark"> 协议 </label>
+            <label class="col-xs-3 control-label no-padding-right" for="handshake"> 协议 </label>
             <div class="col-xs-8">
-                <select class="col-xs-8" id="handshark" name="handshark">
+                <select class="col-xs-8" id="handshake" name="handshake">
                     <option value="0">无</option>
                     <option value="1">XonXof</option>
                     <option value="2">RTS OR CTS</option>

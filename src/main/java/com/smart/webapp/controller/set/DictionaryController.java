@@ -87,13 +87,13 @@ public class DictionaryController {
         Long id = Long.parseLong(request.getParameter("id"));
         String sign = request.getParameter("sign");
         int type = Integer.parseInt(request.getParameter("type"));
-        String value = request.getParameter("type");
+        String value = request.getParameter("value");
         dictionary.setId(id);
         dictionary.setType(type);
         dictionary.setSign(sign);
         dictionary.setValue(value);
         dictionaryManager.save(dictionary);
-        return new ModelAndView("redirect:/set/dictionary");
+        return new ModelAndView("redirect:/set/dictionary?type=" + type);
     }
     @RequestMapping("/remove")
     public void removeDictionary(HttpServletRequest request,HttpServletResponse response){

@@ -76,7 +76,7 @@ function editSection(){
 		content: $("#addDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("form").submit();
+			$("#addDictionaryForm").submit();
 			//layer.close(index); //如果设定了yes回调，需进行手工关闭
 		}
 	});
@@ -190,7 +190,6 @@ function initGrid(typeid){
 			}, 0);
 		},
 		viewrecords: true,
-		multiselect: true,
 		shrinkToFit: true,
 		altRows:true,
 		autowidth:true,
