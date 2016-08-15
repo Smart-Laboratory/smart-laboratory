@@ -23,12 +23,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.Constants;
+import com.smart.model.lis.Section;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
 import com.smart.service.ArrangeManager;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
+import com.smart.service.lis.SectionManager;
 import com.zju.api.service.RMIService;
 
 import jxl.*;
@@ -60,6 +62,9 @@ public class PbcxController extends PbBaseController {
 	@Autowired
 	private RMIService rmiService;
 	
+	@Autowired
+	private SectionManager sectionManager;
+	
 	private final static String pbexcelUrl = "/lab/temporaty";
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -71,6 +76,9 @@ public class PbcxController extends PbBaseController {
 		String section = request.getParameter("section");
 		String type = request.getParameter("type");
 		
+		request.setAttribute("jykCode", Constants.LaboratoryCode);
+		List<Section> pbSections = sectionManager.getPbSection("1");
+		request.setAttribute("pbSections", pbSections);
 		if(section == null || section == "") {
 			if(user == null){
 				ModelAndView view = new ModelAndView();

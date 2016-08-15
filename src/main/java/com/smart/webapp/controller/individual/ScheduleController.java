@@ -295,6 +295,7 @@ public class ScheduleController extends PbBaseController {
         view.addObject("dateSize", j-1);
 //        view.addObject("section", section);
         view.addObject("dshList", dshList);
+        view.addObject("jykCode",Constants.LaboratoryCode);
 		return view;
 	}
 	

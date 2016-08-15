@@ -13,6 +13,7 @@ function preview1() {
 }
 
 $(function() {
+	var jykCode = $("#jykCode").val();
 	$(".footer").css('display','none');
 	if($("#size").val()==999){
 		$("#tabledata").html($("#cxdata").val());
@@ -42,7 +43,7 @@ $(function() {
 	
 	$("#sectionSel").change(function() {
 		$("#section").val($("#sectionSel").val());
-		if($("#sectionSel").val() == '22') {
+		if($("#sectionSel").val() == jykCode) {
 			$("#typeSel").css("display","block");
 		}else if($("#sectionSel").val().indexOf('1400')>=0){
 			window.location.href="../pb/bpbcx?date=" + $("#date").val()+"&section="+$("#sectionSel").val();
@@ -69,7 +70,7 @@ $(function() {
 	$("#sectionSel").val($("#section").val());
 	
 	var section = $("#sectionSel").val();
-	if(section == '22') {
+	if(section == jykCode) {
 		$("#typeSel").css("display","block");
 	}
 	

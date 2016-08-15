@@ -69,13 +69,9 @@ table td.sx{
 			
 			
 			<select id="sectionSelect" onchange="labChange(this)" class="form-control" style="margin-right:15px;float:right;width:400px;">
-				<option value="22">检验科</option>
-				<option value="220100">临检组</option>
-				<option value="220200">生化组</option>
-				<option value="220300">免疫组</option>
-				<option value="220400">微生物组</option>
-				<option value="220600">血库组</option>
-				<option value="220700">分子实验室</option>
+				<c:forEach items="${pbSections }" var="pbsection" >
+					<option value="${pbsection.code }">${pbsection.name }</option>
+				</c:forEach>
 			</select>
 			<button id="print" type="button" class="btn btn-info btn-sm" style="float:right;margin-right:15px;" onclick='pbprint()'><fmt:message key='audit.print'/></button>
 		</div>

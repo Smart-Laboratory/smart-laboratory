@@ -79,6 +79,11 @@
 		220600-血库组；
 		220700-分子实验室；
 		</p>
+		<p>1300000-<fmt:message key="labDepartment.1300000"/>;  1300100-<fmt:message key="labDepartment.1300100"/>; 1300400-<fmt:message key="labDepartment.1300400"/>;
+			1300200-<fmt:message key="labDepartment.1300200"/>;  1300300-<fmt:message key="labDepartment.1300300"/>;
+			1300500-<fmt:message key="labDepartment.1300500"/>;  1300501-<fmt:message key="labDepartment.1300501"/>;
+			1300600-<fmt:message key="labDepartment.1300600"/>;  1300700-<fmt:message key="labDepartment.1300700"/>;
+			1300800-<fmt:message key="labDepartment.1300800"/>;
 		<p><fmt:message key="pb.sort"/></p>
 </div>
 

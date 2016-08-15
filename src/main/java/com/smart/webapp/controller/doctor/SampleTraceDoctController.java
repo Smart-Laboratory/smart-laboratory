@@ -1,7 +1,6 @@
 package com.smart.webapp.controller.doctor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.smart.model.lis.ReceivePoint;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.SampleLogistic;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ReceivePointManager;
 import com.smart.service.lis.SampleLogisticManager;
 import com.smart.service.lis.SampleManager;
@@ -31,11 +31,11 @@ import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.model.Ksdm;
 import com.zju.api.model.Patient;
 import com.zju.api.model.SyncPatient;
 import com.zju.api.model.YLSF;
 import com.zju.api.service.RMIService;
+import com.smart.model.lis.Process;
 
 @Controller
 @RequestMapping("/doctor/sampleTrace*")
@@ -52,6 +52,11 @@ public class SampleTraceDoctController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String type = request.getParameter("type");
+		String name = request.getParameter("name");
+		
+		request.setAttribute("type", type);
+		request.setAttribute("name", name);
 		return new ModelAndView();
 	}
 	
@@ -147,12 +152,14 @@ public class SampleTraceDoctController {
 				map.put("sample", sample.getSampleNo());
 				map.put("examinaim", sample.getInspectionName());
 				map.put("operatetime", Constants.SDF.format(sl.getOperatetime()));
+				map.put("samplestatus", getSampleStatue(sample));
 			}else{
 				Sample info = list.get(start + index);
 				map.put("id",info.getId());
 				map.put("doctadviseno",info.getId());
 				map.put("sample",info.getSampleNo());
 				map.put("examinaim", info.getInspectionName());
+				map.put("samplestatus", getSampleStatue(info));
 			}
 			
 			dataRows.add(map);
@@ -163,7 +170,36 @@ public class SampleTraceDoctController {
 		return dataResponse;
 	}
 	
-	
+	/**
+	 * 判断样本状态 已采集 、已发送、运输中、已接受、无结果...
+	 * @param info
+	 * @return
+	 */
+	private String getSampleStatue(Sample info){
+		String status = info.getAuditStatusValue();
+		if(info.getAuditStatus()==-1){
+			status = "已开单";
+			Process process = processManager.getBySampleId(info.getId());
+			if(process!=null){
+				if(process.getExecutetime()!=null)
+					status = "已采集";
+				if(process.getSendtime()!=null)
+					status = "已送出";
+				else{
+					if(process.getReceivetime()!=null)
+						status = "已接收";
+					else
+						status = "运输中";
+				}
+				if(process.getChecktime()!=null)
+					status = "已审核";
+				
+			}
+			
+		}
+		
+		return status;
+	}
 	
 	/*public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -357,4 +393,6 @@ public class SampleTraceDoctController {
 	private ReceivePointManager receivePointManager;
 	@Autowired
 	private SampleManager sampleManager;
+	@Autowired
+	private ProcessManager processManager;
 }

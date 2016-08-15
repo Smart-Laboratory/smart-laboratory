@@ -45,4 +45,11 @@ public interface SectionDao extends GenericDao<Section,Long> {
 	 * @return
      */
 	boolean batchRemove(long[] ids);
+	
+	/**
+	 * 获取需要排班的科室
+	 * @param hospitalId
+	 * @return
+	 */
+	List<Section> getPbSection(String hospitalId);
 }

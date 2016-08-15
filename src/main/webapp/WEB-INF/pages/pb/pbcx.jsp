@@ -29,6 +29,7 @@ table tr th {
 </style>
 
 <input id="section" value="${section }" type="hidden"/>
+<input id="jykCode" value="${jykCode }" type="hidden"/>
 <input id="month" value="${month}" type="hidden"/>
 <input id="type" value="${type }" type="hidden"/>
 <input id="size" value="${size }" type="hidden"/>
@@ -36,13 +37,9 @@ table tr th {
 <div class="form-inline">
 	<input type="text" id="date" class="form-control" style="margin-left:20px;float:left;">
 	<select id="sectionSel" class="form-control" style="margin-left:20px;float:left;">
-		<option value="22">检验科</option>
-		<option value="220100">临检组</option>
-		<option value="220200">生化组</option>
-		<option value="220300">免疫组</option>
-		<option value="220400">微生物组</option>
-		<option value="220600">血库组</option>
-		<option value="220700">分子实验室</option>
+		<c:forEach items="${pbSections }" var="pbsection" >
+			<option value="${pbsection.code }">${pbsection.name }</option>
+		</c:forEach>
 	</select>
 		<select id="typeSel" class="form-control" style="margin-left:20px;float:left;display:none">
 			<option value="1" ><fmt:message key="pb.yb"/></option>
