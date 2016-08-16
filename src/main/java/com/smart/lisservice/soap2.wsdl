@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://impl.webservice.zcw.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://server.webservice.zcw.com/" name="LisInfoService" targetNamespace="http://impl.webservice.zcw.com/">
+  <wsdl:import location="http://127.0.0.1:8080/lisservice/services/soap?wsdl=LisInfoService.wsdl" namespace="http://server.webservice.zcw.com/">
+    </wsdl:import>
+  <wsdl:binding name="LisInfoServiceSoapBinding" type="ns1:LisInfoService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getPatientTypeList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getPatientTypeList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPatientTypeListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSampleNo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getSampleNo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSampleNoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getListTestResult">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getListTestResult">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getListTestResultResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPatientInfoList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getPatientInfoList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPatientInfoListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="returnSample">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="returnSample">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="returnSampleResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDrugList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDrugList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDrugListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="saveSampleFlowLog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="saveSampleFlowLog">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="saveSampleFlowLogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="booking">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="booking">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="bookingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBacteriaList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getBacteriaList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getBacteriaListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWardList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getWardList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getWardListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTestPurposeList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTestPurposeList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTestPurposeListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="saveTestResult">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="saveTestResult">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="saveTestResultResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCollectedSampleList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCollectedSampleList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCollectedSampleListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSampleTypeList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getSampleTypeList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSampleTypeListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartMentList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDepartMentList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDepartMentListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getReceivedSampleList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getReceivedSampleList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getReceivedSampleListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTestInfo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTestInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTestInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LisInfoService">
+    <wsdl:port binding="tns:LisInfoServiceSoapBinding" name="LisInfoServiceImplPort">
+      <soap:address location="http://127.0.0.1:8080/lisservice/services/soap"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

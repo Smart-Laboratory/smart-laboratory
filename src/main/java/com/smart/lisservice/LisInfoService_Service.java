@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "LisInfoService", targetNamespace = "http://impl.webservice.zcw.com/", wsdlLocation = "http://10.31.96.38:8080/lisservice/services/soap?wsdl")
+@WebServiceClient(name = "LisInfoService", targetNamespace = "http://impl.webservice.zcw.com/", wsdlLocation = "http://127.0.0.1:8080/lisservice/services/soap?wsdl")
 public class LisInfoService_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class LisInfoService_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://10.31.96.38:8080/lisservice/services/soap?wsdl");
+            url = new URL("http://127.0.0.1:8080/lisservice/services/soap?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

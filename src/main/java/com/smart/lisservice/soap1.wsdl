@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon.ico"/>
+    <link rel="stylesheet" type="text/css"  href="/styles/ace.min.css" />
+    <link rel="stylesheet" type="text/css"  href="/styles/font-awesome.css" />
+    <title>Login | AppFuse</title>
+    
+
+
+
+
+
+
+
+
+    
+    
+        <!--link rel="stylesheet" type="text/css" href="/styles/main.css"/-->
+        <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/styles/ace.min.css"/>
+        <script type="text/javascript" src="/scripts/main.js"></script>
+    
+<style>
+        body{margin:0;font:12px/1.8 Tahoma,Geneva,'\5B8B\4F53';color:#333;background:white;}
+        .wrap{position:relative;z-index:0;height:600px;}
+        .banner-show{position:absolute;top:0;left:0;z-index:0;width:100%;min-width:980px;height:600px;overflow:hidden;}
+        .banner-show .cell{position:absolute;top:0;left:0;width:100%;overflow:hidden;background-repeat:repeat-x;background-position:center top;}
+        .banner-show .cell .con{position:relative;height:600px;background-repeat:no-repeat;background-position:center top;}
+        .bns-01{background-image:url(styles/images/mid_banner/banner_01_repeat.png);}
+        .bns-01 .con{background-image:url(styles/images/mid_banner/banner_01.png?v=201406241538);}
+        .bns-02{background-image:url(styles/images/mid_banner/banner_02_repeat.gif?v=201406241538);}
+        .bns-02 .con{background-image:url(styles/images/mid_banner/banner_02.gif?v=201406241538);}
+        .bns-03{background-image:url(styles/images/mid_banner/banner_03_repeat.png?v=201406241538);}
+        .bns-03 .con{background-image:url(styles/images/mid_banner/banner_03.png?v=201406241538);}
+        .banner-link{position:absolute;top:100px;left:50%;width:400px;height:400px;margin-left:-430px;}
+        .banner-link i{display:none;}
+        .banner-control{position:absolute;top:0;left:50%;width:980px;margin-left:-490px;}
+        .banner-control a{position:absolute;top:258px;width:30px;height:30px;line-height:10;overflow:hidden;background-image:url(styles/images/icon_control.png?v=201406241538);background-repeat:no-repeat;background-repeat:no-repeat;}
+        .banner-control a.left{left:-55px;background-position:0 0;}
+        .banner-control a.left:hover{background-position:0 -30px;}
+        .banner-control a.right{right:-55px;background-position:-30px 0;}
+        .banner-control a.right:hover{background-position:-30px -30px;}
+        .container{position:relative;top:600px;z-index:2;width:980px;height:0;margin:auto;}
+        .register-box{position:absolute;top:-550px;right:0;width:396px;height:420px;background:white;border-radius:3px;background:rgba(255, 255, 255, 0.95);}
+        .reg-tab span:first-child{border-top-left-radius:3px;}
+        .reg-tab span:last-child{border-top-right-radius:3px;}
+        .reg-slogan{height:50px;line-height:50px;text-align:center;font-size:16px;}
+        .reg-form{width:328px;height:280px;margin:auto;}
+        .reg-form .cell{position:relative;height:40px;margin-bottom:22px;zoom:1;}
+        .reg-form .cell label{position:absolute;top:0;left:0;z-index:1;padding:0 12px;line-height:40px;font-size:14px;color:#999;font-weight:bold;cursor:text;}
+        .reg-form .cell input{position:absolute;top:0;left:0;width:328px;padding:7px 11px;font-size:16px;background:none;}
+        .reg-form .vcode input{width:110px;}
+        .reg-form .vcode img{position:absolute;top:0;left:144px;width:110px;height:40px;}
+        .reg-form .vcode span{position:absolute;top:0;left:264px;line-height:40px;font-size:14px;}
+        .reg-form .user-agreement input{float:left;width:14px;height:14px;margin:1px 5px 0 0;}
+        .reg-form .bottom .button{display:block;border-radius:3px;}
+        .social-or-login :first-child{background: #f0f0f0 !important;}
+        .input-icon>.ace-icon{line-height: 44px;}
+    </style>
+</head>
+<body id="login"  class="no-skin">
+    <!--<a href="../pb/pbcx">æç­æ¥è¯¢</a>-->
+    <div class="main-container" sytle="padding-top:50px;" id="content">
+        <div class="row">
+        <div class="wrap">
+    <div class="banner-show" id="js_ban_content">
+        <div class="cell bns-01" style="display: block;">
+            <div class="con"> </div>
+        </div>
+        <div class="cell bns-02" style="display: none;">
+            <div class="con"> <a href="#_" target="_blank" class="banner-link"> <i>智慧实验室</i></a> </div>
+        </div>
+        <div class="cell bns-03" style="display: none;">
+            <div class="con"> <a href="#_" target="_blank" class="banner-link"> <i>智慧实验室</i></a> </div>
+        </div>
+    </div>
+    <div class="banner-control" id="js_ban_button_box"> <a href="javascript:;" class="left">左</a> <a href="javascript:;" class="right">右</a> </div>
+    <script type="text/javascript">
+        (function () {
+            var defaultInd = 0;
+            var list = $('#js_ban_content').children();
+            var count = 0;
+            var change = function(newInd, callback){
+                if(count) return;
+                count = 2;
+                $(list[defaultInd]).fadeOut(400, function(){
+                    count--;
+                    if(count <= 0){
+                        if(start.timer) window.clearTimeout(start.timer);
+                        callback && callback();
+                    }
+                });
+                $(list[newInd]).fadeIn(400, function(){
+                    defaultInd = newInd;
+                    count--;
+                    if(count <= 0){
+                        if(start.timer) window.clearTimeout(start.timer);
+                        callback && callback();
+                    }
+                });
+            };
+
+            var next = function(callback){
+                var newInd = defaultInd + 1;
+                if(newInd >= list.length){
+                    newInd = 0;
+                }
+                change(newInd, callback);
+            };
+
+            var start = function(){
+                if(start.timer) window.clearTimeout(start.timer);
+                start.timer = window.setTimeout(function(){
+                    next(function(){
+                        start();
+                    });
+                }, 8000);
+            };
+
+            start();
+
+            $('#js_ban_button_box').on('click', 'a', function(){
+                var btn = $(this);
+                if(btn.hasClass('right')){
+                    //next
+                    next(function(){
+                        start();
+                    });
+                }
+                else{
+                    //prev
+                    var newInd = defaultInd - 1;
+                    if(newInd < 0){
+                        newInd = list.length - 1;
+                    }
+                    change(newInd, function(){
+                        start();
+                    });
+                }
+                return false;
+            });
+
+        })();
+    </script>
+    <div class="container">
+        <div class="register-box">
+            <div class="reg-slogan">
+                <h2>
+                    <i class="ace-icon fa fa-leaf green"></i>
+                    <span class="grey">AppFuse</span>
+                </h2>
+            </div>
+            <div class="reg-form" id="js-form-mobile">
+                <form method="post" id="loginForm" action="/j_security_check"
+                      onsubmit="saveUsername(this);return validateForm(this)" class="form-signin" autocomplete="off">
+                    <div class="cell">
+                        <span class="block input-icon input-icon-right">
+                            <input type="text" name="j_username" id="j_username"
+                                   placeholder="Username" required tabindex="1">
+                            <i class="ace-icon fa fa-user"></i>
+                        </span>
+                    </div>
+                    <div class="cell">
+                       <span class="block input-icon input-icon-right">
+                        <input type="password" name="j_password" id="j_password" tabindex="2"
+                               placeholder="Password" required>
+                        <i class="ace-icon fa fa-lock"></i>
+                       </span>
+                    </div>
+                    <div class="cell">
+                        <label class="inline">
+                            
+                                <input class="ace" type="checkbox" name="_spring_security_remember_me" id="rememberMe" tabindex="3"/>
+                                <span class="lbl">&nbsp;&nbsp;Remember Me</span>
+                            
+                        </label>
+                        <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+                            <i class="ace-icon fa fa-key"></i>
+                            <span class="bigger-110">Login</span>
+                        </button>
+                    </div>
+                </form>
+                <div class="social-or-login center" style="clear: both" >
+                    <span class="bigger-110"></span>
+
+                </div>
+                <style>
+                    .infobox{
+                        width: 130px;
+                        border:none;
+                        background:none;
+                    }
+                    .infobox>.infobox-data{
+                        min-width: 60px;
+                        padding-left:2px;
+                    }
+                    </style>
+                <div class="social-login center">
+                    <div class="infobox infobox-green" >
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-comments"></i>
+                        </div>
+                        <div class="infobox-data">
+                            <a href="/pb/pbcx" data-target="#signup-box" class="user-signup-link">
+                                排班查询
+                            </a>
+                        </div>
+                    </div>
+                    <div class="infobox infobox-blue" >
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-cog"></i>
+                        </div>
+                        <div class="infobox-data">
+                            <a href="/signup" data-target="#signup-box" class="user-signup-link">
+                                用户注册
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="toolbar center">
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="footer">
+    <div class="footer-inner" style="left: 0px;">
+        <div class="footer-content">
+				 <span class="">
+        	???project.name??? |
+        	Version 2.0
+            | <a target="_blank" href="???update.url???">???update.name???</a>
+       	    | <a target="_blank" href="???wsdjk.url???">???wsdjk.name???</a>
+   		</span>
+   		<span style="float: right;">
+       		 &copy; 2014 <a target="_blank" href="http://raibledesigns.com">Your Company Here</a>
+        </span>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+<script type="text/javascript">
+    if ($.cookie("username") != null && $.cookie("username") != "") {
+        $("#j_username").val($.cookie("username"));
+        $("#j_password").focus();
+    } else {
+        $("#j_username").focus();
+    }
+    
+    function saveUsername(theForm) {
+        $.cookie("username",theForm.j_username.value, { expires: 30, path: "/"});
+    }
+    
+    function validateForm(form) {                                                               
+        var valid = validateRequired(form);
+        if (valid == false) {
+            $(".form-group").addClass('error');
+        }
+        return valid;
+    }
+
+    function passwordHint() {
+        if ($("#j_username").val().length == 0) {
+            alert("Username is a required field.");
+            $("#j_username").focus();
+        } else {
+            location.href="/passwordHint?username=" + $("#j_username").val();
+        }
+    }
+    
+    function requestRecoveryToken() {
+        if ($("#j_username").val().length == 0) {
+            alert("Username is a required field.");
+            $("#j_username").focus();
+        } else {
+            location.href="/requestRecoveryToken?username=" + $("#j_username").val();
+        }
+    }    
+    
+    function required () { 
+        this.aa = new Array("j_username", "Username is a required field.", new Function ("varName", " return this[varName];"));
+        this.ab = new Array("j_password", "Password is a required field.", new Function ("varName", " return this[varName];"));
+    }
+</script>
+</body>
+</html>

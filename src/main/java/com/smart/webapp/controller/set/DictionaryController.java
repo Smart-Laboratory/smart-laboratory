@@ -93,7 +93,7 @@ public class DictionaryController {
         dictionary.setSign(sign);
         dictionary.setValue(value);
         dictionaryManager.save(dictionary);
-        return new ModelAndView("redirect:/set/dictionary?type=" + type);
+        return new ModelAndView("redirect:/set/dictionary?type="+type);
     }
     @RequestMapping("/remove")
     public void removeDictionary(HttpServletRequest request,HttpServletResponse response){

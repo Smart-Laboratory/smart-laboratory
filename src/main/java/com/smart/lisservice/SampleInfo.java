@@ -51,10 +51,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="patientId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientPhone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="patientTypeCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="patientTypeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reportDateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="reportDoctor" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="reportDoctorCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="requestmode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sampleDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sampleId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sampleNote" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -114,10 +115,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "patientId",
     "patientName",
     "patientPhone",
+    "patientTypeCode",
+    "patientTypeName",
     "reportDateTime",
     "reportDoctor",
     "reportDoctorCode",
-    "requestmode",
     "sampleDescription",
     "sampleId",
     "sampleNote",
@@ -173,11 +175,12 @@ public class SampleInfo {
     protected String patientId;
     protected String patientName;
     protected String patientPhone;
+    protected String patientTypeCode;
+    protected String patientTypeName;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar reportDateTime;
     protected String reportDoctor;
     protected String reportDoctorCode;
-    protected String requestmode;
     protected String sampleDescription;
     protected String sampleId;
     protected String sampleNote;
@@ -990,6 +993,54 @@ public class SampleInfo {
     }
 
     /**
+     * 获取patientTypeCode属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPatientTypeCode() {
+        return patientTypeCode;
+    }
+
+    /**
+     * 设置patientTypeCode属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPatientTypeCode(String value) {
+        this.patientTypeCode = value;
+    }
+
+    /**
+     * 获取patientTypeName属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPatientTypeName() {
+        return patientTypeName;
+    }
+
+    /**
+     * 设置patientTypeName属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPatientTypeName(String value) {
+        this.patientTypeName = value;
+    }
+
+    /**
      * 获取reportDateTime属性的值。
      * 
      * @return
@@ -1059,30 +1110,6 @@ public class SampleInfo {
      */
     public void setReportDoctorCode(String value) {
         this.reportDoctorCode = value;
-    }
-
-    /**
-     * 获取requestmode属性的值。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRequestmode() {
-        return requestmode;
-    }
-
-    /**
-     * 设置requestmode属性的值。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRequestmode(String value) {
-        this.requestmode = value;
     }
 
     /**

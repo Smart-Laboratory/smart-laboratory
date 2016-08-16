@@ -13260,6 +13260,7 @@ th[aria-selected=true] .ui-jqgrid-sortable {
     content: "\f040"
 }
 
+
 .ui-icon-trash {
     color: #DD5A43
 }
@@ -19795,6 +19796,33 @@ img.editable-click:hover {
     display: none;
 }
 /*add by zcw 2016/06/14 解决autocomplete样式问题*/
+.ui-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
+    z-index:99;
+}
+.ui-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    outline: none
+}
+
+.ui-menu .ui-menu {
+    position: absolute
+}
+
+.ui-menu .ui-menu-item {
+    position: relative;
+    margin: 0;
+    padding: 3px 1em 3px .4em;
+    cursor: pointer;
+    min-height: 0;
+    list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7")
+}
 .ui-helper-hidden-accessible {
     border: 0;
     clip: rect(0 0 0 0);
@@ -19804,4 +19832,27 @@ img.editable-click:hover {
     padding: 0;
     position: absolute;
     width: 1px;
+}
+
+.ui-icon-search {
+    color: #478FCA
+}
+
+.ui-icon-search:before {
+    content: "\f002"
+}
+.ui-icon-refresh:before {
+    content: "\f021";
+}
+.ui-icon-plus:before {
+    content: "\f196";
+}
+.ui-icon-minus:before {
+    content: "\f010";
+}
+.ui-jqgrid .ui-jqgrid-btable .ui-sgcollapsed span{
+    font-size: 13px !important;
+}
+.ui-jqgrid .ui-jqgrid-pager .ui-pg-div span.ui-icon{
+    font-size: 13px !important;
 }

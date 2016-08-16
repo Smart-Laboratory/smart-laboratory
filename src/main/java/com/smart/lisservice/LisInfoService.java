@@ -58,6 +58,23 @@ public interface LisInfoService {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getListTestResult", targetNamespace = "http://server.webservice.zcw.com/", className = "com.smart.lisservice.GetListTestResult")
+    @ResponseWrapper(localName = "getListTestResultResponse", targetNamespace = "http://server.webservice.zcw.com/", className = "com.smart.lisservice.GetListTestResultResponse")
+    public String getListTestResult(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
+
+    /**
+     * 
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getPatientInfoList", targetNamespace = "http://server.webservice.zcw.com/", className = "com.smart.lisservice.GetPatientInfoList")
     @ResponseWrapper(localName = "getPatientInfoListResponse", targetNamespace = "http://server.webservice.zcw.com/", className = "com.smart.lisservice.GetPatientInfoListResponse")
     public String getPatientInfoList(

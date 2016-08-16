@@ -30,6 +30,12 @@
 					{name:'creator',index:'creator', width:"30%", align:"center", sortable:false, editable:false},
 					{name:'createtime',index:'createtime', width:"30%", align:"center", sortable:false, editable:false}
 				],
+				loadComplete : function() {
+					var table = this;
+					setTimeout(function(){
+						updatePagerIcons(table);
+					}, 0);
+				},
 				rowNum:10,
 				rownumbers:true,
 				rowList:[10,20,30],
@@ -83,6 +89,12 @@
 							{name:'baozhuang',index:'baozhuang', width:100, align:"right", sortable:false},
 							{name:'price',index:'price', width:60, align:"right", sortable:false}
 						],
+						loadComplete : function() {
+							var table1 = this;
+							setTimeout(function(){
+								updatePagerIcons(table1);
+							}, 0);
+						},
 						rowNum:20,
 						pager: pager_id,
 						sortname: 'num',
@@ -104,4 +116,22 @@
 		} else {
 			jQuery("#list").trigger("reloadGrid");
 		}
+	}
+	/**
+	 * 设置JQGRID 上下页图标
+	 * @param table
+	 */
+	function updatePagerIcons(table) {
+		var replacement =
+		{
+			'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+			'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+			'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+			'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+		};
+		$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+			var icon = $(this);
+			var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+			if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+		})
 	}

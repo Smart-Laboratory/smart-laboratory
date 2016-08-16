@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _GetListTestResultResponse_QNAME = new QName("http://server.webservice.zcw.com/", "getListTestResultResponse");
     private final static QName _GetPatientInfoList_QNAME = new QName("http://server.webservice.zcw.com/", "getPatientInfoList");
     private final static QName _ReturnSample_QNAME = new QName("http://server.webservice.zcw.com/", "returnSample");
     private final static QName _SaveSampleFlowLog_QNAME = new QName("http://server.webservice.zcw.com/", "saveSampleFlowLog");
@@ -45,6 +46,7 @@ public class ObjectFactory {
     private final static QName _BookingResponse_QNAME = new QName("http://server.webservice.zcw.com/", "bookingResponse");
     private final static QName _ReturnSampleResponse_QNAME = new QName("http://server.webservice.zcw.com/", "returnSampleResponse");
     private final static QName _GetSampleNo_QNAME = new QName("http://server.webservice.zcw.com/", "getSampleNo");
+    private final static QName _GetListTestResult_QNAME = new QName("http://server.webservice.zcw.com/", "getListTestResult");
     private final static QName _GetDrugList_QNAME = new QName("http://server.webservice.zcw.com/", "getDrugList");
     private final static QName _GetSampleTypeListResponse_QNAME = new QName("http://server.webservice.zcw.com/", "getSampleTypeListResponse");
     private final static QName _GetPatientTypeListResponse_QNAME = new QName("http://server.webservice.zcw.com/", "getPatientTypeListResponse");
@@ -177,6 +179,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetListTestResult }
+     * 
+     */
+    public GetListTestResult createGetListTestResult() {
+        return new GetListTestResult();
+    }
+
+    /**
      * Create an instance of {@link GetSampleNo }
      * 
      */
@@ -305,6 +315,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetListTestResultResponse }
+     * 
+     */
+    public GetListTestResultResponse createGetListTestResultResponse() {
+        return new GetListTestResultResponse();
+    }
+
+    /**
      * Create an instance of {@link GetPatientInfoList }
      * 
      */
@@ -366,6 +384,15 @@ public class ObjectFactory {
      */
     public TestResult createTestResult() {
         return new TestResult();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListTestResultResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://server.webservice.zcw.com/", name = "getListTestResultResponse")
+    public JAXBElement<GetListTestResultResponse> createGetListTestResultResponse(GetListTestResultResponse value) {
+        return new JAXBElement<GetListTestResultResponse>(_GetListTestResultResponse_QNAME, GetListTestResultResponse.class, null, value);
     }
 
     /**
@@ -555,6 +582,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://server.webservice.zcw.com/", name = "getSampleNo")
     public JAXBElement<GetSampleNo> createGetSampleNo(GetSampleNo value) {
         return new JAXBElement<GetSampleNo>(_GetSampleNo_QNAME, GetSampleNo.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetListTestResult }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://server.webservice.zcw.com/", name = "getListTestResult")
+    public JAXBElement<GetListTestResult> createGetListTestResult(GetListTestResult value) {
+        return new JAXBElement<GetListTestResult>(_GetListTestResult_QNAME, GetListTestResult.class, null, value);
     }
 
     /**

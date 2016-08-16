@@ -109,7 +109,12 @@ $(function(){
 				});
 				ul.append(li);
 			}
-			ul.children("li").eq(0).click();
+			if(typeId != ''){
+				$('#ullist').find("li[typeid="+typeId+"]").click();
+			}else{
+				ul.children("li").eq(0).click();
+			}
+
 		}
 	});
 

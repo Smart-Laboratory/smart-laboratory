@@ -20,6 +20,11 @@
 		if(isFirst){
 			isFirst = false;
 			var width = $("#mid").width();
+			var clientHeight= $(window).innerHeight();
+			var height =clientHeight-$('#head').height()- $('.tabbable').height()-$('.footer-content').height()-170;
+			$(window).on('resize.jqGrid', function () {
+				$('#list').jqGrid('setGridWidth', width,false);
+			});
 			jQuery("#list").jqGrid({
 			   	url:'../reagent/getReagent',
 				datatype: "json",
@@ -41,12 +46,18 @@
 			   		{name:'pcode',index:'pcode', width:"7%", sortable:false, editable:true},
 			   		{name:'isself',index:'isself', width:"6%", align:"center", sortable:false, editable:true,edittype:"select",editoptions:{value:"0:×;1:√"}}
 			   	],
-			   	rowNum:10,
+				loadComplete : function() {
+					var table = this;
+					setTimeout(function(){
+						updatePagerIcons(table);
+					}, 0);
+				},
+			   	rowNum:20,
 			   	rownumbers:true,
 			   	rowList:[10,20,30],
 			   	pager: '#pager',
 			   	sortname: 'id',
-			   	height: '100%',
+			   	height: height,
 			    viewrecords: true,
 			    editurl : "editReagent",
 			    sortorder: "asc",
@@ -62,4 +73,3 @@
 		}
 		
 	}
-	

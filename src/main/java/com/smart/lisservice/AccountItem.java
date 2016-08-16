@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="operatorNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="patientName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="patientType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="quantity" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="testDoctorDeptNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -48,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
     "operatorNo",
     "patientCode",
     "patientName",
+    "patientType",
     "price",
     "quantity",
     "testDoctorDeptNo",
@@ -65,6 +67,7 @@ public class AccountItem {
     protected String operatorNo;
     protected String patientCode;
     protected String patientName;
+    protected String patientType;
     protected double price;
     protected int quantity;
     protected String testDoctorDeptNo;
@@ -262,6 +265,30 @@ public class AccountItem {
      */
     public void setPatientName(String value) {
         this.patientName = value;
+    }
+
+    /**
+     * 获取patientType属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPatientType() {
+        return patientType;
+    }
+
+    /**
+     * 设置patientType属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPatientType(String value) {
+        this.patientType = value;
     }
 
     /**

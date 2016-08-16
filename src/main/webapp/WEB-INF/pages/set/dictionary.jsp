@@ -110,7 +110,7 @@ ul.nav{
 <div id="addDialog" style="display: none;width: 500px;overflow: hidden" class="row">
     <form id="addDictionaryForm" class="form-horizontal" action="<c:url value='../set/dictionary/saveDictionary'/>" method="post">
         <input type="hidden" name="id" id="id" value="0"/>
-        <input type="hidden" name="type" id="type" value="0"/>
+        <input type="hidden" name="type" id="type" value="${type}"/>
         <div class="form-group">
             <div class="space-4"></div>
             <label class="col-xs-3 control-label no-padding-right" for="sign">标记 </label>
@@ -137,4 +137,6 @@ ul.nav{
         </div>
     </form>
 </div>
-
+<script>
+    var typeId  ='<%=request.getParameter("type")%>';
+</script>
