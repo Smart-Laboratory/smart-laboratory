@@ -39,12 +39,12 @@ function editYlxh() {
 	
 	//initForm初始化Ylxh对象
 	$('#ylxh').val(rowData.ylxh);
-	$('#ylxh').attr("disabled","false");
+	$('#ylxh').attr("readonly","true");
 	$('#ylmc').val(rowData.ylmc);
-	$('#ylmc').attr("disabled","false");
+	$('#ylmc').attr("readonly","true");
 	$('#english').val(rowData.english);
 	$('#price').val(rowData.price);
-	$('#price').attr("disabled","false");
+	$('#price').attr("readonly","true");
 	$('#mzpb').val(rowData.mzpb);
 	$('#zypb').val(rowData.zypb);
 	$('#yblx').val(rowData.yblx);
@@ -56,6 +56,8 @@ function editYlxh() {
 	$('#profiletest').val(rowData.ptest);
 	$('#profiletest2').val(rowData.ptest2);
 	$('#profiletest3').val(rowData.ptest3);
+	$('#cjbw').val(rowData.cjbw);
+	$('#sgsl').val(rowData.sgsl);
 	
 	layer.open({
 		type: 1,
@@ -72,6 +74,7 @@ function editYlxh() {
 			$.ajax({
 			  type: 'POST',
 			  url: '../set/ylsf/editYlsf',
+			  dataType: 'json',
 			  data: $("#YlxhForm").serialize(),
 			  success: function(data){
 				  if(parseInt(data.success)==0) {
@@ -198,7 +201,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-		colNames:['检验目的序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','PTEST','PTEST2','PTEST3','MZPB','ZYPB'], 
+		colNames:['检验目的序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:false},
     		{name:'ylmc',index:'ylmc',width:160, sortable:false},
@@ -206,11 +209,14 @@ function getList(lab) {
     		{name:'price',index:'price',width:30, sortable:false},
     		{name:'mzpbStr',index:'mzpbStr',width:50, sortable:false},
     		{name:'zypbStr',index:'zypbStr',width:50, sortable:false},
-    		{name:'yblx',index:'yblx',width:50, sortable:false},
+    		{name:'yblxzw',index:'yblxzw',width:50, sortable:false},
     		{name:'sglx',index:'sglx',width:50, sortable:false},
     		{name:'bbl',index:'bbl',width:50, sortable:false},
     		{name:'qbgsj',index:'qbgsj',width:50, sortable:false},
     		{name:'qbgdd',index:'qbgdd',width:50, sortable:false},
+			{name:'cjbw',index:'cjbw',width:50, sortable:false},
+			{name:'sgsl',index:'sgsl',width:50, sortable:false},
+			{name:'yblx',index:'yblx',hidden:true},
     		{name:'ptest',index:'ptest', hidden:true},
     		{name:'ptest2',index:'ptest2', hidden:true},
     		{name:'ptest3',index:'ptest3', hidden:true},

@@ -18,6 +18,7 @@
     <script type="text/javascript" src="../scripts/set/device.js"></script>
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 
+    <title><fmt:message key="set.device"/></title>
 </head>
 <style>
     .laftnav{
