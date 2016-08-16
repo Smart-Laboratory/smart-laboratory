@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
+import com.smart.model.lis.Section;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
@@ -206,6 +207,9 @@ public class SxgroupPbcxController extends PbBaseController{
 			request.setAttribute("wshifts", wshifts);
 			request.setAttribute("month", tomonth);
 			request.setAttribute("section", section);
+			request.setAttribute("jykCode", Constants.LaboratoryCode);
+			List<Section> pbSections = sectionManager.getPbSection("1");
+			request.setAttribute("pbSections", pbSections);
 			if(bzArrange!=null && bzArrange.getShift()!=null)
 				request.setAttribute("bz", bzArrange.getShift());
 			else

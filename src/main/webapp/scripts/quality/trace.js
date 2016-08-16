@@ -72,9 +72,10 @@ function getList(from, to, name, type) {
     	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" + type, 
     	datatype: "json", 
     	width: width, 
-    	colNames:['ID','医嘱号', '样本号', '检验目的','操作时间'], 
+    	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间'], 
     	colModel:[ 
     		{name:'id',index:'id', width:width*0.1, sortable:false,hidden:true},
+    		{name:'samplestatus',index:'samplestatus', width:width*0.1, sortable:false},
     		{name:'doctadviseno',index:'doctadviseno', width:width*0.1, sortable:false},
     		{name:'sample',index:'sample',width:width*0.2, sortable:false},
     		{name:'examinaim',index:'examinaim',width:width*0.2, sortable:false},
@@ -191,6 +192,16 @@ $(function() {
 		}).trigger("reloadGrid"); 
 		
 	});
+	var type = $("#type").val();
+	var name = $("#name").val();
+	if(type!=null && type ==4){
+		if (isFirst) {
+			getList("", "", name, type);
+			isFirst = false;
+			$("#search_select").val("4");
+			$("#search_text").val(name);
+		}
+	}
 	
 	$(document).keydown(function(e){
 		if(e.keyCode == 40)

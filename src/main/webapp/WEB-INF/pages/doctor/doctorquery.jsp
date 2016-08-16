@@ -586,7 +586,7 @@
                             //headOtherInfo='有结果';
                        }
                     }
-                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color=\'#FF9800\'>['+ sampleInfo.sampleNo+'] </font> (样本:' +sampleInfo.type+' 科室:'+sampleInfo.section+' 床号:'+sampleInfo.bedno+') ' + headOtherInfo;
+                    var headInfo = (i+1)+'、'+ sampleInfo.examinaim +'<font color=\'#FF9800\'>['+ sampleInfo.sampleNo+'] </font> (样本:' +sampleInfo.type+' 科室:'+sampleInfo.section+' 床号:'+sampleInfo.bedno+') ' + '<button id=\'SampleTrace\' Onclick=\'showSampleTrace('+sampleInfo.doctadviseno+')\'>样本踪迹</button>' + headOtherInfo;
                     //add SubHead
                     var subHeadRow = $('<tr class="headRow show" groupid="0" title="'+'样本:' +sampleInfo.type+' 科室:'+sampleInfo.section+' 床号:'+sampleInfo.bedno+')' +'"><td colspan=8>'+headInfo+'</td></tr>');
                     table.append(subHeadRow);
@@ -1126,6 +1126,10 @@
         };
         return public;
     })();
+    
+    function showSampleTrace(doctadviseno){
+    	window.open("../doctor/sampleTrace?type=4&name="+doctadviseno);
+    }
 
     $(function(){
         $(".samplelist tr").bind("click",function(){

@@ -27,6 +27,7 @@ public class Section extends BaseObject {
 	private String name;
 	private String segment; //检验段，CBC、CBD
 	private long hospitalId;
+	private int ispb; //是否为排班科室
 	
 	/**
 	 * 主键、自增
@@ -85,6 +86,15 @@ public class Section extends BaseObject {
 		this.hospitalId = hospitalId;
 	}
 	
+	@Column
+	public int getIspb() {
+		return ispb;
+	}
+
+	public void setIspb(int ispb) {
+		this.ispb = ispb;
+	}
+
 	public String toString() {
 		return null;
 	}

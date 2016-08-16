@@ -1014,6 +1014,7 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("sampleStatus",ConvertUtil.null2String(info.getSampleStatus()));
         patientInfo.put("auditStatus",ConvertUtil.null2String(info.getAuditStatus()));
         patientInfo.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+        patientInfo.put("doctadviseno", info.getId());
         return  patientInfo;
     }
 }
