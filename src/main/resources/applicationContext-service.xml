@@ -105,7 +105,4 @@
 	<bean id="rmiService" class="com.smart.service.impl.zy.RMIServiceImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplatez1" />
 	</bean>
-    <bean id="webClient" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
-        <constructor-arg type="java.lang.String" value="http://127.0.0.1:8080/lisservice/services/rest/" />
-    </bean>
 </beans>

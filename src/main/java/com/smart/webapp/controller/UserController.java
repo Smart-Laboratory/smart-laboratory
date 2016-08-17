@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
+import com.smart.lisservice.WebService;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.HospitalManager;
@@ -87,7 +88,6 @@ public class UserController {
     			labMap.put(labcode, sectionUtil.getLabValue(labcode));
     		}
     	}
-    	
     	obj.put("username", user.getName());
     	obj.put("hospital", hospitalManager.get(user.getHospitalId()).getName());
     	obj.put("labCode", labCode);

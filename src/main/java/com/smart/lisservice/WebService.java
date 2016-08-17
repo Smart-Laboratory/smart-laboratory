@@ -5,12 +5,16 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.ws.rs.core.MediaType;
+
 
 /**
  * Created by zcw on 2016/8/17.
  */
 public class WebService {
     private JaxWsProxyFactoryBean jwpfb ;
+    private ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-resources.xml");
+    private WebClient client = ctx.getBean("webClient", WebClient.class);
 //    private LisInfoService service;
 //    public WebService(){
 //        jwpfb  = new JaxWsProxyFactoryBean();
@@ -20,13 +24,10 @@ public class WebService {
 //    }
 
     public String getBacteriaList2(){
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-client.xml");
-        WebClient client = ctx.getBean("webClient", WebClient.class);
-        return  client.path("lisservice/services/getBacteriaList").accept("application/xml").get(String.class);
+        return  client.path("getBacteriaList").accept(MediaType.APPLICATION_JSON).get(String.class);
     }
 //    public String getBacteriaList(){
 //        ReturnMsg msg = service.getBacteriaList();
 //        return (String)msg.getMessage();
 //    }
-
 }

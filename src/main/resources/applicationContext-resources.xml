@@ -55,9 +55,9 @@
     <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe" />
-        <property name="username" value="lzh" />
-        <property name="password" value="lzh" />
+        <property name="url" value="jdbc:oracle:thin:@10.31.96.38:1521:orcl" />
+        <property name="username" value="lab" />
+        <property name="password" value="lab" />
     </bean>
     
     <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
@@ -69,5 +69,9 @@
     </bean> -->
     <bean id="jdbcTemplatez1" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource-z1"></property>
+    </bean>
+
+    <bean id="webClient" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
+        <constructor-arg type="java.lang.String" value="http://10.31.96.38:8080/lisservice/services/rest/" />
     </bean>
 </beans>
