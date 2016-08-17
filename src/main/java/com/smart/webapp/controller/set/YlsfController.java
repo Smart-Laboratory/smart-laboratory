@@ -56,7 +56,7 @@ public class YlsfController extends BaseAuditController {
 		}
 		ModelAndView view = new ModelAndView();
 		view.addObject("lab", lab);
-		view.addObject("typeList", SampleUtil.getInstance().getSampleList(dictionaryManager));
+		view.addObject("typeList", SampleUtil.getInstance(dictionaryManager).getMap());
         return view;
     }
 	
@@ -74,7 +74,7 @@ public class YlsfController extends BaseAuditController {
         int row = Integer.parseInt(rows);
         int start = row * (page - 1);
         int end = row * page;
-		Map<String, String> sampleTypeMap = SampleUtil.getInstance().getSampleList(dictionaryManager);
+		Map<String, String> sampleTypeMap = SampleUtil.getInstance(dictionaryManager).getMap();
 
         List<Ylxh> list = new ArrayList<Ylxh>();
         int size = 0;

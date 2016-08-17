@@ -158,7 +158,7 @@ public class SampleTraceController {
 				map.put("blh", p.getBLH());
 			}
 			map.put("type",
-					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(p.getSAMPLETYPE())));
+					SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(p.getSAMPLETYPE())));
 			
 			map.put("request", p.getREQUESTTIME() == null ? "" : Constants.DF.format(p.getREQUESTTIME()));
 			map.put("execute", p.getEXECUTETIME() == null ? "" : Constants.DF.format(p.getEXECUTETIME()));

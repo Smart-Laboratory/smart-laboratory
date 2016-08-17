@@ -309,7 +309,7 @@ public class SampleTraceDoctController {
 				map.put("blh", p.getBLH());
 			}
 			map.put("type",
-					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(p.getSAMPLETYPE())));
+					SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(p.getSAMPLETYPE())));
 			
 			List<SampleLogistic> sList = sampleLogisticManager.getByDoctadviseNo(p.getDOCTADVISENO());
 			List<Map<String, String>> logisticList = new ArrayList<Map<String,String>>();

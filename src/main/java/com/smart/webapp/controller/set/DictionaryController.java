@@ -5,6 +5,7 @@ import com.smart.model.DictionaryType;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.SampleUtil;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,12 +93,15 @@ public class DictionaryController {
         dictionary.setType(type);
         dictionary.setSign(sign);
         dictionary.setValue(value);
-        dictionaryManager.save(dictionary);
+        dictionary = dictionaryManager.save(dictionary);
+        SampleUtil.updateMap(dictionary);
         return new ModelAndView("redirect:/set/dictionary?type="+type);
     }
     @RequestMapping("/remove")
     public void removeDictionary(HttpServletRequest request,HttpServletResponse response){
         Long id = Long.parseLong(request.getParameter("id"));
+        Dictionary dictionary = dictionaryManager.get(id);
+        SampleUtil.remove(dictionary);
         dictionaryManager.remove(id);
     }
 }

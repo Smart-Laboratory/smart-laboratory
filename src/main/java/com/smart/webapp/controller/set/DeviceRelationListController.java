@@ -184,7 +184,7 @@ public class DeviceRelationListController {
         //获取所有部门信息
         Map<String,String> departmentList = DepartUtil.getInstance(sectionManager).getMap();
         //获取标本信息
-        Map<String,String> sampleList = SampleUtil.getInstance().getSampleList(dictionaryManager);
+        Map<String,String> sampleList = SampleUtil.getInstance(dictionaryManager).getMap();
 
         //获取所有仪器信息
         List<Device> devicelist = deviceManager.getAll();

@@ -18,20 +18,34 @@ public class SampleUtil {
 	
 	private SampleUtil() {}
 	
-	public static SampleUtil getInstance() {
-		return instance;
-	}
-	
-	public Map<String, String> getSampleList(DictionaryManager dictionaryManager) {
+	public static SampleUtil getInstance(DictionaryManager dictionaryManager) {
 		if (map == null) {
-			synchronized (instance) {
-				map = new HashMap<String, String>();
-				List<Dictionary> dList = dictionaryManager.getSampleType();
-				for (Dictionary sample : dictionaryManager.getSampleType()) {
-					map.put(sample.getSign(), sample.getValue());
-				}
+			map = new HashMap<String, String>();
+			List<Dictionary> dList = dictionaryManager.getSampleType();
+			for (Dictionary dictionary : dictionaryManager.getSampleType()) {
+				map.put(dictionary.getSign(), dictionary.getValue());
 			}
 		}
+		return instance;
+	}
+
+	public Map<String, String> getMap() {
 		return map;
+	}
+
+	public String getValue(String key) {
+		if (map.containsKey(key)) {
+			return map.get(key);
+		} else {
+			return key;
+		}
+	}
+
+	public static void updateMap( Dictionary dictionary) {
+		map.put(dictionary.getSign(), dictionary.getValue());
+	}
+
+	public static void remove( Dictionary dictionary) {
+		map.remove(dictionary.getSign());
 	}
 }

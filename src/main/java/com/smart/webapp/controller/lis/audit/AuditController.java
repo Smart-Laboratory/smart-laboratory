@@ -462,7 +462,7 @@ public class AuditController extends BaseAuditController {
 		User operator = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 		operator.setLastLab(lab);
 		userManager.saveUser(operator);
-		UserUtil.rebuild(operator);
+		UserUtil.updateMap(operator);
 		return true;
 	}
     
