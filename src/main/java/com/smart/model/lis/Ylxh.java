@@ -36,6 +36,8 @@ public class Ylxh extends BaseObject {
 	private String yblx;	//样本类型
 	private String bbl;		//标本量
 	private String sglx;	//试管类型
+	private String cjbw;	//采集部位
+	private int sgsl;		//试管数量
 	
 	/**
 	 * 医疗序号
@@ -189,6 +191,24 @@ public class Ylxh extends BaseObject {
 
 	public void setSglx(String sglx) {
 		this.sglx = sglx;
+	}
+
+	@Column
+	public String getCjbw() {
+		return cjbw;
+	}
+
+	public void setCjbw(String cjbw) {
+		this.cjbw = cjbw;
+	}
+
+	@Column
+	public int getSgsl() {
+		return sgsl;
+	}
+
+	public void setSgsl(int sgsl) {
+		this.sgsl = sgsl;
 	}
 
 	public String toString() {

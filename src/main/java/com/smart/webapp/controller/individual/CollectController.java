@@ -190,7 +190,7 @@ public class CollectController extends BaseAuditController {
 			map.put("patientId", info.getPatientId());
 			map.put("requester", process.getRequester());
 			map.put("type",
-					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+					SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(info.getSampleType())));
 			
 			Calendar c = Calendar.getInstance(); 
 			c.add(Calendar.DAY_OF_MONTH,-7);

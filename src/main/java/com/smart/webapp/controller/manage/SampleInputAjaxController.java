@@ -171,7 +171,7 @@ public class SampleInputAjaxController {
 			map.put("id", sample.getId());
 			map.put("shm", sample.getStayHospitalModelValue());
 			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			map.put("sampleno", sample.getSampleNo());
 			map.put("pid", sample.getPatientId());
 			map.put("pname", sample.getPatientname());
@@ -368,7 +368,7 @@ public class SampleInputAjaxController {
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		o.put("shm", sample.getStayHospitalModelValue());
 		o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-		o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+		o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
 		o.put("requester", process.getRequester());
@@ -441,7 +441,7 @@ public class SampleInputAjaxController {
 			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			o.put("shm", sample.getStayHospitalModelValue());
 			o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			o.put("part", sample.getPart() == null ? "" : sample.getPart());
 			o.put("requestmode", sample.getRequestMode());
 			o.put("requester", process.getRequester());

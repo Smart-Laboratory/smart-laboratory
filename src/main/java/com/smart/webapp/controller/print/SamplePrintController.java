@@ -80,7 +80,7 @@ public class SamplePrintController extends BaseAuditController {
 		info.put("pName", s.getPatientname());
 		info.put("sex", s.getSexValue());
 		info.put("age", s.getAge());
-		info.put("pType", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(s.getSampleType())));
+		info.put("pType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(s.getSampleType())));
 		info.put("diagnostic", s.getDiagnostic());
 		if(s.getStayHospitalMode() == 2) {
 			info.put("staymodetitle", "住 院 号");

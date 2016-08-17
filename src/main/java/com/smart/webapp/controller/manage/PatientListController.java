@@ -84,7 +84,7 @@ public class PatientListController extends BaseAuditController {
 			map.put("section", section.getName());
 			map.put("sex", info.getSexValue());
 			map.put("blh", info.getPatientblh());
-			map.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+			map.put("type", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(info.getSampleType())));
 		}
 		return map;
 	}

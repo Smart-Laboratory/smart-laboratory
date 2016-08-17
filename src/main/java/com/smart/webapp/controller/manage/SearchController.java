@@ -54,7 +54,7 @@ public class SearchController {
 			}
 		}
 		//depart.put("1300000", "所有科室");
-		Map<String, String> sampleTypes = SampleUtil.getInstance().getSampleList(dictionaryManager);
+		Map<String, String> sampleTypes = SampleUtil.getInstance(dictionaryManager).getMap();
 		
 		request.setAttribute("departList", depart);
 		request.setAttribute("sampleTypes", sampleTypes);
@@ -163,7 +163,7 @@ public class SearchController {
 			return null;
 		}
 		
-		Map<String, String> sMap = SampleUtil.getInstance().getSampleList(dictionaryManager);
+		Map<String, String> sMap = SampleUtil.getInstance(dictionaryManager).getMap();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		
 		
