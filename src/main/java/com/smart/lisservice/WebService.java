@@ -2,6 +2,8 @@ package com.smart.lisservice;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 /**
@@ -18,7 +20,8 @@ public class WebService {
 //    }
 
     public String getBacteriaList2(){
-        WebClient client = WebClient.create("http://127.0.0.1:8080/");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-client.xml");
+        WebClient client = ctx.getBean("webClient", WebClient.class);
         return  client.path("lisservice/services/getBacteriaList").accept("application/xml").get(String.class);
     }
 //    public String getBacteriaList(){
