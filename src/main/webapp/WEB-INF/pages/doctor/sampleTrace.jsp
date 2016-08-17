@@ -1,9 +1,12 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 
 <head>
-	<title><fmt:message key="menu.quality.trace" /></title>
+	
 	<meta charset="utf-8" />
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
     <%-- <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
@@ -20,7 +23,7 @@
 	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
 	
 	<script type="text/javascript" src="../scripts/quality/trace.js"></script>
-	
+	<title><fmt:message key="menu.quality.trace" /></title>
 <style>
 		.pLabel{
 			margin-left:10px;
@@ -109,7 +112,7 @@
 						<span class="pText"><b id="pType"></b></span>
 					</div>
 				</div>
-				<div class="pItem gred">
+				<div class="pItem gred form-inline" >
 					<div class="gred"  style="float:left;width:40%;">
 						<span class="pLabel"><fmt:message key="patient.blh" />:</span>
 						<span class="pText"><b id="blh"></b></span>
@@ -120,7 +123,7 @@
 					</div>
 				</div>
 
-				<div class="pItem gred">
+				<div class="pItem gred form-inline">
 					<div class="gred"  style="float:left;width:40%;">
 						<span class="pLabel"><fmt:message key="patient.section"/>:&nbsp;</span>
 						<span class="pText"><b id="pSection"></b></span>
@@ -130,7 +133,7 @@
 						<span class="pText"><b id="diagnostic"></b></span>
 					</div>
 				</div>
-				<div class="pItem gred">
+				<div class="pItem gred form-inline">
 					<div class="gred"  style="float:left;width:40%;">
 						<span class="pLabel">送检科室:&nbsp;</span>
 						<span class="pText"><b id="sjSection"></b></span>
@@ -181,3 +184,4 @@
 	</div>
 </div>
 </body>
+</html>

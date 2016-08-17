@@ -35,13 +35,13 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
     
-    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+    <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
         <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
         <property name="username" value="lab" />
         <property name="password" value="lab" />
-    </bean>
+    </bean> -->
 
     <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
@@ -50,6 +50,16 @@
         <property name="username" value="zjhis" />
         <property name="password" value="zjhis" />
     </bean> -->
+    
+    <!-- 本地的国际医院库 -->
+    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe" />
+        <property name="username" value="lzh" />
+        <property name="password" value="lzh" />
+    </bean>
+    
     <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="org.mariadb.jdbc.Driver" />

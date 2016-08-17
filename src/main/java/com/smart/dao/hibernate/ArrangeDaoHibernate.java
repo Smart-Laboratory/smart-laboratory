@@ -95,7 +95,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getByDay(String day){
-		String hql = "from Arrange where date = '"+day+"' and section like '"+Constants.LaboratoryCode+"%' ";
+		String hql = "from Arrange where date = '"+day+"'";
 		return getSession().createQuery(hql).list();
 	}
 	

@@ -321,6 +321,8 @@ public class SxgroupPbcxController extends PbBaseController{
 			
 			v.addObject("pbdate", arrDate);
 		}
+		List<Section> pbSections = sectionManager.getPbSection("1");
+		v.addObject("pbSections", pbSections);
 		
 		return v;
 	}

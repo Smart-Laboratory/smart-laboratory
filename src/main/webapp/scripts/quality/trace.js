@@ -82,7 +82,7 @@ function getList(from, to, name, type) {
     		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false}
     		], 
     	rowNum:20,
-    	height: '100%',
+    	height: 500,
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
     	pager: '#s3pager',
