@@ -174,6 +174,12 @@ function updatePagerIcons(table) {
 }
 
 function initGrid(typeid){
+	var clientHeight= $(window).innerHeight();
+	var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
+	var width = $('.content').width();
+	$(window).on('resize.jqGrid', function () {
+		$('#rightGrid').jqGrid('setGridWidth', $(".content").width(),false);
+	});
 	$("#tableList").jqGrid({
 		caption: "仪器设置",
 		url: "../set/device/getDeviceList",
@@ -211,7 +217,8 @@ function initGrid(typeid){
 		altRows:true,
 		autowidth:true,
 		//height: 300,
-		height: "100%",
+		height: height,
+		width:width,
 		rowNum: 10,
 		rowList:[10,30,50],
 		rownumbers: true, // 显示行号

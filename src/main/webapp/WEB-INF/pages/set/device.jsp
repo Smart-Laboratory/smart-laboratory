@@ -58,7 +58,7 @@
 </style>
 <div class="row">
     <div class="col-xs-12">
-        <div  style="padding-top: 5px;">
+        <div  style="padding-top: 5px;" id="toolbar">
             <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="Add()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>
                 <fmt:message key="button.add" />
@@ -81,8 +81,10 @@
 			</span>
             </div>
         </div>
-        <table id="tableList"></table>
-        <div id="pager"></div>
+        <div class="col-xs-12 content">
+            <table id="tableList"></table>
+            <div id="pager"></div>
+        </div>
     </div>
 </div>
 <div style="clear: both"></div>
