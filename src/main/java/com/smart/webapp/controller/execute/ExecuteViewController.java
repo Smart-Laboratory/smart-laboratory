@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
+import com.smart.lisservice.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zju.api.model.ExecuteInfo;
-import com.zju.api.model.Patient;
+import com.smart.model.lis.Patient;
 import com.lowagie.text.Section;
 import com.smart.Constants;
 import com.smart.model.execute.LabOrder;
@@ -62,7 +63,16 @@ public class ExecuteViewController {
 		Map<String, Object> map = new HashMap<String,Object>();
 		//查询病人信息
 		String patientId = request.getParameter("patientId").trim();
-		Patient patient = rmiService.getPatient(patientId);
+		Patient patient = patientManager.getByPatientId(patientId);
+		if(patient == null) {
+			patient = new WebService().getPatient(patientId);
+			if(patientManager.getByBlh(patient.getBlh()) != null) {
+				patient = patientManager.getByBlh(patient.getBlh());
+				patient.setPatientId(patient.getPatientId() + "," + patientId);
+			}
+			patientManager.save(patient);
+		}
+		//Patient patient = rmiService.getPatient(patientId);
 		map.put("patient", patient);
 		//查询不合格标本记录
 		InvalidSample invalidSample = invalidSampleManager.getByPatientId(patientId);
@@ -529,4 +539,6 @@ public class ExecuteViewController {
 	private SampleManager sampleManager;
 	@Autowired
 	private SectionManager sectionManager;
+	@Autowired
+	private PatientManager patientManager;
 }
