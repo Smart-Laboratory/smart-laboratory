@@ -364,14 +364,14 @@ public class ExecuteController {
 				labOrder.setLaborder(doctadviseno);
 				labOrder.setLaborderorg(Long.parseLong(e.getYjsb()));
 				labOrder.setStayhospitalmode(stayhospitalmode);
-				labOrder.setRequestetime(e.getKdsj());
+				labOrder.setRequesttime(e.getKdsj());
 				labOrder.setExecutetime(executetime);
 				labOrder.setBirthday(ymd1.parse(patient.getCsrq()));
 				labOrder.setRequester(e.getSjysgh());
 				labOrder.setExecutor(user.getUsername());
 				
 				labOrder.setPatientid(e.getJzkh());
-				labOrder.setRequestdepartment(Integer.parseInt(e.getSjksdm()));
+				labOrder.setHossection(e.getSjksdm());
 				labOrder.setPatientname(patient.getName());
 				labOrder.setSex(Integer.parseInt(patient.getSex()));
 				labOrder.setBlh(Integer.parseInt(patient.getBlh()));
@@ -651,7 +651,7 @@ public class ExecuteController {
 							+"<span class='sfont' name='hosSection'>"+sectionUtil.getLabValue(l.getLabdepartment().toString())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:99%;float:left;'>"
-							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getRequestdepartment().toString())+"</span>"
+							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getHossection())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:190px;height:50px;margin-top:0px;float:left;'>"
 							+"<img src='/barcode?&msg="+l.getLaborder()+"     &hrsize=0mm' style='align:left;width:180px;height:50px;'/>"

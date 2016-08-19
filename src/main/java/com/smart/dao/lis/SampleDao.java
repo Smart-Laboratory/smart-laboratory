@@ -78,5 +78,8 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	
 	@Transactional
 	List<Sample> getOutList(String sender,Date sendtime);
+
+	@Transactional
+	Long getSampleId();
 	
 }

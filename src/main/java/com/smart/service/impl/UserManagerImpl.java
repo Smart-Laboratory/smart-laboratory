@@ -1,13 +1,10 @@
 package com.smart.service.impl;
 
+import com.smart.service.*;
 import org.apache.commons.lang.StringUtils;
 
 import com.smart.dao.UserDao;
 import com.smart.model.user.User;
-import com.smart.service.MailEngine;
-import com.smart.service.UserExistsException;
-import com.smart.service.UserManager;
-import com.smart.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

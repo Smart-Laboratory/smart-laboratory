@@ -2,7 +2,7 @@ function AddYlxh() {
 	clearData();
 	layer.open({
 		type: 1,
-		area: ['650px','420px'],
+		area: ['650px','450px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -58,10 +58,11 @@ function editYlxh() {
 	$('#profiletest3').val(rowData.ptest3);
 	$('#cjbw').val(rowData.cjbw);
 	$('#sgsl').val(rowData.sgsl);
+	$('#sfhb').val(rowData.sfhb);
 	
 	layer.open({
 		type: 1,
-		area: ['650px','420px'],
+		area: ['650px','450px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -201,7 +202,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-		colNames:['检验目的序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB'],
+		colNames:['检验目的序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:false},
     		{name:'ylmc',index:'ylmc',width:160, sortable:false},
@@ -216,12 +217,14 @@ function getList(lab) {
     		{name:'qbgdd',index:'qbgdd',width:50, sortable:false},
 			{name:'cjbw',index:'cjbw',width:50, sortable:false},
 			{name:'sgsl',index:'sgsl',width:50, sortable:false},
+			{name:'sfhbStr',index:'sfhbStr',width:50, sortable:false},
 			{name:'yblx',index:'yblx',hidden:true},
     		{name:'ptest',index:'ptest', hidden:true},
     		{name:'ptest2',index:'ptest2', hidden:true},
     		{name:'ptest3',index:'ptest3', hidden:true},
     		{name:'mzpb',index:'mzpb', hidden:true},
     		{name:'zypb',index:'zypb', hidden:true},
+			{name:'sfhb',index:'sfhb', hidden:true},
     	],
     	loadComplete : function() {
             var table = this;

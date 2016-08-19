@@ -101,8 +101,10 @@ public class YlsfController extends BaseAuditController {
 			map.put("english", y.getEnglish());
 			map.put("mzpb", y.getMzpb());
 			map.put("zypb", y.getZypb());
+			map.put("sfhb", y.getSfhb());
 			map.put("mzpbStr", y.getMzpb() == 1 ? "是" : "否");
 			map.put("zypbStr", y.getZypb() == 1 ? "是" : "否");
+			map.put("sfhbStr", y.getSfhb() == 1 ? "允许" : "不允许");
 			map.put("price", y.getPrice());
 			map.put("qbgdd", y.getQbgdd());
 			map.put("qbgsj", y.getQbgsj());

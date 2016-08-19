@@ -153,10 +153,10 @@
 								<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
 							</div>
 							<div class="col-sm-3 ">
-								<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
-								<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
+								<span class='col-sm-3'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-3'></b>
+								<span class='col-sm-3'><fmt:message key="patient.age" />:</span><b id="pAge" class='col-sm-3'></b>
 							</div>
-							<button class="btn btn-info btn-sm" id="sampleQuery" style="margin-top:-5px;">检验结果查询</button>
+							<button class="btn btn-info btn-minier" id="sampleQuery">检验结果查询</button>
 						</div>
 						<div class="col-sm-12">
 							<div id="warnLabel" class="alert alert-success col-sm-5" style="display: block; margin:5px 5px; padding: 0px 0px;">

@@ -114,4 +114,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public List<Sample> getOutList(String sender,Date sendtime){
 		return sampleDao.getOutList(sender, sendtime);
 	}
+
+	public Long getSampleId() {
+		return sampleDao.getSampleId();
+	}
 }

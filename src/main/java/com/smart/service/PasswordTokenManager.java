@@ -1,4 +1,4 @@
-package com.smart.service.impl;
+package com.smart.service;
 
 import com.smart.model.user.User;
 

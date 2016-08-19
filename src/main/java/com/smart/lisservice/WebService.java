@@ -6,6 +6,7 @@ import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
+import com.zju.api.model.ExecuteInfo;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
@@ -16,6 +17,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,6 +45,28 @@ public class WebService {
         return new SampleAndResultVo(new Sample(), new Process(), new TestResult());
     }
 
+    public List<String> getJCXM(String patientId, String from, String to) {
+        List<String> list = new ArrayList<String>();
+        try {
+            JSONObject obj = new JSONObject(client.path("getPatientRequestInfo")
+                    .replaceQueryParam("requestType","2")
+                    .replaceQueryParam("patientType","1")
+                    .replaceQueryParam("patientCode",patientId)
+                    .replaceQueryParam("fromDate",from)
+                    .replaceQueryParam("toDate",to)
+                    .accept(MediaType.APPLICATION_JSON).get(String.class));
+            if((Integer)obj.get("State")==1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    list.add(arr.getJSONObject(i).getString("itemName"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public Patient getPatient(String patientId) {
         Patient patient = new Patient();
         try {
@@ -51,15 +76,15 @@ public class WebService {
                     .accept(MediaType.APPLICATION_JSON).get(String.class));
             if((Integer)obj.get("State")==1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                patient.setAddress((String) arr.getJSONObject(0).get("PatientAddress"));
-                patient.setBirthday(Constants.SDF.parse((String)arr.getJSONObject(0).get("Birthday")));
-                patient.setBlh((String) arr.getJSONObject(0).get("PatientFileCode"));
-                patient.setIdCard((String) arr.getJSONObject(0).get("IdCard"));
-                patient.setSex((String) arr.getJSONObject(0).get("Sex"));
+                patient.setAddress(arr.getJSONObject(0).getString("PatientAddress"));
+                patient.setBirthday(Constants.SDF.parse(arr.getJSONObject(0).getString("Birthday")));
+                patient.setBlh(arr.getJSONObject(0).getString("PatientFileCode"));
+                patient.setIdCard(arr.getJSONObject(0).getString("IdCard"));
+                patient.setSex( arr.getJSONObject(0).getString("Sex"));
                 patient.setInfantFlag("0");
-                patient.setPatientId((String) arr.getJSONObject(0).get("PatientCode"));
-                patient.setPatientName((String) arr.getJSONObject(0).get("Name"));
-                patient.setPhone((String) arr.getJSONObject(0).get("PatientPhone"));
+                patient.setPatientId(arr.getJSONObject(0).getString("PatientCode"));
+                patient.setPatientName(arr.getJSONObject(0).getString("Name"));
+                patient.setPhone(arr.getJSONObject(0).getString("PatientPhone"));
             } else {
 
             }
@@ -67,6 +92,29 @@ public class WebService {
             e.printStackTrace();
         }
         return patient;
+    }
+
+    public List<ExecuteInfo> getExecuteInfo(String patientId, String requestmode, String from, String to) {
+        List<ExecuteInfo> list = new ArrayList<ExecuteInfo>();
+        try {
+            JSONObject obj = new JSONObject(client.path("getPatientRequestInfo")
+                    .replaceQueryParam("patientCode",patientId)
+                    .replaceQueryParam("executeStatus",requestmode)
+                    .replaceQueryParam("fromDate",from)
+                    .replaceQueryParam("toDate",to)
+                    .accept(MediaType.APPLICATION_JSON).get(String.class));
+            if((Integer)obj.get("State")==1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    ExecuteInfo ei = new ExecuteInfo();
+
+                    list.add(ei);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<ExecuteInfo>();
     }
 //    public String getBacteriaList(){
 //        ReturnMsg msg = service.getBacteriaList();

@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.sql.DataSource;
 
+import com.smart.service.PasswordTokenManager;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -64,7 +65,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see com.smart.service.impl.PasswordTokenManager#generateRecoveryToken(com.smart.model.user.User)
+     * @see PasswordTokenManager#generateRecoveryToken(com.smart.model.user.User)
      */
     @Override
     public String generateRecoveryToken(final User user) {
@@ -75,7 +76,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
     }
 
     /**
-     * @see com.smart.service.impl.PasswordTokenManager#isRecoveryTokenValid(com.smart.model.user.User, java.lang.String)
+     * @see PasswordTokenManager#isRecoveryTokenValid(com.smart.model.user.User, java.lang.String)
      */
     @Override
     public boolean isRecoveryTokenValid(final User user, final String token) {
@@ -84,7 +85,7 @@ public class PersistentPasswordTokenManagerImpl implements PasswordTokenManager 
 
     /**
      * 
-     * @see com.smart.service.impl.PasswordTokenManager#invalidateRecoveryToken(User, String)
+     * @see PasswordTokenManager#invalidateRecoveryToken(User, String)
      */
     @Override
     public void invalidateRecoveryToken(User user, String token) {

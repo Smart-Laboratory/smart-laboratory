@@ -27,7 +27,8 @@ public class Sample extends BaseObject {
 	private static final long serialVersionUID = -583231534825801731L;
 
 	private Long id;//主键，流水号
-	
+
+	private String barcode;	//样本条码，客户号+主键
 	private String patientId; // 病人 就诊号
 	private String patientname;
 	private Date birthday;
@@ -541,6 +542,15 @@ public class Sample extends BaseObject {
 
 	public void setSymstatus(int symstatus) {
 		this.symstatus = symstatus;
+	}
+
+	@Column
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 
 	@Transient
