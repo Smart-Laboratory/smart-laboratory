@@ -33,13 +33,13 @@ public class LabOrder {
 	private String patientid;
 	private String patientname;
 	private Integer sex=0;
-	private Integer blh;
+	private String blh;
 	private String age;
 
 	private String diagnostic;
 	private String hossection; //申请科室
 	private String sampletype;
-	private Double price;
+	private String price;
 	private Integer feestatus=0;
 	private String examitem;
 	private String ylxh;
@@ -52,7 +52,7 @@ public class LabOrder {
 	private Integer requestmode=0; //急诊标识
 	private String selfexecute;
 	private String toponymy; //采集部位
-	private  String cycle;		//生理周期
+	private Integer cycle;		//生理周期
 
 
 	@Id
@@ -154,10 +154,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Integer getBlh() {
+	public String getBlh() {
 		return blh;
 	}
-	public void setBlh(Integer blh) {
+	public void setBlh(String blh) {
 		this.blh = blh;
 	}
 	
@@ -187,10 +187,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Double getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(Double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 	
@@ -318,11 +318,11 @@ public class LabOrder {
 	}
 
 	@Column
-	public String getCycle() {
+	public int getCycle() {
 		return cycle;
 	}
 
-	public void setCycle(String cycle) {
+	public void setCycle(int cycle) {
 		this.cycle = cycle;
 	}
 

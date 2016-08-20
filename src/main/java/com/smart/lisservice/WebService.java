@@ -2,6 +2,7 @@ package com.smart.lisservice;
 
 import com.smart.Constants;
 import com.smart.model.doctor.SampleAndResultVo;
+import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.Patient;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
@@ -94,8 +95,8 @@ public class WebService {
         return patient;
     }
 
-    public List<ExecuteInfo> getExecuteInfo(String patientId, String requestmode, String from, String to) {
-        List<ExecuteInfo> list = new ArrayList<ExecuteInfo>();
+    public List<LabOrder> getExecuteInfo(String patientId, String requestmode, String from, String to) {
+        List<LabOrder> list = new ArrayList<LabOrder>();
         try {
             JSONObject obj = new JSONObject(client.path("getPatientRequestInfo")
                     .replaceQueryParam("patientCode",patientId)
@@ -106,15 +107,32 @@ public class WebService {
             if((Integer)obj.get("State")==1) {
                 JSONArray arr = obj.getJSONArray("Message");
                 for(int i = 0; i < arr.length(); i++) {
-                    ExecuteInfo ei = new ExecuteInfo();
-
-                    list.add(ei);
+                    LabOrder lo = new LabOrder();
+                    lo.setHossection(arr.getJSONObject(i).getString("KDKSID"));
+                    lo.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("BRCSRQ")));
+                    lo.setBlh(arr.getJSONObject(i).getString("BRDABH"));
+                    lo.setCycle(0);
+                    lo.setDiagnostic(arr.getJSONObject(i).getString("JBZDMC"));
+                    lo.setExamitem(arr.getJSONObject(i).getString("JCXMMC"));
+                    lo.setPatientid(arr.getJSONObject(i).getString("BRJZHM"));
+                    lo.setPatientname(arr.getJSONObject(i).getString("BRDAXM"));
+                    lo.setPrice(arr.getJSONObject(i).getString("FYHJJE"));
+                    lo.setRequester(arr.getJSONObject(i).getString("KDYSID"));
+                    lo.setRequestId(arr.getJSONObject(i).getString("SQJLID"));
+                    lo.setRequestmode(arr.getJSONObject(i).getInt("SFJZPB"));
+                    lo.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("SQKDRQ")));
+                    lo.setSex(arr.getJSONObject(i).getInt("BRDAXB"));
+                    lo.setStayhospitalmode(1);
+                    lo.setToponymy(arr.getJSONObject(i).getString("ZLBWMC"));
+                    lo.setYlxh(arr.getJSONObject(i).getString("JCXMID"));
+                    lo.setZxbz(arr.getJSONObject(i).getInt("SQZTBZ"));
+                    list.add(lo);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new ArrayList<ExecuteInfo>();
+        return new ArrayList<LabOrder>();
     }
 //    public String getBacteriaList(){
 //        ReturnMsg msg = service.getBacteriaList();

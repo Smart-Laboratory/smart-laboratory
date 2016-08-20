@@ -374,11 +374,11 @@ public class ExecuteController {
 				labOrder.setHossection(e.getSjksdm());
 				labOrder.setPatientname(patient.getName());
 				labOrder.setSex(Integer.parseInt(patient.getSex()));
-				labOrder.setBlh(Integer.parseInt(patient.getBlh()));
+				labOrder.setBlh(patient.getBlh());
 				
 				labOrder.setDiagnostic(e.getLzcd());
 				labOrder.setSampletype(sampletype);
-				labOrder.setPrice(fee);
+				labOrder.setPrice(String.valueOf(fee));
 				labOrder.setFeestatus(6);
 				labOrder.setExamitem(e.getYlmc());
 				labOrder.setYlxh(e.getYlxh());

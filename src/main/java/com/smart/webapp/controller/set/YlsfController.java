@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.YlxhUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -131,7 +132,8 @@ public class YlsfController extends BaseAuditController {
 	public String editYlxh(@ModelAttribute("ylxh") Ylxh ylxh) throws Exception {
 		JSONObject success = new JSONObject();
 		try {
-			ylxhManager.save(ylxh);
+			ylxh = ylxhManager.save(ylxh);
+			YlxhUtil.updateMap(ylxh);
 			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -170,7 +172,8 @@ public class YlsfController extends BaseAuditController {
 			} else {
 				y.setProfiletest3(profiletest);
 			}
-			ylxhManager.save(y);
+			y = ylxhManager.save(y);
+			YlxhUtil.updateMap(y);
 			success.put("success", profiletest);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

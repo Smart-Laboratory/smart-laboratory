@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.lisservice.WebService;
+import com.smart.model.lis.Ylxh;
+import com.smart.service.lis.*;
+import com.smart.webapp.util.YlxhUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +30,6 @@ import com.smart.model.lis.Sample;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.execute.LabOrderManager;
-import com.smart.service.lis.InvalidSampleManager;
-import com.smart.service.lis.PatientManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -120,15 +119,21 @@ public class ExecuteViewController {
 		String from=request.getParameter("from");
         String to=request.getParameter("to");
 
-		List<ExecuteInfo> eList = new WebService().getExecuteInfo(patientId, requestmode, from, to);
+		List<LabOrder> loList = new WebService().getExecuteInfo(patientId, requestmode, from, to);
+		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 		StringBuilder html = new StringBuilder();
+		LabOrder lo = new LabOrder();
+		Ylxh y = new Ylxh();
 		ExecuteInfo e = new ExecuteInfo();
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
-
+		for(int i = 0; i < loList.size(); i++) {
+			lo = loList.get(i);
+			y = ylxhMap.get(lo.getYlxh());
+		}
 		
-		for(int i=0;i<eList.size();i++){
+		/*for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
 			if(i==0)
 				recentInvoiceNum = e.getSfsb();
@@ -185,7 +190,7 @@ public class ExecuteViewController {
 								"<span >地点:</span><b id='qbgdd'>"+e.getQbgdd()+"</b>"+
 							"</div>");
 			html.append("</div></div>");
-		}
+		}*/
 		Map<String, String> map = new HashMap<String,String>();
 		map.put("html", html.toString());
 		return map;
@@ -527,4 +532,6 @@ public class ExecuteViewController {
 	private SectionManager sectionManager;
 	@Autowired
 	private PatientManager patientManager;
+	@Autowired
+	private YlxhManager ylxhManager;
 }
