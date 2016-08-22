@@ -122,15 +122,70 @@ public class ExecuteViewController {
 		List<LabOrder> loList = new WebService().getExecuteInfo(patientId, requestmode, from, to);
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 		StringBuilder html = new StringBuilder();
-		LabOrder lo = new LabOrder();
-		Ylxh y = new Ylxh();
-		ExecuteInfo e = new ExecuteInfo();
+		LabOrder labOrder = new LabOrder();
+		Ylxh ylxh = new Ylxh();
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
 		for(int i = 0; i < loList.size(); i++) {
-			lo = loList.get(i);
-			y = ylxhMap.get(lo.getYlxh());
+			labOrder = loList.get(i);
+			ylxh = ylxhMap.get(labOrder.getYlxh());
+			labOrder.setSampletype(ylxh.getYblx());
+			labOrder.setQbgdt(ylxh.getQbgdd());
+			labOrder.setQbgsj(ylxh.getQbgsj());
+			labOrder.setLabdepartment(ylxh.getKsdm());
+
+			/*if(i%2==1){
+				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
+			}else{
+				html.append("<div  id='date"+i+"' class='alert alert-success sampleInfo' style='' >");
+			}
+			String bmp = "";
+			if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
+				bmp ="../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()) +".bmp";
+			}
+
+			String mode = "" + labOrder.getRequestmode();
+			if(mode==null)
+				mode="0";
+			String reportTimeAndDd = takeReportTime(ylxh.getQbgsj().toLowerCase(), labOrder.getHossection(), mode,ylxh.getQbgdd());
+			String reportTime = reportTimeAndDd.split("-")[0];
+			if(reportTimeAndDd.split("-")[1]!=null)
+				e.setQbgdd(reportTimeAndDd.split("-")[1]);
+			if(reportTime.contains("不能抽血") || reportTime.contains("勿"))
+				e.setSl("-900");
+			e.setQbgsj(reportTime);
+			e.setZxksdm(e.getZxksdm().trim());
+
+			if(e.getSfsb().equals(recentInvoiceNum)){
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-6'><label><input type='checkbox' checked value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
+			}else{
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-6'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
+			}
+			if(!bmp.isEmpty()){
+				html.append("<div class='col-sm-4'><img src='"+bmp+"' alt='"+e.getHyfl()+"' width='30px' height='50px' /></div>");
+			}
+			if(e.getHyjg().substring(0, 1).equals("1")){
+				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>");
+			}
+			html.append("</div>");
+			html.append("<div class='col-sm-11' style=''>");
+			html.append("<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+e.getYlmc()+"</b>"+
+					"<span >发票号:</span><b id='sfsb'>"+e.getSfsb()+"</b>"+
+					"<span >单价:</span><b id='dj'>"+e.getDj()+"</b>"+
+					"×<b id='sl'>"+e.getSl()+"</b>"+
+					"<span >执行科室:</span><b id='ksdm'>"+sectionUtil.getValue(e.getZxksdm())+"</b>"+
+					"</div>"+
+					"<div><span >医嘱号:</span><b id='doctadviseno'>"+e.getDoctadviseno()+"</b>"
+					+ "<span >报告时间:</span><b id='qbgsj'>"+e.getQbgsj()+"</b>"+
+					"<span >申请时间:</span><b id='kdsj'>"+Constants.DF8.format(e.getKdsj())+"</b>"+
+					"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(e.getSjksdm())+"</b>"+
+					"<span >地点:</span><b id='qbgdd'>"+e.getQbgdd()+"</b>"+
+					"</div>");
+			html.append("</div></div>");*/
+
 		}
 		
 		/*for(int i=0;i<eList.size();i++){

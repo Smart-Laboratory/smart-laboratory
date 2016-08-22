@@ -382,7 +382,7 @@ public class ExecuteController {
 				labOrder.setFeestatus(6);
 				labOrder.setExamitem(e.getYlmc());
 				labOrder.setYlxh(e.getYlxh());
-				labOrder.setLabdepartment(Integer.parseInt(e.getZxksdm()));
+				labOrder.setLabdepartment(e.getZxksdm());
 				labOrder.setComputername(user.getUsername()); //抽血电脑编号
 				labOrder.setPrintflag(0);
 				labOrder.setReceiveflag(0);

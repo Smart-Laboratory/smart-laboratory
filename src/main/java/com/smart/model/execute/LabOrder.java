@@ -43,7 +43,7 @@ public class LabOrder {
 	private Integer feestatus=0;
 	private String examitem;
 	private String ylxh;
-	private Integer labdepartment=0; //检验科室
+	private String labdepartment; //检验科室
 	private String computername;
 	private Integer printflag=0;
 	private Integer receiveflag=0;
@@ -219,10 +219,10 @@ public class LabOrder {
 	}
 	
 	@Column(name="labdepartment")
-	public Integer getLabdepartment() {
+	public String getLabdepartment() {
 		return labdepartment;
 	}
-	public void setLabdepartment(Integer labdepartment) {
+	public void setLabdepartment(String labdepartment) {
 		this.labdepartment = labdepartment;
 	}
 	
