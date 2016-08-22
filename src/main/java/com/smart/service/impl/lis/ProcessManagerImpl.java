@@ -42,4 +42,16 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 		return processDao.getOutList(sender, starttime);
 	}
 	
+	public List<Process> getReceiveList(String sender, Date starttime, Date endtime,int start,int end){
+		return processDao.getReceiveList(sender, starttime, endtime, start, end);
+	}
+	
+	public int getReceiveListCount(String sender, Date starttime, Date endtime){
+		return processDao.getReceiveListCount(sender, starttime, endtime);
+	}
+	
+	public List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState){
+		return processDao.getReceiveListBySection(section, starttime, endtime,sampleState);
+	}
+	
 }

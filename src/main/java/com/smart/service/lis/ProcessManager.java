@@ -18,4 +18,16 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 	
 	List<Process> getOutList(String sender, Date starttime);
 
+	List<Process> getReceiveList(String sender, Date starttime, Date endtime,int start,int end);
+	
+	int getReceiveListCount(String sender, Date starttime, Date endtime);
+	
+	/**
+	 * 根据科室id查询样本接收记录
+	 * @param section
+	 * @param starttime
+	 * @param endtime
+	 * @return
+	 */
+	List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState);
 }

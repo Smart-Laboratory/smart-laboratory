@@ -68,8 +68,10 @@ function getSample(docNo) {
 
 function getList(from, to, name, type) {
 	var width=$("#searchHeader").width();
+	var sampleState = $("#sampleState").val();
 	var mygrid = jQuery("#s3list").jqGrid({
-    	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" + type, 
+    	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" 
+    			+ type + "&sampleState=" +sampleState, 
     	datatype: "json", 
     	width: width, 
     	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间'], 
@@ -145,7 +147,8 @@ $(function() {
             	url: "../doctor/sampleTrace/ajax/searchSection",
                 dataType: "json",
                 data: {
-                    name : request.term
+                    name : request.term,
+                    type : $("#search_select").val()
                 },
                 success: function( data ) {
   					
@@ -162,12 +165,12 @@ $(function() {
         },
         minLength: 1
 	});
-    if($('#search_select').val() !=1){
+    if($('#search_select').val() !=1 && $('#search_select').val() !=4){
     	$( "#search_text" ).autocomplete( "disable" );
     }
     
     $('#search_select').change(function(){
-		if($(this).children('option:selected').val() == 1) {
+		if($(this).children('option:selected').val() == 1 || $('#search_select').val() !=4) {
 			$( "#search_text" ).autocomplete( "enable" );
 		} else {
 			$( "#search_text" ).autocomplete( "disable" );
@@ -188,7 +191,7 @@ $(function() {
 		}
 
 		jQuery("#s3list").jqGrid("setGridParam",{
-			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type
+			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type+ "&sampleState=" +$("#sampleState").val()
 		}).trigger("reloadGrid"); 
 		
 	});
@@ -234,8 +237,24 @@ $(function() {
 		}
 	});
 	
-	var date = new Date();
-	var today = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
-	$("#from").val(today);
-	$("#to").val(today);
+	$("#from").val(new Date().Format("yyyy-MM-dd"));
+	$("#to").val(new Date().Format("yyyy-MM-dd"));
 });
+Date.prototype.Format = function(fmt)   
+{ //author: meizz   
+  var o = {   
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  return fmt;   
+};

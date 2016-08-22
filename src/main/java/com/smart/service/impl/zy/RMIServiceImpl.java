@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.smart.util.ConvertUtil;
-import org.apache.commons.collections.functors.IfClosure;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -229,7 +227,7 @@ public class RMIServiceImpl implements RMIService {
                 return p;
             }
         });
-		if(list != null) {
+		if(list != null && list.size()>0) {
 			return list.get(0);
 		}
 		return null;
@@ -285,7 +283,7 @@ public class RMIServiceImpl implements RMIService {
             }
 		});
 		if(list.size() > 10) {
-			list = list.subList(0, 5);
+			list = list.subList(0, 10);
 		}
 		return list;
 	}
@@ -596,7 +594,7 @@ public class RMIServiceImpl implements RMIService {
 	}
 	
 	public YLSF getYlsf(String ylxh){
-		String sql = "select * from gy_ylsf where ylxh ="+ylxh;
+		String sql = "select * from gy_ylsf where ylxh = '"+ylxh+"'";
 		List<YLSF> ylsfs = jdbcTemplate.query(sql, new RowMapper<YLSF>() {
 		    public YLSF mapRow(ResultSet rs, int rowNum) throws SQLException {
 		        YLSF p = new YLSF();
@@ -612,6 +610,22 @@ public class RMIServiceImpl implements RMIService {
 	public List<SyncPatient> getOutList(String sender,Date sendtime){
 		String sql = "select * from l_patientinfo p where p.sender='"+sender+"' and p.sendtime between "
 				+ "to_date('"+ymdh.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+ymd.format(sendtime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
+		System.out.println(sql);
+		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
+		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        SyncPatient p = new SyncPatient();
+		        setField(rs, p);
+		        return p;
+		    }
+		});
+	}
+	/**
+	 * 根据医嘱号字符串 取样本信息
+	 * @param doctadvisenos
+	 * @return
+	 */
+	public List<SyncPatient> getByDoctadvisenos(String doctadvisenos){
+		String sql = "select * from l_patientinfo p where p.doctadviseno in ("+doctadvisenos+") ";
 		System.out.println(sql);
 		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
 		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {

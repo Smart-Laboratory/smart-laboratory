@@ -72,6 +72,18 @@
 				<option value="2">姓名</option>
 				<option value="3"><fmt:message key='patient.blh'/></option>
 				<option value="4"><fmt:message key='sample.id'/></option>
+				<option value="5">接收科室</option>
+			</select>
+		</td>
+		<td>
+			<label for="sampleState" style="margin-left: 50px;">样本状态</label>
+			<select id="sampleState" class="select">
+				<option value="1">全部</option>
+				<option value="2">已采集</option>
+				<option value="3">已送出</option>
+				<option value="4">科室接收</option>
+				<option value="5">组内接收</option>
+				<option value="6">已审核</option>
 			</select>
 		</td>
 		<td>

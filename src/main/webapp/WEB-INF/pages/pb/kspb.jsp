@@ -80,7 +80,7 @@ function changeType(select) {
 	if(select.value == 8){
 		window.location.href="../pb/sxpb?month=" + $("#date").val();
 	}else{
-		window.location.href="../pb/pb?section="+$("#jykCode").val();+"&type=" + select.value+"&date=" + $("#date").val();
+		window.location.href="../pb/pb?section="+$("#jykCode").val()+"&type=" + select.value+"&date=" + $("#date").val();
 	}
 	
 }

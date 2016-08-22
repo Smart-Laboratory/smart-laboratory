@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
@@ -202,12 +203,12 @@ public class SxgroupPbController {
         		} else if(arrMap.get(name + "-" + l).getShift().contains("公休")){
         			shifts[l][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l).getShift().replace("公休;", "")+"</td>";
         		} else{
-        			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' >" + arrMap.get(name + "-" + l).getShift() + "</td>";
+        			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' >" + arrMap.get(name + "-" + l).getShift().replace(";", ";<br>") + "</td>";
         		}
         		if(arrMap.get(name + "-" + l) != null && arrMap.get(name + "-" + l).getState()<5){
         			shifts[l][k] = shifts[l][k].replace("<td", "<td style='background:#63B8FF'");
         		}
-        		if(sxMap!=null && sxMap.containsKey(name + "-" + l))
+        		if(sxMap!=null && sxMap.containsKey(name + "-" + l) && !section.equals(Constants.LaboratoryCode))
         			shifts[l][k] = shifts[l][k].replace("class='", "class='sx ");
 //        			shifts[l][k] = shifts[l][k].replace("class='", "class='sx ").replace("</td>", "<span class='glyphicon glyphicon-ok'></span> </td>");
             }
@@ -226,14 +227,14 @@ public class SxgroupPbController {
         
         String arrDate = "";
 		for(int k=0;k<i;k++){
-			if(i==0)
+			if(k==0)
 				arrDate += "<thead class='fixedHeader'><tr>";
 			else
 				arrDate += "<tr>";
 			for(int g=0; g<maxDay+2;g++){
 				arrDate += shifts[g][k];
 			}
-			if(i==1)
+			if(k==0)
 				arrDate += "</tr></thead><tbody class='scrollContent'>";
 			else
 				arrDate += "</tr>";
@@ -246,7 +247,7 @@ public class SxgroupPbController {
 	}
 		
 	private Map<WInfo, String> getSxWinfoList(String section,String tomonth){
-		
+		String sectionCode = section;
 		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
@@ -271,7 +272,7 @@ public class SxgroupPbController {
 				if(a.getSection()==null || a.getSection().isEmpty()){
 					continue;
 				}
-				if(sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section)){
+				if(sectionCode.equals(Constants.LaboratoryCode) || (sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section))){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
 					if(wInfo==null)
 						continue;

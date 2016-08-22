@@ -444,6 +444,10 @@ public class PbController {
 	
 	
 	public List<WInfo> getWinfoBySection(String tomonth, String section){
+		if(section.equals(Constants.LaboratoryCode)){
+			return wInfoManager.getByType(2);
+		}
+		
 		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));

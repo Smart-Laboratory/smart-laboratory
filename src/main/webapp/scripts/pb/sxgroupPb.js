@@ -3,6 +3,7 @@
 $(function() {
 	$("#labSelect").val($("#section").val());
 	$("#pbdata").html($("#pbtext").val());
+	$(".footer").css("display","none");
 	
 	$("#pbdata tr td").click(function(){
 		var id=this.id;

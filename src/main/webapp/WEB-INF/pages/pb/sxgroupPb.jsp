@@ -18,7 +18,7 @@
 <style>
 thead.fixedHeader tr {
 	position: relative;
-	display: block
+	display: block;
 }
 html>body thead.fixedHeader {
 	overflow-y: scroll;	
@@ -32,12 +32,12 @@ html>body tbody.scrollContent {
 }
 
 table tr th {
-	width:100px;
+	width:40px;
 	height:24px;
 	text-align:center;
 }
 table tr td {
-	width:100px;
+	width:40px;
 	height:24px;
 }
 
