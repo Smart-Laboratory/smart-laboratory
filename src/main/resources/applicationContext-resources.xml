@@ -73,5 +73,6 @@
 
     <bean id="webClient" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
         <constructor-arg type="java.lang.String" value="http://10.31.96.38:8080/lisservice/services/rest/" />
+        <!--<constructor-arg type="java.lang.String" value="http://192.168.168.12:8080/lisservice/services/rest/" />-->
     </bean>
 </beans>

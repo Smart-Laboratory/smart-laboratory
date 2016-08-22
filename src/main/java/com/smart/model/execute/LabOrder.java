@@ -17,31 +17,33 @@ import javax.persistence.Table;
 public class LabOrder {
 
 	private Long laborder; //医嘱号，自增长
-	
+
+	private String requestId;
+	private String bed;
 	private Long laborderorg; //yjsb
 	private String sampleno;
 	private Integer stayhospitalmode=0;
-	private Date requestetime;
+	private Date requesttime;
 	private String requester;
 	private Date executetime;
 	private String executor;
 	private Integer zxbz=0;//采样执行标志
-	
+
 	private Date birthday;
 	private String patientid;
 	private String patientname;
 	private Integer sex=0;
-	private Integer blh;
+	private String blh;
 	private String age;
-	
+
 	private String diagnostic;
-	private Integer requestdepartment=0; //申请科室
+	private String hossection; //申请科室
 	private String sampletype;
-	private Double price;
+	private String price;
 	private Integer feestatus=0;
 	private String examitem;
 	private String ylxh;
-	private Integer labdepartment=0; //检验科室
+	private String labdepartment; //检验科室
 	private String computername;
 	private Integer printflag=0;
 	private Integer receiveflag=0;
@@ -49,11 +51,10 @@ public class LabOrder {
 	private String qbgdt;
 	private Integer requestmode=0; //急诊标识
 	private String selfexecute;
-	
-	private String sectionStr=""; //科室名称
-	private String requestdepartmentStr="";
-	
-	
+	private String toponymy; //采集部位
+	private Integer cycle;		//生理周期
+
+
 	@Id
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LABORDER")
 //	@SequenceGenerator(name = "SEQ_LABORDER", sequenceName = "laborder_sequence", allocationSize = 1)
@@ -89,11 +90,11 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Date getRequestetime() {
-		return requestetime;
+	public Date getRequesttime() {
+		return requesttime;
 	}
-	public void setRequestetime(Date requestetime) {
-		this.requestetime = requestetime;
+	public void setRequesttime(Date requesttime) {
+		this.requesttime = requesttime;
 	}
 	
 	@Column
@@ -153,10 +154,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Integer getBlh() {
+	public String getBlh() {
 		return blh;
 	}
-	public void setBlh(Integer blh) {
+	public void setBlh(String blh) {
 		this.blh = blh;
 	}
 	
@@ -167,15 +168,16 @@ public class LabOrder {
 	public void setDiagnostic(String diagnostic) {
 		this.diagnostic = diagnostic;
 	}
-	
+
 	@Column
-	public Integer getRequestdepartment() {
-		return requestdepartment;
+	public String getHossection() {
+		return hossection;
 	}
-	public void setRequestdepartment(Integer requestdepartment) {
-		this.requestdepartment = requestdepartment;
+
+	public void setHossection(String hossection) {
+		this.hossection = hossection;
 	}
-	
+
 	@Column(name="specimen")
 	public String getSampletype() {
 		return sampletype;
@@ -185,10 +187,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Double getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(Double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 	
@@ -217,10 +219,10 @@ public class LabOrder {
 	}
 	
 	@Column(name="labdepartment")
-	public Integer getLabdepartment() {
+	public String getLabdepartment() {
 		return labdepartment;
 	}
-	public void setLabdepartment(Integer labdepartment) {
+	public void setLabdepartment(String labdepartment) {
 		this.labdepartment = labdepartment;
 	}
 	
@@ -287,23 +289,43 @@ public class LabOrder {
 	public void setSelfexecute(String selfexecute) {
 		this.selfexecute = selfexecute;
 	}
-	
-	@Transient
-	public String getSectionStr() {
-		return sectionStr;
-	}
-	public void setSectionStr(String sectionStr) {
-		this.sectionStr = sectionStr;
+
+	@Column
+	public String getRequestId() {
+		return requestId;
 	}
 
-	@Transient
-	public String getRequestdepartmentStr() {
-		return requestdepartmentStr;
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
-	public void setRequestdepartmentStr(String requestdepartmentStr) {
-		this.requestdepartmentStr = requestdepartmentStr;
+
+	@Column
+	public String getBed() {
+		return bed;
 	}
-	
+
+	public void setBed(String bed) {
+		this.bed = bed;
+	}
+
+	@Column
+	public String getToponymy() {
+		return toponymy;
+	}
+
+	public void setToponymy(String toponymy) {
+		this.toponymy = toponymy;
+	}
+
+	@Column
+	public int getCycle() {
+		return cycle;
+	}
+
+	public void setCycle(int cycle) {
+		this.cycle = cycle;
+	}
+
 	@Transient
 	public String getAge() {
 		if (birthday != null) {

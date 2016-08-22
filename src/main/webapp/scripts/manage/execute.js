@@ -28,14 +28,13 @@ function getData(item,event){
 			if(jzkh==null || jzkh.length=="")
 				return;
 			$("laborder").val("");
-			$.get("../manage/execute/getPatient",{patientId:jzkh},function(data){
+			$.get("../manage/execute/getPatient",{patientId:jzkh,from:$("#from").val(),to:$("#to").val()},function(data){
 				//先清空数据
-				$("#blh").html("");$("#patientId").html("");$("#pName").html("");$("#pSex").html("");$("#pCsrq").html("");
+				$("#blh").html("");$("#patientId").html("");$("#pName").html("");$("#pSex").html("");$("#pAge").html("");
 				//插入数据
 				var patient = data.patient;
 				var invalidsample = data.invalidsample;
-				var csrq = patient.csrq;
-				$("#blh").html(patient.blh);$("#patientId").html(patient.patientId);$("#pName").html(patient.name);$("#pSex").html(patient.sex);$("#pCsrq").html(csrq.split(".")[0]);
+				$("#blh").html(patient.blh);$("#patientId").html(patient.patientId);$("#pName").html(patient.patientName);$("#pSex").html(patient.sexValue);$("#pAge").html(patient.age);
 				if(invalidsample !=null ){
 					$("#warnLabel").html("不合格标本登记：<b>"+invalidsample+"</b>  ");
 				}
@@ -62,6 +61,9 @@ function getData(item,event){
 						$("#samplehis").append("</div>");
 					}
 				}
+                $("#examtodo").html("");
+                if(data.examtodo!=null)
+                    $("#examtodo").html("待做项："+data.examtodo);
 			});
 			
 			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){

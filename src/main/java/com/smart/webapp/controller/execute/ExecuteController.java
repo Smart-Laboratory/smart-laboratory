@@ -364,25 +364,25 @@ public class ExecuteController {
 				labOrder.setLaborder(doctadviseno);
 				labOrder.setLaborderorg(Long.parseLong(e.getYjsb()));
 				labOrder.setStayhospitalmode(stayhospitalmode);
-				labOrder.setRequestetime(e.getKdsj());
+				labOrder.setRequesttime(e.getKdsj());
 				labOrder.setExecutetime(executetime);
 				labOrder.setBirthday(ymd1.parse(patient.getCsrq()));
 				labOrder.setRequester(e.getSjysgh());
 				labOrder.setExecutor(user.getUsername());
 				
 				labOrder.setPatientid(e.getJzkh());
-				labOrder.setRequestdepartment(Integer.parseInt(e.getSjksdm()));
+				labOrder.setHossection(e.getSjksdm());
 				labOrder.setPatientname(patient.getName());
 				labOrder.setSex(Integer.parseInt(patient.getSex()));
-				labOrder.setBlh(Integer.parseInt(patient.getBlh()));
+				labOrder.setBlh(patient.getBlh());
 				
 				labOrder.setDiagnostic(e.getLzcd());
 				labOrder.setSampletype(sampletype);
-				labOrder.setPrice(fee);
+				labOrder.setPrice(String.valueOf(fee));
 				labOrder.setFeestatus(6);
 				labOrder.setExamitem(e.getYlmc());
 				labOrder.setYlxh(e.getYlxh());
-				labOrder.setLabdepartment(Integer.parseInt(e.getZxksdm()));
+				labOrder.setLabdepartment(e.getZxksdm());
 				labOrder.setComputername(user.getUsername()); //抽血电脑编号
 				labOrder.setPrintflag(0);
 				labOrder.setReceiveflag(0);
@@ -651,7 +651,7 @@ public class ExecuteController {
 							+"<span class='sfont' name='hosSection'>"+sectionUtil.getLabValue(l.getLabdepartment().toString())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:99%;float:left;'>"
-							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getRequestdepartment().toString())+"</span>"
+							+"<span class='sfont' name='hosSection'>"+sectionUtil.getValue(l.getHossection())+"</span>"
 						+"</div>"
 						+"<div class='col-sm-12' style='width:190px;height:50px;margin-top:0px;float:left;'>"
 							+"<img src='/barcode?&msg="+l.getLaborder()+"     &hrsize=0mm' style='align:left;width:180px;height:50px;'/>"

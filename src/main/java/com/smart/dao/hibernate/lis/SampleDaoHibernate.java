@@ -508,4 +508,9 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 				+ "to_date('"+ymd.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
 		return getSession().createQuery(sql).list();
 	}
+
+	public Long getSampleId() {
+	    String sql = "select sample_sequence.nextval from dual";
+        return (Long) getSession().createSQLQuery(sql).uniqueResult();
+    }
 }

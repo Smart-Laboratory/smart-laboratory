@@ -28,8 +28,14 @@ public class Ylxh extends BaseObject {
 	private String ylmc;		//医疗名称
 	private String ksdm;		//科室代码
 	private String english;
+<<<<<<< HEAD
 	private int mzpb=0;
 	private int zypb=0;
+=======
+	private int mzpb;
+	private int zypb;
+	private int sfhb;		//是否允许合并检验目的
+>>>>>>> origin/master
 	private String price;
 	private String qbgdd;	//取报告地点
 	private String qbgsj;	//取报告时间
@@ -209,6 +215,15 @@ public class Ylxh extends BaseObject {
 
 	public void setSgsl(int sgsl) {
 		this.sgsl = sgsl;
+	}
+
+	@Column
+	public int getSfhb() {
+		return sfhb;
+	}
+
+	public void setSfhb(int sfhb) {
+		this.sfhb = sfhb;
 	}
 
 	public String toString() {

@@ -86,4 +86,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getReceiveList(String text, String lab);
 	
 	List<Sample> getOutList(String sender,Date sendtime);
+
+	Long getSampleId();
 }
