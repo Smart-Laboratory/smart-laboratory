@@ -134,7 +134,50 @@ public class WebService {
         }
         return new ArrayList<LabOrder>();
     }
-//    public String getBacteriaList(){
+
+    /**
+     * 获取住院病人列表信息
+     * @param ward  病区
+     * @return
+     */
+    public List<LabOrder> getInExcuteInfo(String ward){
+        List<LabOrder> list = new ArrayList<LabOrder>();
+        try {
+            JSONObject obj = new JSONObject(client.path("getInPatientRequestInfo")
+                    .replaceQueryParam("ward",ward)
+                    .accept(MediaType.APPLICATION_JSON).get(String.class));
+            if((Integer)obj.get("State")==1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    LabOrder lo = new LabOrder();
+                    lo.setHossection(arr.getJSONObject(i).getString("KDKSID"));
+                    lo.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("BRCSRQ")));
+                    lo.setBlh(arr.getJSONObject(i).getString("BRDABH"));
+                    lo.setCycle(0);
+                    lo.setDiagnostic(arr.getJSONObject(i).getString("JBZDMC"));
+                    lo.setExamitem(arr.getJSONObject(i).getString("JCXMMC"));
+                    lo.setPatientid(arr.getJSONObject(i).getString("BRJZHM"));
+                    lo.setPatientname(arr.getJSONObject(i).getString("BRDAXM"));
+                    lo.setPrice(arr.getJSONObject(i).getString("FYHJJE"));
+                    lo.setRequester(arr.getJSONObject(i).getString("KDYSID"));
+                    lo.setRequestId(arr.getJSONObject(i).getString("SQJLID"));
+                    lo.setRequestmode(arr.getJSONObject(i).getInt("SFJZPB"));
+                    lo.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("SQKDRQ")));
+                    lo.setSex(arr.getJSONObject(i).getInt("BRDAXB"));
+                    lo.setStayhospitalmode(2);      //门诊 1 住院2 体检3
+                    lo.setToponymy(arr.getJSONObject(i).getString("ZLBWMC"));
+                    lo.setYlxh(arr.getJSONObject(i).getString("JCXMID"));
+                    lo.setZxbz(arr.getJSONObject(i).getInt("SQZTBZ"));
+                    list.add(lo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<LabOrder>();
+
+    }
+    //    public String getBacteriaList(){
 //        ReturnMsg msg = service.getBacteriaList();
 //        return (String)msg.getMessage();
 //    }

@@ -54,7 +54,6 @@ public class LabOrder {
 	private String toponymy; //采集部位
 	private Integer cycle;		//生理周期
 
-
 	@Id
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LABORDER")
 //	@SequenceGenerator(name = "SEQ_LABORDER", sequenceName = "laborder_sequence", allocationSize = 1)
