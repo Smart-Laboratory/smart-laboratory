@@ -27,12 +27,16 @@
 #tests input[type=checkbox]{
 	width:50px;
 	height:50px;
-	margin-top:5px;
+	margin:0px;
 }
 
 #cxhis span{
 	margin:2px 5px;
 }
+	.alert {
+		padding:8px;
+	}
+
 
 </style>
 

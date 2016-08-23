@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.UserUtil;
 import org.codehaus.jettison.json.JSONObject;
 import org.drools.core.base.evaluators.IsAEvaluatorDefinition.IsAEvaluator;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -60,8 +61,21 @@ public class ExecuteController {
 	private static SimpleDateFormat ymdh = new SimpleDateFormat("yyyy年MM月dd日 HH:mm(EEE)" );
 	
 	private Map<String, String> sampleTypeMap = new HashMap<String,String>();
-	
+
 	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
+	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+		String patientId = request.getParameter("patientId");
+		String mode = request.getParameter("requestmode");
+		String selfexecute = request.getParameter("selfexecute");
+		String from=request.getParameter("from");
+		String to=request.getParameter("to");
+
+
+		return "";
+	}
+	
+	/*@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
@@ -75,7 +89,7 @@ public class ExecuteController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		List<ExecuteInfo> eList = rmiService.gExecuteInfo(patientId, mode, from, to);
 		
 		String selval = request.getParameter("selval");
@@ -409,7 +423,7 @@ public class ExecuteController {
 		response.getWriter().write(o.toString());
 		
 		return null;
-	}
+	}*/
 	
 	//生成样本号
 	public String getautoSampleno(int nextDay,String lab,int type){

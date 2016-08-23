@@ -50,6 +50,7 @@ public class LabOrder {
 	private String qbgsj;
 	private String qbgdt;
 	private Integer requestmode=0; //急诊标识
+	private Integer requestNum = 1; //申请数量
 	private String selfexecute;
 	private String toponymy; //采集部位
 	private Integer cycle;		//生理周期
@@ -324,6 +325,15 @@ public class LabOrder {
 
 	public void setCycle(int cycle) {
 		this.cycle = cycle;
+	}
+
+	@Column
+	public Integer getRequestNum() {
+		return requestNum;
+	}
+
+	public void setRequestNum(Integer requestNum) {
+		this.requestNum = requestNum;
 	}
 
 	@Transient

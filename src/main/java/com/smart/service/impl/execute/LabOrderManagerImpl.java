@@ -29,8 +29,8 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 		return labOrderDao.getByIds(ids);
 	}
 	
-	public List<LabOrder> getByPatientId(String patientId){
-		return labOrderDao.getByPatientId(patientId);
+	public List<LabOrder> getByPatientId(String patientId, String from, String to){
+		return labOrderDao.getByPatientId(patientId, from, to);
 	}
 	
 }
