@@ -51,8 +51,9 @@ public class ExecuteViewController {
         String to=request.getParameter("to");
 
         Patient patient = patientManager.getByPatientId(patientId);
+		WebService webService = new WebService();
 		if(patient == null) {
-			patient = new WebService().getPatient(patientId);
+			patient = webService.getPatient(patientId);
 			if(patientManager.getByBlh(patient.getBlh()) != null) {
 				patient = patientManager.getByBlh(patient.getBlh());
 				patient.setPatientId(patient.getPatientId() + "," + patientId);
@@ -93,7 +94,7 @@ public class ExecuteViewController {
 		}
         //待查项目
         String examtodo="";
-        List<String> exams = new WebService().getJCXM(patientId, from, to);
+        List<String> exams = webService.getJCXM(patientId, from, to);
         for(String exam : exams){
             if(!examtodo.contains(exam)){
                 if(examtodo.isEmpty())
@@ -117,10 +118,12 @@ public class ExecuteViewController {
 		System.out.println(requestmode);
 
 		List<LabOrder> loList = new ArrayList<LabOrder>();
+		WebService webService = new WebService();
 		if(requestmode.equals("0")) {
-			loList.addAll(new WebService().getExecuteInfo(patientId, requestmode, from, to));
+			loList.addAll(webService.getExecuteInfo(patientId, requestmode, from, to));
 		} else if(requestmode.equals("100")){
-
+			loList.addAll(webService.getExecuteInfo(patientId, "0", from, to));
+			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
 		} else {
 			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
 		}
@@ -140,6 +143,8 @@ public class ExecuteViewController {
 			labOrder.setQbgsj(ylxh.getQbgsj());
 			labOrder.setLabdepartment(ylxh.getKsdm());
 
+			System.out.println("执行标志：" + labOrder.getZxbz());
+
 			if(i%2==1){
 				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
 			}else{
@@ -150,8 +155,13 @@ public class ExecuteViewController {
 				bmp ="../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()) +".bmp";
 			}
 			String reportTime = ylxh.getQbgsj() + "-" + ylxh.getQbgdd();
-			html.append("<div class='col-sm-1' style=''>"+
-					"<div class='col-sm-7'><label><input type='checkbox' value='"+labOrder.getRequestId()+ "+" +ylxh.getYlxh()+"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+			if(labOrder.getZxbz() == 0) {
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-7'><label><input type='checkbox' checked value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz() +"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+			} else {
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-7'><label><input type='checkbox' value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz()+"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+			}
 			if(!bmp.isEmpty()){
 				html.append("<div class='col-sm-5'><img src='"+bmp+"' alt='"+ylxh.getSglx() + " " + ylxh.getBbl()+"' width='30px' height='50px' /></div>");
 			}

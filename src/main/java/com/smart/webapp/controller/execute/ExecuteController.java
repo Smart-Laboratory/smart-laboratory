@@ -1,18 +1,15 @@
 package com.smart.webapp.controller.execute;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.lisservice.WebService;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.UserUtil;
+import com.smart.webapp.util.YlxhUtil;
 import org.codehaus.jettison.json.JSONObject;
 import org.drools.core.base.evaluators.IsAEvaluatorDefinition.IsAEvaluator;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -65,14 +62,315 @@ public class ExecuteController {
 	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
-		String patientId = request.getParameter("patientId");
-		String mode = request.getParameter("requestmode");
-		String selfexecute = request.getParameter("selfexecute");
-		String from=request.getParameter("from");
-		String to=request.getParameter("to");
+		String selfExecute = request.getParameter("selfexecute");
+		String selectValue = request.getParameter("selval");
+		String unExecuteRequestIds = "";
+		String executeRequestIds = "";
+
+		String examinaim="",labDepart="",sampleNo="",ybh_like="",ylxhDescribe="";
+		double fee=0;
+		boolean sampleNoExist = false ;
+		Date executeTime = new Date();
+		double time=0,day=0;
+		int nextDay=0;
+
+		for(String str : selectValue.split(";")){
+			if(str!=null && !str.isEmpty()){
+				if(str.split("\\+")[1].equals("0")) {
+					if(unExecuteRequestIds.isEmpty()) {
+						unExecuteRequestIds = str.split("\\+")[0];
+					} else {
+						unExecuteRequestIds += "," + str.split("\\+")[0];
+					}
+				} else {
+					if(executeRequestIds.isEmpty()) {
+						executeRequestIds = str.split("\\+")[0];
+					} else {
+						executeRequestIds += "," + str.split("\\+")[0];
+					}
+				}
+
+			}
+		}
+
+		WebService webService = new WebService();
+		List<LabOrder> unExecuteList = webService.getExecuteInfoByRequestIds(unExecuteRequestIds);
+		List<LabOrder> executeList = labOrderManager.getByRequestIds(executeRequestIds);
+		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+
+		JSONObject o = new JSONObject();
+		Ylxh ylxh = new Ylxh();
+		Sample sample = new Sample();
+		LabOrder labOrder = new LabOrder();		//当前采样项目
+		LabOrder lo = new LabOrder();			//后续采样项目
+		Ylxh ylxh2 = new Ylxh();
+
+		List<Long> laborders = new ArrayList<Long>(); // 记录需要打印的项目
+		/*for(int i=0;i<unExecuteList.size();i++){
+			labOrder = unExecuteList.get(i);
+			ylxh = ylxhMap.get(labOrder.getYlxh());
+			if(labOrder.getRequestNum()<1){
+				o.put("error", "警告！选择项目错误！数量为"+labOrder.getRequestNum()+"件！");
+			}
+			fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
+			examinaim = labOrder.getExamitem();
+			labDepart = ConvertUtil.null2String(labOrder.getLabdepartment());
+
+			//更新yjk
+			webService.requestUpdate(labOrder.getStayhospitalmode()*10+1, );
+
+			//合并组合
+			String sampleType = ConvertUtil.null2String(labOrder.getSampletype()).trim();
+			if(!sampleType.isEmpty()){
+				for(int j=i+1;j<unExecuteList.size();j++){
+					lo = unExecuteList.get(j);
+					ylxh2 = ylxhMap.get(labOrder.getYlxh());
+
+					//判断部门等是否一样
+					if(lo.getRequestmode() == labOrder.getRequestmode() && info.getYblx().trim().equals(sampletype) && info.getZxksdm().equals(e.getZxksdm()) && info.getQbgsj().equals(e.getQbgsj())
+							&& info.getQbgdd().equals(e.getQbgdd())){
+						if(info.getJyxmfl().equals("9") && info.getYlmc().contains("/"))
+							info.setYlmc(info.getYlmc().substring(0, info.getYlmc().indexOf("/")));
+
+						if(!info.getYlmc().contains(e.getYlmc())){
+							//更新yjk
+							rmiService.updateExecuteInfo(info.getYjsb(), info.getYlxh(),info.getRequestmode());
+
+							e.setYlmc(e.getYlmc()+"+"+info.getYlmc());
+							selMap.remove(info.getYjsb());
+							if(info.getYlxh()!=null && !info.getYlxh().isEmpty())
+								e.setYlxh(e.getYlxh()+"+"+info.getYlxh());
+							fee = fee + Double.parseDouble(info.getDj()) * Double.parseDouble(info.getSl());
+						}
+					}
+
+				}
+			} else {
+				o.put("error", "警告！检验项目"+labOrder.getExamitem()+"样本类型为空！");
+			}
+
+			ybh_like = ymd.format(executetime)+"%";
+
+			//生成样本号
+			time = Double.parseDouble(hhmm.format(executetime).replace(":", "."));
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(executetime);
+			day = calendar.get(Calendar.DAY_OF_WEEK);
+
+			//已采集的样本第二次打印是，如果是当天则样本号不变
+			if(zxbz>0 && lab.getSampleno().length()==14 && lab.getSampleno().substring(0, 8).equals(ymd.format(new Date()))){
+
+			}else{
+				do {
+					samplenoExist = false;
+					if(requestmode ==1){
+						e.setZxksdm("1300300");
+						labdepart = "1300300";
+						sampleno = "0";
+						receivetime = executetime;
+					}else{
+						if(labdepart.equals("1300600")){
+							if(day>1 && day<8){
+								if(time<14 && Integer.parseInt(e.getQbbdd())>0){
+									nextday = 0;
+									sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
+								}else {
+									sampleno = "0";
+								}
+							}else
+								sampleno = "0";
+						}else if(labdepart.contains("13007")){
+							if(day>1 && (time>5.06 && time<10) && Integer.parseInt(e.getQbbdd())>0){
+								nextday = 0;
+								sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
+							}else
+								sampleno = "0";
+						}else if(labdepart.contains("13001")){
+							if(day>0 && (time>6.06 && time<17.30) && Integer.parseInt(e.getQbbdd())>0){
+								nextday = 0;
+								sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
+							}else
+								sampleno = "0";
+						}else if(labdepart.contains("1300501")){
+							if(day>1){
+								if(time<13)
+									nextday=0;
+								else
+									nextday = 1;
+								if(Integer.parseInt(e.getQbbdd())>0)
+									sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
+								else
+									sampleno = "0";
+							}else
+								sampleno = "0";
+						}else{
+							sampleno="0";
+						}
+
+					}
+
+//					if(sampleno.trim().length()==14)
+//						samplenoExist = sampleManager.existSampleNo(sampleno);
+				} while (samplenoExist);
+				//生成样本号结束
+			}
+
+			System.out.println("sampleno="+sampleno);
+
+			//--一个条码抽血多次---
+			long doctadviseno = 0;
+			ylxh = ylxhManager.get(Long.parseLong(e.getYlxh()));
+			ylxhdescribe = ylxh.getProfiletest();
+			//if li_dccx = 1  and li_pos > 0  and pos(ls_ylxh,'+') = 0  then //有多个标本
+			if(ylxhdescribe.contains(",") && ylxhdescribe.contains("\\+")){
+				for(String testid : ylxh.getProfiletest().split(",")){
+
+				}
+			}else{
+				String testid = "",eylxh="";
+//				Sample sample = new Sample();
+				Process process = new Process();
+				eylxh = e.getYlxh();
+				if(eylxh.contains("\\+")){
+					testid = eylxh.substring(0, eylxh.indexOf("\\+"));
+				}else {
+					testid = eylxh;
+				}
+				if(e.getDoctadviseno()!=null && sampleManager.exists(Long.parseLong(e.getDoctadviseno()))){
+					sample = sampleManager.get(Long.parseLong(e.getDoctadviseno()));
+				}else{
+					sample = sampleManager.getBySfsb(e.getJzkh(), testid, e.getSfsb());
+				}
+
+				boolean issame = true;
+				if(sample!=null){
+					//如果有项目组合，判断组合项目是否一致
+					String sylxh = sample.getYlxh();
+					if(eylxh.split("\\+").length != sylxh.split("\\+").length)
+						issame = false;
+					for(String s : sylxh.split("\\+")){
+						if(!eylxh.contains(s))
+							issame = false;
+					}
+				}
+
+				if(sample!=null && issame){
+					doctadviseno = sample.getId();
+					if(zxbz>0 && lab.getSampleno().length()==14 && lab.getSampleno().substring(0, 8).equals(ymd.format(new Date()))){
+
+					}else if(sampleno!=null && !sampleno.isEmpty()){
+						sample.setSampleNo(sampleno);
+					}
+					process = processManager.getBySampleId(sample.getId());
+					process.setExecutetime(executetime);
+					process.setExecutor(user.getUsername());
+					sample.setYlxh(eylxh);
+					process.setReceiver(user.getUsername());
+
+					sampleManager.save(sample);
+				}
+				else{
+					sample = new Sample();
+					if(e.getDoctadviseno()!=null && !e.getDoctadviseno().isEmpty()){
+						sample.setId(Long.parseLong(e.getDoctadviseno()));
+					}
+					sample.setStayHospitalMode(stayhospitalmode);
+					sample.setPatientId(e.getJzkh());
+					sample.setSectionId(labdepart);
+					sample.setHosSection(e.getSjksdm());
+					sample.setDiagnostic(diagnostic);
+					sample.setSampleType(sampletype);
+					sample.setCycle(cycle);
+					sample.setFee(String.valueOf(fee));
+					sample.setFeestatus("6");
+					sample.setRequestMode(requestmode);
+					sample.setInspectionName(examinaim);
+					sample.setYlxh(eylxh);
+					sample.setInvoiceNum(Integer.parseInt(e.getSfsb()));
+
+					sample.setBirthday(ymd1.parse(patient.getCsrq()));
+					sample.setPatientname(patient.getName());
+					sample.setSex(patient.getSex());
+					sample.setSampleNo(sampleno);
+					//如果sample的id为空，调用save取到用序列生成的id
+					if(sample.getId()==null){
+						sample = sampleManager.save(sample);
+					}else{
+						sampleManager.insertSample(sample);
+					}
+
+					doctadviseno = sample.getId();
+					process.setSampleid(sample.getId());
+					process.setRequesttime(e.getKdsj());
+					process.setRequester(e.getSjysgh());
+					process.setExecutetime(executetime);
+					process.setExecutor(user.getUsername());
+					process.setReceivetime(receivetime);
+					process.setReceiver(user.getUsername());
+
+				}
+
+				processManager.save(process);
+			}
+			//插入更新laborder表
+			LabOrder labOrder = new LabOrder();
+			if(labOrderManager.existSampleId(doctadviseno+""))
+				labOrder = labOrderManager.get(doctadviseno);
+			if(labOrder !=null && labOrder.getLaborder()!=null){
+				if(sampleno!=null && !sampleno.isEmpty())
+					labOrder.setSampleno(sampleno);
+				labOrder.setExecutetime(executetime);
+			}
+			else{
+				labOrder = new LabOrder();
+				labOrder.setLaborder(doctadviseno);
+				labOrder.setLaborderorg(Long.parseLong(e.getYjsb()));
+				labOrder.setStayhospitalmode(stayhospitalmode);
+				labOrder.setRequesttime(e.getKdsj());
+				labOrder.setExecutetime(executetime);
+				labOrder.setBirthday(ymd1.parse(patient.getCsrq()));
+				labOrder.setRequester(e.getSjysgh());
+				labOrder.setExecutor(user.getUsername());
+
+				labOrder.setPatientid(e.getJzkh());
+				labOrder.setHossection(e.getSjksdm());
+				labOrder.setPatientname(patient.getName());
+				labOrder.setSex(Integer.parseInt(patient.getSex()));
+				labOrder.setBlh(patient.getBlh());
+
+				labOrder.setDiagnostic(e.getLzcd());
+				labOrder.setSampletype(sampletype);
+				labOrder.setPrice(String.valueOf(fee));
+				labOrder.setFeestatus(6);
+				labOrder.setExamitem(e.getYlmc());
+				labOrder.setYlxh(e.getYlxh());
+				labOrder.setLabdepartment(e.getZxksdm());
+				labOrder.setComputername(user.getUsername()); //抽血电脑编号
+				labOrder.setPrintflag(0);
+				labOrder.setReceiveflag(0);
+
+				//如何获取计算后的取报告单时间 、地点
+				String qbgsjdd= selMap.get(e.getYjsb()+e.getYlxh());
+				labOrder.setQbgsj(qbgsjdd.split("-")[0]);
+				labOrder.setQbgdt(qbgsjdd.split("-")[1]);
+				labOrder.setRequestmode(requestmode);
+				labOrder.setSampleno(sampleno);
+				labOrder.setSelfexecute(selfexecute);
+			}
+			//记录采样次数
+			labOrder.setZxbz(++zxbz);
+			labOrder = labOrderManager.save(labOrder);
+
+			laborders.add(labOrder.getLaborder());
 
 
-		return "";
+
+		}*/
+		o.put("laborders", laborders);
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(o.toString());
+
+		return null;
 	}
 	
 	/*@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)

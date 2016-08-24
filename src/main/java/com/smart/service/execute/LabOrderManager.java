@@ -11,7 +11,12 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
 	
 	List<LabOrder> getByIds(String ids);
 	/*
-	 * 根据patientid获取所有抽血记录
+	 * 根据patientId获取所有抽血记录
 	 */
 	List<LabOrder> getByPatientId(String patientId, String from, String to);
+
+	/*
+	 * 根据requestId获取所有抽血记录
+	 */
+	List<LabOrder> getByRequestIds(String requestIds);
 }
