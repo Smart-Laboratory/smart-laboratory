@@ -141,7 +141,6 @@ public class WebService {
         return list;
     }
 
-<<<<<<< HEAD
     public List<LabOrder> getExecuteInfoByRequestIds(String unExecuteRequestIds) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
@@ -152,9 +151,9 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
+            if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                for(int i = 0; i < arr.length(); i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     LabOrder labOrder = new LabOrder();
                     labOrder.setHossection(arr.getJSONObject(i).getString("requestDepartment"));
                     labOrder.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("birthday")));
@@ -177,7 +176,14 @@ public class WebService {
                     labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
                     labOrder.setZxbz(arr.getJSONObject(i).getInt("status"));
                     list.add(labOrder);
-=======
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     /**
      * 获取住院病人列表信息
      * @param ward  病区
@@ -212,13 +218,11 @@ public class WebService {
                     lo.setYlxh(arr.getJSONObject(i).getString("JCXMID"));
                     lo.setZxbz(arr.getJSONObject(i).getInt("SQZTBZ"));
                     list.add(lo);
->>>>>>> origin/master
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
         return list;
     }
 
@@ -246,14 +250,5 @@ public class WebService {
             e.printStackTrace();
         }
     }
-//    public String getBacteriaList(){
-=======
-        return new ArrayList<LabOrder>();
 
-    }
-    //    public String getBacteriaList(){
->>>>>>> origin/master
-//        ReturnMsg msg = service.getBacteriaList();
-//        return (String)msg.getMessage();
-//    }
 }
