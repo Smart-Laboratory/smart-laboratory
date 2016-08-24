@@ -111,6 +111,8 @@ public class SxgroupPbcxController extends PbBaseController{
 			cal.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.split("-")[1])-1);
 			cal.set(Calendar.DATE, Integer.parseInt(yearAndMonth.split("-")[2]));
 			cal.setFirstDayOfWeek(Calendar.MONDAY);
+			year = Integer.parseInt(yearAndMonth.split("-")[0]);
+			month = Integer.parseInt(yearAndMonth.split("-")[1]);
 			int week = cal.get(Calendar.WEEK_OF_YEAR);
 			List<SxArrange> sxArranges = sxArrangeManager.getByWeek(year, week, 1);
 			//记录各个科室所有的实习生

@@ -27,8 +27,12 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		getSession().createSQLQuery("delete from l_process where sample_id=" + id).executeUpdate();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Process getBySampleId(Long sampleid) {
-		return (Process) getSession().createQuery("from Process where sampleid=" + sampleid).uniqueResult();
+		List<Process> p = getSession().createQuery("from Process where sampleid=" + sampleid).list();
+		if(p!=null && p.size()>0)
+			return p.get(0);
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

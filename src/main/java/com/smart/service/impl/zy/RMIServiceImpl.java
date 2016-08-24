@@ -257,11 +257,38 @@ public class RMIServiceImpl implements RMIService {
         });
 	}
 
-	public List<SyncPatient> getSampleBySection(String from, String to, String section) {
-		String sql = "select * from l_patientinfo where labdepartment='" + section + "' and receivetime between to_date('" + from + " 00:00:00','"
-                + Constants.DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + Constants.DATEFORMAT
-                + "') order by doctadviseno desc";
-		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
+	public List<SyncPatient> getSampleBySection(String from, String to, String section, int sampleState) {
+		String hql = "select * from l_patientinfo p where labdepartment='" + section + "' and receivetime between to_date('" + from + "','"
+                + Constants.DATEFORMAT + "') and to_date('" + to + "','" + Constants.DATEFORMAT
+                + "') ";
+		
+		switch (sampleState) {//1:全部;2:已采集;3:已送出;4:科室接收;5:组内接受;6:已审核
+		case 1:
+			
+			break;
+		case 2:
+			hql += " and p.executetime is not null and p.sendtime is null and p.ksreceivetime is null and p.receivetime is null";
+			break;
+		case 3:
+			hql += " and p.executetime is not null and p.sendtime is not null and p.ksreceivetime is null and p.receivetime is null";
+			break;
+		case 4:
+			hql += " and p.executetime is not null  and p.ksreceivetime is not null and p.receivetime is null";
+			break;
+		case 5:
+			hql += " and p.executetime is not null  and p.receivetime is not null ";
+			break;
+		case 6:
+			hql += " and  p.checktime is not null ";
+			break;
+		default:
+			break;
+		}
+		
+		hql += " order by p.receivetime desc";
+		System.out.println(hql);
+		
+		return jdbcTemplate.query(hql, new RowMapper<SyncPatient>() {
 		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
 		        SyncPatient p = new SyncPatient();
 		        setField(rs, p);

@@ -89,11 +89,12 @@ function getOutList(){
 
 var receivelistfirst = true;
 function getReciveList(){
+	
 	var width = $("#samplereceive").width()*0.9;
 	if(receivelistfirst){
 		receivelistfirst=false;
 	jQuery("#receiveList").jqGrid({
-		url:"../manage/sampleHandover/receiveList?type=1&operator=" + $("#outer").val() + "(" + $("#pointout").val() + ")",
+		url:"../manage/sampleHandover/receiveList?type=1&operator=" + $("#outer").val() + "(" + $("#point").val() + ")",
 		datatype:"json",
 		width:width,
 		colNames:['医嘱号','病人姓名','就诊卡号','检验项目','送检科室','申请时间','申请者','采集时间','采集者','送出时间','送出者','科室接收时间','科室接收者'],
@@ -125,9 +126,9 @@ function getReciveList(){
 	jQuery("#receiveList").jqGrid('navGrid','#rpager',{edit:false,add:false,del:false,search:false,refresh:false});
 	}
 	else{
-		jQuery("#receiveList").jqGrid({
-			url:"../manage/sampleHandover/receiveList?type=1&operator=" + 
-			$("#outer").val() + "(" + $("#pointout").val() + ")"}).trigger("reloadGrid");
+		var location = $("#point").val();
+		jQuery("#receiveList").setGridParam({
+			url:"../manage/sampleHandover/receiveList?type=1&operator=" + $("#outer").val() + "(" + location + ")"}).trigger("reloadGrid");
 	}
 }
 
