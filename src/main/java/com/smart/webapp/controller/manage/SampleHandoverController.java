@@ -124,7 +124,14 @@ public class SampleHandoverController {
 				obj.put("mode", sp.getREQUESTMODE());
 				if(sp.getSENDTIME() == null) {
 					obj.put("type", 2);
-					isupdate=1;
+					//更新本地process
+					Process process = processManager.getBySampleId(doct);
+					if(process!=null){
+						process.setSender(operator);
+						process.setSendtime(new Date());
+						processManager.save(process);
+					}
+					
 				} else {
 					obj.put("type", 3);
 				}
@@ -132,19 +139,8 @@ public class SampleHandoverController {
 				if(sp.getLABDEPARTMENT() == null || !lab.contains(sp.getLABDEPARTMENT())) {
 					obj.put("type", 4);
 				}
-				if(isupdate==1){
-					rmiService.sampleOut(doct, operator);
-					//更新本地process
-					Process process = processManager.getBySampleId(doct);
-					if(process==null){
-						process = new Process();
-						process.setSampleid(doct);
-						
-					}
-					process.setSender(operator);
-					process.setSendtime(new Date());
-					processManager.save(process);
-				}
+				rmiService.sampleOut(doct, operator);
+					
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -205,14 +201,13 @@ public class SampleHandoverController {
 				if(sp.getKSRECEIVETIME() == null) {
 					obj.put("type", 2);
 					Process process = processManager.getBySampleId(doct);
-					if(process==null){
-						process = new Process();
-						process.setSampleid(doct);
-						
+					//这个时候如果本地process为空则不更新，等待同步器完成更新，否则会出现多条记录
+					if(process!=null){
+						process.setKsreceiver(operator);
+						process.setKsreceivetime(new Date());
+						processManager.save(process);
 					}
-					process.setKsreceiver(operator);
-					process.setKsreceivetime(new Date());
-					processManager.save(process);
+					
 					
 				} else {
 					obj.put("type", 3);
@@ -345,7 +340,7 @@ public class SampleHandoverController {
 		for(Process p : processes){
 			sampleids += p.getSampleid()+",";
 		}
-		List<SyncPatient> syncPatients = rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
+		List<SyncPatient> syncPatients = null;//rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
 		for(SyncPatient s : syncPatients){
 			if(s!=null)
 				sMap.put(s.getDOCTADVISENO(), s);

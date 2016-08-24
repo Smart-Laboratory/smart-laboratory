@@ -16,7 +16,6 @@
     <script type="text/javascript" src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../scripts/set/dictionary.js"></script>
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
-
     <title><fmt:message key="set.dictionary"/></title>
 </head>
 <style>

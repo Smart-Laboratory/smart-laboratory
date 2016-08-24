@@ -165,12 +165,12 @@
 			<th style="width:20%;"><fmt:message key='tat.requester' /></th><td style="width:30%;"><span id="tat_requester"></span></td></tr>
 			<tr><th><fmt:message key='tat.execute' /></th><td><span id="tat_execute"></span></td>
 			<th><fmt:message key='tat.executor' /></th><td><span id="tat_executor"></span></td></tr>
+			<tr><th><fmt:message key='tat.send' /></th><td><span id="tat_send"></span></td>
+			<th><fmt:message key='tat.sender' /></th><td><span id="tat_sender"></span></td></tr>	
 			</tbody>
 		</table>
-			<%-- <tr><th><fmt:message key='tat.send' /></th><td><span id="tat_send"></span></td>
-			<th><fmt:message key='tat.sender' /></th><td><span id="tat_sender"></span></td></tr>		
-			<tr><th><fmt:message key='tat.ksreceive' /></th><td><span id="tat_ksreceive"></span></td>
-			<th><fmt:message key='tat.ksreceiver' /></th><td><span id="tat_ksreceiver"></span></td></tr> --%>
+				
+			
 		<div style="background:greenyellow;">
 			<table class="table" >
 				<tbody id="logistic">
@@ -179,6 +179,8 @@
 		</div>
 		<table class="table">
 			<tbody>	
+			<tr><th><fmt:message key='tat.ksreceive' /></th><td><span id="tat_ksreceive"></span></td>
+			<th><fmt:message key='tat.ksreceiver' /></th><td><span id="tat_ksreceiver"></span></td></tr>
 			<tr><th style="width:20%;"><fmt:message key='tat.receive' /></th><td style="width:30%;"><span id="tat_receive"></span></td>
 			<th style="width:20%;"><fmt:message key='tat.receiver' /></th><td style="width:30%;"><span id="tat_receiver"></span></td></tr>
 			<tr><th><fmt:message key='tat.tester' /></th><td><span id="tat_tester"></span></td>

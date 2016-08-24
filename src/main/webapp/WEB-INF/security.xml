@@ -12,7 +12,7 @@
 
     <http auto-config="true">
         <intercept-url pattern="/app/admin/**" access="ROLE_ADMIN"/>
-        <intercept-url pattern="/app/doctor/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
+        <intercept-url pattern="/app/doctor/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/passwordHint*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER"/>
         <intercept-url pattern="/app/requestRecoveryToken*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
         <intercept-url pattern="/app/updatePassword*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
