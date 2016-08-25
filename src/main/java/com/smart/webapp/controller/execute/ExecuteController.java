@@ -175,7 +175,7 @@ public class ExecuteController {
 			needSaveList.add(labOrder);
 		}
 
-		List<Long> labOrders = new ArrayList<Long>();
+		Set<Long> labOrders = new HashSet<Long>();
 		AutoSampleNoUtil autoUtil = AutoSampleNoUtil.getInstance(sampleNoBuilderManager);
 		Map<String, List<SampleNoBuilder>> autoMap = autoUtil.getMap();
 		for(int i = 0; i < needSaveList.size(); i++) {
@@ -226,7 +226,9 @@ public class ExecuteController {
 			labOrderManager.save(labOrder);
 		}
 		//回写HIS，申请状态变更
-		//webService.requestUpdate(labOrder.getStayhospitalmode()*10+1, );
+		System.out.println("申请序号： " + itemId);
+		System.out.println("生成的序号： " + labOrders.toString());
+		webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.SDF.format(executeTime), "");
 		o.put("labOrders", labOrders);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
