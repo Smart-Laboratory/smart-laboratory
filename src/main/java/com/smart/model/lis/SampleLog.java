@@ -58,8 +58,7 @@ public class SampleLog extends BaseObject {
 	private int iswriteback=0;//写回标识
 	private int hasimages=0;//是否包含图片
 	private int cycle=0;
-	private int invoiceNum=0; //发票号
-	
+
 	private int auditStatus=0; //样本审核的状态
 	private int auditMark=0; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
@@ -367,15 +366,6 @@ public class SampleLog extends BaseObject {
 	}
 	
 	@Column
-	public int getInvoiceNum() {
-		return invoiceNum;
-	}
-	
-	public void setInvoiceNum(int invoiceNum) {
-		this.invoiceNum = invoiceNum;
-	}
-	
-	@Column
 	public int getAuditStatus() {
 		return auditStatus;
 	}
@@ -541,7 +531,6 @@ public class SampleLog extends BaseObject {
 		s.setHosSection(this.hosSection);
 		s.setId(this.sampleId);
 		s.setInspectionName(this.inspectionName);
-		s.setInvoiceNum(this.invoiceNum);
 		s.setIswriteback(this.iswriteback);
 		s.setMarkTests(this.markTests);
 		s.setModifyFlag(this.modifyFlag);
@@ -587,7 +576,6 @@ public class SampleLog extends BaseObject {
 		this.hosSection = s.getHosSection();
 		this.sampleId = s.getId();
 		this.inspectionName = s.getInspectionName();
-		this.invoiceNum = s.getInvoiceNum();
 		this.iswriteback = s.getIswriteback();
 		this.markTests = s.getMarkTests();
 		this.modifyFlag = s.getModifyFlag();

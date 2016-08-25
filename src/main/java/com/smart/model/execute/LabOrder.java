@@ -15,7 +15,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name="l_laborder")
 public class LabOrder {
+<<<<<<< HEAD
 	private Long laborder; //医嘱号，自增长
+=======
+
+	private Long laborder; //同医嘱号
+>>>>>>> origin/master
 
 	private String requestId;
 	private String bed;
@@ -53,13 +58,12 @@ public class LabOrder {
 	private String selfexecute;
 	private String toponymy; //采集部位
 	private Integer cycle;		//生理周期
+	private Integer count;		//采集数量
 
 	//add by zcw 20160825
 	private String hossectionName;	//科室名称(病区)
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LABORDER")
-//	@SequenceGenerator(name = "SEQ_LABORDER", sequenceName = "laborder_sequence", allocationSize = 1)
 	public Long getLaborder() {
 		return laborder;
 	}
@@ -343,6 +347,15 @@ public class LabOrder {
 	@Transient
 	public void setHossectionName(String hossectionName) {
 		this.hossectionName = hossectionName;
+	}
+
+	@Column
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 
 	@Transient

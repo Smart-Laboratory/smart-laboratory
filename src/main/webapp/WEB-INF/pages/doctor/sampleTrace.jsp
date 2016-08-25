@@ -9,9 +9,9 @@
 	
 	<meta charset="utf-8" />
     <script type="text/javascript" src="<c:url value="/scripts/jquery-1.8.3.min.js"/>"></script>
-    <%-- <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script> --%>
+    <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
     
 	<link rel="stylesheet" type="text/css"  href="../styles/jquery-ui.min.css"/>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>

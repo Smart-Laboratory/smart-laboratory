@@ -244,6 +244,7 @@ public class WebService {
             PostMethod method = new PostMethod(url);
             method.setRequestHeader("Content-Type","application/json;charset=utf-8");
             NameValuePair[] param = { new NameValuePair("requestType",requestType+""),
+                    new NameValuePair("itemId",itemId),
                     new NameValuePair("exeType",exeType+""),
                     new NameValuePair("exeDeptCode",exeDeptCode),
                     new NameValuePair("exeDeptName",exeDeptName),

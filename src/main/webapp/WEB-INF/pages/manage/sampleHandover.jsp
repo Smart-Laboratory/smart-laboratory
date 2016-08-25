@@ -246,8 +246,8 @@
 							</div>
 							
 							<h4>标本接收列表</h4>
-							<div id="receiveListDiv" class="col-sm-12">
-								<table id="receiveList"></table>
+							<div id="receiveListDiv" class="col-sm-12" style="overflow:auto;">
+								<table id="receiveList" class="table table-striped table-bordered table-hover"></table>
 								<div id="rpager"></div>
 							</div>
 							

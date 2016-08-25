@@ -331,7 +331,7 @@ public class SampleTraceDoctController {
 				status = "已送出";
 			if(info.getKSRECEIVETIME()!=null)
 				status="科室接收";
-			if(info.getReceivetime()!=null)
+			if(info.getReceivetime()!=null && !info.getReceivetime().isEmpty())
 				status = "组内接收";
 			if(info.getCHECKTIME()!=null)
 				status = "已审核";
