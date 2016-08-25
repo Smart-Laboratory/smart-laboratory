@@ -666,14 +666,18 @@ public class RMIServiceImpl implements RMIService {
 		    }
 		});
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> origin/master
 	public List<SyncPatient> getReceiveList(String receiver, Date starttime, Date endtime,int start,int end){
 		String hql = "";
 		if(endtime == null){
 			hql = "select * from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
 					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(starttime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
 		}else{
-			hql = "from Process p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+			hql = "select * from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
 					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.SDF.format(endtime)+"','yyyy-mm-dd hh24:mi:ss') ";
 		}
 		
@@ -698,7 +702,7 @@ public class RMIServiceImpl implements RMIService {
 			hql = "select count(*) from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
 					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(starttime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
 		}else{
-			hql = "select count(*) from l_process p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+			hql = "select count(*) from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
 					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.SDF.format(endtime)+"','yyyy-mm-dd hh24:mi:ss') ";
 		}
 		
