@@ -58,6 +58,7 @@ $(function() {
 				}
 				
 				var value = $(this).html();
+				value = value.split("<br>").join('');
 //				value = value.replace("<span class=\"glyphicon glyphicon-ok\"></span> ","")
 				if($(this).attr("class").indexOf("gx")>=0)
 					value += "\u516C\u4F11;";

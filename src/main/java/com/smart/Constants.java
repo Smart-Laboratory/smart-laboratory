@@ -288,5 +288,5 @@ public final class Constants {
 	/**
 	 * 医学检验科编号
 	 */
-	public final static String LaboratoryCode = "22";
+	public final static String LaboratoryCode = "21";
 }

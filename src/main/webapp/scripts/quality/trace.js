@@ -17,10 +17,10 @@ function getSample(docNo) {
 		$("#tat_receive").html(data.receive);
 		$("#tat_audit").html(data.audit);
 		
-//		$("#tat_send").html(data.send);
-//		$("#tat_sender").html(data.sender);
-//		$("#tat_ksreceive").html(data.ksreceive);
-//		$("#tat_ksreceiver").html(data.ksreceiver);
+		$("#tat_send").html(data.send);
+		$("#tat_sender").html(data.sender);
+		$("#tat_ksreceive").html(data.ksreceive);
+		$("#tat_ksreceiver").html(data.ksreceiver);
 		var logisticlist = data.logisticList;
 		var html="";
 		for(var i=0 ;i<logisticlist.length;i++){
@@ -74,14 +74,16 @@ function getList(from, to, name, type) {
     			+ type + "&sampleState=" +sampleState, 
     	datatype: "json", 
     	width: width, 
-    	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间'], 
+    	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间','送出时间','科室接收时间'], 
     	colModel:[ 
     		{name:'id',index:'id', width:width*0.1, sortable:false,hidden:true},
     		{name:'samplestatus',index:'samplestatus', width:width*0.1, sortable:false},
     		{name:'doctadviseno',index:'doctadviseno', width:width*0.1, sortable:false},
     		{name:'sample',index:'sample',width:width*0.2, sortable:false},
     		{name:'examinaim',index:'examinaim',width:width*0.2, sortable:false},
-    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false}
+    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false},
+    		{name:'sendtime',index:'operatetime',width:width*0.2, sortable:false,hidden:true},
+    		{name:'ksreceivetime',index:'operatetime',width:width*0.2, sortable:false,hidden:true}
     		], 
     	rowNum:20,
     	height: 500,

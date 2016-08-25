@@ -69,8 +69,6 @@ public class SampleTraceDoctController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/data*", method = RequestMethod.GET)
-	@ResponseBody
 	public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String pages = request.getParameter("page");
@@ -196,6 +194,153 @@ public class SampleTraceDoctController {
 	}
 	
 	/**
+	 * 根据条件查询该检验人员的样本
+	 * 查询浙一数据库
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/data*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getZYData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String pages = request.getParameter("page");
+		String rows = request.getParameter("rows");
+		String from = request.getParameter("from");
+		String to = request.getParameter("to");
+		String name = request.getParameter("name");
+		int type = Integer.parseInt(request.getParameter("type"));
+		int sampleState = Integer.parseInt(request.getParameter("sampleState"));//1:全部;2:已采集;3:已送出;4:科室接收;5:组内接受;6:已审核
+		DataResponse dataResponse = new DataResponse();
+		int page = Integer.parseInt(pages);
+		int row = Integer.parseInt(rows);
+		
+		List<SyncPatient> list = new ArrayList<SyncPatient>();
+		List<SampleLogistic> sList = new ArrayList<SampleLogistic>();
+		//按地点查询时显示具体时间
+		Map<Long, SyncPatient> lMap = new HashMap<Long,SyncPatient>();
+		
+		switch(type) {
+		case 1:
+			sList = sampleLogisticManager.getByReceivePoint(from, to, name);
+			break;
+		case 2:
+			list = rmiService.getSampleByPatientName(from, to, name);
+			break;
+		case 3:
+			list = rmiService.getSampleByPid(name);
+			rmiService.getSampleByPid(name);
+			break;
+		case 4:
+			try {
+				SyncPatient s = rmiService.getSampleByDoct(Long.parseLong(name));
+				if (s != null) {
+					list.add(s);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			break;
+		case 5:
+			try {
+				list = rmiService.getSampleBySection(from, to, name,sampleState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		int listSize = 0;
+		//type==1时，根据接受点显示列表，那么需要显示的是slist
+		if(type==1){
+			if (sList != null)
+				listSize = sList.size();
+		}else{ 
+			if (list != null)
+				listSize = list.size();
+			
+		}
+		dataResponse.setRecords(listSize);
+		int x = listSize % (row == 0 ? listSize : row);
+		if (x != 0) {
+			x = row - x;
+		}
+		int totalPage = (listSize + x) / (row == 0 ? listSize : row);
+		dataResponse.setPage(page);
+		dataResponse.setTotal(totalPage);
+		int start = row * (page - 1);
+		int index = 0;
+		if(type ==1){
+			String docts = "";
+			for(SampleLogistic s : sList.subList(start, ((start+row)<listSize?(start+row):listSize))){
+				docts += s.getDoctadviseno() +",";
+			}
+			if(docts.length()>0){
+				docts = docts.substring(0, docts.length()-1);
+				list = rmiService.getByDoctadvisenos(docts);
+				for(SyncPatient s : list){
+					lMap.put(s.getDOCTADVISENO(), s);
+				}
+			}
+		}
+		while (index < row && (start + index) < listSize) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			if(type==1){
+				SampleLogistic sl = sList.get(start + index);
+				SyncPatient sample = lMap.get(sl.getDoctadviseno());
+				map.put("id", sl.getId());
+				map.put("doctadviseno", sl.getDoctadviseno());
+				map.put("sample", sample.getSAMPLENO());
+				map.put("examinaim", sample.getEXAMINAIM());
+				map.put("operatetime", Constants.SDF.format(sl.getOperatetime()));
+				map.put("samplestatus", getZYSampleStatue(sample));
+			}else {
+				SyncPatient info = list.get(start + index);
+				map.put("id",info.getDOCTADVISENO());
+				map.put("doctadviseno",info.getDOCTADVISENO());
+				map.put("sample",info.getSAMPLENO());
+				map.put("examinaim", info.getEXAMINAIM());
+				map.put("samplestatus", getZYSampleStatue(info));
+				map.put("sendtime", info.getSENDTIME());
+				map.put("ksreceivetime", info.getKSRECEIVETIME());
+			}
+			
+			dataRows.add(map);
+			index++;
+		}
+		dataResponse.setRows(dataRows);
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
+	}
+	
+	/**
+	 * 判断样本状态  已开单、已采集 、已送出、科室接收、组内接收、已审核...
+	 * @param info
+	 * @return
+	 */
+	private String getZYSampleStatue(SyncPatient info){
+		String status = "";
+		if(info.getREQUESTTIME()!=null){
+			status = "已开单";
+			if(info.getEXECUTETIME()!=null)
+				status = "已采集";
+			if(info.getSENDTIME()!=null)
+				status = "已送出";
+			if(info.getKSRECEIVETIME()!=null)
+				status="科室接收";
+			if(info.getReceivetime()!=null)
+				status = "组内接收";
+			if(info.getCHECKTIME()!=null)
+				status = "已审核";
+		}
+		
+		return status;
+	}
+	
+	/**
 	 * 判断样本状态  已开单、已采集 、已送出、科室接收、组内接收、已审核...
 	 * @param info
 	 * @return
@@ -305,8 +450,8 @@ public class SampleTraceDoctController {
 			map.put("receive", p.getRECEIVETIME() == null ? "" : Constants.DF.format(p.getRECEIVETIME()));
 			map.put("audit", p.getCHECKTIME() == null ? "" : Constants.DF.format(p.getCHECKTIME()));
 			//标本采集后到科室接收前的物流过程
-//			map.put("send", p.getSENDTIME() == null ? "" : Constants.DF.format(p.getSENDTIME()));
-//			map.put("sender", p.getSENDER() == null ? "" : p.getSENDER());
+			map.put("send", p.getSENDTIME() == null ? "" : Constants.DF.format(p.getSENDTIME()));
+			map.put("sender", p.getSENDER() == null ? "" : p.getSENDER());
 			
 			map.put("ksreceive", p.getKSRECEIVETIME() == null ? "" : Constants.DF.format(p.getKSRECEIVETIME()));
 			map.put("requester", p.getREQUESTER() == null ? "" : p.getREQUESTER());
