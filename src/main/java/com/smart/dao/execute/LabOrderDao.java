@@ -23,4 +23,14 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 
 	@Transactional
 	List<LabOrder> getByRequestIds(String requestIds);
+
+	/**
+	 * 获取住院病人所有采集记录
+	 * @param ward			病区
+	 * @param bedNo			床位号
+	 * @param requestIds	申请ID
+	 * @return
+	 */
+	@Transactional
+	List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds);
 }

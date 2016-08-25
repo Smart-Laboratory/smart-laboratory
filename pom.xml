@@ -851,6 +851,11 @@
 			<version>1.0.1</version>
 			<type>jar</type>
 		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.16</version>
+        </dependency>
     </dependencies>
 
     <reporting>

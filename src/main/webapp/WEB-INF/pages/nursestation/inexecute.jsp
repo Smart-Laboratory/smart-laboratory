@@ -157,6 +157,29 @@
                         simpleData: {
                             enable: true
                         }
+                    },
+                    callback: {
+                        onClick:function (event, treeId, treeNode, clickFlag) {
+                            $.ajax({
+                                url: '../nursestation/inexecute/getRequestList',
+                                data: {ward:treeNode.ward,bedNo:treeNode.bedNo,patientId:treeNode.id},
+                                type: 'POST',
+                                dataType: "json",
+                                ContentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    var data = eval("("+data+")");
+                                    var beollected = data.beollected;
+                                    console.log(beollected)
+                                    jQuery("#tableList").jqGrid('setGridParam',{
+                                        datatype : 'local',
+                                        data:beollected
+                                    }).trigger('reloadGrid');//重新载入
+                                },
+                                error: function (msg) {
+                                    alert("获取采集信息失败");
+                                }
+                            });
+                        }
                     }
                 };
                 $.ajax({
@@ -179,6 +202,39 @@
                     datatype: "json",
                     colNames: ['床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
                     colModel: [
+                        { name: 'bed', index: 'bed', width: 60 },
+                        { name: 'patientname', index: 'patientname', width: 100},
+                        { name: 'sex', index: 'sex', width: 60,formatter:'select',editoptions : {value : "1:男;0:女"}},
+                        { name: 'age', index: 'sampletype', width: 100},
+                        { name: 'testId', index: 'sampletype', width: 100,hidden:true},
+                        { name: 'examitem', index: 'examitem', width: 120},
+                        { name: 'sampletype', index: 'sampletype', width: 100},
+                        { name: 'price', index: 'price', width: 60},
+                        { name: 'requestTime', index: 'sampletype', width: 100},
+                        { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
+                    ],
+                    onSelectRow: function(id) {
+                        if(id && id!==lastsel){
+                            jQuery('#tableList').saveRow(lastsel, false, 'clientArray');
+                            lastsel=id;
+                        }
+                        jQuery('#tableList').editRow(id, false);
+                    },
+                    multiselect : true,
+                    multikey : "ctrlKey",
+                    repeatitems:false,
+                    viewrecords: true,
+                    autowidth:true,
+                    altRows:true,
+                    height:100,
+                    rownumbers: true, // 显示行号
+                    rownumWidth: 35
+                });
+                //初始化已采集标本
+                $("#tableList1").jqGrid({
+                    datatype: "json",
+                    colNames: ['床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
+                    colModel: [
                         { name: 'bedno', index: 'channel', width: 60 },
                         { name: 'name', index: 'testid', width: 100},
                         { name: 'sex', index: 'testname', width: 60},
@@ -192,24 +248,22 @@
                     ],
                     onSelectRow: function(id) {
                         if(id && id!==lastsel){
-                            jQuery('#tableList').saveRow(lastsel, false, 'clientArray');
+                            jQuery('#tableList1').saveRow(lastsel, false, 'clientArray');
                             lastsel=id;
                         }
-                        jQuery('#tableList').editRow(id, false);
+                        jQuery('#tableList1').editRow(id, false);
                     },
+                    multiselect : true,
+                    multikey : "ctrlKey",
                     repeatitems:false,
                     viewrecords: true,
                     autowidth:true,
                     altRows:true,
-                    height: "100%",
                     rownumbers: true, // 显示行号
                     rownumWidth: 35
                 });
-
             },
             getSampleList:function(bedno,patientId){
-
-
             }
         }
         var public = {

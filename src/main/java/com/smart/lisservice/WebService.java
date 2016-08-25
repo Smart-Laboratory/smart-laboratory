@@ -30,14 +30,14 @@ import java.util.List;
  */
 public class WebService {
     private JaxWsProxyFactoryBean jwpfb ;
-    private ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-resources.xml");
-    private WebClient client = ctx.getBean("webClient", WebClient.class);
+//    private ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-resources.xml");
+//    private WebClient client = ctx.getBean("webClient", WebClient.class);
 
     private String url = "http://10.31.96.38:8080/lisservice/services/rest/";
     private HttpURLConnection connection = null;
 
     public String getBacteriaList(){
-        return  client.path("getBacteriaList").accept(MediaType.APPLICATION_JSON).get(String.class);
+        return  null;//client.path("getBacteriaList").accept(MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public SampleAndResultVo getRequestInfo() {
@@ -193,9 +193,13 @@ public class WebService {
     public List<LabOrder> getInExcuteInfo(String ward){
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
-            JSONObject obj = new JSONObject(client.path("getInPatientRequestInfo")
-                    .replaceQueryParam("ward",ward)
-                    .accept(MediaType.APPLICATION_JSON).get(String.class));
+            url += "getInPatientRequestInfo";
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url);
+            GetMethod method = new GetMethod(url + "?ward=" + ward);
+            method.releaseConnection();
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             System.out.println(obj.toString());
             if((Integer)obj.get("State")==1) {
                 JSONArray arr = obj.getJSONArray("Message");
@@ -222,6 +226,7 @@ public class WebService {
                     labOrder.setZxbz(arr.getJSONObject(i).getInt("status"));
                     labOrder.setBed(arr.getJSONObject(i).getString("bedno"));
                     labOrder.setHossectionName(arr.getJSONObject(i).getString("wardName"));
+                    labOrder.setSampletype(arr.getJSONObject(i).getString("sampleType"));
                     list.add(labOrder);
                 }
             }
@@ -229,8 +234,6 @@ public class WebService {
             e.printStackTrace();
         }
         return list;
-<<<<<<< HEAD
-=======
     }
 
     public void requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
@@ -252,8 +255,6 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             System.out.println(method.getResponseBodyAsString());
->>>>>>> origin/master
-
         } catch (Exception e) {
             e.printStackTrace();
         }
