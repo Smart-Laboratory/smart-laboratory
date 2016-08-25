@@ -666,11 +666,7 @@ public class RMIServiceImpl implements RMIService {
 		    }
 		});
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	public List<SyncPatient> getReceiveList(String receiver, Date starttime, Date endtime,int start,int end){
 		String hql = "";
 		if(endtime == null){
