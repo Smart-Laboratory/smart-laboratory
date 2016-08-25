@@ -54,6 +54,8 @@ public class LabOrder {
 	private String selfexecute;
 	private String toponymy; //采集部位
 	private Integer cycle;		//生理周期
+	@Transient
+	private String hossectionName;	//科室名称(病区)
 
 	@Id
 //	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LABORDER")
@@ -333,6 +335,13 @@ public class LabOrder {
 
 	public void setRequestNum(Integer requestNum) {
 		this.requestNum = requestNum;
+	}
+
+	public String getHossectionName() {
+		return hossectionName;
+	}
+	public void setHossectionName(String hossectionName) {
+		this.hossectionName = hossectionName;
 	}
 
 	@Transient
