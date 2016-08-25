@@ -15,12 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="l_laborder")
 public class LabOrder {
-<<<<<<< HEAD
-	private Long laborder; //医嘱号，自增长
-=======
-
 	private Long laborder; //同医嘱号
->>>>>>> origin/master
 
 	private String requestId;
 	private String bed;
