@@ -666,8 +666,7 @@ public class RMIServiceImpl implements RMIService {
 		    }
 		});
 	}
-<<<<<<< HEAD
-	
+
 	public List<SyncPatient> getReceiveList(String receiver, Date starttime, Date endtime,int start,int end){
 		String hql = "";
 		if(endtime == null){
@@ -707,7 +706,4 @@ public class RMIServiceImpl implements RMIService {
 		
 		return jdbcTemplate.queryForObject(hql, Integer.class);
 	}
-=======
-
->>>>>>> origin/master
 }

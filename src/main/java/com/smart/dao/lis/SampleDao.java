@@ -62,12 +62,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	boolean existSampleNo(String sampleno);
 	
 	@Transactional
-	Sample getBySfsb(String patientid, String ylxh, String sfsb);
-	
-	@Transactional
-	void insertSample(Sample s);
-	
-	@Transactional
 	List<Sample> getByPatientId(String patientId,String lab);
 
 	@Transactional

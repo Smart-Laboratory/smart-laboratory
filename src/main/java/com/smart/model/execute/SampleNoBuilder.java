@@ -21,7 +21,7 @@ public class SampleNoBuilder {
 	private int startNo;
 	private int endNo;
 	private int nowNo;
-	private int order;
+	private int orderNo;
 
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -80,11 +80,11 @@ public class SampleNoBuilder {
 	}
 
 	@Column
-	public int getOrder() {
-		return order;
+	public int getOrderNo() {
+		return orderNo;
 	}
 
-	public void setOrder(int order) {
-		this.order = order;
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
 	}
 }
