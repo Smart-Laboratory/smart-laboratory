@@ -18,7 +18,7 @@ public class SampleNoBuilderDaoHibernate extends GenericDaoHibernate<SampleNoBui
 	}
 	
 	public SampleNoBuilder getByLab(String lab){
-		String sql = "from SampleNoBuilder where ksdm = '"+lab+"'";
+		String sql = "from SampleNoBuilder where labDepart = '"+lab+"' order by order";
 		return (SampleNoBuilder)getSession().createQuery(sql).list().get(0);
 	}
 	

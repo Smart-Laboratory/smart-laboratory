@@ -68,7 +68,6 @@ public class ExecuteController {
 		String executeRequestIds = "";
 
 		String examinaim="",labDepart="",sampleNo="",ybh_like="",ylxhDescribe="";
-		double fee=0;
 		boolean sampleNoExist = false ;
 		Date executeTime = new Date();
 		double time=0,day=0;
@@ -104,121 +103,85 @@ public class ExecuteController {
 		LabOrder labOrder = new LabOrder();		//当前采样项目
 		LabOrder lo = new LabOrder();			//后续采样项目
 		Ylxh ylxh2 = new Ylxh();
+		double fee=0;
+		boolean isFirst = true;
 
-		List<Long> laborders = new ArrayList<Long>(); // 记录需要打印的项目
-		/*for(int i=0;i<unExecuteList.size();i++){
+		List<LabOrder> needSaveList = new ArrayList<LabOrder>(); // 记录需要打印的项目
+		String itemId = "";
+		for(int i=0;i<unExecuteList.size();i++) {
 			labOrder = unExecuteList.get(i);
-			ylxh = ylxhMap.get(labOrder.getYlxh());
-			if(labOrder.getRequestNum()<1){
-				o.put("error", "警告！选择项目错误！数量为"+labOrder.getRequestNum()+"件！");
-			}
-			fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
-			examinaim = labOrder.getExamitem();
-			labDepart = ConvertUtil.null2String(labOrder.getLabdepartment());
+			if (labOrder.getZxbz() == 0) {
+				//设置执行标志
+				labOrder.setZxbz(1);
+				if (itemId.isEmpty()) {
+					itemId = "" + labOrder.getLaborderorg();
+				} else {
+					itemId += "|" + labOrder.getLaborderorg();
+				}
+				if (i == 0) {
+					ylxh = ylxhMap.get(labOrder.getYlxh());
+					labOrder.setExamitem(ylxh.getYlmc());
+					labOrder.setQbgdt(ylxh.getQbgdd());
+					labOrder.setSampletype(ylxh.getYblx());
+					labOrder.setLabdepartment(ylxh.getKsdm());
+					labOrder.setQbgsj(ylxh.getQbgsj());
+					labOrder.setToponymy(ylxh.getCjbw());
+					fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
+					labOrder.setPrice("" + fee);
+				} else {
+					isFirst = false;
+				}
+				if (labOrder.getRequestNum() < 1) {
+					o.put("error", "警告！选择项目错误！数量为" + labOrder.getRequestNum() + "件！");
+				}
+				//开始合并组合
+				String sampleType = ConvertUtil.null2String(labOrder.getSampletype()).trim();
+				if (!sampleType.isEmpty()) {
+					for (int j = i + 1; j < unExecuteList.size(); j++) {
+						lo = unExecuteList.get(j);
+						if (isFirst) {
+							ylxh2 = ylxhMap.get(lo.getYlxh());
+							lo.setExamitem(ylxh2.getYlmc());
+							lo.setQbgdt(ylxh2.getQbgdd());
+							lo.setSampletype(ylxh2.getYblx());
+							lo.setLabdepartment(ylxh2.getKsdm());
+							lo.setQbgsj(ylxh2.getQbgsj());
+							lo.setToponymy(ylxh2.getCjbw());
+							fee = Double.parseDouble(lo.getPrice()) * lo.getRequestNum();
+							lo.setPrice("" + fee);
+						}
 
-			//更新yjk
-			webService.requestUpdate(labOrder.getStayhospitalmode()*10+1, );
+						//判断合并条件
+						if (lo.getZxbz() == 0 && labOrder.getRequestId().equals(lo.getRequestId()) && lo.getRequestmode() == labOrder.getRequestmode() && lo.getSampletype().equals(labOrder.getSampletype()) && lo.getLabdepartment().equals(labOrder.getLabdepartment()) && lo.getQbgsj().equals(labOrder.getQbgsj())
+								&& lo.getQbgdt().equals(labOrder.getQbgdt())) {
 
-			//合并组合
-			String sampleType = ConvertUtil.null2String(labOrder.getSampletype()).trim();
-			if(!sampleType.isEmpty()){
-				for(int j=i+1;j<unExecuteList.size();j++){
-					lo = unExecuteList.get(j);
-					ylxh2 = ylxhMap.get(labOrder.getYlxh());
-
-					//判断部门等是否一样
-					if(lo.getRequestmode() == labOrder.getRequestmode() && info.getYblx().trim().equals(sampletype) && info.getZxksdm().equals(e.getZxksdm()) && info.getQbgsj().equals(e.getQbgsj())
-							&& info.getQbgdd().equals(e.getQbgdd())){
-						if(info.getJyxmfl().equals("9") && info.getYlmc().contains("/"))
-							info.setYlmc(info.getYlmc().substring(0, info.getYlmc().indexOf("/")));
-
-						if(!info.getYlmc().contains(e.getYlmc())){
-							//更新yjk
-							rmiService.updateExecuteInfo(info.getYjsb(), info.getYlxh(),info.getRequestmode());
-
-							e.setYlmc(e.getYlmc()+"+"+info.getYlmc());
-							selMap.remove(info.getYjsb());
-							if(info.getYlxh()!=null && !info.getYlxh().isEmpty())
-								e.setYlxh(e.getYlxh()+"+"+info.getYlxh());
-							fee = fee + Double.parseDouble(info.getDj()) * Double.parseDouble(info.getSl());
+							if (labOrder.getExamitem().indexOf(lo.getExamitem()) < 0 && lo.getExamitem().indexOf(labOrder.getExamitem()) < 0) {
+								//合并组合
+								labOrder.setExamitem(labOrder.getExamitem() + "+" + lo.getExamitem());
+								labOrder.setYlxh(labOrder.getYlxh() + "+" + lo.getYlxh());
+								labOrder.setPrice("" + (Double.parseDouble(labOrder.getPrice()) + Double.parseDouble(lo.getPrice())));
+								lo.setZxbz(1);
+								itemId += "|" + lo.getLaborderorg();
+							}
 						}
 					}
 
+				} else {
+					o.put("error", "警告！检验项目" + labOrder.getExamitem() + "样本类型为空！");
 				}
-			} else {
-				o.put("error", "警告！检验项目"+labOrder.getExamitem()+"样本类型为空！");
 			}
+			//合并后的采样项目添加到记录表
+			needSaveList.add(labOrder);
+		}
 
-			ybh_like = ymd.format(executetime)+"%";
+		for(int i = 0; i < needSaveList.size(); i++) {
 
 			//生成样本号
-			time = Double.parseDouble(hhmm.format(executetime).replace(":", "."));
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(executetime);
-			day = calendar.get(Calendar.DAY_OF_WEEK);
 
-			//已采集的样本第二次打印是，如果是当天则样本号不变
-			if(zxbz>0 && lab.getSampleno().length()==14 && lab.getSampleno().substring(0, 8).equals(ymd.format(new Date()))){
 
-			}else{
-				do {
-					samplenoExist = false;
-					if(requestmode ==1){
-						e.setZxksdm("1300300");
-						labdepart = "1300300";
-						sampleno = "0";
-						receivetime = executetime;
-					}else{
-						if(labdepart.equals("1300600")){
-							if(day>1 && day<8){
-								if(time<14 && Integer.parseInt(e.getQbbdd())>0){
-									nextday = 0;
-									sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
-								}else {
-									sampleno = "0";
-								}
-							}else
-								sampleno = "0";
-						}else if(labdepart.contains("13007")){
-							if(day>1 && (time>5.06 && time<10) && Integer.parseInt(e.getQbbdd())>0){
-								nextday = 0;
-								sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
-							}else
-								sampleno = "0";
-						}else if(labdepart.contains("13001")){
-							if(day>0 && (time>6.06 && time<17.30) && Integer.parseInt(e.getQbbdd())>0){
-								nextday = 0;
-								sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
-							}else
-								sampleno = "0";
-						}else if(labdepart.contains("1300501")){
-							if(day>1){
-								if(time<13)
-									nextday=0;
-								else
-									nextday = 1;
-								if(Integer.parseInt(e.getQbbdd())>0)
-									sampleno = getautoSampleno(nextday,labdepart,Integer.parseInt(e.getQbbdd()));
-								else
-									sampleno = "0";
-							}else
-								sampleno = "0";
-						}else{
-							sampleno="0";
-						}
-
-					}
-
-//					if(sampleno.trim().length()==14)
-//						samplenoExist = sampleManager.existSampleNo(sampleno);
-				} while (samplenoExist);
-				//生成样本号结束
-			}
-
-			System.out.println("sampleno="+sampleno);
 
 			//--一个条码抽血多次---
-			long doctadviseno = 0;
+			/*long doctadviseno = 0;
 			ylxh = ylxhManager.get(Long.parseLong(e.getYlxh()));
 			ylxhdescribe = ylxh.getProfiletest();
 			//if li_dccx = 1  and li_pos > 0  and pos(ls_ylxh,'+') = 0  then //有多个标本
@@ -361,12 +324,13 @@ public class ExecuteController {
 			labOrder.setZxbz(++zxbz);
 			labOrder = labOrderManager.save(labOrder);
 
-			laborders.add(labOrder.getLaborder());
+			laborders.add(labOrder.getLaborder());*/
 
 
-
-		}*/
-		o.put("laborders", laborders);
+		}
+		//回写HIS，申请状态变更
+		//webService.requestUpdate(labOrder.getStayhospitalmode()*10+1, );
+		//o.put("laborders", laborders);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
 
@@ -725,7 +689,7 @@ public class ExecuteController {
 	
 	//生成样本号
 	public String getautoSampleno(int nextDay,String lab,int type){
-		String sampleno="";
+		/*String sampleno="";
 		String groupId="";
 		Date sampleDate = new Date();//需要生成的样本号日期
 		Date today = new Date(); //数据库中记录的日期
@@ -841,14 +805,14 @@ public class ExecuteController {
 			exsitSampleno = sampleManager.existSampleNo(sampleno);//查看数据库中是否有该样本号记录
 			if(exsitSampleno)
 				sampleno = getautoSampleno(nextDay, lab, type);
-		}
+		}*/
 		
-		return sampleno;
+		return "";
 		
 	}
 	
 	public SampleNoBuilder initBuilder(SampleNoBuilder s,Date today,Date nextday) throws Exception{
-		s.setSampleNo1(0);
+		/*s.setSampleNo1(0);
 		s.setSampleNo2(0);
 		s.setSampleNo3(0);
 		s.setSampleNo4(0);
@@ -860,7 +824,8 @@ public class ExecuteController {
 		s.setNextday(ymd1.parse(ymd1.format(nextday)));
 		
 		s = sampleNoBuilderManager.save(s);
-		return s;
+		return s;*/
+		return new SampleNoBuilder();
 	}
 	
 	
