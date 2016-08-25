@@ -10,6 +10,7 @@ function getSample(docNo) {
     	$("#pType").html(data.type);
     	$("#diagnostic").html(data.diagnostic);
     	$("#sjSection").html(data.sjSection);
+    	$("#cxxx").html("");
     	$("#cxxx").html(data.cxxx);
     	
     	$("#tat_request").html(data.request);
@@ -113,35 +114,45 @@ function getList(from, to, name, type) {
 $(function() {
 	$.ajaxSetup({cache:false});
 	
-//	laydate({
-//        elem: '#fromDate',
-//        event: 'focus',
-//        format: 'YYYYMMDD'
-//    });
-//    laydate({
-//        elem: '#toDate',
-//        event: 'focus',
-//        format: 'YYYYMMDD'
-//    });
+	laydate({
+        elem: '#from',
+        event: 'focus',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        istime: true, //是否开启时间选择
+        isclear: true, //是否显示清空
+        issure: true, 
+        choose: function(dates){ //选择好日期的回调
+        	laydate({
+                elem: '#to',
+                min: dates, //最小日期
+                event: 'focus',
+                format: 'YYYY-MM-DD hh:mm:ss',
+                istime: true, //是否开启时间选择
+                isclear: true, //是否显示清空
+                issure: true, 
+            });
+        }
+    });
+    laydate({
+        elem: '#to',
+        event: 'focus',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        istime: true, //是否开启时间选择
+        isclear: true, //是否显示清空
+        issure: true, 
+        choose: function(dates){ //选择好日期的回调
+        	laydate({
+                elem: '#from',
+                max: dates, //最小日期
+                event: 'focus',
+                format: 'YYYY-MM-DD hh:mm:ss',
+                istime: true, //是否开启时间选择
+                isclear: true, //是否显示清空
+                issure: true, 
+            });
+        }
+    });
     
-	$( "#from" ).datepicker({
-      changeMonth: true,
-      dateFormat:"yy-mm-dd",
-  	  monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-      dayNamesMin: ['日','一','二','三','四','五','六'],
-      onClose: function( selectedDate ) {
-        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-      }
-    });
-    $( "#to" ).datepicker({
-      changeMonth: true,
-      dateFormat:"yy-mm-dd",
-      monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-      dayNamesMin: ['日','一','二','三','四','五','六'],
-      onClose: function( selectedDate ) {
-        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
     
     $("#search_text").autocomplete({
         source: function( request, response ) {
@@ -239,8 +250,8 @@ $(function() {
 		}
 	});
 	
-	$("#from").val(new Date().Format("yyyy-MM-dd"));
-	$("#to").val(new Date().Format("yyyy-MM-dd"));
+	$("#from").val(new Date().Format("yyyy-MM-dd") + " 00:00:00");
+	$("#to").val(new Date().Format("yyyy-MM-dd") + " 23:59:59");
 });
 Date.prototype.Format = function(fmt)   
 { //author: meizz   

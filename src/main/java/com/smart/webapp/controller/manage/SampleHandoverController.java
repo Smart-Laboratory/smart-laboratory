@@ -340,7 +340,7 @@ public class SampleHandoverController {
 		for(Process p : processes){
 			sampleids += p.getSampleid()+",";
 		}
-		List<SyncPatient> syncPatients = null;//rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
+		List<SyncPatient> syncPatients = rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
 		for(SyncPatient s : syncPatients){
 			if(s!=null)
 				sMap.put(s.getDOCTADVISENO(), s);

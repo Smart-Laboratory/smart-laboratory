@@ -9,10 +9,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import com.smart.Constants;
+import com.smart.model.lis.Process;
 import com.zju.api.model.Describe;
 import com.zju.api.model.ExecuteInfo;
 import com.zju.api.model.FormulaItem;
@@ -258,7 +261,7 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncPatient> getSampleBySection(String from, String to, String section, int sampleState) {
-		String hql = "select * from l_patientinfo p where labdepartment='" + section + "' and receivetime between to_date('" + from + "','"
+		String hql = "select * from l_patientinfo p where labdepartment='" + section + "' and REQUESTTIME >to_date('2016-08-24 00:00:00','yyyy-MM-dd hh24:mi:ss') and ksreceivetime between to_date('" + from + "','"
                 + Constants.DATEFORMAT + "') and to_date('" + to + "','" + Constants.DATEFORMAT
                 + "') ";
 		
@@ -267,25 +270,26 @@ public class RMIServiceImpl implements RMIService {
 			
 			break;
 		case 2:
-			hql += " and p.executetime is not null and p.sendtime is null and p.ksreceivetime is null and p.receivetime is null";
+			hql += " and length(p.executetime)>0 and length(p.sendtime) is null and length(p.ksreceivetime) is null and length(p.receivetime) is null";
 			break;
 		case 3:
-			hql += " and p.executetime is not null and p.sendtime is not null and p.ksreceivetime is null and p.receivetime is null";
+			hql += " and length(p.executetime)>0 and length(p.sendtime)>0  and length(p.ksreceivetime) is null and length(p.receivetime) is null";
 			break;
 		case 4:
-			hql += " and p.executetime is not null  and p.ksreceivetime is not null and p.receivetime is null";
+			hql += " and length(p.executetime)>0 and length(p.ksreceivetime)>0 and length(p.receivetime) is null";
 			break;
 		case 5:
+			hql += " and length(p.executetime)>0 and  length(p.receivetime)>0 ";
 			hql += " and p.executetime is not null  and p.receivetime is not null ";
 			break;
 		case 6:
-			hql += " and  p.checktime is not null ";
+			hql += " and  length(p.checktime)>0 ";
 			break;
 		default:
 			break;
 		}
 		
-		hql += " order by p.receivetime desc";
+		hql += " order by p.ksreceivetime asc";
 		System.out.println(hql);
 		
 		return jdbcTemplate.query(hql, new RowMapper<SyncPatient>() {
@@ -621,7 +625,7 @@ public class RMIServiceImpl implements RMIService {
 	}
 	
 	public YLSF getYlsf(String ylxh){
-		String sql = "select * from gy_ylsf where ylxh = '"+ylxh+"'";
+		String sql = "select * from gy_ylsf where to_char(ylxh) = '"+ylxh+"'";
 		List<YLSF> ylsfs = jdbcTemplate.query(sql, new RowMapper<YLSF>() {
 		    public YLSF mapRow(ResultSet rs, int rowNum) throws SQLException {
 		        YLSF p = new YLSF();
@@ -661,5 +665,45 @@ public class RMIServiceImpl implements RMIService {
 		        return p;
 		    }
 		});
+	}
+	
+	public List<SyncPatient> getReceiveList(String receiver, Date starttime, Date endtime,int start,int end){
+		String hql = "";
+		if(endtime == null){
+			hql = "select * from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(starttime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+		}else{
+			hql = "from Process p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.SDF.format(endtime)+"','yyyy-mm-dd hh24:mi:ss') ";
+		}
+		
+		
+		if(start!=0 && end !=0 && start<=end){
+			hql += " and rownum>="+ start + " and rownum<=" + end; 
+		}
+		hql += " order by p.receivetime desc";
+		
+		return jdbcTemplate.query(hql, new RowMapper<SyncPatient>() {
+		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        SyncPatient p = new SyncPatient();
+		        setField(rs, p);
+		        return p;
+		    }
+		});
+	}
+	
+	public int getReceiveListCount(String receiver, Date starttime, Date endtime){
+		String hql = "";
+		if(endtime == null){
+			hql = "select count(*) from l_patientinfo p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(starttime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+		}else{
+			hql = "select count(*) from l_process p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
+					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.SDF.format(endtime)+"','yyyy-mm-dd hh24:mi:ss') ";
+		}
+		
+		hql += " order by p.receivetime desc";
+		
+		return jdbcTemplate.queryForObject(hql, Integer.class);
 	}
 }

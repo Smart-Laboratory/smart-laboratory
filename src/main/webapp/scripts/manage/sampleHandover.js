@@ -93,10 +93,10 @@ function getReciveList(){
 	var width = $("#samplereceive").width()*0.9;
 	if(receivelistfirst){
 		receivelistfirst=false;
-	jQuery("#receiveList").jqGrid({
+	$("#receiveList").jqGrid({
 		url:"../manage/sampleHandover/receiveList?type=1&operator=" + $("#outer").val() + "(" + $("#point").val() + ")",
 		datatype:"json",
-		width:width,
+//		width:width,
 		colNames:['医嘱号','病人姓名','就诊卡号','检验项目','送检科室','申请时间','申请者','采集时间','采集者','送出时间','送出者','科室接收时间','科室接收者'],
 		colModel:[
 		          {name:'doctadviseno',index:'doctadviseno',width:width*0.1,sortable:false},
@@ -108,9 +108,9 @@ function getReciveList(){
 		          {name:'requester',index:'requester',width:width*0.1*0.5,sortable:false},
 		          {name:'executetime',index:'executetime',width:width*0.1,sortable:false},
 		          {name:'executor',index:'executor',width:width*0.1*0.5,sortable:false},
-		          {name:'sendtime',index:'sendtime',width:width*0.1*0.5,sortable:false},
+		          {name:'sendtime',index:'sendtime',width:width*0.1,sortable:false},
 		          {name:'sender',index:'sender',width:width*0.1*0.5,sortable:false},
-		          {name:'ksreceivetime',index:'ksreceivetime',width:width*0.1*0.5,sortable:false},
+		          {name:'ksreceivetime',index:'ksreceivetime',width:width*0.1,sortable:false},
 		          {name:'ksreceiver',reveiver:'ksreceiver',width:width*0.1*0.5,sortable:false}
 		          ],
 		rowNum:20,
