@@ -62,9 +62,24 @@
     .nav-pills > li > a {
         border-radius: 0px;
     }
+    .ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize{
+        height: 30px !important;
+    }
+    .ui-jqgrid .ui-jqgrid-htable th div {
+        padding-top: 5px !important;
+    }
+    .ui-jqgrid .ui-jqgrid-view input, .ui-jqgrid .ui-jqgrid-view select, .ui-jqgrid .ui-jqgrid-view textarea, .ui-jqgrid .ui-jqgrid-view button{
+        margin: 0 0;
+    }
+    .ui-jqgrid tr.ui-row-ltr td, .ui-jqgrid tr.ui-row-rtl td{
+        padding: 2px 4px;
+    }
+    .ui-jqgrid-htable th div .cbox {
+        margin-left: 3px !important;
+    }
 </style>
 <div class="row">
-    <div class="col-xs-2 treelist">
+    <div class="col-xs-3 treelist">
         <div class="laftnav">
             <div class="lazy_header">
                 <span class="lazy-list-title">
@@ -72,14 +87,14 @@
                 <span class="tip" style="cursor:pointer;">病人列表</span>
                 </span>
             </div>
-            <div>
+            <div style="overflow: auto;" id="leftTree">
                 <%--<ul class="nav nav-pills nav-stacked" id="tree">--%>
                 <ul id="tree" class="ztree"></ul>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="col-xs-10">
+    <div class="col-xs-9">
         <div style="padding-top: 5px;">
             <button type="button" class="btn btn-sm btn-primary " title="打印" onclick="AddSection()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>
@@ -170,6 +185,7 @@
                                     var data = eval("("+data+")");
                                     var beollected = data.beollected;
                                     console.log(beollected)
+                                    $("#tableList" ).clearGridData();   //清空原grid数据
                                     jQuery("#tableList").jqGrid('setGridParam',{
                                         datatype : 'local',
                                         data:beollected
@@ -200,17 +216,19 @@
             initGrid:function () {
                 $("#tableList").jqGrid({
                     datatype: "json",
-                    colNames: ['床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
+                    //caption:"未采集标本",
+                    colNames: ['申请ID','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
                     colModel: [
-                        { name: 'bed', index: 'bed', width: 60 },
-                        { name: 'patientname', index: 'patientname', width: 100},
-                        { name: 'sex', index: 'sex', width: 60,formatter:'select',editoptions : {value : "1:男;0:女"}},
-                        { name: 'age', index: 'sampletype', width: 100},
-                        { name: 'testId', index: 'sampletype', width: 100,hidden:true},
-                        { name: 'examitem', index: 'examitem', width: 120},
-                        { name: 'sampletype', index: 'sampletype', width: 100},
+                        { name: 'requestId', index: 'requestId', width: 40,hidden:true },
+                        { name: 'bed', index: 'bed', width: 40 },
+                        { name: 'patientname', index: 'patientname', width: 60},
+                        { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
+                        { name: 'age', index: 'sampletype', width: 40},
+                        { name: 'testId', index: 'sampletype', width: 60,hidden:true},
+                        { name: 'examitem', index: 'examitem', width: 150},
+                        { name: 'sampletype', index: 'sampletype', width: 60},
                         { name: 'price', index: 'price', width: 60},
-                        { name: 'requestTime', index: 'sampletype', width: 100},
+                        { name: 'requestTime', index: 'sampletype', width: 60},
                         { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
                     ],
                     onSelectRow: function(id) {
@@ -226,7 +244,7 @@
                     viewrecords: true,
                     autowidth:true,
                     altRows:true,
-                    height:100,
+                    height:140,
                     rownumbers: true, // 显示行号
                     rownumWidth: 35
                 });
@@ -280,6 +298,8 @@
         var clientHeight = $(window).innerHeight();
         var height = clientHeight - $('#head').height() - $('#toolbar').height() - $('.footer-content').height() - 30;
         $('.laftnav').height(height);
+        $('#leftTree').height(height-40);
+
         TSLAB.Custom.init();
         //$.fn.zTree.init($("#tree"), setting);
     })
