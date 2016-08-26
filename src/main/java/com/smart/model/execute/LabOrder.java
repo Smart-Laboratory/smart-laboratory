@@ -50,17 +50,10 @@ public class LabOrder {
 	private String qbgdt;			//报报告单地点
 	private Integer requestmode=0; //急诊标识
 	private Integer requestNum = 1; //申请数量
-<<<<<<< HEAD
-	private String selfexecute;
-	private String toponymy; //采集部位
-	private Integer cycle=0;		//生理周期
-	private Integer count=0;		//采集数量
-=======
 	private String selfexecute;		//自抽样本
 	private String toponymy; 		//采集部位
 	private Integer cycle;			//生理周期
 	private Integer count;			//采集数量
->>>>>>> origin/master
 
 	//add by zcw 20160825
 	private String hossectionName;	//科室名称(病区)

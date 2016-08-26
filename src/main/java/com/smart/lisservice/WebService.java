@@ -240,7 +240,6 @@ public class WebService {
         try {
 
             HttpClient httpClient = new HttpClient();
-<<<<<<< HEAD
             httpClient.getHostConfiguration().setHost(url+"requestUpdate");
             PostMethod method = new PostMethod(url+"requestUpdate");
             JSONObject object = new JSONObject();
@@ -255,23 +254,6 @@ public class WebService {
             object.put("expand",expand);
             RequestEntity requestEntity = new StringRequestEntity(object.toString(),"application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
-=======
-            httpClient.getHostConfiguration().setHost(url);
-            PostMethod method = new PostMethod(url);
-            method.setRequestHeader("Content-Type","application/json;charset=utf-8");
-            JSONObject params = new JSONObject();
-            params.put("itemId",itemId);
-            params.put("exeType",exeType+"");
-            params.put("exeDeptCode",exeDeptCode);
-            params.put("exeDeptName",exeDeptName);
-            params.put("exeDoctorCode",exeDoctorCode);
-            params.put("exeDoctorName",exeDoctorName);
-            params.put("exeDate",exeDate);
-            params.put("expand",expand);
-            String aaa = "";
-            RequestEntity entity = new StringRequestEntity(params.toString(), "application/json", "UTF-8");
-            method.setRequestEntity(entity);
->>>>>>> origin/master
             method.releaseConnection();
             httpClient.executeMethod(method);
             System.out.println("回写状态：" + method.getResponseBodyAsString());
