@@ -61,8 +61,11 @@
             <Item name="ScheduleSet" title="individual.scheduleSet" page="/pb/sz" roles="ROLE_ADMIN"/>
         </Menu>
 
-        <Menu name="CustomerManage" title="customerManage.title" page="/customer" roles="ROLE_ADMIN">
-            <Item name="EditCustomer" title="menu.customer" page="/customer/viewCustomer" roles="ROLE_ADMIN"/>
+        <Menu name="CustomerManage" title="customerManage.title" page="/dsf" roles="ROLE_ADMIN">
+            <Item name="EditCustomer" title="menu.customer" page="/dsf/customer/viewCustomer" roles="ROLE_ADMIN"/>
+            <Item name="TestObjective" title="menu.testObjective" page="/dsf/testObjective/viewTestObjective" roles="ROLE_ADMIN"/>
+            <Item name="ControlTestItems" title="menu.controlTestItems" page="/dsf/controlTestItems/viewControlTestItems" roles="ROLE_ADMIN"/>
+            <Item name="CustomerDiscount" title="menu.customerDiscount" page="/dsf/customerDiscount/viewCustomerDiscount" roles="ROLE_ADMIN"/>
         </Menu>
 
         <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>

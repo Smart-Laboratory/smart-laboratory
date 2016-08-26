@@ -83,5 +83,9 @@
         <mapping class="com.smart.model.lis.TestResultLog"/>
         <mapping class="com.smart.model.dsf.CustomerInfo"/>
         <mapping class="com.smart.model.dsf.CustomerInfoDetails"/>
+        <mapping class="com.smart.model.dsf.DSF_ylxh"/>
+        <mapping class="com.smart.model.dsf.DSF_TestItems"/>
+        <mapping class="com.smart.model.dsf.DSF_ControlTestItems"/>
+        <mapping class="com.smart.model.dsf.DSF_CustomerBaseDiscount"/>
     </session-factory>
 </hibernate-configuration>

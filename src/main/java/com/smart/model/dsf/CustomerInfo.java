@@ -1,8 +1,10 @@
 package com.smart.model.dsf;
 
 import com.smart.model.BaseObject;
+import com.smart.model.lis.Sample;
 
 import javax.persistence.*;
+import javax.xml.stream.StreamFilter;
 
 /**
  * Created by zjn on 2016/8/4.
@@ -14,6 +16,8 @@ public class CustomerInfo extends BaseObject{
     private Long customerid ;
     private String customername;
     private String address;
+    private String clientnumber;
+    private int sequence;
 
     public CustomerInfo() {
     }
@@ -49,6 +53,22 @@ public class CustomerInfo extends BaseObject{
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getClientnumber() {
+        return clientnumber;
+    }
+
+    public void setClientnumber(String clientnumber) {
+        this.clientnumber = clientnumber;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
     }
 
     @Override
