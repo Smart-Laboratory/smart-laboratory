@@ -19,7 +19,7 @@ public class LabOrder {
 
 	private String requestId;
 	private String bed;
-	private Long laborderorg; //yjsb 申请明细ID
+	private String laborderorg; //yjsb 申请明细ID,多个用逗号隔开
 	private String sampleno;
 	private Integer stayhospitalmode=0;
 	private Date requesttime;
@@ -67,10 +67,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Long getLaborderorg() {
+	public String getLaborderorg() {
 		return laborderorg;
 	}
-	public void setLaborderorg(Long laborderorg) {
+	public void setLaborderorg(String laborderorg) {
 		this.laborderorg = laborderorg;
 	}
 	

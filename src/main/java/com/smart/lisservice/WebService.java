@@ -117,7 +117,7 @@ public class WebService {
                     labOrder.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("birthday")));
                     labOrder.setBlh(arr.getJSONObject(i).getString("patientFileCode"));
                     labOrder.setCycle(0);
-                    labOrder.setLaborderorg(arr.getJSONObject(i).getLong("requestDetailId"));
+                    labOrder.setLaborderorg(arr.getJSONObject(i).getString("requestDetailId"));
                     labOrder.setDiagnostic(arr.getJSONObject(i).getString("diagnose"));
                     labOrder.setExamitem(arr.getJSONObject(i).getString("itemName"));
                     labOrder.setPatientid(arr.getJSONObject(i).getString("patientId"));
@@ -160,7 +160,7 @@ public class WebService {
                     labOrder.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("birthday")));
                     labOrder.setBlh(arr.getJSONObject(i).getString("patientFileCode"));
                     labOrder.setCycle(0);
-                    labOrder.setLaborderorg(arr.getJSONObject(i).getLong("requestDetailId"));
+                    labOrder.setLaborderorg(arr.getJSONObject(i).getString("requestDetailId"));
                     labOrder.setDiagnostic(arr.getJSONObject(i).getString("diagnose"));
                     labOrder.setExamitem(arr.getJSONObject(i).getString("itemName"));
                     labOrder.setPatientid(arr.getJSONObject(i).getString("patientId"));
@@ -236,7 +236,8 @@ public class WebService {
         return list;
     }
 
-    public void requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
+    public boolean requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
+        boolean success = true;
         try {
 
             HttpClient httpClient = new HttpClient();
@@ -256,10 +257,16 @@ public class WebService {
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
             httpClient.executeMethod(method);
-            System.out.println("回写状态：" + method.getResponseBodyAsString());
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            System.out.println(obj.toString());
+            if((Integer)obj.get("State")==0) {
+                success = false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            success = false;
         }
+        return success;
     }
 
 

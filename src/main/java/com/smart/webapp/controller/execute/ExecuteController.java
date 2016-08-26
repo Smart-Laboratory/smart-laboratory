@@ -96,11 +96,7 @@ public class ExecuteController {
 
 		WebService webService = new WebService();
 		List<LabOrder> unExecuteList = webService.getExecuteInfoByRequestIds(unExecuteRequestIds);
-		List<LabOrder> executeList = labOrderManager.getByRequestIds(unExecuteRequestIds);
-		String notExcute = "";
-		if(executeList != null && executeList.size() > 0) {
-
-		}
+		List<LabOrder> executeList = new ArrayList<LabOrder>();
 		if(!executeRequestIds.isEmpty()) {
 			executeList.addAll(labOrderManager.getByRequestIds(executeRequestIds));
 		}
@@ -168,6 +164,7 @@ public class ExecuteController {
 								labOrder.setExamitem(labOrder.getExamitem() + "+" + lo.getExamitem());
 								labOrder.setYlxh(labOrder.getYlxh() + "+" + lo.getYlxh());
 								labOrder.setPrice("" + (Double.parseDouble(labOrder.getPrice()) + Double.parseDouble(lo.getPrice())));
+								labOrder.setLaborderorg(labOrder.getLaborderorg() + "," + lo.getLaborderorg());
 								lo.setZxbz(1);
 								itemId += "|" + lo.getLaborderorg();
 							}
@@ -185,6 +182,9 @@ public class ExecuteController {
 		Set<Long> labOrders = new HashSet<Long>();
 		AutoSampleNoUtil autoUtil = AutoSampleNoUtil.getInstance(sampleNoBuilderManager);
 		Map<String, List<SampleNoBuilder>> autoMap = autoUtil.getMap();
+		List<Sample> needSaveSample = new ArrayList<Sample>();
+		List<Process> needSaveProcess = new ArrayList<Process>();
+		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
 		for(int i = 0; i < needSaveList.size(); i++) {
 			//生成样本号
 			LabOrder labOrder = needSaveList.get(i);
@@ -221,22 +221,28 @@ public class ExecuteController {
 			sample.setSampleType(labOrder.getSampletype());
 			sample.setSectionId(labOrder.getLabdepartment());
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
-			sample = sampleManager.save(sample);
+			sample.setId(sampleManager.getSampleId());
 			Process process = new Process();
 			process.setSampleid(sample.getId());
 			process.setRequesttime(labOrder.getRequesttime());
 			process.setRequester(labOrder.getRequester());
 			process.setExecutetime(labOrder.getExecutetime());
 			process.setExecutor(labOrder.getExecutor());
-			processManager.save(process);
 			labOrders.add(sample.getId());
 			labOrder.setLaborder(sample.getId());
-			labOrderManager.save(labOrder);
+
+			needSaveSample.add(sample);
+			needSaveProcess.add(process);
+			needSaveLabOrder.add(labOrder);
 		}
 		//回写HIS，申请状态变更
 		System.out.println("申请序号： " + itemId);
 		System.out.println("生成的序号： " + labOrders.toString());
-		webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.SDF.format(executeTime), "");
+		if(webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.SDF.format(executeTime), "")){
+			sampleManager.saveAll(needSaveSample);
+			processManager.saveAll(needSaveProcess);
+			labOrderManager.saveAll(needSaveLabOrder);
+		}
 		o.put("labOrders", labOrders);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());

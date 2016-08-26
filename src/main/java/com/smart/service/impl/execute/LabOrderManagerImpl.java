@@ -47,4 +47,8 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 	public List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds){
 		return labOrderDao.getByRequestIds(ward,bedNo,requestIds);
 	}
+
+	public void saveAll(List<LabOrder> list) {
+		labOrderDao.saveAll(list);
+	}
 }
