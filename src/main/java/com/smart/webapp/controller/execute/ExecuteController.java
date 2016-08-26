@@ -96,7 +96,14 @@ public class ExecuteController {
 
 		WebService webService = new WebService();
 		List<LabOrder> unExecuteList = webService.getExecuteInfoByRequestIds(unExecuteRequestIds);
-		List<LabOrder> executeList = labOrderManager.getByRequestIds(executeRequestIds);
+		List<LabOrder> executeList = labOrderManager.getByRequestIds(unExecuteRequestIds);
+		String notExcute = "";
+		if(executeList != null && executeList.size() > 0) {
+
+		}
+		if(!executeRequestIds.isEmpty()) {
+			executeList.addAll(labOrderManager.getByRequestIds(executeRequestIds));
+		}
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 
 		JSONObject o = new JSONObject();
@@ -182,6 +189,7 @@ public class ExecuteController {
 			//生成样本号
 			LabOrder labOrder = needSaveList.get(i);
 			boolean needNo = true;			//需要编号
+			System.out.println("执行科室：" + labOrder.getLabdepartment());
 			for(SampleNoBuilder sampleNoBuilder : autoMap.get(labOrder.getLabdepartment())) {
 				if(needNo && sampleNoBuilder.getNowNo() < sampleNoBuilder.getEndNo()) {
 					int nowNo = sampleNoBuilder.getNowNo() + 1;

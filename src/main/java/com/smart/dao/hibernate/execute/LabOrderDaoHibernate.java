@@ -46,6 +46,7 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	@SuppressWarnings("unchecked")
 	public List<LabOrder> getByRequestIds(String requestIds) {
 		String hql = "from LabOrder where laborderorg in ("+ requestIds+")";
+		System.out.println(hql);
 		return getSession().createQuery(hql).list();
 	}
 }

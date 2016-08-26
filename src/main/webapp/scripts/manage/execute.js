@@ -123,7 +123,6 @@ $(function(){
 		if($("#selfexecute").prop("checked")==true){
 			selfexecute =1;
 		}
-		alert(selval);
 //		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
 		$.get("../manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
 			data = jQuery.parseJSON(data);

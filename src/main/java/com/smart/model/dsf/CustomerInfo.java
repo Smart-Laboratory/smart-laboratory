@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="DSF_CUSTOMER_BASE_INFO")
 public class CustomerInfo extends BaseObject{
-    private Long customerid ;
+    private Long customerid;
     private String customername;
     private String address;
 

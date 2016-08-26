@@ -53,8 +53,8 @@ public class LabOrder {
 	private Integer requestNum = 1; //申请数量
 	private String selfexecute;
 	private String toponymy; //采集部位
-	private Integer cycle;		//生理周期
-	private Integer count;		//采集数量
+	private Integer cycle=0;		//生理周期
+	private Integer count=0;		//采集数量
 
 	@Id
 	public Long getLaborder() {

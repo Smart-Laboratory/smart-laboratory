@@ -11,6 +11,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
@@ -47,10 +49,9 @@ public class WebService {
     public List<String> getJCXM(String patientId, String from, String to) {
         List<String> list = new ArrayList<String>();
         try {
-            url += "getOutPatientRequestInfo";
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?requestType=2&patientType=1&patientCode=" + patientId
+            GetMethod method = new GetMethod(url + "getOutPatientRequestInfo?requestType=2&patientType=1&patientCode=" + patientId
                     + "&fromDate=" + from + "&toDate" + to);
             method.releaseConnection();
             httpClient.executeMethod(method);
@@ -70,10 +71,9 @@ public class WebService {
     public Patient getPatient(String patientId) {
         Patient patient = new Patient();
         try {
-            url += "getPatientInfoList";
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?patientType=1&patientCode=" + patientId);
+            GetMethod method = new GetMethod(url + "getPatientInfoList?patientType=1&patientCode=" + patientId);
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
@@ -100,13 +100,13 @@ public class WebService {
     public List<LabOrder> getExecuteInfo(String patientId, String requestmode, String from, String to) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
-            url += "getOutPatientRequestInfo";
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?patientCode=" + patientId + "&executeStatus=" + requestmode
+            GetMethod method = new GetMethod(url + "getOutPatientRequestInfo?patientCode=" + patientId + "&executeStatus=" + requestmode
                     + "&fromDate=" + from + "&toDate=" + to);
             method.releaseConnection();
             httpClient.executeMethod(method);
+            System.out.println("1获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==1) {
                 JSONArray arr = obj.getJSONArray("Message");
@@ -144,12 +144,12 @@ public class WebService {
     public List<LabOrder> getExecuteInfoByRequestIds(String unExecuteRequestIds) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
-            url += "getOutPatientRequestInfo";
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?requestDetailId=" + unExecuteRequestIds);
+            GetMethod method = new GetMethod(url + "getOutPatientRequestInfo?requestDetailId=" + unExecuteRequestIds);
             method.releaseConnection();
             httpClient.executeMethod(method);
+            System.out.println("获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
@@ -228,24 +228,25 @@ public class WebService {
 
     public void requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
         try {
-            url += "requestUpdate";
+
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url);
-            PostMethod method = new PostMethod(url);
-            method.setRequestHeader("Content-Type","application/json;charset=utf-8");
-            NameValuePair[] param = { new NameValuePair("requestType",requestType+""),
-                    new NameValuePair("itemId",itemId),
-                    new NameValuePair("exeType",exeType+""),
-                    new NameValuePair("exeDeptCode",exeDeptCode),
-                    new NameValuePair("exeDeptName",exeDeptName),
-                    new NameValuePair("exeDoctorCode",exeDoctorCode),
-                    new NameValuePair("exeDoctorName",exeDoctorName),
-                    new NameValuePair("exeDate",exeDate),
-                    new NameValuePair("expand",expand)} ;
-            method.setRequestBody(param);
+            httpClient.getHostConfiguration().setHost(url+"requestUpdate");
+            PostMethod method = new PostMethod(url+"requestUpdate");
+            JSONObject object = new JSONObject();
+            object.put("requestType",requestType);
+            object.put("itemId",itemId);
+            object.put("exeType",exeType);
+            object.put("exeDeptCode",exeDeptCode);
+            object.put("exeDeptName",exeDeptName);
+            object.put("exeDoctorCode",exeDoctorCode);
+            object.put("exeDoctorName",exeDoctorName);
+            object.put("exeDate",exeDate);
+            object.put("expand",expand);
+            RequestEntity requestEntity = new StringRequestEntity(object.toString(),"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
             method.releaseConnection();
             httpClient.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
+            System.out.println("回写状态：" + method.getResponseBodyAsString());
 
         } catch (Exception e) {
             e.printStackTrace();

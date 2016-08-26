@@ -4,6 +4,7 @@ import com.smart.model.execute.SampleNoBuilder;
 import com.smart.service.execute.SampleNoBuilderManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,9 @@ public class AutoSampleNoUtil {
 
     public static AutoSampleNoUtil getInstance(SampleNoBuilderManager sampleNoBuilderManager) {
         if(map == null) {
+            map = new HashMap<String, List<SampleNoBuilder>>();
             for(SampleNoBuilder sampleNoBuilder : sampleNoBuilderManager.getAllByOrder()) {
-                if(map != null && map.containsKey(sampleNoBuilder.getLabDepart())) {
+                if(map.containsKey(sampleNoBuilder.getLabDepart())) {
                     map.get(sampleNoBuilder.getLabDepart()).add(sampleNoBuilder);
                 } else {
                     List<SampleNoBuilder> list = new ArrayList<SampleNoBuilder>();
