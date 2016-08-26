@@ -19,14 +19,14 @@ public class LabOrder {
 
 	private String requestId;
 	private String bed;
-	private Long laborderorg; //yjsb
+	private Long laborderorg; //yjsb 申请明细ID
 	private String sampleno;
 	private Integer stayhospitalmode=0;
 	private Date requesttime;
 	private String requester;
 	private Date executetime;
 	private String executor;
-	private Integer zxbz=0;//采样执行标志
+	private Integer zxbz=0;		//采样执行标志
 
 	private Date birthday;
 	private String patientid;
@@ -39,21 +39,21 @@ public class LabOrder {
 	private String hossection; //申请科室
 	private String sampletype;
 	private String price;				//单价
-	private Integer feestatus=0;
+	private Integer feestatus=0;		//收费状态
 	private String examitem;			//检验项目名称
 	private String ylxh;				//检验项目ID
 	private String labdepartment;  		//检验科室
-	private String computername;
-	private Integer printflag=0;
-	private Integer receiveflag=0;
-	private String qbgsj;
-	private String qbgdt;
+	private String computername;			//电脑名称
+	private Integer printflag=0;			//打印标志
+	private Integer receiveflag=0;			//接收标志
+	private String qbgsj;			//取报告单时间
+	private String qbgdt;			//报报告单地点
 	private Integer requestmode=0; //急诊标识
 	private Integer requestNum = 1; //申请数量
-	private String selfexecute;
-	private String toponymy; //采集部位
-	private Integer cycle;		//生理周期
-	private Integer count;		//采集数量
+	private String selfexecute;		//自抽样本
+	private String toponymy; 		//采集部位
+	private Integer cycle;			//生理周期
+	private Integer count;			//采集数量
 
 	//add by zcw 20160825
 	private String hossectionName;	//科室名称(病区)

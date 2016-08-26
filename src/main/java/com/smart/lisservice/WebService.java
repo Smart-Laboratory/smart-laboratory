@@ -11,6 +11,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
@@ -243,16 +245,18 @@ public class WebService {
             httpClient.getHostConfiguration().setHost(url);
             PostMethod method = new PostMethod(url);
             method.setRequestHeader("Content-Type","application/json;charset=utf-8");
-            NameValuePair[] param = { new NameValuePair("requestType",requestType+""),
-                    new NameValuePair("itemId",itemId),
-                    new NameValuePair("exeType",exeType+""),
-                    new NameValuePair("exeDeptCode",exeDeptCode),
-                    new NameValuePair("exeDeptName",exeDeptName),
-                    new NameValuePair("exeDoctorCode",exeDoctorCode),
-                    new NameValuePair("exeDoctorName",exeDoctorName),
-                    new NameValuePair("exeDate",exeDate),
-                    new NameValuePair("expand",expand)} ;
-            method.setRequestBody(param);
+            JSONObject params = new JSONObject();
+            params.put("itemId",itemId);
+            params.put("exeType",exeType+"");
+            params.put("exeDeptCode",exeDeptCode);
+            params.put("exeDeptName",exeDeptName);
+            params.put("exeDoctorCode",exeDoctorCode);
+            params.put("exeDoctorName",exeDoctorName);
+            params.put("exeDate",exeDate);
+            params.put("expand",expand);
+            String aaa = "";
+            RequestEntity entity = new StringRequestEntity(params.toString(), "application/json", "UTF-8");
+            method.setRequestEntity(entity);
             method.releaseConnection();
             httpClient.executeMethod(method);
             System.out.println(method.getResponseBodyAsString());
@@ -260,5 +264,6 @@ public class WebService {
             e.printStackTrace();
         }
     }
+
 
 }
