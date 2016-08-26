@@ -56,14 +56,10 @@ function editYlxh() {
 	$('#profiletest').val(rowData.ptest);
 	$('#profiletest2').val(rowData.ptest2);
 	$('#profiletest3').val(rowData.ptest3);
-<<<<<<< HEAD
-
-=======
 	$('#cjbw').val(rowData.cjbw);
 	$('#sgsl').val(rowData.sgsl);
 	$('#sfhb').val(rowData.sfhb);
-	
->>>>>>> origin/master
+
 	layer.open({
 		type: 1,
 		area: ['650px','450px'],

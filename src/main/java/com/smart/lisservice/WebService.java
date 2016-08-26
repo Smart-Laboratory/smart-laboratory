@@ -256,12 +256,7 @@ public class WebService {
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
             httpClient.executeMethod(method);
-<<<<<<< HEAD
             System.out.println("回写状态：" + method.getResponseBodyAsString());
-
-=======
-            System.out.println(method.getResponseBodyAsString());
->>>>>>> origin/master
         } catch (Exception e) {
             e.printStackTrace();
         }
