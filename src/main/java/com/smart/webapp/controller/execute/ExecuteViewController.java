@@ -1,17 +1,14 @@
 package com.smart.webapp.controller.execute;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
+import com.smart.lisservice.WebService;
+import com.smart.model.lis.Ylxh;
+import com.smart.service.lis.*;
+import com.smart.webapp.util.YlxhUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,32 +17,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zju.api.model.ExecuteInfo;
-import com.zju.api.model.Patient;
-import com.lowagie.text.Section;
+import com.smart.model.lis.Patient;
 import com.smart.Constants;
 import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.InvalidSample;
 import com.smart.model.lis.Sample;
-import com.smart.model.reagent.Out;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.execute.LabOrderManager;
-import com.smart.service.lis.InvalidSampleManager;
-import com.smart.service.lis.PatientManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
-
-import net.coobird.thumbnailator.geometry.Size;
 
 @Controller
 @RequestMapping("/manage/execute*")
 public class ExecuteViewController {
-	private SimpleDateFormat ymd1 = new SimpleDateFormat("yyyy-MM-dd");
-	private static SimpleDateFormat ymdh = new SimpleDateFormat("yyyy年MM月dd日 HH:mm(EEE)" );
-	private static SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMdd");
-	private static SimpleDateFormat hhmm = new SimpleDateFormat("hh:mm");
 
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView ExecuteView(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -62,7 +47,20 @@ public class ExecuteViewController {
 		Map<String, Object> map = new HashMap<String,Object>();
 		//查询病人信息
 		String patientId = request.getParameter("patientId").trim();
-		Patient patient = rmiService.getPatient(patientId);
+        String from=request.getParameter("from");
+        String to=request.getParameter("to");
+
+        Patient patient = patientManager.getByPatientId(patientId);
+		WebService webService = new WebService();
+		if(patient == null) {
+			patient = webService.getPatient(patientId);
+			if(patientManager.getByBlh(patient.getBlh()) != null) {
+				patient = patientManager.getByBlh(patient.getBlh());
+				patient.setPatientId(patient.getPatientId() + "," + patientId);
+			}
+			patientManager.save(patient);
+		}
+		//Patient patient = rmiService.getPatient(patientId);
 		map.put("patient", patient);
 		//查询不合格标本记录
 		InvalidSample invalidSample = invalidSampleManager.getByPatientId(patientId);
@@ -73,7 +71,7 @@ public class ExecuteViewController {
 		String host = request.getRemoteHost();
 		map.put("host", host);
 		//查询抽血历史
-		List<LabOrder> labOrders = labOrderManager.getByPatientId(patientId);
+		List<LabOrder> labOrders = labOrderManager.getByPatientId(patientId, from, to);
 		if(labOrders == null || labOrders.size()==0)
 			map.put("size", 0);
 		else{
@@ -94,6 +92,18 @@ public class ExecuteViewController {
 			}
 			map.put("samples", samples);
 		}
+        //待查项目
+        String examtodo="";
+        List<String> exams = webService.getJCXM(patientId, from, to);
+        for(String exam : exams){
+            if(!examtodo.contains(exam)){
+                if(examtodo.isEmpty())
+                    examtodo = exam;
+                else
+                    examtodo += ";" + exam;
+            }
+        }
+        map.put("examtodo", examtodo);
 		return map;
 	}
 	
@@ -102,35 +112,81 @@ public class ExecuteViewController {
 	public Map<String, String> getTests(HttpServletRequest request, HttpServletResponse response){
 		String patientId = request.getParameter("patientId");
 		String requestmode = request.getParameter("requestmode");
-		Date from=null,to=null;
-		try {
-			from = request.getParameter("from")==null?null:ymd1.parse(request.getParameter("from"));
-			to = request.getParameter("to")==null?null:ymd1.parse(request.getParameter("to"));
-		} catch (Exception e) {
-			e.printStackTrace();
+		String from=request.getParameter("from");
+        String to=request.getParameter("to");
+
+		System.out.println(requestmode);
+
+		List<LabOrder> loList = new ArrayList<LabOrder>();
+		WebService webService = new WebService();
+		if(requestmode.equals("0")) {
+			loList.addAll(webService.getExecuteInfo(patientId, requestmode, from, to));
+		} else if(requestmode.equals("100")){
+			loList.addAll(webService.getExecuteInfo(patientId, "0", from, to));
+			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
+		} else {
+			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
 		}
-		
-		List<ExecuteInfo> eList = rmiService.gExecuteInfo(patientId, requestmode, from, to);
+		System.out.println(loList.size());
+		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 		StringBuilder html = new StringBuilder();
-		ExecuteInfo e = new ExecuteInfo();
+		LabOrder labOrder = new LabOrder();
+		Ylxh ylxh = new Ylxh();
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
-		//待查项目
-		String examtodo="";
-		List<String> exams = rmiService.getExamtode(patientId,from,to);
-		for(String exam : exams){
-			if(exam.contains("B超") && requestmode.equals("0")){
-				if(!examtodo.contains(exam)){
-					if(examtodo.isEmpty())
-						examtodo = exam;
-					else
-						examtodo += ";" + exam;
-				}
+		for(int i = 0; i < loList.size(); i++) {
+			labOrder = loList.get(i);
+			ylxh = ylxhMap.get(labOrder.getYlxh());
+			labOrder.setSampletype(ylxh.getYblx());
+			labOrder.setQbgdt(ylxh.getQbgdd());
+			labOrder.setQbgsj(ylxh.getQbgsj());
+			labOrder.setLabdepartment(ylxh.getKsdm());
+
+			System.out.println("执行标志：" + labOrder.getZxbz());
+
+			if(i%2==1){
+				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
+			}else{
+				html.append("<div  id='date"+i+"' class='alert alert-success sampleInfo' style='' >");
 			}
+			String bmp = "";
+			if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
+				bmp ="../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()) +".bmp";
+			}
+			String reportTime = ylxh.getQbgsj() + "-" + ylxh.getQbgdd();
+			if(labOrder.getZxbz() == 0) {
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-7'><label><input type='checkbox' checked value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz() +"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+			} else {
+				html.append("<div class='col-sm-1' style=''>"+
+						"<div class='col-sm-7'><label><input type='checkbox' value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz()+"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+			}
+			if(!bmp.isEmpty()){
+				html.append("<div class='col-sm-5'><img src='"+bmp+"' alt='"+ylxh.getSglx() + " " + ylxh.getBbl()+"' width='30px' height='50px' /></div>");
+			}
+			if(labOrder.getRequestmode()==1) {
+				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>");
+			}
+			html.append("</div>");
+			html.append("<div class='col-sm-11' style=''>");
+			html.append("<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+ylxh.getYlmc()+"</b>"+
+					"<span >发票号:</span><b id='sfsb'>"+labOrder.getRequestId()+"</b>"+
+					"<span >单价:</span><b id='dj'>"+labOrder.getPrice()+"</b>"+
+					"×<b id='sl'>"+labOrder.getRequestNum()+"</b>"+
+					"<span >执行科室:</span><b id='ksdm'>检验科</b>"+
+					"</div>"+
+					"<div>"
+					+ "<span >报告时间:</span><b id='qbgsj'>"+ylxh.getQbgsj()+"</b>"+
+					"<span >申请时间:</span><b id='kdsj'>"+Constants.DF8.format(labOrder.getRequesttime())+"</b>"+
+					"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(labOrder.getHossection())+"</b>"+
+					"<span >地点:</span><b id='qbgdd'>"+ylxh.getQbgdd()+"</b>"+
+					"</div>");
+			html.append("</div></div>");
+
 		}
 		
-		for(int i=0;i<eList.size();i++){
+		/*for(int i=0;i<eList.size();i++){
 			e=eList.get(i);
 			if(i==0)
 				recentInvoiceNum = e.getSfsb();
@@ -182,16 +238,14 @@ public class ExecuteViewController {
 						"</div>"+
 						"<div><span >医嘱号:</span><b id='doctadviseno'>"+e.getDoctadviseno()+"</b>"
 						+ "<span >报告时间:</span><b id='qbgsj'>"+e.getQbgsj()+"</b>"+
-								"<span >申请时间:</span><b id='kdsj'>"+ymdh.format(e.getKdsj())+"</b>"+
+								"<span >申请时间:</span><b id='kdsj'>"+Constants.DF8.format(e.getKdsj())+"</b>"+
 								"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(e.getSjksdm())+"</b>"+
 								"<span >地点:</span><b id='qbgdd'>"+e.getQbgdd()+"</b>"+
 							"</div>");
 			html.append("</div></div>");
-		}
+		}*/
 		Map<String, String> map = new HashMap<String,String>();
 		map.put("html", html.toString());
-		map.put("examtodo", examtodo);
-		
 		return map;
 	}
 	
@@ -248,7 +302,7 @@ public class ExecuteViewController {
 		int ll_time = 0; //半小时，一小时
 		
 		Date now = new Date();
-		double ld_time = Double.parseDouble(hhmm.format(now).replace(":", "."));
+		double ld_time = Double.parseDouble(Constants.DF5.format(now).replace(":", "."));
 //		System.out.println(ld_time);
 
 		Calendar c = new GregorianCalendar();
@@ -327,7 +381,7 @@ public class ExecuteViewController {
 				//判断是否在法定节假日
 				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ls_time.split(":")[0]));
 				c.set(Calendar.MINUTE, Integer.parseInt(ls_time.split(":")[1]));
-				qdsj = ymdh.format(c.getTime());
+				qdsj = Constants.DF8.format(c.getTime());
 				qbgsj = c.getTime();
 //				System.out.println(qdsj);
 			}
@@ -364,7 +418,7 @@ public class ExecuteViewController {
 				//判断是否在法定节假日
 				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ls_time.split(":")[0]));
 				c.set(Calendar.MINUTE, Integer.parseInt(ls_time.split(":")[1]));
-				qdsj = ymdh.format(c.getTime());
+				qdsj = Constants.DF8.format(c.getTime());
 				qbgsj = c.getTime();
 //				System.out.println(qdsj);
 			}
@@ -401,7 +455,7 @@ public class ExecuteViewController {
 						c.add(Calendar.HOUR_OF_DAY, ll_time);
 					}
 				}
-				qdsj = ymdh.format(c.getTime());
+				qdsj = Constants.DF8.format(c.getTime());
 				qbgsj = c.getTime();
 //				System.out.println(sj+qdsj);
 			}
@@ -424,7 +478,7 @@ public class ExecuteViewController {
 			c.setTime(qbgsj);
 			ll_day=c.get(Calendar.DAY_OF_WEEK);
 //			System.out.println("取单日星期几"+ll_day);
-			if(Long.parseLong(ymd.format(qbgsj))<Long.parseLong(ymd.format(now))){
+			if(Long.parseLong(Constants.DF3.format(qbgsj))<Long.parseLong(Constants.DF3.format(now))){
 				qdsj="请与科室联系";
 			}
 			else{
@@ -435,13 +489,13 @@ public class ExecuteViewController {
 						qdsj="标本送达两小时后";
 				}
 				else{
-					hour = Double.parseDouble(hhmm.format(qbgsj).replace(":", "."));
+					hour = Double.parseDouble(Constants.DF5.format(qbgsj).replace(":", "."));
 					if(ll_day>1 && labdepartment.contains("1300600") && hour<12){
 						
 					}else if(ll_day==1 && labdepartment.contains("1300600")){
 						c.add(Calendar.DAY_OF_MONTH, 1);
 						qbgsj=c.getTime();
-						qdsj = ymdh.format(qbgsj);
+						qdsj = Constants.DF8.format(qbgsj);
 //						System.out.println(qdsj);
 					}
 					ll_day -=1;
@@ -452,47 +506,47 @@ public class ExecuteViewController {
 						c.set(Calendar.MINUTE, 0);
 						c.set(Calendar.HOUR_OF_DAY, 8);
 						qbgsj = c.getTime();
-						qdsj=ymdh.format(qbgsj)+"（星期一）";
+						qdsj=Constants.DF8.format(qbgsj)+"（星期一）";
 					}else if( ll_day ==6 && qbgdd.contains("化验单")){
 						if(hour<7.30){
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR_OF_DAY, 8);
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期六）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期六）";
 						}else if(hour>11.30 && hour<14){
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR_OF_DAY, 14);
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期六）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期六）";
 						}else if(hour>17.30){
 							c.add(Calendar.DAY_OF_MONTH, 2);
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR_OF_DAY, 8);
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期一）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期一）";
 						}else{
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期六）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期六）";
 						}
 					}else if(qbgdd.contains("化验单")){
 						if(hour<7.30){
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR_OF_DAY, 8);
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期"+ll_day+"）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期"+ll_day+"）";
 						}else if(hour>17.30){
 							c.add(Calendar.DAY_OF_MONTH, 1);
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR_OF_DAY, 8);
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期"+c.get(Calendar.DAY_OF_WEEK)+"）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期"+c.get(Calendar.DAY_OF_WEEK)+"）";
 						}else{
 							qbgsj = c.getTime();
-							qdsj=ymdh.format(qbgsj)+"（星期"+ll_day+"）";
+							qdsj=Constants.DF8.format(qbgsj)+"（星期"+ll_day+"）";
 						}
 					}else{
 						qbgsj = c.getTime();
-						qdsj=ymdh.format(qbgsj)+"（星期"+ll_day+"）";
+						qdsj=Constants.DF8.format(qbgsj)+"（星期"+ll_day+"）";
 					}
 						
 				}
@@ -500,7 +554,7 @@ public class ExecuteViewController {
 				
 				
 			}
-			if((ll_day==1 || Double.parseDouble(hhmm.format(qbgsj).replace(":", "."))>17.30) && ll_requestmode.equals("1")){
+			if((ll_day==1 || Double.parseDouble(Constants.DF5.format(qbgsj).replace(":", "."))>17.30) && ll_requestmode.equals("1")){
 				if(!labdepartment.contains("1300500"))
 					qbgdd = "1号楼1楼急诊化验室";
 			}
@@ -529,4 +583,8 @@ public class ExecuteViewController {
 	private SampleManager sampleManager;
 	@Autowired
 	private SectionManager sectionManager;
+	@Autowired
+	private PatientManager patientManager;
+	@Autowired
+	private YlxhManager ylxhManager;
 }

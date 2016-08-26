@@ -154,7 +154,7 @@ public class ModifyController {
 			map.put("age", sl.getAge() + sl.getAgeunit());
 			map.put("bed", sl.getDepartBed());
 			map.put("exam", sl.getInspectionName());
-			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sl.getSampleType()));
+			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sl.getSampleType()));
 			map.put("fee", sl.getFee());
 			map.put("diag", sl.getDiagnostic());
 			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getValue(sl.getHosSection()));

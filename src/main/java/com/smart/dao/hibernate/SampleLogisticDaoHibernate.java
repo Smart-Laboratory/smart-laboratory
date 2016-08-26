@@ -25,8 +25,8 @@ public class SampleLogisticDaoHibernate extends GenericDaoHibernate<SampleLogist
 	
 	@SuppressWarnings("unchecked")
 	public List<SampleLogistic> getByReceivePoint(String from, String to, String point){
-		String hql = "from SampleLogistic where location='"+point+"' and operatetime between to_date('" + from + " 00:00:00','"
-                + Constants.DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + Constants.DATEFORMAT
+		String hql = "from SampleLogistic where location='"+point+"' and operatetime between to_date('" + from + "','"
+                + Constants.DATEFORMAT + "') and to_date('" + to + "','" + Constants.DATEFORMAT
                 + "') order by operatetime asc";
 		return getSession().createQuery(hql).list();
 	}

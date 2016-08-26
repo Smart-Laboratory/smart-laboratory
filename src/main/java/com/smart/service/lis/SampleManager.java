@@ -64,10 +64,7 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getSampleByCode(String string);
 	
 	boolean existSampleNo(String sampleno);
-	
-	Sample getBySfsb(String patientid, String ylxh, String sfsb);
-	
-	void insertSample(Sample s);
+
 	/*
 	 * 抽血是根据patientid获取历史检验项目 
 	 * lab可以为空
@@ -86,4 +83,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getReceiveList(String text, String lab);
 	
 	List<Sample> getOutList(String sender,Date sendtime);
+
+	Long getSampleId();
 }

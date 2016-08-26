@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.model.pb.WInfo;
 import com.smart.Constants;
@@ -21,22 +20,22 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getBySection(String section, String type) {
 		if(section=="" || section ==null)
-			return getSession().createQuery("from WInfo where type = '"+type+"' and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2").list();
+			return getSession().createQuery("from WInfo where type = '"+type+"' and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord2").list();
 		if(section.equals(""+Constants.LaboratoryCode+"")) {
 			if(type.equals("1")) {
-				return getSession().createQuery("from WInfo where ord1>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%'  order by ord1").list();
+				return getSession().createQuery("from WInfo where ord1>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%'  order by ord1").list();
 			} else if (type.equals("2")) {
-				return getSession().createQuery("from WInfo where ord3>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord3").list();
+				return getSession().createQuery("from WInfo where ord3>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord3").list();
 			} else if (type.equals("3")) {
-				return getSession().createQuery("from WInfo where ord4>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord4").list();
+				return getSession().createQuery("from WInfo where ord4>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord4").list();
 			}else if (type.equals("5")) {
-				return getSession().createQuery("from WInfo where ord5>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord5").list();
+				return getSession().createQuery("from WInfo where ord5>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord5").list();
 			} else if (type.equals("6")) {
-				return getSession().createQuery("from WInfo where ord6>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord6").list();
+				return getSession().createQuery("from WInfo where ord6>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord6").list();
 			}  else if (type.equals("4")) {
-				return getSession().createQuery("from WInfo where (type=1  or type=2) and ord2>0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2 asc").list();
+				return getSession().createQuery("from WInfo where (type=1  or type=2) and ord2>0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord2 asc").list();
 			} else {
-				return getSession().createQuery("from WInfo where type=0 and isActive=1 and section like '"+Constants.LaboratoryCode+"%' order by ord2").list();
+				return getSession().createQuery("from WInfo where type=0 and isActive=1 and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' order by ord2").list();
 			} 
 		}
 		return getSession().createQuery("from WInfo where section like '%"+section+"%' and type=0 and isActive=1 order by ord2").list();
@@ -93,7 +92,7 @@ public class WInfoDaoHibernate extends GenericDaoHibernate<WInfo, Long> implemen
 	
 	@SuppressWarnings("unchecked")
 	public List<WInfo> getByType(int type){
-		String hql = "from WInfo where type = "+type+"order by ord2";
+		String hql = "from WInfo where type = "+type+" and isActive=1 order by ord2";
 		return getSession().createQuery(hql).list();
 	}
 }

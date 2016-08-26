@@ -191,7 +191,7 @@ public final class Constants {
 	public static final SimpleDateFormat DF3 = new SimpleDateFormat("yyyyMMdd");
 	
 	/**
-	 * 日期格式:MMdd
+	 * 日期格式:MM/dd
 	 */
 	public final static SimpleDateFormat DF4 = new SimpleDateFormat("MM/dd");
 	
@@ -206,9 +206,14 @@ public final class Constants {
 	public final static SimpleDateFormat DF6 = new SimpleDateFormat("HH:mm:ss");
 	
 	/**
-	 * 日期格式:HH:mm:ss
+	 * 日期格式:yyMMdd
 	 */
 	public final static SimpleDateFormat DF7 = new SimpleDateFormat("yyMMdd");
+
+	/**
+	 * 日期格式:yyyy年MM月dd日 HH:mm(EEE)
+	 */
+	public final static SimpleDateFormat DF8 = new SimpleDateFormat("yyyy年MM月dd日 HH:mm(EEE)" );
 	
 	/**
 	 * 检验流程——申请
@@ -283,5 +288,5 @@ public final class Constants {
 	/**
 	 * 医学检验科编号
 	 */
-	public final static String LaboratoryCode = "22";
+	public final static String LaboratoryCode = "21";
 }

@@ -27,12 +27,16 @@
 #tests input[type=checkbox]{
 	width:50px;
 	height:50px;
-	margin-top:5px;
+	margin:0px;
 }
 
 #cxhis span{
 	margin:2px 5px;
 }
+	.alert {
+		padding:8px;
+	}
+
 
 </style>
 
@@ -57,10 +61,10 @@
 						<label ><fmt:message key="execute.jzkh" /></label>
 						<input type="text" id="jzkh" class="form-control" onkeypress="getData(this,event)">
 					</div>
-					<div style="padding-top:5px;">
+					<%--<div style="padding-top:5px;">
 						<button><fmt:message key="execute.smk" /></button>
 						<button><fmt:message key="execute.jkk" /></button>
-					</div>
+					</div>--%>
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" id="bloodCheck" class="ace ace-switch ace-switch-4" ><fmt:message key="execute.bloodSample" />
@@ -153,10 +157,10 @@
 								<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
 							</div>
 							<div class="col-sm-3 ">
-								<span class='col-sm-2'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
-								<span class='col-sm-4'><fmt:message key="execute.csrq" />:</span><b id="pCsrq"></b>
+								<span class='col-sm-3'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-3'></b>
+								<span class='col-sm-3'><fmt:message key="patient.age" />:</span><b id="pAge" class='col-sm-3'></b>
 							</div>
-							<button class="btn btn-info btn-sm" id="sampleQuery" style="margin-top:-5px;">检验结果查询</button>
+							<button class="btn btn-info btn-minier" id="sampleQuery">检验结果查询</button>
 						</div>
 						<div class="col-sm-12">
 							<div id="warnLabel" class="alert alert-success col-sm-5" style="display: block; margin:5px 5px; padding: 0px 0px;">
@@ -202,25 +206,25 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="unpatientid">就诊卡号：</label>
 			<div class="col-sm-9">
-				<input type="text" class="col-sm-10" id="unpatientid" disabled ></input>
+				<input type="text" class="col-sm-10" id="unpatientid" disabled />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="part">抽血位置：</label>
 			<div class="col-sm-9">
-				<input type="text" class="col-sm-10" id="part" ></input>
+				<input type="text" class="col-sm-10" id="part" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="mode">抽血方式：</label>
 			<div class="col-sm-9">
-				<input type="text" class="col-sm-10" id="mode" ></input>
+				<input type="text" class="col-sm-10" id="mode" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="reaction">抽血反应：</label>
 			<div class="col-sm-9">
-				<input type="text" class="col-sm-10" id="reaction" ></input>
+				<input type="text" class="col-sm-10" id="reaction" />
 			</div>
 		</div>
 		<div class="form-group">

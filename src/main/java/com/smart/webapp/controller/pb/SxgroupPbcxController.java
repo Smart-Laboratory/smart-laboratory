@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
+import com.smart.model.lis.Section;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.SxArrange;
@@ -110,6 +111,8 @@ public class SxgroupPbcxController extends PbBaseController{
 			cal.set(Calendar.MONTH, Integer.parseInt(yearAndMonth.split("-")[1])-1);
 			cal.set(Calendar.DATE, Integer.parseInt(yearAndMonth.split("-")[2]));
 			cal.setFirstDayOfWeek(Calendar.MONDAY);
+			year = Integer.parseInt(yearAndMonth.split("-")[0]);
+			month = Integer.parseInt(yearAndMonth.split("-")[1]);
 			int week = cal.get(Calendar.WEEK_OF_YEAR);
 			List<SxArrange> sxArranges = sxArrangeManager.getByWeek(year, week, 1);
 			//记录各个科室所有的实习生
@@ -206,6 +209,9 @@ public class SxgroupPbcxController extends PbBaseController{
 			request.setAttribute("wshifts", wshifts);
 			request.setAttribute("month", tomonth);
 			request.setAttribute("section", section);
+			request.setAttribute("jykCode", Constants.LaboratoryCode);
+			List<Section> pbSections = sectionManager.getPbSection("1");
+			request.setAttribute("pbSections", pbSections);
 			if(bzArrange!=null && bzArrange.getShift()!=null)
 				request.setAttribute("bz", bzArrange.getShift());
 			else
@@ -317,6 +323,8 @@ public class SxgroupPbcxController extends PbBaseController{
 			
 			v.addObject("pbdate", arrDate);
 		}
+		List<Section> pbSections = sectionManager.getPbSection("1");
+		v.addObject("pbSections", pbSections);
 		
 		return v;
 	}

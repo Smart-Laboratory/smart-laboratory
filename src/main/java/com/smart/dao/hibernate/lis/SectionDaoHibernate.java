@@ -102,5 +102,10 @@ public class SectionDaoHibernate extends GenericDaoHibernate<Section, Long> impl
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Section> getPbSection(String hospitalId){
+		String hql="from Section where ispb=1 and hospitalId="+hospitalId;
+		return getSession().createQuery(hql).list();
+	}
 
 }

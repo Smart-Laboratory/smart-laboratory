@@ -22,7 +22,7 @@ public class ComboDaoHibernate extends GenericDaoHibernate<Combo, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Combo> getByLab(String lab) {
-		return getSession().createQuery("from Combo where lab='" + lab + "' or lab='22' order by upper(id)").list();
+		return getSession().createQuery("from Combo where lab='" + lab + "' or lab='21' order by upper(id)").list();
 	}
 
 }

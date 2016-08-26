@@ -77,7 +77,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getArrangeByType(String type, String month){
-		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' and section like '"+Constants.LaboratoryCode+"%' ";
+		String hql = "from Arrange where date like '"+month+"%' and shift like '%"+type+"%' and section like '"+Constants.LaboratoryCode.substring(0, 2)+"%' ";
 		return getSession().createQuery(hql).list();
 	}
 	
@@ -95,7 +95,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 	
 	@SuppressWarnings("unchecked")
 	public List<Arrange> getByDay(String day){
-		String hql = "from Arrange where date = '"+day+"' and section like '"+Constants.LaboratoryCode+"%' ";
+		String hql = "from Arrange where date = '"+day+"'";
 		return getSession().createQuery(hql).list();
 	}
 	

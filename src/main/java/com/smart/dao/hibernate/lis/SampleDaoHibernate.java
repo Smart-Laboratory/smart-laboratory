@@ -465,22 +465,6 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
     }
 	
 	@SuppressWarnings("unchecked")
-	public Sample getBySfsb(String patientid, String ylxh, String sfsb){
-		String sql = "from Sample where sampleno='0' and patientId='"+patientid+"' and ylxh like '%"+ylxh+"%' and invoiceNum="+sfsb;
-		List<Sample> samples =  getSession().createQuery(sql).list();
-		if(samples!=null && samples.size()>0)
-			return samples.get(0);
-		return null;
-	}
-	
-	public void insertSample(Sample s){
-		String sql = "INSERT into l_sample VALUES("+s.getId()+",'"+s.getAge()+"',0,0,TO_DATE('"+ymd.format(s.getBirthday())+"','yyyy-MM-dd hh24:mi:ss'),'','','','',0,'','','','"+s.getFee()+"','"+s.getFeestatus()+"',0,"+s.getHosSection()+",'"+s.getInspectionName()+"',0,'',0,'','','','',"+
-				"'"+s.getPatientId()+"','','"+s.getPatientname()+"','','',0,'','"+s.getSampleNo()+"',0,'"+s.getSampleType()+"','"+s.getSectionId()+"','"+s.getSex()+"','"+s.getStayHospitalMode()+"',0,'"+s.getYlxh()+"','"+s.getInvoiceNum()+"',''	)";
-		System.out.println(sql);
-		getSession().createSQLQuery(sql).executeUpdate();
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<Sample> getByPatientId(String patientId,String lab){
 		String hql = "from Sample where patientId = '"+patientId+"'";
 		if(lab!=null && !lab.isEmpty()){
@@ -508,4 +492,9 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 				+ "to_date('"+ymd.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
 		return getSession().createQuery(sql).list();
 	}
+
+	public Long getSampleId() {
+	    String sql = "select sample_sequence.nextval from dual";
+        return (Long) getSession().createSQLQuery(sql).uniqueResult();
+    }
 }

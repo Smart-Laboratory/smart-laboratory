@@ -18,6 +18,7 @@
     <script type="text/javascript" src="../scripts/set/device.js"></script>
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 
+    <title><fmt:message key="set.device"/></title>
 </head>
 <style>
     .laftnav{
@@ -58,7 +59,7 @@
 </style>
 <div class="row">
     <div class="col-xs-12">
-        <div  style="padding-top: 5px;">
+        <div  style="padding-top: 5px;" id="toolbar">
             <button type="button" class="btn btn-sm btn-primary " title="添加" onclick="Add()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>
                 <fmt:message key="button.add" />
@@ -81,8 +82,10 @@
 			</span>
             </div>
         </div>
-        <table id="tableList"></table>
-        <div id="pager"></div>
+        <div class="col-xs-12 content">
+            <table id="tableList"></table>
+            <div id="pager"></div>
+        </div>
     </div>
 </div>
 <div style="clear: both"></div>
@@ -185,9 +188,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="handshark"> 协议 </label>
+            <label class="col-xs-3 control-label no-padding-right" for="handshake"> 协议 </label>
             <div class="col-xs-8">
-                <select class="col-xs-8" id="handshark" name="handshark">
+                <select class="col-xs-8" id="handshake" name="handshake">
                     <option value="0">无</option>
                     <option value="1">XonXof</option>
                     <option value="2">RTS OR CTS</option>

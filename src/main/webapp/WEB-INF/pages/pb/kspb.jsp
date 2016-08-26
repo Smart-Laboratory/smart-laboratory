@@ -80,7 +80,7 @@ function changeType(select) {
 	if(select.value == 8){
 		window.location.href="../pb/sxpb?month=" + $("#date").val();
 	}else{
-		window.location.href="../pb/pb?section=22&type=" + select.value+"&date=" + $("#date").val();
+		window.location.href="../pb/pb?section="+$("#jykCode").val()+"&type=" + select.value+"&date=" + $("#date").val();
 	}
 	
 }
@@ -194,6 +194,7 @@ $(function() {
 });
 </script>
 </head>
+<input id="jykCode" value="${jykCode }" type="hidden"/>
 <input id="section" value="${section }" type="hidden"/>
 <input id="month" value="${month }" type="hidden"/>
 

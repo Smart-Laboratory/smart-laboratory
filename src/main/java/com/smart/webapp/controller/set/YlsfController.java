@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.YlxhUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -53,7 +55,10 @@ public class YlsfController extends BaseAuditController {
 				}
 			}
 		}
-        return new ModelAndView().addObject("lab", lab);
+		ModelAndView view = new ModelAndView();
+		view.addObject("lab", lab);
+		view.addObject("typeList", SampleUtil.getInstance(dictionaryManager).getMap());
+        return view;
     }
 	
 	@RequestMapping(value = "/data*", method = RequestMethod.GET)
@@ -70,6 +75,7 @@ public class YlsfController extends BaseAuditController {
         int row = Integer.parseInt(rows);
         int start = row * (page - 1);
         int end = row * page;
+		Map<String, String> sampleTypeMap = SampleUtil.getInstance(dictionaryManager).getMap();
 
         List<Ylxh> list = new ArrayList<Ylxh>();
         int size = 0;
@@ -96,17 +102,22 @@ public class YlsfController extends BaseAuditController {
 			map.put("english", y.getEnglish());
 			map.put("mzpb", y.getMzpb());
 			map.put("zypb", y.getZypb());
+			map.put("sfhb", y.getSfhb());
 			map.put("mzpbStr", y.getMzpb() == 1 ? "是" : "否");
 			map.put("zypbStr", y.getZypb() == 1 ? "是" : "否");
+			map.put("sfhbStr", y.getSfhb() == 1 ? "允许" : "不允许");
 			map.put("price", y.getPrice());
 			map.put("qbgdd", y.getQbgdd());
 			map.put("qbgsj", y.getQbgsj());
 			map.put("yblx", y.getYblx());
+			map.put("yblxzw", sampleTypeMap.get(y.getYblx()));
 			map.put("bbl", y.getBbl());
 			map.put("sglx", y.getSglx());
 			map.put("ptest", ConvertUtil.null2String(y.getProfiletest()));
 			map.put("ptest2", ConvertUtil.null2String(y.getProfiletest2()));
 			map.put("ptest3", ConvertUtil.null2String(y.getProfiletest3()));
+			map.put("cjbw", ConvertUtil.null2String(y.getCjbw()));
+			map.put("sgsl", y.getSgsl());
 			dataRows.add(map);
 		}
 
@@ -121,11 +132,12 @@ public class YlsfController extends BaseAuditController {
 	public String editYlxh(@ModelAttribute("ylxh") Ylxh ylxh) throws Exception {
 		JSONObject success = new JSONObject();
 		try {
-			ylxhManager.save(ylxh);
+			ylxh = ylxhManager.save(ylxh);
+			YlxhUtil.updateMap(ylxh);
 			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			success.put("success", "失败");
+			success.put("success", "1");
 		}
 		return success.toString();
 	}
@@ -160,7 +172,8 @@ public class YlsfController extends BaseAuditController {
 			} else {
 				y.setProfiletest3(profiletest);
 			}
-			ylxhManager.save(y);
+			y = ylxhManager.save(y);
+			YlxhUtil.updateMap(y);
 			success.put("success", profiletest);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

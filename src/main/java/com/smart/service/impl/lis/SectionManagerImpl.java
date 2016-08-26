@@ -44,6 +44,10 @@ public class SectionManagerImpl extends GenericManagerImpl<Section, Long> implem
 	public boolean batchRemove(long[] ids) {
 		return  sectionDao.batchRemove(ids);
 	}
+	
+	public List<Section> getPbSection(String hospitalId){
+		return sectionDao.getPbSection(hospitalId);
+	}
 
 
 }

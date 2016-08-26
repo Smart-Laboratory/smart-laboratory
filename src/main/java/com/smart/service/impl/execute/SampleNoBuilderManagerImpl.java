@@ -3,6 +3,7 @@ package com.smart.service.impl.execute;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,10 @@ public class SampleNoBuilderManagerImpl extends GenericManagerImpl<SampleNoBuild
 	public SampleNoBuilder updateSampleNo(String lab,int type){
 		return sampleNoBuilderDao.updateSampleNo(lab,type);
 	}
-	
-	
-	
-	
+
+	public List<SampleNoBuilder> getAllByOrder() {
+		return sampleNoBuilderDao.getAllByOrder();
+	}
+
+
 }

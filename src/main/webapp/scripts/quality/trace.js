@@ -10,6 +10,7 @@ function getSample(docNo) {
     	$("#pType").html(data.type);
     	$("#diagnostic").html(data.diagnostic);
     	$("#sjSection").html(data.sjSection);
+    	$("#cxxx").html("");
     	$("#cxxx").html(data.cxxx);
     	
     	$("#tat_request").html(data.request);
@@ -17,10 +18,10 @@ function getSample(docNo) {
 		$("#tat_receive").html(data.receive);
 		$("#tat_audit").html(data.audit);
 		
-//		$("#tat_send").html(data.send);
-//		$("#tat_sender").html(data.sender);
-//		$("#tat_ksreceive").html(data.ksreceive);
-//		$("#tat_ksreceiver").html(data.ksreceiver);
+		$("#tat_send").html(data.send);
+		$("#tat_sender").html(data.sender);
+		$("#tat_ksreceive").html(data.ksreceive);
+		$("#tat_ksreceiver").html(data.ksreceiver);
 		var logisticlist = data.logisticList;
 		var html="";
 		for(var i=0 ;i<logisticlist.length;i++){
@@ -68,20 +69,25 @@ function getSample(docNo) {
 
 function getList(from, to, name, type) {
 	var width=$("#searchHeader").width();
+	var sampleState = $("#sampleState").val();
 	var mygrid = jQuery("#s3list").jqGrid({
-    	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" + type, 
+    	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" 
+    			+ type + "&sampleState=" +sampleState, 
     	datatype: "json", 
     	width: width, 
-    	colNames:['ID','医嘱号', '样本号', '检验目的','操作时间'], 
+    	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间','送出时间','科室接收时间'], 
     	colModel:[ 
     		{name:'id',index:'id', width:width*0.1, sortable:false,hidden:true},
+    		{name:'samplestatus',index:'samplestatus', width:width*0.1, sortable:false},
     		{name:'doctadviseno',index:'doctadviseno', width:width*0.1, sortable:false},
     		{name:'sample',index:'sample',width:width*0.2, sortable:false},
     		{name:'examinaim',index:'examinaim',width:width*0.2, sortable:false},
-    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false}
+    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false},
+    		{name:'sendtime',index:'operatetime',width:width*0.2, sortable:false,hidden:true},
+    		{name:'ksreceivetime',index:'operatetime',width:width*0.2, sortable:false,hidden:true}
     		], 
     	rowNum:20,
-    	height: '100%',
+    	height: 500,
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
     	pager: '#s3pager',
@@ -108,35 +114,45 @@ function getList(from, to, name, type) {
 $(function() {
 	$.ajaxSetup({cache:false});
 	
-//	laydate({
-//        elem: '#fromDate',
-//        event: 'focus',
-//        format: 'YYYYMMDD'
-//    });
-//    laydate({
-//        elem: '#toDate',
-//        event: 'focus',
-//        format: 'YYYYMMDD'
-//    });
+	laydate({
+        elem: '#from',
+        event: 'focus',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        istime: true, //是否开启时间选择
+        isclear: true, //是否显示清空
+        issure: true, 
+        choose: function(dates){ //选择好日期的回调
+        	laydate({
+                elem: '#to',
+                min: dates, //最小日期
+                event: 'focus',
+                format: 'YYYY-MM-DD hh:mm:ss',
+                istime: true, //是否开启时间选择
+                isclear: true, //是否显示清空
+                issure: true, 
+            });
+        }
+    });
+    laydate({
+        elem: '#to',
+        event: 'focus',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        istime: true, //是否开启时间选择
+        isclear: true, //是否显示清空
+        issure: true, 
+        choose: function(dates){ //选择好日期的回调
+        	laydate({
+                elem: '#from',
+                max: dates, //最小日期
+                event: 'focus',
+                format: 'YYYY-MM-DD hh:mm:ss',
+                istime: true, //是否开启时间选择
+                isclear: true, //是否显示清空
+                issure: true, 
+            });
+        }
+    });
     
-	$( "#from" ).datepicker({
-      changeMonth: true,
-      dateFormat:"yy-mm-dd",
-  	  monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-      dayNamesMin: ['日','一','二','三','四','五','六'],
-      onClose: function( selectedDate ) {
-        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-      }
-    });
-    $( "#to" ).datepicker({
-      changeMonth: true,
-      dateFormat:"yy-mm-dd",
-      monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-      dayNamesMin: ['日','一','二','三','四','五','六'],
-      onClose: function( selectedDate ) {
-        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
     
     $("#search_text").autocomplete({
         source: function( request, response ) {
@@ -144,7 +160,8 @@ $(function() {
             	url: "../doctor/sampleTrace/ajax/searchSection",
                 dataType: "json",
                 data: {
-                    name : request.term
+                    name : request.term,
+                    type : $("#search_select").val()
                 },
                 success: function( data ) {
   					
@@ -161,12 +178,12 @@ $(function() {
         },
         minLength: 1
 	});
-    if($('#search_select').val() !=1){
+    if($('#search_select').val() !=1 && $('#search_select').val() !=4){
     	$( "#search_text" ).autocomplete( "disable" );
     }
     
     $('#search_select').change(function(){
-		if($(this).children('option:selected').val() == 1) {
+		if($(this).children('option:selected').val() == 1 || $('#search_select').val() !=4) {
 			$( "#search_text" ).autocomplete( "enable" );
 		} else {
 			$( "#search_text" ).autocomplete( "disable" );
@@ -187,10 +204,20 @@ $(function() {
 		}
 
 		jQuery("#s3list").jqGrid("setGridParam",{
-			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type
+			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type+ "&sampleState=" +$("#sampleState").val()
 		}).trigger("reloadGrid"); 
 		
 	});
+	var type = $("#type").val();
+	var name = $("#name").val();
+	if(type!=null && type ==4){
+		if (isFirst) {
+			getList("", "", name, type);
+			isFirst = false;
+			$("#search_select").val("4");
+			$("#search_text").val(name);
+		}
+	}
 	
 	$(document).keydown(function(e){
 		if(e.keyCode == 40)
@@ -223,8 +250,24 @@ $(function() {
 		}
 	});
 	
-	var date = new Date();
-	var today = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
-	$("#from").val(today);
-	$("#to").val(today);
+	$("#from").val(new Date().Format("yyyy-MM-dd") + " 00:00:00");
+	$("#to").val(new Date().Format("yyyy-MM-dd") + " 23:59:59");
 });
+Date.prototype.Format = function(fmt)   
+{ //author: meizz   
+  var o = {   
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  return fmt;   
+};

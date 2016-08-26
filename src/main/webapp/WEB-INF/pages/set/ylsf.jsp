@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../scripts/set/ylsf.js"></script>
 
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
+	<%--<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />--%>
     <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
 
 	<style>
@@ -56,7 +56,7 @@
 		#profileTab .table>tbody>tr, .table>tbody>tr, .table>tfoot>tr, .table>tfoot>tr, .table>thead>tr, .table>thead>tr {
 			border: 1px solid #ddd;
 		}
-	
+
 	</style>
 </head>
 <body>
@@ -182,7 +182,7 @@
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
 				<label class="col-xs-4 control-label no-padding-right" for="mzpb"> 门诊开单 </label>
 				<div class="col-xs-8">
-					<select id="mzpb" name="mzpb" class="col-xs-8">
+					<select id="mzpb" name="mzpb" class="col-xs-8" style="height:33px;">
 						<option value="1">是</option>
 						<option value="0">否</option>
 					</select>
@@ -191,21 +191,26 @@
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
 				<label class="col-xs-4 control-label no-padding-right" for="zypb"> 住院开单 </label>
 				<div class="col-xs-8">
-					<select id="zypb" name="zypb" class="col-xs-8">
+					<select id="zypb" name="zypb" class="col-xs-8" style="height:33px;">
 						<option value="1">是</option>
 						<option value="0">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="yblx"> 样本类型 </label>
+				<div class="col-xs-8">
+					<select id="yblx" name="yblx" class="col-xs-8" style="height:33px;">
+						<c:forEach var="item" items="${typeList}">
+							<option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
+						</c:forEach>
 					</select>
 				</div>
 			</div>
 		</div>
 		<div class="col-xs-6">
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
-				<label class="col-xs-4 control-label no-padding-right" for="yblx"> 样本类型 </label>
-				<div class="col-xs-8">
-					<input type="text" id="yblx" name="yblx" placeholder="样本类型" class="col-xs-8"/>
-				</div>
-			</div>
-			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<div class="space-4"></div>
 				<label class="col-xs-4 control-label no-padding-right" for="sglx"> 试管类型 </label>
 				<div class="col-xs-8">
 					<input type="text" id="sglx" name="sglx" placeholder="试管类型 " class="col-xs-8"/>
@@ -227,6 +232,27 @@
 				<label class="col-xs-4 control-label no-padding-right" for="qbgdd"> 取报告地点 </label>
 				<div class="col-xs-8">
 					<input type="text" id="qbgdd" name="qbgdd" placeholder="取报告地点" class="col-xs-8"/>
+				</div>
+			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="cjbw"> 采集部位 </label>
+				<div class="col-xs-8">
+					<input type="text" id="cjbw" name="cjbw" placeholder="采集部位" class="col-xs-8"/>
+				</div>
+			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="sgsl"> 试管数量 </label>
+				<div class="col-xs-8">
+					<input type="text" id="sgsl" name="sgsl" placeholder="试管数量" class="col-xs-8" value="0"/>
+				</div>
+			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="sfhb"> 允许合并 </label>
+				<div class="col-xs-8">
+					<select id="sfhb" name="sfhb" class="col-xs-8" style="height:33px;">
+						<option value="1">允许</option>
+						<option value="0">不允许</option>
+					</select>
 				</div>
 			</div>
 		</div>

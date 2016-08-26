@@ -26,7 +26,8 @@ import com.smart.webapp.util.DataResponse;
 
 @Controller
 @RequestMapping("/reagent*")
-public class InController {
+public class
+InController {
 	
 	
 	@Autowired

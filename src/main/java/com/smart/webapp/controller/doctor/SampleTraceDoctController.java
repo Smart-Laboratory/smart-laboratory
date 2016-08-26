@@ -1,7 +1,6 @@
 package com.smart.webapp.controller.doctor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.smart.model.lis.ReceivePoint;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.SampleLogistic;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ReceivePointManager;
 import com.smart.service.lis.SampleLogisticManager;
 import com.smart.service.lis.SampleManager;
@@ -36,6 +36,7 @@ import com.zju.api.model.Patient;
 import com.zju.api.model.SyncPatient;
 import com.zju.api.model.YLSF;
 import com.zju.api.service.RMIService;
+import com.smart.model.lis.Process;
 
 @Controller
 @RequestMapping("/doctor/sampleTrace*")
@@ -52,6 +53,11 @@ public class SampleTraceDoctController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String type = request.getParameter("type");
+		String name = request.getParameter("name");
+		
+		request.setAttribute("type", type);
+		request.setAttribute("name", name);
 		return new ModelAndView();
 	}
 	
@@ -63,8 +69,6 @@ public class SampleTraceDoctController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/data*", method = RequestMethod.GET)
-	@ResponseBody
 	public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String pages = request.getParameter("page");
@@ -73,6 +77,7 @@ public class SampleTraceDoctController {
 		String to = request.getParameter("to");
 		String name = request.getParameter("name");
 		int type = Integer.parseInt(request.getParameter("type"));
+		int sampleState = Integer.parseInt(request.getParameter("sampleState"));//1:全部;2:已采集;3:已送出;4:科室接收;5:组内接受;6:已审核
 		DataResponse dataResponse = new DataResponse();
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
@@ -82,20 +87,10 @@ public class SampleTraceDoctController {
 		//按地点查询时显示具体时间
 		Map<Long, Sample> lMap = new HashMap<Long,Sample>();
 		
+		List<Object[]> spList = new ArrayList<Object[]>();
 		switch(type) {
 		case 1:
 			sList = sampleLogisticManager.getByReceivePoint(from, to, name);
-			String docts = "";
-			for(SampleLogistic s : sList){
-				docts += s.getDoctadviseno() +",";
-			}
-			if(docts.length()>0){
-				docts = docts.substring(0, docts.length()-1);
-				list = sampleManager.getByIds(docts);
-				for(Sample s : list){
-					lMap.put(s.getId(), s);
-				}
-			}
 			break;
 		case 2:
 			list = sampleManager.getSampleByPatientName(from, to, name);
@@ -104,7 +99,7 @@ public class SampleTraceDoctController {
 			list = sampleManager.getByPatientId(name, "");
 			rmiService.getSampleByPid(name);
 			break;
-		default:
+		case 4:
 			try {
 				Sample s = sampleManager.get(Long.parseLong(name));
 				if (s != null) {
@@ -115,13 +110,24 @@ public class SampleTraceDoctController {
 			}
 			
 			break;
+		case 5:
+			try {
+				spList = processManager.getReceiveListBySection(name, Constants.DF2.parse(from),  Constants.DF2.parse(to),sampleState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
+		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		int listSize = 0;
 		//type==1时，根据接受点显示列表，那么需要显示的是slist
 		if(type==1){
 			if (sList != null)
 				listSize = sList.size();
+		}else if(type == 5){
+			if(spList != null)
+				listSize = spList.size();
 		}else{
 			if (list != null)
 				listSize = list.size();
@@ -137,6 +143,19 @@ public class SampleTraceDoctController {
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int index = 0;
+		if(type ==1){
+			String docts = "";
+			for(SampleLogistic s : sList.subList(start, ((start+row)<listSize?(start+row):listSize))){
+				docts += s.getDoctadviseno() +",";
+			}
+			if(docts.length()>0){
+				docts = docts.substring(0, docts.length()-1);
+				list = sampleManager.getByIds(docts);
+				for(Sample s : list){
+					lMap.put(s.getId(), s);
+				}
+			}
+		}
 		while (index < row && (start + index) < listSize) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			if(type==1){
@@ -147,12 +166,23 @@ public class SampleTraceDoctController {
 				map.put("sample", sample.getSampleNo());
 				map.put("examinaim", sample.getInspectionName());
 				map.put("operatetime", Constants.SDF.format(sl.getOperatetime()));
-			}else{
+				map.put("samplestatus", getSampleStatue(sample));
+			}else if(type == 5){
+				Object[] o = spList.get(start + index);
+				Sample info = (Sample)o[0];
+				map.put("id",info.getId());
+				map.put("doctadviseno",info.getId());
+				map.put("sample",info.getSampleNo());
+				map.put("examinaim", info.getInspectionName());
+				map.put("samplestatus", getSampleStatue(info));
+			}
+			else{
 				Sample info = list.get(start + index);
 				map.put("id",info.getId());
 				map.put("doctadviseno",info.getId());
 				map.put("sample",info.getSampleNo());
 				map.put("examinaim", info.getInspectionName());
+				map.put("samplestatus", getSampleStatue(info));
 			}
 			
 			dataRows.add(map);
@@ -163,9 +193,17 @@ public class SampleTraceDoctController {
 		return dataResponse;
 	}
 	
-	
-	
-	/*public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	/**
+	 * 根据条件查询该检验人员的样本
+	 * 查询浙一数据库
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/data*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getZYData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
@@ -173,37 +211,58 @@ public class SampleTraceDoctController {
 		String to = request.getParameter("to");
 		String name = request.getParameter("name");
 		int type = Integer.parseInt(request.getParameter("type"));
+		int sampleState = Integer.parseInt(request.getParameter("sampleState"));//1:全部;2:已采集;3:已送出;4:科室接收;5:组内接受;6:已审核
 		DataResponse dataResponse = new DataResponse();
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
 		
 		List<SyncPatient> list = new ArrayList<SyncPatient>();
+		List<SampleLogistic> sList = new ArrayList<SampleLogistic>();
+		//按地点查询时显示具体时间
+		Map<Long, SyncPatient> lMap = new HashMap<Long,SyncPatient>();
+		
 		switch(type) {
 		case 1:
-			List<SampleLogistic> sList = sampleLogisticManager.getByReceivePoint(from, to, name);
-			String docts = "";
-			for(SampleLogistic s : sList){
-				docts += s.getDoctadviseno() +",";
-			}
-			list = rmiService.getSampleBySection(from, to, name);
+			sList = sampleLogisticManager.getByReceivePoint(from, to, name);
 			break;
 		case 2:
 			list = rmiService.getSampleByPatientName(from, to, name);
 			break;
 		case 3:
+			list = rmiService.getSampleByPid(name);
 			rmiService.getSampleByPid(name);
 			break;
-		default:
-			SyncPatient p = rmiService.getSampleByDoct(Long.parseLong(name));
-			if (p != null) {
-				list.add(p);
+		case 4:
+			try {
+				SyncPatient s = rmiService.getSampleByDoct(Long.parseLong(name));
+				if (s != null) {
+					list.add(s);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
 			break;
+		case 5:
+			try {
+				list = rmiService.getSampleBySection(from, to, name,sampleState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
+		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		int listSize = 0;
-		if (list != null)
-			listSize = list.size();
+		//type==1时，根据接受点显示列表，那么需要显示的是slist
+		if(type==1){
+			if (sList != null)
+				listSize = sList.size();
+		}else{ 
+			if (list != null)
+				listSize = list.size();
+			
+		}
 		dataResponse.setRecords(listSize);
 		int x = listSize % (row == 0 ? listSize : row);
 		if (x != 0) {
@@ -214,19 +273,102 @@ public class SampleTraceDoctController {
 		dataResponse.setTotal(totalPage);
 		int start = row * (page - 1);
 		int index = 0;
+		if(type ==1){
+			String docts = "";
+			for(SampleLogistic s : sList.subList(start, ((start+row)<listSize?(start+row):listSize))){
+				docts += s.getDoctadviseno() +",";
+			}
+			if(docts.length()>0){
+				docts = docts.substring(0, docts.length()-1);
+				list = rmiService.getByDoctadvisenos(docts);
+				for(SyncPatient s : list){
+					lMap.put(s.getDOCTADVISENO(), s);
+				}
+			}
+		}
 		while (index < row && (start + index) < listSize) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			SyncPatient info = list.get(start + index);
-			map.put("id",info.getDOCTADVISENO());
-			map.put("sample",info.getSAMPLENO());
-			map.put("examinaim", info.getEXAMINAIM());
+			if(type==1){
+				SampleLogistic sl = sList.get(start + index);
+				SyncPatient sample = lMap.get(sl.getDoctadviseno());
+				map.put("id", sl.getId());
+				map.put("doctadviseno", sl.getDoctadviseno());
+				map.put("sample", sample.getSAMPLENO());
+				map.put("examinaim", sample.getEXAMINAIM());
+				map.put("operatetime", Constants.SDF.format(sl.getOperatetime()));
+				map.put("samplestatus", getZYSampleStatue(sample));
+			}else {
+				SyncPatient info = list.get(start + index);
+				map.put("id",info.getDOCTADVISENO());
+				map.put("doctadviseno",info.getDOCTADVISENO());
+				map.put("sample",info.getSAMPLENO());
+				map.put("examinaim", info.getEXAMINAIM());
+				map.put("samplestatus", getZYSampleStatue(info));
+				map.put("sendtime", info.getSENDTIME());
+				map.put("ksreceivetime", info.getKSRECEIVETIME());
+			}
+			
 			dataRows.add(map);
 			index++;
 		}
 		dataResponse.setRows(dataRows);
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
-	}*/
+	}
+	
+	/**
+	 * 判断样本状态  已开单、已采集 、已送出、科室接收、组内接收、已审核...
+	 * @param info
+	 * @return
+	 */
+	private String getZYSampleStatue(SyncPatient info){
+		String status = "";
+		if(info.getREQUESTTIME()!=null){
+			status = "已开单";
+			if(info.getEXECUTETIME()!=null)
+				status = "已采集";
+			if(info.getSENDTIME()!=null)
+				status = "已送出";
+			if(info.getKSRECEIVETIME()!=null)
+				status="科室接收";
+			if(info.getReceivetime()!=null && !info.getReceivetime().isEmpty())
+				status = "组内接收";
+			if(info.getCHECKTIME()!=null)
+				status = "已审核";
+		}
+		
+		return status;
+	}
+	
+	/**
+	 * 判断样本状态  已开单、已采集 、已送出、科室接收、组内接收、已审核...
+	 * @param info
+	 * @return
+	 */
+	private String getSampleStatue(Sample info){
+		String status = info.getAuditStatusValue();
+		if(info.getAuditStatus()==-1){
+			status = "已开单";
+			Process process = processManager.getBySampleId(info.getId());
+			if(process!=null){
+				if(process.getExecutetime()!=null)
+					status = "已采集";
+				if(process.getSendtime()!=null)
+					status = "已送出";
+				if(process.getKsreceivetime()!=null)
+					status="科室接收";
+				if(process.getReceivetime()!=null)
+					status = "组内接收";
+				if(process.getChecktime()!=null)
+					status = "已审核";
+				
+			}
+			
+		}
+		
+		return status;
+	}
+	
 	
 	/**
 	 * 获取样本信息
@@ -273,7 +415,7 @@ public class SampleTraceDoctController {
 				map.put("blh", p.getBLH());
 			}
 			map.put("type",
-					SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(p.getSAMPLETYPE())));
+					SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(p.getSAMPLETYPE())));
 			
 			List<SampleLogistic> sList = sampleLogisticManager.getByDoctadviseNo(p.getDOCTADVISENO());
 			List<Map<String, String>> logisticList = new ArrayList<Map<String,String>>();
@@ -308,8 +450,8 @@ public class SampleTraceDoctController {
 			map.put("receive", p.getRECEIVETIME() == null ? "" : Constants.DF.format(p.getRECEIVETIME()));
 			map.put("audit", p.getCHECKTIME() == null ? "" : Constants.DF.format(p.getCHECKTIME()));
 			//标本采集后到科室接收前的物流过程
-//			map.put("send", p.getSENDTIME() == null ? "" : Constants.DF.format(p.getSENDTIME()));
-//			map.put("sender", p.getSENDER() == null ? "" : p.getSENDER());
+			map.put("send", p.getSENDTIME() == null ? "" : Constants.DF.format(p.getSENDTIME()));
+			map.put("sender", p.getSENDER() == null ? "" : p.getSENDER());
 			
 			map.put("ksreceive", p.getKSRECEIVETIME() == null ? "" : Constants.DF.format(p.getKSRECEIVETIME()));
 			map.put("requester", p.getREQUESTER() == null ? "" : p.getREQUESTER());
@@ -334,17 +476,31 @@ public class SampleTraceDoctController {
 	@ResponseBody
 	public String searchSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String name = request.getParameter("name");
+		int type = Integer.parseInt(request.getParameter("type"));
 		if (StringUtils.isEmpty(name)) {
 			return null;
 		}
-		List<ReceivePoint> rList = receivePointManager.getByName(name);
 		JSONArray array = new JSONArray();
-		if (rList != null) {
-			for (ReceivePoint s : rList) {
-				JSONObject o = new JSONObject();
-				o.put("id", s.getId());
-				o.put("name", s.getName());
-				array.put(o);
+		if(type == 1){
+			List<ReceivePoint> rList = receivePointManager.getByName(name);
+			
+			if (rList != null) {
+				for (ReceivePoint s : rList) {
+					JSONObject o = new JSONObject();
+					o.put("id", s.getId());
+					o.put("name", s.getName());
+					array.put(o);
+				}
+			}
+		}else if(type == 5){
+			List<Ksdm> ksdms = rmiService.searchSection(name);
+			if(ksdms !=null && ksdms.size()>0){
+				for(Ksdm k : ksdms){
+					JSONObject o = new JSONObject();
+					o.put("id", k.getName());
+					o.put("name", k.getId());
+					array.put(o);
+				}
 			}
 		}
 		response.setContentType("text/html; charset=UTF-8");
@@ -357,4 +513,6 @@ public class SampleTraceDoctController {
 	private ReceivePointManager receivePointManager;
 	@Autowired
 	private SampleManager sampleManager;
+	@Autowired
+	private ProcessManager processManager;
 }

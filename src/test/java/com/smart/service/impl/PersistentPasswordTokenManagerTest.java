@@ -1,5 +1,6 @@
 package com.smart.service.impl;
 
+import com.smart.service.PasswordTokenManager;
 import com.smart.service.UserManager;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;

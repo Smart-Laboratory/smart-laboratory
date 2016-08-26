@@ -142,7 +142,8 @@ public class UserFormController extends BaseFormController {
             }
 
             try {
-                getUserManager().saveUser(user);
+                User saveUser = getUserManager().saveUser(user);
+                UserUtil.getInstance(getUserManager()).updateMap(user);
             } catch (final AccessDeniedException ade) {
                 // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
                 log.warn(ade.getMessage());

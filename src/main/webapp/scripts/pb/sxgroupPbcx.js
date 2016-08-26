@@ -5,6 +5,7 @@ function pbprint(){
 
 $(function() {
 	$("#labSelect").val($("#section").val()); 
+	$("#labSelect").css("display","none");
 	$("#sectionSelect").val($("#section").val());
 	$("#pbdata").html($("#pbtext").val());
 	

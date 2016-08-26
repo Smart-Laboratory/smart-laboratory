@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.service.lis.*;
+import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,18 +28,7 @@ import com.smart.model.lis.SampleLog;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
-import com.smart.service.lis.PatientManager;
-import com.smart.service.lis.ProcessLogManager;
-import com.smart.service.lis.ProcessManager;
-import com.smart.service.lis.SampleLogManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionManager;
 import com.smart.service.request.SFXMManager;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.SectionUtil;
-import com.smart.webapp.util.UserUtil;
-import com.smart.webapp.util.YLSFXMUtil;
 import com.zju.api.service.RMIService;
 
 
@@ -49,7 +40,7 @@ public class SampleInputAjaxController {
 	private RMIService rmiService = null;
 	
 	@Autowired
-	private SFXMManager sfxmManager = null;
+	private YlxhManager ylxhManager = null;
 	@Autowired
 	private UserManager userManager = null;
 	
@@ -78,7 +69,7 @@ public class SampleInputAjaxController {
 			}
 		}
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
-		YLSFXMUtil ylsfxmUtil = YLSFXMUtil.getInstance(sfxmManager);
+		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
 		if(type == 1) {
@@ -115,8 +106,8 @@ public class SampleInputAjaxController {
 		Map<String, String> feeMap = new HashMap<String, String>();
 		if(sample.getYlxh().indexOf("+") > 0) {
 			for(String s : sample.getYlxh().split("[+]")) {
-				ylxhMap.put(s, ylsfxmUtil.getSFXM(s).getName());
-				feeMap.put(s, ylsfxmUtil.getSFXM(s).getPrice());
+				ylxhMap.put(s, ylxhUtil.getYlxh(s).getYlmc());
+				feeMap.put(s, ylxhUtil.getYlxh(s).getPrice());
 			}
 		} else {
 			ylxhMap.put(sample.getYlxh(), sample.getInspectionName());
@@ -171,7 +162,7 @@ public class SampleInputAjaxController {
 			map.put("id", sample.getId());
 			map.put("shm", sample.getStayHospitalModelValue());
 			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			map.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			map.put("sampleno", sample.getSampleNo());
 			map.put("pid", sample.getPatientId());
 			map.put("pname", sample.getPatientname());
@@ -368,7 +359,7 @@ public class SampleInputAjaxController {
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		o.put("shm", sample.getStayHospitalModelValue());
 		o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-		o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+		o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
 		o.put("requester", process.getRequester());
@@ -441,7 +432,7 @@ public class SampleInputAjaxController {
 			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			o.put("shm", sample.getStayHospitalModelValue());
 			o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			o.put("sampletype", SampleUtil.getInstance().getSampleList(dictionaryManager).get(sample.getSampleType()));
+			o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			o.put("part", sample.getPart() == null ? "" : sample.getPart());
 			o.put("requestmode", sample.getRequestMode());
 			o.put("requester", process.getRequester());

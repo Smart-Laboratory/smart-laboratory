@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,15 +58,20 @@ public class SampleHandoverController {
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		List<ReceivePoint> pointList = receivePointManager.getByType(0);
-		for(ReceivePoint rp : pointList) {
-			pointMap.put(rp.getCode(), rp.getLab());
-		}
+		initPointMap();
 		startTime = new Date();
 		ModelAndView view = new ModelAndView();
 		view.addObject("name", user.getName());
 		view.addObject("pointList", pointList);
         return view;
     }
+	
+	private void initPointMap(){
+		List<ReceivePoint> pointList = receivePointManager.getByType(0);
+		for(ReceivePoint rp : pointList) {
+			pointMap.put(rp.getCode(), rp.getLab());
+		}
+	}
 	
 	@RequestMapping(value = "/ajax/outsample*", method = RequestMethod.GET)
 	@ResponseBody
@@ -120,7 +124,14 @@ public class SampleHandoverController {
 				obj.put("mode", sp.getREQUESTMODE());
 				if(sp.getSENDTIME() == null) {
 					obj.put("type", 2);
-					isupdate=1;
+					//更新本地process
+					Process process = processManager.getBySampleId(doct);
+					if(process!=null){
+						process.setSender(operator);
+						process.setSendtime(new Date());
+						processManager.save(process);
+					}
+					
 				} else {
 					obj.put("type", 3);
 				}
@@ -128,19 +139,8 @@ public class SampleHandoverController {
 				if(sp.getLABDEPARTMENT() == null || !lab.contains(sp.getLABDEPARTMENT())) {
 					obj.put("type", 4);
 				}
-				if(isupdate==1){
-					rmiService.sampleOut(doct, operator);
-					//更新本地process
-					Process process = processManager.getBySampleId(doct);
-					if(process==null){
-						process = new Process();
-						process.setSampleid(doct);
-						
-					}
-					process.setSender(operator);
-					process.setSendtime(new Date());
-					processManager.save(process);
-				}
+				rmiService.sampleOut(doct, operator);
+					
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -154,7 +154,7 @@ public class SampleHandoverController {
 	@RequestMapping(value = "/ajax/sample*", method = RequestMethod.GET)
 	@ResponseBody
 	public String getRelativeTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+		initPointMap();
 		JSONObject obj = new JSONObject();
 		try {
 			long doct = Long.parseLong(request.getParameter("doct"));
@@ -195,12 +195,20 @@ public class SampleHandoverController {
 						obj.put("wardType", "");
 						obj.put("wardPhone", "");
 					}
-					
 				}
 				obj.put("stayhospitalmode", sp.getSTAYHOSPITALMODE());
 				obj.put("mode", sp.getREQUESTMODE());
 				if(sp.getKSRECEIVETIME() == null) {
 					obj.put("type", 2);
+					Process process = processManager.getBySampleId(doct);
+					//这个时候如果本地process为空则不更新，等待同步器完成更新，否则会出现多条记录
+					if(process!=null){
+						process.setKsreceiver(operator);
+						process.setKsreceivetime(new Date());
+						processManager.save(process);
+					}
+					
+					
 				} else {
 					obj.put("type", 3);
 				}
@@ -281,6 +289,82 @@ public class SampleHandoverController {
 			map.put("executor", p.getExecutor());
 			map.put("sendtime", p.getSendtime()==null?"":Constants.SDF.format(p.getSendtime()));
 			map.put("sender", p.getSender());
+			
+			dataRows.add(map);
+		}
+		
+		dataResponse.setRows(dataRows);
+		response.setContentType("text/html;charset=UTF-8");
+		return dataResponse;
+		
+	}
+	
+	
+	@RequestMapping(value = "/receiveList*", method = RequestMethod.GET)
+	@ResponseBody
+	public DataResponse getReceiveList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String pages = request.getParameter("page");
+		String rows = request.getParameter("rows");
+		
+		int page = Integer.parseInt(pages);
+		int row = Integer.parseInt(rows);
+		int start = row*(page-1);
+		int end = row * page;
+		
+		String receiver = request.getParameter("operator");
+		String type = request.getParameter("type");
+		
+		Map<Long, SyncPatient> sMap = new HashMap<Long,SyncPatient>();
+		List<Process> processes  = new ArrayList<Process>();
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+		
+		int size = 0;
+		if(type.equals("1")){//标本送出
+			size = processManager.getReceiveListCount(receiver, startTime, null);
+			
+		}
+		DataResponse dataResponse = new DataResponse();
+		dataResponse.setRecords(size);
+		int x = size % (row == 0 ? size : row);
+		if (x != 0) {
+			x = row - x;
+		}
+		int totalPage = (size + x) / (row == 0 ? size : row);
+		dataResponse.setPage(page);
+		dataResponse.setTotal(totalPage);
+		
+		processes = processManager.getReceiveList(receiver, startTime, null,start,end>size?size:end);
+		if(processes==null || processes.size()==0)
+			return null;
+		String sampleids = "";
+		for(Process p : processes){
+			sampleids += p.getSampleid()+",";
+		}
+		List<SyncPatient> syncPatients = rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
+		for(SyncPatient s : syncPatients){
+			if(s!=null)
+				sMap.put(s.getDOCTADVISENO(), s);
+		}
+		
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		for(Process p : processes){
+			SyncPatient s = sMap.get(p.getSampleid());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("doctadviseno", p.getSampleid());
+			if(s!=null){
+				map.put("patientname", s.getPATIENTNAME());
+				map.put("patientid", s.getPATIENTID());
+				map.put("inspectionName", s.getEXAMINAIM());
+				map.put("labdepartment", sectionUtil.getValue(s.getLABDEPARTMENT()));
+			}
+			map.put("requesttime",p.getRequesttime()==null?"":Constants.SDF.format(p.getRequesttime()));
+			map.put("requester", p.getRequester());
+			map.put("executetime", p.getExecutetime()==null?"":Constants.SDF.format(p.getExecutetime()));
+			map.put("executor", p.getExecutor());
+			map.put("sendtime", p.getSendtime()==null?"":Constants.SDF.format(p.getSendtime()));
+			map.put("sender", p.getSender());
+			map.put("ksreceivetime", p.getKsreceivetime()==null?"":Constants.SDF.format(p.getKsreceivetime()));
+			map.put("ksreceiver", p.getKsreceiver());
 			
 			dataRows.add(map);
 		}

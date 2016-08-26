@@ -1,5 +1,6 @@
 package com.smart.service.impl;
 
+import com.smart.service.PasswordTokenManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

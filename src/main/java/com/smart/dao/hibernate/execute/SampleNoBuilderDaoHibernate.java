@@ -1,6 +1,7 @@
 package com.smart.dao.hibernate.execute;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,6 @@ import com.smart.model.execute.SampleNoBuilder;
 
 @Repository("sampleNoBuilderDao")
 public class SampleNoBuilderDaoHibernate extends GenericDaoHibernate<SampleNoBuilder, Long> implements SampleNoBuilderDao{
-
 	public SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public SampleNoBuilderDaoHibernate(){
@@ -18,7 +18,7 @@ public class SampleNoBuilderDaoHibernate extends GenericDaoHibernate<SampleNoBui
 	}
 	
 	public SampleNoBuilder getByLab(String lab){
-		String sql = "from SampleNoBuilder where ksdm = '"+lab+"'";
+		String sql = "from SampleNoBuilder where labDepart = '"+lab+"' order by orderNo asc";
 		return (SampleNoBuilder)getSession().createQuery(sql).list().get(0);
 	}
 	
@@ -27,5 +27,9 @@ public class SampleNoBuilderDaoHibernate extends GenericDaoHibernate<SampleNoBui
 		String sql = "update SampleNoBuilder set "+sampleno+" = "+sampleno+"+1  where KSDM='"+lab+"'";
 		getSession().createQuery(sql).executeUpdate();
 		return null;
+	}
+
+	public List<SampleNoBuilder> getAllByOrder() {
+		return getSession().createQuery("from SampleNoBuilder order by orderNo asc").list();
 	}
 }

@@ -28,14 +28,18 @@ public class Ylxh extends BaseObject {
 	private String ylmc;		//医疗名称
 	private String ksdm;		//科室代码
 	private String english;
+
 	private int mzpb;
 	private int zypb;
+	private int sfhb;		//是否允许合并检验目的
 	private String price;
 	private String qbgdd;	//取报告地点
 	private String qbgsj;	//取报告时间
 	private String yblx;	//样本类型
 	private String bbl;		//标本量
 	private String sglx;	//试管类型
+	private String cjbw;	//采集部位
+	private int sgsl=0;		//试管数量
 	
 	/**
 	 * 医疗序号
@@ -189,6 +193,33 @@ public class Ylxh extends BaseObject {
 
 	public void setSglx(String sglx) {
 		this.sglx = sglx;
+	}
+
+	@Column
+	public String getCjbw() {
+		return cjbw;
+	}
+
+	public void setCjbw(String cjbw) {
+		this.cjbw = cjbw;
+	}
+
+	@Column
+	public int getSgsl() {
+		return sgsl;
+	}
+
+	public void setSgsl(int sgsl) {
+		this.sgsl = sgsl;
+	}
+
+	@Column
+	public int getSfhb() {
+		return sfhb;
+	}
+
+	public void setSfhb(int sfhb) {
+		this.sfhb = sfhb;
 	}
 
 	public String toString() {

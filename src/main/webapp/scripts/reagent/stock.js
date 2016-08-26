@@ -1,9 +1,12 @@
 	$(function() {
 		var width = $("#mid").width();
+		var clientHeight= $(window).innerHeight();
+		var height =clientHeight-$('#head').height()-$('.footer-content').height()-160;
+
 		jQuery("#list").jqGrid({
 		   	url:'../reagent/getReagent?q=1',
 			datatype: "json",
-			width:width*0.99,
+			width:width,
 		   	colNames:['','名称','规格','配套仪器', '品牌', '单位','单价','存放位置','环境条件','当前温度','总量'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
@@ -18,12 +21,18 @@
 		   		{name:'temp',index:'temp', width:"8%", align:"center", sortable:false},
 		   		{name:'totalnum',index:'totalnum', width:"8%", align:"center", sortable:false}
 		   	],
+			loadComplete : function() {
+				var table = this;
+				setTimeout(function(){
+					updatePagerIcons(table);
+				}, 0);
+			},
 		   	rowNum:20,
 		   	rownumbers:true,
 		   	rowList:[10,20,30],
 		   	pager: '#pager',
 		   	sortname: 'id',
-		   	height: '100%',
+		   	height: height,
 		    viewrecords: true,
 		    sortorder: "asc",
 		    subGrid : true,
@@ -67,7 +76,25 @@
 		}
 		
 	});
-	
+
+	/**
+	 * 设置JQGRID 上下页图标
+	 * @param table
+	 */
+	function updatePagerIcons(table) {
+		var replacement =
+		{
+			'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+			'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+			'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+			'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+		};
+		$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+			var icon = $(this);
+			var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+			if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+		})
+	}
 	
 	
 	

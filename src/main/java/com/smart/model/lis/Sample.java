@@ -27,7 +27,8 @@ public class Sample extends BaseObject {
 	private static final long serialVersionUID = -583231534825801731L;
 
 	private Long id;//主键，流水号
-	
+
+	private String barcode;	//样本条码，客户号+主键
 	private String patientId; // 病人 就诊号
 	private String patientname;
 	private Date birthday;
@@ -57,8 +58,7 @@ public class Sample extends BaseObject {
 	private Integer iswriteback=0;//写回标识
 	private Integer hasimages=0;//是否包含图片
 	private int cycle=0;
-	private int invoiceNum=0; //发票号
-	
+
 	private int auditStatus=0; //样本审核的状态
 	private int auditMark=0; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
@@ -525,15 +525,6 @@ public class Sample extends BaseObject {
 		this.charttest = charttest;
 	}
 	
-	@Column(name="invoicenum")
-	public int getInvoiceNum() {
-		return invoiceNum;
-	}
-
-	public void setInvoiceNum(int invoiceNum) {
-		this.invoiceNum = invoiceNum;
-	}
-	
 	@Column(name="symstatus")
 	public int getSymstatus() {
 		return symstatus;
@@ -541,6 +532,15 @@ public class Sample extends BaseObject {
 
 	public void setSymstatus(int symstatus) {
 		this.symstatus = symstatus;
+	}
+
+	@Column
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 
 	@Transient
@@ -605,7 +605,36 @@ public class Sample extends BaseObject {
 		}
 		return value;
 	}
-	
+
+	@Transient
+	public String getSampleStatusValue() {
+		String value = "";
+		switch (getSampleStatus()) {
+			case 0:
+				value = "已开单";
+				break;
+			case 1:
+				value = "条码打印";
+				break;
+			case 2:
+				value = "已采样";
+				break;
+			case 3:
+				value = "已送达";
+				break;
+			case 4:
+				value = "已接收";
+				break;
+			case 5:
+				value = "已审核";
+				break;
+			case 6:
+				value = "已打印";
+				break;
+		}
+		return value;
+	}
+
 	@Transient
 	public String getStayHospitalModelValue(){
 		String value = "";

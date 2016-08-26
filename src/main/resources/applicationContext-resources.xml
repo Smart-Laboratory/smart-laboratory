@@ -35,13 +35,13 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
     
-    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+    <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
         <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
         <property name="username" value="lab" />
         <property name="password" value="lab" />
-    </bean>
+    </bean> -->
 
     <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
@@ -50,6 +50,16 @@
         <property name="username" value="zjhis" />
         <property name="password" value="zjhis" />
     </bean> -->
+    
+    <!-- 本地的国际医院库 -->
+    <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="url" value="jdbc:oracle:thin:@10.31.96.38:1521:orcl" />
+        <property name="username" value="lab" />
+        <property name="password" value="lab" />
+    </bean>
+    
     <!-- <bean id="dataSource-z1" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="org.mariadb.jdbc.Driver" />
@@ -59,5 +69,10 @@
     </bean> -->
     <bean id="jdbcTemplatez1" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource-z1"></property>
+    </bean>
+
+    <bean id="webClient" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
+        <constructor-arg type="java.lang.String" value="http://10.31.96.38:8080/lisservice/services/rest/" />
+        <!--<constructor-arg type="java.lang.String" value="http://192.168.168.12:8080/lisservice/services/rest/" />-->
     </bean>
 </beans>

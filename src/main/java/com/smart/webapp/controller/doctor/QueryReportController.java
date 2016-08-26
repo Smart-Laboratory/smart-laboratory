@@ -131,7 +131,7 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("sex", ConvertUtil.null2String(info.getSexValue()));
         patientInfo.put("medicalnumber", ConvertUtil.null2String(info.getPatientblh()));
         patientInfo.put("bedno",ConvertUtil.null2String(info.getDepartBed()));
-        patientInfo.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+        patientInfo.put("type", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(info.getSampleType())));
         JSONArray dataRows = null;
         try {
             dataRows = getResult(info.getSampleNo());
@@ -1013,7 +1013,8 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("bedno",ConvertUtil.null2String(info.getDepartBed()));
         patientInfo.put("sampleStatus",ConvertUtil.null2String(info.getSampleStatus()));
         patientInfo.put("auditStatus",ConvertUtil.null2String(info.getAuditStatus()));
-        patientInfo.put("type", SampleUtil.getInstance().getSampleList(dictionaryManager).get(String.valueOf(info.getSampleType())));
+        patientInfo.put("type", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(info.getSampleType())));
+        patientInfo.put("doctadviseno", info.getId());
         return  patientInfo;
     }
 }
