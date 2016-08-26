@@ -15,7 +15,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name="l_laborder")
 public class LabOrder {
-
 	private Long laborder; //同医嘱号
 
 	private String requestId;
@@ -39,11 +38,11 @@ public class LabOrder {
 	private String diagnostic;
 	private String hossection; //申请科室
 	private String sampletype;
-	private String price;
+	private String price;				//单价
 	private Integer feestatus=0;
-	private String examitem;
-	private String ylxh;
-	private String labdepartment; //检验科室
+	private String examitem;			//检验项目名称
+	private String ylxh;				//检验项目ID
+	private String labdepartment;  		//检验科室
 	private String computername;
 	private Integer printflag=0;
 	private Integer receiveflag=0;
@@ -55,6 +54,9 @@ public class LabOrder {
 	private String toponymy; //采集部位
 	private Integer cycle=0;		//生理周期
 	private Integer count=0;		//采集数量
+
+	//add by zcw 20160825
+	private String hossectionName;	//科室名称(病区)
 
 	@Id
 	public Long getLaborder() {
@@ -332,6 +334,14 @@ public class LabOrder {
 
 	public void setRequestNum(Integer requestNum) {
 		this.requestNum = requestNum;
+	}
+	@Transient
+	public String getHossectionName() {
+		return hossectionName;
+	}
+	@Transient
+	public void setHossectionName(String hossectionName) {
+		this.hossectionName = hossectionName;
 	}
 
 	@Column

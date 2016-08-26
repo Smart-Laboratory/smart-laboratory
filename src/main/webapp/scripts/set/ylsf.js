@@ -36,7 +36,7 @@ function editYlxh() {
 		return false;
 	}
 	var rowData = $("#s3list").jqGrid('getRowData',rowId);
-	
+
 	//initForm初始化Ylxh对象
 	$('#ylxh').val(rowData.ylxh);
 	$('#ylxh').attr("readonly","true");
@@ -56,10 +56,14 @@ function editYlxh() {
 	$('#profiletest').val(rowData.ptest);
 	$('#profiletest2').val(rowData.ptest2);
 	$('#profiletest3').val(rowData.ptest3);
+<<<<<<< HEAD
+
+=======
 	$('#cjbw').val(rowData.cjbw);
 	$('#sgsl').val(rowData.sgsl);
 	$('#sfhb').val(rowData.sfhb);
 	
+>>>>>>> origin/master
 	layer.open({
 		type: 1,
 		area: ['650px','450px'],

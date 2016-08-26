@@ -2,11 +2,13 @@ package com.smart.webapp.controller.dsf;
 
 import com.smart.model.dsf.CustomerInfo;
 import com.smart.model.dsf.CustomerInfoDetails;
-import com.smart.model.rule.Index;
+import com.smart.model.dsf.DSF_ylxh;
 import com.smart.service.dsf.CustomerDetailsManager;
 import com.smart.service.dsf.CustomerManager;
+import com.smart.service.dsf.DSF_ylxhManager;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.DataResponse;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -20,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +33,9 @@ import java.util.Map;
  * Created by zjn on 2016/8/4.
  */
 @Controller
-@RequestMapping("/customer/*")
-public class ViewCustomerInfoController {
+@RequestMapping("/dsf/customer/*")
+public class CustomerInfoController {
+    private static Log log = LogFactory.getLog(CustomerInfoController.class);
     @Autowired
     private CustomerManager customerManager;
     @Autowired
@@ -51,7 +53,6 @@ public class ViewCustomerInfoController {
     public ModelAndView viewCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return new ModelAndView();
     }
-
     @RequestMapping(value = "/saveCustomer*", method = RequestMethod.POST)
     @ResponseBody
     public String saveCustomer(@ModelAttribute CustomerInfo cust,@ModelAttribute CustomerInfoDetails custd, HttpServletRequest request, HttpServletResponse response) throws JSONException {
@@ -142,20 +143,30 @@ public class ViewCustomerInfoController {
         List<CustomerInfo> resultList = new ArrayList();
 
         String customsName = ConvertUtil.null2String(request.getParameter("query"));
-        resultList = customerManager.searchByName(customsName, "like");
+
+        try {
+            resultList = customerManager.searchByName(customsName, "like");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JSONArray jsonArray = new JSONArray();
         for (CustomerInfo cust : resultList) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("customerid", cust.getCustomerid());
             jsonObject.put("customername", cust.getCustomername());
             jsonObject.put("address", cust.getAddress());
+            jsonObject.put("clientnumber", cust.getClientnumber());
+            jsonObject.put("sequence", cust.getSequence());
+
             jsonArray.put(jsonObject);
         }
+
+
         response.setContentType("text/html;charset=UTF-8");
         return jsonArray.toString();
     }
 
-    @RequestMapping(value = "ajaxcustomer*", method = {RequestMethod.GET})
+    @RequestMapping(value = "/ajaxcustomer*", method = {RequestMethod.GET})
     @ResponseBody
     public String ajaxcustomer(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         JSONObject obj = new JSONObject();
@@ -183,6 +194,15 @@ public class ViewCustomerInfoController {
                         cdMap.put("customerid", cd.getCustomerid());
                         cdMap.put("name", cd.getName());
                         cdMap.put("age", cd.getAge());
+
+                        String sexname = "未知";
+                        if ("1".equals(cd.getSex())){
+                            sexname = "男";
+                        }else{
+                            sexname = "女";
+                        }
+                        cdMap.put("sexname", sexname);
+
                         cdMap.put("sex", cd.getSex());
                         cdMap.put("position", cd.getPosition());
                         cdMap.put("hobby", cd.getHobby());
@@ -194,6 +214,16 @@ public class ViewCustomerInfoController {
                         cdMap.put("besttimetovisit", cd.getBesttimetovisit());
                         cdMap.put("bestplacetovisit", cd.getBestplacetovisit());
                         cdMap.put("bestcallroute", cd.getBestcallroute());
+
+                        String maritalstatusname = "未知";
+                        if ("1".equals(cd.getMaritalstatus())){
+                            maritalstatusname = "已婚";
+                        }
+                        if ("2".equals(cd.getMaritalstatus())){
+                            maritalstatusname = "未婚";
+                        }
+                        cdMap.put("maritalstatusname", maritalstatusname);
+
                         cdMap.put("maritalstatus", cd.getMaritalstatus());
                         cdMap.put("spousename", cd.getSpousename());
                         cdMap.put("spouseoccupation", cd.getSpouseoccupation());
@@ -209,10 +239,10 @@ public class ViewCustomerInfoController {
         }
         return obj.toString();
     }
-    @RequestMapping(value = "ajaxcustomerRelation*", method = {RequestMethod.GET})
+    @RequestMapping(value = "/ajaxcustomerRelation*", method = {RequestMethod.GET})
     @ResponseBody
     public ModelAndView ajaxcustomerRelation(HttpServletRequest request, HttpServletResponse response){
-        ModelAndView modelAndView = new ModelAndView("/customer/customerRelation");
+        ModelAndView modelAndView = new ModelAndView("/dsf/customer/customerRelation");
 
         try {
             String method = ConvertUtil.null2String(request.getParameter("method"));    //add or edit

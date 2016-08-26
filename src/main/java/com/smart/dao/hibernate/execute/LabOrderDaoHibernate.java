@@ -1,7 +1,9 @@
 package com.smart.dao.hibernate.execute;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.execute.LabOrderDao;
@@ -48,5 +50,36 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		String hql = "from LabOrder where laborderorg in ("+ requestIds+")";
 		System.out.println(hql);
 		return getSession().createQuery(hql).list();
+	}
+
+	/**
+	 * 获取住院病人所有采集记录
+	 * @param ward			病区
+	 * @param bedNo			床位号
+	 * @param requestIds	申请ID
+	 * @return
+	 */
+	public List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds){
+		List condition = new ArrayList();
+		String hql = " from LabOrder where 1=1 ";
+		if(ward !=null && !ward.isEmpty()){
+			hql += " and hossection=?";
+			condition.add(ward);
+		}
+		if(bedNo !=null && !bedNo.isEmpty()){
+			hql += " and bed=?";
+			condition.add(bedNo);
+		}
+		if(requestIds !=null && !requestIds.isEmpty()){
+			hql += " and requestId in(?)";
+			condition.add(requestIds);
+		}
+		Query query = getSession().createQuery(hql);
+		if (condition != null && condition.size() > 0) {
+			for (int i = 0; i < condition.size(); i++) {
+				query.setParameter(i, condition.get(i));
+			}
+		}
+		return query.list();
 	}
 }
