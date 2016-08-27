@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.execute.LabOrderDao;
@@ -81,5 +82,14 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 			}
 		}
 		return query.list();
+	}
+
+	public void saveAll(List<LabOrder> list) {
+		Session s = getSessionFactory().openSession();
+		for(LabOrder labOrder : list) {
+			s.saveOrUpdate(labOrder);
+		}
+		s.flush();
+		s.close();
 	}
 }

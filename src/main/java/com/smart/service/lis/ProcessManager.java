@@ -30,4 +30,6 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 	 * @return
 	 */
 	List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState);
+
+    void saveAll(List<Process> needSaveProcess);
 }

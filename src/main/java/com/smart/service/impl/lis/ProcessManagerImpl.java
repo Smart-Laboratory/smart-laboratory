@@ -53,5 +53,8 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 	public List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState){
 		return processDao.getReceiveListBySection(section, starttime, endtime,sampleState);
 	}
-	
+
+	public void saveAll(List<Process> list) {
+		processDao.saveAll(list);
+	}
 }

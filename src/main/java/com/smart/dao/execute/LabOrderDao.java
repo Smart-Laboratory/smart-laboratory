@@ -33,4 +33,6 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	 */
 	@Transactional
 	List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds);
+
+    void saveAll(List<LabOrder> list);
 }

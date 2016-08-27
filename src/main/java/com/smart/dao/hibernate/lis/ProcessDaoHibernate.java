@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.antlr.runtime.tree.RewriteRuleNodeStream;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
@@ -126,6 +127,15 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		System.out.println(hql);
 		
 		return getSession().createSQLQuery(hql).addEntity("s", Sample.class).addEntity("p", Process.class).list();
+	}
+
+	public void saveAll(List<Process> list) {
+		Session s = getSessionFactory().openSession();
+		for(Process process : list) {
+			s.saveOrUpdate(process);
+		}
+		s.flush();
+		s.close();
 	}
 
 }
