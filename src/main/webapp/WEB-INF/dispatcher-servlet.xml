@@ -42,6 +42,6 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-    
+
     <!-- Add additional controller beans here -->
 </beans>

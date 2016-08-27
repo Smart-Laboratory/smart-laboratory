@@ -1,5 +1,7 @@
 package com.smart.model.execute;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,15 +21,16 @@ public class LabOrder {
 
 	private String requestId;
 	private String bed;
-	private Long laborderorg; //yjsb 申请明细ID
+	private String laborderorg; //yjsb 申请明细ID 多个ID逗号分分隔(111,222,333)
 	private String sampleno;
 	private Integer stayhospitalmode=0;
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date requesttime;
 	private String requester;
 	private Date executetime;
 	private String executor;
 	private Integer zxbz=0;		//采样执行标志
-
+	@JSONField(format="yyyy-MM-dd")
 	private Date birthday;
 	private String patientid;
 	private String patientname;
@@ -67,10 +70,10 @@ public class LabOrder {
 	}
 	
 	@Column
-	public Long getLaborderorg() {
+	public String getLaborderorg() {
 		return laborderorg;
 	}
-	public void setLaborderorg(Long laborderorg) {
+	public void setLaborderorg(String laborderorg) {
 		this.laborderorg = laborderorg;
 	}
 	

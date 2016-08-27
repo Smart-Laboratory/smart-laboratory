@@ -96,7 +96,7 @@
     </div>
     <div class="col-xs-9">
         <div style="padding-top: 5px;">
-            <button type="button" class="btn btn-sm btn-primary " title="打印" onclick="AddSection()">
+            <button type="button" class="btn btn-sm btn-primary " title="打印" onclick="TSLAB.Custom.printInfo()">
                 <i class="ace-icon fa fa-fire bigger-110"></i>
                 打印
             </button>
@@ -175,9 +175,17 @@
                     },
                     callback: {
                         onClick:function (event, treeId, treeNode, clickFlag) {
+                            var data ={};
+                            if(treeNode.level==0){
+                                data.ward=treeNode.id;
+                            }else{
+                                data.ward=treeNode.ward;
+                                data.bedNo=treeNode.bedNo;
+                                data.patientId=treeNode.id
+                            }
                             $.ajax({
                                 url: '../nursestation/inexecute/getRequestList',
-                                data: {ward:treeNode.ward,bedNo:treeNode.bedNo,patientId:treeNode.id},
+                                data:data,
                                 type: 'POST',
                                 dataType: "json",
                                 ContentType: "application/json; charset=utf-8",
@@ -188,8 +196,11 @@
                                     $("#tableList" ).clearGridData();   //清空原grid数据
                                     jQuery("#tableList").jqGrid('setGridParam',{
                                         datatype : 'local',
+                                        rowNum:beollected.length,
                                         data:beollected
                                     }).trigger('reloadGrid');//重新载入
+                                    //全选
+                                    $("#tableList").trigger("jqGridSelectAll",true);
                                 },
                                 error: function (msg) {
                                     alert("获取采集信息失败");
@@ -217,10 +228,16 @@
                 $("#tableList").jqGrid({
                     datatype: "json",
                     //caption:"未采集标本",
-                    colNames: ['申请ID','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
+                    colNames: ['申请ID','申请明细ID','ylxh','labdepartment','examitem','qbgsj','zxbz','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
                     colModel: [
                         { name: 'requestId', index: 'requestId', width: 40,hidden:true },
-                        { name: 'bed', index: 'bed', width: 40 },
+                        { name: 'laborderorg', index: 'laborderorg', width: 40,hidden:true },
+                        { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
+                        { name: 'labdepartment', index: 'labdepartment', width: 40,hidden:true },
+                        { name: 'examitem', index: 'examitem', width: 40,hidden:true },
+                        { name: 'qbgsj', index: 'qbgsj', width: 40,hidden:true },
+                        { name: 'zxbz', index: 'zxbz', width: 40,hidden:true },
+                        { name: 'bed', index: 'bed', width: 40},
                         { name: 'patientname', index: 'patientname', width: 60},
                         { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
                         { name: 'age', index: 'sampletype', width: 40},
@@ -228,7 +245,7 @@
                         { name: 'examitem', index: 'examitem', width: 150},
                         { name: 'sampletype', index: 'sampletype', width: 60},
                         { name: 'price', index: 'price', width: 60},
-                        { name: 'requestTime', index: 'sampletype', width: 60},
+                        { name: 'requesttime', index: 'requesttime', width: 100},
                         { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
                     ],
                     onSelectRow: function(id) {
@@ -239,7 +256,7 @@
                         jQuery('#tableList').editRow(id, false);
                     },
                     multiselect : true,
-                    multikey : "ctrlKey",
+                    //multikey : "ctrlKey",
                     repeatitems:false,
                     viewrecords: true,
                     autowidth:true,
@@ -281,6 +298,26 @@
                     rownumWidth: 35
                 });
             },
+            printInfo:function () {
+                //打印标本条码号
+                var ids = $("#tableList").jqGrid('getGridParam','selarrrow');
+                var saveDatas =[];
+                $.each(ids, function(key, val) {
+                    var rowData = $("#tableList").jqGrid("getRowData", ids[key]);
+                    saveDatas.push(rowData)
+                });
+                $.ajax({
+                    type:"POST",
+                    url:"../nursestation/inexecute/printRequestList",
+                    dataType:"json",
+                    contentType:"application/json",
+                    data:JSON.stringify(saveDatas),
+                    success:function(data){
+
+                    }
+                });
+                console.log(saveDatas);
+            },
             getSampleList:function(bedno,patientId){
             }
         }
@@ -288,6 +325,9 @@
             init: function () {
                 private.initTree();
                 private.initGrid();
+            },
+            printInfo:function () {
+                private.printInfo();
             }
 
         }
