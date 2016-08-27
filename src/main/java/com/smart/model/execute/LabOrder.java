@@ -21,11 +21,7 @@ public class LabOrder {
 
 	private String requestId;
 	private String bed;
-<<<<<<< HEAD
 	private String laborderorg; //yjsb 申请明细ID 多个ID逗号分分隔(111,222,333)
-=======
-	private String laborderorg; //yjsb 申请明细ID,多个用逗号隔开
->>>>>>> 7aad339e3510b3a434b696e91976bb379dfbf9ae
 	private String sampleno;
 	private Integer stayhospitalmode=0;
 	@JSONField(format="yyyy-MM-dd HH:mm:ss")
