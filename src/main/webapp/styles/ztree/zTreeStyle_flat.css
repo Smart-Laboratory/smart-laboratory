@@ -78,8 +78,8 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button {
     line-height:0;
     margin:0;
-    width:16px;
-    height:16px;
+    /*width:16px;*/
+    /*height:16px;*/
     display: inline-block;
     vertical-align:middle;
     border:0 none;
@@ -162,10 +162,10 @@ website:	http://code.google.com/p/jquerytree/
     height:18px
 }
 .ztree li span.button.root_open {
-    background-position:-92px -54px
+    background-position:-20px -20px
 }
 .ztree li span.button.root_close {
-    background-position:-74px -54px
+    background-position:-0px -20px
 }
 .ztree li span.button.roots_open {
     background-position:-92px 0
@@ -301,7 +301,7 @@ ul.ztree.zTreeDragUL {
     line-height: 30px;
 }
 .ztree li a {
-    width: 100%;
+    width: 92%;
     height: 30px;
     padding-top: 0px;
 }
@@ -309,16 +309,16 @@ ul.ztree.zTreeDragUL {
     text-decoration: none;
     background-color: #E7E7E7;
     filter:alpha(opacity=50);
-    -moz-opacity:0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;
+    /*-moz-opacity:0.5;*/
+    /*-khtml-opacity: 0.5;*/
+    /*opacity: 0.5;*/
 }
 .ztree li a.curSelectedNode {
-    background-color: #D4D4D4;
-    filter:alpha(opacity=50);
-    -moz-opacity:0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;
+    background-color: #d9edf7;
+    /*filter:alpha(opacity=50);*/
+    /*-moz-opacity:0.5;*/
+    /*-khtml-opacity: 0.5;*/
+    /*opacity: 0.5;*/
     border: 0;
     height: 30px;
 }

@@ -3234,6 +3234,18 @@ $.fn.jqGrid = function( pin ) {
 		if ($.isFunction( ts.p.onInitGrid )) { ts.p.onInitGrid.call(ts); }
 
 		populate();ts.p.hiddengrid=false;
+		/**
+		 * checkbox 全选 、反选
+		 * add by zcw 20160827
+		 */
+		$(ts).bind('jqGridSelectAll',function(e,checkFlag){
+			if(e.isTrigger===2){
+				return;
+			}
+			$('#cb_'+ts.id).attr('checked', (checkFlag===false));
+			$("#cb_"+ts.id).trigger("click");
+			$('#cb_'+ts.id).attr('checked', !(checkFlag===false));
+		});
 	});
 };
 $.jgrid.extend({

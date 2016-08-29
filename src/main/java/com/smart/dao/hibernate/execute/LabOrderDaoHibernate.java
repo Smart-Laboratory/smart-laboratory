@@ -63,24 +63,19 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	public List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds){
 		List condition = new ArrayList();
 		String hql = " from LabOrder where 1=1 ";
+
 		if(ward !=null && !ward.isEmpty()){
-			hql += " and hossection=?";
-			condition.add(ward);
+			hql += " and hossection='" +ward+"'";
 		}
 		if(bedNo !=null && !bedNo.isEmpty()){
-			hql += " and bed=?";
-			condition.add(bedNo);
+			hql += " and bed='"+bedNo+"'";
 		}
+
 		if(requestIds !=null && !requestIds.isEmpty()){
-			hql += " and requestId in(?)";
-			condition.add(requestIds);
+			hql += " and requestId in("+requestIds+")";
 		}
 		Query query = getSession().createQuery(hql);
-		if (condition != null && condition.size() > 0) {
-			for (int i = 0; i < condition.size(); i++) {
-				query.setParameter(i, condition.get(i));
-			}
-		}
+
 		return query.list();
 	}
 
