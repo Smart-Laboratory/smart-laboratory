@@ -57,4 +57,8 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 	public void saveAll(List<Process> list) {
 		processDao.saveAll(list);
 	}
+
+	public void removeAll(List<Process> list) {
+		processDao.removeAll(list);
+	}
 }

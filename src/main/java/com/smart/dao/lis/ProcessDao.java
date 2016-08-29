@@ -35,4 +35,6 @@ public interface ProcessDao extends GenericDao<Process, Long> {
 	List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState);
 
     void saveAll(List<Process> list);
+
+    void removeAll(List<Process> list);
 }

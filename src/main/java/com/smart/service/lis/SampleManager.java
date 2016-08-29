@@ -85,4 +85,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getOutList(String sender,Date sendtime);
 
 	Long getSampleId();
+
+    void removeAll(List<Sample> needSaveSample);
 }

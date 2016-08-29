@@ -111,4 +111,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	public Long getSampleId() {
 		return sampleDao.getSampleId();
 	}
+
+	public void removeAll(List<Sample> list) {
+		sampleDao.removeAll(list);
+	}
 }

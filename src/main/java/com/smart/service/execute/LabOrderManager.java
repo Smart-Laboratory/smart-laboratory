@@ -30,4 +30,6 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
 	List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds);
 
     void saveAll(List<LabOrder> needSaveLabOrder);
+
+    void removeAll(List<LabOrder> needSaveLabOrder);
 }

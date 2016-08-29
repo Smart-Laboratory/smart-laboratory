@@ -1,19 +1,16 @@
 package com.smart.webapp.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
-import com.smart.model.lis.Hospital;
 import com.smart.model.user.User;
 import com.smart.service.RoleManager;
 import com.smart.service.UserExistsException;
 import com.smart.service.lis.HospitalManager;
+import com.smart.webapp.util.HospitalUtil;
 import com.smart.webapp.util.RequestUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +48,7 @@ public class SignupController extends BaseFormController {
     @ModelAttribute
     @RequestMapping(method = RequestMethod.GET)
     public User showForm(HttpServletRequest request, final HttpServletResponse response) {
-    	Map<Long, String> hospitals = new HashMap<Long,String>();
-    	List<Hospital> hList = hospitalManager.getAll();
-    	for(Hospital h: hList){
-    		hospitals.put(h.getId(), h.getName());
-    	}
-    	request.setAttribute("hospitals", hospitals);
+    	request.setAttribute("hospitals", HospitalUtil.getInstance(hospitalManager).getNameMap());
         return new User();
     }
 

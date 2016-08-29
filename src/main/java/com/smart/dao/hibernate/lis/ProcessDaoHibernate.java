@@ -138,4 +138,13 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		s.close();
 	}
 
+	public void removeAll(List<Process> list) {
+		Session s = getSessionFactory().openSession();
+		for(Process process : list) {
+			s.delete(process);
+		}
+		s.flush();
+		s.close();
+	}
+
 }

@@ -1,19 +1,16 @@
 package com.smart.webapp.controller;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.HospitalUtil;
 import org.apache.commons.lang.StringUtils;
 
 import com.smart.Constants;
-import com.smart.model.lis.Hospital;
 import com.smart.model.user.Role;
 import com.smart.model.user.User;
 import com.smart.service.RoleManager;
@@ -194,13 +191,7 @@ public class UserFormController extends BaseFormController {
     @RequestMapping(method = RequestMethod.GET)
     protected User showForm(final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
-    	
-    	Map<Long, String> hospitals = new HashMap<Long,String>();
-    	List<Hospital> hList = hospitalManager.getAll();
-    	for(Hospital h: hList){
-    		hospitals.put(h.getId(), h.getName());
-    	}
-    	request.setAttribute("hospitals", hospitals);
+    	request.setAttribute("hospitals", HospitalUtil.getInstance(hospitalManager).getNameMap());
     	
     	//获取电子签名地址--------------------------------
     	String dzqm_imghtm = "";

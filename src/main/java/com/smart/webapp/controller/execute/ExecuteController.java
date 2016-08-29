@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
 import com.smart.lisservice.WebService;
+import com.smart.model.lis.Hospital;
+import com.smart.service.lis.*;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.AutoSampleNoUtil;
-import com.smart.webapp.util.UserUtil;
-import com.smart.webapp.util.YlxhUtil;
+import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
 import org.drools.core.base.evaluators.IsAEvaluatorDefinition.IsAEvaluator;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -37,11 +37,6 @@ import com.smart.service.execute.ExecuteUnusualManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.execute.SampleNoBuilderManager;
 import com.smart.service.impl.zy.RMIServiceImpl;
-import com.smart.service.lis.ProcessManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionManager;
-import com.smart.service.lis.YlxhManager;
-import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.ExecuteInfo;
 import com.zju.api.model.Patient;
 import com.zju.api.service.RMIService;
@@ -174,6 +169,9 @@ public class ExecuteController {
 				} else {
 					o.put("error", "警告！检验项目" + labOrder.getExamitem() + "样本类型为空！");
 				}
+
+				//获得取报告单时间
+
 			}
 			//合并后的采样项目添加到记录表
 			needSaveList.add(labOrder);
@@ -222,6 +220,7 @@ public class ExecuteController {
 			sample.setSectionId(labOrder.getLabdepartment());
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
 			sample.setId(sampleManager.getSampleId());
+			sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%8d", sample.getId()));
 			Process process = new Process();
 			process.setSampleid(sample.getId());
 			process.setRequesttime(labOrder.getRequesttime());
@@ -238,15 +237,27 @@ public class ExecuteController {
 		//回写HIS，申请状态变更
 		System.out.println("申请序号： " + itemId);
 		System.out.println("生成的序号： " + labOrders.toString());
-		if(webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.SDF.format(executeTime), "")){
-			sampleManager.saveAll(needSaveSample);
-			processManager.saveAll(needSaveProcess);
-			labOrderManager.saveAll(needSaveLabOrder);
-		}
+        boolean saveSuccess = true;
+        try {
+            System.out.println("开始保存数据");
+            sampleManager.saveAll(needSaveSample);
+            processManager.saveAll(needSaveProcess);
+            labOrderManager.saveAll(needSaveLabOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            saveSuccess = false;
+        }
+        if(true) {
+           boolean updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.DF9.format(executeTime), "");
+            if(!updateStatusSuccess){
+                sampleManager.removeAll(needSaveSample);
+                processManager.removeAll(needSaveProcess);
+                labOrderManager.removeAll(needSaveLabOrder);
+            }
+        }
 		o.put("labOrders", labOrders);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
-
 		return null;
 	}
 
@@ -459,5 +470,7 @@ public class ExecuteController {
 	private ExecuteUnusualManager executeUnusualManager;
 	@Autowired
 	private SectionManager sectionManager;
+	@Autowired
+	private HospitalManager hospitalManager;
 	
 }
