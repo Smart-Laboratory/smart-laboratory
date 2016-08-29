@@ -1,13 +1,17 @@
 package com.smart.webapp.controller.execute;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.smart.lisservice.WebService;
 import com.smart.model.lis.Ylxh;
 import com.smart.service.lis.*;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.YlxhUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -107,15 +111,13 @@ public class ExecuteViewController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/getTests*", method = RequestMethod.GET)
+	@RequestMapping(value = "/ajax/getTests*", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, String> getTests(HttpServletRequest request, HttpServletResponse response){
+	public String getTests(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String patientId = request.getParameter("patientId");
 		String requestmode = request.getParameter("requestmode");
 		String from=request.getParameter("from");
         String to=request.getParameter("to");
-
-		System.out.println(requestmode);
 
 		List<LabOrder> loList = new ArrayList<LabOrder>();
 		WebService webService = new WebService();
@@ -127,7 +129,6 @@ public class ExecuteViewController {
 		} else {
 			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
 		}
-		System.out.println(loList.size());
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 		StringBuilder html = new StringBuilder();
 		LabOrder labOrder = new LabOrder();
@@ -135,118 +136,41 @@ public class ExecuteViewController {
 		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
+
+		JSONArray jsonArray = new JSONArray();
 		for(int i = 0; i < loList.size(); i++) {
+			JSONObject jsonObject = new JSONObject();
 			labOrder = loList.get(i);
 			ylxh = ylxhMap.get(labOrder.getYlxh());
 			labOrder.setSampletype(ylxh.getYblx());
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());
 			labOrder.setLabdepartment(ylxh.getKsdm());
-
 			System.out.println("执行标志：" + labOrder.getZxbz());
-
-			if(i%2==1){
-				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
-			}else{
-				html.append("<div  id='date"+i+"' class='alert alert-success sampleInfo' style='' >");
-			}
-			String bmp = "";
+			jsonObject.put("zxbz", labOrder.getZxbz());
 			if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
-				bmp ="../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()) +".bmp";
-			}
-			String reportTime = ylxh.getQbgsj() + "-" + ylxh.getQbgdd();
-			if(labOrder.getZxbz() == 0) {
-				html.append("<div class='col-sm-1' style=''>"+
-						"<div class='col-sm-7'><label><input type='checkbox' checked value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz() +"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+				jsonObject.put("bmp", "../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()));
 			} else {
-				html.append("<div class='col-sm-1' style=''>"+
-						"<div class='col-sm-7'><label><input type='checkbox' value='"+labOrder.getLaborderorg()+"+"+ labOrder.getZxbz()+"+"+ylxh.getQbgsj()+"+"+ylxh.getQbgdd()+"'></label></div>");
+				jsonObject.put("bmp", "");
 			}
-			if(!bmp.isEmpty()){
-				html.append("<div class='col-sm-5'><img src='"+bmp+"' alt='"+ylxh.getSglx() + " " + ylxh.getBbl()+"' width='30px' height='50px' /></div>");
-			}
-			if(labOrder.getRequestmode()==1) {
-				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>");
-			}
-			html.append("</div>");
-			html.append("<div class='col-sm-11' style=''>");
-			html.append("<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+ylxh.getYlmc()+"</b>"+
-					"<span >发票号:</span><b id='sfsb'>"+labOrder.getRequestId()+"</b>"+
-					"<span >单价:</span><b id='dj'>"+labOrder.getPrice()+"</b>"+
-					"×<b id='sl'>"+labOrder.getRequestNum()+"</b>"+
-					"<span >执行科室:</span><b id='ksdm'>检验科</b>"+
-					"</div>"+
-					"<div>"
-					+ "<span >报告时间:</span><b id='qbgsj'>"+ylxh.getQbgsj()+"</b>"+
-					"<span >申请时间:</span><b id='kdsj'>"+Constants.DF8.format(labOrder.getRequesttime())+"</b>"+
-					"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(labOrder.getHossection())+"</b>"+
-					"<span >地点:</span><b id='qbgdd'>"+ylxh.getQbgdd()+"</b>"+
-					"</div>");
-			html.append("</div></div>");
-
+			jsonObject.put("requestId", labOrder.getRequestId());
+			jsonObject.put("labOrderOrg", labOrder.getLaborderorg());
+			jsonObject.put("qbgsj", ylxh.getQbgsj());
+			jsonObject.put("qbgdd", ylxh.getQbgdd());
+			jsonObject.put("requestMode", labOrder.getRequestmode());
+			jsonObject.put("ylmc", ylxh.getYlmc());
+			jsonObject.put("sglx", ylxh.getSglx());
+			jsonObject.put("bbl", ConvertUtil.null2String(ylxh.getBbl()));
+			jsonObject.put("price", labOrder.getPrice());
+			jsonObject.put("amount", labOrder.getRequestNum());
+			jsonObject.put("labDepart", sectionUtil.getLabValue(ylxh.getKsdm()));
+			jsonObject.put("hosSection", sectionUtil.getLabValue(labOrder.getHossection()));
+			jsonObject.put("requestTime", Constants.DF8.format(labOrder.getRequesttime()));
+			jsonArray.add(jsonObject);
 		}
-		
-		/*for(int i=0;i<eList.size();i++){
-			e=eList.get(i);
-			if(i==0)
-				recentInvoiceNum = e.getSfsb();
-			
-			
-//			System.out.println(e.getDoctadviseno()+e.getYlmc()+e.getYlxh()+e.getYjsb()+e.getSfsb());
-			if(i%2==1){
-				html.append("<div  id='date"+i+"' class='alert alert-info sampleInfo' style='' >");
-			}else{
-				html.append("<div  id='date"+i+"' class='alert alert-success sampleInfo' style='' >");
-			}
-			String bmp = "";
-			if(!getBmp(e.getHyfl()).equals("notube") && !getBmp(e.getHyfl()).isEmpty()){
-				bmp ="../images/bmp/"+ getBmp(e.getHyfl()) +".bmp";
-			}
-			
-			String mode = e.getHyjg().substring(0, 1);
-			if(mode==null)
-				mode="0";
-			String reportTimeAndDd = takeReportTime(e.getQbgsj().toLowerCase(), e.getZxksdm(), mode,e.getQbgdd());
-			String reportTime = reportTimeAndDd.split("-")[0];
-			if(reportTimeAndDd.split("-")[1]!=null)
-				e.setQbgdd(reportTimeAndDd.split("-")[1]);
-			if(reportTime.contains("不能抽血") || reportTime.contains("勿"))
-				e.setSl("-900");
-			e.setQbgsj(reportTime);
-			e.setZxksdm(e.getZxksdm().trim());
-			
-			if(e.getSfsb().equals(recentInvoiceNum)){
-				html.append("<div class='col-sm-1' style=''>"+
-						"<div class='col-sm-6'><label><input type='checkbox' checked value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
-			}else{
-				html.append("<div class='col-sm-1' style=''>"+
-						"<div class='col-sm-6'><label><input type='checkbox' value='"+e.getYjsb()+e.getYlxh()+"+"+e.getQbgsj()+"-"+e.getQbgdd()+"'></label></div>");
-			}
-			if(!bmp.isEmpty()){
-				html.append("<div class='col-sm-4'><img src='"+bmp+"' alt='"+e.getHyfl()+"' width='30px' height='50px' /></div>");
-			}
-			if(e.getHyjg().substring(0, 1).equals("1")){
-				html.append("<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>");
-			}
-			html.append("</div>");
-			html.append("<div class='col-sm-11' style=''>");
-			html.append("<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+e.getYlmc()+"</b>"+
-								"<span >发票号:</span><b id='sfsb'>"+e.getSfsb()+"</b>"+
-								"<span >单价:</span><b id='dj'>"+e.getDj()+"</b>"+
-									"×<b id='sl'>"+e.getSl()+"</b>"+
-								"<span >执行科室:</span><b id='ksdm'>"+sectionUtil.getValue(e.getZxksdm())+"</b>"+
-						"</div>"+
-						"<div><span >医嘱号:</span><b id='doctadviseno'>"+e.getDoctadviseno()+"</b>"
-						+ "<span >报告时间:</span><b id='qbgsj'>"+e.getQbgsj()+"</b>"+
-								"<span >申请时间:</span><b id='kdsj'>"+Constants.DF8.format(e.getKdsj())+"</b>"+
-								"<span >申请科室:</span><b id='sjksdm'>"+sectionUtil.getValue(e.getSjksdm())+"</b>"+
-								"<span >地点:</span><b id='qbgdd'>"+e.getQbgdd()+"</b>"+
-							"</div>");
-			html.append("</div></div>");
-		}*/
-		Map<String, String> map = new HashMap<String,String>();
-		map.put("html", html.toString());
-		return map;
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(jsonArray.toString());
+		return null;
 	}
 	
 	public String getBmp(String str){
@@ -254,37 +178,35 @@ public class ExecuteViewController {
 			return "";
 		String bmpStr=str;
 		if (str.indexOf("黑")>=0) //and str.indexOf('1.6')>0 
-			bmpStr="black1d6";
+			bmpStr="black1d6.bmp";
 		else if (str.indexOf("蓝")>=0  &&  (str.indexOf("2")>=0 || str.indexOf("3")>=0)) 
-			bmpStr="blue2d7";
+			bmpStr="blue2d7.bmp";
 		else if ( str.indexOf("蓝")>=0 && (str.indexOf("4")>=0 || str.indexOf("5")>=0) )
-			bmpStr="blue5";
+			bmpStr="blue5.bmp";
 		else if (str.indexOf("灰")>=0)  //and str.indexOf('2')>0 
-			bmpStr="gray2";
-		else if (str.indexOf("紫")>=0 && str.indexOf("2")>=0) 
-			bmpStr="purple2";
-		else if (str.indexOf("紫")>=0 && str.indexOf("5")>=0) 
-			bmpStr="purple5";
-		else if ( str.indexOf("红")>=0) 
-			bmpStr="red5";
+			bmpStr="gray2.bmp";
+		else if (str.indexOf("紫")>=0)
+			bmpStr="purple.png";
+		else if ( str.indexOf("红")>=0)
+			bmpStr="red5.bmp";
 		else if ( str.indexOf("黄")>=0) //and str.indexOf('5')>0 
-			bmpStr="yellow5";
+			bmpStr="yellow.png";
 		else if ( str.indexOf("普通")>=0 && str.indexOf("2.7ml")>=0) 
-			bmpStr="no_1";
+			bmpStr="no_1.bmp";
 		else if ( str.indexOf("普通")>=0 && str.indexOf("3ml")>=0) 
-			bmpStr="no_2";
+			bmpStr="no_2.bmp";
 		else if ( str.indexOf("普通")>=0 && str.indexOf("5ml")>=0) 
-			bmpStr="no_3";
+			bmpStr="no_3.bmp";
 		else if ( str.indexOf("特殊")>=0 && str.indexOf("5ml")>=0) 
-			bmpStr="no_3";
+			bmpStr="no_3.bmp";
 		else if ( str.indexOf("特殊")>=0 && str.indexOf("4ml")>=0) 
-			bmpStr="no_3";
+			bmpStr="no_3.bmp";
 		else if ( str.indexOf("血培养")>=0 && str.indexOf("5ml")>=0) 
-			bmpStr="no_3";
+			bmpStr="no_3.bmp";
 		else if ( str.indexOf("肝素")>=0 && str.indexOf("血")>=0) 
-			bmpStr="no_4";
+			bmpStr="no_4.bmp";
 		else if ( str.indexOf("肝素")>=0 && str.indexOf("骨髓")>=0) 
-			bmpStr="no_4";
+			bmpStr="no_4.bmp";
 	   else
 			bmpStr="notube";
 	   return bmpStr;

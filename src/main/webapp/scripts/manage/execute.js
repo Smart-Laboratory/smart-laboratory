@@ -66,9 +66,50 @@ function getData(item,event){
                     $("#examtodo").html("待做项："+data.examtodo);
 			});
 			
-			$.get("../manage/execute/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
+			$.get("../manage/execute/ajax/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val()},function(data){
 				if(data!=null){
-					$("#tests").html(data.html);
+					var jsonArr = jQuery.parseJSON(data);
+					var html = "";
+					for(var i = 0; i<jsonArr.length; i++) {
+						if(i%2 == 0) {
+							html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#f5f5f5'>";
+						}else{
+							html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#fff'>";
+						}
+						if(jsonArr[i].zxbz == 0) {
+							html+="<div class='col-sm-2' style=''>"+
+								"<div class='col-sm-6'><label><input type='checkbox' checked value='"+jsonArr[i].labOrderOrg+"+"+ jsonArr[i].zxbz +"+"+jsonArr[i].qbgsj+"+"+jsonArr[i].qbgdd+"'></label></div>";
+						} else {
+							html+="<div class='col-sm-3' style=''>"+
+								"<div class='col-sm-6'><label><input type='checkbox' value='"+jsonArr[i].labOrderOrg+"+"+ jsonArr[i].zxbz +"+"+jsonArr[i].qbgsj+"+"+jsonArr[i].qbgdd+"'></label></div>";
+						}
+						if(jsonArr[i].bmp == "") {
+							html+="<div class='col-sm-4'>&nbsp;</div>";
+						} else {
+							html+="<div class='col-sm-4'><img src='"+jsonArr[i].bmp+"' alt='"+jsonArr[i].sglx +"' height='50px' /></div>";
+						}
+						if(jsonArr[i].requestMode == 1) {
+							html+="<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>";
+						} else {
+							html+="<div class='col-sm-2'>&nbsp;</div>";
+						}
+						html+="</div>";
+						html+="<div class='col-sm-10' style=''>";
+						html+="<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+jsonArr[i].ylmc+"</b>"+
+							"<span >发票号:</span><b id='sfsb'>"+jsonArr[i].requestId+"</b>"+
+							"<span >单价:</span><b id='dj'>"+jsonArr[i].price+"</b>"+
+							"×<b id='sl'>"+jsonArr[i].amount+"</b>"+
+							"<span >执行科室:</span><b id='ksdm'>"+jsonArr[i].labDepart+"</b>"+
+							"<span >采集量:</span><b id='bbl'>"+jsonArr[i].bbl+"</b></div>"+
+							"<div>"
+							+ "<span >报告时间:</span><b id='qbgsj'>"+jsonArr[i].qbgsj+"</b>"+
+							"<span >申请时间:</span><b id='kdsj'>"+jsonArr[i].requestTime+"</b>"+
+							"<span >申请科室:</span><b id='sjksdm'>"+jsonArr[i].hosSection+"</b>"+
+							"<span >地点:</span><b id='qbgdd'>"+jsonArr[i].qbgdd+"</b>"+
+							"</div>";
+						html+="</div></div>";
+					}
+					$("#tests").html(html);
 					if(data.examtodo!=null)
 						$("#examtodo").html("待做项："+data.examtodo);
 				}

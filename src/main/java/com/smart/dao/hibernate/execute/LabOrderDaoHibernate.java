@@ -87,4 +87,13 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		s.flush();
 		s.close();
 	}
+
+	public void removeAll(List<LabOrder> list) {
+		Session s = getSessionFactory().openSession();
+		for(LabOrder labOrder : list) {
+			s.delete(labOrder);
+		}
+		s.flush();
+		s.close();
+	}
 }

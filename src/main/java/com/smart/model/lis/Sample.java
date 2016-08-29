@@ -74,8 +74,6 @@ public class Sample extends BaseObject {
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_SAMPLE")
-	@SequenceGenerator(name = "SEQ_SAMPLE", sequenceName = "sample_sequence", allocationSize=1)
 	public Long getId(){
 		return this.id;
 	}

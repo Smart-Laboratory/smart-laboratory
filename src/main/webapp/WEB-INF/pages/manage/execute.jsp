@@ -44,9 +44,9 @@
 
 <input type="hidden" id="laborder" />
 
-<div class="col-sm-12">
+<div class="row">
 	<div class="col-sm-3">
-		<div class="widget-box">
+		<div class="widget-box widget-color-green">
 			<div class="widget-header">
 				<h4 class="widget-title"><fmt:message key="execute.cxxx" /></h4>
 				<div class="widget-toolbar">
@@ -117,7 +117,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12" id="cxhis" style="margin:5px 0px;border:1px solid #DDD;">
+		<div class="col-sm-12" id="cxhis" style="margin:5px 0px;border:1px solid #82af6f;">
 			<div class="col-sm-12 ">
 				<span class='col-sm-4'>抽血次数:</span><b id="cxcx"></b>
 			</div>
@@ -135,7 +135,7 @@
 	</div>
 	<div class="col-sm-9" style="">
 		<div id="patientInfo" style="width:99%;margin:10px 5px;">
-			<div class="widget-box">
+			<div class="widget-box widget-color-green">
 				<div class="widget-header">
 					<h4 class="widget-title"><fmt:message key="execute.brxx" /></h4>
 					<div class="widget-toolbar">
@@ -176,8 +176,8 @@
 				</div>
 			</div>
 		</div>
-		<div style="width:99%; ">
-			<div class="widget-box">
+		<div style="width:99%; width:99%;margin:10px 5px;">
+			<div class="widget-box widget-color-green">
 				<div class="widget-header">
 					<h4 class="widget-title"><fmt:message key="execute.datelist" /></h4>
 					<div class="widget-toolbar">
@@ -187,9 +187,8 @@
 					</div>
 				</div>
 				<div class="widget-body" style="overflow-x:scroll;">
-					<div id="tests" class="widget-main" style="width:1500px;">
-					
-					
+					<div id="tests" class="widget-main">
+
 					</div>
 				</div>
 			</div>
@@ -230,7 +229,7 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label no-padding-right" for="time">抽血次数：</label>
 			<div class="col-sm-9">
-				<input type="text" class="col-sm-10" id="time" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"></input>
+				<input type="text" class="col-sm-10" id="time" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/>
 			</div>
 		</div>
 		<div class="form-group">

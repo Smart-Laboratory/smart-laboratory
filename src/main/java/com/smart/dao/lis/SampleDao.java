@@ -75,5 +75,6 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	Long getSampleId();
-	
+
+    void removeAll(List<Sample> list);
 }

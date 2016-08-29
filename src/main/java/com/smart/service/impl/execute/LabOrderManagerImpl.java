@@ -51,4 +51,8 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 	public void saveAll(List<LabOrder> list) {
 		labOrderDao.saveAll(list);
 	}
+
+	public void removeAll(List<LabOrder> list) {
+		labOrderDao.removeAll(list);
+	}
 }

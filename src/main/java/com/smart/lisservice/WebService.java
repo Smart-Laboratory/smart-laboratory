@@ -222,8 +222,8 @@ public class WebService {
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
             httpClient.executeMethod(method);
+            System.out.println(method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            System.out.println(obj.toString());
             if((Integer)obj.get("State")==0) {
                 success = false;
             }

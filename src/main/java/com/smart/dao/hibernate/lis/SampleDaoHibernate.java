@@ -26,21 +26,21 @@ import com.smart.model.util.NeedWriteCount;
 public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implements SampleDao {
 
 	public SampleDaoHibernate() {
-        super(Sample.class);
-    }
-	
+		super(Sample.class);
+	}
+
 	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {
 		if (StringUtils.isEmpty(lab)) {
 			return null;
 		}
-		
+
 		if (StringUtils.isEmpty(date)) {
 			date = "________";
 		}
-		
+
 		StringBuilder builder = new StringBuilder();
 		if(lab.contains(",")) {
 			builder.append("from Sample where sectionId in (" + lab + ")");
@@ -83,9 +83,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 		System.out.println(query.getQueryString());
 		List<Sample> list = query.list();
-		
-		
-		
+
+
+
 		return list;
 	}
 
@@ -99,7 +99,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		Session session = getSession();
 		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) and sampleStatus<5 order by auditMark");
 		q.setFirstResult(0);
-		q.setMaxResults(500);  
+		q.setMaxResults(500);
 		List<Sample> list = q.list();
 		return list;
 	}
@@ -115,7 +115,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
-		
+
 		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
 				return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' order by s.id desc").list();
@@ -144,34 +144,34 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab) {
 		try {
 			Date todate = Constants.DF3.parse(sampleno.substring(0, 8));
-			Calendar calendar = Calendar.getInstance(); 
-	        calendar.setTime(todate); 
-	        calendar.add(Calendar.DATE,-180); 
-	        Date fromdate = calendar.getTime();
-	        String from = Constants.DF3.format(fromdate);
-	        List<Sample> infos = getSession().createQuery(
-	                "from Sample s where (s.patientblh='" + patientid + "' or s.patientblh='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
-	                        + sampleno + "' and s.sectionId in (" + lab + ") order by s.sampleNo desc").list();
-	        return infos;
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(todate);
+			calendar.add(Calendar.DATE,-180);
+			Date fromdate = calendar.getTime();
+			String from = Constants.DF3.format(fromdate);
+			List<Sample> infos = getSession().createQuery(
+					"from Sample s where (s.patientblh='" + patientid + "' or s.patientblh='" + blh + "') and s.sampleNo>='" + from + "' and s.sampleNo<='"
+							+ sampleno + "' and s.sectionId in (" + lab + ") order by s.sampleNo desc").list();
+			return infos;
 		} catch (ParseException e) {
 			//e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public Sample getBySampleNo(String sampleNo){
 		return (Sample)getSession().createQuery("from Sample s where s.sampleNo='"+sampleNo+"'").uniqueResult();
 	}
-	
-public List<Integer> getAuditInfo(String date, String department, String code, String user) {
-		
+
+	public List<Integer> getAuditInfo(String date, String department, String code, String user) {
+
 		if (StringUtils.isEmpty(department) ) {
 			return null;
 		}
 		if (StringUtils.isEmpty(date)) {
 			date = "________";
 		}
-		
+
 		if(code == null) {
 			code = "";
 		}
@@ -185,7 +185,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			builder.append("=");
 			builder.append(department);
 		}
-		
+
 		builder.append(" and ");
 		StringBuilder bld = new StringBuilder();
 		bld.append("(");
@@ -200,26 +200,26 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		bld.append(")");
 		builder.append(bld.toString());
-		
-		
-		int unaudit = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
+
+
+		int unaudit = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" +
 				builder.toString() + " and p.auditStatus=0").uniqueResult()).intValue();
-		int unpass = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
+		int unpass = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" +
 				builder.toString() + " and p.auditStatus=2").uniqueResult()).intValue();
-		int danger = ((Number)getSession().createQuery("select count(p) from Sample p, CriticalRecord c where c.sampleid = p.id and p.sectionId" + 
-				builder.toString() + " and p.auditMark=6 and c.criticalDealFlag=0").uniqueResult()).intValue(); 
-		
+		int danger = ((Number)getSession().createQuery("select count(p) from Sample p, CriticalRecord c where c.sampleid = p.id and p.sectionId" +
+				builder.toString() + " and p.auditMark=6 and c.criticalDealFlag=0").uniqueResult()).intValue();
+
 		List<Integer> list = new ArrayList<Integer>();
 		list.add(unaudit);
 		list.add(unpass);
 		list.add(danger);
-		
+
 		if (!date.equals("________")) {
-			int needwriteBack = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" + 
-					builder.toString() + " and p.writeback!=0").uniqueResult()).intValue(); 
+			int needwriteBack = ((Number)getSession().createQuery("select count(p) from Sample p where p.sectionId" +
+					builder.toString() + " and p.writeback!=0").uniqueResult()).intValue();
 			list.add(needwriteBack);
 		}
-		
+
 		return list;
 	}
 
@@ -234,7 +234,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		}
 		return getSession().createQuery(hql).list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleBySearchType(String fromDate, String toDate, String searchType, String text){
 		String hql = "select s from Sample s where s."+searchType+"='" + text + "' ";
@@ -249,71 +249,71 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
 		String[] cds = code.split(",");
 		switch (text.length()) {
-		case 8:
-			if (StringUtils.isNumeric(text)) {
+			case 8:
+				if (StringUtils.isNumeric(text)) {
+					sql += "and (";
+					for (int i=0; i<cds.length; i++) {
+						sql += "s.sampleNo like '" + text + cds[i] + "%'";
+						if (cds.length != i+1) {
+							sql += " or ";
+						}
+					}
+					sql += ")";
+				}
+				break;
+			case 11:
+				if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
+					sql += "and s.sampleNo like '" + text + "%'";
+				} else {
+					sql += "and s.sampleNo like '" + text.substring(0, 8) + "%'";
+				}
+				break;
+			case 14:
+				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) &&
+						code.indexOf(text.substring(8, 11)) != -1) {
+					sql += "and s.sampleNo='" + text + "'";
+				}
+				break;
+			case 18:
+				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
+						&& StringUtils.isNumeric(text.substring(11, 14))
+						&& StringUtils.isNumeric(text.substring(15, 18))
+						&& code.indexOf(text.substring(8, 11)) != -1) {
+					sql += "and s.sampleNo>='" + text.substring(0, 14)
+							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+				}
+				break;
+			default:
+				String date = Constants.DF3.format(new Date());
 				sql += "and (";
 				for (int i=0; i<cds.length; i++) {
-					sql += "s.sampleNo like '" + text + cds[i] + "%'";
+					sql += "s.sampleNo like '" + date + cds[i] + "%'";
 					if (cds.length != i+1) {
 						sql += " or ";
 					}
 				}
 				sql += ")";
-			}
-			break;
-		case 11:
-			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
-				sql += "and s.sampleNo like '" + text + "%'";
-			} else {
-				sql += "and s.sampleNo like '" + text.substring(0, 8) + "%'";
-			}
-			break;
-		case 14:
-			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
-				code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleNo='" + text + "'";
-			}
-			break;
-		case 18:
-			if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
-				&& StringUtils.isNumeric(text.substring(11, 14))
-				&& StringUtils.isNumeric(text.substring(15, 18))
-				&& code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleNo>='" + text.substring(0, 14) 
-					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
-			}
-			break;
-		default:
-			String date = Constants.DF3.format(new Date());
-			sql += "and (";
-			for (int i=0; i<cds.length; i++) {
-				sql += "s.sampleNo like '" + date + cds[i] + "%'";
-				if (cds.length != i+1) {
-					sql += " or ";
-				}
-			}
-			sql += ")";
-			break;
+				break;
 		}
-		
+
 		switch (status) {
-		case -3:
-			break;
-		case -2:
-			sql += " and s.auditStatus>-1";
-			break;
-		case 3:
-			sql += " and s.modifyFlag=1";
-			break;
-		case 4:
-			sql += " and s.sampleStatus<5";
-			break;
-		case 5:
-			sql += " and s.hasimages=1";
-			break;
-		default:
-			sql += " and s.auditStatus=" + status;
-			break;
+			case -3:
+				break;
+			case -2:
+				sql += " and s.auditStatus>-1";
+				break;
+			case 3:
+				sql += " and s.modifyFlag=1";
+				break;
+			case 4:
+				sql += " and s.sampleStatus<5";
+				break;
+			case 5:
+				sql += " and s.hasimages=1";
+				break;
+			default:
+				sql += " and s.auditStatus=" + status;
+				break;
 		}
 		if (mark != 0) {
 			sql += " and s.auditMark=" + mark;
@@ -324,7 +324,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 		System.out.print(q.getQueryString());
 		if( end != 0){
 			q.setFirstResult(start);
-			q.setMaxResults(end); 
+			q.setMaxResults(end);
 		}
 		return q.list();
 	}
@@ -336,69 +336,69 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 			cds = code.split(",");
 		}
 		switch (text.length()) {
-		case 8:
-			if (StringUtils.isNumeric(text)) {
+			case 8:
+				if (StringUtils.isNumeric(text)) {
+					sql += "and (";
+					for (int i=0; i<cds.length; i++) {
+						sql += "s.sampleNo like '" + text + cds[i] + "%'";
+						if (cds.length != i+1) {
+							sql += " or ";
+						}
+					}
+					sql += ")";
+				}
+				break;
+			case 11:
+				if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
+					sql += "and s.sampleNo like '" + text + "%'";
+				}
+				break;
+			case 14:
+				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) &&
+						code.indexOf(text.substring(8, 11)) != -1) {
+					sql += "and s.sampleNo='" + text + "'";
+				}
+				break;
+			case 18:
+				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
+						&& StringUtils.isNumeric(text.substring(11, 14))
+						&& StringUtils.isNumeric(text.substring(15, 18))
+						&& code.indexOf(text.substring(8, 11)) != -1) {
+					sql += "and s.sampleNo>='" + text.substring(0, 14)
+							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+				}
+				break;
+			default:
+				String date = Constants.DF3.format(new Date());
 				sql += "and (";
 				for (int i=0; i<cds.length; i++) {
-					sql += "s.sampleNo like '" + text + cds[i] + "%'";
+					sql += "s.sampleNo like '" + date + cds[i] + "%'";
 					if (cds.length != i+1) {
 						sql += " or ";
 					}
 				}
 				sql += ")";
-			}
-			break;
-		case 11:
-			if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
-				sql += "and s.sampleNo like '" + text + "%'";
-			}
-			break;
-		case 14:
-			if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) && 
-				code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleNo='" + text + "'";
-			}
-			break;
-		case 18:
-			if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
-				&& StringUtils.isNumeric(text.substring(11, 14))
-				&& StringUtils.isNumeric(text.substring(15, 18))
-				&& code.indexOf(text.substring(8, 11)) != -1) {
-				sql += "and s.sampleNo>='" + text.substring(0, 14) 
-					+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
-			}
-			break;
-		default:
-			String date = Constants.DF3.format(new Date());
-			sql += "and (";
-			for (int i=0; i<cds.length; i++) {
-				sql += "s.sampleNo like '" + date + cds[i] + "%'";
-				if (cds.length != i+1) {
-					sql += " or ";
-				}
-			}
-			sql += ")";
-			break;
+				break;
 		}
-		
+
 		switch (status) {
-		case -3:
-			break;
-		case -2:
-			sql += " and s.auditStatus>-1";
-			break;
-		case 3:
-			sql += " and s.modifyFlag=1";
-			break;
-		case 4:
-			sql += " and s.sampleStatus<5";
-			break;
-		case 5:
-			sql += " and s.hasimages=1";
-			break;
-		default:
-			sql += " and s.auditStatus=" + status;
-			break;
+			case -3:
+				break;
+			case -2:
+				sql += " and s.auditStatus>-1";
+				break;
+			case 3:
+				sql += " and s.modifyFlag=1";
+				break;
+			case 4:
+				sql += " and s.sampleStatus<5";
+				break;
+			case 5:
+				sql += " and s.hasimages=1";
+				break;
+			default:
+				sql += " and s.auditStatus=" + status;
+				break;
 		}
 		if (mark != 0) {
 			sql += " and s.auditMark=" + mark;
@@ -442,7 +442,7 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getByIds(String ids) {
 		return getSession().createQuery("from Sample where id in (" + ids + ")").list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Sample> getBysampleNos(String ids) {
 		try {
@@ -457,13 +457,13 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	public List<Sample> getSampleByCode(String code) {
 		return getSession().createQuery("from Sample where sampleNo like '"+ code +"%'").list();
 	}
-	
+
 	public boolean existSampleNo(String sampleno){
 		String sql = "select count(*) from Sample where sampleno = '"+sampleno+"'";
 		Query q = getSession().createQuery(sql);
-        return ((Number) (q.uniqueResult())).intValue() != 0;
-    }
-	
+		return ((Number) (q.uniqueResult())).intValue() != 0;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Sample> getByPatientId(String patientId,String lab){
 		String hql = "from Sample where patientId = '"+patientId+"'";
@@ -475,17 +475,17 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	}
 
 	public String getReceiveSampleno(String name, String lab, String today) {
-		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and p.receiver='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc"; 
+		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and p.receiver='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
 		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getReceiveList(String text, String lab) {
-		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";  
+		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";
 		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' order by p.receivetime desc";
 		return getSession().createQuery(sql).list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Sample> getOutList(String sender,Date sendtime){
 		String sql = "select s from Sample s, Process p where s.id=p.sampleid and p.sender='"+sender+"' and p.sendtime > "
@@ -494,7 +494,16 @@ public List<Integer> getAuditInfo(String date, String department, String code, S
 	}
 
 	public Long getSampleId() {
-	    String sql = "select sample_sequence.nextval from dual";
-        return (Long) getSession().createSQLQuery(sql).uniqueResult();
-    }
+		String sql = "select sample_sequence.nextval from dual";
+		return Long.valueOf(getSession().createSQLQuery(sql).uniqueResult().toString());
+	}
+
+	public void removeAll(List<Sample> list) {
+		Session s = getSessionFactory().openSession();
+		for(Sample sample : list) {
+			s.delete(sample);
+		}
+		s.flush();
+		s.close();
+	}
 }
