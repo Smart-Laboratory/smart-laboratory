@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
@@ -494,8 +496,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	public Long getSampleId() {
-		String sql = "select sample_sequence.nextval from dual";
-		return Long.valueOf(getSession().createSQLQuery(sql).uniqueResult().toString());
+        String sql = "select  sample_sequence.nextval nextvalue from dual";
+        return (Long)(getSession().createSQLQuery(sql).addScalar("nextvalue", StandardBasicTypes.LONG) ).uniqueResult();
 	}
 
 	public void removeAll(List<Sample> list) {

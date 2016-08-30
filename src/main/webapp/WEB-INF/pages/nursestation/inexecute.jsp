@@ -253,15 +253,28 @@
                     success: function (data) {
                         var data = eval("("+data+")");
                         var beollected = data.beollected;
-                        console.log(beollected)
+                        var spidered = data.spidered;
+
+                          //加载未采集标本
                         $("#tableList" ).clearGridData();   //清空原grid数据
                         jQuery("#tableList").jqGrid('setGridParam',{
                             datatype : 'local',
                             rowNum:beollected.length,
                             data:beollected
                         }).trigger('reloadGrid');//重新载入
+
+                        //加载已采集标本
+                        jQuery("#tableList1").jqGrid('setGridParam',{
+                            datatype : 'local',
+                            rowNum:spidered.length,
+                            data:spidered
+                        }).trigger('reloadGrid');//重新载入
+
                         //全选
                         $("#tableList").trigger("jqGridSelectAll",true);
+                        //$("#tableList1").trigger("jqGridSelectAll",true);
+
+                        //加载病人信息
                         var patientinfo="";
                         private.addPatientInfo(treeNode.level,beollected[0]);
                     },
@@ -274,21 +287,17 @@
                 $("#tableList").jqGrid({
                     datatype: "json",
                     //caption:"未采集标本",
-                    colNames: ['申请ID','申请明细ID','patientid','ylxh','labdepartment','examitem','qbgsj','zxbz','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
+                    colNames: ['申请ID','申请明细ID','patientid','ylxh','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
                     colModel: [
                         { name: 'requestId', index: 'requestId', width: 40,hidden:true },
                         { name: 'laborderorg', index: 'laborderorg', width: 40,hidden:true },
                         { name: 'patientid', index: 'patientid', width: 40,hidden:true },
                         { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
-                        { name: 'labdepartment', index: 'labdepartment', width: 40,hidden:true },
-                        { name: 'examitem', index: 'examitem', width: 40,hidden:true },
-                        { name: 'qbgsj', index: 'qbgsj', width: 40,hidden:true },
-                        { name: 'zxbz', index: 'zxbz', width: 40,hidden:true },
                         { name: 'bed', index: 'bed', width: 40},
                         { name: 'patientname', index: 'patientname', width: 60},
                         { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
-                        { name: 'age', index: 'sampletype', width: 40},
-                        { name: 'testId', index: 'sampletype', width: 60,hidden:true},
+                        { name: 'age', index: 'age', width: 40},
+                        { name: 'testId', index: 'testId', width: 60,hidden:true},
                         { name: 'examitem', index: 'examitem', width: 150},
                         { name: 'sampletype', index: 'sampletype', width: 60},
                         { name: 'price', index: 'price', width: 60},
@@ -325,28 +334,42 @@
                // var height=$('.laftnav').height()-$('#widget-box-2').height()-116;
                 $("#tableList1").jqGrid({
                     datatype: "json",
-                    colNames: ['床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
+                    //caption:"未采集标本",
+                    colNames: ['申请ID','申请明细ID','patientid','ylxh','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
                     colModel: [
-                        { name: 'bedno', index: 'channel', width: 60 },
-                        { name: 'name', index: 'testid', width: 100},
-                        { name: 'sex', index: 'testname', width: 60},
-                        { name: 'age', index: 'sampletype', width: 100},
-                        { name: 'testId', index: 'sampletype', width: 100,hidden:true},
-                        { name: 'testName', index: 'sampletype', width: 120},
-                        { name: 'sampleType', index: 'sampletype', width: 100},
-                        { name: 'amount', index: 'sampletype', width: 60},
-                        { name: 'requestTime', index: 'sampletype', width: 100},
-                        { name: 'emergency', index: 'emergency', width: 60}
+                        { name: 'requestId', index: 'requestId', width: 40,hidden:true },
+                        { name: 'laborderorg', index: 'laborderorg', width: 40,hidden:true },
+                        { name: 'patientid', index: 'patientid', width: 40,hidden:true },
+                        { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
+                        { name: 'bed', index: 'bed', width: 40},
+                        { name: 'patientname', index: 'patientname', width: 60},
+                        { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
+                        { name: 'age', index: 'age', width: 40},
+                        { name: 'testId', index: 'testId', width: 60,hidden:true},
+                        { name: 'examitem', index: 'examitem', width: 150},
+                        { name: 'sampletype', index: 'sampletype', width: 60},
+                        { name: 'price', index: 'price', width: 60},
+                        { name: 'requesttime', index: 'requesttime', width: 100},
+                        { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
                     ],
                     onSelectRow: function(id) {
                         if(id && id!==lastsel){
                             jQuery('#tableList1').saveRow(lastsel, false, 'clientArray');
                             lastsel=id;
                         }
-                        jQuery('#tableList1').editRow(id, false);
+                        jQuery('#tableList').editRow(id, false);
+                    },
+                    gridComplete: function () {
+                        var ids = jQuery("#tableList").jqGrid('getDataIDs');
+                        for (var i = 0; i < ids.length; i++) {
+                            var rowData = $("#tableList").getRowData(ids[i]);
+                            if(rowData.requestmode==1){
+                                $('#'+ids[i]).find("td").css("color","red");
+                            }
+                        }
                     },
                     multiselect : true,
-                    multikey : "ctrlKey",
+                    //multikey : "ctrlKey",
                     repeatitems:false,
                     viewrecords: true,
                     autowidth:true,

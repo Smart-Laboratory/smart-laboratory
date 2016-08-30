@@ -322,11 +322,11 @@ public class LabOrder {
 	}
 
 	@Column
-	public int getCycle() {
+	public Integer getCycle() {
 		return cycle;
 	}
 
-	public void setCycle(int cycle) {
+	public void setCycle(Integer cycle) {
 		this.cycle = cycle;
 	}
 

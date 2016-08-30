@@ -32,4 +32,5 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
     void saveAll(List<LabOrder> needSaveLabOrder);
 
     void removeAll(List<LabOrder> needSaveLabOrder);
+
 }

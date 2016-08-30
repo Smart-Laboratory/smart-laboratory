@@ -12,12 +12,15 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
+import com.smart.service.execute.InExcuteManager;
 import com.smart.service.execute.LabOrderManager;
 import com.alibaba.fastjson.*;
+import com.smart.service.lis.HospitalManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.util.ConvertUtil;
+import com.smart.webapp.util.HospitalUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.UserUtil;
 import com.smart.webapp.util.YlxhUtil;
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
@@ -58,6 +62,12 @@ public class InExecuteViewController {
     @Autowired
     private UserManager userManager;
 
+    @Autowired
+    private InExcuteManager inExcuteManager;
+
+    @Autowired
+    private HospitalManager hospitalManager;
+
     private ValueFilter filter = new ValueFilter() {
         @Override
         public Object process(Object obj, String s, Object v) {
@@ -72,9 +82,10 @@ public class InExecuteViewController {
         return new ModelAndView();
     }
 
-    private List<LabOrder> labOrdersService =  new ArrayList<LabOrder>();
-    private Map<String, List> resultMap =   new HashMap<String,List>();
-    private Map<String,LabOrder> labOrderMapService = new HashMap<String,LabOrder>();
+    private List<LabOrder> labOrdersService = new ArrayList<LabOrder>();
+    private Map<String, List> resultMap = new HashMap<String, List>();
+    private Map<String, LabOrder> labOrderMapService = new HashMap<String, LabOrder>();
+
     /**
      * 获取字典列表
      *
@@ -88,6 +99,8 @@ public class InExecuteViewController {
     public String getList(@RequestParam(value = "ward") String ward, HttpServletRequest request, HttpServletResponse response) throws Exception {
         labOrdersService = new WebService().getInExcuteInfo(ward);//重新初始化
         resultMap = new HashMap<String, List>();   //重新初始化
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+
         JSONArray nodes = new JSONArray();
         JSONObject root = new JSONObject();
         if (labOrdersService != null && labOrdersService.size() > 0) {
@@ -101,9 +114,26 @@ public class InExecuteViewController {
         //Map<String ,List> resultMap = new HashMap<String ,List>();
         for (Iterator it = labOrdersService.iterator(); it.hasNext(); ) {
             LabOrder labOrder = (LabOrder) it.next();
+
+            Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
+            /**
+             * LIS获取相关信息
+             */
+            labOrder.setExamitem(ylxh.getYlmc());
+            labOrder.setQbgdt(ylxh.getQbgdd());
+            labOrder.setSampletype(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
+            labOrder.setLabdepartment(ylxh.getKsdm());
+            labOrder.setQbgsj(ylxh.getQbgsj());
+            labOrder.setToponymy(ylxh.getCjbw());
+            labOrder.setCount(ylxh.getSgsl());
+            labOrder.setSampletype(ylxh.getYblx());
+            Double fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
+            labOrder.setPrice("" + fee);
+
+
             String key = labOrder.getBed() + "_" + labOrder.getPatientid();
-            String key1 = labOrder.getRequestId()+"_"+labOrder.getLaborderorg();        //按requestid ,requestdetailid 存储Map
-            labOrderMapService.put(key1,labOrder);
+            String key1 = labOrder.getRequestId() + "_" + labOrder.getLaborderorg();        //按requestid ,requestdetailid 存储Map
+            labOrderMapService.put(key1, labOrder);
 
             if (!resultMap.isEmpty() && resultMap.containsKey(key)) { //如果已经存在这个数组，就放在这里
                 List laborderList = resultMap.get(key);
@@ -146,7 +176,7 @@ public class InExecuteViewController {
     @RequestMapping(value = "/getRequestList*", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json; charset=utf-8")
     @ResponseBody
     public String getRequestList(@RequestParam(value = "ward") String ward, @RequestParam(value = "bedNo", defaultValue = "") String bedNo, @RequestParam(value = "patientId", defaultValue = "") String patientId, @RequestParam(value = "requestIds", defaultValue = "") String requestIds) {
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+
         //获取病区已采集标本
         List<LabOrder> labOrderList = labOrderManager.getByRequestIds(ward, bedNo, requestIds);
 
@@ -163,30 +193,27 @@ public class InExecuteViewController {
         }
         //未采集标本
         try {
-            for (LabOrder labOrder : beCollectedList) {
+            Iterator iterator = beCollectedList.iterator();
+            while(iterator.hasNext()) {
+                LabOrder labOrder = (LabOrder) iterator.next();
                 String requestId = ConvertUtil.null2String(labOrder.getRequestId());
                 String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
-                if (requestDetailIds.indexOf(requestDetailIds + ",") >= 0) {
-                    beCollectedList.remove(labOrder);
+                if (requestDetailIds.indexOf(requestDetailId + ",",0) >= 0) {
+                    iterator.remove();
                 }
             }
+
+//            for (LabOrder labOrder : beCollectedList) {
+//                String requestId = ConvertUtil.null2String(labOrder.getRequestId());
+//                String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
+//                if (requestDetailIds.indexOf(requestDetailId + ",",0) >= 0) {
+//                    beCollectedList.remove(labOrder);
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (LabOrder labOrder : beCollectedList) {
 
-            Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
-            //labOrder.setZxbz(1);    //设置执行标志
-            labOrder.setExamitem(ylxh.getYlmc());
-            labOrder.setQbgdt(ylxh.getQbgdd());
-            labOrder.setSampletype(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
-            labOrder.setLabdepartment(ylxh.getKsdm());
-            labOrder.setQbgsj(ylxh.getQbgsj());
-            labOrder.setToponymy(ylxh.getCjbw());
-            labOrder.setCount(ylxh.getSgsl());
-            Double fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
-            labOrder.setPrice("" + fee);
-        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("spidered", labOrderList);       //已采集标本
         jsonObject.put("beollected", beCollectedList); //未采集标本
@@ -199,11 +226,10 @@ public class InExecuteViewController {
      *
      * @param orders 申请单LIST [{key:value},{...}]
      * @return
-     *
      */
     @RequestMapping(value = "/printRequestList*", method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json; charset=utf-8")
     @ResponseBody
-    public String printRequestList(@RequestBody String orders,HttpServletRequest request,HttpServletResponse response) {
+    public String printRequestList(@RequestBody String orders, HttpServletRequest request, HttpServletResponse response) {
         WebService webService = new WebService();
         JSONArray retList = new JSONArray();         //返回JSON打印信息
         User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
@@ -212,8 +238,8 @@ public class InExecuteViewController {
         String requestIds = "";
         Matcher matcher = Pattern.compile(regex).matcher(orders);
         while (matcher.find()) {
-            String id= ConvertUtil.null2String(matcher.group(1));
-            if (!requestIds.isEmpty() &&  !id.isEmpty()) requestIds += ",";
+            String id = ConvertUtil.null2String(matcher.group(1));
+            if (!requestIds.isEmpty() && !id.isEmpty()) requestIds += ",";
             requestIds += id;
         }
 
@@ -242,7 +268,7 @@ public class InExecuteViewController {
             //未采集标本按requestId分组
             Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
             for (LabOrder labOrder : labOrders) {
-                labOrder= labOrderMapService.get(labOrder.getRequestId()+"_"+labOrder.getLaborderorg());
+                labOrder = labOrderMapService.get(labOrder.getRequestId() + "_" + labOrder.getLaborderorg());
                 if (!labOrderMap.isEmpty() && labOrderMap.containsKey(labOrder.getRequestId())) {
                     List laborderList = labOrderMap.get(labOrder.getRequestId());
                     laborderList.add(labOrder);
@@ -292,13 +318,15 @@ public class InExecuteViewController {
                  * ?????待实现
                  */
                 LabOrder labOrder = unLabOrderlistMap.get(key);
+
+                // System.out.println(labOrder.gets);
                 //设置样本信息
                 Sample sample = new Sample();
                 sample.setBirthday(labOrder.getBirthday());
                 sample.setPatientId(labOrder.getPatientid());
                 sample.setYlxh(ConvertUtil.null2String(labOrder.getYlxh()));
                 sample.setCount(ConvertUtil.null2String(labOrder.getCount()));
-                sample.setCycle(ConvertUtil.getIntValue(ConvertUtil.null2String(labOrder.getCycle()),0));
+                sample.setCycle(ConvertUtil.getIntValue(ConvertUtil.null2String(labOrder.getCycle()), 0));
                 sample.setDiagnostic(labOrder.getDiagnostic());
                 sample.setFee(labOrder.getPrice());
                 sample.setFeestatus(ConvertUtil.null2String(labOrder.getFeestatus()));
@@ -315,7 +343,8 @@ public class InExecuteViewController {
                 sample.setSectionId(labOrder.getLabdepartment());
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());
                 sample.setId(sampleManager.getSampleId());
-
+                //生成样本号
+                sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
                 Date executeTime = new Date();
 
                 Process process = new Process();
@@ -329,23 +358,25 @@ public class InExecuteViewController {
                 //回写HIS，申请状态变更
                 //项目申请类型  11 门诊检验  12 门诊检查 21 住院检验  22 住院检查
                 // 1 执行(门诊)  2 取消执行(门诊)  3 接受计费(住院)  4 退费(住院)  5 打印 (住院)  6 取消打印7 预约时间
-
-                sampleManager.save(sample);             //保存样本信息
-                processManager.save(process);           //保存流转记录
-                labOrderManager.save(labOrder);         //保存采集记录
-                if (!webService.requestUpdate(21, labOrder.getLaborderorg(),5, user.getLastLab(),"", user.getUsername(),"",  Constants.SDF.format(executeTime), "")) {
-                    sampleManager.remove(sample);             //HIS保存失败删除样本信息
-                    processManager.remove(process);           //HIS保存失败流转记录
-                    labOrderManager.remove(labOrder);         //HIS保存失败采集记录
-                }else {
-                    JSONObject object = new JSONObject();
-                    object.put("testinfo",labOrder.getExamitem());
-                    object.put("barcode",sample.getBarcode());
-                    object.put("patientinfo",labOrder.getPatientname());
-                    object.put("sampletype",labOrder.getSampletype());
-                    SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd hh:mm:ss" );
-                    object.put("datetime",sdf.format(executeTime));
-                    retList.add(object);
+                String retval = inExcuteManager.saveInExcute(sample, process, labOrder);
+                JSONObject retObj = JSON.parseObject(retval);
+                if (retObj.getBoolean("state")) {
+                    if (!webService.requestUpdate(21, labOrder.getLaborderorg(), 5, user.getLastLab(), "", user.getUsername(), "", Constants.DF9.format(executeTime), sample.getBarcode())) {
+                        Sample sample1 = sampleManager.get(retObj.getLong("sample1Id"));
+                        Process process1 = processManager.get(retObj.getLong("processId"));
+                        LabOrder labOrder1 = labOrderManager.get(retObj.getLong("labOrderId"));
+                        inExcuteManager.removeInExcute(sample1, process1, labOrder1);
+                        //labOrder1.setZxbz(0);
+                    } else {
+                        JSONObject object = new JSONObject();
+                        object.put("testinfo", labOrder.getExamitem());
+                        object.put("barcode", sample.getBarcode());
+                        object.put("patientinfo", labOrder.getPatientname());
+                        object.put("sampletype", labOrder.getSampletype());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        object.put("datetime", sdf.format(executeTime));
+                        retList.add(object);
+                    }
                 }
             }
             //打印
@@ -353,7 +384,7 @@ public class InExecuteViewController {
             e.printStackTrace();
         }
         JSONObject retObj = new JSONObject();
-        retObj.put("printOrders",retList);
+        retObj.put("printOrders", retList);
         retObj.put("noPrintOrders", hasPrintLaborder);
 
         System.out.println(retObj.toString());

@@ -220,7 +220,7 @@ public class ExecuteController {
 			sample.setSectionId(labOrder.getLabdepartment());
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
 			sample.setId(sampleManager.getSampleId());
-			sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%8d", sample.getId()));
+			sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
 			Process process = new Process();
 			process.setSampleid(sample.getId());
 			process.setRequesttime(labOrder.getRequesttime());
