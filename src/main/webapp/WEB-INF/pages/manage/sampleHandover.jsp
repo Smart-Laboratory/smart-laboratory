@@ -84,7 +84,7 @@
         <div class="space-4"></div>
         <div class="col-xs-12">
             <div class="widget-toolbar no-border">
-            	<button id="sampleTraceLink" class="btn bth-info" style="width:30px;height:28px;padding:0px 0px;border:0px;" >查询</button>
+            	<button id="sampleTraceLink" class="btn btn-info" style="width:50px;height:28px;padding:0px 0px;border:0px;" >查询</button>
                 <button id="fullScreen" class="btn btn-info" style="height:28px;padding:0px 0px;">
 					<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
 				</button>

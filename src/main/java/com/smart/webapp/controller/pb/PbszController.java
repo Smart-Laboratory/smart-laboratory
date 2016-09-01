@@ -27,12 +27,14 @@ import com.smart.service.ShiftManager;
 import com.smart.service.SxSchoolManager;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.model.lis.Section;
 import com.smart.model.pb.DayShift;
 import com.smart.model.pb.WInfo;
 import com.smart.service.DayShiftManager;
 import com.smart.service.WInfoManager;
 
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.SectionUtil;
 
 @Controller
 @RequestMapping("/pb/sz*")
@@ -152,7 +154,7 @@ public class PbszController extends PbBaseController {
 				map.put("workid", wi.getWorkid());
 				map.put("name", wi.getName());
 				map.put("sex", wi.getSexString());
-				map.put("section", wi.getSection());
+				map.put("section", labMap.get(wi.getSection()));
 				map.put("worktime", wi.getWorktime()==null?"":sdf.format(wi.getWorktime()));
 				map.put("type", wi.getTypeString());
 				map.put("phone", wi.getPhone());
@@ -520,7 +522,13 @@ public class PbszController extends PbBaseController {
 		}
 		
 	}
-	
+	/**
+	 * 获取科室和学校列表
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/ajax/getSchool*", method = RequestMethod.GET)
 	@ResponseBody
 	public String getSchool(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -531,8 +539,14 @@ public class PbszController extends PbBaseController {
 		}
 		sname = sname.substring(0,sname.length()-1);
 		
+		String sectionList = "";
+		for(String code : labMap.keySet()){
+			sectionList += code + ":" + labMap.get(code)+";";
+		}
+		
 		JSONObject o = new JSONObject();
 		o.put("schools", sname);
+		o.put("sectionListStr", sectionList.substring(0,sectionList.length()-1));
 		
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());

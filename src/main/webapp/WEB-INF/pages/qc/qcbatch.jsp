@@ -9,17 +9,21 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
+    <title>质控品设定</title>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/bootstrap-datetimepicker.min.css"/>" />
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
     <script type="text/javascript" src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-ui.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/i18n/grid.locale-cn.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace-elements.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/bootstrap-tag.min.js"/>"></script>
 
     <style>
         .ui-jqgrid {
@@ -47,7 +51,7 @@
             display: none;
         }
         .ui-autocomplete{
-            z-index: 9999;
+            z-index: 99999999!important;
         }
         li {list-style-type:none;}
         #addForm.form-horizontal{
@@ -161,8 +165,8 @@
 
 
 <div style="clear: both"></div>
-<div id="addDialog" style="display: none;overflow: hidden">
-    <form id="addForm" class="form-horizontal" action="<c:url value='../micro/cultureresult/save'/>" method="post">
+<div id="addDialog" style="display: none;">
+    <form id="addForm" action="<c:url value='../micro/cultureresult/save'/>"  class="form-horizontal"  method="post" >
         <input type="hidden" id="id" name="id" />
         <div class="form-group">
             <div class="space-2"></div>
@@ -175,25 +179,18 @@
                 <input type="text" id="sampleType" name="sampleType" placeholder="样本类型" class="col-xs-12"/>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-xs-2 control-label no-padding-right" for="deviceid">质控品名称 </label>
-            <div class="col-xs-4">
-                <input type="text" id="qcBatchName" name="qcBatchName" placeholder="质控品名称" class="col-xs-12"/>
-            </div>
-            <label class="col-xs-2 control-label no-padding-right" for="device">仪器 </label>
-            <div class="col-xs-4">
-                <input type="hidden" id="deviceid" name="deviceid" placeholder="仪器ID" class="col-xs-12" />
-                <input type="text" id="device" name="device" placeholder="仪器" class="col-xs-12"/>
-                <div class="list" style="display: none">
-                    <div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">
-                        <a id="btnCancelChose" class="btnCancelChose" onclick="TSLAB.Custom.cancelChose()">取消</a><a id="btnChose" class="btnChose" onclick="TSLAB.Custom.choseItem()">选择</a>
-                    </div>
-                    <ul id="testList" class="testlist">
-                    </ul>
 
-                </div>
-            </div>
-        </div>
+            <%--<input type="text" id="device" name="device" placeholder="仪器" class="col-xs-12"/>--%>
+                <%--<div class="list" style="display: none">--%>
+                    <%--<div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">--%>
+                        <%--<a id="btnCancelChose" class="btnCancelChose" onclick="TSLAB.Custom.cancelChose()">取消</a><a id="btnChose" class="btnChose" onclick="TSLAB.Custom.choseItem()">选择</a>--%>
+                    <%--</div>--%>
+                    <%--<ul id="testList" class="testlist">--%>
+                    <%--</ul>--%>
+
+                <%--</div>--%>
+
+
         <div class="form-group">
             <label class="col-xs-2 control-label no-padding-right" for="qcLevel">质控水平 </label>
             <div class="col-xs-4">
@@ -238,6 +235,17 @@
             <div class="col-xs-4">
                 <input type="text" id="expDate"  name="expDate" placeholder="失效日期" value="" class="col-xs-12 text"/>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label no-padding-right" for="qcBatchName">质控品名称 </label>
+            <div class="col-xs-4">
+                <input type="text" id="qcBatchName" name="qcBatchName" placeholder="质控品名称" class="col-xs-12"/>
+            </div>
+            <label class="col-sm-2 control-label no-padding-right" for="deviceidtags">仪器</label>
+            <div class="col-sm-4" id="examTag">
+                <input type="text" name="deviceidtags" id="deviceidtags" placeholder="输入仪器的中文、拼音" class="col-sm-12"/>
+            </div>
+
         </div>
     </form>
 </div>

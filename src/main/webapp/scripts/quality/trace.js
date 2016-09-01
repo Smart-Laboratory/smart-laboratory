@@ -68,26 +68,32 @@ function getSample(docNo) {
 }
 
 function getList(from, to, name, type) {
+	//列表初始化
+	$(window).on('resize.jqGrid',function () {
+		jQuery("#s3list").jqGrid("setGridWidth",$("#searchHeader").width(),false);
+	});
+	var clienthight = $(window).innerHeight();
+	var height = clienthight - $("#head").height() - $("#footer").height()-150;
+
 	var width=$("#searchHeader").width();
 	var sampleState = $("#sampleState").val();
 	var mygrid = jQuery("#s3list").jqGrid({
     	url:"../doctor/sampleTrace/data?from=" + from + "&to=" + to + "&name=" + name + "&type=" 
     			+ type + "&sampleState=" +sampleState, 
     	datatype: "json", 
-    	width: width, 
     	colNames:['ID','样本状态','医嘱号', '样本号', '检验目的','操作时间','送出时间','科室接收时间'], 
     	colModel:[ 
-    		{name:'id',index:'id', width:width*0.1, sortable:false,hidden:true},
-    		{name:'samplestatus',index:'samplestatus', width:width*0.1, sortable:false},
-    		{name:'doctadviseno',index:'doctadviseno', width:width*0.1, sortable:false},
-    		{name:'sample',index:'sample',width:width*0.2, sortable:false},
-    		{name:'examinaim',index:'examinaim',width:width*0.2, sortable:false},
-    		{name:'operatetime',index:'operatetime',width:width*0.2, sortable:false},
-    		{name:'sendtime',index:'operatetime',width:width*0.2, sortable:false,hidden:true},
-    		{name:'ksreceivetime',index:'operatetime',width:width*0.2, sortable:false,hidden:true}
+    		{name:'id',index:'id', width:100, sortable:false,hidden:true},
+    		{name:'samplestatus',index:'samplestatus', width:60, sortable:false},
+    		{name:'doctadviseno',index:'doctadviseno', width:100, sortable:false},
+    		{name:'sample',index:'sample',width:150, sortable:false},
+    		{name:'examinaim',index:'examinaim',width:200, sortable:false},
+    		{name:'operatetime',index:'operatetime',width:180, sortable:false},
+    		{name:'sendtime',index:'operatetime',width:180, sortable:false},
+    		{name:'ksreceivetime',index:'operatetime',width:180, sortable:false}
     		], 
     	rowNum:20,
-    	height: 500,
+    	height: height,
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
     	pager: '#s3pager',
@@ -97,6 +103,7 @@ function getList(from, to, name, type) {
     		
     	},
     	loadComplete: function() {
+
     		var firstDocId;
     		$.each(jQuery('#s3list').jqGrid('getCol','id', false), function(k,v) {
     			var ret = jQuery("#s3list").jqGrid('getRowData',v);
@@ -108,7 +115,6 @@ function getList(from, to, name, type) {
     	}
     }).trigger("reloadGrid"); 
 	jQuery("#s3list").jqGrid('navGrid','#s3pager',{edit:false,add:false,del:false,search:false,refresh:false});
-    jQuery("#s3list").jqGrid('navButtonAdd',"#s3pager",{caption:"",title:"", buttonicon :'ui-icon-pin-s', onClickButton:function(){ mygrid[0].toggleToolbar() } });
 }
 
 $(function() {
@@ -202,6 +208,11 @@ $(function() {
 			getList(from, to, name, type);
 			isFirst = false;
 		}
+		if(type == 1){
+			jQuery("#s3list").jqGrid("showCol","operatetime");
+		}else{
+			jQuery("#s3list").jqGrid("hideCol","operatetime");
+		}
 
 		jQuery("#s3list").jqGrid("setGridParam",{
 			url:"../doctor/sampleTrace/data?from="+from+"&to="+to+"&name="+name+"&type="+type+ "&sampleState=" +$("#sampleState").val()
@@ -210,6 +221,8 @@ $(function() {
 	});
 	var type = $("#type").val();
 	var name = $("#name").val();
+
+
 	if(type!=null && type ==4){
 		if (isFirst) {
 			getList("", "", name, type);

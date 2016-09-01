@@ -381,8 +381,9 @@ public class SxgroupPbcxController extends PbBaseController{
 		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
+		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
-        c.add(GregorianCalendar.DAY_OF_MONTH, 7*(week-1));
+        c.add(GregorianCalendar.DATE, 7*(week-1));
         String[] startDate = md.format(c.getTime()).split("-");
 		c.add(GregorianCalendar.DATE, 6);
 		String[] endDate = md.format(c.getTime()).split("-");
