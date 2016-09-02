@@ -37,9 +37,8 @@ public class LabOrder {
 	private Integer sex=0;
 	private String blh;
 	private String age;
-
 	private String diagnostic;
-	private String hossection; //申请科室
+	private String hossection; //申请科室ID
 	private String sampletype;
 	private String price;				//单价
 	private Integer feestatus=0;		//收费状态
@@ -59,8 +58,11 @@ public class LabOrder {
 	private Integer count;			//采集数量
 
 	//add by zcw 20160825
-	private String hossectionName;	//科室名称(病区)
-
+	private String hossectionName;	//申请科室名称
+	private String sampleTypeName;	//样本类型名称
+	private String wardId;			//病区ID
+	private String wardName;		//病区名称
+	private String ageUnit;			//年龄单位
 	@Id
 	public Long getLaborder() {
 		return laborder;
@@ -338,13 +340,38 @@ public class LabOrder {
 	public void setRequestNum(Integer requestNum) {
 		this.requestNum = requestNum;
 	}
-	@Transient
+
 	public String getHossectionName() {
 		return hossectionName;
 	}
-	@Transient
+
 	public void setHossectionName(String hossectionName) {
 		this.hossectionName = hossectionName;
+	}
+
+	public String getWardId() {
+		return wardId;
+	}
+
+	public void setWardId(String wardId) {
+		this.wardId = wardId;
+	}
+
+	public String getWardName() {
+		return wardName;
+	}
+
+	public void setWardName(String wardName) {
+		this.wardName = wardName;
+	}
+
+	@Transient
+	public String getSampleTypeName() {
+		return sampleTypeName;
+	}
+
+	public void setSampleTypeName(String sampleTypeName) {
+		this.sampleTypeName = sampleTypeName;
 	}
 
 	@Column
@@ -354,6 +381,14 @@ public class LabOrder {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public String getAgeUnit() {
+		return ageUnit;
+	}
+
+	public void setAgeUnit(String ageUnit) {
+		this.ageUnit = ageUnit;
 	}
 
 	@Transient

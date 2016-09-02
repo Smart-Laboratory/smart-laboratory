@@ -20,7 +20,7 @@ public class Ylxh extends BaseObject {
 	private static final long serialVersionUID = -1318480292416322789L;
 
 	// Primary Key
-	private Long ylxh; // 医疗序号
+	private Long ylxh; 				// 医疗序号
 	
 	private String profiletest3;	//相关检验项目列表 
 	private String profiletest2;   //可做可不做的检验项目

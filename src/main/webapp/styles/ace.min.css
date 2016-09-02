@@ -5590,7 +5590,7 @@ body.mob-safari .sidebar.sidebar-fixed {
 }
 
 .footer {
-    padding-top: 64px;
+    padding-top: 54px;
     height: 0;
     width: 0
 }
@@ -5715,7 +5715,7 @@ body.mob-safari .sidebar.sidebar-fixed {
     right: 12px;
     bottom: 4px;
     padding: 8px;
-    line-height: 36px;
+    line-height: 26px;
     border-top: 1px dotted #E5E5E5
 }
 

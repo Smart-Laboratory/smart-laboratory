@@ -1,8 +1,14 @@
 package com.smart.dao.hibernate.execute;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
+import com.smart.model.execute.LabOrderVo;
+import com.smart.model.lis.Process;
+import com.smart.model.lis.Sample;
+import com.smart.util.ConvertUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -57,28 +63,131 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	 * 获取住院病人所有采集记录
 	 * @param ward			病区
 	 * @param bedNo			床位号
-	 * @param requestIds	申请ID
+	 * @param patientId		病人ID
 	 * @return
 	 */
-	public List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds){
-		List condition = new ArrayList();
-		String hql = " from LabOrder where 1=1 ";
+	public List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
+		String sql =" from LabOrder where 1=1";
+		Long startTime=System.currentTimeMillis(); //获取结束时间
 
 		if(ward !=null && !ward.isEmpty()){
-			hql += " and hossection='" +ward+"'";
+			sql += " and wardId=:ward";
 		}
 		if(bedNo !=null && !bedNo.isEmpty()){
-			hql += " and bed='"+bedNo+"'";
+			sql += " and bed=:bedNo";
+		}
+		if(patientId !=null && !patientId.isEmpty()){
+			sql += " and  patientid=:patientId";
+		}
+		if(requestIds !=null && requestIds.size()>0){
+			sql += " and  requestId in (:requestIds)";
 		}
 
-		if(requestIds !=null && !requestIds.isEmpty()){
-			hql += " and requestId in("+requestIds+")";
+		Query query = getSession().createQuery(sql);
+		if(ward !=null && !ward.isEmpty()){
+			query.setString("ward",ward);
 		}
-		Query query = getSession().createQuery(hql);
+		if(bedNo !=null && !bedNo.isEmpty()){
+			query.setString("bedNo",bedNo);
+		}
+		if(patientId !=null && !patientId.isEmpty()){
+			query.setString("patientId",patientId);
+		}
+		if(requestIds !=null && requestIds.size()>0){
+			query.setParameterList("requestIds",requestIds);
+		}
 
-		return query.list();
+
+		List list = query.list();
+		Long endTime =System.currentTimeMillis(); //获取结束时间
+		System.out.println("程序运行时间qqqqq： "+(endTime-startTime)+"ms");
+		return list;
 	}
 
+	/**
+	 * 获取病人已打印记录
+	 * @param ward
+	 * @param bedNo
+	 * @param patientId
+	 * @param requestIds 样本ID
+	 * @return
+	 */
+	public List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds){
+		String hql =" from LabOrder as l ,Sample as s,Process as p where l.laborder =  s.id and l.laborder = p.sampleid";
+		if(ward !=null && !ward.isEmpty()){
+			hql += " and l.wardId=:ward";
+		}
+		if(bedNo !=null && !bedNo.isEmpty()){
+			hql += " and l.bed=:bedNo";
+		}
+		if(patientId !=null && !patientId.isEmpty()){
+			hql += " and  l.patientid=:patientId";
+		}
+		if(requestIds !=null && requestIds.size()>0){
+			hql += " and  l.requestId in (:requestIds)";
+		}
+
+		Query query = getSession().createQuery(hql);
+		if(ward !=null && !ward.isEmpty()){
+			query.setString("ward",ward);
+		}
+		if(bedNo !=null && !bedNo.isEmpty()){
+			query.setString("bedNo",bedNo);
+		}
+		if(patientId !=null && !patientId.isEmpty()){
+			query.setString("patientId",patientId);
+		}
+		if(requestIds !=null && requestIds.size()>0){
+			query.setParameterList("requestIds",requestIds);
+		}
+		List<LabOrderVo> labOrderVos = new ArrayList<LabOrderVo>();
+		try {
+			List<Object> resultList = query.list();
+			for (int i = 0; i < resultList.size(); i++) {
+				Object[] obj = (Object[])resultList.get(i);
+				LabOrder labOrder = (LabOrder)obj[0];
+				Sample sample = (Sample)obj[1];
+				Process process = (Process)obj[2];
+				LabOrderVo labOrderVo =new LabOrderVo();
+				labOrderVo.setRequestId(labOrder.getRequestId());
+				labOrderVo.setLaborder(labOrder.getLaborder());
+				labOrderVo.setLaborderOrg(labOrder.getLaborderorg());
+				labOrderVo.setBarcode(sample.getBarcode());
+				labOrderVo.setWard(labOrder.getWardName());
+				labOrderVo.setBedNo(labOrder.getBed());
+				labOrderVo.setHossection(labOrder.getHossectionName());
+				labOrderVo.setPatientCode(labOrder.getBlh());
+				labOrderVo.setPatientName(labOrder.getPatientname());
+				String sex = ConvertUtil.null2String(labOrder.getSex());
+				if(sex.equals("1")){
+					labOrderVo.setSex("男");
+				}else if(sex.equals("2")){
+					labOrderVo.setSex("女");
+				}else{
+					labOrderVo.setSex("");
+				}
+				labOrderVo.setAge(labOrder.getAge());
+				labOrderVo.setAgeUnit(labOrder.getAgeUnit());
+				labOrderVo.setExamitem(labOrder.getExamitem());
+				labOrderVo.setSampleType(labOrder.getSampletype());
+				labOrderVo.setRequester(labOrder.getRequester());
+				labOrderVo.setRequestTime(ConvertUtil.getFormatDate(process.getReceivetime()));
+				labOrderVo.setDiagnose(labOrder.getDiagnostic());
+				labOrderVo.setPatientType(ConvertUtil.null2String(labOrder.getStayhospitalmode()));
+				labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(process.getExecutetime()));
+				labOrderVo.setPrintTime(ConvertUtil.getFormatDate(process.getPrinttime()));
+				labOrderVo.setPatientId(labOrder.getPatientid());
+				labOrderVo.setRequestMode(ConvertUtil.null2String(labOrder.getRequestmode()));
+				labOrderVo.setYlxh(ConvertUtil.null2String(labOrder.getYlxh()));
+				labOrderVos.add(labOrderVo);
+
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return labOrderVos;
+	}
 	public void saveAll(List<LabOrder> list) {
 		Session s = getSessionFactory().openSession();
 		for(LabOrder labOrder : list) {
@@ -96,4 +205,6 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		s.flush();
 		s.close();
 	}
+
+
 }
