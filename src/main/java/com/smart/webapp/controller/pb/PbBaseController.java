@@ -17,12 +17,13 @@ public class PbBaseController {
 		labMap.clear();
 		List<Section> list = sectionManager.getAll();
 		for (Section s : list) {
-			labMap.put(s.getCode(), s.getName());
+			if(s.getIspb()==1)
+				labMap.put(s.getCode(), s.getName());
 		}
 	}
 	
 	
 	@Autowired
-	private SectionManager sectionManager;
+	protected SectionManager sectionManager;
 
 }

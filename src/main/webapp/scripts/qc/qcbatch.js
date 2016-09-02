@@ -46,6 +46,35 @@ TSLAB.Custom=(function(){
         Add:function(){
             public.clearData();
             public.loadDualListbox();
+
+            $("#sampleType").autocomplete({
+                source: function( request, response ) {
+                    $.ajax({
+                        url: "../set/dictionary/getList?type=1&rows=10&page=1&sidx=&sord=asc",
+                        dataType: "json",
+                        data: {
+                            query : request.term
+                        },
+                        success: function( data ) {
+                            response( $.map( data.rows, function( result ) {
+                                return {
+                                    label: result.sign + " : " + result.value,
+                                    value: result.sign,
+                                }
+                            }));
+                            $("#searchProject").removeClass("ui-autocomplete-loading");
+                        }
+                    });
+                },
+                minLength: 1,
+                // select : function(event, ui) {
+                //     $('#id').val(ui.item.id);
+                //     $('#drugId').val(ui.item.id);
+                //     $('#groupId').val(groupId);
+                //     $(this).val('');
+                // }
+            });
+
             layer.open({
                 type: 1,
                 area: ['800px','420px'],
@@ -170,6 +199,12 @@ TSLAB.Custom=(function(){
             $('select[name="cultureMediumList"]').bootstrapDualListbox("refresh");
         },
         loadAutocomplete:function(key){
+            if(key!=''){
+                var ids = [];
+                ids = key.split(",");
+                var length = ids.length;
+                key = ids[length-1];
+            }
             $.ajax({
                 url: "../qc/qcbatch/searchDevice",
                 dataType: "json",
@@ -243,7 +278,7 @@ TSLAB.Custom=(function(){
                 loadComplete : function() {
                     var table = this;
                     setTimeout(function(){
-                        updatePagerIcons(table);
+                        public.updatePagerIcons(table);
                     }, 0);
                 },
                 onSelectRow: function(id){
@@ -448,6 +483,15 @@ TSLAB.Custom=(function(){
             //$('#device').click(function (e) {
             //    TSLAB.Custom.loadAutocomplete($('#device').val()||'');
             //});
+
+
+
+            // programmatically add/remove a tag
+            // var $tag_obj = $('#form-deviceid-tags').data('tag');
+            // $tag_obj.add('Programmatically Added');
+            //
+            // var index = $tag_obj.inValues('some tag');
+            // $tag_obj.remove(index);
         }
 
     };
@@ -466,6 +510,21 @@ $(function(){
             TSLAB.Custom.search();
         }
     });
+
+    var tag_input = $('#deviceidtags');
+    tag_input.tag({
+        placeholder:tag_input.attr('placeholder'),
+        style:tag_input.attr('class'),
+        source: function(query, process) {
+            $.get("../set/device/ajax/getSearchList",{query:query},function(data) {
+                var json = jQuery.parseJSON(data);
+                process(json.list);
+            });
+        }
+    });
+
     TSLAB.Custom.init();
+
+
 
 });

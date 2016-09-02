@@ -21,7 +21,7 @@ public class WorkCountDaoHibernate extends GenericDaoHibernate<WorkCount, Long> 
 	
 	@SuppressWarnings("unchecked")
 	public List<WorkCount> getMonthBySection(String section, String month){
-		List<WorkCount> workCounts = getSession().createQuery("from WorkCount where section = '%"+section+"%' and workMonth = '"+month+"'").list();
+		List<WorkCount> workCounts = getSession().createQuery("from WorkCount where section like '%"+section+"%' and workMonth = '"+month+"'").list();
 		return workCounts;
 	}
 	

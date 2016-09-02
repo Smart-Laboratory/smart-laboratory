@@ -237,8 +237,8 @@ public class RMIServiceImpl implements RMIService {
 	}
 
 	public List<SyncPatient> getSampleByPatientName(String from, String to, String pName) {
-		String sql = "select * from l_patientinfo where patientname='" + pName + "' and receivetime between to_date('" + from + " 00:00:00','"
-                + Constants.DATEFORMAT + "') and to_date('" + to + " 23:59:59','" + Constants.DATEFORMAT
+		String sql = "select * from l_patientinfo where patientname='" + pName + "' and receivetime between to_date('" + from + "','"
+                + Constants.DATEFORMAT + "') and to_date('" + to + "','" + Constants.DATEFORMAT
                 + "') order by doctadviseno desc";
 		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
 		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -681,7 +681,7 @@ public class RMIServiceImpl implements RMIService {
 		if(start!=0 && end !=0 && start<=end){
 			hql += " and rownum>="+ start + " and rownum<=" + end; 
 		}
-		hql += " order by p.receivetime desc";
+		hql += " order by p.ksreceivetime desc";
 		
 		return jdbcTemplate.query(hql, new RowMapper<SyncPatient>() {
 		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -702,7 +702,7 @@ public class RMIServiceImpl implements RMIService {
 					+ "to_date('"+Constants.SDF.format(starttime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.SDF.format(endtime)+"','yyyy-mm-dd hh24:mi:ss') ";
 		}
 		
-		hql += " order by p.receivetime desc";
+		hql += " order by p.ksreceivetime desc";
 		
 		return jdbcTemplate.queryForObject(hql, Integer.class);
 	}

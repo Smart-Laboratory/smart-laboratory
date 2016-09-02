@@ -5,10 +5,12 @@ function getWI() {
 	if (wiFirst) {
 		wiFirst = false;
 		var schools="";
+		var sectionListStr="";
 		$.get("../pb/sz/ajax/getSchool",function(data){
 			{
                 data = jQuery.parseJSON(data);
                 schools = data.schools;
+                sectionListStr = data.sectionListStr;
                 jQuery("#witable").jqGrid({
                     url: "../pb/sz/ajax/getWinfo",
                     datatype: "json",
@@ -23,7 +25,7 @@ function getWI() {
                             editable: true,
                             search: false,
                             edittype: "select",
-                            editoptions: {value: "0:不使用;1:使用"}
+                            editoptions: {value: "1:使用;0:不使用"}
                         },
                         {
                             name: 'workid',
@@ -53,7 +55,10 @@ function getWI() {
                             sortable: false,
                             search: false
                         },
-                        {name: 'section', index: 'section', width: 120, editable: true, search: false},
+                        {name: 'section', index: 'section', width: 120, editable: true, 
+                        	edittype: 'select',
+                            editoptions: {value: sectionListStr}
+                        },
                         {
                             name: 'worktime',
                             index: 'worktime',
@@ -188,29 +193,37 @@ var bcFirst = true;
 function getBC() {
 	if (bcFirst) {
 		bcFirst = false;
-		jQuery("#bctable").jqGrid({
-			url:"../pb/sz/ajax/getShift",
-			datatype: "json",
-			jsonReader : {repeatitems : false}, 
-			colNames:['ID','名称','缩写','工作时间段','科室','显示顺序',"工作量"],
-		   	colModel:[
-				{name:'id',index:'id',hidden:true,editable:true},
-				{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
-				{name:'ab',index:'ab',width:60,editable:true,editoptions:{size:5}},
-				{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},
-//				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"22:检验科;220100:临检组;220200:生化组;220300:免疫组;220400:微生物组;220600:血库组;220700:分子实验室;"}},
-				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4;1400100:超声医学科(医生);1400200:超声医学科(报告)"}},
-				{name:'order',index:'order',width:40,editable:true,editoptions:{size:10}},
-				{name:'days',index:'days',width:40,editable:true}
-		   	],
-		   	rowNum:15,
-		   	pager: '#bcpager',
-		   	viewrecords: true,
-		   	rownumbers: true,
-		   	height: '100%',
-		   	editurl: "../pb/sz/bcedit"
+		var sectionListStr="";
+		$.get("../pb/sz/ajax/getSchool",function(data){
+			
+			data = jQuery.parseJSON(data);
+            schools = data.schools;
+            sectionListStr = data.sectionListStr;
+			jQuery("#bctable").jqGrid({
+				url:"../pb/sz/ajax/getShift",
+				datatype: "json",
+				jsonReader : {repeatitems : false}, 
+				colNames:['ID','名称','缩写','工作时间段','科室','显示顺序',"工作量"],
+			   	colModel:[
+					{name:'id',index:'id',hidden:true,editable:true},
+					{name:'name',index:'name',width:200,editable:true,editoptions:{size:20}},
+					{name:'ab',index:'ab',width:60,editable:true,editoptions:{size:5}},
+					{name:'wtime',index:'wtime',width:100,editable:true,editoptions:{size:30}},
+	//				{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"22:检验科;220100:临检组;220200:生化组;220300:免疫组;220400:微生物组;220600:血库组;220700:分子实验室;"}},
+//					{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:"1300000:\u533b\u5b66\u68c0\u9a8c\u79d1;1300100:\u95e8\u8bca\u5316\u9a8c\u5ba4;1300200:\u75c5\u623f\u5316\u9a8c\u5ba4;1300400:\u62bd\u8840\u4e2d\u5fc3;1300500:\u7ec6\u83cc\u5ba4;1300501:\u5185\u5206\u6ccc\u5ba4;1300600:\u751f\u5316\u5ba4;1300700:\u514d\u75ab\u5ba4;1300800:\u5206\u5b50\u5b9e\u9a8c\u5ba4;1400100:超声医学科(医生);1400200:超声医学科(报告)"}},
+					{name:'section',index:'section',width:100,editable:true,edittype:"select",editoptions:{value:sectionListStr}},
+					{name:'order',index:'order',width:40,editable:true,editoptions:{size:10}},
+					{name:'days',index:'days',width:40,editable:true}
+			   	],
+			   	rowNum:15,
+			   	pager: '#bcpager',
+			   	viewrecords: true,
+			   	rownumbers: true,
+			   	height: '100%',
+			   	editurl: "../pb/sz/bcedit"
+			});
+			jQuery("#bctable").jqGrid('navGrid','#bcpager',{});
 		});
-		jQuery("#bctable").jqGrid('navGrid','#bcpager',{});
 	} else {
 		jQuery("#bctable").jqGrid("setGridParam",{
 			url:"../pb/sz/ajax/getShift"

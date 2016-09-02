@@ -126,12 +126,13 @@ public class SampleHandoverController {
 					obj.put("type", 2);
 					//更新本地process
 					Process process = processManager.getBySampleId(doct);
-					if(process!=null){
-						process.setSender(operator);
-						process.setSendtime(new Date());
-						processManager.save(process);
+					if(process==null){
+						process = new Process();
+						process.setSampleid(sp.getDOCTADVISENO());
 					}
-					
+					process.setSender(operator);
+					process.setSendtime(new Date());
+					processManager.save(process);
 				} else {
 					obj.put("type", 3);
 				}
@@ -202,12 +203,13 @@ public class SampleHandoverController {
 					obj.put("type", 2);
 					Process process = processManager.getBySampleId(doct);
 					//这个时候如果本地process为空则不更新，等待同步器完成更新，否则会出现多条记录
-					if(process!=null){
-						process.setKsreceiver(operator);
-						process.setKsreceivetime(new Date());
-						processManager.save(process);
+					if(process==null){
+						process = new Process();
+						process.setSampleid(sp.getDOCTADVISENO());
 					}
-					
+					process.setKsreceiver(operator);
+					process.setKsreceivetime(new Date());
+					processManager.save(process);
 					
 				} else {
 					obj.put("type", 3);

@@ -18,7 +18,7 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 	public int getDictionaryCount(String query, String type) {
 		String sql = "select count(1) cnt from lab_dictionary where 1=1 ";
 		if(query != null && !query.equals(""))
-			sql += " and value  like '%" +query +"%'";
+			sql += " and (value  like '%" +query +"%' or sign like '%" +query +"%')";
 		if(type != null && !type.equals(""))
 			sql += " and type = " +type;
 		Query q =  getSession().createSQLQuery(sql);
@@ -37,7 +37,7 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 	public List<Dictionary> getDictionaryList(String query, String type, int start, int end,String sidx,String sord)  {
 		String sql = " from Dictionary s where 1=1 ";
 		if(query != null && !query.equals(""))
-			sql += " and s.value  like '%" +query +"%'";
+			sql += " and s.value  like '%" +query +"%' or s.sign like '%" +query +"%')";
 		if(type != null && !type.equals(""))
 			sql += " and s.type = " +type;
 

@@ -43,6 +43,12 @@
         .pItem{
         	margin:5px 5px;
         }
+        .ui-jqgrid .ui-jqgrid-bdiv{
+        	overflow:hidden;
+        }
+		.laydate_body .laydate_bottom{
+			border-bottom:hidden;
+		}
 </style>
 	
 </head>
@@ -96,11 +102,9 @@
 </div>
 
 <div class="form-inline" style="margin-top: 10px;">
-	<div id="searchHeader" style="float: left;margin-left:30px; width: 35%;">
-		<div id="sampleListPanel">
-			<table id="s3list"></table>
+	<div id="searchHeader" style="float: left;margin-left:30px; width: 35%;overflow:auto;">
+			<table id="s3list" style="text-align:center;"></table>
 			<div id="s3pager"></div>
-		</div>
 	</div>
 	<div id="midContent"
 		style="float: left; width: 50%; margin-left: 30px; display: none;">

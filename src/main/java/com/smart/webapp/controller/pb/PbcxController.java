@@ -412,7 +412,7 @@ public class PbcxController extends PbBaseController {
 			ks[i]= labMap.get(wInfo.getSection());
 			gh[i]=wInfo.getWorkid();
 			data[i][0] = wInfo.getName();
-			List<Arrange> arranges = arrangeManager.getPersonalArrange(wInfo.getName(), date);
+			List<Arrange> arranges = arrangeManager.getPersonalArrange(wInfo.getName(), date.substring(0,7));
 			for(Arrange a : arranges){
 				System.out.println(a.getDate()+a.getWorker());
 				int day = Integer.parseInt(a.getDate().split("-")[2]);

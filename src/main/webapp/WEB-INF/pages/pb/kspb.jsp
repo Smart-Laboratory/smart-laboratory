@@ -18,16 +18,16 @@ tr:hover{
 }
 
 table tr td {
-	width:45px;
+	width:48px;
 	height:30px;
 }
 table tr th  {
-	width:45px ;
+	width:48px ;
 	height:30px;
 	padding:0px 1px ;
 }
 #day0{
-	width:45px important; 
+	width:48px important; 
 }
 
 #nmshow{

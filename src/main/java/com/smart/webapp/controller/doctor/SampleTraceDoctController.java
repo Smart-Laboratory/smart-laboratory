@@ -230,7 +230,7 @@ public class SampleTraceDoctController {
 			break;
 		case 3:
 			list = rmiService.getSampleByPid(name);
-			rmiService.getSampleByPid(name);
+//			rmiService.getSampleByPid(name);
 			break;
 		case 4:
 			try {
@@ -295,7 +295,7 @@ public class SampleTraceDoctController {
 				map.put("doctadviseno", sl.getDoctadviseno());
 				map.put("sample", sample.getSAMPLENO());
 				map.put("examinaim", sample.getEXAMINAIM());
-				map.put("operatetime", Constants.SDF.format(sl.getOperatetime()));
+				map.put("operatetime", sl.getOperatetime()==null? "" : Constants.SDF.format(sl.getOperatetime()));
 				map.put("samplestatus", getZYSampleStatue(sample));
 			}else {
 				SyncPatient info = list.get(start + index);
@@ -304,8 +304,8 @@ public class SampleTraceDoctController {
 				map.put("sample",info.getSAMPLENO());
 				map.put("examinaim", info.getEXAMINAIM());
 				map.put("samplestatus", getZYSampleStatue(info));
-				map.put("sendtime", info.getSENDTIME());
-				map.put("ksreceivetime", info.getKSRECEIVETIME());
+				map.put("sendtime", info.getSENDTIME()==null?"": Constants.SDF.format(info.getSENDTIME()));
+				map.put("ksreceivetime",info.getKSRECEIVETIME()==null? "" : Constants.SDF.format(info.getKSRECEIVETIME()));
 			}
 			
 			dataRows.add(map);
