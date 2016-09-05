@@ -31,9 +31,6 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	 * @return
 	 */
 
-<<<<<<< HEAD
-    List<LabOrder> saveAll(List<LabOrder> list);
-=======
 	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
 	/**
@@ -42,8 +39,8 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	 * @return
 	 */
 	List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds);
-    void saveAll(List<LabOrder> list);
->>>>>>> origin/master
+
+	List<LabOrder> saveAll(List<LabOrder> list);
 
     void removeAll(List<LabOrder> list);
 }

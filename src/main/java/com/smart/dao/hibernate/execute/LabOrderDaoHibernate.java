@@ -104,9 +104,6 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		return list;
 	}
 
-<<<<<<< HEAD
-	public List<LabOrder> saveAll(List<LabOrder> list) {
-=======
 	/**
 	 * 获取病人已打印记录
 	 * @param ward
@@ -191,8 +188,8 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 
 		return labOrderVos;
 	}
-	public void saveAll(List<LabOrder> list) {
->>>>>>> origin/master
+
+	public List<LabOrder> saveAll(List<LabOrder> list) {
 		Session s = getSessionFactory().openSession();
 		List<LabOrder> returnList = new ArrayList<LabOrder>();
 		for(LabOrder labOrder : list) {
