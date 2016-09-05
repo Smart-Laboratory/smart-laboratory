@@ -13,6 +13,7 @@
     <script src="<c:url value="/scripts/i18n/grid.locale-cn.js"/>"></script>
     <script src="<c:url value="/scripts/jquery.jqGrid.js"/>"></script>
     <script src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
+    <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/>"/>
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ztree/zTreeStyle_flat.css'/>"/>
@@ -111,6 +112,10 @@
     .widget-main {
         padding: 5px;
     }
+    .widget-header-small {
+        min-height: 21px;
+        /* padding-left: 10px; */
+    }
 </style>
 <div class="row">
     <div class="col-xs-3 treelist">
@@ -134,9 +139,13 @@
                 <i class="ace-icon fa fa-fire bigger-110"></i>
                 打印
             </button>
-            <button type="button" class="btn btn-sm  btn-success" title="补打" onclick="editSection()">
+            <button type="button" class="btn btn-sm  btn-success" title="补打" onclick="TSLAB.Custom.printOldInfo()">
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
                 补打
+            </button>
+            <button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">
+                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                打印设计
             </button>
         </div>
         <div class="widget-box widget-color-green" id="widget-box-1" style="display: none">
@@ -181,7 +190,7 @@
                 </div>
             </div>
             <div class="widget-body">
-                <div class="widget-main">
+                <div class="widget-main" id="colletionList">
                     <table id="tableList1"></table>
                     <div id="pager1"></div>
                 </div>
@@ -196,9 +205,10 @@
         var private = {
             initHieght:function () {
                 var clientHeight = $(window).innerHeight();
-                var height = clientHeight - $('#head').height() - $('#toolbar').height() - $('.footer-content').height() - 30;
+                var height = clientHeight - $('#head').height() - $('#toolbar').height() - $('.footer-content').height() - 35;
                 $('.laftnav').height(height);
                 $('#leftTree').height(height-40);
+
             },
             initTree: function () {
                 var setting = {
@@ -244,14 +254,18 @@
                     data.bedNo=treeNode.bedNo;
                     data.patientId=treeNode.id
                 }
+                var index ;
                 $.ajax({
                     url: '../nursestation/inexecute/getRequestList',
                     data:data,
                     type: 'POST',
                     dataType: "json",
                     ContentType: "application/json; charset=utf-8",
+                    beforeSend: function () {
+                        index =layer.load(1,{offset: ['30%']});
+                        //index =layer.msg('加载中...', {icon: 16,scrollbar: false, time:100000}) ; ;
+                    },
                     success: function (data) {
-                        var data = eval("("+data+")");
                         var beollected = data.beollected;
                         var spidered = data.spidered;
 
@@ -275,35 +289,56 @@
                         //$("#tableList1").trigger("jqGridSelectAll",true);
 
                         //加载病人信息
-                        var patientinfo="";
-                        private.addPatientInfo(treeNode.level,beollected[0]);
+                        var patientinfo=beollected[0] || spidered[0] ||'';
+                        private.addPatientInfo(treeNode.level,patientinfo);
+
+                        layer.close(index);
                     },
                     error: function (msg) {
-                        alert("获取采集信息失败");
+                        layer.close(index);
+                        layer.msg('获取采集信息失败！');
                     }
                 });
+                //layer.closeAll('loading');
             },
             initGrid:function () {
                 $("#tableList").jqGrid({
                     datatype: "json",
                     //caption:"未采集标本",
-                    colNames: ['申请ID','申请明细ID','patientid','ylxh','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
-                    colModel: [
-                        { name: 'requestId', index: 'requestId', width: 40,hidden:true },
+                    colNames: ['申请ID','申请明细ID','床号', '姓名','性别', '年龄','单位',
+                        '项目代码','项目名称','标本种类','金额','申请时间',
+                        '申请医生','是否急诊','patientid','ylxh',
+                        'sampleno','hossection','hossectionName','birthday','stayhospitalmode','blh',
+                        'diagnostic','labdepartment','requestNum','count','wardid','wardname','qbgsj'],
+                    colModel: [{ name: 'requestId', index: 'requestId', width: 40,hidden:true },
                         { name: 'laborderorg', index: 'laborderorg', width: 40,hidden:true },
-                        { name: 'patientid', index: 'patientid', width: 40,hidden:true },
-                        { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
-                        { name: 'bed', index: 'bed', width: 40},
+                        { name: 'bed', index: 'bed', width: 30},
                         { name: 'patientname', index: 'patientname', width: 60},
-                        { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
-                        { name: 'age', index: 'age', width: 40},
+                        { name: 'sex', index: 'sex', width: 30,formatter:'select',editoptions : {value : "1:男;0:女"}},
+                        { name: 'age', index: 'age', width: 30},
+                        { name: 'ageUnit', index: 'ageUnit', width: 30},
                         { name: 'testId', index: 'testId', width: 60,hidden:true},
                         { name: 'examitem', index: 'examitem', width: 150},
-                        { name: 'sampletype', index: 'sampletype', width: 60},
+                        { name: 'sampleTypeName', index: 'sampleTypeName', width: 60},
                         { name: 'price', index: 'price', width: 60},
                         { name: 'requesttime', index: 'requesttime', width: 100},
-                        { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
-                    ],
+                        { name: 'requester', index: 'requester', width: 60},
+                        { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}},
+                        { name: 'patientid', index: 'patientid', width: 40,hidden:true },
+                        { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
+                        { name: 'sampleno', index: 'sampleno', width: 40,hidden:true },
+                        { name: 'hossection', index: 'hossection', width: 40,hidden:true },
+                        { name: 'hossectionName', index: 'hossectionName', width: 40,hidden:true },
+                        { name: 'birthday', index: 'birthday', width: 40,hidden:true },
+                        { name: 'stayhospitalmode', index: 'stayhospitalmode', width: 40,hidden:true },
+                        { name: 'blh', index: 'blh', width: 40,hidden:true },
+                        { name: 'diagnostic', index: 'diagnostic', width: 40,hidden:true },
+                        { name: 'labdepartment', index: 'labdepartment', width: 40,hidden:true },
+                        { name: 'requestNum', index: 'requestNum', width: 40,hidden:true },
+                        { name: 'count', index: 'count', width: 40,hidden:true },
+                        { name: 'wardId', index: 'wardId', width: 40,hidden:true },
+                        { name: 'wardName', index: 'wardName', width: 40,hidden:true },
+                        { name: 'qbgsj', index: 'qbgsj', width: 40,hidden:true }],
                     onSelectRow: function(id) {
                         if(id && id!==lastsel){
                             jQuery('#tableList').saveRow(lastsel, false, 'clientArray');
@@ -311,6 +346,7 @@
                         }
                         jQuery('#tableList').editRow(id, false);
                     },
+
                     gridComplete: function () {
                         var ids = jQuery("#tableList").jqGrid('getDataIDs');
                         for (var i = 0; i < ids.length; i++) {
@@ -327,6 +363,7 @@
                     autowidth:true,
                     altRows:true,
                     height:200,
+                    gridview:true,
                     rownumbers: true, // 显示行号
                     rownumWidth: 35
                 });
@@ -335,23 +372,30 @@
                 $("#tableList1").jqGrid({
                     datatype: "json",
                     //caption:"未采集标本",
-                    colNames: ['申请ID','申请明细ID','patientid','ylxh','床号', '姓名','性别', '年龄','项目代码','项目名称','标本种类','金额','申请时间','是否急诊'],
-                    colModel: [
-                        { name: 'requestId', index: 'requestId', width: 40,hidden:true },
-                        { name: 'laborderorg', index: 'laborderorg', width: 40,hidden:true },
-                        { name: 'patientid', index: 'patientid', width: 40,hidden:true },
-                        { name: 'ylxh', index: 'ylxh', width: 40,hidden:true },
-                        { name: 'bed', index: 'bed', width: 40},
-                        { name: 'patientname', index: 'patientname', width: 60},
-                        { name: 'sex', index: 'sex', width: 40,formatter:'select',editoptions : {value : "1:男;0:女"}},
+                    colNames: ['laborder','requestId','laborderOrg','patientId','病区','床号', '病历号','姓名','性别', '年龄','单位',
+                        '项目名称','标本类型','样本条码','申请科室','申请时间','诊断','患者类型',
+                        '打印时间','急诊'],
+                    colModel: [{ name: 'requestId', index: 'requestId', width: 40,hidden:true },
+                        { name: 'laborder', index: 'laborder', width: 40,hidden:true },
+                        { name: 'laborderOrg', index: 'laborderOrg', width: 40,hidden:true },
+                        { name: 'patientId', index: 'patientId', width: 40,hidden:true },
+                        { name: 'ward', index: 'ward', width: 100},
+                        { name: 'bedNo', index: 'bedNo', width: 60},
+                        { name: 'patientCode', index: 'patientCode', width: 100},
+                        { name: 'patientName', index: 'patientName', width: 100},
+                        { name: 'sex', index: 'sex', width: 40},
                         { name: 'age', index: 'age', width: 40},
-                        { name: 'testId', index: 'testId', width: 60,hidden:true},
+                        { name: 'ageUnit', index: 'ageUnit', width: 40},
                         { name: 'examitem', index: 'examitem', width: 150},
-                        { name: 'sampletype', index: 'sampletype', width: 60},
-                        { name: 'price', index: 'price', width: 60},
-                        { name: 'requesttime', index: 'requesttime', width: 100},
-                        { name: 'requestmode', index: 'requestmode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
-                    ],
+                        { name: 'sampleType', index: 'sampleType', width: 60},
+                        { name: 'barcode', index: 'barcode', width: 100},
+                        { name: 'hossection', index: 'hossection', width: 100},
+                        { name: 'requestTime', index: 'requestTime', width: 60 },
+                        { name: 'diagnose', index: 'diagnose', width: 100},
+                        { name: 'patientType', index: 'patientType', width: 60},
+                        { name: 'printTime', index: 'printTime', width: 60},
+                        { name: 'requestMode', index: 'requestMode', width: 60,formatter:'select',editoptions : {value : "1:是;0:否"}}
+                        ],
                     onSelectRow: function(id) {
                         if(id && id!==lastsel){
                             jQuery('#tableList1').saveRow(lastsel, false, 'clientArray');
@@ -360,9 +404,9 @@
                         jQuery('#tableList').editRow(id, false);
                     },
                     gridComplete: function () {
-                        var ids = jQuery("#tableList").jqGrid('getDataIDs');
+                        var ids = jQuery("#tableList1").jqGrid('getDataIDs');
                         for (var i = 0; i < ids.length; i++) {
-                            var rowData = $("#tableList").getRowData(ids[i]);
+                            var rowData = $("#tableList1").getRowData(ids[i]);
                             if(rowData.requestmode==1){
                                 $('#'+ids[i]).find("td").css("color","red");
                             }
@@ -372,9 +416,11 @@
                     //multikey : "ctrlKey",
                     repeatitems:false,
                     viewrecords: true,
-                    autowidth:true,
+                    //autowidth:true,
+                    width:$('#widget-box-3').width()-10,
                     altRows:true,
-                    height:$('.laftnav').height()-$('#widget-box-2').height()-118,
+                    shrinkToFit:false,
+                    height:$('.laftnav').height()-$('#widget-box-2').height()-$('#widget-box-1').height()-74,
                     rownumbers: true, // 显示行号
                     rownumWidth: 35
                 });
@@ -394,36 +440,80 @@
                     contentType:"application/json",
                     data:JSON.stringify(saveDatas),
                     success:function(data){
-                        //var printDatas = data.printOrders
+                        var printDatas = data.printOrders
                         var noPrintDatas = data.noPrintOrders;
-                        var printDatas=[{testinfo:'检测项目1',barcode:'12345678901234',patientinfo:'张三丰',sampletype:'全血',datetime:'2016-08-27 18:30'},{testname:'检测项目2',barcode:'12345678901234',patientinfo:'张三丰2',sampletype:'全血2',datetime:'2016-08-27 18:30'}];
                         for(i=0;i<printDatas.length;i++){
-                            //startPrint(printDatas[i]);
+                            startPrint(printDatas[i]);
                         }
                         for(i=0;i<noPrintDatas.length;i++){
 
                         }
                     }
                 });
-                console.log(saveDatas);
+                //console.log(saveDatas);
+            },
+            printOldInfo:function () {
+                //补打标本条码号
+                var ids = $("#tableList1").jqGrid('getGridParam','selarrrow');
+                var saveDatas =[];
+                $.each(ids, function(key, val) {
+                    var rowData = $("#tableList1").jqGrid("getRowData", ids[key]);
+                    saveDatas.push(rowData.requestId)
+                });
+                console.log(saveDatas)
+                $.ajax({
+                    type:"POST",
+                    url:"../nursestation/inexecute/printOldLaborderList",
+                    dataType:"json",
+                    contentType:"application/json",
+                    data:JSON.stringify(saveDatas),
+                    success:function(data){
+                        for(i=0;i<data.length;i++){
+                            startPrint(data);
+                        }
+                    }
+                });
+                //console.log(saveDatas);
             },
             addPatientInfo:function (level,data) {
                 if(level==0){
                     $('#widget-box-1').hide();
-                    var height=$('.laftnav').height()-$('#widget-box-2').height()-118;
+                    var height=$('.laftnav').height()-$('#widget-box-2').height()-115  ;
                    $("#tableList1").setGridHeight(height);
                 }else {
                     var table = $('#patientInfo');
-                    var html = '<tr><td>姓&#12288;名：'+data.patientname+'</td><td>性&#12288;&#12288;别：'+((data.sex==1)?'男':'女')+'</td><td>年&#12288;&#12288;龄：'+data.age+'</td><td>病&#12288;&#12288;区：'+data.hossectionName+'</td><td>床&#12288;&#12288;号：'+data.bed+'</td></tr>';
-                    html += '<tr><td>病员号：'+data.blh+'</td><td>出生日期：'+data.birthday+'</td><td>送检医生：</td><td>送检单位：'+data.labdepartment+'</td><td>接收日期：'+data.requesttime+'</td></tr>';
+                    var html = '<tr><td>姓&#12288;名：'+data.patientname+'</td><td>性&#12288;&#12288;别：'+((data.sex==1)?'男':'女')+'</td><td>年&#12288;&#12288;龄：'+data.age+data.ageUnit+'</td><td>病&#12288;&#12288;区：'+data.wardName+'</td><td>床&#12288;&#12288;号：'+data.bed+'</td></tr>';
+                    html += '<tr><td>病员号：'+data.blh+'</td><td>出生日期：'+data.birthday+'</td><td>送检医生：'+data.requester+'</td><td>送检单位：'+data.hossectionName+'</td><td>接收日期：'+data.requesttime+'</td></tr>';
                     table.html("");
                     table.append(html);
-                    var height=$('.laftnav').height()-$('#widget-box-2').height()-$('#widget-box-1').height()-122;
-                   $("#tableList1").setGridHeight(height);
+                    var height=$('.laftnav').height()-$('#widget-box-2').height()-$('#widget-box-1').height()-120;
+                    $("#tableList1").setGridHeight(height);
                     $('#widget-box-1').show();
                 }
             },
             getSampleList:function(bedno,patientId){
+            },
+            printSet:function(){
+                var data ={
+                    "age": "55",
+                    "barcode": "A12000000098",
+                    "bedNo": "04",
+                    "department": "测试科室",
+                    "patientCode": "00000496",
+                    "patientName": "电子病历测试",
+                    "printDateTime": "2016-08-31 01:40:47",
+                    "requestmode": "0",
+                    "sampleNo": "",
+                    "sampleQuantity": "2mL",
+                    "sampleType": "",
+                    "sex": "男",
+                    "testName": "抗精子抗体测定(IgM)",
+                    "testTube": "黄色管",
+                    "ward": "测试病区",
+                    "wardId": "1025"
+                }
+                CreateDataBill(data)
+                LODOP.PRINT_DESIGN()
             }
         }
         var public = {
@@ -434,6 +524,12 @@
             },
             printInfo:function () {
                 private.printInfo();
+            },
+            printOldInfo:function () {
+              private.printOldInfo();
+            },
+            printSet:function () {
+                private.printSet();
             }
 
         }
@@ -450,45 +546,49 @@
 
     function Preview() {//打印预览
         LODOP = getLodop();
-        LODOP.PRINT_INITA(-1, -1, 824, 1129, "运单套打");
-
-        CreateLicenseData();
-        LODOP.SET_PREVIEW_WINDOW(2, 0, 0, 800, 600, "");
-        LODOP.SET_PRINT_PAGESIZE(1, 0, 0, "A4");
+        CreateDataBill(data)
         LODOP.PREVIEW();
     };
     function Setup() {//打印维护
         LODOP = getLodop();
-        LODOP.PRINT_INITA(-1, -1, 824, 1129, "运单套打");
-
-        CreateLicenseData();
         LODOP.PRINT_SETUP();
     };
     function Design() {//打印设计
-        LODOP = getLodop();
-        LODOP.PRINT_INITA(-1, -1, 824, 1129, "运单套打");
-        CreateLicenseData();
-        LODOP.PRINT_DESIGN();
+//;       $.ajax({
+//            url:"http://127.0.0.1:8081/wikiservice/rest/service/getitems/尿液",
+//            type:"get",
+//            jsonp:'callback',
+//            dataType:"jsonp",//跨域必须用jsonp
+//            cache:false,
+//            success: function(obj){
+//                alert(obj)
+//                console.log(obj)
+//
+//            }
+//        });
     }
-    function CreateLicenseData(data) {
 
+    function CreateDataBill(data) {
+        if(data && data!=null){
+            var patientInfo = data.bedNo +"  "+data.patientName+" "+data.testTube+data.sampleQuantity;
+            var patientInfo1 = data.patientCode +"  "+data.department;
+            LODOP = getLodop();
+            LODOP.PRINT_INIT("");
+            LODOP.SET_PRINT_PAGESIZE(0,500,350,"A4");
+            LODOP.ADD_PRINT_TEXTA("patientinfo","2.99mm","2.95mm",180,25,patientInfo);
+            LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.94mm","42.6mm",35,"128B",data.barcode);
+            LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
+            LODOP.SET_PRINT_STYLEA(0,"Horient",2);
+            LODOP.ADD_PRINT_TEXTA("code","19.39mm","2.95mm",180,25,data.barcode);
+            LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+            LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+            LODOP.ADD_PRINT_TEXTA("patientinfo1",23,"2.95mm",180,20,patientInfo1);
+            LODOP.ADD_PRINT_TEXTA("testinfo","23.36mm","2.95mm",180,20,data.testName);
+            LODOP.ADD_PRINT_TEXTA("datetime","31.56mm","2.95mm",180,25,"采集时间 "+data.printDateTime);
+        }
     }
     function startPrint(data) {
-        LODOP = getLodop();
-        LODOP.SET_PRINT_PAGESIZE(0,500,350,"A4");
-        LODOP.ADD_PRINT_TEXTA("testinfo","3mm","4mm",175,25,data.testinfo);
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
-        LODOP.ADD_PRINT_BARCODEA("barcode","12.00mm","4mm",180,35,"128A",data.barcode);
-        LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
-        LODOP.ADD_PRINT_TEXTA("code","21.50mm","4mm",125,25,data.barcode);
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
-        LODOP.ADD_PRINT_TEXTA("patientinfo",26,"4mm",175,20,data.patientinfo);
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-        LODOP.ADD_PRINT_TEXTA("sampletype","21.50mm","30mm",55,25,data.sampletype);
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXTA("datetime","26.00mm","4mm",174,25,data.datetime);
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
+        CreateDataBill(data);
         //开始打印
         LODOP.PRINT();
     }

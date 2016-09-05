@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import com.smart.model.LabelValue;
 
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -126,6 +127,18 @@ public final class ConvertUtil {
             return Long.parseLong(v);
         } catch (Exception ex) {
             return def;
+        }
+    }
+    public static String  getFormatDate(Object v) {
+        return getFormatDate(v,"");
+    }
+
+    public static String  getFormatDate(Object v, String format) {
+        try {
+            if(format==null && format.isEmpty()) format="yyyy-MM-dd HH:MM:SS";
+            return new SimpleDateFormat(format).format(v);
+        } catch (Exception ex) {
+            return "";
         }
     }
 }

@@ -139,13 +139,13 @@ public class WebService {
      * @param ward  病区
      * @return
      */
-    public List<LabOrder> getInExcuteInfo(String ward){
+    public List<LabOrder> getInExcuteInfo(String ward,String bedNo,String patientId){
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
             url += "getInPatientRequestInfo";
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?ward=" + ward);
+            GetMethod method = new GetMethod(url + "?ward=" + ward +"&bedNo="+bedNo +"&patientId="+patientId);
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
@@ -173,7 +173,10 @@ public class WebService {
             JSONArray arr = obj.getJSONArray("Message");
             for (int i = 0; i < arr.length(); i++) {
                 LabOrder labOrder = new LabOrder();
-                labOrder.setHossection(arr.getJSONObject(i).getString("ward"));         //病区
+                labOrder.setHossection(arr.getJSONObject(i).getString("requestDepartment"));         //申请科室ID
+                labOrder.setHossectionName(arr.getJSONObject(i).getString("requestDepartmentName"));         //申请科室名称
+                labOrder.setWardId(arr.getJSONObject(i).getString("ward"));                         //病区ID
+                labOrder.setWardName(arr.getJSONObject(i).getString("wardName"));                   //病区名称
                 labOrder.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("birthday")));
                 labOrder.setBlh(arr.getJSONObject(i).getString("patientFileCode"));
                 labOrder.setCycle(0);
@@ -194,8 +197,8 @@ public class WebService {
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
                 labOrder.setZxbz(arr.getJSONObject(i).getInt("status"));
                 labOrder.setBed(arr.getJSONObject(i).getString("bedno"));
-                labOrder.setHossectionName(arr.getJSONObject(i).getString("wardName"));
                 labOrder.setSampletype(arr.getJSONObject(i).getString("sampleType"));
+                labOrder.setAgeUnit(arr.getJSONObject(i).getString("ageUnit"));
                 list.add(labOrder);
             }
         }
@@ -205,6 +208,7 @@ public class WebService {
     public boolean requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
         boolean success = true;
         try {
+            //if(1==1)throw new Exception("错误");
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url+"requestUpdate");
             PostMethod method = new PostMethod(url+"requestUpdate");
@@ -218,15 +222,19 @@ public class WebService {
             object.put("exeDoctorName",exeDoctorName);
             object.put("exeDate",exeDate);
             object.put("expand",expand);
+
             RequestEntity requestEntity = new StringRequestEntity(object.toString(),"application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
+
             httpClient.executeMethod(method);
             System.out.println(method.getResponseBodyAsString());
+
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
                 success = false;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             success = false;

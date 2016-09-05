@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -269,6 +270,8 @@ public class SxgroupPbController {
 		
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
+				if(a.getWorker().equals("9119"))
+					System.out.println(a.getWeek());
 				if(a.getSection()==null || a.getSection().isEmpty()){
 					continue;
 				}
@@ -299,8 +302,9 @@ public class SxgroupPbController {
 		c.set(Calendar.YEAR, Integer.parseInt(month.split("-")[0]));
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DATE, 1);
+		Date date = c.getTime();
         c.set(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY);
-        c.add(GregorianCalendar.DAY_OF_MONTH, 7*(week-1));
+        c.add(GregorianCalendar.DATE, 7*(week-1));
         String[] startDate = md.format(c.getTime()).split("-");
 		c.add(GregorianCalendar.DATE, 6);
 		String[] endDate = md.format(c.getTime()).split("-");

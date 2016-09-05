@@ -469,7 +469,7 @@ public class PbController {
 		List<WInfo> wInfos = new ArrayList<WInfo>();
 		if(sxArranges != null && !sxArranges.isEmpty()){
 			for(SxArrange a: sxArranges){
-				if(a.getSection()!=null && sectionMap.get(a.getSection()).equals(section)){
+				if(a.getSection()!=null && sectionMap.get(a.getSection())!=null && sectionMap.get(a.getSection()).equals(section)){
 					WInfo wInfo = wInfoManager.getByWorkId(a.getWorker());
 					
 					wInfos.add(wInfo);

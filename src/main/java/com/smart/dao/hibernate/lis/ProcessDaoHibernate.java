@@ -63,7 +63,7 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 			hql = "from Process p where p.ksreceiver='"+receiver+"' and p.ksreceivetime between "
 					+ "to_date('"+Constants.DF2.format(starttime)+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(endtime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
 		}
-		hql += " order by p.receivetime desc";
+		hql += " order by p.ksreceivetime desc";
 		
 		Query q = getSession().createQuery(hql);
 		if(start!=0 && end !=0 && start<=end){
@@ -83,7 +83,7 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 					+ "to_date('"+Constants.DF2.format(starttime)+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+Constants.DF2.format(endtime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
 		}
 		
-		hql += " order by p.receivetime desc";
+		hql += " order by p.ksreceivetime desc";
 		
 		JdbcTemplate jdbcTemplate =
                 new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));

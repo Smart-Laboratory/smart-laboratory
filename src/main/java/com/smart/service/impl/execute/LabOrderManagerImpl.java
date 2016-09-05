@@ -2,6 +2,7 @@ package com.smart.service.impl.execute;
 
 import java.util.List;
 
+import com.smart.model.execute.LabOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.smart.dao.execute.LabOrderDao;
 import com.smart.model.execute.LabOrder;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.impl.GenericManagerImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("labOrderManager")
 public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> implements LabOrderManager {
@@ -20,19 +22,23 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 		this.dao = labOrderDao;
 		this.labOrderDao = labOrderDao;
 	}
-	
+
+	@Transactional
 	public boolean existSampleId(String sampleid){
 		return labOrderDao.existSampleId(sampleid);
 	}
-	
+
+	@Transactional
 	public List<LabOrder> getByIds(String ids){
 		return labOrderDao.getByIds(ids);
 	}
-	
+
+	@Transactional
 	public List<LabOrder> getByPatientId(String patientId, String from, String to){
 		return labOrderDao.getByPatientId(patientId, from, to);
 	}
 
+	@Transactional
 	public List<LabOrder> getByRequestIds(String requestIds) {
 		return labOrderDao.getByRequestIds(requestIds);
 	}
@@ -41,17 +47,39 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 	 * 获取住院病人所有采集记录
 	 * @param ward			病区
 	 * @param bedNo			床位号
-	 * @param requestIds	申请ID
+	 * @param patientId		病人ID
+	 * @param requestIds	申请记录ID
 	 * @return
 	 */
-	public List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds){
-		return labOrderDao.getByRequestIds(ward,bedNo,requestIds);
+	@Transactional
+	public List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
+		return labOrderDao.getByRequestIds(ward,bedNo,patientId,requestIds);
 	}
 
+	/**
+	 * 获取病人已打印记录
+	 * @param ward
+	 * @param bedNo
+	 * @param patientId
+	 * @param requestIds
+	 * @return
+	 */
+	@Transactional
+	public List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds){
+		return labOrderDao.getPrintedList(ward,bedNo,patientId,requestIds);
+	}
+
+<<<<<<< HEAD
 	public List<LabOrder> saveAll(List<LabOrder> list) {
 		return labOrderDao.saveAll(list);
+=======
+	@Transactional
+	public void saveAll(List<LabOrder> list) {
+		labOrderDao.saveAll(list);
+>>>>>>> origin/master
 	}
 
+	@Transactional
 	public void removeAll(List<LabOrder> list) {
 		labOrderDao.removeAll(list);
 	}

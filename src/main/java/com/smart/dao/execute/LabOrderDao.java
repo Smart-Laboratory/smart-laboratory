@@ -2,6 +2,7 @@ package com.smart.dao.execute;
 
 import java.util.List;
 
+import com.smart.model.execute.LabOrderVo;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.smart.dao.GenericDao;
@@ -15,26 +16,34 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	/*
 	 * 根据ids获取LabOrders
 	 */
-	@Transactional
+
 	List<LabOrder> getByIds(String ids);
 
-	@Transactional
 	List<LabOrder> getByPatientId(String patientId, String from, String to);
 
-	@Transactional
 	List<LabOrder> getByRequestIds(String requestIds);
 
 	/**
 	 * 获取住院病人所有采集记录
 	 * @param ward			病区
 	 * @param bedNo			床位号
-	 * @param requestIds	申请ID
+	 * @param patientId		病人ID
 	 * @return
 	 */
-	@Transactional
-	List<LabOrder> getByRequestIds(String ward,String bedNo,String requestIds);
 
+<<<<<<< HEAD
     List<LabOrder> saveAll(List<LabOrder> list);
+=======
+	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
+
+	/**
+	 * 获取已打印记录
+	 * @param requestIds 样本ID
+	 * @return
+	 */
+	List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds);
+    void saveAll(List<LabOrder> list);
+>>>>>>> origin/master
 
     void removeAll(List<LabOrder> list);
 }

@@ -42,7 +42,8 @@ public class Process extends BaseObject {
 	private int isprint;
 	private Date printtime;
 	private long sampleid;
-	
+	private Date collectonTime;			//采集时间
+	private String collectoner;			//采集人
 
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -203,5 +204,21 @@ public class Process extends BaseObject {
 
 	public int hashCode() {
 		return 0;
+	}
+
+	public Date getCollectonTime() {
+		return collectonTime;
+	}
+
+	public void setCollectonTime(Date collectonTime) {
+		this.collectonTime = collectonTime;
+	}
+
+	public String getCollectoner() {
+		return collectoner;
+	}
+
+	public void setCollectoner(String collectoner) {
+		this.collectoner = collectoner;
 	}
 }
