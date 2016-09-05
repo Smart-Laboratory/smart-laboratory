@@ -48,8 +48,8 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 		return labOrderDao.getByRequestIds(ward,bedNo,requestIds);
 	}
 
-	public void saveAll(List<LabOrder> list) {
-		labOrderDao.saveAll(list);
+	public List<LabOrder> saveAll(List<LabOrder> list) {
+		return labOrderDao.saveAll(list);
 	}
 
 	public void removeAll(List<LabOrder> list) {

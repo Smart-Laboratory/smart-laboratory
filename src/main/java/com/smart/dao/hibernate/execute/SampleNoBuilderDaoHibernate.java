@@ -32,4 +32,8 @@ public class SampleNoBuilderDaoHibernate extends GenericDaoHibernate<SampleNoBui
 	public List<SampleNoBuilder> getAllByOrder() {
 		return getSession().createQuery("from SampleNoBuilder order by orderNo asc").list();
 	}
+
+	public void clearNo() {
+		getSession().createSQLQuery("update lab_auto_sampleno set nowno = startno").executeUpdate();
+	}
 }

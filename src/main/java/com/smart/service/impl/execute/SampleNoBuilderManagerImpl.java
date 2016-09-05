@@ -39,5 +39,7 @@ public class SampleNoBuilderManagerImpl extends GenericManagerImpl<SampleNoBuild
 		return sampleNoBuilderDao.getAllByOrder();
 	}
 
-
+	public void clearNo() {
+		sampleNoBuilderDao.clearNo();
+	}
 }

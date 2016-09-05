@@ -36,8 +36,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getNeedAudit(day);
 	}
 
-	public void saveAll(List<Sample> updateSample) {
-		sampleDao.saveAll(updateSample);
+	public List<Sample> saveAll(List<Sample> updateSample) {
+		return sampleDao.saveAll(updateSample);
 	}
 
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {

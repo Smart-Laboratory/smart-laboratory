@@ -54,9 +54,9 @@ public class ProcessManagerImpl extends GenericManagerImpl<Process, Long> implem
 		return processDao.getReceiveListBySection(section, starttime, endtime,sampleState);
 	}
 
-	public void saveAll(List<Process> list) {
-		processDao.saveAll(list);
-	}
+	public List<Process> saveAll(List<Process> list) {
+		return processDao.saveAll(list);
+    }
 
 	public void removeAll(List<Process> list) {
 		processDao.removeAll(list);

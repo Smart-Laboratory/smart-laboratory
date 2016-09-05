@@ -240,9 +240,9 @@ public class ExecuteController {
         boolean saveSuccess = true;
         try {
             System.out.println("开始保存数据");
-            sampleManager.saveAll(needSaveSample);
-            processManager.saveAll(needSaveProcess);
-            labOrderManager.saveAll(needSaveLabOrder);
+			needSaveSample = sampleManager.saveAll(needSaveSample);
+			needSaveProcess = processManager.saveAll(needSaveProcess);
+			needSaveLabOrder = labOrderManager.saveAll(needSaveLabOrder);
         } catch (Exception e) {
             e.printStackTrace();
             saveSuccess = false;

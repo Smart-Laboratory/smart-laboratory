@@ -15,7 +15,7 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getNeedAudit(String format);
 
-	void saveAll(List<Sample> updateSample);
+	List<Sample> saveAll(List<Sample> updateSample);
 
 	List<Sample> getHistorySample(String patientId, String blh, String lab);
 

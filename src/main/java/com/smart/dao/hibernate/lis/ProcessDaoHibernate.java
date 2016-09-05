@@ -1,9 +1,9 @@
 package com.smart.dao.hibernate.lis;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.antlr.runtime.tree.RewriteRuleNodeStream;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -129,14 +129,16 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		return getSession().createSQLQuery(hql).addEntity("s", Sample.class).addEntity("p", Process.class).list();
 	}
 
-	public void saveAll(List<Process> list) {
+	public List<Process> saveAll(List<Process> list) {
 		Session s = getSessionFactory().openSession();
+		List<Process> returnList = new ArrayList<Process>();
 		for(Process process : list) {
-			s.saveOrUpdate(process);
+			returnList.add((Process) s.merge(process));
 		}
 		s.flush();
 		s.close();
-	}
+        return returnList;
+    }
 
 	public void removeAll(List<Process> list) {
 		Session s = getSessionFactory().openSession();

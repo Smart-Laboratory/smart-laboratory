@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import com.smart.Constants;
 import com.smart.dao.hibernate.GenericDaoHibernate;
 import com.smart.model.lis.Sample;
-import com.smart.model.lis.Process;
 import com.smart.model.util.NeedWriteCount;
 
 
@@ -106,14 +104,16 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return list;
 	}
 
-	public void saveAll(List<Sample> updateSample) {
+	public List<Sample> saveAll(List<Sample> updateSample) {
 		Session s = getSessionFactory().openSession();
+		List<Sample> returnList  = new ArrayList<Sample>();
 		for(Sample sample : updateSample) {
-			s.saveOrUpdate(sample);
+			returnList.add((Sample)s.merge(sample));
 		}
 		s.flush();
 		s.close();
-	}
+        return returnList;
+    }
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
