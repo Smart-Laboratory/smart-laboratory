@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
     <script type="text/javascript" src="../scripts/manage/execute.js"></script>
+	<script src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
     <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
 </head>
 <style>
@@ -47,7 +48,7 @@
 <div class="row">
 	<div class="col-sm-3">
 		<div class="widget-box widget-color-green">
-			<div class="widget-header">
+			<div class="widget-header widget-header-small">
 				<h4 class="widget-title"><fmt:message key="execute.cxxx" /></h4>
 				<div class="widget-toolbar">
 					<a href="#" data-action="collapse">
@@ -82,8 +83,12 @@
 						</div>
 						
 					</div>
-					<button id="conform" class="btn btn-lg center-block"><fmt:message key="button.confirm" /></button>
-					<button id="unusualRegister" class="btn btn-lg center-block">异常登记</button>
+					<button id="conform" class="btn btn-sm btn-success"><fmt:message key="button.confirm" /></button>
+					<button id="unusualRegister" class="btn btn-sm btn-warning">异常登记</button>
+					<button type="button" class="btn btn-sm btn-info" title="打印设计" onclick="printSet()">
+						<i class="ace-icon fa fa-pencil-square bigger-110"></i>
+						回执单打印设计
+					</button>
 					<div>
 						<div class="radio">
 							<label class="radio">
@@ -136,7 +141,7 @@
 	<div class="col-sm-9" style="">
 		<div id="patientInfo" style="width:99%;margin:10px 5px;">
 			<div class="widget-box widget-color-green">
-				<div class="widget-header">
+				<div class="widget-header widget-header-small">
 					<h4 class="widget-title"><fmt:message key="execute.brxx" /></h4>
 					<div class="widget-toolbar">
 						<a href="#" data-action="collapse">
@@ -178,7 +183,7 @@
 		</div>
 		<div style="width:99%; width:99%;margin:10px 5px;">
 			<div class="widget-box widget-color-green">
-				<div class="widget-header">
+				<div class="widget-header widget-header-small">
 					<h4 class="widget-title"><fmt:message key="execute.datelist" /></h4>
 					<div class="widget-toolbar">
 						<a href="#" data-action="collapse">

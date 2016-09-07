@@ -6,6 +6,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
 import com.smart.Constants;
 import com.smart.lisservice.WebService;
 import com.smart.model.lis.Hospital;
@@ -69,6 +70,7 @@ public class ExecuteController {
 		Date executeTime = new Date();
 		double time=0,day=0;
 		int nextDay=0;
+        JSONObject o = new JSONObject();
 
 		for(String str : selectValue.split(";")){
 			if(str!=null && !str.isEmpty()){
@@ -97,7 +99,6 @@ public class ExecuteController {
 		}
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
 
-		JSONObject o = new JSONObject();
 		double fee=0;
 		boolean isFirst = true;
 
@@ -124,6 +125,8 @@ public class ExecuteController {
 					labOrder.setQbgsj(ylxh.getQbgsj());
 					labOrder.setToponymy(ylxh.getCjbw());
 					labOrder.setCount(ylxh.getSgsl());
+                    labOrder.setContainer(ylxh.getSglx());
+                    labOrder.setVolume(ylxh.getBbl());
 					fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
 					labOrder.setPrice("" + fee);
 				} else {
@@ -146,6 +149,8 @@ public class ExecuteController {
 							lo.setQbgsj(ylxh2.getQbgsj());
 							lo.setToponymy(ylxh2.getCjbw());
 							lo.setCount(ylxh2.getSgsl());
+                            lo.setContainer(ylxh2.getSglx());
+                            lo.setVolume(ylxh2.getBbl());
 							fee = Double.parseDouble(lo.getPrice()) * lo.getRequestNum();
 							lo.setPrice("" + fee);
 						}
@@ -221,15 +226,18 @@ public class ExecuteController {
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
 			sample.setId(sampleManager.getSampleId());
 			sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
-			Process process = new Process();
+
+            Process process = new Process();
 			process.setSampleid(sample.getId());
 			process.setRequesttime(labOrder.getRequesttime());
 			process.setRequester(labOrder.getRequester());
 			process.setExecutetime(labOrder.getExecutetime());
 			process.setExecutor(labOrder.getExecutor());
-			labOrders.add(sample.getId());
-			labOrder.setLaborder(sample.getId());
 
+			labOrder.setLaborder(sample.getId());
+            labOrder.setBarcode(sample.getBarcode());
+
+            labOrders.add(sample.getId());
 			needSaveSample.add(sample);
 			needSaveProcess.add(process);
 			needSaveLabOrder.add(labOrder);
@@ -255,7 +263,34 @@ public class ExecuteController {
                 labOrderManager.removeAll(needSaveLabOrder);
             }
         }
-		o.put("labOrders", labOrders);
+        JSONArray array = new JSONArray();
+        for(LabOrder labOrder : needSaveLabOrder) {
+            JSONObject object = new JSONObject();
+            object.put("barcode", labOrder.getBarcode());
+            object.put("patientName", labOrder.getPatientname());
+            object.put("sex", labOrder.getSex());
+            object.put("age", labOrder.getAge());
+            object.put("ageUnit", labOrder.getAgeUnit());
+            object.put("labDepartMent", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getLabdepartment()));
+            object.put("patientCode",labOrder.getBlh());
+            object.put("executeTime",labOrder.getExecutetime());
+            object.put("requestMode",0);
+            object.put("sampleNo",labOrder.getSampleno());
+            object.put("container", labOrder.getContainer());
+            object.put("volume", labOrder.getVolume());
+            object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
+            object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
+            object.put("testName", labOrder.getExamitem());
+            object.put("hosSectionName", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getHossection()));
+            object.put("ageUnit", labOrder.getAgeUnit());
+            object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
+            object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
+            object.put("reportTime", labOrder.getQbgsj());
+            object.put("requester", labOrder.getRequester());
+            object.put("reportPlace", labOrder.getQbgdt());
+            array.add(object);
+        }
+        o.put("labOrders", array);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
 		return null;

@@ -1,3 +1,109 @@
+var LODOP; //声明为全局变量
+
+function Preview() {//打印预览
+	LODOP = getLodop();
+	CreateDataBill(data)
+	LODOP.PREVIEW();
+};
+function Setup() {//打印维护
+	LODOP = getLodop();
+	LODOP.PRINT_SETUP();
+};
+
+function CreateDataBill(data) {
+	if(data && data!=null){
+	    var patientInfo = data.patientName + " "+ data.sex+" "+ data.age+data.ageUnit+" "+data.testTube+data.sampleQuantity;
+        var exam = data.testName + "  "+ data.sampleType;
+		var patientInfo1 = data.patientCode +"  "+data.department;
+		LODOP = getLodop();
+		LODOP.PRINT_INIT("");
+		LODOP.SET_PRINT_PAGESIZE(0,980,1100,"A4");
+		LODOP.ADD_PRINT_IMAGE(10,10,80,115,"<img src='../images/shulan.png' style='width:80px;'/>");
+        LODOP.ADD_PRINT_TEXT(10,100,230,35,"树兰（杭州）医院");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",20);
+        LODOP.ADD_PRINT_TEXT(45,100,230,35,"浙江大学国际医院");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",20);
+        LODOP.ADD_PRINT_BARCODEA("patientCode","21.98mm","27.01mm","46.57mm",40,"128B",data.patientCode);
+        LODOP.SET_PRINT_STYLEA(0,"Horient",2);
+        LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","12.46mm",45,20,"姓名：");
+        LODOP.ADD_PRINT_TEXTA("name","33.00mm","23.31mm",90,20,data.patientName);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXTA("sexText","33.00mm","46.86mm",45,20,"性别：");
+        LODOP.ADD_PRINT_TEXTA("sex","33.00mm","58.5mm",30,20,data.sex);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXTA("ageText","33.00mm","65.91mm",45,20,"年龄：");
+        LODOP.ADD_PRINT_TEXTA("age","33.00mm","77.55mm",40,20,data.age + data.ageUnit);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXTA("examText","38.00mm","5.85mm",70,20,"检验目的：");
+        LODOP.ADD_PRINT_TEXTA("exam","38.00mm","23.31mm",300,20,data.testName);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXTA("requestTimeText","43.00mm","5.85mm",70,20,"开单时间：");
+        LODOP.ADD_PRINT_TEXTA("requestTime","43.00mm","23.31mm",300,20,data.requestTime);
+        LODOP.ADD_PRINT_TEXTA("requesterText","48.00mm","5.85mm",70,20,"开单医生：");
+        LODOP.ADD_PRINT_TEXTA("requester","48.00mm","23.31mm",300,20,data.requester);
+        LODOP.ADD_PRINT_TEXTA("executeTimeText","53.00mm","5.85mm",70,20,"采集时间：");
+        LODOP.ADD_PRINT_TEXTA("executeTime","53.00mm","23.31mm",300,20,data.executeTime);
+        LODOP.ADD_PRINT_TEXTA("reportTimeText","58.00mm","5.58mm",70,20,"报告时间：");
+        LODOP.ADD_PRINT_TEXTA("reportTime","58.00mm","23.31mm",300,20,data.reportTime);
+        LODOP.ADD_PRINT_TEXTA("reportPlaceText","63.00mm","5.58mm",70,20,"取单地点：");
+        LODOP.ADD_PRINT_TEXTA("reportPlace","63.00mm","23.31mm",300,20,data.reportPlace);
+        LODOP.ADD_PRINT_TEXTA("tip1","68.00mm","5.58mm",360,20,"*法定节假日(如:春节等)仪器故障报告时间顺延*");
+        LODOP.ADD_PRINT_TEXTA("tip2","73.00mm","5.58mm",360,20,"*抽血时请携带就诊卡，凭此单或就诊卡取检验报告*");
+
+		LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","2.85mm",180,25,patientInfo);
+        LODOP.ADD_PRINT_TEXTA("testinfo","83mm","2.95mm",180,20,data.testName);
+		LODOP.ADD_PRINT_BARCODEA("barcode","88mm","2.85mm","46mm",30,"128B",data.barcode);
+		LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
+		LODOP.ADD_PRINT_TEXTA("code","96mm","11.2mm",120,25,"*"+data.barcode+"*");
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		LODOP.ADD_PRINT_TEXTA("patientinfo1","101mm","2.95mm",180,20,patientInfo1);
+		LODOP.ADD_PRINT_TEXTA("datetime","106mm","2.95mm",180,25,"采集时间 "+data.printDateTime);
+
+        LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","51.25mm",180,25,patientInfo);
+        LODOP.ADD_PRINT_TEXTA("testinfo","83mm","51.25mm",180,20,data.testName);
+        LODOP.ADD_PRINT_BARCODEA("barcode","88mm","51.25mm","46mm",30,"128B",data.barcode);
+        LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
+        LODOP.ADD_PRINT_TEXTA("code","96mm","58.95mm",120,25,"*"+data.sampleNo+"*");
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXTA("patientinfo1","101mm","51.25mm",180,20,patientInfo1);
+        LODOP.ADD_PRINT_TEXTA("datetime","106mm","51.25mm",180,25,"采集时间 "+data.executeTime);
+	}
+}
+function startPrint(data) {
+	CreateDataBill(data);
+	//开始打印
+	LODOP.PRINT();
+}
+
+function printSet() {
+	var data ={
+		"age": "55",
+		"barcode": "A12000000098",
+		"bedNo": "04",
+		"department": "测试科室",
+		"patientCode": "00000496",
+		"patientName": "电子病历测试",
+		"printDateTime": "2016-08-31 01:40:47",
+		"requestmode": "0",
+		"sampleNo": "20160907XCG001",
+		"sampleQuantity": "2mL",
+		"sampleType": "",
+		"sex": "男",
+		"testName": "抗精子抗体测定(IgM)",
+		"testTube": "黄色管",
+		"ward": "测试病区",
+		"wardId": "1025",
+        "ageUnit": "岁",
+        "requestTime":"2016-09-07 08:50:28",
+        "executeTime":"2016-09-07 09:17:21",
+        "reportTime":"2016-09-07 13:17:00",
+        "requester":"开单医生",
+        "reportPlace":"在服务台或自助机上取单"
+	}
+	CreateDataBill(data);
+	LODOP.PRINT_DESIGN();
+}
+
 function getData(item,event){
 	var e = e||event;
 	var key = event.keyCode;
@@ -157,7 +263,7 @@ $(function(){
 				selval = selval + $(this).val()+";";
 		});
 		if(selval==null || selval == ''){
-			alert("请选择检验项目");
+			layer.msg("请选择检验项目", {icon: 2, time: 1000});
 			return;
 		}
 		var selfexecute = 0;
@@ -167,25 +273,9 @@ $(function(){
 //		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
 		$.get("../manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
 			data = jQuery.parseJSON(data);
-			var tests = data.laborders;
-			
-			
-			var testStr="";
-			for(var i =0; i<tests.length;i++){
-				testStr += tests[i] + ",";
-			}
-			$("#laborder").val(tests);
-			if(data.error == null || data.error == undefined){
-				
-				layer.open({
-		            type: 2,
-		            area: ['550px','500px'],
-		            fix: false, //不固定
-		            maxmin: true,
-		            shade:0.5,
-		            title: "条码打印",
-		            content:  "../manage/printBarcode?tests="+testStr
-		        })
+			console.log(data);
+			for(i=0;i<data.labOrders.length;i++){
+				startPrint(data.labOrders[i]);
 			}
 		});
 		
@@ -271,5 +361,5 @@ Date.prototype.Format = function(fmt)
   for(var k in o)   
     if(new RegExp("("+ k +")").test(fmt))   
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
-  return fmt;   
+  return fmt;
 };
