@@ -69,12 +69,10 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 		return labOrderDao.getPrintedList(ward,bedNo,patientId,requestIds);
 	}
 
-	@Transactional
-	public void saveAll(List<LabOrder> list) {
-		labOrderDao.saveAll(list);
+	public List<LabOrder> saveAll(List<LabOrder> list) {
+		return labOrderDao.saveAll(list);
 	}
 
-	@Transactional
 	public void removeAll(List<LabOrder> list) {
 		labOrderDao.removeAll(list);
 	}

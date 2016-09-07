@@ -27,9 +27,12 @@
     <aop:aspectj-autoproxy/>
     
     <!-- Enable @Scheduled support -->
-    <task:scheduled-tasks>   
-        <task:scheduled ref="reagentOutCount" method="run" cron="0 0 6 * * ?"/>   
-	</task:scheduled-tasks>  
+    <task:scheduled-tasks>
+        <task:scheduled ref="reagentOutCount" method="run" cron="0 0 6 * * ?"/>
+	</task:scheduled-tasks>
+    <task:scheduled-tasks>
+        <task:scheduled ref="sampleNoClear" method="run" cron="0 0 0 * * ?"/>
+    </task:scheduled-tasks>
 
     <!-- Activates scanning of @Autowired -->
     <context:annotation-config/>

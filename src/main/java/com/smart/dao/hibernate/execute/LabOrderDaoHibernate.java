@@ -188,14 +188,17 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 
 		return labOrderVos;
 	}
-	public void saveAll(List<LabOrder> list) {
+
+	public List<LabOrder> saveAll(List<LabOrder> list) {
 		Session s = getSessionFactory().openSession();
+		List<LabOrder> returnList = new ArrayList<LabOrder>();
 		for(LabOrder labOrder : list) {
-			s.saveOrUpdate(labOrder);
+			returnList.add((LabOrder) s.merge(labOrder));
 		}
 		s.flush();
 		s.close();
-	}
+        return returnList;
+    }
 
 	public void removeAll(List<LabOrder> list) {
 		Session s = getSessionFactory().openSession();

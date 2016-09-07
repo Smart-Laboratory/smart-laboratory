@@ -40,7 +40,7 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
 	 */
 	List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds);
 
-    void saveAll(List<LabOrder> needSaveLabOrder);
+    List<LabOrder> saveAll(List<LabOrder> needSaveLabOrder);
 
     void removeAll(List<LabOrder> needSaveLabOrder);
 

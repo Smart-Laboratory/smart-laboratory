@@ -27,6 +27,7 @@ public class LabOrder {
 	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date requesttime;
 	private String requester;
+	private String requesterName;
 	private Date executetime;
 	private String executor;
 	private Integer zxbz=0;		//采样执行标志
@@ -63,6 +64,10 @@ public class LabOrder {
 	private String wardId;			//病区ID
 	private String wardName;		//病区名称
 	private String ageUnit;			//年龄单位
+    private String barcode;         //条码
+    private String container;       //标本容器
+    private String volume;          //标本量
+
 	@Id
 	public Long getLaborder() {
 		return laborder;
@@ -341,6 +346,7 @@ public class LabOrder {
 		this.requestNum = requestNum;
 	}
 
+	@Column
 	public String getHossectionName() {
 		return hossectionName;
 	}
@@ -349,6 +355,7 @@ public class LabOrder {
 		this.hossectionName = hossectionName;
 	}
 
+	@Column
 	public String getWardId() {
 		return wardId;
 	}
@@ -357,12 +364,22 @@ public class LabOrder {
 		this.wardId = wardId;
 	}
 
+	@Column
 	public String getWardName() {
 		return wardName;
 	}
 
 	public void setWardName(String wardName) {
 		this.wardName = wardName;
+	}
+
+	@Column
+	public String getRequesterName() {
+		return requesterName;
+	}
+
+	public void setRequesterName(String requesterName) {
+		this.requesterName = requesterName;
 	}
 
 	@Transient
@@ -383,6 +400,7 @@ public class LabOrder {
 		this.count = count;
 	}
 
+    @Column
 	public String getAgeUnit() {
 		return ageUnit;
 	}
@@ -391,7 +409,34 @@ public class LabOrder {
 		this.ageUnit = ageUnit;
 	}
 
-	@Transient
+    @Column
+    public String getContainer() {
+        return container;
+    }
+
+    public void setContainer(String container) {
+        this.container = container;
+    }
+
+    @Column
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    @Column
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    @Transient
 	public String getAge() {
 		if (birthday != null) {
 			Calendar now = Calendar.getInstance();

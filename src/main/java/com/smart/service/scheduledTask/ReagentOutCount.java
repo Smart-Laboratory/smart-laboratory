@@ -1,4 +1,4 @@
-package com.smart.service;
+package com.smart.service.scheduledTask;
 
 import java.util.Calendar;
 import java.util.Date;
