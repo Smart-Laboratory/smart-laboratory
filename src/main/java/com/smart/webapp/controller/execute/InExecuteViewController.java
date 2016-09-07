@@ -147,8 +147,15 @@ public class InExecuteViewController {
             node.put("bedNo", labOrders1.get(0).getBed());
             node.put("patientCode", labOrders1.get(0).getBlh());
             node.put("patientName", labOrders1.get(0).getPatientname());
-            node.put("ward", labOrdersService.get(0).getWardId());
-            node.put("wardName", labOrdersService.get(0).getWardName());
+            node.put("ward", labOrders1.get(0).getWardId());
+            node.put("wardName", labOrders1.get(0).getWardName());
+            node.put("birthday", ConvertUtil.getFormatDate(labOrders1.get(0).getBirthday(),"yyyy-MM-dd"));
+            node.put("requestTime", ConvertUtil.getFormatDate(labOrders1.get(0).getRequesttime(),"yyyy-MM-dd HH:MM:SS"));
+            node.put("age", labOrders1.get(0).getAge());
+            node.put("ageUnit", labOrders1.get(0).getAgeUnit());
+            node.put("requester", labOrders1.get(0).getRequester());
+            node.put("hossectionName", labOrders1.get(0).getHossectionName());
+            node.put("sex", labOrders1.get(0).getSex());
             //node.put("laborders", labOrders1);
             nodes.add(node);
         }
@@ -208,19 +215,43 @@ public class InExecuteViewController {
             beCollectedList = labOrders;
         }
 
-        List<LabOrderVo> labOrderVoList = labOrderManager.getPrintedList(ward, bedNo, patientId, null);
+        List<LabOrder> labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
         endTime = System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间3： " + (endTime - startTime) + "ms");
         //获取病区已采集标本
 
         //已采集明细ID
         String requestDetailIds = "";
+        JSONArray spideredList = new JSONArray();
+
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
-        for (LabOrderVo labOrderVo : labOrderVoList) {
-            Ylxh ylxh = ylxhMap.get(labOrderVo.getYlxh().split("\\+")[0]);
+        LabOrderVo labOrderVo  = new LabOrderVo();
+        for (LabOrder labOrder : labOrderList) {
+            Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {
                 labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
             }
+            JSONObject laobder
+            LabOrderVo labOrderVo = new LabOrderVo();
+            labOrderVo.setPatientCode(labOrder.getBlh());
+            labOrderVo.setPatientName(labOrder.getPatientname());
+            labOrderVo.setSampleType(labOrder.getSampleTypeName());
+            labOrderVo.setBarcode(labOrder.getb());
+            labOrderVo.setAge(labOrder.getAge() + labOrder.getAgeUnit());
+            labOrderVo.setHossection(labOrder.getHossectionName());
+            labOrderVo.setExamitem(labOrder.getExamitem());
+            if (ylxh != null) {
+                labOrderVo.setSampleQuantity(ConvertUtil.null2String(ylxh.getBbl()));
+                labOrderVo.setTestTube(ylxh.getSglx());
+            }
+            labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
+            labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
+            labOrderVo.setBedNo(labOrder.getBed());
+            labOrderVo.setSex(ConvertUtil.getIntValue("" + labOrder.getSex()) == 1 ? "男" : "女");
+            labOrderVo.setRequestMode("" + labOrder.getRequestmode());
+            labOrderVos.add(labOrderVo);
+
+
             requestDetailIds += labOrderVo.getLaborderOrg() + ",";
         }
         endTime = System.currentTimeMillis(); //获取结束时间

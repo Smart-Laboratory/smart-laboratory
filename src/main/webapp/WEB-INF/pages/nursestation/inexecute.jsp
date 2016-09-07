@@ -289,8 +289,7 @@
                         //$("#tableList1").trigger("jqGridSelectAll",true);
 
                         //加载病人信息
-                        var patientinfo=beollected[0] || spidered[0] ||'';
-                        private.addPatientInfo(treeNode.level,patientinfo);
+                        private.addPatientInfo(treeNode.level,treeNode);
 
                         layer.close(index);
                     },
@@ -449,7 +448,16 @@
 
                         }
                     }
+
                 });
+                //刷新当前节点数据
+                var zTree = $.fn.zTree.getZTreeObj("tree");
+                var nodes = zTree.getSelectedNodes();
+                if (nodes.length>0)
+                {
+                    zTree.selectNode(nodes[0]);
+                    zTree.setting.callback.onClick(null, zTree.setting.treeId, nodes[0]);//调用事件
+                }
                 //console.log(saveDatas);
             },
             printOldInfo:function () {
@@ -476,14 +484,15 @@
                 //console.log(saveDatas);
             },
             addPatientInfo:function (level,data) {
+                if(!data) return;
                 if(level==0){
                     $('#widget-box-1').hide();
                     var height=$('.laftnav').height()-$('#widget-box-2').height()-115  ;
                    $("#tableList1").setGridHeight(height);
                 }else {
                     var table = $('#patientInfo');
-                    var html = '<tr><td>姓&#12288;名：'+data.patientname+'</td><td>性&#12288;&#12288;别：'+((data.sex==1)?'男':'女')+'</td><td>年&#12288;&#12288;龄：'+data.age+data.ageUnit+'</td><td>病&#12288;&#12288;区：'+data.wardName+'</td><td>床&#12288;&#12288;号：'+data.bed+'</td></tr>';
-                    html += '<tr><td>病员号：'+data.blh+'</td><td>出生日期：'+data.birthday+'</td><td>送检医生：'+data.requester+'</td><td>送检单位：'+data.hossectionName+'</td><td>接收日期：'+data.requesttime+'</td></tr>';
+                    var html = '<tr><td>姓&#12288;名：'+data.patientName+'</td><td>性&#12288;&#12288;别：'+((data.sex==1)?'男':'女')+'</td><td>年&#12288;&#12288;龄：'+data.age+data.ageUnit+'</td><td>病&#12288;&#12288;区：'+data.wardName+'</td><td>床&#12288;&#12288;号：'+data.bedNo+'</td></tr>';
+                    html += '<tr><td>病员号：'+data.patientCode+'</td><td>出生日期：'+data.birthday+'</td><td>送检医生：'+data.requester+'</td><td>送检单位：'+data.hossectionName+'</td><td>接收日期：'+data.requestTime+'</td></tr>';
                     table.html("");
                     table.append(html);
                     var height=$('.laftnav').height()-$('#widget-box-2').height()-$('#widget-box-1').height()-120;
@@ -579,12 +588,12 @@
             LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.94mm","42.6mm",35,"128B",data.barcode);
             LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
             LODOP.SET_PRINT_STYLEA(0,"Horient",2);
-            LODOP.ADD_PRINT_TEXTA("code","19.39mm","2.95mm",180,25,data.barcode);
+            LODOP.ADD_PRINT_TEXTA("code","19.39mm","2.95mm",180,25,"*"+data.barcode+"*");
             LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
             LODOP.SET_PRINT_STYLEA(0,"Bold",1);
             LODOP.ADD_PRINT_TEXTA("patientinfo1",23,"2.95mm",180,20,patientInfo1);
             LODOP.ADD_PRINT_TEXTA("testinfo","23.36mm","2.95mm",180,20,data.testName);
-            LODOP.ADD_PRINT_TEXTA("datetime","31.56mm","2.95mm",180,25,"采集时间 "+data.printDateTime);
+            LODOP.ADD_PRINT_TEXTA("datetime","31.56mm","2.95mm",180,25,"采集时间 "+data.requestTime);
         }
     }
     function startPrint(data) {
