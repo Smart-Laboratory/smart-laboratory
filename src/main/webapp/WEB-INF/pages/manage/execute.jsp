@@ -31,6 +31,13 @@
 	margin:0px;
 }
 
+#checkAll {
+	width:15px;
+	height:15px;
+	vertical-align:middle;
+	margin:auto;
+}
+
 #cxhis span{
 	margin:2px 5px;
 }
@@ -184,11 +191,21 @@
 		<div style="width:99%; width:99%;margin:10px 5px;">
 			<div class="widget-box widget-color-green">
 				<div class="widget-header widget-header-small">
-					<h4 class="widget-title"><fmt:message key="execute.datelist" /></h4>
+					<h4 class="widget-title"><fmt:message key="execute.datalist" /></h4>
 					<div class="widget-toolbar">
 						<a href="#" data-action="collapse">
 							<i class="ace-icon fa fa-chevron-up"></i>
 						</a>
+					</div>
+					<div class="widget-toolbar">
+						<select id="requestModeSelect">
+							<option value="0" selected>全部</option>
+							<option value="1">门诊</option>
+							<option value="2">急诊</option>
+						</select>
+					</div>
+					<div class="widget-toolbar">
+						<input id="checkAll" type='checkbox'/>全选/全不选
 					</div>
 				</div>
 				<div class="widget-body" style="overflow-x:scroll;">

@@ -3,6 +3,7 @@ package com.smart.webapp.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.smart.lisservice.WebService;
 import com.smart.model.lis.Section;
 import com.smart.service.lis.SectionManager;
 import com.zju.api.model.Ksdm;
@@ -20,8 +21,8 @@ public class SectionUtil {
 	public static SectionUtil getInstance(RMIService rmi, SectionManager sectionManager) {
 		if (map == null || map.size() == 0) {
 			map = new HashMap<String, String>();
-			for (Ksdm s : rmi.getAllKsdm()) {
-				map.put(s.getId(), s.getName());
+			for(Section s : new WebService().getSectionList()) {
+				map.put(s.getCode(), s.getName());
 			}
 		}
 		if (labMap == null || labMap.size() == 0) {

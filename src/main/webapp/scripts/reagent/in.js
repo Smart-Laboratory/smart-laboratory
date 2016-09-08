@@ -68,6 +68,7 @@
 			} else if($(this).children('option:selected').val() == 1) {
 				$("#reagentdes").attr('placeholder','提示:输入或扫描医院库房出库单条码');
 			}
+			$("#reagentdes").val("").focus();
 		});
 		
 		$("#inBtn").click(function(){
@@ -186,6 +187,8 @@
 		    sortorder: "asc",
 		    caption: "<h5><b>试剂入库</b></h5>"
 		});
+
+		$("#reagentdes").val("").focus();
 
 		labChange=function(select){
 			$.ajax({

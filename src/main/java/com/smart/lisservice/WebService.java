@@ -3,10 +3,8 @@ package com.smart.lisservice;
 import com.smart.Constants;
 import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.execute.LabOrder;
-import com.smart.model.lis.Patient;
+import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestResult;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -46,6 +44,45 @@ public class WebService {
     public SampleAndResultVo getRequestInfo() {
 
         return new SampleAndResultVo(new Sample(), new Process(), new TestResult());
+    }
+
+    public List<Section> getSectionList() {
+        List<Section> list = new ArrayList<Section>();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url);
+            GetMethod method = new GetMethod(url + "getDepartMentList");
+            method.releaseConnection();
+            httpClient.executeMethod(method);
+            System.out.println("获取门诊科室信息：" + method.getResponseBodyAsString());
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    Section s = new Section();
+                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setName(arr.getJSONObject(i).getString("Name"));
+                    list.add(s);
+                }
+            }
+            GetMethod method2 = new GetMethod(url + "getWardList");
+            method.releaseConnection();
+            httpClient.executeMethod(method2);
+            System.out.println("获取住院信息：" + method2.getResponseBodyAsString());
+            JSONObject obj2 = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj2.get("State")==1) {
+                JSONArray arr = obj2.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    Section s = new Section();
+                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setName(arr.getJSONObject(i).getString("Name"));
+                    list.add(s);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public List<String> getJCXM(String patientId, String from, String to) {
