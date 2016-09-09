@@ -116,6 +116,7 @@ public class ExecuteViewController {
 	public String getTests(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String patientId = request.getParameter("patientId");
 		String requestmode = request.getParameter("requestmode");
+        int isEmergency = Integer.parseInt(request.getParameter("isEmergency"));
 		String from=request.getParameter("from");
         String to=request.getParameter("to");
 
@@ -133,47 +134,65 @@ public class ExecuteViewController {
 		StringBuilder html = new StringBuilder();
 		LabOrder labOrder = new LabOrder();
 		Ylxh ylxh = new Ylxh();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		//记录最新的发票号
 		String recentInvoiceNum="";
 
 		JSONArray jsonArray = new JSONArray();
 		for(int i = 0; i < loList.size(); i++) {
-			JSONObject jsonObject = new JSONObject();
 			labOrder = loList.get(i);
 			ylxh = ylxhMap.get(labOrder.getYlxh());
 			labOrder.setSampletype(ylxh.getYblx());
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());
 			labOrder.setLabdepartment(ylxh.getKsdm());
-			System.out.println("执行标志：" + labOrder.getZxbz());
-			jsonObject.put("zxbz", labOrder.getZxbz());
-			if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
-				jsonObject.put("bmp", "../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()));
-			} else {
-				jsonObject.put("bmp", "");
-			}
-			jsonObject.put("requestId", labOrder.getRequestId());
-			jsonObject.put("labOrderOrg", labOrder.getLaborderorg());
-			jsonObject.put("qbgsj", ylxh.getQbgsj());
-			jsonObject.put("qbgdd", ylxh.getQbgdd());
-			jsonObject.put("requestMode", labOrder.getRequestmode());
-			jsonObject.put("ylmc", ylxh.getYlmc());
-			jsonObject.put("sglx", ylxh.getSglx());
-			jsonObject.put("bbl", ConvertUtil.null2String(ylxh.getBbl()));
-			jsonObject.put("price", labOrder.getPrice());
-			jsonObject.put("amount", labOrder.getRequestNum());
-			jsonObject.put("labDepart", sectionUtil.getLabValue(ylxh.getKsdm()));
-			jsonObject.put("hosSection", sectionUtil.getLabValue(labOrder.getHossection()));
-			jsonObject.put("requestTime", Constants.DF8.format(labOrder.getRequesttime()));
-			jsonArray.add(jsonObject);
+			System.out.println("执行标志：" + labOrder.getZxbz() + " 急诊标志：" + labOrder.getRequestmode());
+            switch (isEmergency) {
+                case 0 :
+                    jsonArray.add(getJsonObject(labOrder, ylxh));
+                    break;
+                case 1 :
+                    if(labOrder.getRequestmode() == 0) {
+                        jsonArray.add(getJsonObject(labOrder, ylxh));
+                    }
+                    break;
+                case 2 :
+                    if(labOrder.getRequestmode() != 0) {
+                        jsonArray.add(getJsonObject(labOrder, ylxh));
+                    }
+                    break;
+            }
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(jsonArray.toString());
 		return null;
 	}
-	
-	public String getBmp(String str){
+
+    private JSONObject getJsonObject(LabOrder labOrder, Ylxh ylxh) {
+        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("zxbz", labOrder.getZxbz());
+        if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
+            jsonObject.put("bmp", "../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()));
+        } else {
+            jsonObject.put("bmp", "");
+        }
+        jsonObject.put("requestId", labOrder.getRequestId());
+        jsonObject.put("labOrderOrg", labOrder.getLaborderorg());
+        jsonObject.put("qbgsj", ylxh.getQbgsj());
+        jsonObject.put("qbgdd", ylxh.getQbgdd());
+        jsonObject.put("requestMode", labOrder.getRequestmode());
+        jsonObject.put("ylmc", ylxh.getYlmc());
+        jsonObject.put("sglx", ylxh.getSglx());
+        jsonObject.put("bbl", ConvertUtil.null2String(ylxh.getBbl()));
+        jsonObject.put("price", labOrder.getPrice());
+        jsonObject.put("amount", labOrder.getRequestNum());
+        jsonObject.put("labDepart", sectionUtil.getLabValue(ylxh.getKsdm()));
+        jsonObject.put("hosSection", sectionUtil.getValue(labOrder.getHossection()));
+        jsonObject.put("requestTime", Constants.DF8.format(labOrder.getRequesttime()));
+        return jsonObject;
+    }
+
+    public String getBmp(String str){
 		if(str==null || str.isEmpty())
 			return "";
 		String bmpStr=str;

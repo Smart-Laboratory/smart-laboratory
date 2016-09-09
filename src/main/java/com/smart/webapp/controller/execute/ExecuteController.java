@@ -271,22 +271,22 @@ public class ExecuteController {
             object.put("sex", labOrder.getSex());
             object.put("age", labOrder.getAge());
             object.put("ageUnit", labOrder.getAgeUnit());
-            object.put("labDepartMent", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getLabdepartment()));
+            object.put("labDepartment", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getLabdepartment()));
             object.put("patientCode",labOrder.getBlh());
             object.put("executeTime",labOrder.getExecutetime());
-            object.put("requestMode",0);
+            object.put("requestMode",labOrder.getRequestmode());
             object.put("sampleNo",labOrder.getSampleno());
             object.put("container", labOrder.getContainer());
             object.put("volume", labOrder.getVolume());
             object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
             object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
             object.put("testName", labOrder.getExamitem());
-            object.put("hosSectionName", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getHossection()));
+            object.put("hosSectionName", SectionUtil.getInstance(rmiService, sectionManager).getValue(labOrder.getHossection()));
             object.put("ageUnit", labOrder.getAgeUnit());
             object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
             object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
-            object.put("reportTime", labOrder.getQbgsj());
-            object.put("requester", labOrder.getRequester());
+            object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
+            object.put("requester", labOrder.getRequesterName());
             object.put("reportPlace", labOrder.getQbgdt());
             array.add(object);
         }

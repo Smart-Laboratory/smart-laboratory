@@ -10,7 +10,7 @@
         				$("#list").jqGrid("addRowData", data.rows[i].id, data.rows[i]);
         			} else {
         				if(type == 1) {
-        					alert($("#list").jqGrid("getRowData", data.rows[i].id)["name"] + "已存在，无需重复选取！");
+        					layer.alert($("#list").jqGrid("getRowData", data.rows[i].id)["name"] + "已存在，无需重复选取！", {icon: 0, title: "提示"});
         				}
         			}
         		}
@@ -46,6 +46,7 @@
 							$("#alert").prop("class","alert alert-danger");
 							$("#alert").html(data.error);
 						}
+						$("#reagentdes").val("").focus();
 					}
 				});
 
@@ -61,6 +62,7 @@
 			} else if($(this).children('option:selected').val() == 1) {
 				$("#reagentdes").attr('placeholder','提示:输入或扫描试剂条形码');
 			}
+			$("#reagentdes").val("").focus();
 		});
 		
 		$("#outBtn").click(function(){
@@ -152,6 +154,8 @@
 		    sortorder: "asc",
 		    caption: "<h5><b>试剂入库</b></h5>"
 		});
+
+		$("#reagentdes").focus();
 
 		labChange=function(select){
 			$.ajax({
