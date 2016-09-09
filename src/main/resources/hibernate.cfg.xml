@@ -8,6 +8,7 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping class="com.smart.model.lis.TestTube"/>
         <mapping class="com.smart.model.qc.QcTest"/>
         <mapping class="com.smart.model.qc.QcBatch"/>
         <mapping class="com.smart.model.qc.QcData"/>

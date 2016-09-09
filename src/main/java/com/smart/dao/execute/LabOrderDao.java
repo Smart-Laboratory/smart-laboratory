@@ -33,13 +33,6 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 
 	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
-	/**
-	 * 获取已打印记录
-	 * @param requestIds 样本ID
-	 * @return
-	 */
-	List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds);
-
 	List<LabOrder> saveAll(List<LabOrder> list);
 
     void removeAll(List<LabOrder> list);

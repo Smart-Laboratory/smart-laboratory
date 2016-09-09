@@ -56,19 +56,6 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 		return labOrderDao.getByRequestIds(ward,bedNo,patientId,requestIds);
 	}
 
-	/**
-	 * 获取病人已打印记录
-	 * @param ward
-	 * @param bedNo
-	 * @param patientId
-	 * @param requestIds
-	 * @return
-	 */
-	@Transactional
-	public List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds){
-		return labOrderDao.getPrintedList(ward,bedNo,patientId,requestIds);
-	}
-
 	public List<LabOrder> saveAll(List<LabOrder> list) {
 		return labOrderDao.saveAll(list);
 	}

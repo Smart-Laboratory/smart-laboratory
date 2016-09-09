@@ -9,6 +9,8 @@ import com.smart.service.lis.ChannelManager;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
+import com.smart.webapp.util.ChannelUtil;
+import com.smart.webapp.util.DeviceUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -81,11 +83,10 @@ public class DeviceChannelController {
         }
         String [] arrayInstrument = instruments.split(",");
         Map<String,String> deviceMap = new HashMap<String,String>();
-        for (int i=0;i<arrayInstrument.length;i++){
-            String code = arrayInstrument[i];
+        for(String code:arrayInstrument){
             if(code == null || code.equals("")) continue;
-            Device device = deviceManager.getDeviceByCode(code);
-            deviceMap.put(code,device.getName());
+            String value = DeviceUtil.getInstance(deviceManager).getValue(code);
+            deviceMap.put(code,value);
         }
 
         for(Map.Entry<String, String> entry:deviceMap.entrySet()){
@@ -153,7 +154,7 @@ public class DeviceChannelController {
             JSONObject jsonObject= new JSONObject();
             //获取仪器相关检验项目
             if(instrument.indexOf(deviceid)>=0){
-                channel = channelManager.getChannel(deviceid,testid);
+                channel = ChannelUtil.getInstance(channelManager).getValue(deviceid+"_"+testid);
                 if(channel == null){
                     channel = new Channel();
                     //如果为空则从检验项目中获取

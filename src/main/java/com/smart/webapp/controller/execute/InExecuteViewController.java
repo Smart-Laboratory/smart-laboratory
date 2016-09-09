@@ -21,10 +21,7 @@ import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.HospitalUtil;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.UserUtil;
-import com.smart.webapp.util.YlxhUtil;
+import com.smart.webapp.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -86,6 +83,7 @@ public class InExecuteViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ward = ConvertUtil.null2String(request.getParameter("ward"));
+        Map map = TestTubeUtil.getTestTubes();
         return new ModelAndView().addObject("ward", ward);
     }
 
@@ -149,8 +147,8 @@ public class InExecuteViewController {
             node.put("patientName", labOrders1.get(0).getPatientname());
             node.put("ward", labOrders1.get(0).getWardId());
             node.put("wardName", labOrders1.get(0).getWardName());
-            node.put("birthday", ConvertUtil.getFormatDate(labOrders1.get(0).getBirthday(),"yyyy-MM-dd"));
-            node.put("requestTime", ConvertUtil.getFormatDate(labOrders1.get(0).getRequesttime(),"yyyy-MM-dd HH:MM:SS"));
+            node.put("birthday", ConvertUtil.getFormatDate(labOrders1.get(0).getBirthday(), "yyyy-MM-dd"));
+            node.put("requestTime", ConvertUtil.getFormatDate(labOrders1.get(0).getRequesttime(), "yyyy-MM-dd HH:MM:SS"));
             node.put("age", labOrders1.get(0).getAge());
             node.put("ageUnit", labOrders1.get(0).getAgeUnit());
             node.put("requester", labOrders1.get(0).getRequester());
@@ -225,19 +223,18 @@ public class InExecuteViewController {
         JSONArray spideredList = new JSONArray();
 
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
-        LabOrderVo labOrderVo  = new LabOrderVo();
+        List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
         for (LabOrder labOrder : labOrderList) {
+            LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {
                 labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
             }
-            JSONObject laobder
-            LabOrderVo labOrderVo = new LabOrderVo();
             labOrderVo.setPatientCode(labOrder.getBlh());
             labOrderVo.setPatientName(labOrder.getPatientname());
-            labOrderVo.setSampleType(labOrder.getSampleTypeName());
-            labOrderVo.setBarcode(labOrder.getb());
-            labOrderVo.setAge(labOrder.getAge() + labOrder.getAgeUnit());
+            labOrderVo.setBarcode(labOrder.getBarcode());
+            labOrderVo.setAge(labOrder.getAge());
+            labOrderVo.setAgeUnit(labOrder.getAgeUnit());
             labOrderVo.setHossection(labOrder.getHossectionName());
             labOrderVo.setExamitem(labOrder.getExamitem());
             if (ylxh != null) {
@@ -247,12 +244,21 @@ public class InExecuteViewController {
             labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
             labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
             labOrderVo.setBedNo(labOrder.getBed());
-            labOrderVo.setSex(ConvertUtil.getIntValue("" + labOrder.getSex()) == 1 ? "男" : "女");
+            labOrderVo.setRequestId(labOrder.getRequestId());
+            labOrderVo.setLaborder(labOrder.getLaborder());
+            labOrderVo.setLaborderOrg(labOrder.getLaborderorg());
+            labOrderVo.setPatientId(labOrder.getPatientid());
+            int sex = ConvertUtil.getIntValue("" + labOrder.getSex());
+            if (sex == 1) {
+                labOrderVo.setSex("男");
+            } else if (sex == 2) {
+                labOrderVo.setSex("女");
+            } else {
+                labOrderVo.setSex("未知");
+            }
             labOrderVo.setRequestMode("" + labOrder.getRequestmode());
-            labOrderVos.add(labOrderVo);
-
-
-            requestDetailIds += labOrderVo.getLaborderOrg() + ",";
+            labOrderVoList.add(labOrderVo);
+            requestDetailIds += labOrder.getLaborderorg() + ",";
         }
         endTime = System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间4： " + (endTime - startTime) + "ms");
@@ -278,6 +284,7 @@ public class InExecuteViewController {
 
         endTime = System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间5： " + (endTime - startTime) + "ms");
+        System.out.println(JSON.toJSONString(jsonObject, filter));
         return JSON.toJSONString(jsonObject, filter);
     }
 
@@ -318,11 +325,9 @@ public class InExecuteViewController {
             Iterator iterator = labOrders.iterator();
             while (iterator.hasNext()) {
                 LabOrder labOrder = (LabOrder) iterator.next();
-                String requestDetailId = ConvertUtil.null2String(labOrder.getLaborder());
+                String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
                 if (requestDetailIds.indexOf(requestDetailId + ",", 0) >= 0) {
                     iterator.remove();
-                } else {
-
                 }
             }
 
@@ -398,7 +403,9 @@ public class InExecuteViewController {
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());
                 sample.setId(sampleManager.getSampleId());
                 //生成样本号
-                sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
+                String barcode = HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId());
+                sample.setBarcode(barcode);
+                labOrder.setBarcode(barcode);
                 Date executeTime = new Date();
 
                 Process process = new Process();
@@ -427,22 +434,32 @@ public class InExecuteViewController {
                         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
 
                         LabOrderVo labOrderVo = new LabOrderVo();
-                        labOrderVo.setPatientCode(labOrder.getBlh());
-                        labOrderVo.setPatientName(labOrder.getPatientname());
-                        labOrderVo.setSampleType(labOrder.getSampleTypeName());
-                        labOrderVo.setBarcode(sample.getBarcode());
-                        labOrderVo.setAge(labOrder.getAge() + labOrder.getAgeUnit());
-                        labOrderVo.setHossection(labOrder.getHossectionName());
-                        labOrderVo.setExamitem(labOrder.getExamitem());
+
+                        labOrderVo.setPatientCode(ConvertUtil.null2String(labOrder.getBlh()));
+                        labOrderVo.setPatientName(ConvertUtil.null2String(labOrder.getPatientname()));
+                        labOrderVo.setSampleType(ConvertUtil.null2String(labOrder.getSampleTypeName()));
+                        labOrderVo.setBarcode(ConvertUtil.null2String(sample.getBarcode()));
+                        labOrderVo.setAge(ConvertUtil.null2String(labOrder.getAge()));
+                        labOrderVo.setHossection(ConvertUtil.null2String(labOrder.getHossectionName()));
+                        labOrderVo.setExamitem(ConvertUtil.null2String(labOrder.getExamitem()));
                         if (ylxh != null) {
                             labOrderVo.setSampleQuantity(ConvertUtil.null2String(ylxh.getBbl()));
-                            labOrderVo.setTestTube(ylxh.getSglx());
+                            labOrderVo.setTestTube(ConvertUtil.null2String(ylxh.getSglx()));
                         }
                         labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
-                        labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
+                        labOrderVo.setWard(ConvertUtil.null2String(labOrder.getWardId()));
+                        labOrderVo.setWardName(ConvertUtil.null2String(labOrder.getWardName()));
                         labOrderVo.setBedNo(labOrder.getBed());
-                        labOrderVo.setSex(ConvertUtil.getIntValue("" + labOrder.getSex()) == 1 ? "男" : "女");
-                        labOrderVo.setRequestMode("" + labOrder.getRequestmode());
+                        labOrderVo.setRequestTime(ConvertUtil.getFormatDate(labOrder.getRequesttime(), "yyyy-MM-dd hh:mm:ss"));
+                        int sex = ConvertUtil.getIntValue(ConvertUtil.null2String(labOrder.getSex()),3);
+                        if (sex == 1) {
+                            labOrderVo.setSex("男");
+                        } else if (sex == 2) {
+                            labOrderVo.setSex("女");
+                        } else {
+                            labOrderVo.setSex("未知");
+                        }
+                        labOrderVo.setRequestMode(ConvertUtil.null2String(labOrder.getRequestmode()));
                         labOrderVos.add(labOrderVo);
                     }
                 }
@@ -454,7 +471,7 @@ public class InExecuteViewController {
         JSONObject retObj = new JSONObject();
         retObj.put("printOrders", labOrderVos);
         retObj.put("noPrintOrders", hasPrintLaborder);
-        System.out.println(JSON.toJSONString(retObj, filter));
+        //System.out.println(JSON.toJSONString(retObj, filter));
         return JSON.toJSONString(retObj, filter);
     }
 
@@ -477,9 +494,51 @@ public class InExecuteViewController {
                                        HttpServletRequest request,
                                        HttpServletResponse response) {
         //获取已打印记录
-        List arr = JSON.parseArray(orders);
-        List<LabOrderVo> printedLaborderDtos = labOrderManager.getPrintedList("", "", "", arr);
-        return JSON.toJSONString(printedLaborderDtos);
+        List<String> arr = JSON.parseArray(orders,String.class);
+        String ids = "";
+        for(String str:arr){
+            if(!str.isEmpty() && !ids.isEmpty()) ids +=",";
+            ids+=str;
+        }
+
+        List<LabOrder> labOrderList = labOrderManager.getByIds(ids);
+        List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        for (LabOrder labOrder : labOrderList) {
+            LabOrderVo labOrderVo = new LabOrderVo();
+            Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
+            if (ylxh != null) {
+                labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
+            }
+            labOrderVo.setPatientCode(labOrder.getBlh());
+            labOrderVo.setPatientName(labOrder.getPatientname());
+            labOrderVo.setBarcode(labOrder.getBarcode());
+            labOrderVo.setAge(labOrder.getAge());
+            labOrderVo.setAgeUnit(labOrder.getAgeUnit());
+            labOrderVo.setHossection(labOrder.getHossectionName());
+            labOrderVo.setExamitem(labOrder.getExamitem());
+            if (ylxh != null) {
+                labOrderVo.setSampleQuantity(ConvertUtil.null2String(ylxh.getBbl()));
+                labOrderVo.setTestTube(ylxh.getSglx());
+            }
+            labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
+            labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
+            labOrderVo.setBedNo(labOrder.getBed());
+            labOrderVo.setRequestTime(ConvertUtil.getFormatDate(labOrder.getRequesttime(), "yyyy-MM-dd hh:mm:ss"));
+            labOrder.setDiagnostic(labOrder.getDiagnostic());
+            int sex = ConvertUtil.getIntValue("" + labOrder.getSex());
+            if (sex == 1) {
+                labOrderVo.setSex("男");
+            } else if (sex == 2) {
+                labOrderVo.setSex("女");
+            } else {
+                labOrderVo.setSex("未知");
+            }
+            labOrderVo.setRequestMode("" + labOrder.getRequestmode());
+            labOrderVoList.add(labOrderVo);
+        }
+
+        return JSON.toJSONString(labOrderVoList,filter);
     }
 
     private void setLisInfo(LabOrder labOrder) {
@@ -498,8 +557,5 @@ public class InExecuteViewController {
         labOrder.setSampleTypeName(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
         Double fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
         labOrder.setPrice("" + fee);
-
     }
-
-
 }

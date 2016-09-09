@@ -36,6 +36,7 @@
     .ztree{
         border: 1px solid #D9D9D9;
         border-top: none;
+        height: 100%;
     }
 </style>
 <div class="row">
@@ -48,7 +49,7 @@
                     <span class="tip" style="cursor:pointer;">仪器设备</span>
                 </span>
             </div>
-            <div>
+            <div class="tree">
                 <ul id="treeList" class="ztree"></ul>
             </div>
         </div>
@@ -69,6 +70,9 @@
 <script type="text/javascript">
     $(function(){
         initGrid();
+        var clientHeight = $(window).innerHeight();
+        var height = clientHeight - $('#head').height()- $('.footer-content').height();
+        $('.tree').height(height-70);
         var zNodes =${treeNodes};
         $.fn.zTree.init($("#treeList"), {
             data: {
@@ -124,6 +128,8 @@
     }
     var lastsel;
     function initGrid(){
+        var clientHeight = $(window).innerHeight();
+        var height = clientHeight - $('#head').height()- $('.footer-content').height()-150;
         $("#tableList").jqGrid({
             caption: "设置",
             //url: "../set/dictionary/getList",
@@ -149,11 +155,10 @@
             autowidth:true,
             altRows:true,
             //height: 300,
-            height: "100%",
+            height: height,
             rownumbers: true, // 显示行号
             rownumWidth: 35
         });
-
     }
 
     function arrayToJson(o) {

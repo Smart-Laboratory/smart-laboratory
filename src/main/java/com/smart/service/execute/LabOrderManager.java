@@ -30,16 +30,6 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
 	 */
 	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
-	/**
-	 * 获取病人已打印记录
-	 * @param ward
-	 * @param bedNo
-	 * @param patientId
-	 * @param requestIds
-	 * @return
-	 */
-	List<LabOrderVo> getPrintedList(String ward, String bedNo, String patientId, List requestIds);
-
     List<LabOrder> saveAll(List<LabOrder> needSaveLabOrder);
 
     void removeAll(List<LabOrder> needSaveLabOrder);
