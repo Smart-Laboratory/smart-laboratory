@@ -71,15 +71,6 @@ function changeType(select) {
 }
 
 function getHoliday(){
-	var section = $("#section").val();
-	$.get("../pb/pb/getholiday",{section:section},function(data){
-		alert(11);
-		for(var i=0;i<data.length;i++){
-			var name = data[i].name;
-			var holiday = data[i].holiday;
-			alert(name + holiday);
-		}
-	});
 }
 $(function() {
 	$("#labSelect").val($("#section").val());
@@ -152,12 +143,13 @@ $(function() {
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
 			var bz= $("#bz").val();
-			$.post("../pb/pb/submit",{text:text,section:section,date:date,bz:bz},function(data) {
-				if(data){
+			$.post("../pb/pb/ajax/submit",{text:text,section:section,date:date,bz:bz},function(data) {
+				data = jQuery.parseJSON(data);
+				if(data.data=="true"){
 					alert("Success!");
 					window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
 				}else{
-					alert("Fail!")
+					alert(data.data);
 				}
 				
 			});
@@ -169,15 +161,15 @@ $(function() {
 		var section = $("#section").val();
 		var month = $("#month").val();
 		$.get("../pb/pb/workCount",{section:section,month:month},function(data){
-			alert("Success!");
-			for(var i=0;i<data.length;i++){
+			window.location.href="../pb/pb?date=" + $("#date").val()+"&section=" + $("#section").val();
+			/*for(var i=0;i<data.length;i++){
 				var worker = data[i];
-				var name = worker.worker; 
+				var name = worker.worker;
 				$("#nx"+name).html(worker.holiday);
 				$("#yx"+name).html(worker.monthOff);
 				$("#yb"+name).html(worker.workTime);
 				$("#yjx"+name).html(worker.yjx);
-			}
+			}*/
 		});
 
 	});
@@ -197,7 +189,7 @@ $(function() {
 				$("#yb"+name).html(worker.workTime);
 				$("#yjx"+name).html(worker.yjx);
 			}
-		});
+	});
 	$("#pbhead").html($("#test").val());
 	
 	$("#publish").click(function(){

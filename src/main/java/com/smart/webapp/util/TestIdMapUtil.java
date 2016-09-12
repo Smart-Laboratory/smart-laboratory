@@ -16,16 +16,16 @@ public class TestIdMapUtil {
 	
 	public TestIdMapUtil() {}
 
-    public Map<String, Index> getInstance() {
+    public  TestIdMapUtil getInstance() {
 		if(instance.idMap == null){
 			synchronized (instance) {
 				initMap();
 			}
 		}
-		return idMap;
+		return instance;
 	}
 	
-	public Map<String, Index> initMap(){
+	public  Map<String, Index> initMap(){
 		List<Index> list = indexManager.getAll();
 		for (Index t : list) {
 			idMap.put(t.getIndexId(), t);
@@ -34,5 +34,5 @@ public class TestIdMapUtil {
 	}
 	
 	@Autowired
-	private IndexManager indexManager;
+	private  IndexManager indexManager;
 }

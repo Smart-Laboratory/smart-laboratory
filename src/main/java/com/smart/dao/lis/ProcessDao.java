@@ -29,10 +29,19 @@ public interface ProcessDao extends GenericDao<Process, Long> {
 	List<Process> getReceiveList(String sender, Date starttime, Date endtime,int start,int end);
 	
 	@Transactional
+	List<Process> getSendList(String sender, Date starttime, Date endtime,int start,int end);
+	
+	@Transactional
 	int getReceiveListCount(String sender, Date starttime, Date endtime);
 	
 	@Transactional
 	List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState);
+	
+	@Transactional
+	int getSendListCount(String sender, Date starttime, Date endtime);
+	
+	@Transactional
+	List<Object[]> getSendListBySection(String section, Date starttime, Date endtime,int sampleState);
 
     List<Process> saveAll(List<Process> list);
 

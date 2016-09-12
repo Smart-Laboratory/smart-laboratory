@@ -18,7 +18,9 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 	
 	List<Process> getOutList(String sender, Date starttime);
 
-	List<Process> getReceiveList(String sender, Date starttime, Date endtime,int start,int end);
+	List<Process> getReceiveList(String receiver, Date starttime, Date endtime,int start,int end);
+	
+	List<Process> getSendList(String sender, Date starttime, Date endtime,int start,int end);
 	
 	int getReceiveListCount(String sender, Date starttime, Date endtime);
 	
@@ -30,6 +32,17 @@ public interface ProcessManager extends GenericManager<Process, Long> {
 	 * @return
 	 */
 	List<Object[]> getReceiveListBySection(String section, Date starttime, Date endtime,int sampleState);
+	
+	int getSendListCount(String sender, Date starttime, Date endtime);
+	
+	/**
+	 * 根据科室id查询样本送出记录
+	 * @param section
+	 * @param starttime
+	 * @param endtime
+	 * @return
+	 */
+	List<Object[]> getSendListBySection(String section, Date starttime, Date endtime,int sampleState);
 
     List<Process> saveAll(List<Process> needSaveProcess);
 

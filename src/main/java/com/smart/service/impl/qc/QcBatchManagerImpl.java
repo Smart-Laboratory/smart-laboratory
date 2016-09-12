@@ -32,13 +32,13 @@ public class QcBatchManagerImpl  extends GenericManagerImpl<QcBatch, Long> imple
 
     }
 
-    public int getCount(String qcBatch, int start, int end, String sidx, String sord){
-        return qcBatchDao.getCount(qcBatch,start,end,sidx,sord);
+    public int getCount(String lab, String qcBatch, int start, int end, String sidx, String sord){
+        return qcBatchDao.getCount(lab,qcBatch,start,end,sidx,sord);
 
     }
 
-    public List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord){
-        return qcBatchDao.getDetails(qcBatch,start,end,sidx,sord);
+    public List<QcBatch> getDetails(String lab, String qcBatch, int start, int end, String sidx, String sord){
+        return qcBatchDao.getDetails(lab,qcBatch,start,end,sidx,sord);
     }
 
 	public List<QcBatch> getByDevice(String deviceid) {

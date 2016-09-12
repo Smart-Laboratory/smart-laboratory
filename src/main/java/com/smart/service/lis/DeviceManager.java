@@ -11,4 +11,10 @@ public interface DeviceManager extends GenericManager<Device, Long> {
     Device getDeviceByCode(String code);
     List<Device> getDeviceList(String name);
 	List<Device> getDeviceByLab(String lab);
+	/**
+	 * 根据多个id获取device
+	 * @param ids
+	 * @return
+	 */
+	List<Device> getByIds(String ids);
 }

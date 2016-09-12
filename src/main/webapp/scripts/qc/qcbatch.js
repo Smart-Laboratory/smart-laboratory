@@ -14,7 +14,7 @@ TSLAB.Custom=(function(){
             else
                 return null;
         },
-        antiSelected:{},
+        batchSelected:{},
         drugGrid:$('#leftGrid'),
         drugDetailGrid:$('#rightGrid')
     };
@@ -93,25 +93,39 @@ TSLAB.Custom=(function(){
         Edit:function(){
             var rowId = cache.drugGrid.jqGrid('getGridParam','selrow');
             var rowData = cache.drugGrid.jqGrid('getRowData',rowId);
-            //获取已选择培养基
-            $.ajax({
-                url:'../micro/testcase/getTestCaseDetails',
-                type:"POST",
-                dataType:"json",
-                async:false,
-                data:{testCaseId:rowId},
-                success:function(data){
-                    cache.antiSelected = data;
-                }
-            });
             if(!rowId || rowId =='' || rowId==null){
                 layer.msg("请先选择要编辑的数据",{icon:2});
                 return false;
             }
-            public.loadDualListbox();
+            //获取已选择质控品
+            $.ajax({
+                url:'../qc/qcbatch/getBatch',
+                type:"POST",
+                dataType:"json",
+                async:false,
+                data:{id:rowId},
+                success:function(data){
+                    cache.batchSelected = data;
+                    $("#id").val(data.id);
+                    $("#qcBatch").val(data.qcBatch);
+                    $("#sampleType").val(data.sampleType);
+                    $("#qcLevel").val(data.qcLevel);
+                    $("#qcCode").val(data.qcCode);
+                    $("#factory").val(data.factory);
+                    $("#labdepart").val(data.labdepart);
+                    $("#indate").val(data.indate);
+                    $("#outdate").val(data.outdate);
+                    $("#method").val(data.method);
+                    $("#expDate").val(data.expDate);
+                    $("#qcBatchName").val(data.qcBatchName);
+                    $("#deviceid").val(data.deviceid);
+                    
+                    $("#deviceVal").val(data.deviceName);
+                }
+            });
+            
+//            public.loadDualListbox();
             //设置数据
-            $('#id').val(rowData.id);
-            $('#testCaseName').val(rowData.name);
             layer.open({
                 type: 1,
                 area: ['800px','420px'],
@@ -129,12 +143,11 @@ TSLAB.Custom=(function(){
         Save:function(index){
             var obj={};
             obj.qcBatch = $('#qcBatch').val()||'';
-            obj.id= $('#id').val()||'';
-            obj.cultureMediumList =  $('#cultureMediumList').val()||'';
             if(obj.qcBatch ==''){
                 layer.alert('质控批号没有输入，不允许保存',{icon:2});
                 return false;
             }
+            alert($('#addForm').serialize());
             $.ajax({
                 url:'../qc/qcbatch/save',
                 type:"POST",
@@ -144,7 +157,13 @@ TSLAB.Custom=(function(){
                     //console.log(data);
                     if(parseInt(data.success)==0){
                         layer.close(index);
-                        public.search();
+                        cache.drugGrid.jqGrid('setGridParam',{
+                            url: "../qc/qcbatch/getList",
+                            datatype : 'json',
+                            postData : {lab:$("#scode").val(),deviceid:$("#deviceSelect").val()},
+                            //发送数据
+                            page : 1
+                        }).trigger('reloadGrid');//重新载入
                     }else{
                         layer.alert(data.success);
                     }
@@ -168,56 +187,30 @@ TSLAB.Custom=(function(){
             $("#addDialog").find("input,textarea").each(function(){
                 this.value = "";
             });
-            cache.antiSelected = {};
-        },
-        initDualListbox:function() {
-            //仪器设备
-            var cultureMediumList = $('select[name="cultureMediumList"]').bootstrapDualListbox({
-                infoText: false,
-                filterTextClear: "",
-                filterPlaceHolder: '过滤',
-                selectorMinimalHeight: 160,
-                preserveSelectionOnMove: false
-            });
-            var druglistCcontainer = cultureMediumList.bootstrapDualListbox('getContainer');
-            druglistCcontainer.find('.btn').addClass('btn-white btn-info btn-bold');
-        },
-        loadDualListbox:function(){
-            var labdepartment = $('#antibiotics').val()|| '';         //已选部门信息
-            var selectDev = $('#cultureMediumList');
-            selectDev.empty();
-            var cultureMediumList = cache.antibiotics();
-            for (var k in cultureMediumList) {
-                var option = document.createElement("option");
-                option.value = cultureMediumList[k].id;
-                option.text = "["+cultureMediumList[k].id+"]"+cultureMediumList[k].name;
-                if (cache.antiSelected[cultureMediumList[k].id] && cache.antiSelected[cultureMediumList[k].id].length >= 0) {
-                    option.selected = 'selected';
-                }
-                selectDev[0].options.add(option);
-            }
-            $('select[name="cultureMediumList"]').bootstrapDualListbox("refresh");
+            cache.batchSelected = {};
         },
         loadAutocomplete:function(key){
-            if(key!=''){
-                var ids = [];
-                ids = key.split(",");
-                var length = ids.length;
-                key = ids[length-1];
-            }
-            $.ajax({
+        	$("#diviceList").show();
+        	$.ajax({
                 url: "../qc/qcbatch/searchDevice",
                 dataType: "json",
                 data: {
                     maxRows : 12,
-                    name :key
+                    name :key,
+                    chosed :  $('#deviceid').val()
                 },
                 success: function( data ) {
                     var ul = $('#testList');
                     ul.empty();
+                    var choose = $("#deviceid").val();
                     for(i=0;i< data.length;i++){
                         var item = data[i];
-                        var li = $('<li><input type="checkbox" testid="'+item.id+'" testname="'+item.name+'">'+ item.name+'</li>');
+                        if(choose!=null && choose.indexOf(item.id)>=0){
+                        	var li = $('<li><input type="checkbox" testid="'+item.id+'" testname="'+item.name+'">'+ item.name+'</li>');
+                        	li.children("input").prop("checked",true);
+                        }else{
+                        	var li = $('<li><input type="checkbox" testid="'+item.id+'" testname="'+item.name+'">'+ item.name+'</li>');
+                        }
                         ul.append(li);
                     }
                     ul.parent().show();
@@ -236,8 +229,9 @@ TSLAB.Custom=(function(){
                 }
             });
             $('#deviceid').val(deviceId.join(","));
-            $('#device').val(deviceName.join(","));
+            $('#deviceVal').val(deviceName.join(","));
             ul.parent().hide();
+            $('#device').val();
         },
         cancelChose:function(){
             $('#testList').parent().hide();
@@ -257,6 +251,7 @@ TSLAB.Custom=(function(){
                 datatype : "json",
                 height : height,
                 shrinkToFit:false,
+                postData : {lab:$("#scode").val(),deviceid:$("#deviceSelect").val()},
                 width:$('.leftContent').width(),
                 colNames : ['id','质控批号','质控品名称','样本类型','质控水平','质控编码','厂商','方法','生效日期','结束日期','出单人','仪器','部门','失效日期' ],
                 colModel : [
@@ -282,12 +277,12 @@ TSLAB.Custom=(function(){
                     }, 0);
                 },
                 onSelectRow: function(id){
-                    // var rowData = $("#leftGrid").jqGrid('getRowData',id);
+                    var rowData = $("#leftGrid").jqGrid('getRowData',id);
                     cache.drugDetailGrid.jqGrid('setGridParam',{
-                        url: "../micro/testcase/getDetailsList",
+                        url: "../qc/qctest/getList",
                         datatype : 'json',
                         //发送数据
-                        postData : {"testCaseId":id},
+                        postData : {"qcBatch":rowData.qcBatch},
                         page : 1
                     }).trigger('reloadGrid');//重新载入
                 },
@@ -303,23 +298,25 @@ TSLAB.Custom=(function(){
                 pager: "#leftPager",//分页控件的id
                 caption : "质控品设定"
             });
-            //检验项目表设置
+            //靶值设置
             cache.drugDetailGrid.jqGrid({
-                //datatype : "local",
+                url : "../qc/qctest/getList",
                 height :height,
                 width:$('.rightContent').width(),
-                colNames : ['cultureMediumId', 'testCaseId','培养基', '培养方法', '接种方法','染色方法','湿度','温度','空气','周期'],
+                colNames : ['id', '项目id','试验项目','英文缩写', '靶值', '标准差','频率(小时)','是否在用','仪器号','科室','pt低限','pt高限'],
                 colModel : [
-                    {name : 'cultureMediumId',index : 'cultureMediumId',width : 60,hidden : true,key:true, editable: true},
-                    {name : 'testCaseId',index : 'testCaseId',width : 90,hidden:true, editable: true},
-                    {name : 'cultureMedium',index : 'drugName',width : 150, editable: true},
-                    {name : 'cultureMethod',index : 'quantitativeResult',width : 100, editable: true},
-                    {name : 'vaccinateMethod',index : 'qualitativeResult',width : 100, editable: true},
-                    {name : 'stainingMethod',index : 'method',width : 100, editable: true},
-                    {name : 'humidity',index : 'micrange',width : 100, editable: true},
-                    {name : 'temperature',index : 'micrange',width : 100, editable: true},
-                    {name : 'air',index : 'kbrange',width : 100, editable: true},
-                    {name : 'cycle',index : 'kbrange',width : 100, editable: true}
+                    {name : 'id',index : 'id',width : 60,hidden : true,key:true},
+                    {name : 'testId',index : 'testId',width : 90,hidden : true, editable: true,editrules: { edithidden: true }},
+                    {name : 'chineseName',index : 'chineseName',width : 150, editable: true},
+                    {name : 'englishab',index : 'englishab',width : 150, editable: true},
+                    {name : 'targetValue',index : 'targetValue',width : 100, editable: true},
+                    {name : 'stdV',index : 'stdV',width : 100, editable: true},
+                    {name : 'frequency',index : 'frequency',width : 100, editable: true},
+                    {name : 'inuse',index : 'inuse',width : 100, editable: true, edittype : "checkbox",editoptions : {value : "1:0"}},
+                    {name : 'deviceid',index : 'deviceid',width : 100, editable: true},
+                    {name : 'labDepart',index : 'labDepart',width : 100, editable: true},
+                    {name : 'ptlow',index : 'ptlow',width : 100,hidden : true, editable: true, editrules: { edithidden: true },},
+                    {name : 'pthigh',index : 'pthigh',width : 100, hidden:true, editable: true, editrules: { edithidden: true },}
                 ],
                 loadComplete : function() {
                     var table = this;
@@ -336,8 +333,8 @@ TSLAB.Custom=(function(){
                 rownumbers: true, // 显示行号
                 rownumWidth: 35, // the width of the row numbers columns
                 pager: "#rightPager",//分页控件的id
-                caption : "培养基明细",
-                editurl : "editReagent"
+                caption : "靶值设定",
+                editurl : ""
             });
             var navParams = {
                 edit:true,
@@ -355,15 +352,18 @@ TSLAB.Custom=(function(){
                         layer.msg('请先选择方案', {icon: 2,time: 1000});
                         return false;
                     }
-
+                    var rowData = cache.drugGrid.jqGrid('getRowData',groupId);
                     var addParams = {
-                        url:'testcase/saveDetail',
+                        url:'qctest/save?qcBatch='+rowData.qcBatch+'&sampleType='+rowData.sampleType,
                         closeAfterAdd : true,
                         beforeShowForm:function(){
-                            $('#drugName').autocomplete({
+                        	
+                        	$('#labDepart').val($("#scode").html()).attr('readonly', true);
+                        	$("#deviceid").val(rowData.deviceid).attr('readonly',true);
+                            $('#testId').autocomplete({
                                 source: function( request, response ) {
                                     $.ajax({
-                                        url: "../../ajax/searchAntibiotic",
+                                        url: "../ajax/searchTest",
                                         dataType: "json",
                                         data: {
                                             name : request.term
@@ -372,9 +372,10 @@ TSLAB.Custom=(function(){
                                             response( $.map( data, function( result ) {
                                                 return {
                                                     label: result.id + " : " + result.ab + " : " + result.name,
-                                                    value: result.name,
+                                                    value: result.id,
                                                     id : result.id,
-                                                    ab:result.ab
+                                                    ab:result.ab,
+                                                    name:result.name
                                                 }
                                             }));
                                             $("#searchProject").removeClass("ui-autocomplete-loading");
@@ -383,16 +384,17 @@ TSLAB.Custom=(function(){
                                 },
                                 minLength: 1,
                                 select : function(event, ui) {
-                                    $('#id').val(ui.item.id);
-                                    $('#drugId').val(ui.item.id);
-                                    $('#groupId').val(groupId);
+                                    $('#testId').val(ui.item.id);
+                                    $('#chineseName').val(ui.item.name);
+                                    $('#englishab').val(ui.item.ab);
+                                    
                                     $(this).val('');
                                 }
                             });
                         },
                         beforeSubmit : function(postdata, formid){
                             //console.log(postdata);
-                            if(postdata.drugId ==''){
+                            if(postdata.testId ==''){
                                 layer.msg("数据不存在，请选择正确的数据后再保存。");
                                 return false;
                             }
@@ -402,14 +404,14 @@ TSLAB.Custom=(function(){
                     cache.drugDetailGrid.jqGrid("editGridRow","new",addParams);
                 },
                 editfunc : function(rowId){
+                	var groupId=cache.drugGrid.jqGrid('getGridParam','selrow');
+                    var rowData = cache.drugGrid.jqGrid('getRowData',groupId);
                     var editParams = {
-                        editData : {
-                            //triggerName : triggerName,
-                        },
                         beforeShowForm:function(){
-                            $('#tr_drugName').find('#drugName').attr('readonly','true');
+                        	$('#labDepart').attr('readonly', true);
+                        	$("#deviceid").attr('readonly',true);
                         },
-                        url:'testcase/saveDetail',
+                        url:'qctest/save?qcBatch='+rowData.qcBatch+'&sampleType='+rowData.sampleType,
                         closeAfterEdit : true,
                         editCaption: "编辑",
                         bSubmit: "保存",
@@ -420,7 +422,7 @@ TSLAB.Custom=(function(){
                 delfunc:function(rowId){
                     var rowData = cache.drugDetailGrid.jqGrid('getRowData',rowId);
                     layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-                        $.post('../micro/testcase/deleteDetails',{groupId : rowData.groupId,drugId : rowData.drugId},function(data) {
+                        $.post('../qc/qctest/delete',{id : rowData.id},function(data) {
                             cache.drugDetailGrid.jqGrid('delRowData',rowId);
                         });
                         layer.close(index);
@@ -453,8 +455,6 @@ TSLAB.Custom=(function(){
         },
         init:function(){
             public.initGrid();
-            public.initDualListbox();
-            public.loadDualListbox();
 
             laydate({
                 elem: '#indate',
@@ -480,18 +480,34 @@ TSLAB.Custom=(function(){
                 }, 400);
             });
 
-            //$('#device').click(function (e) {
-            //    TSLAB.Custom.loadAutocomplete($('#device').val()||'');
-            //});
-
-
-
-            // programmatically add/remove a tag
-            // var $tag_obj = $('#form-deviceid-tags').data('tag');
-            // $tag_obj.add('Programmatically Added');
-            //
-            // var index = $tag_obj.inValues('some tag');
-            // $tag_obj.remove(index);
+            $('#deviceEdit').click(function (e) {
+                TSLAB.Custom.loadAutocomplete($('#device').val()||'');
+            });
+            
+            $("#deviceSelect").change(function(){
+            	cache.drugGrid.jqGrid('setGridParam',{
+	                url:'../qc/qcbatch/getList',
+	                postData : {lab:$("#scode").val(),deviceid:$("#deviceSelect").val()},
+            	}).trigger('reloadGrid');
+            });
+            	
+            labChange=function(select){
+        		$.ajax({
+        			  type: 'POST',
+        			  url: "../audit/labChange?lab="+$(select).children().attr("title"),
+        			  success:function(data){
+        				  var section = $(select).children().attr("title");
+        				  $("#labText").html($(select).children().html());
+        				  $("#scode").val(section);
+        				  cache.drugGrid.jqGrid('setGridParam',{
+        		                url:'../qc/qcbatch/getList',
+        		                postData : {lab:section,deviceid:$("#deviceSelect").val()},
+        				  }).trigger('reloadGrid');
+        			  }
+        		});
+        		
+        	}
+            
         }
 
     };
@@ -511,18 +527,7 @@ $(function(){
         }
     });
 
-    var tag_input = $('#deviceidtags');
-    tag_input.tag({
-        placeholder:tag_input.attr('placeholder'),
-        style:tag_input.attr('class'),
-        source: function(query, process) {
-            $.get("../set/device/ajax/getSearchList",{query:query},function(data) {
-                var json = jQuery.parseJSON(data);
-                process(json.list);
-            });
-        }
-    });
-
+    
     TSLAB.Custom.init();
 
 

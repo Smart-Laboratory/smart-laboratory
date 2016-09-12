@@ -20,10 +20,10 @@ public interface QcBatchDao extends GenericDao<QcBatch, Long> {
     void saveDetails(List<QcBatch> qcBatchList);
     
     @Transactional
-    int getCount(String qcBatch, int start, int end, String sidx, String sord);
+    int getCount(String lab, String qcBatch, int start, int end, String sidx, String sord);
     
     @Transactional
-    List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+    List<QcBatch> getDetails(String lab, String qcBatch, int start, int end, String sidx, String sord);
     
     @Transactional
 	List<QcBatch> getByDevice(String deviceid);

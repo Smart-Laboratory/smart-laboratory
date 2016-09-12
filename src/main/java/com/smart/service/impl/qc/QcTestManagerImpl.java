@@ -29,7 +29,6 @@ public class QcTestManagerImpl  extends GenericManagerImpl<QcTest, Long> impleme
 
     public void saveDetails(List<QcTest> qcBatchList){
         qcTestDao.saveDetails(qcBatchList);
-
     }
 
     public int getCount(String qcBatch, int start, int end, String sidx, String sord){

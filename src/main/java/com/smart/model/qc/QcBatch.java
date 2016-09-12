@@ -23,7 +23,7 @@ public class QcBatch {
 	private int qcLevel;			//质控水平
 	private String qcCode;			//质控编码
 	private String factory;			//厂家
-	private String medthod;			//方法学
+	private String method;			//方法学
 	private Date indate;			//入库时间 
 	private Date outdate;			//出库时间
 	private String outer;			//出库人
@@ -91,12 +91,12 @@ public class QcBatch {
 	}
 	
 	@Column
-	public String getMedthod() {
-		return medthod;
+	public String getMethod() {
+		return method;
 	}
 	
-	public void setMedthod(String medthod) {
-		this.medthod = medthod;
+	public void setMethod(String method) {
+		this.method = method;
 	}
 	
 	@Column

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface QcBatchManager extends GenericManager<QcBatch, Long> {
     void saveDetails(List<QcBatch> qcBatchList);
-    int getCount(String qcBatch, int start, int end, String sidx, String sord);
-    List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+    int getCount(String lab, String qcBatch, int start, int end, String sidx, String sord);
+    List<QcBatch> getDetails(String lab, String qcBatch, int start, int end, String sidx, String sord);
 	List<QcBatch> getByDevice(String deviceid);
 }

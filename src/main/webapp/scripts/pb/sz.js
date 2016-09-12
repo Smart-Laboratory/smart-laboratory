@@ -15,7 +15,7 @@ function getWI() {
                     url: "../pb/sz/ajax/getWinfo",
                     datatype: "json",
                     jsonReader: {repeatitems: false},
-                    colNames: ['ID', '使用', '工号', '姓名', '性别', '科室', '开始工作时间', '类型', '电话', '班次', '组内顺序', '夜班顺序', '良渚班', '外出班', '海创园', '入院', '年休', '积休', '历年积休', '积休使用', '所在学校', '备注'],
+                    colNames: ['ID', '使用', '工号', '姓名', '性别', '科室', '开始工作时间', '类型', '电话', '班次', '组内顺序', '夜班顺序', '良渚班', '外出班', '海创园', '入院', '年休', '积休', '历年积休', '历休使用', '所在学校', '备注'],
                     colModel: [
                         {name: 'id', index: 'id', hidden: true, editable: true},
                         {
@@ -96,7 +96,7 @@ function getWI() {
                             name: 'shift',
                             index: 'shift',
                             width: 100,
-                            editable: true,
+                            editable: false,
                             editoptions: {size: 30},
                             sortable: false,
                             search: false

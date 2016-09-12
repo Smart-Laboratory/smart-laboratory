@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.smart.Constants;
 import com.smart.model.pb.Arrange;
 import com.smart.model.pb.Shift;
 import com.smart.model.pb.WInfo;
@@ -76,13 +77,20 @@ public class PbszCountController extends PbBaseController{
 		//统计本月公休
 		List<String> gxList = arrangeManager.getGXcount(month);
 		
+		int isnew = 1;
+		double lxsyOld = 0;
 		for(WInfo w : wInfos){
 			Set<String> workdate = new HashSet<String>();
-			
+			isnew = 1;
+			lxsyOld = 0;
 			WorkCount workCount = new WorkCount();
 			for(WorkCount wc: workCounts){
-				if(wc.getWorker().equals(w.getName()))
+				if(wc.getWorker().equals(w.getName())){
 					workCount = wc;
+					isnew = 0;
+					lxsyOld = workCount.getDefeholiday();
+				}
+				
 			}
 			if(workCount.getSection()==null){
 				workCount.setSection(section);
@@ -92,6 +100,8 @@ public class PbszCountController extends PbBaseController{
 			double holiday = 0;
 			double worktime = 0;
 			double monthOff = 0;
+			double lxsy = 0;
+			
 			
 			String shifts = "";
 			for(Arrange arrange : arranges){
@@ -117,7 +127,10 @@ public class PbszCountController extends PbBaseController{
 				}
 				if(shift.contains("休") && !shift.contains("公休")){
 					monthOff += 1;
-				}				
+				}		
+				if(shift.equals(Constants.defeholidayhis)){
+					lxsy += 1;
+				}
 			}
 			//计算积修
 			double yjx = 0;
@@ -151,6 +164,7 @@ public class PbszCountController extends PbBaseController{
 			workCount.setMonthOff(days-workdate.size()+monthOff);
 			workCount.setYjx(yjx);
 			workCount.setWorkMonth(month);
+			workCount.setDefeholiday(lxsy);
 			wList.add(workCount);
 			
 	        String defeholiday = w.getDefeHoliday();
@@ -168,6 +182,11 @@ public class PbszCountController extends PbBaseController{
 	        	defeholiday += month+":"+yjx+";";
 	        }
 	        w.setDefeHoliday(defeholiday);
+	        if(isnew==1){
+	        	w.setLxsy(w.getLxsy()+lxsy);
+	        }else{
+	        	w.setLxsy(w.getLxsy()+lxsy-lxsyOld);
+	        }
 	        
 	        //计算年休
 //			double nx = w.getHolidayNum()-workCountManager.getYearCount(month.substring(0, 4),w.getName());

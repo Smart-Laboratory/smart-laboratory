@@ -34,12 +34,15 @@ public class QcBatchDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> imp
      * @param sord
      * @return
      */
-    public int getCount(String qcBatch, int start, int end, String sidx, String sord) {
-        String sql = "select count(*)  from QcBatch  c where c.qcBatch=:qcBatch";
+    public int getCount(String lab, String deviceId, int start, int end, String sidx, String sord) {
+        String sql = "select count(*)  from QcBatch  c where c.labdepart='"+lab+"' ";
+        if(deviceId!=null && !deviceId.isEmpty()){
+        	sql += " and c.deviceid like '%"+deviceId+"%' ";
+        }
+        
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
         Query q =  getSession().createQuery(sql);
-        q.setString("qcBatch",qcBatch);
         return new Integer(q.uniqueResult() + "");
     }
 
@@ -53,12 +56,11 @@ public class QcBatchDaoHibernate  extends GenericDaoHibernate<QcBatch, Long> imp
      * @return
      */
     @SuppressWarnings("unchecked")
-	public List<QcBatch> getDetails(String qcBatch, int start, int end, String sidx, String sord) {
-        String sql = "from QcBatch c where c.qcBatch=:qcBatch ";
+	public List<QcBatch> getDetails(String lab, String deviceId, int start, int end, String sidx, String sord) {
+        String sql = "from QcBatch c where c.labdepart='"+lab+"' and c.deviceid like '%"+deviceId+"%'";
         sidx = sidx.equals("") ? "id" : sidx;
         sql +=" order by  " +sidx + " " + sord;
         Query q = getSession().createQuery(sql);
-        q.setString("qcBatch",qcBatch);
         if(end !=0){
             q.setFirstResult(start);
             q.setMaxResults(end);

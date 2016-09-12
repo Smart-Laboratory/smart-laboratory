@@ -87,4 +87,9 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
 	public List<Device> getDeviceByLab(String lab) {
 		return getSession().createQuery("from Device where lab='" + lab + "' order by id").list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Device> getByIds(String ids){
+		return getSession().createQuery("from Device where id in ("+ids+")").list();
+	}
 }

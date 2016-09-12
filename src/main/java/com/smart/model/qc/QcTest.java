@@ -29,6 +29,8 @@ public class QcTest {
 	private String pthigh;
 	private String ruleSelected;
 	
+	private String testId;
+	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_QC_TEST")
@@ -148,4 +150,15 @@ public class QcTest {
 	public void setRuleSelected(String ruleSelected) {
 		this.ruleSelected = ruleSelected;
 	}
+
+	@Column
+	public String getTestId() {
+		return testId;
+	}
+
+	public void setTestId(String testId) {
+		this.testId = testId;
+	}
+	
+	
 }

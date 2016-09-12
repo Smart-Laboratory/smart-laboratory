@@ -5,6 +5,7 @@ import com.smart.dao.qc.QcTestDao;
 import com.smart.model.qc.QcTest;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @Date:2016/7/28 11:07
  * @Version:
  */
+@Repository("qcTestDao")
 public class QcTestDaoHibernate  extends GenericDaoHibernate<QcTest, Long> implements QcTestDao {
     public QcTestDaoHibernate() {
         super(QcTest.class);

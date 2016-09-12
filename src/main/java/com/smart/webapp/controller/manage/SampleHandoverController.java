@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
 import com.smart.model.lis.ReceivePoint;
-import com.smart.model.lis.Sample;
 import com.smart.model.lis.Process;
 import com.smart.model.lis.Ward;
 import com.smart.model.user.User;
@@ -76,9 +75,8 @@ public class SampleHandoverController {
 	@RequestMapping(value = "/ajax/outsample*", method = RequestMethod.GET)
 	@ResponseBody
 	public String outSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+		initPointMap();
 		JSONObject obj = new JSONObject();
-		int isupdate = 0;
 		try {
 			long doct = Long.parseLong(request.getParameter("doct"));
 			String operator = request.getParameter("operator");
@@ -243,26 +241,16 @@ public class SampleHandoverController {
 		String sender = request.getParameter("operator");
 		String type = request.getParameter("type");
 		
-		List<Sample> samples = new ArrayList<Sample>();
-		Map<Long, Sample> sMap = new HashMap<Long,Sample>();
+		Map<Long, SyncPatient> sMap = new HashMap<Long,SyncPatient>();
 		List<Process> processes  = new ArrayList<Process>();
+		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
 		
+		int size = 0;
 		if(type.equals("1")){//标本送出
-			processes = processManager.getOutList(sender, startTime);
-			if(processes==null || processes.size()==0)
-				return null;
-			String sampleids = "";
-			for(Process p : processes){
-				sampleids += p.getSampleid()+",";
-			}
-			samples = sampleManager.getByIds(sampleids.substring(0,sampleids.length()-1));
-			for(Sample s : samples){
-				if(s!=null)
-					sMap.put(s.getId(), s);
-			}
+			size = processManager.getReceiveListCount(sender, startTime, null);
+			
 		}
 		DataResponse dataResponse = new DataResponse();
-		int size = samples.size();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);
 		if (x != 0) {
@@ -272,18 +260,30 @@ public class SampleHandoverController {
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
 		
-		samples = samples.subList(start, end>size?size:end);
+		processes = processManager.getSendList(sender, startTime, null,start,end>size?size:end);
+		
+		if(processes==null || processes.size()==0)
+			return null;
+		String sampleids = "";
+		for(Process p : processes){
+			sampleids += p.getSampleid()+",";
+		}
+		List<SyncPatient> syncPatients = rmiService.getByDoctadvisenos(sampleids.substring(0,sampleids.length()-1));
+		for(SyncPatient s : syncPatients){
+			if(s!=null)
+				sMap.put(s.getDOCTADVISENO(), s);
+		}
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		for(Process p : processes){
-			Sample s = sMap.get(p.getSampleid());
+			SyncPatient s = sMap.get(p.getSampleid());
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("doctadviseno", p.getSampleid());
 			if(s!=null){
-				map.put("patientname", s.getPatientname());
-				map.put("patientid", s.getPatientId());
-				map.put("inspectionName", s.getInspectionName());
-				map.put("labdepartment", s.getSectionId());
+				map.put("patientname", s.getPATIENTNAME());
+				map.put("patientid", s.getPATIENTID());
+				map.put("inspectionName", s.getEXAMINAIM());
+				map.put("labdepartment", sectionUtil.getValue(s.getLABDEPARTMENT()));
 			}
 			map.put("requesttime",p.getRequesttime()==null?"":Constants.SDF.format(p.getRequesttime()));
 			map.put("requester", p.getRequester());
@@ -291,6 +291,8 @@ public class SampleHandoverController {
 			map.put("executor", p.getExecutor());
 			map.put("sendtime", p.getSendtime()==null?"":Constants.SDF.format(p.getSendtime()));
 			map.put("sender", p.getSender());
+			map.put("ksreceivetime", p.getKsreceivetime()==null?"":Constants.SDF.format(p.getKsreceivetime()));
+			map.put("ksreceiver", p.getKsreceiver());
 			
 			dataRows.add(map);
 		}

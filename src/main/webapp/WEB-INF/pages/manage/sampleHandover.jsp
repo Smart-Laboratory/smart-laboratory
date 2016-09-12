@@ -9,6 +9,7 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
+	<title>标本交接</title>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery-ui.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/bootstrap.min.js"/>"></script>
@@ -170,8 +171,8 @@
 							</div>
 							
 							<h4>标本送出列表</h4>
-							<div id="outListDiv" class="col-sm-12">
-								<table id="outList"></table>
+							<div id="outListDiv" class="col-sm-12" style="overflow:auto;">
+								<table id="outList" class="table table-striped table-bordered table-hover"></table>
 								<div id="pager"></div>
 							</div>
 							

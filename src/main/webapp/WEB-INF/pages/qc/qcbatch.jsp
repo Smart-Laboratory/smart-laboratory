@@ -122,6 +122,9 @@
             background-color: #2e8ded;
             color: #fff;
         }
+        .EditTable tr:first-child {
+   			display: table-row !important;
+		}
     </style>
 </head>
 <div class="row" id="toolbar">
@@ -139,6 +142,16 @@
                 <i class="ace-icon fa fa-times bigger-110"></i>
                 <fmt:message key="button.delete" />
             </button>
+            <div class="form-group col-xs-2" style="margin-bottom:5px;">
+            	<label class="col-xs-4 control-label no-padding-right" style="text-align:right;" for="deviceSelect">选择仪器 </label>
+            	<div class="col-xs-8">
+                	<select id="deviceSelect"  name="deviceSelect" class="col-xs-12">
+	            		<c:forEach items="${devices }" var="dev">
+	            			<option value="${dev.key }">${dev.value }</option>
+	            		</c:forEach>
+	            	</select>
+            	</div>
+            </div>
             <div class="input-group col-sm-3 " style="float: right;" >
                 <input type="text" id="query" class="form-control search-query" placeholder="输入编号或名称" />
 			<span class="input-group-btn">
@@ -180,15 +193,8 @@
             </div>
         </div>
 
-            <%--<input type="text" id="device" name="device" placeholder="仪器" class="col-xs-12"/>--%>
-                <%--<div class="list" style="display: none">--%>
-                    <%--<div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">--%>
-                        <%--<a id="btnCancelChose" class="btnCancelChose" onclick="TSLAB.Custom.cancelChose()">取消</a><a id="btnChose" class="btnChose" onclick="TSLAB.Custom.choseItem()">选择</a>--%>
-                    <%--</div>--%>
-                    <%--<ul id="testList" class="testlist">--%>
-                    <%--</ul>--%>
-
-                <%--</div>--%>
+            
+             
 
 
         <div class="form-group">
@@ -213,7 +219,11 @@
             </div>
             <label class="col-xs-2 control-label no-padding-right" for="labdepart">实验室部门 </label>
             <div class="col-xs-4">
-                <input type="text" id="labdepart"  name="labdepart" placeholder="实验室部门" value="" class="col-xs-12 text"/>
+            	<select id="labdepart"  name="labdepart" class="form-control">
+            		<c:forEach items="${sections }" var="section">
+            			<option value="${section.code }">${section.name }</option>
+            		</c:forEach>
+            	</select>
             </div>
         </div>
         <div class="form-group">
@@ -229,7 +239,7 @@
         <div class="form-group">
             <label class="col-xs-2 control-label no-padding-right" for="medthod">方法学 </label>
             <div class="col-xs-4">
-                <input type="text" id="medthod" name="medthod" placeholder="方法学" value="" class="col-xs-12 text"/>
+                <input type="text" id="method" name="method" placeholder="方法学" value="" class="col-xs-12 text"/>
             </div>
             <label class="col-xs-2 control-label no-padding-right" for="expDate">失效日期 </label>
             <div class="col-xs-4">
@@ -241,10 +251,35 @@
             <div class="col-xs-4">
                 <input type="text" id="qcBatchName" name="qcBatchName" placeholder="质控品名称" class="col-xs-12"/>
             </div>
-            <label class="col-sm-2 control-label no-padding-right" for="deviceidtags">仪器</label>
-            <div class="col-sm-4" id="examTag">
-                <input type="text" name="deviceidtags" id="deviceidtags" placeholder="输入仪器的中文、拼音" class="col-sm-12"/>
+            <label class="col-xs-2 control-label no-padding-right" for="deviceid">仪器</label>
+            <div class="col-xs-4">
+            	<div class="input-group col-xs-12 " style="float: right;" >
+            		<input id="deviceid" name="deviceid" type="hidden" />
+	                <input type="text" id="deviceVal" name="deviceVal" placeholder="仪器" class="col-xs-12 " disabled />
+					<span class="input-group-btn">
+						<button type="button" id="deviceEdit" class="btn btn-purple btn-sm" >
+		                    	编辑
+		                    <i class="ace-icon glyphicon glyphicon-edit icon-on-right"></i>
+		                </button>
+					</span>
+	            </div>
+	            
+	                <div id="diviceList" class="list" style="display: none">
+	                	<input type="text" id="device" name="device" placeholder="请输入仪器id/名称" class="col-xs-12" />
+	                    <div style="width: 100%;background: #eee;text-align: right;pointer-events: auto;">
+	                        <a id="btnCancelChose" class="btnCancelChose" onclick="TSLAB.Custom.cancelChose()">取消</a><a id="btnChose" class="btnChose" onclick="TSLAB.Custom.choseItem()">选择</a>
+	                    </div>
+	                    <ul id="testList" class="testlist">
+	                    </ul>
+	
+	                </div>
             </div>
+            
+            
+            
+            <!-- <div class="col-sm-4" id="examTag">
+                <input type="text" name="deviceidtags" id="deviceidtags" placeholder="输入仪器的中文、拼音" class="col-sm-12"/>
+            </div> -->
 
         </div>
     </form>

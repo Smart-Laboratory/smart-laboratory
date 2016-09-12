@@ -35,6 +35,7 @@ import com.smart.service.SxArrangeManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
 import com.smart.service.lis.SectionManager;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.service.RMIService;
 
@@ -70,9 +71,10 @@ public class PbController {
 	SimpleDateFormat sdf2 = new SimpleDateFormat("EEE");
 	
 	
-	@RequestMapping(value = "/submit*", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/submit*", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean submit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public String submit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		JSONObject o = new JSONObject();
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		
 		String text = request.getParameter("text");
@@ -93,6 +95,14 @@ public class PbController {
 			wInfos = getWinfoBySection(month,section);
 		}else{
 			wInfos = wInfoManager.getBySection(section);
+		}
+		
+		String isLxsy = IsLxsyOutOfRange(text, wInfos);
+		if(isLxsy!=null && !isLxsy.isEmpty()){
+			o.put("data", isLxsy);
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().print(o.toString());
+			return null;
 		}
 		
 		for(WInfo wInfo : wInfos){
@@ -176,7 +186,43 @@ public class PbController {
 		
 		arrangeManager.saveAll(list);
 		System.out.println(list.size()+"保存完成");
-		return true;
+		o.put("data", "true");
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(o.toString());
+		return null;
+	}
+	/**
+	 * 判断用户历休使用是否超标
+	 * @param str
+	 * @return
+	 */
+	public String IsLxsyOutOfRange(String str, List<WInfo> wList){
+		Map<String, Integer> pMap = new HashMap<String ,Integer>();
+		for(String s : str.split(",")){
+			String[] info = s.split(":");
+			int shifts = 0;
+			if(info.length<3 || !info[2].equalsIgnoreCase(Constants.defeholidayhis)){
+				continue;
+			}
+			if(pMap.keySet().contains(info[0])){
+				shifts = pMap.get(info[0]);
+				pMap.put(info[0], ++shifts);
+			}else{
+				pMap.put(info[0], 1);
+			}
+		}
+		//list转map
+		Map<String, WInfo> wMap = new HashMap<String,WInfo>();
+		
+		for(WInfo w: wList)
+			wMap.put(w.getName(), w);
+		
+		for(String name : pMap.keySet()){
+			if(wMap.get(name)==null || wMap.get(name).getDefeHolidayNum()<pMap.get(name)){
+				return name+" 使用历休超过限制！";
+			}
+		}
+		return null;
 	}
 	
 	@RequestMapping(value = "/kssubmit*", method = RequestMethod.POST)

@@ -40,4 +40,8 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long> implemen
 	public List<Device> getDeviceByLab(String lab) {
 		return deviceDao.getDeviceByLab(lab);
 	}
+	
+	public List<Device> getByIds(String ids){
+		return deviceDao.getByIds(ids);
+	}
 }

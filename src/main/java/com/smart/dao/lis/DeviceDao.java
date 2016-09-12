@@ -55,4 +55,11 @@ public interface DeviceDao extends GenericDao<Device, Long> {
 	@Transactional
 	List<Device> getDeviceByLab(String lab);
 
+	/**
+	 * 根据多个id获取device
+	 * @param ids
+	 * @return
+	 */
+	@Transactional
+	List<Device> getByIds(String ids);
 }

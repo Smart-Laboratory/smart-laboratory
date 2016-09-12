@@ -294,4 +294,10 @@ public final class Constants {
 	 * 医学检验科编号
 	 */
 	public final static String LaboratoryCode = "21";
+	
+	/**
+	 * 排班特殊班次
+	 */
+	public final static String defeholidayhis = "历休";
+	public final static String holiday = "公休"; //法定节假日
 }
