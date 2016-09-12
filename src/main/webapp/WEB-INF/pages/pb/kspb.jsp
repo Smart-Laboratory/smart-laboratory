@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
@@ -126,7 +127,9 @@ $(function() {
 				
 				var value = $(this).html();
 				if($(this).attr("class").indexOf("gx")>=0)
-					value += "\u516C\u4F11;";
+					value += "公休;";
+				if($(this).attr("class").indexOf("rx")>=0)
+					value += "日休;";
 				text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
 			$.post("../pb/pb/kssubmit",{text:text,type:type,date:date},function(data) {
@@ -147,13 +150,24 @@ $(function() {
 		var shifts=$("#"+id).html();
 		$.each($("#shiftSelect input"),function(n,v){
 			if(v.checked){
-				if(v.value == "\u516C\u4F11"){
+				if(v.value == "公休"){
 					if($("#"+id).attr("class").indexOf("gx")>=0){
 						$("td[name='"+name+"']").css("background","#FFF");
 						$("td[name='"+name+"']").removeClass("gx");
 					}else{
 						$("td[name='"+name+"']").css("background","#FDFF7F");
 						$("td[name='"+name+"']").addClass("gx");
+						$("td[name='"+name+"']").removeClass("rx");
+					}
+					
+				}else if(v.value == "日休"){
+					if($("#"+id).attr("class").indexOf("rx")>=0){
+						$("td[name='"+name+"']").css("background","#FFF");
+						$("td[name='"+name+"']").removeClass("rx");
+					}else{
+						$("td[name='"+name+"']").css("background","#7CFC00");
+						$("td[name='"+name+"']").addClass("rx");
+						$("td[name='"+name+"']").removeClass("gx");
 					}
 					
 				}else if(shifts.indexOf(v.value)>=0){
