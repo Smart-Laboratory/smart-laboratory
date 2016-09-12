@@ -52,9 +52,8 @@ public class TestTubeController {
 
         DataResponse dataResponse = new DataResponse();
         List<TestTube> list = new ArrayList<TestTube>();
-        int size = testTubeManager.getTestTubeCount(query, type);
-
-        list = testTubeManager.getTestTubeList(query, type, start, end, sidx, sord);
+        int size = testTubeManager.getTestTubeCount(query);
+        list = testTubeManager.getTestTubeList(query, start, end, sidx, sord);
 
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
         dataResponse.setRecords(size);
@@ -92,14 +91,18 @@ public class TestTubeController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/saveDevice*", method = RequestMethod.POST)
+    @RequestMapping(value = "/save*", method = RequestMethod.POST)
     @ResponseBody
-    public String saveDevice(@ModelAttribute @Validated TestTube testTube, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String save(@ModelAttribute @Validated TestTube testTube, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String id = request.getParameter("id");
         JSONObject success = new JSONObject();
         String method = request.getParameter("method");
         //System.out.println("method==>"+method);
-        testTubeManager.save(testTube);
+        try {
+            testTubeManager.save(testTube);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         success.put("success", "0");
         return success.toString();
     }

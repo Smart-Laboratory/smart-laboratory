@@ -20,12 +20,12 @@ public class TestTubeDaoHibernate extends GenericDaoHibernate<TestTube,Long> imp
     }
 
     @Override
-    public List<TestTube> getTestTubeList(String query, String type, int start, int end, String sidx, String sord) {
-        String sql = "from TestTube t where 1=1 ";
+    public List<TestTube> getTestTubeList(String query,  int start, int end, String sidx, String sord) {
+        String sql = " from TestTube t where 1=1 ";
         if(query != null && !query.equals(""))
             sql += " and t.name  like '%" +query +"%'";
 
-        sidx = sidx.equals("")?"code":sidx;
+        sidx = sidx.equals("")?"id":sidx;
         sql +=" order by  " +sidx + " " + sord;
 
         Query q =  getSession().createQuery(sql);
@@ -38,7 +38,7 @@ public class TestTubeDaoHibernate extends GenericDaoHibernate<TestTube,Long> imp
     }
 
     @Override
-    public int getTestTubeCount(String query, String type) {
+    public int getTestTubeCount(String query) {
         String sql = "select count(1) cnt from lab_testtube where 1=1";
         if(query != null && !query.equals(""))
             sql += " and name like '%" +query +"%'";

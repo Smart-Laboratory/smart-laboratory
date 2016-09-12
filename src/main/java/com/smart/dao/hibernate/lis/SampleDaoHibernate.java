@@ -79,6 +79,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			builder.append(date);
 		}
 		builder.append("%' order by sampleNo");
+		System.out.println(builder.toString());
 		Query query = getSession().createQuery(builder.toString());
 
 		System.out.println(query.getQueryString());

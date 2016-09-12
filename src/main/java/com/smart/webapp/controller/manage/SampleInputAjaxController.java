@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.execute.LabOrder;
+import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.*;
 import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
@@ -43,7 +45,8 @@ public class SampleInputAjaxController {
 	private YlxhManager ylxhManager = null;
 	@Autowired
 	private UserManager userManager = null;
-	
+	@Autowired
+	private LabOrderManager labOrderManager = null;
 	@Autowired
 	private SampleManager sampleManager = null;
 	@Autowired
@@ -370,6 +373,7 @@ public class SampleInputAjaxController {
 	
 	@RequestMapping(value = "/receive*", method = RequestMethod.GET)
 	public String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
 		Sample sample = null;
 		Process process = null;
 		String code = request.getParameter("id");
@@ -413,6 +417,11 @@ public class SampleInputAjaxController {
 			process.setReceivetime(new Date());
 			sampleManager.save(sample);
 			processManager.save(process);
+
+			LabOrder labOrder = labOrderManager.get(Long.parseLong(code));
+			//计试管费、采血费
+			ChargeUtil.getInstance().tubeFee(user,labOrder);
+
 			o.put("success", 3);
 			o.put("message", "医嘱号为"+ code + "的标本接收成功！");
 		}

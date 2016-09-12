@@ -1,0 +1,47 @@
+#*****************************
+ * 检验报告单模版
+ * **************************#
+<html>
+<body>
+    #parse ("testReportHead.vm")
+<div id="resultDiv"
+     style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <th>
+            <td>No.</td>
+            <td>项目</td>
+            <td>当次结果</td>
+            <td>上次结果</td>
+            <td>参考范围</td>
+            <td>单位</td>
+        </th>
+        #set ($i=0)
+        #foreach ($element in $list)
+            #set($i=$i+1)
+            <tr>
+                <td>$i</td>
+                <td>$element.itemName</td>
+                <td>$element.result</td>
+                <td>$element.hisResult</td>
+                <td>$element.lo</td>
+                <td>$element.unit</td>
+            </tr>
+        #end
+    </table>
+</div>
+<div id="imageDiv"></div>
+<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;" id="advise">
+    <h4><b>
+        <fmt:message key="sample.diagadvise"/>
+        :</b></h4>
+    <div id="adviseHtml"></div>
+</div>
+<div id="historyChart" style="float:left;width:96%;margin-left:2%;padding:10px;border-top:1px solid #000000;">
+    <p>
+        <fmt:message key="sample.history.chart"/>
+    </p>
+</div>
+    #parse ("testReportFooter.vm")
+</body>
+</html>
+

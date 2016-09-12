@@ -9,6 +9,6 @@ import java.util.List;
  * Created by zcw on 2016/9/9.
  */
 public interface TestTubeManager  extends GenericManager<TestTube, Long> {
-    List<TestTube> getTestTubeList(String query, String type, int start, int end, String sidx, String sord);
-    int getTestTubeCount(String query,String type);
+    List<TestTube> getTestTubeList(String query, int start, int end, String sidx, String sord);
+    int getTestTubeCount(String query);
 }

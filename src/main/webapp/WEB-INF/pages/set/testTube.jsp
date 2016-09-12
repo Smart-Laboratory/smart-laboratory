@@ -1,24 +1,22 @@
 <%--
   Created by IntelliJ IDEA.
   User: zhou
-  Date: 2016/5/17
+  Date: 2016/9/09
   Time: 16:24
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
-    <title><fmt:message key="set.device"/></title>
+    <title>试管设置</title>
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
     <script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
     <script type="text/javascript" src="../scripts/layer/layer.js"></script>
-    <script type="text/javascript" src="../scripts/set/device.js"></script>
+    <script type="text/javascript" src="../scripts/set/testTube.js"></script>
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
-
-    <title><fmt:message key="set.device"/></title>
 </head>
 <style>
     .laftnav{
@@ -89,15 +87,9 @@
     </div>
 </div>
 <div style="clear: both"></div>
-<div id="addDialog" style="display: none;width: 500px;overflow: hidden" class="row">
+<div id="addDialog" style="display: none;width: 400px;overflow: hidden" class="row">
     <form id="addForm" class="form-horizontal" action="<c:url value='../set/device/saveDevice'/>" method="post">
-        <div class="form-group">
-            <div class="space-4"></div>
-            <label class="col-xs-3 control-label no-padding-right" for="name"> 编号 </label>
-            <div class="col-xs-8">
-                <input type="text" id="id" name="id" placeholder="编号" class="col-xs-8"/>
-            </div>
-        </div>
+        <input type="hidden" id="id" name="id" placeholder="编号" class="col-xs-8"/>
         <div class="form-group">
             <div class="space-4"></div>
             <label class="col-xs-3 control-label no-padding-right" for="name"> 名称 </label>
@@ -106,103 +98,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="type">类型</label>
+            <label class="col-xs-3 control-label no-padding-right" for="price">单价</label>
             <div class="col-xs-8">
-                <select id="type" name="type">
-                    <c:forEach var="item" items="${typeList}">
-                        <option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
-                    </c:forEach>
-                </select>
+                <input type="text" id="price" name="price" placeholder="单价" datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" nullmsg="不能为空" errormsg="必须为数字，可以有小数" class="col-xs-8"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="lab"> 所属科室 </label>
+            <label class="col-xs-3 control-label no-padding-right" for="feeItemId">费用项目ID</label>
             <div class="col-xs-8">
-                <select id="lab" name="lab">
-                    <c:forEach var="item" items="${departList}">
-                        <option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="comport"> COM口 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="comport" name="comport">
-                    <option value="1">COM1</option>
-                    <option value="2">COM2</option>
-                    <option value="3">COM3</option>
-                    <option value="4">COM4</option>
-                    <option value="5">COM5</option>
-                    <option value="6">COM6</option>
-                    <option value="7">COM7</option>
-                    <option value="8">COM8</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="baudrate"> 波特率 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="baudrate" name="baudrate">
-                    <option value="300">300</option>
-                    <option value="600">600</option>
-                    <option value="1200">1200</option>
-                    <option value="1800">1800</option>
-                    <option value="2400">2400</option>
-                    <option value="4800">4800</option>
-                    <option value="7200">7200</option>
-                    <option value="9600">9600</option>
-                    <option value="14400">14400</option>
-                    <option value="19200">19200</option>
-                    <option value="28800">28800</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="parity"> 校验位 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="parity" name="parity">
-                    <option value="N">无</option>
-                    <option value="O">奇校验</option>
-                    <option value="E">偶校验</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="databit"> 数据位 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="databit" name="databit">
-                    <option value="8">8</option>
-                    <option value="7">7</option>
-                    <option value="6">6</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="databit"> 停止位 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="stopbit" name="stopbit">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-3 control-label no-padding-right" for="handshake"> 协议 </label>
-            <div class="col-xs-8">
-                <select class="col-xs-8" id="handshake" name="handshake">
-                    <option value="0">无</option>
-                    <option value="1">XonXof</option>
-                    <option value="2">RTS OR CTS</option>
-                    <option value="3">ASTM</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="space-4"></div>
-            <label class="col-xs-3 control-label no-padding-right" for="datawind">数据窗口</label>
-            <div class="col-xs-8">
-                <input type="text" id="datawind" name= "datawind" placeholder="datawind" class="col-xs-8"/>
+                <input type="text" id="feeItemId" name="feeItemId" placeholder="费用项目ID" class="col-xs-8"/>
             </div>
         </div>
     </form>

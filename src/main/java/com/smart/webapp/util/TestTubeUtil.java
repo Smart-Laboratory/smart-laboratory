@@ -1,5 +1,8 @@
 package com.smart.webapp.util;
 
+import com.smart.model.lis.TestTube;
+import com.smart.service.lis.TestTubeManager;
+import com.smart.util.ConvertUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,43 +18,42 @@ import java.util.Properties;
  * Created by zcw on 2016/9/8.
  */
 public class TestTubeUtil {
-    private static Properties prop = new Properties();
+
+    private static TestTubeUtil instance = new TestTubeUtil();
     private static Map<String, String> map = null;
-    protected static final Log log = LogFactory.getLog(TestTubeUtil.class);
-    static {
-        init();
-    }
+    private TestTubeUtil() {}
 
-    private static void init() {
-        Reader reader = null;
-        try {
-            log.info("加载试管类型资源文件开始");
-            InputStream stream = TestTubeUtil.class.getClassLoader().getResourceAsStream("properties/testTube.properties");
-            reader = new InputStreamReader(stream, "UTF-8");
-            prop.load(reader);
-            map = (Map) prop;
-            stream.close();
-            log.info("加载试管类型资源文件结束");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (null != reader) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-// ignore
+    public static TestTubeUtil getInstance(TestTubeManager testTubeManager) {
+        if (map == null) {
+            synchronized (instance) {
+                map = new HashMap<String, String>();
+                for (TestTube testTube : testTubeManager.getAll()) {
+                    map.put(ConvertUtil.null2String(testTube.getId()), testTube.getName());
                 }
             }
         }
+        return instance;
     }
 
-    public static Map<String, String> getTestTubes() {
+    public Map<String, String> getMap (){
         return map;
     }
-
-    public static double getDoubleValue(String name) {
-        String value = prop.getProperty(name);
-        return Double.parseDouble(value);
+    public String getValue(String key) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        } else {
+            return key;
+        }
     }
+
+    public String getKey(String value) {
+        for(String name: map.keySet()) {
+            if(value.equals(map.get(name))) {
+                return name;
+            }
+        }
+        return value;
+    }
+
 }

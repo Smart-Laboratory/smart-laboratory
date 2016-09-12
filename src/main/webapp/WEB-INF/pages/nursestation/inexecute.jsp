@@ -537,6 +537,11 @@
                 }
                 CreateDataBill(data)
                 LODOP.PRINT_DESIGN()
+            },
+            printReport:function(){
+                $.get("../print/printReport",{sampleno:'20160530URF003', haslast:'0', type:''}, function(data){
+                    console.log(data)
+                })
             }
         }
         var public = {
@@ -552,7 +557,8 @@
                 private.printOldInfo();
             },
             printSet: function () {
-                private.printSet();
+               // private.printSet();
+                private.printReport();
             }
 
         }
@@ -562,6 +568,7 @@
     $(function () {
         TSLAB.Custom.init();
     })
+
 </script>
 
 <script>
@@ -572,12 +579,12 @@
         CreateDataBill(data)
         LODOP.PREVIEW();
     }
-    ;
+
     function Setup() {//打印维护
         LODOP = getLodop();
         LODOP.PRINT_SETUP();
     }
-    ;
+
     function CreateDataBill(data) {
 
         if (data && data != null) {

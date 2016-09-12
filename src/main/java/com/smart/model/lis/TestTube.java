@@ -1,11 +1,14 @@
 package com.smart.model.lis;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by zcw on 2016/9/9.
  * 试管基础信息表
  */
+@Entity
+@Table(name = "lab_testtube")
 public class TestTube implements Serializable{
     private static final long serialVersionUID = -5592217688167360956L;
     private Long id;
@@ -13,6 +16,9 @@ public class TestTube implements Serializable{
     private Double price;       //单价
     private String feeItemId;   //费用项目ID HIS对应
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_TESTTUBE")
+    @SequenceGenerator(name = "SEQ_TESTTUBE", sequenceName = "TESTTUBE_SEQUENCE", allocationSize=1)
     public Long getId() {
         return id;
     }

@@ -7,7 +7,7 @@ function  Add(){
     clearData();
     layer.open({
         type: 1,
-        area: ['520px','500px'],
+        area: ['420px','300px'],
         fix: false, //不固定
         maxmin: false,
         shade:0.6,
@@ -69,13 +69,13 @@ function search(){
 }
 
 /**
- * 编辑字典
+ * 编辑
  */
 function Edit(){
     var rowId = $("#tableList").jqGrid('getGridParam','selrow');
     var rowData = $("#tableList").jqGrid('getRowData',rowId);
     if(!rowId || rowId =='' || rowId==null){
-        layer.alert("请先选择要编辑的数据",{icon:1,title:"提示"});
+        layer.msg('请先选择要编辑的数据', {icon: 2,time: 1000});
         return false;
     }
     //设置数据
@@ -87,7 +87,7 @@ function Edit(){
     $('#feeItemId').val(rowData.feeItemId);
     layer.open({
         type: 1,
-        area: ['520px','500px'],
+        area: ['420px','300px'],
         fix: false, //不固定
         maxmin: false,
         shade:0.6,
@@ -117,6 +117,12 @@ function Edit(){
 }
 
 $(function(){
+    $("#addForm").Validform({
+        tiptype:4,
+        callback:function(){
+
+        }
+    });
     var height = document.documentElement.clientHeight;
     initGrid();
     if(height>150) $('#ullist').height(height-150);

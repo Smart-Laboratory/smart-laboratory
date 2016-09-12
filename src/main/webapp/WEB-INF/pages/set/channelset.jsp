@@ -13,7 +13,7 @@
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-
+    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 </head>
 <style>
     .lazy_header{
@@ -74,10 +74,11 @@
         var height = clientHeight - $('#head').height()- $('.footer-content').height();
         $('.tree').height(height-70);
         var zNodes =${treeNodes};
+
         $.fn.zTree.init($("#treeList"), {
             data: {
                 key: {
-                    title:"t"
+                    title:"name"
                 },
                 simpleData: {
                     enable: true
@@ -94,12 +95,10 @@
                         repeatitems : false,
                         //发送数据
                         postData : {"deviceid":deviceid },
-
                     }).trigger('reloadGrid');//重新载入
 
                 }
             }
-
         }, zNodes);
     });
 
@@ -113,7 +112,6 @@
         var obj = $("#tableList").jqGrid("getRowData");
         var datas = [];
         jQuery(obj).each(function(){
-            console.log(this);
             var obj = {};
             obj.channel = this.channel;
             obj.testid = this.testid;
@@ -121,7 +119,6 @@
             obj.sampletype= this.sampletype;
             datas.push(obj);
         });
-        console.log(datas);
         $.post('../set/channelset/save',{datas:arrayToJson(datas)},function(data){
             layer.msg("保存成功");
         })

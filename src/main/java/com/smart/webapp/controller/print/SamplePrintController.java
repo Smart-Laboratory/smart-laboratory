@@ -13,6 +13,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -692,7 +696,7 @@ public class SamplePrintController extends BaseAuditController {
 				if (lo != null && hi != null && !lo.isEmpty() && !hi.isEmpty()) {
 					scope = lo + "-" + hi;
 				}
-				if(lo != null && !lo.isEmpty() && (hi.isEmpty() || hi == null)) {
+				if(lo != null && !lo.isEmpty() && ( hi == null || hi.isEmpty())) {
 					scope = lo;
 				}
 				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
@@ -882,5 +886,230 @@ public class SamplePrintController extends BaseAuditController {
 			result +=re.getTestResult();
 		}
 		return result;
+	}
+
+
+	//打印类型：1-单栏正常；2-双栏正常；3-乙肝MYC；4-微生物培养和鉴定；5-微生物药敏
+	@RequestMapping(value = "/printReport*", method = RequestMethod.GET)
+	public String printReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		VelocityContext velocityContext = new VelocityContext();
+		String sampleno = request.getParameter("sampleno");
+		int hasLast = Integer.parseInt(request.getParameter("haslast"));
+		int type = 1;
+		JSONObject info = new JSONObject();
+		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		Sample s = sampleManager.getBySampleNo(sampleno);
+		Process process = processManager.getBySampleId(s.getId());
+		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
+		List<SyncResult> wswlist = null;
+		if(sampleno.substring(8, 11).equals("BAA")) {
+			wswlist = rmiService.getWSWResult(s.getSampleNo());
+			type = 4;
+		} else {
+			if(sampleno.substring(8, 11).equals("MYC")) {
+				type = 3;
+			}
+			/*if(list.size() > 22) {
+				type = 2;
+			}*/
+			//染色体
+			if("1300801".equals(s.getSectionId())) {
+				type = 5;
+			}
+		}
+		velocityContext.put("blh", s.getPatientblh());
+		velocityContext.put("pName", s.getPatientname());
+		velocityContext.put("sex", s.getSexValue());
+		velocityContext.put("age", s.getAge());
+		velocityContext.put("pType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(s.getSampleType())));
+		velocityContext.put("diagnostic", s.getDiagnostic());
+		if(s.getStayHospitalMode() == 2) {
+			velocityContext.put("staymodetitle", "住 院 号");
+			velocityContext.put("staymodesection", "病区");
+			velocityContext.put("bed", s.getDepartBed());
+		} else {
+			velocityContext.put("staymodetitle", "就诊卡号");
+			velocityContext.put("staymodesection", "科室");
+		}
+		velocityContext.put("staymode", s.getStayHospitalMode());
+		velocityContext.put("pId", s.getPatientId());
+		velocityContext.put("section", sectionutil.getValue(s.getHosSection()));
+		if(contactMap.size() == 0) {
+			initContactInforMap();
+		}
+		if(idMap.size() == 0) {
+			initMap();
+		}
+		if(likeLabMap.size() == 0) {
+			initLikeLabMap();
+		}
+		velocityContext.put("requester", process.getRequester() == null ? " " : (contactMap.containsKey(process.getRequester()) ? contactMap.get(process.getRequester()).getNAME() : process.getRequester()));
+		velocityContext.put("tester", s.getChkoper2());
+		//更改为电子签名图片地址
+		//info.put("auditor", process.getCheckoperator());
+		String dzqm_imghtm = "";
+		//由于process.getCheckoperator() 有工号有姓名，需要区分
+		String username = UserUtil.getInstance(userManager).getKey(process.getCheckoperator());
+		//实现获取电子签名
+		String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\bmp";
+		File dzqm_dir = new File(dzqm_filepath);
+		if (dzqm_dir.exists()) {
+			for (File dzqm_f : dzqm_dir.listFiles()) {
+				//去掉后缀
+				int dot = dzqm_f.getName().lastIndexOf('.');
+				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
+					dzqm_imghtm += "../images/bmp/" + dzqm_f.getName() + ";";
+				}
+			}
+		}
+		velocityContext.put("auditro", dzqm_imghtm);
+
+		velocityContext.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
+		velocityContext.put("checktime", Constants.SDF.format(process.getChecktime()));
+		velocityContext.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
+		velocityContext.put("examinaim", s.getInspectionName());
+		velocityContext.put("date", sampleno.substring(0, 4) + "年" + sampleno.substring(4, 6) + "月" + sampleno.substring(6, 8) + "日");
+		Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
+		String hisTitle1 = "";
+		String lab = s.getSectionId();
+		if(likeLabMap.containsKey(lab)) {
+			lab = likeLabMap.get(lab);
+		}
+		if(hasLast == 1 && type<4) {
+			List<Sample> history = sampleManager.getHistorySample(s.getPatientId(), s.getPatientblh(), lab);
+			String hisSampleId = "";
+			String hisSampleNo = "";
+			for(Sample sample : history) {
+				hisSampleId += sample.getId() + ",";
+				hisSampleNo += "'" + sample.getSampleNo() + "',";
+			}
+			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+			for(Process p : processList) {
+				hisProcessMap.put(p.getSampleid(), p);
+			}
+			for(TestResult tr : testList) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
+			Date receivetime = null;
+			receivetime = process.getReceivetime();
+			long curInfoReceiveTime = receivetime.getTime();
+			int index = 0;
+			Map<String, TestResult> rmap = null;
+			Set<String> testIdSet = new HashSet<String>();
+			for (TestResult t : list) {
+				testIdSet.add(t.getTestId());
+			}
+			if(history != null && history.size()>0){
+				for (Sample pinfo : history) {
+					String psampleno = pinfo.getSampleNo();
+					if(psampleno.equals(sampleno)) {
+						continue;
+					}
+					boolean isHis = false;
+					List<TestResult> his = hisTestMap.get(psampleno);
+					if(his != null) {
+						for (TestResult test: his) {
+							String testid = test.getTestId();
+							Set<String> sameTests = util.getKeySet(testid);
+							sameTests.add(testid);
+							for (String id : sameTests) {
+								if (testIdSet.contains(id)) {
+									isHis = true;
+									break;
+								}
+							}
+							if (isHis) {
+								break;
+							}
+						}
+					}
+					Date preceivetime = null;
+					preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
+					if (preceivetime == null || pinfo.getSampleNo() == null) {
+						continue;
+					}
+					if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
+						if (index > 4)
+							break;
+						switch (index) {
+							case 0:
+								rmap = resultMap1;
+								hisTitle1 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
+								break;
+						}
+						for (TestResult tr : hisTestMap.get(psampleno)) {
+							rmap.put(tr.getTestId(), tr);
+						}
+						index++;
+					}
+				}
+			}
+		}
+//		String html = "";
+//		String dangerTest = "";
+//		if(s.getAuditMark() == 6) {
+//			for(String str : s.getMarkTests().split(";")) {
+//				if(Integer.parseInt(str.split(":")[1]) == 3) {
+//					dangerTest += str.split(":")[0] + ",";
+//				}
+//			}
+//		}
+//		if(type > 3) {
+//			if(type==5){
+//				html = getRSTHTML(list);
+//			}else{
+//				html = getWSWHTML(type,wswlist);
+//			}
+//		} else {
+//			html = getHTML(type,hasLast,list,hisTitle1,resultMap1,dangerTest);
+//		}
+//		info.put("html", html);
+//		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
+//		String imghtml = "";
+//		//type==5说明是染色体，染色体图片为分开2张
+//		if(type==5){
+//			if(s.getHasimages() == 1) {
+//				String filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\upload\\"+sampleno;
+//				File dir = new File(filepath);
+//				if (dir.exists()) {
+//					for (File f : dir.listFiles()) {
+//						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+//							imghtml += "../images/upload/" + sampleno + "/" + f.getName() + ";";
+//						}
+//					}
+//				}
+//			}
+//		}else{
+//			if(s.getHasimages() == 1) {
+//				String filepath = Constants.imageUrl + sampleno;
+//				File dir = new File(filepath);
+//				if (dir.exists()) {
+//					for (File f : dir.listFiles()) {
+//						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
+//							imghtml += "<img src='../images/upload/" + sampleno + "/" + f.getName() + "' style='float:left;margin-left:5%;width:45%'>";
+//						}
+//					}
+//				}
+//			}
+//		}
+//		info.put("imghtml", imghtml);
+		VelocityEngine engine = new VelocityEngine();
+		engine.setProperty(Velocity.RESOURCE_LOADER, "class");
+		engine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		engine.init();
+		Template template = engine.getTemplate("template/testReport.vm", "gbk");
+		template.merge(velocityContext, response.getWriter());
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(info.toString());
+		return null;
 	}
 }

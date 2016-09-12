@@ -83,7 +83,6 @@ public class InExecuteViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ward = ConvertUtil.null2String(request.getParameter("ward"));
-        Map map = TestTubeUtil.getTestTubes();
         return new ModelAndView().addObject("ward", ward);
     }
 
@@ -377,6 +376,7 @@ public class InExecuteViewController {
             }
 
             //生成条码号barcode
+            List<LabOrder> labOrderList1 = new ArrayList<LabOrder>();
             for (String key : unLabOrderlistMap.keySet()) {
                 LabOrder labOrder = unLabOrderlistMap.get(key);
                 //设置样本信息
@@ -434,7 +434,6 @@ public class InExecuteViewController {
                         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
 
                         LabOrderVo labOrderVo = new LabOrderVo();
-
                         labOrderVo.setPatientCode(ConvertUtil.null2String(labOrder.getBlh()));
                         labOrderVo.setPatientName(ConvertUtil.null2String(labOrder.getPatientname()));
                         labOrderVo.setSampleType(ConvertUtil.null2String(labOrder.getSampleTypeName()));
@@ -461,9 +460,12 @@ public class InExecuteViewController {
                         }
                         labOrderVo.setRequestMode(ConvertUtil.null2String(labOrder.getRequestmode()));
                         labOrderVos.add(labOrderVo);
+                        labOrderList1.add(labOrder);
                     }
                 }
             }
+            //计采血费
+            ChargeUtil.getInstance().bloodCollectionFee(user,labOrderList1);
             //打印
         } catch (Exception e) {
             e.printStackTrace();
@@ -558,4 +560,5 @@ public class InExecuteViewController {
         Double fee = Double.parseDouble(labOrder.getPrice()) * labOrder.getRequestNum();
         labOrder.setPrice("" + fee);
     }
+
 }

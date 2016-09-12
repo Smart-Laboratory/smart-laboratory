@@ -1,5 +1,6 @@
 package com.smart.lisservice;
 
+import com.alibaba.fastjson.JSON;
 import com.smart.Constants;
 import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.execute.LabOrder;
@@ -11,6 +12,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
@@ -31,6 +34,7 @@ import java.util.List;
  */
 public class WebService {
     private JaxWsProxyFactoryBean jwpfb ;
+    private static final Log log = LogFactory.getLog(WebService.class);
 //    private ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-resources.xml");
 //    private WebClient client = ctx.getBean("webClient", WebClient.class);
 
@@ -243,7 +247,28 @@ public class WebService {
         return list;
     }
 
-    public boolean requestUpdate(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, String exeDate, String expand) {
+    /**
+     * HIS申请状态变更
+     * @param requestType
+     * @param itemId
+     * @param exeType
+     * @param exeDeptCode
+     * @param exeDeptName
+     * @param exeDoctorCode
+     * @param exeDoctorName
+     * @param exeDate
+     * @param expand
+     * @return
+     */
+    public boolean requestUpdate(int requestType,
+                                 String itemId,
+                                 int exeType,
+                                 String exeDeptCode,
+                                 String exeDeptName,
+                                 String exeDoctorCode,
+                                 String exeDoctorName,
+                                 String exeDate,
+                                 String expand) {
         boolean success = true;
         try {
             //if(1==1)throw new Exception("错误");
@@ -278,6 +303,38 @@ public class WebService {
             success = false;
         }
         return success;
+    }
+
+
+    /**
+     * 记账
+     * @param params  记账参数 JSON格式{"patientCode":"6000213","patientId":"123123"....}
+     * @return
+     */
+    public boolean booking(String params){
+        boolean success = true;
+        try{
+            HttpClient httpClient = new HttpClient();
+            //httpClient.getHostConfiguration().setHost(url+"requestUpdate");
+            PostMethod method = new PostMethod(url+"booking");
+
+            RequestEntity requestEntity = new StringRequestEntity(params,"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            System.out.println(method.getResponseBodyAsString());
+
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==0) {
+                success = false;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            success = false;
+        }
+        return  success;
     }
 
 
