@@ -90,7 +90,7 @@
 </style>
 <div class="main-container" id="content">
     <div class="row">
-        <form id="addForm" class="form-horizontal" action="<c:url value='../set/device/saveDevice'/>" method="post">
+        <form id="addForm" class="form-horizontal" action="<%=request.getContextPath()%>/set/device/saveDevice" method="post">
             <div class="form-group">
                 <div class="space-4"></div>
                 <label class="col-xs-1 control-label no-padding-right" for="testname" > 名称 </label>
@@ -261,7 +261,7 @@
     $("#testname").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "../ajax/searchTest",
+                url: "<%=request.getContextPath()%>/ajax/searchTest",
                 dataType: "json",
                 data: {
                     name : request.term

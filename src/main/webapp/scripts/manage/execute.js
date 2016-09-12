@@ -254,23 +254,18 @@ function reloadTests() {
 $(function(){
 	
 	$(".footer").css('display','none');
-	$( "#from" ).datepicker({
-		changeMonth: true,
-		dateFormat:"yy-mm-dd",
-		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-		dayNamesMin: ['日','一','二','三','四','五','六'],
-		onClose: function( selectedDate ) {
-			$( "#to" ).datepicker( "option", "minDate", selectedDate );
-		}
+    laydate.skin('molv');
+	laydate({
+		elem: '#from',
+		event: 'focus',
+        festival: true,
+		format: 'YYYY-MM-DD'
 	});
-	$( "#to" ).datepicker({
-		changeMonth: true,
-		dateFormat:"yy-mm-dd",
-		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-		dayNamesMin: ['日','一','二','三','四','五','六'],
-		onClose: function( selectedDate ) {
-			$( "#from" ).datepicker( "option", "maxDate", selectedDate );
-	    }
+	laydate({
+		elem: '#to',
+		event: 'focus',
+        festival: true,
+		format: 'YYYY-MM-DD'
 	});
 	var d = new Date();
 	d.setMonth(d.getMonth()-1);

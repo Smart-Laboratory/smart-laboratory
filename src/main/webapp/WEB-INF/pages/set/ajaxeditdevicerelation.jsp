@@ -173,8 +173,7 @@
                                                     <option value="2" <c:if test="${index.diffAlgo=='2'}">selected</c:if>>差值百分率</option>
                                                     <option value="1" <c:if test="${index.diffAlgo=='1'}">selected</c:if>>差值</option>
                                                     <option value="3" <c:if test="${index.diffAlgo=='3'}">selected</c:if>>差值变化</option>
-                                                    <option value="4" <c:if test="${index.diffAlgo=='4'}">selected</c:if>>差值变化</option>
-                                                    <option value="5" <c:if test="${index.diffAlgo=='5'}">selected</c:if>>差值变化率</option>
+                                                    <option value="4" <c:if test="${index.diffAlgo=='4'}">selected</c:if>>差值变化率</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -420,7 +419,7 @@
             indexid : $('#index_Id').val()||'',
             refTable:$('#tableList'),                       //参考范围列表
             dicTable:$('#dicTable'),                        //项目字典列表
-            saveUrl:'../devicerelationlist/saveInfo',
+            saveUrl:'<%=request.getContextPath()%>/devicerelationlist/saveInfo',
             lastsel:'0',
             lastsel2:'0'
         };
@@ -591,7 +590,7 @@
                     datatype:'local',
                     rowNum:references.length,
                     data:references,
-                    colNames: ['testid', '项目名称', '标本名称', '性别', '年龄低限','年龄低限单位','年龄高限','年龄高限单位', '序号', '设备ID', '周期', '参考范围值'],
+                    colNames: ['testid', '项目名称', '标本类型', '性别', '年龄低限','低限单位','年龄高限','高限单位', '序号', '设备ID', '周期', '参考范围值'],
                     colModel: [
                         {name: 'testid', index: 'testid', width: 60, hidden: true},
                         {name: 'testname', index: 'testname', width: 200},
@@ -656,7 +655,7 @@
                         var rowData = cache.refTable.jqGrid('getRowData',id);
                         var sex= $('#'+id + "_sex").val();
                         var orderno= $('#'+id + "_orderno").val();      //编辑状态数据获取
-                        $.post('../set/devicerelationlist/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
+                        $.post('<%=request.getContextPath()%>/set/devicerelationlist/deleteReference',{testid:rowData.testid,sex:sex,orderno:orderno},function(data) {
                             var data = eval("("+data+")");
                             if(data && data.result=='true'){
                                 layer.msg("删除成功！");
@@ -746,7 +745,7 @@
         $("#labdepartmentshow").autocomplete({
             source: function( request, response ) {
                 $.ajax({
-                    url: "../../ajax/searchLab",
+                    url: "<%=request.getContextPath()%>/ajax/searchLab",
                     dataType: "json",
                     data: {
                         name : request.term

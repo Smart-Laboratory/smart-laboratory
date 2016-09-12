@@ -49,14 +49,14 @@
 				<i class="ace-icon fa fa-times bigger-110"></i>
 				删除
 			</button>
-			<button type="button" class="btn btn-sm btn-info" title="打印签收单" onclick="print()">
+			<button type="button" class="btn btn-sm btn-info" title="打印签收单" onclick="print()" disabled>
 				<i class="ace-icon fa fa-print bigger-110"></i>
 				打印签收单
 			</button>
 		</div>
 		<div class="col-sm-3">
 			<div style="width:43px;height:34px;background-color:#eee;float:left;padding:7px;border: 1px solid #ccc;">状态</div>
-			<select style="width:100px;" id="">
+			<select style="width:50px;" id="">
 			</select>
 		</div>
 	</div>

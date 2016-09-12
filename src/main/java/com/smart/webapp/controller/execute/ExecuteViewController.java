@@ -140,7 +140,10 @@ public class ExecuteViewController {
 		JSONArray jsonArray = new JSONArray();
 		for(int i = 0; i < loList.size(); i++) {
 			labOrder = loList.get(i);
-			ylxh = ylxhMap.get(labOrder.getYlxh());
+			ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
+			if(ylxh == null) {
+
+			}
 			labOrder.setSampletype(ylxh.getYblx());
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());

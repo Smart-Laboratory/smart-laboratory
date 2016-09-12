@@ -133,7 +133,7 @@
             //postData:{deviceid:typeid},
 
             datatype: "json",
-            colNames: ['通道名称', 'testid','试验名称', '样本名称'],
+            colNames: ['通道名称', 'testid','试验名称', '样本类型'],
             colModel: [
                 { name: 'channel', index: 'channel', width: 60,editable : true },
                 { name: 'testid', index: 'testid', width: 60,hidden:true},

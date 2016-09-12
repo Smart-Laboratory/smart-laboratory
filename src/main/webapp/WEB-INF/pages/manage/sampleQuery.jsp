@@ -1,104 +1,223 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
-
 <head>
-    <title><fmt:message key="sample.manage.audit"/></title>
-    
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
-    
-    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="<c:url value='/scripts/jquery.tablednd_0_5.js'/> "></script>
-    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
-    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-    <script type="text/javascript" src="../scripts/jquery.form.js"></script>
-    
-    <script type="text/javascript" src="../scripts/manage/sampleQuery.js"></script>
+    <title>标本查询</title>
+
+	<script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
+	<script type="text/javascript" src="../scripts/manage/sampleQuery.js"></script>
+
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
+</head>
 <style>
-.ui-jqgrid-title{
-	font-size:16px;
-	color:#000;
-}
-.ui-jqgrid-sortable{
-	height:20px!important;
-}
-.date{
-	width:15%!important;
-}
+	.laftnav {
+		/*background: #ffffff;*/
+		/*border-right: 1px solid #D9D9D9;*/
+		/*border-left: 1px solid #D9D9D9;*/
+		border: 1px solid #82af6f;
+	}
+
+	.lazy_header {
+		height: 40px;
+		background: #82af6f !important;
+		color: white;
+		border-bottom: 1px solid #D9D9D9;
+		border-top: 1px solid #D9D9D9;
+		line-height: 35px;
+		margin-top: 1px;
+
+	}
+
+	.lazy-list-title {
+		font-size: 14px;
+		max-width: 100px;
+		display: inline-block;
+		text-overflow: ellipsis;
+		-o-text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		padding-left: 5px;
+	}
+
+	.no-skin .nav-list > li.active:after {
+		border: 1px;
+	}
+
+	.no-skin .nav-list > li > a {
+		padding-left: 20px;
+	}
+
+	ul.nav {
+		margin-left: 0px;
+	}
+
+	.nav-pills > li > a {
+		border-radius: 0px;
+	}
+
+	.ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
+		height: 30px !important;
+	}
+
+	.ui-jqgrid .ui-jqgrid-htable th div {
+		padding-top: 5px !important;
+	}
+
+	.ui-jqgrid .ui-jqgrid-view input, .ui-jqgrid .ui-jqgrid-view select, .ui-jqgrid .ui-jqgrid-view textarea, .ui-jqgrid .ui-jqgrid-view button {
+		margin: 0 0;
+	}
+
+	.ui-jqgrid tr.ui-row-ltr td, .ui-jqgrid tr.ui-row-rtl td {
+		padding: 2px 4px;
+	}
+
+	.ui-jqgrid-htable th div .cbox {
+		margin-left: 3px !important;
+	}
+
+	/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+	::-webkit-scrollbar {
+		width: 12px;
+		height: 12px;
+		background-color: #F5F5F5;
+	}
+
+	/*定义滚动条轨道 内阴影+圆角*/
+	::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		border-radius: 5px;
+		background-color: #F5F5F5;
+	}
+
+	/*定义滑块 内阴影+圆角*/
+	::-webkit-scrollbar-thumb {
+		border-radius: 5px;
+		-webkit-box-shadow: inset 0 0 6px rgba(151, 151, 151, 0.3);
+		background-color: #9f9f9f;
+	}
+
+	table.alert-info tr td {
+		padding: 0px 10px;
+	}
+
+	.widget-main {
+		padding: 5px;
+	}
 
 </style>
-
-</head>
-<body>
 <input id='lastlab' value="${lastlab }" type='hidden' />
 
-<h2><fmt:message key="sample.sampleQuery" /></h2>
-<div class="form-inline">
-	<label for="search_text" style="margin-left : 20px;"><fmt:message key="sample.query" /></label>
-	<input type="text" id="search_text" name="search_text" class="form-control" />
-	
-	<button id="searchBtn" class="btn btn-info form-control" style="margin-left:10px;"><fmt:message key="search" /></button>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-xs-3">
+		<div class="laftnav">
+			<div class="lazy_header">
+                <span class="lazy-list-title">
+                <i class="fa fa-bars"></i>
+                <span class="tip" style="cursor:pointer;">查询条件</span>
+                </span>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<input type="text" id="search_text" name="search_text" class="col-xs-9" placeholder="<fmt:message key='sample.query' />"/>
+				<button id="searchBtn" class="btn btn-sm btn-info col-xs-3"><fmt:message key="search" /></button>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>起始日期:</b></div>
+				<input type="text" id="from" name="from" class="col-xs-9 laydate-icon-molv" style="height:33px;" />
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>结束日期:</b></div>
+				<input type="text" id="to" name="to" class="col-xs-9 laydate-icon-molv" style="height:33px;">
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-6">
+					<label>
+						<input type="radio" name="select_type" id="q_sampleno" value="1" checked class="ace" />
+						<span class="lbl"><fmt:message key="sample.query.sampleno" /></span>
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label>
+						<input type="radio" name="select_type" id="q_id" value="2" checked class="ace" />
+						<span class="lbl"><fmt:message key="sample.query.id" /></span>
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label>
+						<input type="radio" name="select_type" id="q_name" value="3" checked class="ace" />
+						<span class="lbl"><fmt:message key="sample.query.name" /></span>
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label>
+						<input type="radio" name="select_type" id="q_blh" value="4" checked class="ace" />
+						<span class="lbl"><fmt:message key="sample.query.blh" /></span>
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label>
+						<input type="radio" name="select_type" id="q_patientid" value="5" checked class="ace" />
+						<span class="lbl"><fmt:message key="sample.query.patientid" /></span>
+					</label>
+				</div>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>就诊方式:</b></div>
+				<select id="search_select" class="col-xs-9 select" >
+					<option value="0"><fmt:message key="treatmentType.5" /></option>
+					<option value="1"><fmt:message key="treatmentType.1" /></option>
+					<option value="2"><fmt:message key="treatmentType.2" /></option>
+					<option value="3"><fmt:message key="treatmentType.4"></fmt:message></option>
+				</select>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>标本类型:</b></div>
+				<select id="sampleTypeSelect"  class="col-xs-9">
+					<c:forEach var="sType" items="${sampleTypes}">
+						<option value='<c:out value="${sType.key}" />'><c:out value="${sType.value}" /></option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>检验部门:</b></div>
+				<select id="labSelect_seach"  class="col-xs-9">
+					<option value='all'>全部</option>
+					<c:forEach var="depart" items="${departList}">
+						<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="row" style="margin:5px;overflow: auto;">
+				<select id="printType"  class="col-xs-9" style="height:34px;">
+					<option value='0'>报告单</option>
+					<option value='1'>条&nbsp;&nbsp;&nbsp;码</option>
+				</select>
+				<button id="print" class="btn btn-sm btn-info col-xs-3"><fmt:message key="print" /></button>
+			</div>
+		</div>
+	</div>
 
-	
-	<label for="from" style="margin-left : 20px;"><b><fmt:message key="from" /></b></label>
-	<input type="text" id="from" name="from" class="form-control date" />
-	<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
-	<input type="text" id="to" name="to" class="form-control date">
-	
-	<label style="margin-left : 10px;"><fmt:message key="sample.stayHospitalMode" /></label>
-	<select id="search_select" class="form-control select" >
-		<option value="0"><fmt:message key="treatmentType.5" /></option>
-		<option value="1"><fmt:message key="treatmentType.1" /></option>
-		<option value="2"><fmt:message key="treatmentType.2" /></option>
-		<option value="3"><fmt:message key="treatmentType.4"></fmt:message></option>
-	</select>
-</div>
-
-<div class="form-inline" style="margin:10px 20px;">
-		<label class="radio-inline">
-  			<input type="radio" name="select_type" id="q_sampleno" value="1" checked>
-  			<fmt:message key="sample.query.sampleno" />
-		</label>
-		<label class="radio-inline">
-  			<input type="radio" name="select_type" id="q_id" value="2" >
-  			<fmt:message key="sample.query.id" />
-		</label>
-		<label class="radio-inline">
-  			<input type="radio" name="select_type" id="q_name" value="3" >
-  			<fmt:message key="sample.query.name" />
-		</label>
-		<label class="radio-inline">
-  			<input type="radio" name="select_type" id="q_blh" value="4"  >
-  			<fmt:message key="sample.query.blh" />
-		</label>
-		
-
- 		<label class="radio-inline">
-  			<input type="radio" name="select_type" id="q_patientid" value="5"  >
-  			<fmt:message key="sample.query.patientid" />
-		</label>
- 		
-		
-		<label style="margin-left : 10px;"><fmt:message key="sample.section" /></label>
-		<select id="labSelect_seach"  class="form-control" style="">
-			<c:forEach var="depart" items="${departList}">
-				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
-			</c:forEach>
-		</select>
-		<label style="margin-left : 0px;"><fmt:message key="sample.sampleType" /></label>
-		<select id="sampleTypeSelect"  class="form-control" style="width:100px;">
-			<c:forEach var="sType" items="${sampleTypes}">
-				<option value='<c:out value="${sType.key}" />'><c:out value="${sType.value}" /></option>
-			</c:forEach>
-		</select>
-</div>
-
-<div class="row">
-	<div id="sampleListPanel" class="col-sm-12">
-		<table id="list"></table>
-		<div id="pager"></div>
+	<div class="col-xs-9">
+		<div class="widget-box widget-color-green">
+			<div class="widget-header">
+				<h5 class="widget-title">标本查询列表</h5>
+				<div class="widget-toolbar">
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-down"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main" id="sampleListPanel">
+					<table id="list"></table>
+					<div id="pager"></div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div style="font-size: 13px; display:none;margin-top: 10px;">
@@ -108,18 +227,3 @@
 		<input type="hidden" id="hisLastResult"/>
 	</div>
 </div>
-	<!-- 2016-5-19  张晋南 查询详细信息打印 -->
-		<div id="searchPrint" align="left"
-			title='<fmt:message key="audit.preview" />'>
-			<button class="btn btn-success"
-				onclick="document.getElementById('iframe_print').contentWindow.print();">
-				<fmt:message key="audit.print" />
-			</button>
-			<div id="printFrame"></div>
-			<button class="btn btn-success"
-				onclick="document.getElementById('iframe_print').contentWindow.print();">
-				<fmt:message key="audit.print" />
-			</button>
-		</div>
-
-</body>
