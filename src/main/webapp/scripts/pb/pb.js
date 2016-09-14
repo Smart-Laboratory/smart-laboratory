@@ -140,6 +140,8 @@ $(function() {
 				var value = $(this).html();
 				if($(this).attr("class").indexOf("gx")>=0)
 					value += "\u516C\u4F11;";
+				if($(this).attr("class").indexOf("rx")>=0)
+					value += "日休;";
 					text = text + array[0] + ":" + date + "-" + day + ":" + value  +",";
 			});
 			var bz= $("#bz").val();

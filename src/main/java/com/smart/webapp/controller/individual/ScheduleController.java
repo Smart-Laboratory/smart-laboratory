@@ -207,6 +207,8 @@ public class ScheduleController extends PbBaseController {
         			shifts[l][k] = td;
         		} else if(arrMap.get(name + "-" + l).getShift()!=null &&  arrMap.get(name + "-" + l).getShift().contains("公休")){
         			shifts[l][k] = "<td  class='day gx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#FDFF7F;' "+background+">"+arrMap.get(name + "-" + l).getShift().replace("公休;", "")+"</td>";
+        		} else if(arrMap.get(name + "-" + l).getShift()!=null &&  arrMap.get(name + "-" + l).getShift().contains("日休")){
+        			shifts[l][k] = "<td  class='day rx' name='td" + l + "' id='" + name + "-" + l + "'  style='background:#7CFC00;' "+background+">"+arrMap.get(name + "-" + l).getShift().replace("日休;", "")+"</td>";
         		} else{
         			shifts[l][k] = "<td "+background+" class='day' name='td" + l + "' id='" + name + "-" + l + "' >" + arrMap.get(name + "-" + l).getShift() + "</td>";
         		}

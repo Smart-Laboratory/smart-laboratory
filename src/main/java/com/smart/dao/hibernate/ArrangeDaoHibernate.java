@@ -70,7 +70,7 @@ public class ArrangeDaoHibernate extends GenericDaoHibernate<Arrange, Long> impl
 		JdbcTemplate jdbcTemplate =
                 new JdbcTemplate(SessionFactoryUtils.getDataSource(getSessionFactory()));
 		
-		List<String> gxList = jdbcTemplate.queryForList("select distinct(riqi) from workarrange where riqi like '"+month+"%' and shift like '%公休%'", String.class);
+		List<String> gxList = jdbcTemplate.queryForList("select distinct(riqi) from workarrange where riqi like '"+month+"%' and (shift like '%公休%' or shift like '%日休%')", String.class);
         
         return gxList;
 	}

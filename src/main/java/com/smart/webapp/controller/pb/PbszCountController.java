@@ -104,14 +104,33 @@ public class PbszCountController extends PbBaseController{
 			
 			
 			String shifts = "";
+			boolean isxx = true;
 			for(Arrange arrange : arranges){
 				if(!arrange.getWorker().equals(w.getName()))
 					continue;
+				isxx = true;
 				if(arrange.getShift()!=null && !arrange.getShift().trim().isEmpty()){
 					workdate.add(arrange.getDate());
 					shifts += arrange.getShift();
 					if(arrange.getShift().contains("公休")){
-						if(arrange.getShift().replace("公休;", "").isEmpty())
+						for(String str : arrange.getShift().replace("公休;", "").split(";")){
+							if(!str.contains("休")){
+								worktime += 1;
+								isxx = false;
+								break;
+							}
+						}
+						if(isxx)
+							monthOff += 1;
+					}
+					if(arrange.getShift().contains("日休")){
+						for(String str : arrange.getShift().replace("日休;", "").split(";")){
+							if(!str.contains("休")){
+								isxx = false;
+								break;
+							}
+						}
+						if(isxx)
 							monthOff += 1;
 					}
 				}
@@ -125,7 +144,7 @@ public class PbszCountController extends PbBaseController{
 				if(shift=="年休"){
 					holiday +=1;
 				}
-				if(shift.contains("休") && !shift.contains("公休")){
+				if(shift.contains("休") && !shift.contains("公休")&& !shift.contains("日休")){
 					monthOff += 1;
 				}		
 				if(shift.equals(Constants.defeholidayhis)){

@@ -90,7 +90,7 @@
 </style>
 <div class="main-container" id="content">
     <div class="row">
-        <form id="addForm" class="form-horizontal" action="<c:url value='../set/device/saveDevice'/>" method="post">
+        <form id="addForm" class="form-horizontal" action="<%=request.getContextPath()%>/set/device/saveDevice" method="post">
             <div class="form-group">
                 <div class="space-4"></div>
                 <label class="col-xs-1 control-label no-padding-right" for="testname" > 名称 </label>
@@ -176,7 +176,7 @@
                     public.indexGrid.jqGrid('setGridWidth', $("#leftContent").width(),false);
                 });
                 public.indexGrid.jqGrid({
-                    url: '/set/devicerelationlist/getList',
+                    url: '<%=request.getContextPath()%>/set/devicerelationlist/getList',
                     datatype: "json",
                     height: 200,
                     //shrinkToFit: false,
@@ -218,7 +218,7 @@
              search:function(){
                 var query = $('#query').val()||'';
                 public.indexGrid.jqGrid('setGridParam',{
-                    url: "/set/devicerelationlist/getList",
+                    url: "<%=request.getContextPath()%>/set/devicerelationlist/getList",
                     datatype : 'json',
                     postData : {"query":query },
                     page : 1
@@ -230,7 +230,7 @@
                 $('#testnumb').val(Calculate.formulaIem.length);
                 $('#formulaitem').val(Calculate.formulaIem.join(","));
                 $.ajax({
-                    url:'/set/calculateformula/saveInfo',
+                    url:'<%=request.getContextPath()%>/set/calculateformula/saveInfo',
                     dataType:'json',
                     type:'post',
                     data:$('#addForm').serialize(),
@@ -261,7 +261,7 @@
     $("#testname").autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "../ajax/searchTest",
+                url: "<%=request.getContextPath()%>/ajax/searchTest",
                 dataType: "json",
                 data: {
                     name : request.term

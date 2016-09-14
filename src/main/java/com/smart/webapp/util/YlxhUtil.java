@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.smart.model.lis.Ylxh;
 import com.smart.service.lis.YlxhManager;
+import com.smart.util.ConvertUtil;
 
 public class YlxhUtil {
 
@@ -18,7 +19,7 @@ public class YlxhUtil {
 		if (map == null) {
 			map = new HashMap<String, Ylxh>();
 			for (Ylxh ylxh : ylxhManager.getAll()) {
-				map.put("" + ylxh.getYlxh(), ylxh);
+				map.put(ConvertUtil.null2String(ylxh.getYlxh()), ylxh);
 			}
 		}
 		return instance;
@@ -35,8 +36,9 @@ public class YlxhUtil {
 	public Map<String, Ylxh> getMap (){
 		return map;
 	}
+
 	public static void updateMap(Ylxh ylxh) {
-		map.put("" + ylxh.getYlxh(), ylxh);
+		map.put(ConvertUtil.null2String(ylxh.getYlxh()), ylxh);
 	}
 
 }

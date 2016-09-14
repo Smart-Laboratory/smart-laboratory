@@ -26,7 +26,7 @@ html{_background-image:url(about:blank); _background-attachment:fixed;}
 .laydate_body .laydate_box .laydate_yms, .laydate_body .laydate_box .laydate_time{display:none;}
 .laydate_body .laydate_box .laydate_show{display:block;}
 .laydate_body .laydate_box input{outline:0; font-size:14px; background-color:#fff;}
-.laydate_body .laydate_top{position:relative; height:26px; padding:5px; *width:100%; z-index:99;}
+.laydate_body .laydate_top{position:relative; height:26px; *width:100%; z-index:99;}
 .laydate_body .laydate_ym{position:relative; float:left; height:24px; cursor:pointer;}
 .laydate_body .laydate_ym input{float:left; height:24px; line-height:24px; text-align:center; border:none; cursor:pointer;}
 .laydate_body .laydate_ym .laydate_yms{position:absolute; left: -1px; top: 24px; height:181px;}
@@ -51,7 +51,7 @@ html{_background-image:url(about:blank); _background-attachment:fixed;}
 .laydate_body .laydate_table td{width:31px; height:19px; line-height:19px; text-align: center; cursor:pointer; font-size: 12px;}
 .laydate_body .laydate_table thead{height:22px; line-height:22px;}
 .laydate_body .laydate_table thead th{font-weight:400; font-size:12px; text-align:center;}
-.laydate_body .laydate_bottom{position:relative; height:22px; line-height:20px; padding:5px; font-size:12px;}
+.laydate_body .laydate_bottom{position:relative; height:22px; line-height:20px; font-size:12px;}
 .laydate_body .laydate_bottom #laydate_hms{position: relative; z-index: 1; float:left; }
 .laydate_body .laydate_time{ position:absolute; left:5px; bottom: 26px; width:129px; height:125px; *overflow:hidden;}
 .laydate_body .laydate_time .laydate_hmsno{ padding:5px 0 0 5px;}
@@ -67,7 +67,7 @@ html{_background-image:url(about:blank); _background-attachment:fixed;}
 .laydate_body .laydate_bottom .laydte_hsmtex{height:20px; line-height:20px; text-align:center;}
 .laydate_body .laydate_bottom .laydte_hsmtex span{position:absolute; width:20px; top:0; right:0px; cursor:pointer;}
 .laydate_body .laydate_bottom .laydte_hsmtex span:hover{font-size:14px;}
-.laydate_body .laydate_bottom .laydate_btn{position:absolute; right:5px; top:5px;}
+.laydate_body .laydate_bottom .laydate_btn{position:absolute; right:5px;}
 .laydate_body .laydate_bottom .laydate_btn a{float:left; height:20px; padding:0 6px; _padding:0 5px;}
 .laydate_body .laydate_bottom .laydate_v{position:absolute; left:10px; top:6px; font-family:Courier; z-index:0;}
 

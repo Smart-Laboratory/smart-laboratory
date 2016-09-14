@@ -4,15 +4,16 @@
 <head>
     <title><fmt:message key="sample.manage.execute"/></title>
     
-    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/bootstrap.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="../scripts/manage/execute.js"></script>
 	<script src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
     <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
+	<script type="text/javascript" src="../scripts/manage/execute.js"></script>
 </head>
 <style>
 
@@ -82,11 +83,11 @@
 						<span><fmt:message key="execute.date" /></span>
 						<div class="form-inline">
 							<label for="from" style="margin-left : 10px; width:50px;"><b><fmt:message key="from" /></b></label>
-							<input type="text" id="from" name="from" class="form-control date" />
+							<input type="text" id="from" name="from" class="laydate-icon-molv" style="height:33px;"/>
 						</div>
 						<div class="form-inline">
 							<label for="to" style="margin-left : 10px; width:50px;" ><b><fmt:message key="to" /></b></label>
-							<input type="text" id="to" name="to" class="form-control date">
+							<input type="text" id="to" name="to" class="laydate-icon-molv" style="height:33px;">
 						</div>
 						
 					</div>

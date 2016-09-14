@@ -19,7 +19,7 @@
     <script src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
-    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/i18n/grid.locale-cn.js"></script>
     <script src="<c:url value="/scripts/jquery.jqGrid.js"/>"></script>
 
 </head>
@@ -144,7 +144,7 @@
             maxmin: true,
             shade:0.5,
             title: "添加指标",
-            content:  '../set/calculateformula/ajaxeditdformula'
+            content:  '<%=request.getContextPath()%>/set/calculateformula/ajaxeditdformula'
         })
     }
 
@@ -163,7 +163,7 @@
             maxmin: true,
             shade:0.5,
             title: "添加指标",
-            content:  '../set/calculateformula/ajaxeditdformula?testid='+rowData.testId
+            content:  '<%=request.getContextPath()%>/set/calculateformula/ajaxeditdformula?testid='+rowData.testId
         })
     }
 
@@ -175,7 +175,7 @@
         }
         var rowData = $("#dataGrid").jqGrid('getRowData',id);
         layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-            $.post('../set/calculateformula/deleteFormula',{testid:rowData.testId},function(data) {
+            $.post('<%=request.getContextPath()%>/set/calculateformula/deleteFormula',{testid:rowData.testId},function(data) {
                 jQuery("#dataGrid").jqGrid('delRowData',id );
             });
             layer.close(index);
@@ -194,7 +194,7 @@
             $('#dataGrid').jqGrid('setGridWidth', $(".leftContent").width(),false);
         });
         $("#dataGrid").jqGrid({
-            url: '../set/calculateformula/getList',
+            url: '<%=request.getContextPath()%>/set/calculateformula/getList',
             datatype: "json",
             height: height,
             shrinkToFit: false,
@@ -237,7 +237,7 @@
     function search(){
         var query = $('#query').val()||'';
         jQuery("#dataGrid").jqGrid('setGridParam',{
-            url: "../set/calculateformula/getList",
+            url: "<%=request.getContextPath()%>/set/calculateformula/getList",
             datatype : 'json',
             //发送数据
             postData : {"query":query },

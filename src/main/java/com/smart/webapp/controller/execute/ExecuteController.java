@@ -117,7 +117,7 @@ public class ExecuteController {
 				labOrder.setExecutetime(executeTime);
 				labOrder.setExecutor(user.getUsername());
 				if (i == 0) {
-					Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
+					Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
 					labOrder.setExamitem(ylxh.getYlmc());
 					labOrder.setQbgdt(ylxh.getQbgdd());
 					labOrder.setSampletype(ylxh.getYblx());
@@ -141,7 +141,7 @@ public class ExecuteController {
 					for (int j = i + 1; j < unExecuteList.size(); j++) {
 						LabOrder lo = unExecuteList.get(j);		//后续采样项目
 						if (isFirst) {
-							Ylxh ylxh2 = ylxhMap.get(lo.getYlxh());
+							Ylxh ylxh2 = ylxhMap.get(ConvertUtil.null2String(lo.getYlxh()));
 							lo.setExamitem(ylxh2.getYlmc());
 							lo.setQbgdt(ylxh2.getQbgdd());
 							lo.setSampletype(ylxh2.getYblx());

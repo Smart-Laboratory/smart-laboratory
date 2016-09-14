@@ -48,7 +48,7 @@
 		    border: 1px solid #C5D0DC
 		}
 		.ui-autocomplete {
-			z-index: 999;
+			z-index: 99999999 !important;
 			margin:0;
 			padding:0;
 			border:0;
@@ -200,11 +200,8 @@
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
 				<label class="col-xs-4 control-label no-padding-right" for="yblx"> 样本类型 </label>
 				<div class="col-xs-8">
-					<select id="yblx" name="yblx" class="col-xs-8" style="height:33px;">
-						<c:forEach var="item" items="${typeList}">
-							<option value='<c:out value="${item.key}"/>' ><c:out value="${item.value}"/> </option>
-						</c:forEach>
-					</select>
+					<input type="hidden" id="yblx" name="yblx"/>
+					<input type="text" id="yblxzw" name="yblxzw" class="col-xs-8" placeholder="样本类型"/>
 				</div>
 			</div>
 		</div>

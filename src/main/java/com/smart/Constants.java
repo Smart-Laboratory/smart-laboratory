@@ -300,4 +300,5 @@ public final class Constants {
 	 */
 	public final static String defeholidayhis = "历休";
 	public final static String holiday = "公休"; //法定节假日
+	public final static String holidayOne = "日休"; //法定节假日，不补休
 }
