@@ -856,6 +856,27 @@
 			<version>1.0.1</version>
 			<type>jar</type>
 		</dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.itextpdf</groupId>-->
+            <!--<artifactId>itextpdf</artifactId>-->
+            <!--<version>5.0.6</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.itextpdf</groupId>-->
+            <!--<artifactId>itext-asian</artifactId>-->
+            <!--<version>5.2.0</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf-itext5</artifactId>
+            <version>9.0.6</version>
+        </dependency>
+
     </dependencies>
 
     <reporting>
@@ -1176,7 +1197,7 @@
         <jdbc.artifactId>ojdbc14</jdbc.artifactId>
         <jdbc.version>10.2.0.4.0</jdbc.version>
         <jdbc.driverClassName>oracle.jdbc.OracleDriver</jdbc.driverClassName> 
-        <jdbc.url>jdbc:oracle:thin:@10.31.96.38:1521:orcl</jdbc.url>
+        <jdbc.url>jdbc:oracle:thin:@127.0.0.1:1521:orcl</jdbc.url>
         <jdbc.username>lab</jdbc.username>
         <jdbc.password>lab</jdbc.password>
         <jdbc.validationQuery>SELECT 1 + 1 from DUAL</jdbc.validationQuery>

@@ -1,25 +1,26 @@
-<div style="float:left;width:96%;margin-left:2%;padding-top:5px;font-size:12px;border-top:1px solid #000000;">
-    <div style="margin-left:10px;width:100%;">
-        <div style="float:left;width:5%;">&nbsp;</div>
-        <div style="float:left;width:10%;"><fmt:message key="requester.name"/></div>
-        <div style="float:left;width:20%;"><b id="requester">$!requester</b></div>
-        <div style="float:left;width:10%;"><fmt:message key="tat.tester"/></div>
-        <div style="float:left;width:20%;"><b id="tester">$!tester</b></div>
-        <div style="float:left;width:10%;"><fmt:message key="tat.auditor"/></div>
-        <div style="float:left;width:20%;">	<img id="auditor" alt="" src="" border="0" width="60px" height="17px"></div>
-        <div style="float:left;width:5%;">&nbsp;</div>
-    </div>
-    <div style="margin-left:10px;width:100%;">
-        <div style="float:left;width:5%;">&nbsp;</div>
-        <div style="float:left;width:10%;"><fmt:message key="tat.receive"/></div>
-        <div style="float:left;width:20%;"><b id="receivetime">$!receivetime</b></div>
-        <div style="float:left;width:10%;"><fmt:message key="tat.audit"/></div>
-        <div style="float:left;width:20%;"><b id="checktime">$!checktime</b></div>
-        <div style="float:left;width:10%;"><fmt:message key="tat.execute"/></div>
-        <div style="float:left;width:20%;"><b id="executetime">$!executetime</b></div>
-        <div style="float:left;width:5%;">&nbsp;</div>
-    </div>
+<!--检查信息 start-->
+<div class="footer">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="line1">
+            <td colspan="4" style="border-bottom:1px solid #000">备注:</td>
+        </tr>
+        <tr class="line2">
+            <td>标本采集时间:$!executetime</td>
+            <td>实验室接收时间:$!receivetime</td>
+            <td>报告时间:$!checktime</td>
+            <td>&#160;</td>
+        </tr>
+        <tr>
+            <td>检验者:$!tester</td>
+            <td>复审者:<img id="auditor" alt="" src="$!auditro" border="0" width="60px" height="17px"/></td>
+            <td>受检者电话:</td>
+            <td>&#160;</td>
+        </tr>
+        <tr>
+            <td colspan="2">本检测结果仅对检测标本负责，如有疑问请在报告日期起3日内提出！</td>
+            <td>地址:浙江省杭州市下城区 东新路848号</td>
+            <td>第1页/共1页</td>
+        </tr>
+    </table>
 </div>
-<div style="float:left;width:92%;padding-top:10px;font-size:10px;text-align:center;margin-left:4%;border-top:1px solid #000000;">
-    <fmt:message key="sample.print.tip"/>
-</div>
+<!--检查信息 end-->

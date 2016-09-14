@@ -1,34 +1,48 @@
-<div style="float:left;width:96%;margin-left:2%;margin-top:20px;">
-    <div style="height:50px;width:100%;">
-        <img src="../images/zy_logo.png" style="float:left;margin-left:10%;"/>
-        <b style="float:left;font-size:10px;margin-top:25px;margin-left:5%">No:$!{sampleNo}</b>
-    </div>
-    <div style="border-top:1px solid #000000;">
-        <div style="float:left;margin-left:10px;width:100%;">
-            <div style="float:left;width:10%"><fmt:message key="patientInfo.examinaim"/></div>
-            <div style="float:left;width:58%"><b id="examinaim">$!examinaim</b></div>
-            <div style="float:left;width:10%"><fmt:message key="sample.type"/></div>
-            <div style="float:left;width:22%"><b id="pType">$!pType</b></div>
-        </div>
-        <div style="float:left;margin-left:10px;width:100%;">
-            <div style="float:left;width:10%"><fmt:message key="patientInfo.patientName"/></div>
-            <div style="float:left;width:10%"><b id="pName">$!pName</b></div>
-            <div style="float:left;width:5%"><fmt:message key="patient.sex"/></div>
-            <div style="float:left;width:8%"><b id="pSex">$!pSex</b></div>
-            <div style="float:left;width:5%"><fmt:message key="patient.age"/></div>
-            <div style="float:left;width:8%"><b id="pAge">$!pAge</b></div>
-            <div style="float:left;width:7%"><fmt:message key="patient.blh"/></div>
-            <div style="float:left;width:15%"><b id="blh">$!blh</b></div>
-            <div style="float:left;width:5%"><fmt:message key="diagnostic"/></div>
-            <div style="float:left;width:27%"><b id="diagnostic">$!diagnostic</b></div>
-        </div>
-        <div style="float:left;margin-left:10px;width:100%;">
-            <div style="float:left;width:10%;" id="staymodetitle">$!staymodetitle</div>
-            <div style="float:left;width:23%"><b id="patientId">$!patientId</b></div>
-            <div style="float:left;width:5%" id="staymodesection">$!staymodesection</div>
-            <div style="float:left;width:30%"><b id="pSection">$!pSection</b></div>
-            <div style="float:left;width:5%" id="bedtitle"><fmt:message key="patient.departbed"/></div>
-            <div style="float:left;width:27%"><b id="pBed">$!pBed</b></div>
-        </div>
-    </div>
+<!--头部信息 start-->
+<div class="head">
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <div class="llogo"><img src="../images/l_logo.jpg"/></div>
+            </td>
+            <td style="text-align:center"><span class="headtitle">检验报告单</span></td>
+            <td>
+                <div class="rlogo"><img src="../images/r_logo.jpg"/></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>检验目的:$!examinaim</b></td>
+        </tr>
+    </table>
 </div>
+<div class="patientinfo">
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td>姓&#12288;&#12288;名:<span style="font-weight: bold">$!patientName</span></td>
+            <td>性&#12288;&#12288;别:<span>$!sex</span></td>
+            <td>年&#12288;&#12288;龄:<span>$!age$!ageUnit</span></td>
+            <td>标&#8194;识&#8194;号:<span>$!barCode</span></td>
+        </tr>
+        <tr>
+            #if($!staymode ==2)
+                <td>病&#12288;&#12288;区:<span>$!section</span></td>
+                <td>住&#8194;院&#8194;号:<span>$!blh</span></td>
+            #else
+                <td>科&#12288;&#12288;别:<span>$!section</span></td>
+                <td>就&#8194;诊&#8194;号:<span>$!blh</span></td>
+            #end
+            <td>床&#12288;&#12288;号:<span>$!bed</span></td>
+            <td>标&#8194;本&#8194;号:<span>$!sampleNo</span></td>
+        </tr>
+        <tr>
+            <td>标本类型:<span>$!sampleType</span></td>
+            <td>标本状态:<span>$!note</span></td>
+            <td>送检医师:<span>$!requester</span></td>
+            <td>检验仪器:</td>
+        </tr>
+        <tr>
+            <td colspan="4">临床诊断:<span>$!diagnostic</span></td>
+        </tr>
+    </table>
+</div>
+<!--头部信息 end-->

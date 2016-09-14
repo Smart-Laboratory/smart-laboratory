@@ -539,8 +539,9 @@
                 LODOP.PRINT_DESIGN()
             },
             printReport:function(){
-                $.get("../print/printReport",{sampleno:'20160530URF003', haslast:'0', type:''}, function(data){
+                $.get("/print/ajax/printReport",{sampleno:'20160530URF001', haslast:'0', type:''}, function(data){
                     console.log(data)
+                    Preview(data);
                 })
             }
         }
@@ -574,9 +575,13 @@
 <script>
     var LODOP; //声明为全局变量
 
-    function Preview() {//打印预览
+    function Preview(strHtml) {//打印预览
         LODOP = getLodop();
-        CreateDataBill(data)
+        //CreateDataBill(data)
+        LODOP=getLodop();
+        LODOP.PRINT_INIT("打印报告单");
+        LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
+        //LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
         LODOP.PREVIEW();
     }
 

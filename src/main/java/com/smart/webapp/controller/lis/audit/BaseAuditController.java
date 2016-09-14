@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.smart.service.lis.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,21 +19,6 @@ import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
-import com.smart.service.lis.AuditTraceManager;
-import com.smart.service.lis.CollectSampleManager;
-import com.smart.service.lis.ContactManager;
-import com.smart.service.lis.CriticalRecordManager;
-import com.smart.service.lis.DeviceManager;
-import com.smart.service.lis.DiagnosisManager;
-import com.smart.service.lis.LikeLabManager;
-import com.smart.service.lis.ProcessManager;
-import com.smart.service.lis.ProfileTestManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.SectionCodeManager;
-import com.smart.service.lis.SectionManager;
-import com.smart.service.lis.TaskManager;
-import com.smart.service.lis.TestResultManager;
-import com.smart.service.lis.YlxhManager;
 import com.smart.service.reagent.ReagentManager;
 import com.smart.service.request.SFXMManager;
 import com.smart.service.rule.BagManager;
@@ -123,7 +109,10 @@ public class BaseAuditController {
 	
 	@Autowired
 	protected DesBagManager desBagManager = null;
-	
+
+	@Autowired
+	protected PatientManager patientManager = null;
+
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();

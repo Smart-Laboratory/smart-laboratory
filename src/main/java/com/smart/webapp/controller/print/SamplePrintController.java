@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.print;
 
-import java.io.File;		
+import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,6 +14,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.lis.*;
+import com.smart.model.lis.Process;
+import com.smart.util.ConvertUtil;
+import com.smart.util.GenericPdfUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -22,12 +27,10 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.Constants;
-import com.smart.model.lis.Process;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestResult;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -890,16 +893,18 @@ public class SamplePrintController extends BaseAuditController {
 
 
 	//打印类型：1-单栏正常；2-双栏正常；3-乙肝MYC；4-微生物培养和鉴定；5-微生物药敏
-	@RequestMapping(value = "/printReport*", method = RequestMethod.GET)
+	@RequestMapping(value = "ajax/printReport*", method = RequestMethod.GET)
+	@ResponseBody
 	public String printReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		VelocityContext velocityContext = new VelocityContext();
 		String sampleno = request.getParameter("sampleno");
-		int hasLast = Integer.parseInt(request.getParameter("haslast"));
+		int hasLast = ConvertUtil.getIntValue(request.getParameter("haslast"),0);
 		int type = 1;
 		JSONObject info = new JSONObject();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		Sample s = sampleManager.getBySampleNo(sampleno);
 		Process process = processManager.getBySampleId(s.getId());
+		Patient patient = patientManager.getByPatientId(s.getPatientId());
 		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
 		List<SyncResult> wswlist = null;
 		if(sampleno.substring(8, 11).equals("BAA")) {
@@ -917,19 +922,21 @@ public class SamplePrintController extends BaseAuditController {
 				type = 5;
 			}
 		}
+		velocityContext.put("type", type);
 		velocityContext.put("blh", s.getPatientblh());
-		velocityContext.put("pName", s.getPatientname());
+		velocityContext.put("patientName", s.getPatientname());
 		velocityContext.put("sex", s.getSexValue());
 		velocityContext.put("age", s.getAge());
-		velocityContext.put("pType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(s.getSampleType())));
+		velocityContext.put("ageUnit", s.getAgeunit());
+		velocityContext.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(s.getSampleType())));
 		velocityContext.put("diagnostic", s.getDiagnostic());
+		velocityContext.put("note", s.getNote());
+		velocityContext.put("barCode", s.getBarcode());
+		velocityContext.put("sampleNo", s.getSampleNo());
+		velocityContext.put("sampleId", s.getId());
+		//velocityContext.put("phone",patient.getPhone());
 		if(s.getStayHospitalMode() == 2) {
-			velocityContext.put("staymodetitle", "住 院 号");
-			velocityContext.put("staymodesection", "病区");
 			velocityContext.put("bed", s.getDepartBed());
-		} else {
-			velocityContext.put("staymodetitle", "就诊卡号");
-			velocityContext.put("staymodesection", "科室");
 		}
 		velocityContext.put("staymode", s.getStayHospitalMode());
 		velocityContext.put("pId", s.getPatientId());
@@ -963,7 +970,6 @@ public class SamplePrintController extends BaseAuditController {
 			}
 		}
 		velocityContext.put("auditro", dzqm_imghtm);
-
 		velocityContext.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
 		velocityContext.put("checktime", Constants.SDF.format(process.getChecktime()));
 		velocityContext.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
@@ -1054,6 +1060,44 @@ public class SamplePrintController extends BaseAuditController {
 				}
 			}
 		}
+
+		List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
+		for(TestResult result:list){
+			String testId = result.getTestId();
+			Set<String> sameTests = util.getKeySet(testId);
+			sameTests.add(testId);
+			TestResultVo testResultVo = new TestResultVo();
+			testResultVo.setTestName(idMap.get(result.getTestId()).getName());
+			testResultVo.setTestResult(result.getTestResult());
+			if (Integer.parseInt(idMap.get(result.getTestId()).getPrintord()) <=2015) {
+				if(result.getResultFlag().charAt(0) == 'C') {
+					testResultVo.setResultFlag("↓");
+				} else if(result.getResultFlag().charAt(0) == 'B') {
+					testResultVo.setResultFlag("↑");
+				}
+			}
+			//上次检验结果
+			if(hasLast == 1) {
+				for(String tid : sameTests) {
+					if(resultMap1.size() != 0 && resultMap1.containsKey(tid)) {
+						testResultVo.setHisTestResult1(resultMap1.get(tid).getTestResult());
+						if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+							if(resultMap1.get(tid).getResultFlag().charAt(0) == 'C') {
+								testResultVo.setHisResultFlag1("↓");
+							} else if(resultMap1.get(tid).getResultFlag().charAt(0) == 'B') {
+								testResultVo.setHisResultFlag1("↑");
+							}
+						}
+					}
+				}
+			}
+			testResultVo.setUnit(result.getUnit());
+			testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
+
+			testResultVos.add(testResultVo);
+		}
+		velocityContext.put("resultSize",testResultVos.size());
+		velocityContext.put("results",testResultVos);
 //		String html = "";
 //		String dangerTest = "";
 //		if(s.getAuditMark() == 6) {
@@ -1106,10 +1150,15 @@ public class SamplePrintController extends BaseAuditController {
 		engine.setProperty(Velocity.RESOURCE_LOADER, "class");
 		engine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 		engine.init();
-		Template template = engine.getTemplate("template/testReport.vm", "gbk");
-		template.merge(velocityContext, response.getWriter());
+		Template template = engine.getTemplate("/template/testReport.vm", "UTF-8");
+		StringWriter writer = new StringWriter();
+		template.merge(velocityContext, writer);
+
+		GenericPdfUtil.createPdf(s.getSampleNo()+".pdf",writer.toString());
 		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(info.toString());
+		//response.getWriter().write(info.toString());
 		return null;
 	}
+
+
 }

@@ -1,47 +1,142 @@
-#*****************************
- * 检验报告单模版
- * **************************#
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        @page { size: 8.5in 5.5in; }
+        html * {
+            margin: 0 auto;
+            font-family: SimSun;
+            font-size: 9pt;
+
+        }
+
+        body {
+            width: 100%;
+            /*height: 13.5cm;*/
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .content {
+            /*padding: 20px 20px 10px 20px;*/
+        }
+
+        .head {
+            width: 100%;
+
+        }
+
+        .patientinfo {
+            width: 100%;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .patientinfo td {
+            /*padding-top:2px;
+            padding-bottom:2px;*/
+        }
+
+        .patientinfo td span {
+            padding-left: 5px;
+        }
+
+        .result {
+            width: 100%;
+            height: 8cm;
+        }
+
+        .result table {
+            width: 100%;
+        }
+
+        .result table tr th {
+            text-align: left;
+            font-bold: weight;
+            border-bottom: 1px solid #000;
+        }
+
+        .result table tr td {
+            text-align: left;
+            #if($!resultSize <6)
+                font-size: 10.5pt;
+            #end
+        }
+
+        .footer {
+            width: 100%;
+        }
+
+        .footer table {
+            width: 100%;
+        }
+
+        .footer tr td {
+            font-size: 7.5pt;
+        }
+
+        .headtitle {
+            font-size: 16pt;
+            font-weight: bold;
+        }
+
+        .llogo img, .rlogo img {
+            width: 160px;
+            height: 50px;
+        }
+
+        .rlogo {
+            text-align: right;
+        }
+
+        .line1 td {
+            border-bottom: 1px solid #000;
+            font-size: 9pt;
+        }
+
+        .line2 td {
+            border-bottom: 2px solid #000;
+            font-size: 9pt;
+        }
+    </style>
+</head>
 <body>
-    #parse ("testReportHead.vm")
-<div id="resultDiv"
-     style="float:left;width:96%;margin-left:2%;padding:10px;font-size:12px;border-top:1px solid #000000;">
-    <table border="0" cellpadding="0" cellspacing="0">
-        <th>
-            <td>No.</td>
-            <td>项目</td>
-            <td>当次结果</td>
-            <td>上次结果</td>
-            <td>参考范围</td>
-            <td>单位</td>
-        </th>
-        #set ($i=0)
-        #foreach ($element in $list)
-            #set($i=$i+1)
+<div class="content">
+    #parse ("/template/testReportHead.vm")
+    <!--结果信息 start-->
+    <div class="result">
+        <table cellpadding="0" cellspacing="0">
+            <colgroup>
+                <col width="35%"/>
+                <col width="15%"/>
+                <col width="5%"/>
+                <col width="35%"/>
+                <col width="10%"/>
+            </colgroup>
             <tr>
-                <td>$i</td>
-                <td>$element.itemName</td>
-                <td>$element.result</td>
-                <td>$element.hisResult</td>
-                <td>$element.lo</td>
-                <td>$element.unit</td>
+                <th>检验项目</th>
+                <th>结果</th>
+                <th>&#160;</th>
+                <th>参考值</th>
+                <th>单位</th>
             </tr>
-        #end
-    </table>
+            #foreach($item in $results)
+                <tr>
+                    <td>$!item.testName</td>
+                    <td>$!item.testResult</td>
+                    <td>$!item.resultFlag</td>
+                    <td>$!item.reference</td>
+                    <td>$!item.unit</td>
+                </tr>
+            #end
+        </table>
+    </div>
+    <!--结果信息 end-->
+    #parse ("/template/testReportFooter.vm")
 </div>
-<div id="imageDiv"></div>
-<div style="float:left;width:92%;margin-left:4%;margin-top:5px;font-size:12px;" id="advise">
-    <h4><b>
-        <fmt:message key="sample.diagadvise"/>
-        :</b></h4>
-    <div id="adviseHtml"></div>
-</div>
-<div id="historyChart" style="float:left;width:96%;margin-left:2%;padding:10px;border-top:1px solid #000000;">
-    <p>
-        <fmt:message key="sample.history.chart"/>
-    </p>
-</div>
-    #parse ("testReportFooter.vm")
 </body>
 </html>
-
