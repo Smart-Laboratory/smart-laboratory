@@ -57,7 +57,6 @@ public class YlsfController extends BaseAuditController {
 		}
 		ModelAndView view = new ModelAndView();
 		view.addObject("lab", lab);
-		view.addObject("typeList", SampleUtil.getInstance(dictionaryManager).getMap());
         return view;
     }
 	
@@ -133,7 +132,7 @@ public class YlsfController extends BaseAuditController {
 		JSONObject success = new JSONObject();
 		try {
 			ylxh = ylxhManager.save(ylxh);
-			YlxhUtil.updateMap(ylxh);
+			YlxhUtil.getInstance(ylxhManager).updateMap(ylxh);
 			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

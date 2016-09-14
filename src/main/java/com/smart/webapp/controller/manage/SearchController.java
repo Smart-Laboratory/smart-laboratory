@@ -1,10 +1,7 @@
 package com.smart.webapp.controller.manage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,11 +50,7 @@ public class SearchController {
 				}
 			}
 		}
-		//depart.put("1300000", "所有科室");
-		Map<String, String> sampleTypes = SampleUtil.getInstance(dictionaryManager).getMap();
-		
 		request.setAttribute("departList", depart);
-		request.setAttribute("sampleTypes", sampleTypes);
 		request.setAttribute("lastlab", lab);
         return new ModelAndView();
     }
@@ -89,8 +82,7 @@ public class SearchController {
 		int size = 0;
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String lab = operator.getDepartment();
-		
-		
+
 		//获取样本信息
 		switch (type) {
 		case 1:
@@ -122,10 +114,11 @@ public class SearchController {
 			return null;
 		}
 		if(mode!=0){
-			for(int i=0;i<samples.size();i++){
-				if(samples.get(i).getStayHospitalMode()!=mode){
-					samples.remove(i);
-					i--;
+			Iterator iterator = samples.iterator();
+			while(iterator.hasNext()) {
+				Sample s = (Sample)iterator.next();
+				if(s.getStayHospitalMode()!=mode) {
+					iterator.remove();
 				}
 			}
 		}
@@ -165,11 +158,9 @@ public class SearchController {
 		
 		Map<String, String> sMap = SampleUtil.getInstance(dictionaryManager).getMap();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
-		
-		
+
 		for(Sample info :samples) {
 			String section = sectionutil.getLabValue(info.getSectionId());
-			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
 			map.put("sample", "<a href='../manage/patientList?blh="+info.getPatientblh()+"'>"+info.getSampleNo()+"</a>");
@@ -184,7 +175,6 @@ public class SearchController {
 			map.put("section",section);
 			map.put("patientid",info.getPatientId());
 			map.put("sampleType", sMap.get(info.getSampleType()));
-			map.put("operation", "<button id='search_printBtn' onclick='search_printBtn(\""+info.getSampleNo()+"\")' class='btn btn-info' style='margin-left:20px;'>打印</button>");
 			if (info.getSampleStatus()>=5) {
 				if (info.getIswriteback() == 1) {
 					map.put("lisPass", "<font color='red'>" + "已打印" + "</font>");

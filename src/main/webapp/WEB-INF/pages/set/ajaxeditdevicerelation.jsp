@@ -107,7 +107,7 @@
                         </a>
                     </li>
                 </ul>
-                <form class="form-horizontal" name="infoForm" id="infoForm"  action="/set/devicerelation/saveInfo">
+                <form class="form-horizontal" name="infoForm" id="infoForm"  action="<%=request.getContextPath()%>/set/devicerelation/saveInfo">
                 <div class="tab-content">
                     <!--常用信息start-->
 
@@ -141,6 +141,10 @@
                                         <div class="form-group controls controls-row">
                                             <label class="col-sm-1 control-label" for="samplefrom">样本类型</label>
                                             <div class="col-sm-5">
+                                                <input type="hidden" id="hiddenSamplefrom" name="hiddenSamplefrom" value="${index.sampleFrom}"/>
+                                                <input type="text" id="samplefrom" name="samplefrom" placeholder="样本类型" style="width:100%" value="${sampleType}"/>
+                                            </div>
+                                            <%--<div class="col-sm-5">
                                                 <select class="form-control" id="samplefrom" name="samplefrom" placeholder="样本类型" >
                                                     <c:forEach items="${samplelist}" var="entry">
                                                         <option value="<c:out value="${entry.key}" />" <c:choose>
@@ -151,7 +155,7 @@
                                                             <c:out value="${entry.value}" /></option>
                                                     </c:forEach>
                                                 </select>
-                                            </div>
+                                            </div>--%>
                                             <label class="col-sm-1 control-label" for="labdepartment">检验部门</label>
                                             <div class="col-sm-5">
                                                 <input class="form-control" id="labdepartmentshow"  name="labdepartmentshow" type="text"  value="${index.labdepartment}" placeholder="检验部门" />
@@ -163,7 +167,7 @@
                                             <div class="col-sm-5">
                                                 <select id="type" name="type" class="form-control">
                                                     <option value="S">字符型</option>
-                                                    <option value="N">数值型</option>
+                                                    <option value="N" selected>数值型</option>
                                                     <option value="E">枚举型</option>
                                                 </select>
                                             </div>
@@ -178,9 +182,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group controls controls-row">
-                                            <label class="col-sm-1 control-label" for="method">检测方法</label>
+                                            <label class="col-sm-1 control-label" for="printord">打印顺序</label>
                                             <div class="col-sm-5">
-                                                <input class="form-control" id="method"   name="method" value="${index.method}" type="text" placeholder="检测方法"/>
+                                                <input class="form-control" id="printord" name="printord" value="${index.printord}" type="text" placeholder="打印顺序"/>
                                             </div>
                                             <label class="col-sm-1 control-label" for="description">指标说明</label>
                                             <div class="col-sm-5">
@@ -419,7 +423,7 @@
             indexid : $('#index_Id').val()||'',
             refTable:$('#tableList'),                       //参考范围列表
             dicTable:$('#dicTable'),                        //项目字典列表
-            saveUrl:'<%=request.getContextPath()%>/devicerelationlist/saveInfo',
+            saveUrl:'<%=request.getContextPath()%>/set/devicerelationlist/saveInfo',
             lastsel:'0',
             lastsel2:'0'
         };
@@ -464,6 +468,10 @@
                     layer.msg("单位不能为空,请输入！",{icon:2,time:1000});
                     return false;
                 }
+                if($('#samplefrom').val() ==''){
+                    layer.msg("样本类型不能为空,请输入！",{icon:2,time:1000});
+                    return false;
+                }
                 if($('#labdepartment').val() =='' && $('select[name="departlist[]"]').val() ==''){
                     layer.msg("部门不能为空,请输入！",{icon:2,time:1000});
                     return false;
@@ -483,17 +491,17 @@
                 var datas = [];
                 $(rowData).each(function(){
                     var obj = {};
-                    obj.sampletype = this.sampletype;
                     obj.testid = this.testid;
                     obj.deviceid = this.deviceid;
                     obj.sex= this.sex;
-                    obj.age= this.age;
-                    obj.ageunit = this.ageunit;
+                    obj.ageLow= this.ageLow;
+                    obj.ageLowUnit = this.ageLowUnit;
+                    obj.ageHigh = this.ageHigh;
+                    obj.ageHighUnit = this.ageHighUnit;
                     obj.orderno= this.orderno;
-                    obj.sampletype = this.sampletype;
+                    obj.sampletype = $("#hiddenSamplefrom").val();
                     obj.direct = this.direct;
-                    obj.reflower = this.reflower;
-                    obj.refhigh= this.refhigh;
+                    obj.reference = this.reference;
                     datas.push(obj);
                 });
                 datas = public.arrayToJson(datas);
@@ -631,7 +639,7 @@
                     var rowData = {
                         testid:$('#indexid').val()||'',
                         testname: $('#name').val()||'',
-                        sampletype: $('#samplefrom').val(),
+                        sampletype: $('#hiddenSamplefrom').val(),
                         sex: "0",
                         ageLow: "0",
                         ageLowUnit:'岁',
@@ -768,5 +776,31 @@
                 $("#departlist").val(ui.item.code);
             }
         });
+
+       $("#samplefrom").autocomplete({
+           source: function( request, response ) {
+               $.ajax({
+                   url: "<%=request.getContextPath()%>/ajax/searchSampleType",
+                   dataType: "json",
+                   data: {
+                       name : request.term
+                   },
+                   success: function( data ) {
+                       response( $.map( data, function( result ) {
+                           return {
+                               label: result.sign + " : " + result.value,
+                               value: result.value,
+                               sign : result.sign
+                           }
+                       }));
+                   }
+               });
+           },
+           minLength: 1,
+           select : function(event, ui) {
+               $("#samplefrom").val(ui.item.value);
+               $("#hiddenSamplefrom").val(ui.item.sign);
+           }
+       });
     })
 </script>

@@ -176,7 +176,7 @@
                     public.indexGrid.jqGrid('setGridWidth', $("#leftContent").width(),false);
                 });
                 public.indexGrid.jqGrid({
-                    url: '/set/devicerelationlist/getList',
+                    url: '<%=request.getContextPath()%>/set/devicerelationlist/getList',
                     datatype: "json",
                     height: 200,
                     //shrinkToFit: false,
@@ -218,7 +218,7 @@
              search:function(){
                 var query = $('#query').val()||'';
                 public.indexGrid.jqGrid('setGridParam',{
-                    url: "/set/devicerelationlist/getList",
+                    url: "<%=request.getContextPath()%>/set/devicerelationlist/getList",
                     datatype : 'json',
                     postData : {"query":query },
                     page : 1
@@ -230,7 +230,7 @@
                 $('#testnumb').val(Calculate.formulaIem.length);
                 $('#formulaitem').val(Calculate.formulaIem.join(","));
                 $.ajax({
-                    url:'/set/calculateformula/saveInfo',
+                    url:'<%=request.getContextPath()%>/set/calculateformula/saveInfo',
                     dataType:'json',
                     type:'post',
                     data:$('#addForm').serialize(),

@@ -48,6 +48,7 @@ function editYlxh() {
 	$('#mzpb').val(rowData.mzpb);
 	$('#zypb').val(rowData.zypb);
 	$('#yblx').val(rowData.yblx);
+	$('#yblxzw').val(rowData.yblxzw);
 	$('#sglx').val(rowData.sglx);
 	$('#bbl').val(rowData.bbl);
 	$('#qbgsj').val(rowData.qbgsj);
@@ -174,7 +175,7 @@ function removeTest(obj, index, indexid) {
 function search(){
 	var query = $('#query').val()||'';
 	jQuery("#s3list").jqGrid('setGridParam',{
-		url: "../set/ylsf/data",
+		url: baseUrl + "/set/ylsf/data",
 		datatype : 'json',
 		//发送数据
 		postData : {
@@ -198,7 +199,7 @@ function getList(lab) {
     var height =clientHeight-$('#head').height()- $('#toolbar').height()-$('.footer-content').height()-150;
 	var mygrid = $("#s3list").jqGrid({
 		caption: "检验目的基础设置",
-		url: "../set/ylsf/data?lab="+lab,
+		url: baseUrl + "/set/ylsf/data?lab="+lab,
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
@@ -265,6 +266,9 @@ function getList(lab) {
 				}
 			});
     	},
+		ondblClickRow: function (id) {
+			editYlxh();
+		},
 		viewrecords: true,
 		shrinkToFit: true,
 		altRows:true,
@@ -286,11 +290,37 @@ $(function() {
 
 		}
 	});
+
+	$("#yblxzw").autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url: baseUrl + "/ajax/searchSampleType",
+				dataType: "json",
+				data: {
+					name : request.term
+				},
+				success: function( data ) {
+					response( $.map( data, function( result ) {
+						return {
+							label: result.sign + " : " + result.value,
+							value: result.value,
+							sign : result.sign
+						}
+					}));
+				}
+			});
+		},
+		minLength: 1,
+		select : function(event, ui) {
+			$("#yblxzw").val(ui.item.value);
+			$("#yblx").val(ui.item.sign);
+		}
+	});
 	
 	$("#searchIndex").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../ajax/searchTest",
+            	url: baseUrl + "/ajax/searchTest",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -352,12 +382,12 @@ $(function() {
 		var code = $(select).children().attr("title");
 		$.ajax({
 			  type: 'POST',
-			  url: "../audit/labChange?lab="+code
+			  url: baseUrl + "/audit/labChange?lab="+code
 		});
 		$("#lab").val(code);
 		$("#labText").html($(select).children().html());
 		jQuery("#s3list").jqGrid('setGridParam',{
-			url:"../set/ylsf/data",
+			url:baseUrl + "/set/ylsf/data",
 			datatype : 'json',
 			postData : {"lab":code},
 			page : 1

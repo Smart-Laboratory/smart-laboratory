@@ -236,6 +236,7 @@ public class DeviceRelationListController {
             }
 
             view.addObject("index",index);                  //指标信息
+            view.addObject("sampleType",SampleUtil.getInstance(dictionaryManager).getValue(index.getSampleFrom())); //样本类型中文
         }
         //返回常用信息
         //JSONObject jsonIndex = toJSON(index);
@@ -280,7 +281,7 @@ public class DeviceRelationListController {
 
         String name = ConvertUtil.null2String(request.getParameter("name"));
         String eglish = ConvertUtil.null2String(request.getParameter("eglish"));
-        String sampleFrom = ConvertUtil.null2String(request.getParameter("samplefrom"));
+        String sampleFrom = ConvertUtil.null2String(request.getParameter("hiddenSamplefrom"));
         String unit = ConvertUtil.null2String(request.getParameter("unit"));
         String defaultValue = ConvertUtil.null2String(request.getParameter("defaultvalue"));
         String outDate = ConvertUtil.null2String(request.getParameter("outdate"));
@@ -293,6 +294,7 @@ public class DeviceRelationListController {
         String description = ConvertUtil.null2String(request.getParameter("description"));
         String guide = ConvertUtil.null2String(request.getParameter("guide"));
         String type = ConvertUtil.null2String(request.getParameter("type"));
+        int printord = ConvertUtil.getIntValue(request.getParameter("printord"),0);
 
         if(!name.equals("")) index.setName(name);
         if(!eglish.equals("")) index.setEnglish(eglish);
@@ -308,6 +310,7 @@ public class DeviceRelationListController {
         if(!guide.equals("")) index.setGuide(guide);
         if(!type.equals("")) index.setType(type);
         if(!unit.equals("")) index.setUnit(unit);
+        if(printord>=0) index.setPrintord(ConvertUtil.null2String(printord));
         //不常用信息
         String principle = ConvertUtil.null2String(request.getParameter("principle"));          //测定原理
         String workCriterion = ConvertUtil.null2String(request.getParameter("workcriterion")); //工作规范

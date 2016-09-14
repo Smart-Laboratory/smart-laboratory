@@ -142,25 +142,25 @@
 				</div>
 				<div class="col-xs-6">
 					<label>
-						<input type="radio" name="select_type" id="q_id" value="2" checked class="ace" />
+						<input type="radio" name="select_type" id="q_id" value="2" class="ace" />
 						<span class="lbl"><fmt:message key="sample.query.id" /></span>
 					</label>
 				</div>
 				<div class="col-xs-6">
 					<label>
-						<input type="radio" name="select_type" id="q_name" value="3" checked class="ace" />
+						<input type="radio" name="select_type" id="q_name" value="3" class="ace" />
 						<span class="lbl"><fmt:message key="sample.query.name" /></span>
 					</label>
 				</div>
 				<div class="col-xs-6">
 					<label>
-						<input type="radio" name="select_type" id="q_blh" value="4" checked class="ace" />
+						<input type="radio" name="select_type" id="q_blh" value="4" class="ace" />
 						<span class="lbl"><fmt:message key="sample.query.blh" /></span>
 					</label>
 				</div>
 				<div class="col-xs-6">
 					<label>
-						<input type="radio" name="select_type" id="q_patientid" value="5" checked class="ace" />
+						<input type="radio" name="select_type" id="q_patientid" value="5" class="ace" />
 						<span class="lbl"><fmt:message key="sample.query.patientid" /></span>
 					</label>
 				</div>
@@ -176,11 +176,8 @@
 			</div>
 			<div class="row" style="margin:5px;overflow: auto;">
 				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>标本类型:</b></div>
-				<select id="sampleTypeSelect"  class="col-xs-9">
-					<c:forEach var="sType" items="${sampleTypes}">
-						<option value='<c:out value="${sType.key}" />'><c:out value="${sType.value}" /></option>
-					</c:forEach>
-				</select>
+				<input type="hidden" id="hiddenSampleType"/>
+				<input type="text" id="sampleTypeSearch"  class="col-xs-9"/>
 			</div>
 			<div class="row" style="margin:5px;overflow: auto;">
 				<div class="col-xs-3" style="text-align:center;line-height: 33px;"><b>检验部门:</b></div>

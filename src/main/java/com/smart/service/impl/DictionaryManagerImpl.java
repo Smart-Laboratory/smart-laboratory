@@ -44,4 +44,12 @@ public class DictionaryManagerImpl extends GenericManagerImpl<Dictionary, Long> 
 	public List<Dictionary> getDeviceType(){
 		return dictionaryDao.getDeviceType();
 	}
+
+	/**
+	 * 搜索标本类型
+	 * @return
+	 */
+	public List<Dictionary> searchSampleType(String name) {
+		return dictionaryDao.searchSampleType(name);
+	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.Dictionary;
 import com.smart.model.lis.*;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -71,7 +72,7 @@ public class SearchAjaxController extends BaseAuditController {
     }
     
     /**
-     * 搜索仪器
+     * 搜索检验段
      * @param request
      * @param response
      * @return
@@ -105,6 +106,42 @@ public class SearchAjaxController extends BaseAuditController {
         response.getWriter().print(array.toString());
         return null;
     }
+
+	/**
+	 * 搜索样本类型
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/searchSampleType", method = { RequestMethod.GET })
+	@ResponseBody
+	public String searchSampleType(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String name = request.getParameter("name");
+		if (StringUtils.isEmpty(name)) {
+			return null;
+		}
+
+		List<Dictionary> codeList =  dictionaryManager.searchSampleType(name);
+		if(codeList.size()>5)
+			codeList = codeList.subList(0, 5);
+
+		JSONArray array = new JSONArray();
+		if (codeList != null) {
+			for (Dictionary dictionary : codeList) {
+				JSONObject  jsonObject = new JSONObject();
+				jsonObject.put("id", dictionary.getId());
+				jsonObject.put("sign", dictionary.getSign());
+				jsonObject.put("value",dictionary.getValue());
+				array.put(jsonObject);
+			}
+		}
+
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
 
     /**
      * 搜索部门

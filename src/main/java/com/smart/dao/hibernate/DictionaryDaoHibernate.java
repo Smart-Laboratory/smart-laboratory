@@ -77,4 +77,13 @@ public class DictionaryDaoHibernate extends GenericDaoHibernate<Dictionary, Long
 	public List<Dictionary> getDeviceType(){
 		return  getSession().createQuery("from Dictionary where type = 3").list();
 	}
+
+	/**
+	 * 样本类型信息 type =1
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Dictionary> searchSampleType(String name) {
+		return getSession().createQuery("from Dictionary where type=1 and value like '" + name + "%'").list();
+	}
 }

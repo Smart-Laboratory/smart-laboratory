@@ -36,6 +36,7 @@ public class YlxhUtil {
 	public Map<String, Ylxh> getMap (){
 		return map;
 	}
+
 	public static void updateMap(Ylxh ylxh) {
 		map.put(ConvertUtil.null2String(ylxh.getYlxh()), ylxh);
 	}

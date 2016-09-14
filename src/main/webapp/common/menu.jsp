@@ -3,6 +3,7 @@
 function labChange() {
 }
 
+var baseUrl = "<%=request.getContextPath()%>";
 $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
 		var nowUrl = window.location.pathname;

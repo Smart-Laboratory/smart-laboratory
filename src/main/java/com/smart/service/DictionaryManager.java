@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.smart.model.Dictionary;
 import com.smart.model.DictionaryType;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface DictionaryManager  extends GenericManager<Dictionary, Long>{
 	/**
@@ -16,9 +17,21 @@ public interface DictionaryManager  extends GenericManager<Dictionary, Long>{
      * @param sord
      * @return
      */
+	@Transactional
 	List<Dictionary> getDictionaryList(String query,String type,int start,int end,String sidx,String sord);
+
+	@Transactional
 	List<Dictionary> getPatientInfo(String name);
+
+	@Transactional
 	List<Dictionary> getSampleType();
+
+	@Transactional
 	List<Dictionary> getDeviceType();
+
+	@Transactional
 	int getDictionaryCount(String query, String type);
+
+	@Transactional
+    List<Dictionary> searchSampleType(String name);
 }
