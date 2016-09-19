@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smart.model.Dictionary;
 import com.smart.model.lis.*;
+import com.smart.util.ConvertUtil;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -252,16 +253,35 @@ public class SearchAjaxController extends BaseAuditController {
     @RequestMapping(value = "/searchYlsf*", method = RequestMethod.GET)
 	public String searchYlsf(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String query = request.getParameter("query");
-		long hospitalid = userManager.getUserByUsername(request.getRemoteUser()).getHospitalId();
-		List<SFXM> sfxmList = sfxmManager.searchSFXM(query.toUpperCase(), hospitalid);
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Ylxh> ylxhList = ylxhManager.searchData(query.toUpperCase(), lab);
 		JSONObject o = new JSONObject();
 		List<String> list= new ArrayList<String>();
-		for(SFXM sfxm : sfxmList) {
-			list.add(sfxm.getId() + " " + sfxm.getName() + " " + sfxm.getYblx() +" " + sfxm.getPrice());
+		for(Ylxh ylxh : ylxhList) {
+			list.add(ylxh.getYlxh() + " " + ylxh.getYlmc() + " " + ylxh.getYblx() +" " + ylxh.getPrice());
 		}
 		o.put("list", list);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
+		return null;
+	}
+
+	@RequestMapping(value = "/searchYlxh*", method = RequestMethod.GET)
+	public String searchYlxh(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String name = request.getParameter("name");
+		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
+		List<Ylxh> ylxhList = ylxhManager.searchData(name.toUpperCase(), lab);
+		JSONArray array = new JSONArray();
+		if (ylxhList != null) {
+			for (Ylxh ylxh : ylxhList) {
+				JSONObject o = new JSONObject();
+				o.put("id", ylxh.getYlxh());
+				o.put("name", ylxh.getYlmc() + " " + ylxh.getPrice());
+				array.put(o);
+			}
+		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.getWriter().write(array.toString());
 		return null;
 	}
     
@@ -310,7 +330,7 @@ public class SearchAjaxController extends BaseAuditController {
 				
 				JSONObject o = new JSONObject();
 				o.put("id", d.getIndexId());
-				o.put("ab", d.getEnglish());
+				o.put("ab", ConvertUtil.null2String(d.getEnglish()));
 				o.put("name", d.getName());
 				array.put(o);
 			}

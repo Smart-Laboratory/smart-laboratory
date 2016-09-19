@@ -130,6 +130,7 @@ public class DeviceChannelController {
             channels.add(channel);
         }
         channelManager.saveChannels(channels);  //批量保存数据
+        ChannelUtil.getInstance(channelManager).updateMap(channels);
     }
 
 

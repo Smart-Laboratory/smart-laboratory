@@ -899,7 +899,7 @@
             },
             loadAutocomplete:function(key){
                 $.ajax({
-                    url: "../doctor/searchTest",
+                    url: "../ajax/searchTest",
                     dataType: "json",
                     data: {
                         maxRows : 12,

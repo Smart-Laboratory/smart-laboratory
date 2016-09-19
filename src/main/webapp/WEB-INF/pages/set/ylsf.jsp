@@ -83,10 +83,15 @@
 		</div>
 	</div>
 	<div class="input-group col-sm-3" style="padding-top: 5px;">
-		<input type="text" id="searchIndex" class="form-control search-query" placeholder="输入项目ID或者名称" />
+		<input type="text" id="searchIndex" class="col-xs-8 search-query" placeholder="输入ID或者名称" />
 		<input type="hidden" id="searchIndexId" name="searchIndexId" value=''/>
+		<input type="hidden" id="searchTypeValue" name="searchTypeValue" value=''/>
+		<select class="col-xs-4" style="height: 33px;" id="searchType">
+			<option value="0" selected>检验项目</option>
+			<option value="1">检验目的</option>
+		</select>
 		<span class="input-group-btn">
-			<button type="button" class="btn btn-info btn-sm" onclick="addTest()">
+			<button type="button" class="btn btn-info btn-sm" style="height: 33px;" onclick="addTest()">
 				<i class="ace-icon fa fa-fire bigger-110"></i>
 				<fmt:message key="button.add"/>
 			</button>
@@ -204,6 +209,16 @@
 					<input type="text" id="yblxzw" name="yblxzw" class="col-xs-8" placeholder="样本类型"/>
 				</div>
 			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="ksdm"> 执行科室 </label>
+				<div class="col-xs-8">
+					<select type="text" id="ksdm" name="ksdm" class="col-xs-8" style="height:33px;">
+						<c:forEach items="${labs }" var="section">
+							<option value="${section.code }">${section.name }</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-6">
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
@@ -253,7 +268,6 @@
 				</div>
 			</div>
 		</div>
-		<input type="hidden" id="ksdm" name="ksdm"/>
 		<input type="hidden" id="profiletest" name="profiletest"/>
 		<input type="hidden" id="profiletest2" name="profiletest2"/>
 		<input type="hidden" id="profiletest3" name="profiletest3"/>

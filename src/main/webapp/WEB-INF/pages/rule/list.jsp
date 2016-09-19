@@ -52,7 +52,7 @@
 	</script>
 </head>
 <body>
-<div class="col-sm-7">
+<div class="col-sm-9">
 <h1><fmt:message key='rule.title'/></h1>
 <div class="form-inline" style="margin-bottom: 50px;">
 	<div class="col-sm-6" style="margin-top:3px;">

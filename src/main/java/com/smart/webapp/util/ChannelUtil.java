@@ -4,6 +4,7 @@ import com.smart.model.lis.Channel;
 import com.smart.service.lis.ChannelManager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,12 @@ public class ChannelUtil {
             }
         }
         return "";
+    }
+
+    public void updateMap(List<Channel> list) {
+        for(Channel channel : list) {
+            map.put(channel.getDeviceId()+"_"+channel.getTestId(), channel);
+        }
     }
 
 }

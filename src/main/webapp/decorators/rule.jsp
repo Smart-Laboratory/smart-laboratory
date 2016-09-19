@@ -49,11 +49,6 @@
             	<%@ include file="/common/left.jsp" %>
             </div>
             <decorator:body/>
-            <div class="col-sm-2">
-	            <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-	                <menu:displayMenu name="SampleSet"/>
-	            </menu:useMenuDisplayer>
-            </div>
         </div>
     </div>
 

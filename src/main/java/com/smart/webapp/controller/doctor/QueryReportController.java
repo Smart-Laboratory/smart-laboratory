@@ -696,43 +696,6 @@ public class QueryReportController  extends BaseAuditController {
     }
 
     /**
-     * 获取检验项目结果
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/searchTest", method = { RequestMethod.GET })
-    @ResponseBody
-    public String searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        String name = request.getParameter("name");
-        if (org.apache.cxf.common.util.StringUtils.isEmpty(name)) {
-            return null;
-        }
-
-        List<Index> desList =  indexManager.getIndexs(name);
-        if(desList.size()>10)
-            desList = desList.subList(0, 10);
-        JSONArray array = new JSONArray();
-
-        if (desList != null) {
-            for (Index d : desList) {
-
-                JSONObject o = new JSONObject();
-                o.put("id", d.getIndexId());
-                o.put("ab", d.getEnglish());
-                o.put("name", d.getName());
-                array.put(o);
-            }
-        }
-
-        response.setContentType("text/html; charset=UTF-8");
-        response.getWriter().print(array.toString());
-        return null;
-    }
-
-    /**
      * 历史曲线图
      * @param request
      * @param response

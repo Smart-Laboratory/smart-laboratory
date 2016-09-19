@@ -2,6 +2,7 @@ package com.smart.dao.hibernate.rule;
 
 import java.util.List;
 
+import com.smart.util.Config;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	public IndexDaoHibernate() {
 		super(Index.class);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexs(int pageNum, String field, boolean isAsc) {
 		
@@ -77,7 +78,7 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 
 	@SuppressWarnings("unchecked")
 	public List<Index> getIndexs(String indexName) {
-		List<Index> indexs = getSession().createQuery("from Index where name like '" + indexName + "%'  or english like '"+indexName+"%' order by name,sampleFrom").list();
+		List<Index> indexs = getSession().createQuery("from Index where name like '%" + indexName + "%'  or english like '%"+indexName+"%' or indexId like '"+ indexName + "%' order by name,sampleFrom").list();
 		return indexs;
 	}
 	

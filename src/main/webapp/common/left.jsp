@@ -4,10 +4,9 @@
     <link rel="stylesheet" href="../styles/ztree/zTreeStyle.css" type="text/css">
     <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../scripts/jquery.ztree.all-3.5.js"></script>
-    <link rel="stylesheet" href="../styles/jquery-ui.min.css" type="text/css">
     <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ruleLib.css'/>" />
-    <script type="text/javascript" src="../scripts/jquery.jstree.js"></script>
+	<script type="text/javascript" src="<c:url value='/scripts/jquery.jstree.js'/>"></script>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ruleLib.css'/>" />
 	<script type="text/javascript" src="../scripts/jquery.json-2.3.min.js"></script>
 </head>
 
@@ -347,14 +346,14 @@
 			async : true,
 			cache : false,
 			type : 'GET',
-			url : "<c:url value='../ajax/getBag'/>",
+			url : "<c:url value='/ajax/getBag'/>",
 			datatype : "json",
 			error : function() {
 				alert('data false');
 			},
 			success : function(data) {
 				var o = jQuery.parseJSON(data);
-				if (${pageContext.request.remoteUser=='admin'}) {
+				if (${pageContext.request.remoteUser=='lis'}) {
 					$.fn.zTree.init($("#tree"), setting1, o).expandAll(true);
 					$("#selectAll").bind("click", selectAll);
 					$("#callbackTrigger").bind("change", {}, setTrigger);	

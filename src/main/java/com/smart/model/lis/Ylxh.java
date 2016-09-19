@@ -40,6 +40,8 @@ public class Ylxh extends BaseObject {
 	private String sglx;	//试管类型
 	private String cjbw;	//采集部位
 	private int sgsl=0;		//试管数量
+	private String pinyin;
+	private String wubi;
 	
 	/**
 	 * 医疗序号
@@ -220,6 +222,24 @@ public class Ylxh extends BaseObject {
 
 	public void setSfhb(int sfhb) {
 		this.sfhb = sfhb;
+	}
+
+	@Column
+	public String getPinyin() {
+		return pinyin;
+	}
+
+	public void setPinyin(String pinyin) {
+		this.pinyin = pinyin;
+	}
+
+	@Column
+	public String getWubi() {
+		return wubi;
+	}
+
+	public void setWubi(String wubi) {
+		this.wubi = wubi;
 	}
 
 	public String toString() {

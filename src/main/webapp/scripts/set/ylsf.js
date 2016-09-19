@@ -2,7 +2,7 @@ function AddYlxh() {
 	clearData();
 	layer.open({
 		type: 1,
-		area: ['650px','450px'],
+		area: ['650px','500px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -53,7 +53,7 @@ function editYlxh() {
 	$('#bbl').val(rowData.bbl);
 	$('#qbgsj').val(rowData.qbgsj);
 	$('#qbgdd').val(rowData.qbgdd);
-	$("#ksdm").val($("#lab").val());
+	$("#ksdm").val(rowData.ksdm);
 	$('#profiletest').val(rowData.ptest);
 	$('#profiletest2').val(rowData.ptest2);
 	$('#profiletest3').val(rowData.ptest3);
@@ -63,7 +63,7 @@ function editYlxh() {
 
 	layer.open({
 		type: 1,
-		area: ['650px','450px'],
+		area: ['650px','500px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -72,7 +72,6 @@ function editYlxh() {
 		content: $("#YlxhDialog"),
 		btn:["保存","取消"],
 		yes: function(index, layero){
-			$("#ksdm").val($("#lab").val());
 			$.ajax({
 			  type: 'POST',
 			  url: '../set/ylsf/editYlsf',
@@ -103,37 +102,60 @@ function addTest() {
 	}
 	var rowData = $("#s3list").jqGrid('getRowData',rowId);
 	var type = $("#profileTab .active").children().prop('id').replace("tab","");
-	$.post('../set/ylsf/editProfile',{
-		type:type,
-		edit:'add',
-		index:$("#searchIndexId").val(),
-		ylxh:rowData.ylxh
-	},function(data) {
-		if(parseInt(data.success)==1) {
-			if(type == '1') {
-				layer.msg(rowData.ylmc + "的必做项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
-			} else if(type =='2') {
-				layer.msg(rowData.ylmc + "的可选项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000}); 
-			} else {
-				layer.msg(rowData.ylmc + "的关联项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
-
-}
-        } else {
-			if(type == '1') {
-				$("#s3list").jqGrid('setCell',rowId,'ptest',data.success);
-				$("#testTable").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
-			} else if(type =='2') {
-				$("#s3list").jqGrid('setCell',rowId,'ptest2',data.success);
-				$("#testTable2").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
-			} else {
-				$("#s3list").jqGrid('setCell',rowId,'ptest3',data.success);
-				$("#testTable3").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
-			}
-			$("#searchIndexId").val('');
-			$("#searchIndex").val('');
+	var searchType = $("#searchTypeValue").val();
+	var profiletest="";
+	if(type == '1') {
+		profiletest = rowData.ptest;
+	} else if(type =='2') {
+		profiletest = rowData.ptest2;
+	} else {
+		profiletest = rowData.ptest3;
+	}
+	if(profiletest.indexOf($("#searchIndexId").val()) >= 0) {
+		if(type == '1') {
+			layer.msg(rowData.ylmc + "的必做项目已包含"+ $("#searchIndex").val() +"，无需重复添加",{icon:2,time: 1000});
+		} else if(type =='2') {
+			layer.msg(rowData.ylmc + "的可选项目已包含"+ $("#searchIndex").val() +"，无需重复添加",{icon:2,time: 1000});
+		} else {
+			layer.msg(rowData.ylmc + "的关联项目已包含"+ $("#searchIndex").val() +"，无需重复添加",{icon:2,time: 1000});
 		}
-	});
-	
+	} else {
+		$.post('../set/ylsf/editProfile',{
+			type:type,
+			edit:'add',
+			index:$("#searchIndexId").val(),
+			searchType: searchType,
+			ylxh:rowData.ylxh
+		},function(data) {
+			if(parseInt(data.success)==1) {
+				if(type == '1') {
+					layer.msg(rowData.ylmc + "的必做项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
+				} else if(type =='2') {
+					layer.msg(rowData.ylmc + "的可选项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
+				} else {
+					layer.msg(rowData.ylmc + "的关联项目"+ $("#searchIndex").val() +"添加失败",{icon:2,time: 1000});
+				}
+			} else {
+				if(searchType == 0) {
+					if(type == '1') {
+						$("#s3list").jqGrid('setCell',rowId,'ptest',data.success);
+						$("#testTable").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+					} else if(type =='2') {
+						$("#s3list").jqGrid('setCell',rowId,'ptest2',data.success);
+						$("#testTable2").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+					} else {
+						$("#s3list").jqGrid('setCell',rowId,'ptest3',data.success);
+						$("#testTable3").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+					}
+					$("#searchIndexId").val('');
+					$("#searchIndex").val('');
+				} else {
+					$("#s3list").jqGrid('setSelection',rowId);
+				}
+
+			}
+		});
+	}
 }
 
 function removeTest(obj, index, indexid) {
@@ -148,7 +170,8 @@ function removeTest(obj, index, indexid) {
 		type:type,
 		edit:'delete',
 		index:indexid,
-		ylxh:rowData.ylxh
+		ylxh:rowData.ylxh,
+		searchType: 0,
 	},function(data) {
 		if(parseInt(data.success)==1) {
 			if(type == '1') {
@@ -182,7 +205,6 @@ function search(){
 			"query":query,
 			"lab":$("#lab").val()
 		},
-		page : 1
 	}).trigger('reloadGrid');//重新载入
 }
 
@@ -203,7 +225,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-		colNames:['序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB'],
+		colNames:['序号', '检验目的','英文名称','价格','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:false},
     		{name:'ylmc',index:'ylmc',width:160, sortable:false},
@@ -226,6 +248,7 @@ function getList(lab) {
     		{name:'mzpb',index:'mzpb', hidden:true},
     		{name:'zypb',index:'zypb', hidden:true},
 			{name:'sfhb',index:'sfhb', hidden:true},
+			{name:'ksdm',index:'ksdm', hidden:true}
     	],
     	loadComplete : function() {
             var table = this;
@@ -319,29 +342,52 @@ $(function() {
 	
 	$("#searchIndex").autocomplete({
         source: function( request, response ) {
-            $.ajax({
-            	url: baseUrl + "/ajax/searchTest",
-                dataType: "json",
-                data: {
-                    name : request.term
-                },
-                success: function( data ) {
-  					
-                	response( $.map( data, function( result ) {
-                        return {
-                            label: result.id + " : " + result.ab + " : " + result.name,
-                            value: result.name,
-                            id : result.id
-                        }
-                    }));
-
-                    $("#searchIndex").removeClass("ui-autocomplete-loading");
-                }
-            });
+			if($("#searchType").val() == 0) {
+				$.ajax({
+					url: baseUrl + "/ajax/searchTest",
+					dataType: "json",
+					data: {
+						name : request.term
+					},
+					success: function( data ) {
+						response( $.map( data, function( result ) {
+							return {
+								label: result.id + " : " + result.ab + " : " + result.name,
+								value: result.name,
+								id : result.id
+							}
+						}));
+						$("#searchIndex").removeClass("ui-autocomplete-loading");
+					}
+				});
+			} else {
+				$.ajax({
+					url: baseUrl + "/ajax/searchYlxh",
+					dataType: "json",
+					data: {
+						name : request.term
+					},
+					success: function( data ) {
+						response( $.map( data, function( result ) {
+							return {
+								label: result.name,
+								value: result.name,
+								id : result.id
+							}
+						}));
+						$("#searchIndex").removeClass("ui-autocomplete-loading");
+					}
+				});
+			}
         },
         minLength: 1,
         select : function(event, ui) {
-        	$("#searchIndexId").val(ui.item.id);
+			$("#searchIndexId").val(ui.item.id);
+			if($("#searchType").val() == 0) {
+				$("#searchTypeValue").val(0);
+			}else {
+				$("#searchTypeValue").val(1);
+			}
         }
 	});
 	

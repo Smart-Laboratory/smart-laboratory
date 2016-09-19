@@ -84,7 +84,7 @@
 </head>
 
 <div >
-	<div class="col-sm-7" style="float:left;">
+	<div class="col-sm-9" style="float:left;">
 	<h1><fmt:message key='rule.view'/></h1>
 	<table id="ruleViewTable">
 		<tr>

@@ -9,8 +9,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.YlxhUtil;
+import com.smart.webapp.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -24,8 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.model.lis.Ylxh;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.UserUtil;
 import com.smart.model.lis.TestResult;
 import com.smart.model.user.User;
 import com.smart.util.ConvertUtil;
@@ -57,6 +54,7 @@ public class YlsfController extends BaseAuditController {
 		}
 		ModelAndView view = new ModelAndView();
 		view.addObject("lab", lab);
+		view.addObject("labs", sectionManager.getAll());
         return view;
     }
 	
@@ -117,6 +115,7 @@ public class YlsfController extends BaseAuditController {
 			map.put("ptest3", ConvertUtil.null2String(y.getProfiletest3()));
 			map.put("cjbw", ConvertUtil.null2String(y.getCjbw()));
 			map.put("sgsl", y.getSgsl());
+			map.put("ksdm", ConvertUtil.null2String(y.getKsdm()));
 			dataRows.add(map);
 		}
 
@@ -149,6 +148,7 @@ public class YlsfController extends BaseAuditController {
 			Long ylxh = Long.parseLong(request.getParameter("ylxh"));
 			int type = Integer.parseInt(request.getParameter("type"));
 			String edit = request.getParameter("edit");
+			int searchType = Integer.parseInt(request.getParameter("searchType"));
 			String indexId = request.getParameter("index");
 			Ylxh y = ylxhManager.get(ylxh);
 			String profiletest = "";
@@ -160,7 +160,16 @@ public class YlsfController extends BaseAuditController {
 				profiletest = ConvertUtil.null2String(y.getProfiletest3());
 			}
 			if(edit.equals("add")) {
-				profiletest += indexId + ",";
+				if(searchType == 0) {
+					profiletest += indexId + ",";
+				} else {
+					String addProfileTest = ylxhManager.get(Long.parseLong(indexId)).getProfiletest();
+					if(addProfileTest != null) {
+						for (String s : addProfileTest.split(",")) {
+							profiletest = profiletest.replace(s + ",", "") + s + ",";
+						}
+					}
+				}
 			} else {
 				profiletest = profiletest.replace(indexId + ",", "");
 			}
@@ -175,6 +184,7 @@ public class YlsfController extends BaseAuditController {
 			YlxhUtil.updateMap(y);
 			success.put("success", profiletest);
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getMessage(), e);
 			success.put("success", "0");
 		}

@@ -47,8 +47,12 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Ylxh> getSearchData(String text){
-		return getSession().createQuery("from Ylxh where ylmc like '%"+text+"%'").list();
+	public List<Ylxh> searchData(String text, String lab){
+		List<Ylxh> list = getSession().createQuery("from Ylxh where (ylmc like '"+text+"%' or pinyin like '" + text + "%' or wubi like '" + text + "%') and ksdm='" +lab + "'").list();
+		if(list.size() > 5) {
+			list = list.subList(0, 5);
+		}
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")
