@@ -419,7 +419,7 @@ public class SampleInputAjaxController {
 			processManager.save(process);
 
 			LabOrder labOrder = labOrderManager.get(Long.parseLong(code));
-			//计试管费、采血费
+			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
 
 			o.put("success", 3);

@@ -8,11 +8,13 @@ import com.smart.service.DictionaryManager;
 import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.TestTubeManager;
 import com.smart.service.lis.YlxhManager;
+import com.smart.util.Config;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -63,10 +65,19 @@ public class ChargeUtil {
                 }
             }
             WebService service = new WebService();
+
+            //不计采血费科室
+            String[] departs = Config.getString("sampling.fee","").split(",");
+            Set<String> set = new HashSet<String>(Arrays.asList(departs));
+
             //计费
             for (String key : labOrderMap.keySet()) {
                 JSONObject param = new JSONObject();
                 LabOrder labOrder = labOrderMap.get(key).get(0);
+
+                //不计采血费、试管费
+                if(set.contains(labOrder.getHossection())) continue;
+
                 param.put("patientCode", labOrder.getBlh());
                 param.put("patientId", labOrder.getPatientid());
                 param.put("patientType", "2");
@@ -120,6 +131,11 @@ public class ChargeUtil {
         boolean flag = false;
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
+
+        //不计采血费科室
+        String[] departs = Config.getString("sampling.fee","").split(",");
+        Set<String> set = new HashSet<String>(Arrays.asList(departs));
+
         try {
             //采集部位
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
@@ -146,7 +162,11 @@ public class ChargeUtil {
             param.put("testDoctorDeptNo", user.getUsername());
             param.put("operatorNo", user.getUsername());
             //param.put("accountId", "");
-            service.booking(param.toString());
+
+            if(!set.contains(labOrder.getHossection())) {
+                service.booking(param.toString());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

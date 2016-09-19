@@ -173,7 +173,7 @@ public class InExecuteViewController {
                                  @RequestParam(value = "bedNo", defaultValue = "") String bedNo,
                                  @RequestParam(value = "patientId", defaultValue = "") String patientId,
                                  @RequestParam(value = "requestIds", defaultValue = "") String requestIds) {
-        Long startTime = System.currentTimeMillis(); //获取结束时间
+        //Long startTime = System.currentTimeMillis(); //获取结束时间
         Map<String, List> resultMap = new HashMap<String, List>();
 
         List<LabOrder> labOrders = new ArrayList<LabOrder>();
@@ -186,8 +186,8 @@ public class InExecuteViewController {
         } else {
             labOrders = labOrdersService;//取所有记录
         }
-        Long endTime = System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间1： " + (endTime - startTime) + "ms");
+        //Long endTime = System.currentTimeMillis(); //获取结束时间
+       // System.out.println("程序运行时间1： " + (endTime - startTime) + "ms");
         Iterator it = labOrders.iterator();
         while (it.hasNext()) {
             LabOrder labOrder = (LabOrder) it.next();
@@ -203,7 +203,7 @@ public class InExecuteViewController {
             }
         }
 
-        System.out.println("程序运行时间2： " + (endTime - startTime) + "ms");
+        //System.out.println("程序运行时间2： " + (endTime - startTime) + "ms");
 
         List<LabOrder> beCollectedList = new ArrayList<LabOrder>();
         if (!bedNo.isEmpty() && !patientId.isEmpty()) {
@@ -213,8 +213,8 @@ public class InExecuteViewController {
         }
 
         List<LabOrder> labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
-        endTime = System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间3： " + (endTime - startTime) + "ms");
+        //endTime = System.currentTimeMillis(); //获取结束时间
+        //System.out.println("程序运行时间3： " + (endTime - startTime) + "ms");
         //获取病区已采集标本
 
         //已采集明细ID
@@ -259,8 +259,8 @@ public class InExecuteViewController {
             labOrderVoList.add(labOrderVo);
             requestDetailIds += labOrder.getLaborderorg() + ",";
         }
-        endTime = System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间4： " + (endTime - startTime) + "ms");
+        //endTime = System.currentTimeMillis(); //获取结束时间
+       // System.out.println("程序运行时间4： " + (endTime - startTime) + "ms");
         //未采集标本
         try {
             if (beCollectedList != null && beCollectedList.size() > 0) {
@@ -281,8 +281,8 @@ public class InExecuteViewController {
         jsonObject.put("spidered", labOrderVoList);       //已采集标本
         jsonObject.put("beollected", beCollectedList); //未采集标本
 
-        endTime = System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间5： " + (endTime - startTime) + "ms");
+        //endTime = System.currentTimeMillis(); //获取结束时间
+        //System.out.println("程序运行时间5： " + (endTime - startTime) + "ms");
         System.out.println(JSON.toJSONString(jsonObject, filter));
         return JSON.toJSONString(jsonObject, filter);
     }

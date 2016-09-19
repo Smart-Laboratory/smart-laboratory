@@ -203,6 +203,7 @@
         </div>
     </div>
 </div>
+
 <div style="clear: both"></div>
 <script type="text/javascript">
     var TSLAB = TSLAB || {};
@@ -231,7 +232,7 @@
                 };
                 $.ajax({
                     url: '../nursestation/inexecute/getList',
-                    data: {ward: "1025"},
+                    data: {ward: '${ward}'},
                     type: 'POST',
                     dataType: "json",
                     ContentType: "application/json; charset=utf-8",
@@ -539,7 +540,7 @@
                 LODOP.PRINT_DESIGN()
             },
             printReport:function(){
-                $.get("/print/ajax/printReport",{sampleno:'20160530URF001', haslast:'0', type:''}, function(data){
+                $.get("/print/ajax/printReport",{sampleno:'20160530URF300', haslast:'0', type:''}, function(data){
                     console.log(data)
                     Preview(data);
                 })

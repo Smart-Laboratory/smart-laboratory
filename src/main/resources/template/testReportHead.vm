@@ -1,13 +1,12 @@
-<!--头部信息 start-->
 <div class="head">
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <div class="llogo"><img src="../images/l_logo.jpg"/></div>
+                <div class="llogo"><img src="$!requestUrl/images/l_logo.jpg"/></div>
             </td>
             <td style="text-align:center"><span class="headtitle">检验报告单</span></td>
             <td>
-                <div class="rlogo"><img src="../images/r_logo.jpg"/></div>
+                <div class="rlogo"><img src="$!requestUrl/images/r_logo.jpg"/></div>
             </td>
         </tr>
         <tr>
@@ -45,4 +44,3 @@
         </tr>
     </table>
 </div>
-<!--头部信息 end-->

@@ -41,7 +41,7 @@ public class Config {
 		return Long.parseLong(value);
 	}
 	
-	private static String getString(String name, String defaultValue) {
+	public static String getString(String name, String defaultValue) {
 		return prop.getProperty(name, defaultValue);
 	}
 	
@@ -76,5 +76,9 @@ public class Config {
 
 	public static int getOnceAuditMaxCount(int defaultValue) {
 		return getInt("once.audit.max.count", defaultValue);
+	}
+
+	public static String getPdfPath(){
+		return getString("pdf.path","");
 	}
 }

@@ -960,16 +960,24 @@ public class SamplePrintController extends BaseAuditController {
 		//实现获取电子签名
 		String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\bmp";
 		File dzqm_dir = new File(dzqm_filepath);
+
+		String requestUrl = request.getScheme() //当前链接使用的协议
+				+"://" + request.getServerName()//服务器地址
+				+ ":" + request.getServerPort() //端口号
+				+ request.getContextPath(); //应用名称，如果应用名称为
+		//System.out.println(" request.getContextPath()==>"+ requestUrl  );
 		if (dzqm_dir.exists()) {
 			for (File dzqm_f : dzqm_dir.listFiles()) {
 				//去掉后缀
 				int dot = dzqm_f.getName().lastIndexOf('.');
 				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
-					dzqm_imghtm += "../images/bmp/" + dzqm_f.getName() + ";";
+					dzqm_imghtm += requestUrl+"/images/bmp/" + dzqm_f.getName() + ";";
 				}
 			}
 		}
+		velocityContext.put("requestUrl", requestUrl);
 		velocityContext.put("auditro", dzqm_imghtm);
+		velocityContext.put("checker",process.getCheckoperator());
 		velocityContext.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
 		velocityContext.put("checktime", Constants.SDF.format(process.getChecktime()));
 		velocityContext.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
@@ -1098,65 +1106,22 @@ public class SamplePrintController extends BaseAuditController {
 		}
 		velocityContext.put("resultSize",testResultVos.size());
 		velocityContext.put("results",testResultVos);
-//		String html = "";
-//		String dangerTest = "";
-//		if(s.getAuditMark() == 6) {
-//			for(String str : s.getMarkTests().split(";")) {
-//				if(Integer.parseInt(str.split(":")[1]) == 3) {
-//					dangerTest += str.split(":")[0] + ",";
-//				}
-//			}
-//		}
-//		if(type > 3) {
-//			if(type==5){
-//				html = getRSTHTML(list);
-//			}else{
-//				html = getWSWHTML(type,wswlist);
-//			}
-//		} else {
-//			html = getHTML(type,hasLast,list,hisTitle1,resultMap1,dangerTest);
-//		}
-//		info.put("html", html);
-//		info.put("advise", s.getDescription()== null ? "" : s.getDescription());
-//		String imghtml = "";
-//		//type==5说明是染色体，染色体图片为分开2张
-//		if(type==5){
-//			if(s.getHasimages() == 1) {
-//				String filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\upload\\"+sampleno;
-//				File dir = new File(filepath);
-//				if (dir.exists()) {
-//					for (File f : dir.listFiles()) {
-//						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
-//							imghtml += "../images/upload/" + sampleno + "/" + f.getName() + ";";
-//						}
-//					}
-//				}
-//			}
-//		}else{
-//			if(s.getHasimages() == 1) {
-//				String filepath = Constants.imageUrl + sampleno;
-//				File dir = new File(filepath);
-//				if (dir.exists()) {
-//					for (File f : dir.listFiles()) {
-//						if (f.getName().endsWith(".jpg") || f.getName().endsWith(".JPG") || f.getName().endsWith(".PNG") || f.getName().endsWith(".png")) {
-//							imghtml += "<img src='../images/upload/" + sampleno + "/" + f.getName() + "' style='float:left;margin-left:5%;width:45%'>";
-//						}
-//					}
-//				}
-//			}
-//		}
-//		info.put("imghtml", imghtml);
 		VelocityEngine engine = new VelocityEngine();
 		engine.setProperty(Velocity.RESOURCE_LOADER, "class");
 		engine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 		engine.init();
-		Template template = engine.getTemplate("/template/testReport.vm", "UTF-8");
+		String tmplate="/template/testReport.vm";
+		if(testResultVos.size()>20){
+			tmplate ="/template/testReport32.vm";
+		}
+		Template template = engine.getTemplate(tmplate, "UTF-8");
 		StringWriter writer = new StringWriter();
 		template.merge(velocityContext, writer);
 
-		GenericPdfUtil.createPdf(s.getSampleNo()+".pdf",writer.toString());
+		//GenericPdfUtil.createPdf(s.getSampleNo()+".pdf",writer.toString());
+		GenericPdfUtil.html2Pdf(s.getSampleNo()+".pdf",writer.toString());
 		response.setContentType("text/html; charset=UTF-8");
-		//response.getWriter().write(info.toString());
+		response.getWriter().write(writer.toString());
 		return null;
 	}
 
