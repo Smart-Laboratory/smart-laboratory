@@ -1101,7 +1101,6 @@ public class SamplePrintController extends BaseAuditController {
 			}
 			testResultVo.setUnit(result.getUnit());
 			testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
-
 			testResultVos.add(testResultVo);
 		}
 		velocityContext.put("resultSize",testResultVos.size());
