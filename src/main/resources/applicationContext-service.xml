@@ -19,7 +19,7 @@
         <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* *..service.*Manager.*(..))" order="2"/>
     </aop:config>
 
-    <bean name="SpringContextUtil" class="com.smart.util.SpringContextUtil" lazy-init="false"/>
+    <bean name="SpringContextUtil" class="com.smart.util.SpringContextUtil" lazy-init="false" scope="singleton"/>
     <!-- Enable @Transactional support -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -110,14 +110,5 @@
 	<bean id="rmiService" class="com.smart.service.impl.zy.RMIServiceImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplatez1" />
 	</bean>
-
-    <bean id="reportGenerate" class="com.smart.service.scheduledTask.ReportGenerate">
-        <property name="sectionManager" ref="sectionManager" />
-        <property name="dictionaryManager" ref="dictionaryManager" />
-        <property name="rmiService" ref="rmiService" />
-        <property name="userManager" ref="userManager" />
-        <property name="indexManager" ref="indexManager" />
-        <property name="likeLabManager" ref="likeLabManager" />
-    </bean>
 
 </beans>

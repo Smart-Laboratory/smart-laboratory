@@ -131,7 +131,6 @@
             caption: "设置",
             //url: "../set/dictionary/getList",
             //postData:{deviceid:typeid},
-
             datatype: "json",
             colNames: ['通道名称', 'testid','试验名称', '样本类型'],
             colModel: [
@@ -147,9 +146,9 @@
                 }
                 jQuery('#tableList').editRow(id, false);
             },
-            repeatitems:false,
             viewrecords: true,
             autowidth:true,
+            rowNum:100,
             altRows:true,
             //height: 300,
             height: height,
