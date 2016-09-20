@@ -23,6 +23,11 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.*;
@@ -34,7 +39,7 @@ import java.util.*;
  *
  * 报告单生成PDF
  */
-public class ReportGenerate {
+public class ReportGenerate extends HttpServlet {
 
     private SectionManager sectionManager = null;
     protected DictionaryManager dictionaryManager = null;
@@ -48,13 +53,16 @@ public class ReportGenerate {
     private Map<String, String> likeLabMap = new HashMap<String, String>();
 
 
+
     public  ReportGenerate()  {
-        indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
-        sectionManager = (SectionManager) SpringContextUtil.getBean("sectionManager");
-        dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
-        rmiService = (RMIService) SpringContextUtil.getBean("rmiService");
-        userManager = (UserManager) SpringContextUtil.getBean("userManager");
-        likeLabManager = (LikeLabManager) SpringContextUtil.getBean("likeLabManager");
+        ServletContext context = getServletContext();
+        ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+        indexManager = (IndexManager) ctx.getBean("indexManager");
+        sectionManager = (SectionManager) ctx.getBean("sectionManager");
+        dictionaryManager = (DictionaryManager) ctx.getBean("dictionaryManager");
+        rmiService = (RMIService) ctx.getBean("rmiService");
+        userManager = (UserManager) ctx.getBean("userManager");
+        likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
     }
     /**
      * 获取报告单Html

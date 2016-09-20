@@ -10,7 +10,6 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
             http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
        default-lazy-init="true">
-    <bean id="springContextUtil" class="com.smart.util.SpringContextUtil" scope="singleton"> </bean>
     <!-- =================================================================== -->
     <!-- AOP: Configuration and Aspects                                      -->
     <!-- =================================================================== -->
