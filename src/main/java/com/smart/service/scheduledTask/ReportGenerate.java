@@ -83,21 +83,22 @@ public class ReportGenerate {
 
     /**
      * 获取报告单Html
-     * @param sampleNo      //样本号
-     * @param hasLast       //是否显示上次结果
+     * @param sample            //样本
+     * @param process           //流转
+     * @param testResultList    //结果
+     * @param hasLast           //是否上次结果
      * @return
      * @throws Exception
      */
-    public String getReportHtml(String sampleNo,boolean hasLast) throws Exception {
+    public String getReportHtml(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
         VelocityContext velocityContext = new VelocityContext();
 
         int type = 1;
         String webPath= Config.getString("web.path","");
+        String sampleNo = sample.getSampleNo();
         SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
-        Sample sample = sampleManager.getBySampleNo(sampleNo);
-        Process process = processManager.getBySampleId(sample.getId());
         Patient patient = patientManager.getByPatientId(sample.getPatientId());
-        List<TestResult> list = testResultManager.getPrintTestBySampleNo(sample.getSampleNo());
+        //List<TestResult> list = testResultManager.getPrintTestBySampleNo(sample.getSampleNo());
         List<SyncResult> wswlist = null;
 
         velocityContext.put("type", type);
@@ -194,7 +195,7 @@ public class ReportGenerate {
             int index = 0;
             Map<String, TestResult> rmap = null;
             Set<String> testIdSet = new HashSet<String>();
-            for (TestResult t : list) {
+            for (TestResult t : testResultList) {
                 testIdSet.add(t.getTestId());
             }
             if(history != null && history.size()>0){
@@ -245,7 +246,7 @@ public class ReportGenerate {
         }
 
         List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
-        for(TestResult result:list){
+        for(TestResult result:testResultList){
             String testId = result.getTestId();
             Set<String> sameTests = util.getKeySet(testId);
             sameTests.add(testId);
@@ -295,15 +296,19 @@ public class ReportGenerate {
         return writer.toString();
     }
 
+
     /**
      * 创建报告单PDF
-     * @param sampleNo     样本号
-     * @param hasLast       是否显示上次结果
+     * @param sample            //样本
+     * @param process           //流转
+     * @param testResultList    //结果
+     * @param hasLast           //是否上次结果
+     * @return
      * @throws Exception
      */
-    public void  CreateReportPdf(String sampleNo,boolean hasLast) throws Exception{
-        String html = getReportHtml(sampleNo,hasLast);
-        GenericPdfUtil.html2Pdf(sampleNo+".pdf",html);
+    public void CreateReportPdf(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
+        String html = getReportHtml(sample,process,testResultList,hasLast);
+        GenericPdfUtil.html2Pdf(sample.getSampleNo()+".pdf",html);
     }
 
 
