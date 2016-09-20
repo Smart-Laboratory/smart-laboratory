@@ -627,7 +627,7 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groujpId>org.springframework</groujpId>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -873,25 +873,19 @@
         </dependency>
 
         <dependency>
-            <groupId>org.pdf4ml</groupId>
+            <groupId>com.zju</groupId>
             <artifactId>fonts</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/fonts.jar</systemPath>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
-        <groupId>org.pdf4ml</groupId>
-        <artifactId>pd4ml</artifactId>
-        <version>1.0.0</version>
-        <scope>system</scope>
-        <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/pd4ml_demo.jar</systemPath>
+        <groupId>com.zju</groupId>
+        <artifactId>ss_css2</artifactId>
+        <version>1.1.0</version>
     </dependency>
         <dependency>
-            <groupId>org.pdf4ml</groupId>
+            <groupId>com.zju</groupId>
             <artifactId>pd4ml</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ss_css2.jar</systemPath>
+            <version>1.1.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.w3c.css/sac -->
         <!--<dependency>-->
