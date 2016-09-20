@@ -290,7 +290,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								} else {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
-														reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), now, false);
+														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {

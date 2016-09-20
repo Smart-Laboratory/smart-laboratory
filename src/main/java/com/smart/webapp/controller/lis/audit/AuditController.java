@@ -371,7 +371,7 @@ public class AuditController extends BaseAuditController {
 							} else {
 								info.setCheckerOpinion(Check.AUTO_AUDIT);
 							}
-							reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), now, false);
+							reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
 						}
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
@@ -537,7 +537,7 @@ public class AuditController extends BaseAuditController {
 			auditTraceManager.saveAll(updateA);
 			ReportGenerate reportGenerate = new ReportGenerate();
 			if ("pass".equals(op)) {
-				reportGenerate.CreateReportPdf(sample.get(0), process, testResultList, false);
+				reportGenerate.createReportPdf(sample.get(0), process, testResultList, false);
 			} else if ("unpass".equals(op)) {
 
 			}
@@ -684,7 +684,7 @@ public class AuditController extends BaseAuditController {
 					a.setType(2);
 					a.setStatus(info.getAuditStatus());
 					updateA.add(a);
-					reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), hisTestMap.get(info.getSampleNo()), false);
+					reportGenerate.createReportPdf(info, processMap.get(info.getId()), hisTestMap.get(info.getSampleNo()), false);
 				}
 				updateP.add(info);
 			}
