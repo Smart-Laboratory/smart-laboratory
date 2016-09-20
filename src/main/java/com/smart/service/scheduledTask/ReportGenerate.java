@@ -97,7 +97,7 @@ public class ReportGenerate {
         String webPath= Config.getString("web.path","");
         String sampleNo = sample.getSampleNo();
         SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
-        Patient patient = patientManager.getByPatientId(sample.getPatientId());
+        //Patient patient = patientManager.getByPatientId(sample.getPatientId());
         //List<TestResult> list = testResultManager.getPrintTestBySampleNo(sample.getSampleNo());
         List<SyncResult> wswlist = null;
 
@@ -113,7 +113,7 @@ public class ReportGenerate {
         velocityContext.put("barCode", sample.getBarcode());
         velocityContext.put("sampleNo", sample.getSampleNo());
         velocityContext.put("sampleId", sample.getId());
-        velocityContext.put("phone",patient.getPhone());
+        //velocityContext.put("phone",patient.getPhone());
 
         if(sample.getStayHospitalMode() == 2) {
             velocityContext.put("bed", sample.getDepartBed());
@@ -306,7 +306,7 @@ public class ReportGenerate {
      * @return
      * @throws Exception
      */
-    public void CreateReportPdf(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
+    public void createReportPdf(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
         String html = getReportHtml(sample,process,testResultList,hasLast);
         GenericPdfUtil.html2Pdf(sample.getSampleNo()+".pdf",html);
     }
