@@ -12,6 +12,7 @@ import com.smart.service.rule.IndexManager;
 import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
 import com.smart.util.GenericPdfUtil;
+import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.HisIndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
@@ -22,11 +23,6 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-import org.codehaus.jettison.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.*;
@@ -39,48 +35,27 @@ import java.util.*;
  * 报告单生成PDF
  */
 public class ReportGenerate {
-    @Autowired
-    private PatientManager patientManager = null;
 
-    @Autowired
-    private ProcessManager processManager = null;
-
-    @Autowired
-    private SampleManager sampleManager = null;
-
-    @Autowired
     private SectionManager sectionManager = null;
-
-    @Autowired
-    private TestResultManager testResultManager = null;
-
-    @Autowired
     protected DictionaryManager dictionaryManager = null;
-
-    @Autowired
     protected RMIService rmiService = null;
+    private UserManager userManager = null;
+    private IndexManager indexManager = null;
+    private LikeLabManager likeLabManager = null;
 
-    @Autowired
-    protected UserManager userManager = null;
-
-    @Autowired
-    protected ContactManager contactManager = null;
-
-    @Autowired
-    protected IndexManager indexManager = null;
-
-    @Autowired
-    protected LikeLabManager likeLabManager = null;
-
-    protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
+    private static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     private Map<String, Index> idMap = new HashMap<String, Index>();
-    private Map<String, Integer> slgiMap = new HashMap<String, Integer>();
-    private Map<String, String> diagMap = new HashMap<String, String>();
-    private Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
     private Map<String, String> likeLabMap = new HashMap<String, String>();
-    private Map<String, String> deviceMap = new HashMap<String, String>();
-    private Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
 
+
+    public  ReportGenerate()  {
+        indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
+        sectionManager = (SectionManager) SpringContextUtil.getBean("sectionManager");
+        dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
+        rmiService = (RMIService) SpringContextUtil.getBean("rmiService");
+        userManager = (UserManager) SpringContextUtil.getBean("userManager");
+        likeLabManager = (LikeLabManager) SpringContextUtil.getBean("likeLabManager");
+    }
     /**
      * 获取报告单Html
      * @param sample            //样本
@@ -121,16 +96,14 @@ public class ReportGenerate {
         velocityContext.put("staymode", sample.getStayHospitalMode());
         velocityContext.put("pId", sample.getPatientId());
         velocityContext.put("section", sectionutil.getValue(sample.getHosSection()));
-        if(contactMap.size() == 0) {
-            initContactInforMap();
-        }
+
         if(idMap.size() == 0) {
             initMap();
         }
         if(likeLabMap.size() == 0) {
             initLikeLabMap();
         }
-        velocityContext.put("requester", process.getRequester() == null ? " " : (contactMap.containsKey(process.getRequester()) ? contactMap.get(process.getRequester()).getNAME() : process.getRequester()));
+        velocityContext.put("requester", process.getRequester());
         velocityContext.put("tester", sample.getChkoper2());
         //更改为电子签名图片地址
         //info.put("auditor", process.getCheckoperator());
@@ -162,88 +135,88 @@ public class ReportGenerate {
         Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
         String hisTitle1 = "";
         String lab = sample.getSectionId();
-        if(likeLabMap.containsKey(lab)) {
-            lab = likeLabMap.get(lab);
-        }
-        if(hasLast && type<4) {
-            List<Sample> history = sampleManager.getHistorySample(sample.getPatientId(), sample.getPatientblh(), lab);
-            String hisSampleId = "";
-            String hisSampleNo = "";
-            for(Sample sample1 : history) {
-                hisSampleId += sample1.getId() + ",";
-                hisSampleNo += "'" + sample1.getSampleNo() + "',";
-            }
-            List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
-            List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-            Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
-            Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
-            for(Process p : processList) {
-                hisProcessMap.put(p.getSampleid(), p);
-            }
-            for(TestResult tr : testList) {
-                if(hisTestMap.containsKey(tr.getSampleNo())) {
-                    hisTestMap.get(tr.getSampleNo()).add(tr);
-                } else {
-                    List<TestResult> tlist = new ArrayList<TestResult>();
-                    tlist.add(tr);
-                    hisTestMap.put(tr.getSampleNo(), tlist);
-                }
-            }
-            Date receivetime = null;
-            receivetime = process.getReceivetime();
-            long curInfoReceiveTime = receivetime.getTime();
-            int index = 0;
-            Map<String, TestResult> rmap = null;
-            Set<String> testIdSet = new HashSet<String>();
-            for (TestResult t : testResultList) {
-                testIdSet.add(t.getTestId());
-            }
-            if(history != null && history.size()>0){
-                for (Sample pinfo : history) {
-                    String psampleno = pinfo.getSampleNo();
-                    if(psampleno.equals(sampleNo)) {
-                        continue;
-                    }
-                    boolean isHis = false;
-                    List<TestResult> his = hisTestMap.get(psampleno);
-                    if(his != null) {
-                        for (TestResult test: his) {
-                            String testid = test.getTestId();
-                            Set<String> sameTests = util.getKeySet(testid);
-                            sameTests.add(testid);
-                            for (String id : sameTests) {
-                                if (testIdSet.contains(id)) {
-                                    isHis = true;
-                                    break;
-                                }
-                            }
-                            if (isHis) {
-                                break;
-                            }
-                        }
-                    }
-                    Date preceivetime = null;
-                    preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
-                    if (preceivetime == null || pinfo.getSampleNo() == null) {
-                        continue;
-                    }
-                    if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
-                        if (index > 4)
-                            break;
-                        switch (index) {
-                            case 0:
-                                rmap = resultMap1;
-                                hisTitle1 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
-                                break;
-                        }
-                        for (TestResult tr : hisTestMap.get(psampleno)) {
-                            rmap.put(tr.getTestId(), tr);
-                        }
-                        index++;
-                    }
-                }
-            }
-        }
+//        if(likeLabMap.containsKey(lab)) {
+//            lab = likeLabMap.get(lab);
+//        }
+//        if(hasLast && type<4) {
+//            List<Sample> history = sampleManager.getHistorySample(sample.getPatientId(), sample.getPatientblh(), lab);
+//            String hisSampleId = "";
+//            String hisSampleNo = "";
+//            for(Sample sample1 : history) {
+//                hisSampleId += sample1.getId() + ",";
+//                hisSampleNo += "'" + sample1.getSampleNo() + "',";
+//            }
+//            List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+//            List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+//            Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+//            Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+//            for(Process p : processList) {
+//                hisProcessMap.put(p.getSampleid(), p);
+//            }
+//            for(TestResult tr : testList) {
+//                if(hisTestMap.containsKey(tr.getSampleNo())) {
+//                    hisTestMap.get(tr.getSampleNo()).add(tr);
+//                } else {
+//                    List<TestResult> tlist = new ArrayList<TestResult>();
+//                    tlist.add(tr);
+//                    hisTestMap.put(tr.getSampleNo(), tlist);
+//                }
+//            }
+//            Date receivetime = null;
+//            receivetime = process.getReceivetime();
+//            long curInfoReceiveTime = receivetime.getTime();
+//            int index = 0;
+//            Map<String, TestResult> rmap = null;
+//            Set<String> testIdSet = new HashSet<String>();
+//            for (TestResult t : testResultList) {
+//                testIdSet.add(t.getTestId());
+//            }
+//            if(history != null && history.size()>0){
+//                for (Sample pinfo : history) {
+//                    String psampleno = pinfo.getSampleNo();
+//                    if(psampleno.equals(sampleNo)) {
+//                        continue;
+//                    }
+//                    boolean isHis = false;
+//                    List<TestResult> his = hisTestMap.get(psampleno);
+//                    if(his != null) {
+//                        for (TestResult test: his) {
+//                            String testid = test.getTestId();
+//                            Set<String> sameTests = util.getKeySet(testid);
+//                            sameTests.add(testid);
+//                            for (String id : sameTests) {
+//                                if (testIdSet.contains(id)) {
+//                                    isHis = true;
+//                                    break;
+//                                }
+//                            }
+//                            if (isHis) {
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    Date preceivetime = null;
+//                    preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
+//                    if (preceivetime == null || pinfo.getSampleNo() == null) {
+//                        continue;
+//                    }
+//                    if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
+//                        if (index > 4)
+//                            break;
+//                        switch (index) {
+//                            case 0:
+//                                rmap = resultMap1;
+//                                hisTitle1 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
+//                                break;
+//                        }
+//                        for (TestResult tr : hisTestMap.get(psampleno)) {
+//                            rmap.put(tr.getTestId(), tr);
+//                        }
+//                        index++;
+//                    }
+//                }
+//            }
+//        }
 
         List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
         for(TestResult result:testResultList){
@@ -261,20 +234,20 @@ public class ReportGenerate {
                 }
             }
             //上次检验结果
-            if(hasLast) {
-                for(String tid : sameTests) {
-                    if(resultMap1.size() != 0 && resultMap1.containsKey(tid)) {
-                        testResultVo.setHisTestResult1(resultMap1.get(tid).getTestResult());
-                        if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
-                            if(resultMap1.get(tid).getResultFlag().charAt(0) == 'C') {
-                                testResultVo.setHisResultFlag1("↓");
-                            } else if(resultMap1.get(tid).getResultFlag().charAt(0) == 'B') {
-                                testResultVo.setHisResultFlag1("↑");
-                            }
-                        }
-                    }
-                }
-            }
+//            if(hasLast) {
+//                for(String tid : sameTests) {
+//                    if(resultMap1.size() != 0 && resultMap1.containsKey(tid)) {
+//                        testResultVo.setHisTestResult1(resultMap1.get(tid).getTestResult());
+//                        if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+//                            if(resultMap1.get(tid).getResultFlag().charAt(0) == 'C') {
+//                                testResultVo.setHisResultFlag1("↓");
+//                            } else if(resultMap1.get(tid).getResultFlag().charAt(0) == 'B') {
+//                                testResultVo.setHisResultFlag1("↑");
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             testResultVo.setUnit(result.getUnit());
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
             testResultVos.add(testResultVo);
@@ -311,13 +284,6 @@ public class ReportGenerate {
         GenericPdfUtil.html2Pdf(sample.getSampleNo()+".pdf",html);
     }
 
-
-    private synchronized void initContactInforMap() {
-        List<ContactInfor> list = contactManager.getAll();
-        for(ContactInfor ci : list) {
-            contactMap.put(ci.getWORKID(), ci);
-        }
-    }
     private synchronized void initMap() {
         List<Index> list = indexManager.getAll();
         for (Index t : list) {
