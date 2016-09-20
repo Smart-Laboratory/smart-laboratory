@@ -289,6 +289,14 @@ public class ReportGenerate {
             likeLabMap.put(ll.getLab(), ll.getLikeLab());
         }
     }
+    public ReportGenerate(){
+        indexManager = (IndexManager)SpringContextUtil.getBean("indexManager");
+        sectionManager = (SectionManager)SpringContextUtil.getBean("sectionManager");
+        dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
+        rmiService = (RMIService)SpringContextUtil.getBean("rmiService");
+        userManager = (UserManager)SpringContextUtil.getBean("userManager");
+        likeLabManager = (LikeLabManager)SpringContextUtil.getBean("likeLabManager");
+    }
 
     private SectionManager sectionManager = null;
     private DictionaryManager dictionaryManager = null;
@@ -297,33 +305,4 @@ public class ReportGenerate {
     private IndexManager indexManager = null;
     private LikeLabManager likeLabManager = null;
 
-    @Autowired
-    public void setSectionManager(SectionManager sectionManager) {
-        this.sectionManager = sectionManager;
-    }
-
-    @Autowired
-    public void setDictionaryManager(DictionaryManager dictionaryManager) {
-        this.dictionaryManager = dictionaryManager;
-    }
-
-    @Autowired
-    public void setRmiService(RMIService rmiService) {
-        this.rmiService = rmiService;
-    }
-
-    @Autowired
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    @Autowired
-    public void setIndexManager(IndexManager indexManager) {
-        this.indexManager = indexManager;
-    }
-
-    @Autowired
-    public void setLikeLabManager(LikeLabManager likeLabManager) {
-        this.likeLabManager = likeLabManager;
-    }
 }

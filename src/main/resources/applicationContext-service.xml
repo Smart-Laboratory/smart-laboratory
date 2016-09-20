@@ -19,6 +19,7 @@
         <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* *..service.*Manager.*(..))" order="2"/>
     </aop:config>
 
+    <bean name="SpringContextUtil" class="com.smart.util.SpringContextUtil" lazy-init="false"/>
     <!-- Enable @Transactional support -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
