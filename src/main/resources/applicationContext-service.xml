@@ -110,4 +110,13 @@
 		<property name="jdbcTemplate" ref="jdbcTemplatez1" />
 	</bean>
 
+    <bean id="reportGenerate" class="com.smart.service.scheduledTask.ReportGenerate">
+        <property name="sectionManager" ref="sectionManager" />
+        <property name="dictionaryManager" ref="dictionaryManager" />
+        <property name="rmiService" ref="rmiService" />
+        <property name="userManager" ref="userManager" />
+        <property name="indexManager" ref="indexManager" />
+        <property name="likeLabManager" ref="likeLabManager" />
+    </bean>
+
 </beans>

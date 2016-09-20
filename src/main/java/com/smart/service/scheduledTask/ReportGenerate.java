@@ -23,7 +23,9 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
@@ -39,31 +41,13 @@ import java.util.*;
  *
  * 报告单生成PDF
  */
-public class ReportGenerate extends HttpServlet {
-
-    private SectionManager sectionManager = null;
-    protected DictionaryManager dictionaryManager = null;
-    protected RMIService rmiService = null;
-    private UserManager userManager = null;
-    private IndexManager indexManager = null;
-    private LikeLabManager likeLabManager = null;
+@Service("reportCenerate")
+public class ReportGenerate {
 
     private static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     private Map<String, Index> idMap = new HashMap<String, Index>();
     private Map<String, String> likeLabMap = new HashMap<String, String>();
 
-
-
-    public  ReportGenerate()  {
-        ServletContext context = getServletContext();
-        ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
-        indexManager = (IndexManager) ctx.getBean("indexManager");
-        sectionManager = (SectionManager) ctx.getBean("sectionManager");
-        dictionaryManager = (DictionaryManager) ctx.getBean("dictionaryManager");
-        rmiService = (RMIService) ctx.getBean("rmiService");
-        userManager = (UserManager) ctx.getBean("userManager");
-        likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
-    }
     /**
      * 获取报告单Html
      * @param sample            //样本
@@ -304,5 +288,42 @@ public class ReportGenerate extends HttpServlet {
         for (LikeLab ll : list) {
             likeLabMap.put(ll.getLab(), ll.getLikeLab());
         }
+    }
+
+    private SectionManager sectionManager = null;
+    private DictionaryManager dictionaryManager = null;
+    private RMIService rmiService = null;
+    private UserManager userManager = null;
+    private IndexManager indexManager = null;
+    private LikeLabManager likeLabManager = null;
+
+    @Autowired
+    public void setSectionManager(SectionManager sectionManager) {
+        this.sectionManager = sectionManager;
+    }
+
+    @Autowired
+    public void setDictionaryManager(DictionaryManager dictionaryManager) {
+        this.dictionaryManager = dictionaryManager;
+    }
+
+    @Autowired
+    public void setRmiService(RMIService rmiService) {
+        this.rmiService = rmiService;
+    }
+
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    @Autowired
+    public void setIndexManager(IndexManager indexManager) {
+        this.indexManager = indexManager;
+    }
+
+    @Autowired
+    public void setLikeLabManager(LikeLabManager likeLabManager) {
+        this.likeLabManager = likeLabManager;
     }
 }
