@@ -13,6 +13,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import com.smart.model.lis.*;
+import com.smart.model.lis.Process;
+import com.smart.service.lis.*;
+import com.smart.service.scheduledTask.ReportGenerate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -32,21 +36,9 @@ import com.smart.check.RatioCheck;
 import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
-import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.LikeLab;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestResult;
-import com.smart.model.lis.Ylxh;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
-import com.smart.model.lis.AuditTrace;
 import com.smart.service.DictionaryManager;
-import com.smart.service.lis.AuditTraceManager;
-import com.smart.service.lis.CriticalRecordManager;
-import com.smart.service.lis.LikeLabManager;
-import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.TestResultManager;
-import com.smart.service.lis.YlxhManager;
 import com.smart.service.rule.BagManager;
 import com.smart.service.rule.ItemManager;
 import com.smart.service.rule.ResultManager;
@@ -81,6 +73,7 @@ public class AutoAuditServlet extends HttpServlet {
         final YlxhManager ylxhManager = (YlxhManager) ctx.getBean("ylxhManager");
         final AuditTraceManager auditTraceManager = (AuditTraceManager) ctx.getBean("auditTraceManager");
         final LikeLabManager likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
+		final ProcessManager processManager = (ProcessManager) ctx.getBean("processManager");
         
         System.out.println("Initializing context...");
 
@@ -134,18 +127,25 @@ public class AutoAuditServlet extends HttpServlet {
             Thread autoAudit = new Thread(new Runnable(){
 				public void run() {
 					int autocount = 0;
-        			while (!Thread.interrupted()) {// 线程未中断执行循环 
+        			while (!Thread.interrupted()) {// 线程未中断执行循环
         				autocount++;
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
                     	if (needAuditSamples != null && needAuditSamples.size() > 0) {
                 			String hisSampleNo = "";
+							String sampleIds = "";
                 			for(Sample sample : needAuditSamples) {
                 				hisSampleNo += "'" + sample.getSampleNo() + "',";
+								sampleIds += sample.getId() + ",";
                 			}
                 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-                			final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+                			List<Process> processList = processManager.getHisProcess(sampleIds.substring(0, sampleIds.length()-1));
+							final Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+							final Map<Long, Process> processMap = new HashMap<Long, Process>();
+							for(Process process : processList) {
+								processMap.put(process.getSampleid(), process);
+							}
                 			for(TestResult tr : testList) {
                 				if(StringUtils.isNumeric(tr.getTestId())) {
                 					if(hisTestMap.containsKey(tr.getSampleNo())) {
@@ -165,6 +165,7 @@ public class AutoAuditServlet extends HttpServlet {
                         		new Thread(new Runnable(){
                             		public void run() {
                         	            try {
+											ReportGenerate reportGenerate = new ReportGenerate();
                         	            	long nowtime = System.currentTimeMillis();
                         	            	List<Sample> updateSample = new ArrayList<Sample>();
                         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
@@ -289,6 +290,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								} else {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
+														reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), now, false);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
@@ -310,11 +312,6 @@ public class AutoAuditServlet extends HttpServlet {
                         	        		sampleManager.saveAll(updateSample);
                         					criticalRecordManager.saveAll(updateCriticalRecord);
                         					auditTraceManager.saveAll(updateAuditTrace);
-											for(Sample sample : updateSample) {
-												if(sample.getAuditStatus() == Check.PASS) {
-
-												}
-											}
                         					System.out.println(System.currentTimeMillis()-nowtime);
                         	            } catch (Exception e) {
                         	                e.printStackTrace();

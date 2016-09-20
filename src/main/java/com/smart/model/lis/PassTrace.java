@@ -13,6 +13,9 @@ import javax.persistence.Table;
 
 import com.smart.model.BaseObject;
 
+/*
+ * 用于记录用户审核行为，便于后续分析
+ */
 @Entity
 @Table(name="l_passtrace")
 public class PassTrace extends BaseObject implements Serializable{

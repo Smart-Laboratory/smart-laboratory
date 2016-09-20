@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.smart.model.lis.*;
+import com.smart.model.lis.Process;
+import com.smart.service.scheduledTask.ReportGenerate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,12 +43,6 @@ import com.smart.check.RatioCheck;
 import com.smart.check.RetestCheck;
 import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
-import com.smart.model.lis.CriticalRecord;
-import com.smart.model.lis.PassTrace;
-import com.smart.model.lis.ProfileTest;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.Task;
-import com.smart.model.lis.TestResult;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.webapp.util.AnalyticUtil;
@@ -57,8 +54,6 @@ import com.smart.webapp.util.TaskManagerUtil;
 import com.smart.webapp.util.UserUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
-import com.smart.model.lis.AuditTrace;
-import com.smart.model.lis.CollectSample;
 import com.smart.model.user.Evaluate;
 import com.smart.model.user.User;
 import com.smart.model.util.Statistic;
@@ -122,6 +117,7 @@ public class AuditController extends BaseAuditController {
 		final Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
 		final List<Sample> updateSample = new ArrayList<Sample>();
 		final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
+		final Map<Long, Process> processMap = new HashMap<Long, Process>();
     	log.debug("开始手工审核...");
     	System.out.println("开始手工审核...");
     	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
@@ -229,12 +225,18 @@ public class AuditController extends BaseAuditController {
     			}
     		}
     		task.setSampleCount(samples.size());
-    		
+
 			String hisSampleNo = "";
+			String sampleIds = "";
 			for(Sample s : samples) {
 				hisSampleNo += "'" + s.getSampleNo() + "',";
+				sampleIds += s.getId() + ",";
 			}
 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+			List<Process> processList = processManager.getHisProcess(sampleIds.substring(0, sampleIds.length()-1));
+			for(Process process : processList) {
+				processMap.put(process.getSampleid(), process);
+			}
 			for(TestResult tr : testList) {
 				if(StringUtils.isNumeric(tr.getTestId())) {
 					if(hisTestMap.containsKey(tr.getSampleNo())) {
@@ -327,6 +329,7 @@ public class AuditController extends BaseAuditController {
 			
     		public void run() {
     			int index = 0;
+				ReportGenerate reportGenerate = new ReportGenerate();
         		for (Sample info : samples) {
         			try {
 	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
@@ -368,6 +371,7 @@ public class AuditController extends BaseAuditController {
 							} else {
 								info.setCheckerOpinion(Check.AUTO_AUDIT);
 							}
+							reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), now, false);
 						}
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
@@ -483,10 +487,13 @@ public class AuditController extends BaseAuditController {
 		String charttest = request.getParameter("checktest");
 		String ids = request.getParameter("ids");
 		List<Sample> sample = sampleManager.getListBySampleNo(sampleNo);
+		Process process = processManager.getBySampleId(sample.get(0).getId());
+		List<TestResult> testResultList = testResultManager.getTestBySampleNo(sampleNo);
 		
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
-//		try {
+
+		try {
 			for (Sample info : sample) {
 				info.setCharttest(charttest);
 				info.setPassReason(note);
@@ -506,9 +513,7 @@ public class AuditController extends BaseAuditController {
 					}
 					info.setDescription(description);
 				}
-				
-				
-				
+
 				if (info.getCheckerOpinion()!=null
 					&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)
 						&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)) {
@@ -525,18 +530,24 @@ public class AuditController extends BaseAuditController {
 				a.setType(2);
 				a.setStatus(info.getAuditStatus());
 				updateA.add(a);
-				
-				updatePasstrace(request,info.getSampleNo(),ids);
+
+				updatePassTrace(request,info.getSampleNo(),ids);
 			}
 			sampleManager.saveAll(updateP);
 			auditTraceManager.saveAll(updateA);
-//		} catch (Exception e) {
-//			log.error("通过或不通过出错！", e);
-//		}
+			ReportGenerate reportGenerate = new ReportGenerate();
+			if ("pass".equals(op)) {
+				reportGenerate.CreateReportPdf(sample.get(0), process, testResultList, false);
+			} else if ("unpass".equals(op)) {
+
+			}
+		} catch (Exception e) {
+			log.error("通过或不通过出错！", e);
+		}
 		return result;
 	}
     
-    private void updatePasstrace(HttpServletRequest request,String sampleno,String ids){
+    private void updatePassTrace(HttpServletRequest request,String sampleno,String ids){
     	
     	if(ids ==null || ids.isEmpty())
     		return;
@@ -562,12 +573,8 @@ public class AuditController extends BaseAuditController {
     			p.setType(id.substring(0, 1));
     			p.setDiagnostic(sample.getDiagnostic());
     			p.setSampleNo(sampleno);
-    			
-    			
     			p.setAge(Integer.parseInt(sample.getAge()));
     			p.setSex(sample.getSex());
-    			
-    			
     			p.setInformation(information);
     			pTraces.add(p);
     		}
@@ -638,9 +645,32 @@ public class AuditController extends BaseAuditController {
 		}
 		
 		List<Sample> samples = sampleManager.getByIds(ids);
+		List<Process> processes = processManager.getHisProcess(ids);
+		String hisSampleNo = "";
+		for(Sample sample : samples) {
+			hisSampleNo += "'" + sample.getSampleNo() + "',";
+		}
+		List<TestResult> testResultList = testResultManager.getTestBySampleNos(hisSampleNo.substring(0, hisSampleNo.length()-1));
+		Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+		Map<Long, Process> processMap = new HashMap<Long, Process>();
+		for(Process process : processes) {
+			processMap.put(process.getSampleid(), process);
+		}
+		for(TestResult tr : testResultList) {
+			if(StringUtils.isNumeric(tr.getTestId())) {
+				if(hisTestMap.containsKey(tr.getSampleNo())) {
+					hisTestMap.get(tr.getSampleNo()).add(tr);
+				} else {
+					List<TestResult> tlist = new ArrayList<TestResult>();
+					tlist.add(tr);
+					hisTestMap.put(tr.getSampleNo(), tlist);
+				}
+			}
+		}
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
-		
+
+		ReportGenerate reportGenerate = new ReportGenerate();
 		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
@@ -654,6 +684,7 @@ public class AuditController extends BaseAuditController {
 					a.setType(2);
 					a.setStatus(info.getAuditStatus());
 					updateA.add(a);
+					reportGenerate.CreateReportPdf(info, processMap.get(info.getId()), hisTestMap.get(info.getSampleNo()), false);
 				}
 				updateP.add(info);
 			}
