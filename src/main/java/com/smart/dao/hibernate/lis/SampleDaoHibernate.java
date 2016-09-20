@@ -166,6 +166,10 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return (Sample)getSession().createQuery("from Sample s where s.sampleNo='"+sampleNo+"'").uniqueResult();
 	}
 
+	public Sample getSampleByBarcode(String barcode){
+		return (Sample)getSession().createQuery("from Sample s where s.barcode='"+barcode+"'").uniqueResult();
+	}
+
 	public List<Integer> getAuditInfo(String date, String department, String code, String user) {
 
 		if (StringUtils.isEmpty(department) ) {

@@ -378,12 +378,14 @@ public class SampleInputAjaxController {
 		Process process = null;
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
-		if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
-			code = code.substring(0,code.length()-1);
-		}
+//
+//		System.out.println("code.charAT=="+code.charAt(code.length()-1));
+//		if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
+//			code = code.substring(0,code.length()-1);
+//		}
 		JSONObject o = new JSONObject();
 		try {
-			sample = sampleManager.get(Long.parseLong(code));
+			sample = sampleManager.getSampleByBarcode(code);
 		} catch(Exception e) {
 			sample = null;
 		}
@@ -395,7 +397,7 @@ public class SampleInputAjaxController {
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
 		} else {
-			process = processManager.getBySampleId(Long.parseLong(code));
+			process = processManager.getBySampleId(sample.getId());
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
 			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));

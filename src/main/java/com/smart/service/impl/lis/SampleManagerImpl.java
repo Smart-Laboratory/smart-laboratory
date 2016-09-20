@@ -52,6 +52,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getBySampleNo(sampleNo);
 	}
 
+	public Sample getSampleByBarcode(String barcode){
+		return sampleDao.getSampleByBarcode(barcode);
+	}
 	public List<Integer> getAuditInfo(String date, String department, String code, String user) {
 		return sampleDao.getAuditInfo(date, department, code, user);
 	}

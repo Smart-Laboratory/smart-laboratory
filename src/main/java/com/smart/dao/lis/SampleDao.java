@@ -30,7 +30,10 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	
 	@Transactional
 	Sample getBySampleNo(String sampleNo);
-	
+
+	@Transactional
+	Sample getSampleByBarcode(String barcode);
+
 	@Transactional
 	List<Integer> getAuditInfo(String date, String department, String code, String user);
 	
@@ -75,6 +78,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	Long getSampleId();
+
 
     void removeAll(List<Sample> list);
 }
