@@ -67,8 +67,9 @@ div #contentright {
 #navContent {
 	background-color: white;
 	border: 1px solid #E1E1E1;
+	margin-top: 10px;
 	padding: 5px 0px 10px 0px;
-	min-height:600px;
+	min-height:480px;
 }
 .border-radius-6, .border-radius-10, .custom-scroll-bar::-webkit-scrollbar, .custom-scroll-bar::-webkit-scrollbar-thumb, .x-message-shadow, .x-message-box .x-message-content {
 	-moz-background-clip: padding;
@@ -93,7 +94,7 @@ div #contentright {
 }
 .tag-item {
 	cursor: pointer;
-	height:34;
+	height:34px;
 }
 .selbtn, .selbtn:visited {
 	height: 31px;

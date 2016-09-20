@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.SampleUtil;
 import org.apache.cxf.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -85,20 +86,16 @@ public class IndexAjaxController {
 				}
 				
 				JSONObject o = new JSONObject();
-				//String unit = index.getUnit();
-				String sample = index.getSampleFrom();
+				String unit = index.getUnit();
+				String sample = SampleUtil.getInstance(dictionaryManager).getValue(index.getSampleFrom());
 				
-				/*if (StringUtils.isEmpty(unit)) {
+				if (StringUtils.isEmpty(unit)) {
 					unit = "";
-				}*/
-//				if (map.containsKey(sample)) {
-//					sample = map.get(sample);
-//				}
-				
+				}
 				o.put("id", "I" + index.getId().toString());
 				o.put("indexId", index.getIndexId());
 				o.put("sample", sample);
-				//o.put("unit", unit);
+				o.put("unit", unit);
 				o.put("name", index.getName());
 				
 				if (StringUtils.isEmpty(index.getType())) {

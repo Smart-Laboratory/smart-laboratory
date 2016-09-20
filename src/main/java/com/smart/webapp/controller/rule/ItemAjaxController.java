@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.service.DictionaryManager;
+import com.smart.webapp.util.SampleUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -34,6 +36,8 @@ public class ItemAjaxController {
 	private UserManager userManager = null;
 	@Autowired
 	private ResultManager resultManager = null;
+	@Autowired
+	private DictionaryManager dictionaryManager = null;
 	
 	@RequestMapping(value = "/getItem*", method = RequestMethod.GET)
 	@ResponseBody
@@ -60,7 +64,8 @@ public class ItemAjaxController {
 				}
 				JSONObject o = new JSONObject();
 				o.put("id", "I" + item.getId());
-				o.put("content", index.getName()+":"+value+" ("+index.getSampleFrom()+unit+")");
+				o.put("content", index.getName()+":"+value+" ("+ SampleUtil.getInstance(dictionaryManager).getValue(index.getSampleFrom())+unit+")");
+
 				array.put(o);
 			}
 		}

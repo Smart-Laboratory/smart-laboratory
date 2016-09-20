@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
@@ -296,9 +297,9 @@
 			$("#createResultPanel").css('display', 'none');
 			layer.open({
 				type: 1,
-				area: ['300px','200px'],
+				area: ['600px','240px'],
 				fix: true, //不固定
-				skin: 'layui-layer-molv',
+				skin: 'layui-layer-lan',
 				maxmin: false,
 				shade:0.6,
 				title: "<fmt:message key="result.add.dialog"/>",
@@ -313,7 +314,7 @@
 				type: 1,
 				area: ['300px','200px'],
 				fix: true, //不固定
-				skin: 'layui-layer-molv',
+				skin: 'layui-layer-lan',
 				maxmin: false,
 				shade:0.6,
 				title: "<fmt:message key="bag.add.dialog"/>",
@@ -359,9 +360,6 @@
 			select : function(event, ui) {
 				var c = ui.item.category;
 				$("#exsitItemPanel").css('display', 'block');
-				$("#itemPanel").dialog({
-					width : 650
-				});
 				if (c == "I") {
 					showAddItemPanel(ui);
 				} else {
@@ -565,9 +563,9 @@
 		initItemPanel();
 		layer.open({
 			type: 1,
-			area: ['350px','360px'],
+			area: ['700px','300px'],
 			fix: true, //不固定
-			skin: 'layui-layer-molv',
+			skin: 'layui-layer-lan',
 			maxmin: false,
 			shade:0.6,
 			title: "<fmt:message key="item.add.dialog"/>",
@@ -622,10 +620,6 @@
 	function result_create_href() {
 		$("#createResultPanel").css('display', 'block');
 		$("#result_content").val($("#searchResult").val());
-		$("#resultPanel").dialog({
-			width : 800,
-			height : 300
-		});
 	}
 	function typeChange(select) {
 		if(select.value==1){
@@ -651,6 +645,12 @@ td {
 
 th {
 	padding: 0px 0px 10px 5px;
+}
+.ui-autocomplete {
+	z-index: 99999999 !important;
+	margin:0;
+	padding:0;
+	border:0;
 }
 </style>
 
@@ -710,8 +710,7 @@ th {
 			<td>
 				<div>
 					<div style="float: left;">
-						<select multiple class="form-control" id="result_select"
-							style="width: 300px; ">
+						<select multiple="multiple" class="form-control" id="result_select" style="width: 300px; ">
 							<c:forEach var="result" items="${resultIdList}">
 								<option value="<c:out value="${result.id}"/>">
 									<c:out value="${result.content}" />
@@ -724,9 +723,9 @@ th {
 					</div>
 					<div style="width: 30px; float: right;">
 						<input type="button"  value="+"   id="addResult" class="btn btn-info btn-sm"
-							style="width: 40px; height: 40px;" > 
+							style="width: 40px; height: 40px;" >
 						<input type="button" class="btn btn-info btn-sm"
-							value="-" id="removeResult" style="width: 40px; height: 40px;" />
+							value="-" id="removeResult" style="width: 40px; height: 40px; margin-top:14px;" />
 					</div>
 				</div>
 			</td>
@@ -738,7 +737,7 @@ th {
 			<td>
 				<div>
 					<div style="float: left;">
-						<select multiple class="form-control" id="bag_select" style="width: 300px;">
+						<select multiple="multiple" class="form-control" id="bag_select" style="width: 300px;">
 							<c:forEach var="bag" items="${bagIdList}">
 								<option value="<c:out value="${bag.id}"/>">
 									<c:out value="${bag.name}" />
@@ -749,7 +748,7 @@ th {
 					<div style="width: 30px; float: right;">
 						<input type="button" class="btn btn-info btn-sm" value="+" id="addBag"
 							style="width: 40px; height: 40px;" /> <input type="button" class="btn btn-info btn-sm"
-							value="-" id="removeBag" style="width: 40px; height: 40px;" />
+							value="-" id="removeBag" style="width: 40px; height: 40px; margin-top:14px;" />
 					</div>
 				</div>
 			</td>
@@ -802,16 +801,15 @@ th {
 
 <div id="panel">
 
-	<div id="itemPanel" style="width:650px;">
-		<div id="searchIndexPanel" style="width: 230px; text-align: left; float: left; display: block;">
+	<div id="itemPanel" style="display:none;padding-top:10px;">
+		<div id="searchIndexPanel" class="col-xs-5" style="text-align: left; display: block;">
 			<div>
 				<label><fmt:message key="input.search.name" /></label>
 			</div>
 			<div>
-				<input id="searchIndex" class="form-control" style="width: 200px"
-					placeholder="input search text" />
+				<input id="searchIndex" class="form-control" placeholder="输入检验项目名称或ID" />
 			</div>
-			<div id="indexPanel" style="width: 220px; text-align: left; display: none;">
+			<div id="indexPanel" style="text-align: left; display: none;">
 				<div>
 					<input type="hidden" id="index_id" /> 
 					<input type="hidden" id="current_type" /> 
@@ -869,8 +867,7 @@ th {
 				</div>
 			</div>
 		</div>
-		<div id="exsitItemPanel" style="width: 320px; float: right; text-align: left; 
-		 	font-size: 12px; border: 0px solid #E1E1E1;" class="border-radius-6 border-shadow">
+		<div id="exsitItemPanel" class="col-xs-7" style="float: right; text-align: left; font-size: 12px; border-left: 1px dashed #ccc;">
 			<div style="margin: 12px;">
 				<h5>
 					<fmt:message key="item.select" />
@@ -890,14 +887,14 @@ th {
 
 	</div>
 
-	<div id="resultPanel" style="text-align: left;">
-		<div id="addResultPanel" style="float: left;">
+	<div id="resultPanel" style="text-align: left;display:none;padding-top:10px;">
+		<div id="addResultPanel" class="col-xs-4" style="float: left;">
 			<div>
 				<label><fmt:message key="input.search.name" /></label>
 			</div>
 			<div>
-				<input id="searchResult" style="width: 200px" /> <input
-					type="hidden" id="result_id" />
+				<input id="searchResult" class="form-control col-xs-10" />
+				<input type="hidden" id="result_id" />
 			</div>
 			<div>
 				<input type="button" id="addResultBtn" class="btn btn-info btn-info"
@@ -906,16 +903,16 @@ th {
 						key="result.create" /></a>
 			</div>
 		</div>
-		<div id="createResultPanel" style="width:500px;float: right; display: none;"  class="form-inline">
-			<div class="input-prepend" style="margin-top:10px;">
-				<label class="col-sm-2 add-on" for="result_content" style="margin:8px 2px;"><fmt:message key="result.content" /></label><textarea
-					id="result_content" type="text" class="col-sm-10 form-control " style="width: 360px" ></textarea>
+		<div id="createResultPanel" class="col-xs-8" style="border-left:#ccc dashed 1px;float: right; display: none;">
+			<div class="col-xs-12" style="margin-top:10px;">
+				<label class="col-sm-2 add-on" for="result_content" style="margin:10px 0px;"><fmt:message key="result.content" /></label><textarea
+					id="result_content" type="text" class="col-sm-10"></textarea>
 			</div>
-			<div class="input-prepend" style="margin-top:10px;">
-				<label class="col-sm-2 add-on" style="margin:8px 2px;"><fmt:message key="result.category" /></label><input
-					id="result_category" type="text" class="col-sm-4 form-control " style="width: 80px" />
-				<label class="col-sm-2 add-on" style="margin:8px 2px;"><fmt:message key="result.percent" /></label><input
-					id="result_percent" type="text" class="col-sm-4 form-control " style="width: 80px" />
+			<div class="col-xs-12" style="margin-top:10px;">
+				<label class="col-sm-2 add-on" style="margin:8px 0px;"><fmt:message key="result.category" /></label><input
+					id="result_category" type="text" class="col-sm-4"/>
+				<label class="col-sm-2 add-on" style="margin:8px 0px;"><fmt:message key="result.percent" /></label><input
+					id="result_percent" type="text" class="col-sm-4"/>
 			</div>
 			<div class="col-sm-12" style="margin-top:10px;">
 				<button class="btn btn-info btn-sm" id="createResultBtn">
@@ -923,19 +920,18 @@ th {
 				</button>
 			</div>
 		</div>
-
-		<div id="bagPanel" style="text-align: left;">
-			<div>
-				<label><fmt:message key="input.search.name" /></label>
-			</div>
-			<div>
-				<input id="searchBag" style="width: 200px" /> <input type="hidden"
-					id="bag_id" />
-			</div>
-			<div>
-				<input type="button" class="btn btn-info btn-sm" id="addBagBtn"
-					value="<fmt:message key="bag.add"/>" />
-			</div>
+	</div>
+	<div id="bagPanel" style="text-align: left;display:none;padding-top:10px;">
+		<div class="col-xs-12">
+			<label><fmt:message key="input.search.name" /></label>
+		</div>
+		<div class="col-xs-12">
+			<input id="searchBag" style="width: 200px" class="form-control"/>
+			<input type="hidden" id="bag_id" />
+		</div>
+		<div class="col-xs-12" style="margin-top: 10px;">
+			<input type="button" class="btn btn-info btn-sm" id="addBagBtn"
+				   value="<fmt:message key="bag.add"/>" />
 		</div>
 	</div>
 </div>

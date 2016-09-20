@@ -49,6 +49,6 @@ public class BagDaoHibernate extends GenericDaoHibernate<Bag, Long> implements B
 
 	@SuppressWarnings("unchecked")
 	public List<Bag> getBag(String name) {
-		return getSession().createQuery("from Bag where name='" + name + "' order by upper(id)").list();
+		return getSession().createQuery("from Bag where name like '%" + name + "%' order by upper(id)").list();
 	}
 }
