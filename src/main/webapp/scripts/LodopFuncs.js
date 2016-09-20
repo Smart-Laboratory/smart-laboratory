@@ -42,9 +42,9 @@ if (needCLodop()) {
     oscript.src ="http://localhost:8000/CLodopfuncs.js?priority=1";
     head.insertBefore( oscript,head.firstChild );
     //本机浏览器的后补端口8001：
-    oscript = document.createElement("script");
+    /*oscript = document.createElement("script");
     oscript.src ="http://localhost:8001/CLodopfuncs.js?priority=2";
-    head.insertBefore( oscript,head.firstChild );
+    head.insertBefore( oscript,head.firstChild );*/
 };
 
 //====获取LODOP对象的主过程：====

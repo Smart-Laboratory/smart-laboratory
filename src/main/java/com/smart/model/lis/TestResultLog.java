@@ -43,6 +43,7 @@ public class TestResultLog extends BaseObject {
     private int isprint;
     private int editMark;
     private String method;
+	private String hint;
     
     
     private String logger;
@@ -250,7 +251,15 @@ public class TestResultLog extends BaseObject {
 	public void setLogoperate(String logoperate) {
 		this.logoperate = logoperate;
 	}
-	
+
+	@Column
+	public String getHint() {
+		return hint;
+	}
+
+	public void setHint(String hint) {
+		this.hint = hint;
+	}
 
 	@Transient
 	public TestResult getTestResultEntity() {
@@ -272,6 +281,7 @@ public class TestResultLog extends BaseObject {
 		tr.setTestResult(this.testResult);
 		tr.setTestStatus(this.testStatus);
 		tr.setUnit(this.unit);
+		tr.setHint(this.hint);
 		return tr;
 	}
 	
@@ -293,6 +303,7 @@ public class TestResultLog extends BaseObject {
 		this.testResult = tr.getTestResult();
 		this.testStatus = tr.getTestStatus();
 		this.unit = tr.getUnit();
+		this.hint = tr.getHint();
 	}
 
 	public String toString() {
