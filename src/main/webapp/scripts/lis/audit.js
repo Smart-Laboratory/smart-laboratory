@@ -238,7 +238,19 @@ $(function(){
 		$("#isContinued").html("1");
 		getProValue();
 	});
-	
+
+	var LODOP; //声明为全局变量
+
+	function Preview(strHtml) {//打印预览
+		LODOP = getLodop();
+		//CreateDataBill(data)
+		LODOP=getLodop();
+		LODOP.PRINT_INIT("打印报告单");
+		LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
+		//LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
+		LODOP.PREVIEW();
+	}
+
 	//张晋南 2016-5-12 染色体打印报告
 	$("#auditPrintBtn").click(function() {
 		// $('#printFrame').empty();
@@ -253,11 +265,15 @@ $(function(){
 		// $("#iframe_print").height(450);
 
 		//edit by zhou 20160920 报告单打印
-		 
 
 		//alert($("#chartPanel").height());
 	});
-	
+	function printReport(sampleno){
+		$.get("/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
+			console.log(data)
+			Preview(data);
+		})
+	}
 	$("#samplePrintBtn").click(function(){
 		var text = $("#gs_sample").val();
 		$('#samplePrintFrame').empty();

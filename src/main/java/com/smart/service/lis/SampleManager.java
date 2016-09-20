@@ -22,6 +22,8 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Sample> getDiffCheck(String patientId, String blh, String sampleNo, String lab);
 
 	Sample getBySampleNo(String sampleNo);
+
+	Sample getSampleByBarcode(String barcode);
 	
 	/**
 	 * 	 样本数统计

@@ -40,6 +40,10 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
+<<<<<<< HEAD
+=======
+//@Scope("session")
+>>>>>>> origin/master
 public class InExecuteViewController {
 
     @Autowired
@@ -332,6 +336,7 @@ public class InExecuteViewController {
             //未采集标本按requestId分组
             Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
             for (LabOrder labOrder : labOrders) {
+                setLisInfo(labOrder);
                 if (!labOrderMap.isEmpty() && labOrderMap.containsKey(labOrder.getRequestId())) {
                     List laborderList = labOrderMap.get(labOrder.getRequestId());
                     laborderList.add(labOrder);
@@ -367,7 +372,7 @@ public class InExecuteViewController {
                         labOrder1.setZxbz(1);
                     } else {
                         //
-                        setLisInfo(labOrder);
+
                         labOrder.setZxbz(1);
                         unLabOrderlistMap.put(key1, labOrder);
                     }
