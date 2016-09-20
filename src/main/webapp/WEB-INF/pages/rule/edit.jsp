@@ -5,7 +5,7 @@
 <title><fmt:message key="set.rule"/></title>
 <meta name="menu" content="SampleSet"/>
 
-	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
+	<script type="text/javascript" src="<c:url value='/scripts/layer/layer.js'/>"></script>
 
 	<script>
 	function initItemPanel() {
@@ -39,7 +39,7 @@
 
 	function removeItemWithoutUsed(self) {
 		var id = self.parent().children().eq(0).html();
-		$.get("../item/ajax/deleteItem", {
+		$.get("<%=request.getContextPath()%>/item/ajax/deleteItem", {
 			id : id
 		}, function(data) {
 			if (data == 0) {
@@ -53,7 +53,7 @@
 	function showAddItemPanel(ui) {
 
 		$("#selectItem").empty();
-		$.get("../item/ajax/getItem", { id : ui.item.id },
+		$.get("<%=request.getContextPath()%>/item/ajax/getItem", { id : ui.item.id },
 			function(data) {
 				$("#exsit_item").html("");
 				var array = jQuery.parseJSON(data);
@@ -257,13 +257,13 @@
 	}
 
 	$(function() {
-		$.jstree._themes = "../styles/themes/";
+		$.jstree._themes = "<%=request.getContextPath()%>/styles/themes/";
 
 		$("#ruleTree").jstree({
 			"json_data" : {
 
 				"ajax" : {
-					"url" : '../ajax/getRule?id=<c:out value="${rule.id}" />'
+					"url" : '<%=request.getContextPath()%>/ajax/getRule?id=<c:out value="${rule.id}" />'
 				}
 			},
 			"crrm" : {
@@ -327,7 +327,7 @@
 
 		$("#searchIndex").autocomplete({
 			source : function(request, response) {
-				$.ajax({url : "../ajax/getIndex",
+				$.ajax({url : "<%=request.getContextPath()%>/ajax/getIndex",
 					dataType : "json",
 					data : {
 						maxRows : 12,
@@ -393,7 +393,7 @@
 		$("#searchResult").autocomplete({
 			source : function(request, response) {
 				$.ajax({
-					url : "../result/ajax/getResult",
+					url : "<%=request.getContextPath()%>/result/ajax/getResult",
 					dataType : "json",
 					data : {
 						name : request.term
@@ -421,7 +421,7 @@
 		$("#searchBag").autocomplete({
 			source : function(request, response) {
 				$.ajax({
-					url : "../ajax/searchBag",
+					url : "<%=request.getContextPath()%>/ajax/searchBag",
 					dataType : "json",
 					data : {
 						name : request.term
@@ -479,7 +479,7 @@
 				return;
 			}
 
-			$.post("../item/ajax/addItem",
+			$.post("<%=request.getContextPath()%>/item/ajax/addItem",
 			{
 				id : $("#index_id").val(),
 				value : value,
@@ -522,7 +522,7 @@
 
 		$("#createResultBtn").click(function() {
 
-			$.post("../result/ajax/add", {
+			$.post("<%=request.getContextPath()%>/result/ajax/add", {
 				content : $("#result_content").val(),
 				category : $("#result_category").val(),
 				percent : $("#result_percent").val()

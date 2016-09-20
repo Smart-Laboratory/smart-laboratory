@@ -310,6 +310,11 @@ public class AutoAuditServlet extends HttpServlet {
                         	        		sampleManager.saveAll(updateSample);
                         					criticalRecordManager.saveAll(updateCriticalRecord);
                         					auditTraceManager.saveAll(updateAuditTrace);
+											for(Sample sample : updateSample) {
+												if(sample.getAuditStatus() == Check.PASS) {
+
+												}
+											}
                         					System.out.println(System.currentTimeMillis()-nowtime);
                         	            } catch (Exception e) {
                         	                e.printStackTrace();

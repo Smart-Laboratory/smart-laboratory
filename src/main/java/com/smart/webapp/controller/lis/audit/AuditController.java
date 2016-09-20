@@ -391,6 +391,11 @@ public class AuditController extends BaseAuditController {
         		}
         		sampleManager.saveAll(updateSample);
 				criticalRecordManager.saveAll(updateCriticalRecord);
+				for(Sample sample : updateSample) {
+					if(sample.getAuditStatus() == Check.PASS) {
+
+					}
+				}
 				log.debug("手工审核结束！");
             	System.out.println("手工审核结束！");
             	task.setEndTime(new Date());
