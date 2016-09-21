@@ -9,6 +9,7 @@ import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.rule.IndexManager;
+import com.smart.util.Config;
 import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
@@ -47,7 +48,7 @@ public class WebService {
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
     private TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
-    private String url = "http://127.0.0.1:8080/lisservice/services/rest/";
+    private String url = Config.getString("webservice.path","");
     private HttpURLConnection connection = null;
 
     public String getBacteriaList(){

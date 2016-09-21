@@ -11,6 +11,7 @@ import com.smart.service.lis.TestTubeManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
+import com.smart.util.SpringContextUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -29,6 +30,9 @@ public class ChargeUtil {
     private static ChargeUtil instance = new ChargeUtil();
 
     private ChargeUtil() {
+        ylxhManager = (YlxhManager)SpringContextUtil.getBean("ylxhManager");
+        dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
+        testTubeManager = (TestTubeManager)SpringContextUtil.getBean("testTubeManager");
     }
 
     public static ChargeUtil getInstance() {
@@ -184,12 +188,9 @@ public class ChargeUtil {
         return flag;
     }
 
-    @Autowired
-    private YlxhManager ylxhManager;
+    private YlxhManager ylxhManager = null;
 
-    @Autowired
-    private DictionaryManager dictionaryManager;
+    private DictionaryManager dictionaryManager = null;
 
-    @Autowired
-    private TestTubeManager testTubeManager;
+    private TestTubeManager testTubeManager = null;
 }

@@ -254,7 +254,10 @@ public class InExecuteViewController {
                 labOrderVo.setSampleQuantity(ConvertUtil.null2String(ylxh.getBbl()));
                 labOrderVo.setTestTube(ylxh.getSglx());
             }
-            labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
+            labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(process.getExecutetime()));
+            labOrderVo.setRequestTime(ConvertUtil.getFormatDate(process.getRequesttime()));
+            labOrderVo.setPrintTime(ConvertUtil.getFormatDate(process.getPrinttime()));
+            labOrderVo.setPatientType(""+labOrder.getStayhospitalmode());
             labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
             labOrderVo.setBedNo(labOrder.getBed());
             labOrderVo.setRequestId(labOrder.getRequestId());
@@ -262,6 +265,7 @@ public class InExecuteViewController {
             labOrderVo.setLaborderOrg(labOrder.getLaborderorg());
             labOrderVo.setPatientId(labOrder.getPatientid());
             labOrderVo.setPrintTime(ConvertUtil.getFormatDate(process.getPrinttime()));
+            labOrderVo.setDiagnose(labOrder.getDiagnostic());
             int sex = ConvertUtil.getIntValue("" + labOrder.getSex());
             if (sex == 1) {
                 labOrderVo.setSex("男");
@@ -442,6 +446,7 @@ public class InExecuteViewController {
                 process.setRequester(labOrder.getRequester());
                 process.setExecutetime(executeTime);
                 process.setExecutor(user.getUsername());
+                process.setPrinttime(executeTime);
                 labOrder.setLaborder(sample.getId());
 
                 //回写HIS，申请状态变更

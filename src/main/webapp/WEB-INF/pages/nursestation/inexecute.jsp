@@ -399,10 +399,10 @@
                         {name: 'sampleType', index: 'sampleType', width: 60},
                         {name: 'barcode', index: 'barcode', width: 100},
                         {name: 'hossection', index: 'hossection', width: 100},
-                        {name: 'requestTime', index: 'requestTime', width: 60},
+                        {name: 'requestTime', index: 'requestTime', width: 120},
                         {name: 'diagnose', index: 'diagnose', width: 100},
-                        {name: 'patientType', index: 'patientType', width: 60},
-                        {name: 'printTime', index: 'printTime', width: 60},
+                        {name: 'patientType', index: 'patientType', width: 60,formatter: 'select',editoptions: {value: "1:门诊;2:住院;3:其他"}},
+                        {name: 'printTime', index: 'printTime', width: 120},
                         {
                             name: 'requestMode',
                             index: 'requestMode',
