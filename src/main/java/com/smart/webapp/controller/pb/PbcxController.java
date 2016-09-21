@@ -192,7 +192,7 @@ public class PbcxController extends PbBaseController {
 //	    			if(a.getShift().contains("休"))
 //	    				continue;
 	    			if(bc.equals("夜")){
-	    				if(!a.getShift().contains("夜;") && !a.getShift().contains("夜生;") && !a.getShift().contains("夜临;")){
+	    				if(!a.getShift().contains("夜;") && !a.getShift().contains("夜生;") && !a.getShift().contains("夜临;")  && !a.getShift().contains("夜新;")){
 	    					continue;
 	    				}
 	    			}else if(!a.getShift().contains(bc+";")){
