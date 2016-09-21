@@ -6,13 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import com.smart.model.LabelValue;
 
 import java.text.SimpleDateFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 /**
@@ -129,14 +123,16 @@ public final class ConvertUtil {
             return def;
         }
     }
-    public static String  getFormatDate(Object v) {
+    public static String  getFormatDate(Date v) {
         return getFormatDate(v,"");
     }
 
-    public static String  getFormatDate(Object v, String format) {
+    public static String  getFormatDate(Date v, String format) {
         try {
-            if(format==null && format.isEmpty()) format="yyyy-MM-dd HH:MM:SS";
-            return new SimpleDateFormat(format).format(v);
+            if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(v);
+            return new SimpleDateFormat(format).format(calendar.getTime());
         } catch (Exception ex) {
             return "";
         }

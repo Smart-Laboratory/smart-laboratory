@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.smart.model.execute.LabOrder;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.*;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class SampleInputAjaxController {
 		Sample sample = new Sample();
 		if(type == 1) {
 			try {
-				sample = sampleManager.get(Long.parseLong(code));
+				sample = sampleManager.getSampleByBarcode(code);
 			} catch(Exception e) {
 				return null;
 			}
@@ -392,8 +393,8 @@ public class SampleInputAjaxController {
 		if(sample == null) {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
-		} else if(!sample.getSampleNo().equals("0")) {
-			process = processManager.getBySampleId(Long.parseLong(code));
+		} else if(sample.getSampleNo() != null && !sample.getSampleNo().equals("0")) {
+			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
 		} else {
@@ -420,7 +421,7 @@ public class SampleInputAjaxController {
 			sampleManager.save(sample);
 			processManager.save(process);
 
-			LabOrder labOrder = labOrderManager.get(Long.parseLong(code));
+			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
 

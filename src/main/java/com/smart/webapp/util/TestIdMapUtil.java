@@ -16,15 +16,15 @@ public class TestIdMapUtil {
 	
 	public TestIdMapUtil() {}
 
-    public  TestIdMapUtil getInstance() {
+    public  static TestIdMapUtil getInstance() {
 		if(instance.idMap == null){
 			synchronized (instance) {
-				initMap();
+				instance.initMap();
 			}
 		}
 		return instance;
 	}
-	
+
 	public  Map<String, Index> initMap(){
 		List<Index> list = indexManager.getAll();
 		for (Index t : list) {

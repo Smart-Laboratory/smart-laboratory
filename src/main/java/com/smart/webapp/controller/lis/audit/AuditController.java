@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.smart.lisservice.WebService;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.service.scheduledTask.ReportGenerate;
@@ -537,11 +538,15 @@ public class AuditController extends BaseAuditController {
 			auditTraceManager.saveAll(updateA);
 			ReportGenerate reportGenerate = new ReportGenerate();
 			if ("pass".equals(op)) {
+				//生成PDF
 				reportGenerate.createReportPdf(sample.get(0), process, testResultList, false);
+				//写入HIS
+				new WebService().saveHisResult(sample.get(0),process,testResultList);
 			} else if ("unpass".equals(op)) {
 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("通过或不通过出错！", e);
 		}
 		return result;

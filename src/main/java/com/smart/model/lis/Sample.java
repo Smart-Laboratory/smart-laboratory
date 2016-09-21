@@ -46,7 +46,7 @@ public class Sample extends BaseObject {
 	private String printFlag; //是否打印
 	private String printTime;
 	private String chkoper2;
-	private int requestMode=0;
+	private int requestMode=0;		//是否急诊
 	private String fee;	//费用
 	private String feestatus;	//收费状态
 	private String part;	//采集部位
