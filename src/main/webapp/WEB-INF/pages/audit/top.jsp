@@ -1,6 +1,6 @@
 <script type="text/javascript" src="../scripts/lis/audit/top.js"></script>
 
-<div class="col-sm-12">
+<div>
 <div class="alert alert-success" style="margin-bottom:5px;padding:0px 5px;">
 	<div class="form-inline">
 		<div class="form-group" style="margin-right:30px;">
@@ -11,7 +11,7 @@
 			<b><fmt:message key="info.today.unpass" /> : </b><a id="t_info_unpass"><span id="today_info_unpass"><c:out
 						value="${today_info_unpass}" /></span></a>
 		</div>
-		<div id="need_write_back_div" class="form-group alert-info" style="margin-right:30px;padding:5px;">
+		<div id="need_write_back_div" class="form-group" style="margin-right:30px;padding:5px;">
 			<b><fmt:message key="info.need.writeback" /> : </b><span id="need_write_back"><c:out value="${need_write_back}" /></span>
 		</div>
 		

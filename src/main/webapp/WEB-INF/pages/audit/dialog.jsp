@@ -1,6 +1,5 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <script type="text/javascript" src="../scripts/lis/audit/dialog.js"></script>
-
 <div id="auditDialog" style="text-align:left;display:none;">
 	<div id="searchPanel" align="left">
 		<div style="display:none;" id="isContinued">0</div>
@@ -31,24 +30,29 @@
 <div id="addTestResultDialog" style="text-align:left;display:none;">
 	<form id="addRForm" class="form-horizontal" action="" method="post">
 	<div class="form-group">
-		<label class="col-sm-5 control-label no-padding-right" style="text-align:right;" for="searchProject"><fmt:message key='add.single'/> </label>
-        <div class="col-sm-7">
+		<label class="col-sm-3 control-label no-padding-right" style="text-align:right;" for="searchProject">
+			按单项添加</label>
+        <div class="col-sm-9">
             <input  id="searchProject" class="form-control"  placeholder="<fmt:message key='add.single'/>">
         </div>
 	</div>
-	
-	<div class="form-group">
-		<input id="lastprofile" type="hidden" value="<c:out value='${lastprofle}'/>"  />
-		<!-- <select id="profileList" class="form-control" style="width:280px;"></select> -->
-		<button type="button" id="deleteAllTest" class="btn btn-sm btn-danger"><fmt:message key="button.empty" /></button>
-		<div class="col-sm-7">
-			<input  id="packages" class="col-sm-7 form-control "  placeholder="<fmt:message key='button.add.profile'/>">
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" style="text-align:right;" for="searchProject">
+				按套餐添加</label>
+			<div class="col-sm-9">
+				<input id="lastprofile" type="hidden" value="<c:out value='${lastprofle}'/>"  />
+				<input  id="packages" class="col-sm-7 form-control "  placeholder="<fmt:message key='button.add.profile'/>">
+			</div>
 		</div>
-		<!-- <button id="addProfileBtn" class="btn btn-info"><fmt:message key="button.add.profile" /></button> -->
-		
-	</div>
+
 	<fieldset>
-	<legend><fmt:message key="index.message" /></legend>
+		<div>
+			<legend style="float: left;padding-left:5px"><fmt:message key="index.message" /></legend>
+			<div style="float: right;position: relative;top:-50px;padding-right: 5px">
+				<button type="button" id="deleteAllTest" class="btn btn-white btn-danger btn-sm"><fmt:message key="button.empty" /></button>
+			</div>
+		</div>
+
 	<div id="addTestList">
 	
 	</div>

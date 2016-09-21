@@ -73,6 +73,11 @@ function getList(text, lab) {
     		}
     	},
     	loadComplete: function() {
+			var table = this;
+			setTimeout(function(){
+				updatePagerIcons(table);
+			}, 0);
+
     		jQuery("#list").jqGrid("setGridParam",{url:"../audit/data?lab=" + $("#lastDepLab").val()});
     		
     		var firstDocId, firstSampleNo;

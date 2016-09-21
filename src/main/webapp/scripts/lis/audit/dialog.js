@@ -259,7 +259,7 @@ function openAddTestResultDialog() {
 		type: 1,
     	shade: 0.4,
     	skin: 'layui-layer-lan',
-    	area: ['450', '400px'],
+    	area: ['450px', '400px'],
     	title: '添加新的检验项',
     	btn: ['添加', '取消'],
     	content: $("#addTestResultDialog"),
@@ -650,7 +650,7 @@ $(function(){
 			var array = jQuery.parseJSON(data);
 			for (var i=0 ; i < array.length ; i++) {
 				// var html = array[i].ksdm+","+array[i].ylmc;
-					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text'  class='testValue span2 form-control'/></div>");
+					$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].test+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text'  class='testValue span2 form-control'/></div></div>");
 				}
 		 });
 		openAddTestResultDialog();
@@ -714,7 +714,7 @@ $(function(){
     		    			result = false;
     		    	});
     				if(result){
-    					$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+array[i].test+"'/><span class='testName span2'>"+array[i].name+"</span><input type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div>")
+						$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].name+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div></div>");
     				}else{
     					alert("样本列表或者添加列表中已包含该检验项目!");
     				}
@@ -771,7 +771,7 @@ $(function(){
 	    			result = false;
 	    	});
 			if(result){
-				$("#addTestList").append("<div class='form-inline'><input type='hidden' class='testID' value='"+ui.item.id+"'/><span class='testName span2'>"+ui.item.value+"</span><input type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div>")
+				$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+ui.item.id+"'/><label>"+ui.item.value+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div></div>");
 			}else{
 				alert("样本列表或者添加列表中已包含该检验项目!");
 			}

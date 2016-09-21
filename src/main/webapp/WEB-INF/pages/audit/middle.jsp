@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <script type="text/javascript" src="../scripts/lis/audit/middle.js"></script>
 <style>
 #btnMenu button {
@@ -10,6 +11,24 @@
 #testresultDiv .ui-jqgrid-bdiv {
 	overflow-x:hidden;
 }
+	.patientinfo tr td{
+		text-align: left;
+		padding-left: 15px;
+	}
+
+	.patientinfo tr td b{
+		padding-left: 10px;
+	}
+
+	.patientinfo tr td b,a{
+		text-underline: none;
+		color: #23527c ;
+	}
+
+	.alert-info{
+		margin:0 auto;
+		text-align: center;
+	}
 </style>
 
 <div id="mid" class="col-sm-9" >
@@ -20,46 +39,35 @@
 			<b id="passreason"></b>
 		</div>
 		<div class="clearfix alert alert-info" style="margin-bottom:0px;padding:2px;padding-bottom:2px;">
-			<div class="col-sm-12 pinfo">
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-4'><fmt:message key="patient.name" />:</span><b id="pName"></b>
-				</div>
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-4'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-2'></b>
-					<span class='col-sm-4'><fmt:message key="patient.age" />:</span><b id="pAge"></b>
-				</div>
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-6'><fmt:message key="sample.type" />:</span><b id="pType"></b>
-				</div>
-			</div>
-			<div class="col-sm-12 pinfo">
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-5'><fmt:message key="sample.id" />:</span><b id="doctadviseno"></b>
-				</div>
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-7'><fmt:message key="sample.mode" />:</span><b id="stayhospitalmode"></b>
-				</div>
-				<div class="col-sm-4 pinfo">
-					<span class='col-sm-5'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
-				</div>
-			</div>
-			<div class="col-sm-12 pinfo">
-				<div class="col-sm-8 pinfo">
-					<span class='col-sm-2'><fmt:message key="patient.section" />:</span><b id="pSection"></b>
-				</div>
-				<div id="pBedHtml" class="col-sm-4 pinfo">
-					<span class='col-sm-4'><fmt:message key="patient.departbed" />:</span><b id="pBed"></b>
-				</div>
-			</div>
-			<div class="col-sm-12 pinfo">
-				<div id="pDiaHtml" class="col-sm-5 pinfo">
-					<span class='col-sm-3'><fmt:message key="diagnostic" />:</span><b id="diagnostic"></b>
-					<input type="hidden" id="diagnosisValue" /> 
-				</div>
-				<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
-					<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
-				</div>
-			</div>
+			<table style="width: 100%" cellpadding="0" cellspacing="0" class="patientinfo">
+				<colgroup>
+					<col width="30%"/>
+					<col width="30%"/>
+					<col width="*"/>
+				</colgroup>
+				<tr>
+					<td>姓&#8195;名:</span><b id="pName"></b></td>
+					<td>性&#8195;别:</span><b id="pSex"></b></td>
+					<td>年&#8195;&#8195;龄:</span><b id="pAge"></b></td>
+				</tr>
+				<tr>
+					<td>类&#8195;型:</span><b id="pType"></b></td>
+					<td>医嘱号:</span><b id="doctadviseno"></b></td>
+					<td>在院方式:</span><b id="stayhospitalmode"></b></td>
+				</tr>
+				<tr>
+					<td>病历号:</span><b id="blh"></b></td>
+					<td>科&#8195;室:</span><b id="pSection"></b></td>
+					<td>床&#8195;&#8195;号:</span><b id="pBed"></b></td>
+				</tr>
+				<tr>
+					<td colspan="3">诊&#8195;断:</span><b id="diagnostic"></b>
+						<input type="hidden" id="diagnosisValue" />
+						<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
+						<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
+					</div></td>
+				</tr>
+			</table>
 		</div>
 		<div style="display:none;" class="clearfix" id="unaudit_reason">
 			<div style="float:left;width:80px;margin:0px;padding:2px;padding-left:10px;margin-right:10px;" class="alert alert-error"><b><fmt:message key="unpass.reason" /></b></div>

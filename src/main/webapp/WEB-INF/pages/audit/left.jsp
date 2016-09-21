@@ -3,11 +3,14 @@
 .ui-search-clear {
 	display:none;
 }
+.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th {
+	border-right: 1px solid #E1E1E1 !important;
+}
 </style>
 
 <div id="left" class="col-sm-3">
-	<div class="btn-group col-sm-12">
-		<button data-toggle="dropdown" class="btn btn-info dropdown-toggle col-sm-5">
+	<div class="col-sm-12">
+		<button data-toggle="dropdown" class="btn btn-info dropdown-toggle col-sm-6">
 			<fmt:message key='batch.deal'/>
 			<span class="ace-icon fa fa-caret-down icon-on-right"></span>
 		</button>
