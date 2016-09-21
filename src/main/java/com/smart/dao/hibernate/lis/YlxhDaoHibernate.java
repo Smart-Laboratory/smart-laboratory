@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.hql.internal.ast.HqlASTFactory;
 import org.springframework.stereotype.Repository;
 
 import com.smart.dao.hibernate.GenericDaoHibernate;
@@ -43,7 +44,13 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 				labs +="'"+s+"'";
 			}
 		}
-		return getSession().createQuery("from Ylxh where ksdm in("+labs+") and ylmc like '%"+ylmc+"%'order by profiletest").list();
+		String hql = "";
+		if(ylmc==null){
+			hql = "from Ylxh where ksdm in("+labs+") and (ylmc like '%"+ylmc+"%') order by profiletest";
+		}else{
+			hql = "from Ylxh where ksdm in("+labs+") and (ylmc like '%"+ylmc+"%' or ylxh like '"+ylmc+"') order by profiletest";
+		}
+		return getSession().createQuery(hql).list();
 	}
 
 	@SuppressWarnings("unchecked")

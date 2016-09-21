@@ -31,7 +31,7 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 	 * @return
 	 */
 
-	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
+	List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
 	List<LabOrder> saveAll(List<LabOrder> list);
 

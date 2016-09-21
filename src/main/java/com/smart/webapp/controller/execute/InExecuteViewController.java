@@ -40,7 +40,6 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
-@Scope("prototype")
 public class InExecuteViewController {
 
     @Autowired
@@ -77,8 +76,8 @@ public class InExecuteViewController {
     };
 
     private Map<String, String> sampleTypeMap = new HashMap<String, String>();
-    private List<LabOrder> labOrdersService = new ArrayList<LabOrder>();
 
+    private List<LabOrder> labOrdersService = null;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -109,6 +108,8 @@ public class InExecuteViewController {
         Map<String, List> resultMap = new HashMap<String, List>();
         long startTime = System.currentTimeMillis();   //获取开始时间
         labOrdersService = new WebService().getInExcuteInfo(ward, bedNo, patientId);//重新初始化
+
+        System.out.println("labOrdersService==>"+labOrdersService.size());
         long endTime = System.currentTimeMillis(); //获取结束时间
 
         JSONArray nodes = new JSONArray();
@@ -175,7 +176,7 @@ public class InExecuteViewController {
                                  @RequestParam(value = "requestIds", defaultValue = "") String requestIds) {
         //Long startTime = System.currentTimeMillis(); //获取结束时间
         Map<String, List> resultMap = new HashMap<String, List>();
-
+        System.out.println("labOrdersService11=>"+labOrdersService.size());
         List<LabOrder> labOrders = new ArrayList<LabOrder>();
         if (!ward.isEmpty() && !bedNo.isEmpty() && !patientId.isEmpty()) {
             for (LabOrder labOrder : labOrdersService) {
@@ -212,7 +213,12 @@ public class InExecuteViewController {
             beCollectedList = labOrders;
         }
 
-        List<LabOrder> labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
+        List<Object[]> labOrderList = null;
+        try {
+            labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         //endTime = System.currentTimeMillis(); //获取结束时间
         //System.out.println("程序运行时间3： " + (endTime - startTime) + "ms");
         //获取病区已采集标本
@@ -223,12 +229,19 @@ public class InExecuteViewController {
 
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
-        for (LabOrder labOrder : labOrderList) {
+        for (Object[] objects : labOrderList) {
+            LabOrder labOrder = (LabOrder) objects[0];
+            Sample sample = (Sample) objects[1];
+            Process process  = (Process) objects[2];
+
+            //排除非ICU项目
+            if(!labOrder.getYlxh().equals("22813") ||  !labOrder.getYlxh().equals("22814")) continue;
             LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {
                 labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
             }
+
             labOrderVo.setPatientCode(labOrder.getBlh());
             labOrderVo.setPatientName(labOrder.getPatientname());
             labOrderVo.setBarcode(labOrder.getBarcode());
@@ -247,6 +260,7 @@ public class InExecuteViewController {
             labOrderVo.setLaborder(labOrder.getLaborder());
             labOrderVo.setLaborderOrg(labOrder.getLaborderorg());
             labOrderVo.setPatientId(labOrder.getPatientid());
+            labOrderVo.setPrintTime(ConvertUtil.getFormatDate(process.getPrinttime()));
             int sex = ConvertUtil.getIntValue("" + labOrder.getSex());
             if (sex == 1) {
                 labOrderVo.setSex("男");
@@ -263,15 +277,23 @@ public class InExecuteViewController {
        // System.out.println("程序运行时间4： " + (endTime - startTime) + "ms");
         //未采集标本
         try {
+            //System.out.println(beCollectedList.size());
             if (beCollectedList != null && beCollectedList.size() > 0) {
-                Iterator iterator = beCollectedList.iterator();
+                 Iterator iterator = beCollectedList.iterator();
                 while (iterator.hasNext()) {
                     LabOrder labOrder = (LabOrder) iterator.next();
                     String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
                     if (requestDetailIds.indexOf(requestDetailId + ",", 0) >= 0) {
+                        System.out.println("1111");
+                        iterator.remove();
+                    }
+                    //排除非ICU项目
+                   // System.out.println("labOrder.getYlxh()==>"+labOrder.getYlxh().equals("22813"));
+                    if(!labOrder.getYlxh().equals("22813") &&  !labOrder.getYlxh().equals("22814")) {
                         iterator.remove();
                     }
                 }
+                System.out.println(beCollectedList.size());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -314,10 +336,12 @@ public class InExecuteViewController {
         //再次判断提交对象是否已经采集
         //获取病区已采集标本
         try {
-            List<LabOrder> labOrderList = labOrderManager.getByRequestIds("", "", "", requestIds);
+            List<Object[]> labOrderList = labOrderManager.getByRequestIds("", "", "", requestIds);
             //已采集明细ID
             String requestDetailIds = "";
-            for (LabOrder labOrder : labOrderList) {
+
+            for (Object[] objects : labOrderList) {
+                LabOrder labOrder = (LabOrder)objects[0];
                 requestDetailIds += labOrder.getLaborderorg() + ",";
             }
             //未采集标本
@@ -398,7 +422,11 @@ public class InExecuteViewController {
                 sample.setRequestMode(labOrder.getRequestmode());
                 sample.setSampleNo(labOrder.getSampleno());
                 sample.setSex(ConvertUtil.null2String(labOrder.getSex()));
+<<<<<<< HEAD
                 sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
+=======
+                sample.setSampleStatus(1);
+>>>>>>> origin/master
                 sample.setSampleType(labOrder.getSampletype());
                 sample.setSectionId(labOrder.getLabdepartment());
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());

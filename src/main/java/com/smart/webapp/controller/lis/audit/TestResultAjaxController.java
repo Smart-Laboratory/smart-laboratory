@@ -183,7 +183,7 @@ public class TestResultAjaxController extends BaseAuditController{
 					fillUtil.fillResult(nt, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();
-//					testModify.setModifyTime(new Date());
+					testModify.setModifyTime(new Date());
 					testModify.setModifyUser(request.getRemoteUser());
 					testModify.setSampleNo(sample);
 					testModify.setTestId(idValue[0]);
@@ -191,7 +191,8 @@ public class TestResultAjaxController extends BaseAuditController{
 					testModify.setType(Constants.ADD);
 					testModifyManager.save(testModify);
 					info.setModifyFlag(1);
-					//sampleManager.save(info);
+					info.setAuditStatus(0);
+					sampleManager.save(info);
 				}
 			}
 			//获取user表中常用的检测类型，修改
@@ -201,7 +202,7 @@ public class TestResultAjaxController extends BaseAuditController{
 			if(null!=user){
 				for (String tc : tcResult) {
 					if(null!=user.getLastProfile()&&!"".equals(user.getLastProfile())){
-						if(user.getLastProfile().indexOf(tc)!=-1){
+						if(user.getLastProfile().indexOf(tc)<0){
 							user.setLastProfile(user.getLastProfile()+tc+",");
 						}
 					}else{

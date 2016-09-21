@@ -69,6 +69,10 @@ public class SampleInputAjaxController {
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String code = request.getParameter("id");
 		int type = Integer.parseInt(request.getParameter("type"));
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
 		JSONObject o = new JSONObject();

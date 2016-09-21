@@ -60,21 +60,20 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	 * @param patientId		病人ID
 	 * @return
 	 */
-	public List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
-		String sql =" from LabOrder where 1=1";
-		Long startTime=System.currentTimeMillis(); //获取结束时间
+	public List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
+		String sql =" from LabOrder l, Sample s,Process p where l.sampleno = s.sampleNo and s.id=p.sampleid";
 
 		if(ward !=null && !ward.isEmpty()){
-			sql += " and wardId=:ward";
+			sql += " and l.wardId=:ward";
 		}
 		if(bedNo !=null && !bedNo.isEmpty()){
-			sql += " and bed=:bedNo";
+			sql += " and l.bed=:bedNo";
 		}
 		if(patientId !=null && !patientId.isEmpty()){
-			sql += " and  patientid=:patientId";
+			sql += " and  l.patientid=:patientId";
 		}
 		if(requestIds !=null && requestIds.size()>0){
-			sql += " and  requestId in (:requestIds)";
+			sql += " and  l.requestId in (:requestIds)";
 		}
 
 		Query query = getSession().createQuery(sql);
@@ -91,12 +90,9 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 			query.setParameterList("requestIds",requestIds);
 		}
 
-
-		List list = query.list();
-		Long endTime =System.currentTimeMillis(); //获取结束时间
-		System.out.println("程序运行时间qqqqq： "+(endTime-startTime)+"ms");
-		return list;
+		return query.list();
 	}
+
 
 
 	public List<LabOrder> saveAll(List<LabOrder> list) {

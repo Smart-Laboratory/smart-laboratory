@@ -1187,8 +1187,8 @@
 			jsonReader : {repeatitems : false}, 
 			colNames:['项目名称','修改类型','修改前'
 			          ,'修改后','修改时间','修改者'],
-		   	colModel:[{name:'test',index:'test',width:80,sortable:false},
-		   		{name:'type',index:'type',width:70,sortable:false},
+		   	colModel:[{name:'test',index:'test',width:100,sortable:false},
+		   		{name:'type',index:'type',width:50,sortable:false},
 		   		{name:'oldValue',index:'oldValue',width:50,sortable:false},
 		   		{name:'newValue',index:'newValue',width:50,sortable:false},
 		   		{name:'modifyTime',index:'modifyTime',sortable:false},
