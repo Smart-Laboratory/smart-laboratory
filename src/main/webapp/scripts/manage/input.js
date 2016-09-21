@@ -19,6 +19,7 @@ function receive(obj,event) {
 				var data = JSON.parse(data);
 				if(data.success == 0) {
 					layer.msg(data.message, {icon: 2, time: 1000});
+					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 				} else {
 					$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
 						var data = JSON.parse(data);
@@ -76,6 +77,7 @@ function receive(obj,event) {
 							var ids = $('#new').jqGrid('getDataIDs');
 							var newId = parseInt(ids[ids.length - 1] || 0) + 1;
 							$("#new").jqGrid('addRowData', newId, rowData);
+							$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 							$("#receive_id").val("").focus();
 							layer.msg(data.message, {icon: 1, time: 1000});
 						}
@@ -284,7 +286,6 @@ function sample() {
 			var sampleno = $("#sampleno").val();
 			$('#sampleForm')[0].reset();
 			$('#examinaim').data('tag').clear();
-			$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 			var html = "";
 			html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
 			html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";

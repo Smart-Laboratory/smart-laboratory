@@ -387,7 +387,7 @@ public class SampleInputAjaxController {
 		String sampleno = request.getParameter("sampleno");
 		Sample sample = sampleManager.getBySampleNo(sampleno);
 		JSONObject o = new JSONObject();
-		if(!sample.getBarcode().equals(code)) {
+		if(sample != null && !sample.getBarcode().equals(code)) {
 			o.put("success", 0);
 			o.put("message", "样本号为" + sampleno + "的标本已存在，不能对条码为" + code + "的标本编号！");
 		} else {

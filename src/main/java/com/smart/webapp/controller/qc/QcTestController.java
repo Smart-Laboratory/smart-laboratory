@@ -85,7 +85,7 @@ public class QcTestController {
         dataResponse.setPage(page);
         dataResponse.setTotal(totalPage);
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-        instanceTest instance = instanceTest.getInstance(sectionManager);
+        instanceTest instance = instanceTest.getInstance();
         for(QcTest info :list) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("id", ConvertUtil.null2String(info.getId()));
