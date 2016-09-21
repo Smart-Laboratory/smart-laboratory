@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.smart.service.lis.*;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -126,12 +127,9 @@ public class BaseAuditController {
     protected Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
 
 	protected synchronized void initMap() {
-		List<Index> list = indexManager.getAll();
-		for (Index t : list) {
-			idMap.put(t.getIndexId(), t);
-		}
+		idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
 	}
-	
+
 	protected synchronized void initDeviceMap() {
 		List<Device> list = deviceManager.getAll();
 		for (Device d : list) {

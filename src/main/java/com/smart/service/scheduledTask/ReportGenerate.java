@@ -11,10 +11,7 @@ import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
 import com.smart.util.GenericPdfUtil;
 import com.smart.util.SpringContextUtil;
-import com.smart.webapp.util.HisIndexMapUtil;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.SectionUtil;
-import com.smart.webapp.util.UserUtil;
+import com.smart.webapp.util.*;
 import com.zju.api.model.SyncResult;
 import com.zju.api.service.RMIService;
 import org.apache.velocity.Template;
@@ -36,7 +33,6 @@ import java.util.*;
 public class ReportGenerate {
 
     private static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
-    private Map<String, Index> idMap = new HashMap<String, Index>();
     private Map<String, String> likeLabMap = new HashMap<String, String>();
 
     /**
@@ -80,9 +76,6 @@ public class ReportGenerate {
         velocityContext.put("pId", sample.getPatientId());
         velocityContext.put("section", sectionutil.getValue(sample.getHosSection()));
 
-        if(idMap.size() == 0) {
-            initMap();
-        }
         if(likeLabMap.size() == 0) {
             initLikeLabMap();
         }
@@ -202,6 +195,7 @@ public class ReportGenerate {
 //        }
 
         List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
+        Map<String, Index> idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
         for(TestResult result:testResultList){
             String testId = result.getTestId();
             Set<String> sameTests = util.getKeySet(testId);
@@ -209,7 +203,7 @@ public class ReportGenerate {
             TestResultVo testResultVo = new TestResultVo();
             testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             testResultVo.setTestResult(result.getTestResult());
-            if (Integer.parseInt(idMap.get(result.getTestId()).getPrintord()) <=2015 && result.getResultFlag() != null) {
+            if (result.getResultFlag() != null && result.getResultFlag().charAt(1) == 'A') {
                 if( result.getResultFlag().charAt(0) == 'C') {
                     testResultVo.setResultFlag("↓");
                 } else if( result.getResultFlag().charAt(0) == 'B') {
@@ -269,13 +263,6 @@ public class ReportGenerate {
     public void createReportPdf(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
         String html = getReportHtml(sample,process,testResultList,hasLast);
         GenericPdfUtil.html2Pdf(sample.getSampleNo()+".pdf",html);
-    }
-
-    private synchronized void initMap() {
-        List<Index> list = indexManager.getAll();
-        for (Index t : list) {
-            idMap.put(t.getIndexId(), t);
-        }
     }
 
     private synchronized void initLikeLabMap() {
