@@ -31,7 +31,7 @@
 <div class="row widget-main">
 	<div class="input-group col-sm-6" style="float: left;">
 		<span class="input-group-addon">医嘱号</span>
-		<input type="text" class="form-control" placeholder="医嘱号" onkeypress="receive(this,event)"/>
+		<input type="text" class="form-control" placeholder="医嘱号" id="receive_id" onkeypress="receive(this,event)"/>
 		<span class="input-group-addon">样本号</span>
 		<input type="text" class="form-control" value="${sampleno}" id="sampleno_text"/>
 		<span class="input-group-btn">
