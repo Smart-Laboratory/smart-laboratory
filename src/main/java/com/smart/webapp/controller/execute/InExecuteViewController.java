@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
-//@Scope("session")
+@Scope("prototype")
 public class InExecuteViewController {
 
     @Autowired

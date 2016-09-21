@@ -6,8 +6,13 @@ import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
+import com.smart.model.rule.Index;
+import com.smart.service.DictionaryManager;
+import com.smart.util.SpringContextUtil;
+import com.smart.webapp.util.IndexMapUtil;
+import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
@@ -19,25 +24,26 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 
 import javax.ws.rs.core.MediaType;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
  * Created by zcw on 2016/8/17.
  */
 public class WebService {
+    private DictionaryManager dictionaryManager = null;
+    public WebService(){
+        dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
+    }
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
-//    private ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-resources.xml");
-//    private WebClient client = ctx.getBean("webClient", WebClient.class);
-
+    private static TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance();
     private String url = "http://10.31.96.38:8080/lisservice/services/rest/";
     private HttpURLConnection connection = null;
 
@@ -304,6 +310,112 @@ public class WebService {
             success = false;
         }
         return success;
+    }
+
+
+    /**
+     * 将检测结果保存至HIS系统
+     * @param sample        样本信息
+     * @param process       流转记录
+     * @param resultList    检测结果集合
+     * @return
+     */
+    public boolean saveHisResult(Sample sample,Process process,List<TestResult> resultList){
+        boolean flag = false;
+        try {
+            //if(1==1)throw new Exception("错误");
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url+"saveHisResult");
+            PostMethod method = new PostMethod(url+"saveHisResult");
+            JSONObject hisSampleInfo = new JSONObject();
+
+            //样本信息
+            hisSampleInfo.put("barCode",sample.getBarcode());
+            hisSampleInfo.put("sampleNo",sample.getSampleNo());
+            hisSampleInfo.put("organizationId",1001);       //机构代码
+            hisSampleInfo.put("patientType",sample.getStayHospitalModelValue());
+            hisSampleInfo.put("patientId",sample.getPatientId());
+            hisSampleInfo.put("patientNo",sample.getPatientblh());
+            hisSampleInfo.put("patientName",sample.getPatientname());
+            hisSampleInfo.put("sex",sample.getSex());
+            hisSampleInfo.put("age",sample.getAge());
+            hisSampleInfo.put("ageUnit",sample.getAgeunit());
+            hisSampleInfo.put("isBaby",0);
+            hisSampleInfo.put("bedNo",sample.getDepartBed());
+            hisSampleInfo.put("diagnosisId","");
+            hisSampleInfo.put("diagnosis",sample.getDiagnostic());
+            hisSampleInfo.put("part",sample.getPart());
+            hisSampleInfo.put("cycleId",sample.getCycle());
+            hisSampleInfo.put("executeTime",process.getExecutetime());
+            hisSampleInfo.put("requesterId","");
+            hisSampleInfo.put("requesterName",process.getRequester());
+            hisSampleInfo.put("departmentId","");
+            hisSampleInfo.put("departmentName",sample.getHosSection());
+            hisSampleInfo.put("receiveTime",process.getReceivetime());
+            hisSampleInfo.put("testerId","");
+            hisSampleInfo.put("testerName",sample.getChkoper2());
+            hisSampleInfo.put("testDepartmentId","");
+            hisSampleInfo.put("testDepartmentName","");
+            hisSampleInfo.put("testTime",process.getExecutetime());
+            hisSampleInfo.put("auditerId","");
+            hisSampleInfo.put("auditerName",process.getCheckoperator());
+            hisSampleInfo.put("auditTime",process.getChecktime());
+            hisSampleInfo.put("auditNote",sample.getNote());
+            hisSampleInfo.put("sampleTypeId",sample.getSampleType());
+            hisSampleInfo.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
+            hisSampleInfo.put("sampleOperateStatus",0);
+            hisSampleInfo.put("sampleResultTime",process.getChecktime());
+            hisSampleInfo.put("sampleResultStatus",sample.getSampleStatus());
+            hisSampleInfo.put("isPrint",sample.getPrintFlag());
+            hisSampleInfo.put("isEmergency",sample.getRequestMode());
+            hisSampleInfo.put("testId",sample.getYlxh());
+            hisSampleInfo.put("testName",sample.getInspectionName());
+            hisSampleInfo.put("reportUrl","");
+            hisSampleInfo.put("patientCode",sample.getPatientblh());
+
+            //结果信息
+            JSONArray hisTestResult= new JSONArray();
+            Map<String, Index> indexMap = testIdMapUtil.initMap();
+            for(TestResult testResult:resultList){
+                JSONObject object = new JSONObject();
+                object.put("testItemId",testResult.getTestId());              //检测项目ID
+                object.put("testItemName_EN", indexMap.get(sample.getYlxh()).getEnglish());         //项目英文名称
+                object.put("testItemName_CN",testResult.getTestName());         //项目中文名称
+                object.put("sampleTypeId",testResult.getSampleType());            //样本类型ID
+                object.put("sampleTypeName",SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(testResult.getSampleType())));          //样本类型名称
+                object.put("testResult",testResult.getTestResult());              //结果
+                object.put("resultFlag",testResult.getResultFlag());              //结果标志
+                object.put("resultHint",testResult.getHint());              //结果提示
+                object.put("unit",testResult.getUnit());
+                object.put("referenceLo",testResult.getRefLo());             //下限
+                object.put("referenceHi",testResult.getRefHi());             //上限
+                object.put("reference",testResult.getReference());               //参考范围
+                object.put("order",indexMap.get(sample.getYlxh()).getPrintord());                   //结果顺序
+                object.put("method",indexMap.get(sample.getYlxh()).getMethod());                  //检测方法
+                hisTestResult.put(object);
+            }
+
+            JSONObject hisTestInfo = new JSONObject();
+            hisTestInfo.put("sampleInfo",hisSampleInfo);
+            hisTestInfo.put("testResultList",hisTestResult);
+            RequestEntity requestEntity = new StringRequestEntity(hisTestInfo.toString(),"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            System.out.println(method.getResponseBodyAsString());
+
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==0) {
+                flag = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        }
+
+        return flag;
     }
 
 

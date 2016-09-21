@@ -1,13 +1,11 @@
 package com.smart.service.scheduledTask;
 
-import com.smart.Constants;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.lis.*;
-import com.smart.service.reagent.OutManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
@@ -23,13 +21,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.*;
@@ -41,7 +33,6 @@ import java.util.*;
  *
  * 报告单生成PDF
  */
-@Service("reportCenerate")
 public class ReportGenerate {
 
     private static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
@@ -101,7 +92,7 @@ public class ReportGenerate {
         //info.put("auditor", process.getCheckoperator());
         String dzqm_imghtm = "";
         //由于process.getCheckoperator() 有工号有姓名，需要区分
-        String username = UserUtil.getInstance(userManager).getKey(process.getCheckoperator());
+        String username = UserUtil.getInstance(userManager).getKey(ConvertUtil.null2String(process.getCheckoperator()));
         //实现获取电子签名
         String dzqm_filepath = webPath+"\\images\\bmp";
         File dzqm_dir = new File(dzqm_filepath);
@@ -118,10 +109,10 @@ public class ReportGenerate {
         }
         velocityContext.put("requestUrl", webPath);
         velocityContext.put("auditro", dzqm_imghtm);
-        velocityContext.put("checker",process.getCheckoperator());
-        velocityContext.put("receivetime", process.getReceivetime() == null ? "" : Constants.SDF.format(process.getReceivetime()));
-        velocityContext.put("checktime", Constants.SDF.format(process.getChecktime()));
-        velocityContext.put("executetime", process.getExecutetime() == null ? "" : Constants.SDF.format(process.getExecutetime()));
+        velocityContext.put("checker",ConvertUtil.null2String(process.getCheckoperator()));
+        velocityContext.put("receivetime",ConvertUtil.getFormatDate(process.getReceivetime()));
+        velocityContext.put("checktime", ConvertUtil.getFormatDate(process.getChecktime()));
+        velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getExecutetime()));
         velocityContext.put("examinaim", sample.getInspectionName());
         velocityContext.put("date", sampleNo.substring(0, 4) + "年" + sampleNo.substring(4, 6) + "月" + sampleNo.substring(6, 8) + "日");
         Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
@@ -218,10 +209,10 @@ public class ReportGenerate {
             TestResultVo testResultVo = new TestResultVo();
             testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             testResultVo.setTestResult(result.getTestResult());
-            if (Integer.parseInt(idMap.get(result.getTestId()).getPrintord()) <=2015) {
-                if(result.getResultFlag().charAt(0) == 'C') {
+            if (Integer.parseInt(idMap.get(result.getTestId()).getPrintord()) <=2015 && result.getResultFlag() != null) {
+                if( result.getResultFlag().charAt(0) == 'C') {
                     testResultVo.setResultFlag("↓");
-                } else if(result.getResultFlag().charAt(0) == 'B') {
+                } else if( result.getResultFlag().charAt(0) == 'B') {
                     testResultVo.setResultFlag("↑");
                 }
             }
@@ -257,10 +248,14 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-
+        System.out.println(writer.toString());
         return writer.toString();
     }
 
+    //保存结果至HIS系统
+    public void saveHisResult(){
+
+    }
 
     /**
      * 创建报告单PDF
@@ -283,7 +278,7 @@ public class ReportGenerate {
         }
     }
 
-    protected synchronized void initLikeLabMap() {
+    private synchronized void initLikeLabMap() {
         List<LikeLab> list = likeLabManager.getAll();
         for (LikeLab ll : list) {
             likeLabMap.put(ll.getLab(), ll.getLikeLab());

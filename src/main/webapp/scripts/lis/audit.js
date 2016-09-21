@@ -265,6 +265,10 @@ $(function(){
 		// $("#iframe_print").height(450);
 
 		//edit by zhou 20160920 报告单打印
+		var sampeNo =$("#hiddenSampleNo").val() ||'';
+		if(sampeNo !=''){
+			printReport(sampeNo);
+		}
 
 		//alert($("#chartPanel").height());
 	});
