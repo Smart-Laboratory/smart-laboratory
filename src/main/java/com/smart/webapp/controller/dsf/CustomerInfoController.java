@@ -94,7 +94,7 @@ public class CustomerInfoController {
         try {
             if("editCustomer".equals(method)){
                 List<CustomerInfo> resultList = customerManager.searchByName(cust.getCustomername(), "");
-                    if (null != resultList && resultList.size() > 0) {
+                    if (null != resultList && resultList.size() !=1) {
                         jsonObject.put("msg", "repeat");
                     } else {
                         customerManager.save(cust);
@@ -156,7 +156,7 @@ public class CustomerInfoController {
             jsonObject.put("customername", cust.getCustomername());
             jsonObject.put("address", cust.getAddress());
             jsonObject.put("clientnumber", cust.getClientnumber());
-            jsonObject.put("sequence", cust.getSequence());
+            jsonObject.put("customerkey", cust.getCustomerkey());
 
             jsonArray.put(jsonObject);
         }
@@ -184,6 +184,7 @@ public class CustomerInfoController {
                 baseJsonObject.put("customerid", customerInfo.getCustomerid());
                 baseJsonObject.put("customername", customerInfo.getCustomername());
                 baseJsonObject.put("address", customerInfo.getAddress());
+                baseJsonObject.put("customerkey",customerInfo.getCustomerkey());
                 obj.put("baseCust", baseJsonObject);
                 //客户联系人
                 List<CustomerInfoDetails> cdList = customerDetailsManager.getCustomerDetailByCid(cid);

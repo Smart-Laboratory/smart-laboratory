@@ -111,8 +111,8 @@
                                         <fieldset>
                                             <div class="space-10"></div>
                                             <div class="form-group controls controls-row">
-                                                <label class="col-sm-1 control-label" for="customername">客户名称</label>
-                                                <div class="col-sm-5">
+                                                <label class="col-sm-2 control-label" for="customername">客户名称</label>
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="customername" name="customername"
                                                            type="text"
                                                            placeholder="客户名称" value="${customerInfo.customername}"
@@ -120,25 +120,25 @@
                                                            nullmsg="客户名称不能为空"/>
                                                 </div>
 
-                                                <label class="col-sm-1 control-label" for="address">客户地址</label>
-                                                <div class="col-sm-5">
+                                                <label class="col-sm-2 control-label" for="address">客户地址</label>
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="address" name="address" type="text"
                                                            value="${customerInfo.address}" placeholder="客户地址"/>
                                                 </div>
                                             </div>
                                             <div class="form-group controls controls-row">
-                                                <label class="col-sm-1 control-label" for="clientnumber">客户号</label>
-                                                <div class="col-sm-5">
+                                                <label class="col-sm-2 control-label" for="clientnumber">客户号</label>
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="clientnumber" name="clientnumber"
                                                            type="text"
                                                            placeholder="客户号为六位识别编号" value="${customerInfo.clientnumber}"
                                                            datatype="*"
                                                            nullmsg="客户号不能为空"/>
                                                 </div>
-                                                <label class="col-sm-1 control-label" for="sequence">序列</label>
-                                                <div class="col-sm-5">
-                                                    <input class="form-control" id="sequence" name="sequence" type="text"
-                                                           value="${customerInfo.sequence}" placeholder="序列，请输入正整数"/>
+                                                <label class="col-sm-2 control-label" for="customerkey">webService验证KEY</label>
+                                                <div class="col-sm-4">
+                                                    <input class="form-control" id="customerkey" name="customerkey" type="text"
+                                                           value="${customerInfo.customerkey}" placeholder="webService验证KEY，用户webService验证合法性使用"/>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -365,15 +365,11 @@
                 layer.msg("客户号不能为空,请输入！", {icon: 2, time: 1000});
                 return false;
             }
-            if ($('#sequence').val() == '') {
-                layer.msg("序列不能为空,请输入！", {icon: 2, time: 1000});
+            if ($('#customerkey').val() == '') {
+                layer.msg("webService验证KEY不能为空,请输入！", {icon: 2, time: 1000});
                 return false;
             }
-            var re = /^[0-9]*[1-9][0-9]*$/;
-            if (!re.test($('#sequence').val())) {
-                layer.msg("序列必须为正整数,请重新输入！", {icon: 2, time: 1000});
-                return false;
-            }
+
             if ('editCustomer' == method) {
                 $.ajax({
                     url: "/dsf/customer/editCustomer",

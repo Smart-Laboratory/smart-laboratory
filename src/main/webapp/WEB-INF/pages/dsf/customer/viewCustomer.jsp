@@ -174,35 +174,34 @@
                                         <fieldset>
                                             <div class="space-10"></div>
                                             <div class="form-group controls controls-row">
-                                                <label class="col-sm-1 control-label" for="customername">客户名称</label>
-
-                                                <div class="col-sm-5">
+                                                <label class="col-sm-2 control-label" for="customername">客户名称</label>
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="customername" name="customername"
                                                            type="text"
                                                            placeholder="客户名称" value="${customerInfo.customername}"
                                                            datatype="*"
                                                            nullmsg="客户名称不能为空"/>
                                                 </div>
-                                                <label class="col-sm-1 control-label" for="address">客户地址</label>
+                                                <label class="col-sm-2 control-label" for="address">客户地址</label>
 
-                                                <div class="col-sm-5">
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="address" name="address" type="text"
                                                            value="${customerInfo.address}" placeholder="客户地址"/>
                                                 </div>
                                             </div>
                                             <div class="form-group controls controls-row">
-                                                <label class="col-sm-1 control-label" for="clientnumber">客户号</label>
-                                                <div class="col-sm-5">
+                                                <label class="col-sm-2 control-label" for="clientnumber">客户号</label>
+                                                <div class="col-sm-4">
                                                     <input class="form-control" id="clientnumber" name="clientnumber"
                                                            type="text"
                                                            placeholder="客户号为六位识别编号" value="${customerInfo.clientnumber}"
                                                            datatype="*"
                                                            nullmsg="客户号不能为空"/>
                                                 </div>
-                                                <label class="col-sm-1 control-label" for="sequence">序列</label>
-                                                <div class="col-sm-5">
-                                                    <input class="form-control" id="sequence" name="sequence" type="text"
-                                                           value="${customerInfo.sequence}" placeholder="序列，请输入正整数"/>
+                                                <label class="col-sm-2 control-label" for="customerkey">webService验证KEY</label>
+                                                <div class="col-sm-4">
+                                                    <input class="form-control" id="customerkey" name="customerkey" type="text"
+                                                           value="${customerInfo.customerkey}" placeholder="webService验证KEY，用户webService验证合法性使用"/>
                                                 </div>
                                             </div>
 
@@ -269,7 +268,7 @@
             fix: false, //不固定
             maxmin: true,
             shade: 0.5,
-            title: "添加客户信息",
+            title: "修改客户信息",
             content: '/dsf/customer/ajaxcustomerRelation?method=editCustomer&customerid=' + rowData.customerid
         })
     }
@@ -292,7 +291,7 @@
                 $("#customerid").val(data.baseCust.customerid);
                 $("#address").val(data.baseCust.address);
                 $("#clientnumber").val(data.baseCust.clientnumber);
-                $("#sequence").val(data.baseCust.sequence);
+                $("#customerkey").val(data.baseCust.customerkey);
                 //赋值联系人
                 $("#tableList").clearGridData();
                 if (data.cdList != undefined) {
@@ -408,7 +407,7 @@
         });
 
         //增加工具栏按钮
-        var setting = $('<span class="widget-toolbar" style="right:1830px;top:1px"><button type="button" id="add" onclick="addNewContact()" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加联系人</button>| <button type="button" id="contactEdit" onclick="editContact()" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>编辑联系人</button>| <button type="button" id="delete" onclick="deleteContact()" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除联系人</button></span>');
+        var setting = $('<span class="widget-toolbar" style="right:1730px;top:1px"><button type="button" id="add" onclick="addNewContact()" class="btn btn-xs btn-success" data-toggle="button"> <i class="ace-icon fa fa-plus"></i>增加联系人</button>| <button type="button" id="contactEdit" onclick="editContact()" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>编辑联系人</button>| <button type="button" id="delete" onclick="deleteContact()" class="btn btn-xs btn-success" data-toggle="button"><i class="ace-icon fa fa-times"></i>删除联系人</button></span>');
         $("#gview_tableList").find('.ui-jqgrid-titlebar').append(setting);
 
         $('#tableList').jqGrid('setGridWidth', $(".rightContent").width(), false);
