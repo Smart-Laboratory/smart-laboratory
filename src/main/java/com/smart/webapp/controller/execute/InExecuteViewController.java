@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
+
 public class InExecuteViewController {
 
     @Autowired
@@ -77,7 +78,7 @@ public class InExecuteViewController {
 
     private Map<String, String> sampleTypeMap = new HashMap<String, String>();
 
-    private List<LabOrder> labOrdersService = null;
+    private List<LabOrder> labOrdersService = new ArrayList<LabOrder>();
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -176,7 +177,7 @@ public class InExecuteViewController {
                                  @RequestParam(value = "requestIds", defaultValue = "") String requestIds) {
         //Long startTime = System.currentTimeMillis(); //获取结束时间
         Map<String, List> resultMap = new HashMap<String, List>();
-        System.out.println("labOrdersService11=>"+labOrdersService.size());
+//        System.out.println("labOrdersService11=>"+labOrdersService.size());
         List<LabOrder> labOrders = new ArrayList<LabOrder>();
         if (!ward.isEmpty() && !bedNo.isEmpty() && !patientId.isEmpty()) {
             for (LabOrder labOrder : labOrdersService) {
@@ -235,7 +236,7 @@ public class InExecuteViewController {
             Process process  = (Process) objects[2];
 
             //排除非ICU项目
-            if(!labOrder.getYlxh().equals("22813") ||  !labOrder.getYlxh().equals("22814")) continue;
+            if(!labOrder.getYlxh().equals("22813") && !labOrder.getYlxh().equals("22814")) continue;
             LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {

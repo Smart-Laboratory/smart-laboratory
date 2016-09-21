@@ -707,14 +707,13 @@ public class RMIServiceImpl implements RMIService {
 		return jdbcTemplate.queryForObject(hql, Integer.class);
 	}
 
-	@Override
+
 	public List<SyncPatient> getSendList(String arg0, Date arg1, Date arg2,
 			String arg3, String arg4, int arg5, int arg6, int arg7) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public int getSendListCount(String arg0, Date arg1, Date arg2, String arg3,
 			String arg4, int arg5) {
 		// TODO Auto-generated method stub

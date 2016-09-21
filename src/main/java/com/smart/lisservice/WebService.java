@@ -47,7 +47,7 @@ public class WebService {
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
     private TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
-    private String url = "http://10.31.96.38:8080/lisservice/services/rest/";
+    private String url = "http://127.0.0.1:8080/lisservice/services/rest/";
     private HttpURLConnection connection = null;
 
     public String getBacteriaList(){
@@ -431,7 +431,7 @@ public class WebService {
         boolean success = true;
         try{
             HttpClient httpClient = new HttpClient();
-            //httpClient.getHostConfiguration().setHost(url+"requestUpdate");
+            httpClient.getHostConfiguration().setHost(url+"booking");
             PostMethod method = new PostMethod(url+"booking");
 
             RequestEntity requestEntity = new StringRequestEntity(params,"application/json", "UTF-8");
@@ -441,6 +441,7 @@ public class WebService {
             httpClient.executeMethod(method);
             System.out.println(method.getResponseBodyAsString());
 
+            System.out.println("method.getResponseBodyAsString()==>"+method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
                 success = false;

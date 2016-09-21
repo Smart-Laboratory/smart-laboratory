@@ -3,6 +3,9 @@ package com.smart.dao.hibernate.execute;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.smart.model.lis.Process;
+import com.smart.model.lis.Sample;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -61,7 +64,7 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	 * @return
 	 */
 	public List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
-		String sql =" from LabOrder l, Sample s,Process p where l.sampleno = s.sampleNo and s.id=p.sampleid";
+		String sql ="select l,s,p from LabOrder l, Sample s,Process p where l.barcode = s.barcode and s.id = p.sampleid";
 
 		if(ward !=null && !ward.isEmpty()){
 			sql += " and l.wardId=:ward";
