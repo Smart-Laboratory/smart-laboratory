@@ -28,7 +28,7 @@ public interface LabOrderManager extends GenericManager<LabOrder, Long> {
 	 * @param patientId  	病人ID
 	 * @return
 	 */
-	List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
+	List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
     List<LabOrder> saveAll(List<LabOrder> needSaveLabOrder);
 

@@ -52,7 +52,7 @@ public class LabOrderManagerImpl extends GenericManagerImpl<LabOrder, Long> impl
 	 * @return
 	 */
 	@Transactional
-	public List<LabOrder> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
+	public List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
 		return labOrderDao.getByRequestIds(ward,bedNo,patientId,requestIds);
 	}
 

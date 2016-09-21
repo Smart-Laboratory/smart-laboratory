@@ -67,11 +67,7 @@ public class SampleInputAjaxController {
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String code = request.getParameter("id");
 		int type = Integer.parseInt(request.getParameter("type"));
-		if(type == 1) {
-			if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
-				code = code.substring(0,code.length()-1);
-			}
-		}
+
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
 		JSONObject o = new JSONObject();
