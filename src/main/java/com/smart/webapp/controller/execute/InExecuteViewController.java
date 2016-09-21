@@ -224,11 +224,14 @@ public class InExecuteViewController {
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
         for (LabOrder labOrder : labOrderList) {
+            //排除非ICU项目
+            if(!labOrder.getYlxh().equals("22813") ||  !labOrder.getYlxh().equals("22814")) continue;
             LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {
                 labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
             }
+
             labOrderVo.setPatientCode(labOrder.getBlh());
             labOrderVo.setPatientName(labOrder.getPatientname());
             labOrderVo.setBarcode(labOrder.getBarcode());
@@ -269,6 +272,10 @@ public class InExecuteViewController {
                     LabOrder labOrder = (LabOrder) iterator.next();
                     String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
                     if (requestDetailIds.indexOf(requestDetailId + ",", 0) >= 0) {
+                        iterator.remove();
+                    }
+                    //排除非ICU项目
+                    if(!labOrder.getYlxh().equals("22813") ||  !labOrder.getYlxh().equals("22814")) {
                         iterator.remove();
                     }
                 }
