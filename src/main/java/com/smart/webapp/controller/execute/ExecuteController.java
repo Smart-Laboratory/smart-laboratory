@@ -226,6 +226,8 @@ public class ExecuteController {
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
 			sample.setId(sampleManager.getSampleId());
 			sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
+			sample.setAge(labOrder.getAge());
+			sample.setAgeunit(labOrder.getAgeUnit());
 
             Process process = new Process();
 			process.setSampleid(sample.getId());

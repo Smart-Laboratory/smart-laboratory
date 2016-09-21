@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.smart.model.lis.TestReference;
+import com.smart.model.reagent.In;
+import com.smart.model.rule.Index;
+import com.smart.service.lis.TestReferenceManager;
+import com.smart.service.rule.IndexManager;
+import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -18,36 +24,36 @@ import com.zju.api.service.RMIService;
 
 public class FillFieldUtil {
 
-	private Map<String, Describe> desMap = null;
-	private Map<String, List<Reference>> refMap = null;
+	private Map<String, Index> indexMap = null;
+    private Map<String, List<TestReference>> testReferenceMap = null;
 	private static FillFieldUtil util = null;
 
-	private FillFieldUtil(List<Describe> desList, List<Reference> refList) {
-		desMap = new HashMap<String, Describe>();
-		refMap = new HashMap<String, List<Reference>>();
-		for (Describe des : desList) {
-			desMap.put(des.getTESTID(), des);
+	private FillFieldUtil(IndexManager indexManager, TestReferenceManager testReferenceManager) {
+		if(indexMap == null) {
+			indexMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
 		}
-		for (Reference ref : refList) {
-			if (refMap.containsKey(ref.getTESTID())) {
-				List<Reference> list = refMap.get(ref.getTESTID());
-				list.add(ref);
-			} else {
-				List<Reference> list = new ArrayList<Reference>();
-				list.add(ref);
-				refMap.put(ref.getTESTID(), list);
+		if(testReferenceMap == null) {
+			testReferenceMap = new HashMap<String, List<TestReference>>();
+			for(TestReference testReference : testReferenceManager.getAll()) {
+				if(testReferenceMap.containsKey(testReference.getTestId())) {
+					testReferenceMap.get(testReference.getTestId()).add(testReference);
+				} else {
+					List<TestReference> list = new ArrayList<TestReference>();
+					list.add(testReference);
+					testReferenceMap.put(testReference.getTestId(), list);
+				}
 			}
 		}
 	}
 
-	public synchronized static FillFieldUtil getInstance(List<Describe> desList, List<Reference> refList) {
+	public synchronized static FillFieldUtil getInstance(IndexManager indexManager, TestReferenceManager testReferenceManager) {
 		if (util == null) {
-			util = new FillFieldUtil(desList, refList);
+			util = new FillFieldUtil(indexManager, testReferenceManager);
 		}
 		return util;
 	}
 
-	public TestResult fillResult(TestResult result, int cycle, int age, String sex) {
+	public TestResult fillResult(TestResult result, int cycle, double age, int sex) {
 
 		// 完善字段数据
 		int li_direct = fillReference(result, age, cycle, sex);
@@ -56,135 +62,57 @@ public class FillFieldUtil {
 	}
 	
 	public void fillReference(String testid,JSONObject obj) throws JSONException{
-		if (refMap.containsKey(testid)) {
-			List<Reference> referList = refMap.get(testid);
-			Reference reference = referList.get(0);
-			obj.put("reference", reference.getFREFLO0()+"-"+reference.getFREFHI0());
+		if (testReferenceMap.containsKey(testid)) {
+			List<TestReference> referList = testReferenceMap.get(testid);
+            TestReference reference = referList.get(0);
+			obj.put("reference", reference.getReference());
 		}
 	}
 
-	private int fillReference(TestResult result, int age, int cycle, String sex) {
+	private int fillReference(TestResult result, double age, int cycle, int sex) {
+
+		System.out.println("开始完善参考范围");
 		int direct = 0;
 		String testid = result.getTestId();
 		String value = result.getTestResult();
-		if (refMap.containsKey(testid)) {
-			List<Reference> referList = refMap.get(testid);
-			int linshi = 200;
-			Reference reference = referList.get(0);
-			for (Reference r : referList) {
-				if (age - r.getREFAGE() > 0 && age - r.getREFAGE() < linshi) {
-					reference = r;
-					linshi = age - r.getREFAGE();
-				}
-			}
-			if (sex.equals("女")) { // 性别：女
-				switch (cycle) {
-				case 0:
-					result.setRefLo(reference.getFREFLO0());
-					result.setRefHi(reference.getFREFHI0());
-					direct = reference.getDIRECT();
-					break;
-				case 1:
-					result.setRefLo(reference.getFREFLO1());
-					result.setRefHi(reference.getFREFHI1());
-					direct = reference.getDIRECT();
-					break;
-				case 2:
-					result.setRefLo(reference.getFREFLO2());
-					result.setRefHi(reference.getFREFHI2());
-					direct = reference.getDIRECT();
-					break;
-				case 3:
-					result.setRefLo(reference.getFREFLO3());
-					result.setRefHi(reference.getFREFHI3());
-					direct = reference.getDIRECT();
-					break;
-				case 4:
-					result.setRefLo(reference.getFREFLO4());
-					result.setRefHi(reference.getFREFHI4());
-					direct = reference.getDIRECT();
-					break;
-				case 5:
-					result.setRefLo(reference.getFREFLO5());
-					result.setRefHi(reference.getFREFHI5());
-					direct = reference.getDIRECT();
-					break;
-				case 6:
-					result.setRefLo(reference.getFREFLO6());
-					result.setRefHi(reference.getFREFHI6());
-					direct = reference.getDIRECT();
-					break;
-				case 7:
-					result.setRefLo(reference.getFREFLO7());
-					result.setRefHi(reference.getFREFHI7());
-					direct = reference.getDIRECT();
-					break;
-				case 8:
-					result.setRefLo(reference.getFREFLO8());
-					result.setRefHi(reference.getFREFHI8());
-					direct = reference.getDIRECT();
-				}
-				if ((result.getRefHi() == null || result.getRefHi().isEmpty())
-						&& (result.getRefHi() == null || result.getRefHi().isEmpty())) {
-					result.setRefLo(reference.getFREFLO0());
-					result.setRefHi(reference.getFREFHI0());
-					direct = reference.getDIRECT();
-				}
-			} else { // 性别：男或未知
-				switch (cycle) {
-				case 0:
-					result.setRefLo(reference.getMREFLO0());
-					result.setRefHi(reference.getMREFHI0());
-					direct = reference.getDIRECT();
-					break;
-				case 1:
-					result.setRefLo(reference.getMREFLO1());
-					result.setRefHi(reference.getMREFHI1());
-					direct = reference.getDIRECT();
-					break;
-				case 2:
-					result.setRefLo(reference.getMREFLO2());
-					result.setRefHi(reference.getMREFHI2());
-					direct = reference.getDIRECT();
-					break;
-				case 3:
-					result.setRefLo(reference.getMREFLO3());
-					result.setRefHi(reference.getMREFHI3());
-					direct = reference.getDIRECT();
-					break;
-				case 4:
-					result.setRefLo(reference.getMREFLO4());
-					result.setRefHi(reference.getMREFHI4());
-					direct = reference.getDIRECT();
-					break;
-				case 5:
-					result.setRefLo(reference.getMREFLO5());
-					result.setRefHi(reference.getMREFHI5());
-					direct = reference.getDIRECT();
-					break;
-				case 6:
-					result.setRefLo(reference.getMREFLO6());
-					result.setRefHi(reference.getMREFHI6());
-					direct = reference.getDIRECT();
-					break;
-				case 7:
-					result.setRefLo(reference.getMREFLO7());
-					result.setRefHi(reference.getMREFHI7());
-					direct = reference.getDIRECT();
-					break;
-				case 8:
-					result.setRefLo(reference.getMREFLO8());
-					result.setRefHi(reference.getMREFHI8());
-					direct = reference.getDIRECT();
-				}
-				if ((result.getRefHi() == null || result.getRefHi().isEmpty())
-						&& (result.getRefHi() == null || result.getRefHi().isEmpty())) {
-					result.setRefLo(reference.getMREFLO0());
-					result.setRefHi(reference.getMREFHI0());
-					direct = reference.getDIRECT();
-				}
-			}
-			
+		if (testReferenceMap.containsKey(testid)) {
+			List<TestReference> referList = testReferenceMap.get(testid);
+            Double ageLow = 0d;
+            Double ageHigh = 0d;
+            for(TestReference testReference : referList) {
+                ageLow = new AgeUtil().getAge(String.valueOf(testReference.getAgeLow()), testReference.getAgeLowUnit());
+                ageHigh = new AgeUtil().getAge(String.valueOf(testReference.getAgeHigh()), testReference.getAgeHighUnit());
+                if((sex == testReference.getSex() || testReference.getSex() == 3) && testid.equals(testReference.getTestId()) && age >= ageLow && age < ageHigh) {
+                	if(testReference.getReference().indexOf("-") >= 0) {
+						String[] refArr = testReference.getReference().split("-");
+                        if(refArr.length == 2) {
+                            result.setRefLo(refArr[0]);
+                            result.setRefHi(refArr[1]);
+                        } else if (refArr.length == 3) {
+                            result.setRefLo("-" + refArr[1]);
+                            result.setRefHi(refArr[2]);
+                        } else {
+                            result.setRefLo(testReference.getReference());
+                            result.setRefHi("");
+                        }
+                    } else if (testReference.getReference().indexOf(">") == 0) {
+                        result.setRefLo(testReference.getReference().substring(1));
+                        result.setRefHi("");
+                    } else if (testReference.getReference().indexOf("<") == 0) {
+                        int round = testReference.getReference().substring(1).split("[.]")[1].length();
+                        StringBuilder sb = new StringBuilder("#0.");
+                        for(int i = 0; i < round; i++) {
+                            sb.append("0");
+                        }
+                        DecimalFormat df  = new DecimalFormat(sb.toString());
+                        result.setRefLo(df.format(0d));
+                        result.setRefHi(testReference.getReference().substring(1));
+                    } else {
+                        result.setRefLo(testReference.getReference());
+                        result.setRefHi("");
+                    }
+                }
+            }
 			String reflo = result.getRefLo();
 			try {
 				if (value != null && value.length() > 0) {
@@ -209,15 +137,18 @@ public class FillFieldUtil {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-		} 
+		}
 		result.setTestResult(value);
+		if(result.getUnit() == null || result.getUnit().isEmpty()) {
+			result.setUnit(ConvertUtil.null2String(indexMap.get(testid).getUnit()));
+		}
+		result.setSampleType(indexMap.get(testid).getSampleFrom());
 		return direct;
 	}
 
 	private void filleResultFlag(TestResult result, int li_direct) {
 
-		Describe des = desMap.get(result.getTestId());
+		Index index = indexMap.get(result.getTestId());
 		String ls_result = result.getTestResult();
 		String ls_reflo = result.getRefLo();
 		String ls_refhi = result.getRefHi();
@@ -230,8 +161,8 @@ public class FillFieldUtil {
 			flags = new char[] { 'A', 'A', 'A', 'A', 'A', 'A' };
 		}
 		
-		if (des != null) {
-			result.setIsprint(des.getISPRINT());
+		if (index != null) {
+			result.setIsprint(index.getIsprint());
 		} else {
 			result.setIsprint(0);
 		}
@@ -251,129 +182,25 @@ public class FillFieldUtil {
 			ls_result = ls_result.substring(1);
 		}
 		
-		if (isDouble(ls_result) && des != null) {
+		if (isDouble(ls_result) && index != null && isDouble(ls_reflo)) {
 			double ld_result = dbl(ls_result);
-			if (des.getWARNHI3() != null && des.getWARNHI3().trim().length() != 0 && ld_result > dbl(des.getWARNHI3())) {
-				flags[1] = 'D';
-			} else if (des.getWARNHI2() != null && des.getWARNHI2().trim().length() != 0 && ld_result > dbl(des.getWARNHI2())) {
-				flags[1] = 'C';
-			} else if (des.getWARNHI1() != null && des.getWARNHI1().trim().length() != 0 && ld_result > dbl(des.getWARNHI1())) {
-				flags[1] = 'B';
-			} else if (des.getWARNLO3() != null && des.getWARNLO3().trim().length() != 0 && ld_result < dbl(des.getWARNLO3())) {
-				flags[1] = 'D';
-			} else if (des.getWARNLO2() != null && des.getWARNLO2().trim().length() != 0 && ld_result < dbl(des.getWARNLO2())) {
-				flags[1] = 'C';
-			} else if (des.getWARNLO1() != null && des.getWARNLO1().trim().length() != 0 && ld_result < dbl(des.getWARNLO1())) {
-				flags[1] = 'B';
-			} else {
-				flags[1] = 'A';
-			}
-			if (StringUtils.isEmpty(ls_reflo) || ".".equals(ls_reflo)) {
-				flags[0] = 'A';
-			} else if (des.getPRINTORD() <= 2015) {
-				if (ld_result < dbl(ls_reflo)) {
-					switch (li_direct) {
-					case 0:
-						flags[0] = 'C';
-						break;
-					case 1:
-						flags[0] = 'A';
-						break;
-					case 2:
-						flags[0] = 'B';
-						break;
-					default:
-						flags[0] = 'C';
-						break;
-					}
-				} else if (ld_result > dbl(ls_refhi)) {
-					switch (li_direct) {
-					case 0:
-						flags[0] = 'B';
-						break;
-					case 1:
-						flags[0] = 'B';
-						break;
-					case 2:
-						flags[0] = 'A';
-						break;
-					default:
-						flags[0] = 'B';
-						break;
-					}
-				} else {
-					flags[0] = 'A';
-				}
-			} else {
-				if (ld_result < dbl(ls_reflo)) {
-					switch (li_direct) {
-					case 0:
-						flags[0] = 'A';
-						break;
-					case 1:
-						flags[0] = 'A';
-						break;
-					case 2:
-						flags[0] = 'B';
-						break;
-					default:
-						flags[0] = 'A';
-						break;
-					}
-				} else if (ld_result > dbl(ls_refhi)) {
-					switch (li_direct) {
-					case 0:
-						flags[0] = 'B';
-						break;
-					case 1:
-						flags[0] = 'B';
-						break;
-					case 2:
-						flags[0] = 'A';
-						break;
-					default:
-						flags[0] = 'B';
-						break;
-					}
-				} else {
-					flags[0] = 'A';
-				}
-			}
+            if (ld_result < dbl(ls_reflo)) {
+                flags[0] = 'C';
+            } else if (ld_result > dbl(ls_refhi)) {
+                flags[0] = 'B';
+            } else {
+                flags[0] = 'A';
+            }
 		} else {
-			flags[0] = 'A';
+			flags[1] = 'B';
 			if (ls_result.indexOf("+") > -1 || ls_result.indexOf("阳") > -1) {
-				flags[1] = 'B';
+				flags[0] = 'B';
 			} else if (ls_result.indexOf("-") > -1 || ls_result.indexOf("阴") > -1) {
-				flags[1] = 'A';
+				flags[0] = 'A';
 			} else {
-				flags[1] = 'B';
+				flags[0] = 'B';
 			}
 		}
-
-		if (des != null && des.getWARNHI1() != null && des.getWARNHI2() != null && des.getWARNHI2() != null
-				&& des.getWARNLO1() != null && des.getWARNLO2() != null && des.getWARNLO3() != null) {
-			try {
-				if (isDouble(ls_result)) {
-					char ls_warn;
-					double ld_result = dbl(ls_result);
-					if (ld_result <= dbl(des.getWARNHI1())
-							&& ld_result >= dbl(des.getWARNLO1())) {
-						ls_warn = 'A';
-					} else if (ld_result <= dbl(des.getWARNHI2())
-							&& ld_result >= dbl(des.getWARNLO2())) {
-						ls_warn = 'B';
-					} else if (ld_result <= dbl(des.getWARNHI3())
-							&& ld_result >= dbl(des.getWARNLO3())) {
-						ls_warn = 'C';
-					} else {
-						ls_warn = 'D';
-					}
-					flags[1] = ls_warn;
-				}
-			} catch (Exception e) {
-			}
-		}
-
 		// 把flags写回resultFlag
 		result.setResultFlag(String.valueOf(flags));
 	}
@@ -395,10 +222,10 @@ public class FillFieldUtil {
 		return true;
 	}
 	
-	public Describe getDescribe(String testId) {
-		if (desMap != null) {
-			if (desMap.containsKey(testId)) {
-				return desMap.get(testId);
+	public Index getIndex(String testId) {
+		if (indexMap != null) {
+			if (indexMap.containsKey(testId)) {
+				return indexMap.get(testId);
 			} else {
 				return null;
 			}

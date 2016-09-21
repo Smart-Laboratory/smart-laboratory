@@ -113,6 +113,9 @@ public class BaseAuditController {
 	@Autowired
 	protected PatientManager patientManager = null;
 
+	@Autowired
+	protected TestReferenceManager testReferenceManager = null;
+
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();

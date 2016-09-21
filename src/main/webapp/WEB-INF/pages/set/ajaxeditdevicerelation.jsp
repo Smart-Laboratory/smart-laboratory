@@ -603,7 +603,7 @@
                         {name: 'testid', index: 'testid', width: 60, hidden: true},
                         {name: 'testname', index: 'testname', width: 200},
                         {name: 'sampletype', index: 'sampletype', width: 100},
-                        {name: 'sex',index: 'sex',width: 60,editable: true,formatter: "select",edittype: "select",editoptions: {value: "0:男;1:女;2:其他"}},
+                        {name: 'sex',index: 'sex',width: 60,editable: true,formatter: "select",edittype: "select",editoptions: {value: "1:男;2:女;3:其他"}},
                         {name: 'ageLow', index: 'ageLow', width: 60, editable: true},
                         {name: 'ageLowUnit', index: 'ageLowUnit', width: 60, editable: true,formatter: "select", edittype: "select", editoptions: {value: "岁:岁;月:月;周:周;天:天"}},
                         {name: 'ageHigh', index: 'ageHigh', width: 60, editable: true},

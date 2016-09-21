@@ -12,18 +12,18 @@ import com.smart.webapp.util.FillFieldUtil;
 
 public class JyzCheck implements Check {
 
-	private Map<String, String> profileJYZ = new HashMap<String, String>();
-	private RMIService rmiService = null;
 	private final String LACK_CHECKER_ERROR = "缺少检验者！";
 	
-	public JyzCheck(RMIService rmiService) {
-		this.rmiService = rmiService;
+	public JyzCheck() {
 	}
 	
 	public boolean doCheck(Sample info, List<TestResult> list) {
 		
 		boolean result = false;
-		String profileName = info.getSampleNo().substring(8, 11);
+		if(info.getChkoper2() != null && !info.getChkoper2().isEmpty()) {
+			result = true;
+		}
+		/*String profileName = info.getSampleNo().substring(8, 11);
 		String deviceId = null;
 		
 		for (TestResult tr : list) {
@@ -42,7 +42,7 @@ public class JyzCheck implements Check {
 				profileJYZ.put(key, jyz);
 				result = true;
 			}
-		}
+		}*/
 		
 		if (!result) {
 			// -----------------------------------

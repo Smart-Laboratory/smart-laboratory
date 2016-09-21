@@ -17,7 +17,12 @@ import javax.servlet.http.HttpSession;
 
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
+import com.smart.model.reagent.In;
+import com.smart.model.rule.Index;
+import com.smart.service.lis.CalculateFormulaManager;
+import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.scheduledTask.ReportGenerate;
+import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,13 +50,6 @@ import com.smart.drools.DroolsRunner;
 import com.smart.drools.R;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
-import com.smart.webapp.util.AnalyticUtil;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.FillFieldUtil;
-import com.smart.webapp.util.FormulaUtil;
-import com.smart.webapp.util.HisIndexMapUtil;
-import com.smart.webapp.util.TaskManagerUtil;
-import com.smart.webapp.util.UserUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.smart.model.user.Evaluate;
@@ -78,9 +76,7 @@ public class AuditController extends BaseAuditController {
     	if(likeLabMap.size() == 0) {
     		initLikeLabMap();
     	}
-    	
-		final Map<String, Describe> idMap = new HashMap<String, Describe>();
-    	final Map<String, String> indexNameMap = new HashMap<String, String>();
+    	final Map<String, String> indexNameMap = TestIdMapUtil.getInstance(indexManager).getNameMap();
     	List<Rule> ruleList = new ArrayList<Rule>();
 		if (!DroolsRunner.getInstance().isBaseInited()) {
     		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
@@ -95,14 +91,8 @@ public class AuditController extends BaseAuditController {
 			String testid = i.getIndexId();
 			hasRuleSet.add(testid);
 		}
-		List<Describe> desList = rmiService.getDescribe();
-        List<Reference> refList = rmiService.getReference();
-		for (Describe t : desList) {
-			idMap.put(t.getTESTID(), t);
-			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
-		}
-        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-        final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
+        final FormulaUtil formulaUtil = FormulaUtil.getInstance(calculateFormulaManager, testResultManager, indexManager, fillUtil);
         log.debug("初始化常量完成");
         System.out.println("初始化常量完成");
         String sample = request.getParameter("sample").toUpperCase();
@@ -252,11 +242,13 @@ public class AuditController extends BaseAuditController {
     		for (Sample info : samples) {
     			try {
                 	List<TestResult> now = hisTestMap.get(info.getSampleNo());
-                	formulaUtil.formula(info, "admin", now, Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
-    				Set<String> testIdSet = new HashSet<String>();
-    				for (TestResult t : now) {
-    					testIdSet.add(t.getTestId());
-    				}
+					Set<String> testIdSet = new HashSet<String>();
+					for (TestResult t : now) {
+						testIdSet.add(t.getTestId());
+						fillUtil.fillResult(t, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
+					}
+					testResultManager.saveAll(now);
+                	formulaUtil.formula(info, "admin", now, new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
     				System.out.println(info.getSampleNo()+" : " + now.size());
     				String lab = info.getSectionId();
     				if(likeLabMap.containsKey(lab)) {
@@ -1017,9 +1009,7 @@ public class AuditController extends BaseAuditController {
 		
 		String packages = request.getParameter("packages");
 		//获取单位
-		List<Describe> desList = rmiService.getDescribe();
-        List<Reference> refList = rmiService.getReference();
-        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
 		
 		ProfileTest pft = proFileTestManager.get(Long.parseLong(packages));
 		
@@ -1035,9 +1025,9 @@ public class AuditController extends BaseAuditController {
 				JSONObject obj = new JSONObject();
 				fillUtil.fillReference(pftString,obj);
 				
-				Describe des = fillUtil.getDescribe(pftString);
-				if (des != null) {
-					obj.put("unit", null==des.getUNIT()?"":des.getUNIT());
+				Index index = fillUtil.getIndex(pftString);
+				if (index != null) {
+					obj.put("unit", null==index.getUnit()?"":index.getUnit());
 				}else{
 					obj.put("unit","");
 				}
@@ -1078,13 +1068,7 @@ public class AuditController extends BaseAuditController {
 		if(Integer.parseInt(bsb)>Integer.parseInt(bse)){
 			return error;
 		}
-		
-		List<Describe> desList = rmiService.getDescribe();
-        List<Reference> refList = rmiService.getReference();
-        FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-       
-        
-        
+        FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
 		List <TestResult>resultList = new ArrayList<TestResult>();
 		if(null!=postStrs&&!"".equals(postStrs)){
 			if(postStrs.indexOf(";")!=-1){
@@ -1102,12 +1086,12 @@ public class AuditController extends BaseAuditController {
 						tr.setMeasureTime(new Date());
 						tr.setResultFlag("AAAAAA");
 						tr.setEditMark(Constants.ADD_FLAG);
-						Describe des = fillUtil.getDescribe(testResult[0]);
-						if (des != null) {
-							tr.setSampleType(""+ des.getSAMPLETYPE());
-							tr.setUnit(des.getUNIT());
+						Index index = fillUtil.getIndex(testResult[0]);
+						if (index != null) {
+							tr.setSampleType(""+ index.getSampleFrom());
+							tr.setUnit(index.getUnit());
 						}
-						fillUtil.fillResult(tr, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
+						fillUtil.fillResult(tr, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 						TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
 						if(null==t){
 							resultList.add(tr);
@@ -1128,12 +1112,12 @@ public class AuditController extends BaseAuditController {
 					tr.setMeasureTime(new Date());
 					tr.setResultFlag("AAAAAA");
 					tr.setEditMark(Constants.ADD_FLAG);
-					Describe des = fillUtil.getDescribe(testResult[0]);
-					if (des != null) {
-						tr.setSampleType(""+ des.getSAMPLETYPE());
-						tr.setUnit(des.getUNIT());
+					Index index = fillUtil.getIndex(testResult[0]);
+					if (index != null) {
+						tr.setSampleType(""+ index.getSampleFrom());
+						tr.setUnit(index.getUnit());
 					}
-					fillUtil.fillResult(tr, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
+					fillUtil.fillResult(tr, info.getCycle(), Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
 					TestResult t = testResultManager.getListByTestId(sampleNo, testResult[0]);
 					if(!t.getTestId().equals(tr.getTestId())){
 						resultList.add(tr);
@@ -1168,5 +1152,7 @@ public class AuditController extends BaseAuditController {
 	private EvaluateManager evaluateManager;
 	@Autowired
 	private PassTraceManager passTraceManager;
-	
+	@Autowired
+	private CalculateFormulaManager calculateFormulaManager;
+
 }

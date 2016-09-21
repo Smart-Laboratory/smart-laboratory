@@ -239,6 +239,7 @@ public class WebService {
                 labOrder.setZxbz(arr.getJSONObject(i).getInt("status"));
                 labOrder.setBed(arr.getJSONObject(i).getString("bedno"));
                 labOrder.setSampletype( arr.getJSONObject(i).getString("sampleType"));
+                labOrder.setAge(arr.getJSONObject(i).getString("age"));
                 labOrder.setAgeUnit(arr.getJSONObject(i).getString("ageUnit"));
                 labOrder.setRequesterName(arr.getJSONObject(i).getString("requestDoctorName"));
                 list.add(labOrder);

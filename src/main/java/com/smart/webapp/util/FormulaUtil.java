@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.smart.model.lis.CalculateFormula;
+import com.smart.model.rule.Index;
+import com.smart.service.lis.CalculateFormulaManager;
+import com.smart.service.rule.IndexManager;
 import com.zju.api.service.RMIService;
 import com.smart.Constants;
 import com.smart.model.lis.Sample;
@@ -17,51 +21,49 @@ import com.zju.api.model.FormulaItem;
 
 public class FormulaUtil {
 
-	private Map<String, List<FormulaItem>> formulaMap = new HashMap<String, List<FormulaItem>>();
-	private Map<String, Describe> idMap = null;
+	private Map<String, List<CalculateFormula>> formulaMap = null;
+	private Map<String, Index> idMap = null;
 	private TestResultManager testResultManager = null;
-	private RMIService rmiService = null;
 	private FillFieldUtil fillUtil = null;
 	
 	private static FormulaUtil util = new FormulaUtil();
 	
 	private FormulaUtil() {}
 	
-	public static FormulaUtil getInstance(RMIService rmiService, TestResultManager testResultManager, SampleManager sampleManager, Map<String, Describe> idMap, FillFieldUtil fillUtil) {
-		util.rmiService = rmiService;
+	public synchronized static FormulaUtil getInstance(CalculateFormulaManager calculateFormulaManager, TestResultManager testResultManager, IndexManager indexManager, FillFieldUtil fillUtil) {
 		util.testResultManager = testResultManager;
-		util.idMap = idMap;
+		if(util.idMap == null) {
+			util.idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
+		}
 		util.fillUtil = fillUtil;
+		if(util.formulaMap == null) {
+			util.formulaMap = CalculateFormulaMapUtil.getInstance(calculateFormulaManager).getFormulaMap();
+		}
 		return util;
 	}
 	
-	public void formula(Sample info, String operator, List<TestResult> list, int age, int sex) {
+	public void formula(Sample info, String operator, List<TestResult> list, double age, int sex) {
 		String lab = info.getSectionId();
-		
-		if (!formulaMap.containsKey(lab)) {
-			List<FormulaItem> items = rmiService.getFormulaItem(lab);
-			formulaMap.put(lab, items);
-		}
-		
-		List<FormulaItem> items = formulaMap.get(lab);
+
+		List<CalculateFormula> items = formulaMap.get(lab);
 		List<TestResult> updatelist = new ArrayList<TestResult>();
 		if (items != null && items.size() != 0) {
 			Map<String, TestResult> testMap = new HashMap<String, TestResult>();
 			for (TestResult tr : list) {
 				String id = tr.getTestId();
 				if (idMap.containsKey(id)) {
-					Describe des = idMap.get(tr.getTestId());
-					tr.setMethod(des.getMETHODNAME());
+					Index index = idMap.get(tr.getTestId());
+					tr.setMethod(index.getMethod());
 					updatelist.add(tr);
-					testMap.put(id + "[" + des.getSAMPLETYPE(), tr);
+					testMap.put(id + "[" + index.getSampleFrom(), tr);
 				}
 			}
-			for (FormulaItem item : items) {
+			for (CalculateFormula item : items) {
 				String fm = item.getFormula();
 				String[] keys = item.getFormulaItem().split(",");
 				String testid = item.getTestId();
 				String sampletype = "" + item.getSampleType();
-				int isprint = item.getIsPrint();
+				int isprint = idMap.get(item.getTestId()).getIsprint();
 	
 				boolean flag = true;
 				for (String key : keys) {
@@ -93,7 +95,7 @@ public class FormulaUtil {
 					if(isFloat){
 						TestResult t = new TestResult();
 						String k = testid + "[" + sampletype;
-						Describe des = fillUtil.getDescribe(testid);
+						Index index = fillUtil.getIndex(testid);
 						if (testMap.containsKey(k)) {
 							t = testMap.get(k);
 							list.remove(t);
@@ -109,14 +111,14 @@ public class FormulaUtil {
 							t.setCorrectFlag("3");
 							t.setEditMark(Constants.ADD_FLAG);
 						}
-						if (des != null) {
-							t.setUnit(des.getUNIT());
+						if (index != null) {
+							t.setUnit(index.getUnit());
 						}
 						t.setMeasureTime(new Date());
 						t.setOperator(operator);
 						t.setIsprint(isprint);
 						t.setTestResult(testResultManager.getFormulaResult(fm));
-						fillUtil.fillResult(t, info.getCycle(), age, sex == 2 ? "女" : "男" );
+						fillUtil.fillResult(t, info.getCycle(), age, sex);
 						//testResultManager.save(t);
 						list.add(t);
 						updatelist.add(t);

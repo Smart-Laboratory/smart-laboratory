@@ -10,29 +10,31 @@ import com.smart.model.rule.Index;
 import com.smart.service.rule.IndexManager;
 
 public class TestIdMapUtil {
-	private Map<String, Index> idMap = new HashMap<String,Index>();
+	private static Map<String, Index> idMap = null;
+	private static Map<String, String> nameMap = null;
 	
 	private static TestIdMapUtil instance = new TestIdMapUtil();
 	
-	public TestIdMapUtil() {}
+	private TestIdMapUtil() {}
 
-    public  TestIdMapUtil getInstance() {
-		if(instance.idMap == null){
-			synchronized (instance) {
-				initMap();
+    public static synchronized TestIdMapUtil getInstance(IndexManager indexManager) {
+		if(instance.idMap == null || instance.nameMap == null){
+			List<Index> list = indexManager.getAll();
+			idMap = new HashMap<String, Index>();
+			nameMap = new HashMap<String, String>();
+			for (Index t : list) {
+				idMap.put(t.getIndexId(), t);
+				nameMap.put(t.getIndexId(), t.getName());
 			}
 		}
 		return instance;
 	}
-	
-	public  Map<String, Index> initMap(){
-		List<Index> list = indexManager.getAll();
-		for (Index t : list) {
-			idMap.put(t.getIndexId(), t);
-		}
+
+	public Map<String, Index> getIdMap() {
 		return idMap;
 	}
-	
-	@Autowired
-	private  IndexManager indexManager;
+
+	public Map<String, String> getNameMap() {
+		return nameMap;
+	}
 }

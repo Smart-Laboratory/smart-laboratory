@@ -16,12 +16,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "l_calculateformula")
 public class CalculateFormula {
+
     public int getFormulaType() {
         return formulaType;
     }
 
     public void setFormulaType(int formulaType) {
         this.formulaType = formulaType;
+    }
+
+    public String getLab() {
+        return lab;
+    }
+
+    public void setLab(String lab) {
+        this.lab = lab;
     }
 
     @Id
@@ -107,6 +116,7 @@ public class CalculateFormula {
     private int testNumb;               //项目个数
     private String excludeItem;         //排除项目
     private String excludeDescribe;     //排除说明
+    private String lab;                  //实验室部门
 
 
 

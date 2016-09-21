@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.service.lis.TestReferenceManager;
+import com.smart.webapp.util.AgeUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,9 +154,7 @@ public class TestResultAjaxController extends BaseAuditController{
 			String tcValues = request.getParameter("tcValues");
 			String[] tcResult = tcValues.split(",");
 			System.out.println(tcValues);
-			List<Describe> desList = rmiService.getDescribe();
-            List<Reference> refList = rmiService.getReference();
-            FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
+            FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
             
 
 			Sample info = sampleManager.getBySampleNo(sample);
@@ -175,12 +175,12 @@ public class TestResultAjaxController extends BaseAuditController{
 					nt.setMeasureTime(new Date());
 					nt.setResultFlag("AAAAAA");
 					nt.setEditMark(Constants.ADD_FLAG);
-					Describe des = fillUtil.getDescribe(idValue[0]);
-					if (des != null) {
-						nt.setSampleType(""+ des.getSAMPLETYPE());
-						nt.setUnit(des.getUNIT());
+					Index index = fillUtil.getIndex(idValue[0]);
+					if (index != null) {
+						nt.setSampleType(""+ index.getSampleFrom());
+						nt.setUnit(index.getUnit());
 					}
-					fillUtil.fillResult(nt, info.getCycle(), Integer.parseInt(info.getAge()), info.getSexValue());
+					fillUtil.fillResult(nt, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();
 //					testModify.setModifyTime(new Date());

@@ -15,8 +15,11 @@ import javax.servlet.http.HttpServlet;
 
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
+import com.smart.model.rule.Index;
 import com.smart.service.lis.*;
+import com.smart.service.rule.*;
 import com.smart.service.scheduledTask.ReportGenerate;
+import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -39,14 +42,6 @@ import com.smart.drools.R;
 import com.smart.model.rule.Item;
 import com.smart.model.rule.Rule;
 import com.smart.service.DictionaryManager;
-import com.smart.service.rule.BagManager;
-import com.smart.service.rule.ItemManager;
-import com.smart.service.rule.ResultManager;
-import com.smart.service.rule.RuleManager;
-import com.smart.webapp.util.AnalyticUtil;
-import com.smart.webapp.util.FillFieldUtil;
-import com.smart.webapp.util.FormulaUtil;
-import com.smart.webapp.util.HisIndexMapUtil;
 import com.zju.api.model.Describe;
 import com.zju.api.model.Reference;
 import com.zju.api.service.RMIService;
@@ -68,18 +63,19 @@ public class AutoAuditServlet extends HttpServlet {
         final ResultManager resultManager = (ResultManager) ctx.getBean("resultManager");
         final RuleManager ruleManager = (RuleManager) ctx.getBean("ruleManager");
         final BagManager bagManager = (BagManager) ctx.getBean("bagManager");
-        final RMIService rmiService = (RMIService) ctx.getBean("rmiService");
         final CriticalRecordManager criticalRecordManager = (CriticalRecordManager) ctx.getBean("criticalRecordManager");
         final YlxhManager ylxhManager = (YlxhManager) ctx.getBean("ylxhManager");
         final AuditTraceManager auditTraceManager = (AuditTraceManager) ctx.getBean("auditTraceManager");
         final LikeLabManager likeLabManager = (LikeLabManager) ctx.getBean("likeLabManager");
 		final ProcessManager processManager = (ProcessManager) ctx.getBean("processManager");
+		final IndexManager indexManager = (IndexManager) ctx.getBean("indexManager");
+		final TestReferenceManager testReferenceManager = (TestReferenceManager) ctx.getBean("testReferenceManager");
+		final CalculateFormulaManager calculateFormulaManager = (CalculateFormulaManager) ctx.getBean("calculateFormulaManager");
         
         System.out.println("Initializing context...");
 
         try {
-        	final Map<String, Describe> idMap = new HashMap<String, Describe>();
-        	final Map<String, String> indexNameMap = new HashMap<String, String>();
+        	final Map<String, String> indexNameMap = TestIdMapUtil.getInstance(indexManager).getNameMap();
         	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
         	final Map<String, String> likeLabMap = new HashMap<String, String>();
         	Long start = System.currentTimeMillis();
@@ -97,12 +93,6 @@ public class AutoAuditServlet extends HttpServlet {
     			String testid = i.getIndexId();
     			hasRuleSet.add(testid);
     		}
-    		List<Describe> desList = rmiService.getDescribe();
-            List<Reference> refList = rmiService.getReference();
-    		for (Describe t : desList) {
-    			idMap.put(t.getTESTID(), t);
-    			indexNameMap.put(t.getTESTID(), t.getCHINESENAME());
-    		}
     		List<Ylxh> ylxhList = ylxhManager.getYlxh();
     		for (Ylxh y : ylxhList) {
     			ylxhMap.put(y.getYlxh(), y);
@@ -111,10 +101,10 @@ public class AutoAuditServlet extends HttpServlet {
     		for (LikeLab ll : list) {
     			likeLabMap.put(ll.getLab(), ll.getLikeLab());
     		}
-            FillFieldUtil fillUtil = FillFieldUtil.getInstance(desList, refList);
-            final FormulaUtil formulaUtil = FormulaUtil.getInstance(rmiService, testResultManager, sampleManager, idMap, fillUtil);
+            final FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
+            final FormulaUtil formulaUtil = FormulaUtil.getInstance(calculateFormulaManager, testResultManager, indexManager, fillUtil);
             final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
-            final Check jyzCheck = new JyzCheck(rmiService);
+            final Check jyzCheck = new JyzCheck();
             final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager);
             final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
             final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
@@ -180,16 +170,17 @@ public class AutoAuditServlet extends HttpServlet {
                         	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
                         	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
+												Set<String> testIdSet = new HashSet<String>();
                         	                	try {
-                        	        				formulaUtil.formula(info, "admin", now, Integer.parseInt(info.getAge()), Integer.parseInt(info.getSex()));
+													for (TestResult t : now) {
+														testIdSet.add(t.getTestId());
+														fillUtil.fillResult(t, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
+													}
+                        	        				formulaUtil.formula(info, "admin", now, new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
                         	                	} catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
                          	        			}
-                    	        				Set<String> testIdSet = new HashSet<String>();
-                    	        				for (TestResult t : now) {
-                    	        					testIdSet.add(t.getTestId());
-                    	        				}
                     	        				System.out.println(info.getSampleNo() + " : " + now.size());
                     	        				try {
                     	        					String lab = info.getSectionId();

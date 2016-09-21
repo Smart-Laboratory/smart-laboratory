@@ -406,6 +406,8 @@ public class InExecuteViewController {
                 //生成样本号
                 String barcode = HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId());
                 sample.setBarcode(barcode);
+                sample.setAge(labOrder.getAge());
+                sample.setAgeunit(labOrder.getAgeUnit());
                 labOrder.setBarcode(barcode);
                 Date executeTime = new Date();
 
