@@ -290,7 +290,8 @@ function openAddTestResultDialog() {
     			if (postStr != "") {
 	    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
 	    				if (data) {
-	    					$("#addTestResultDialog").dialog("close");
+	    					$("#lastprofile").val(tcValue);
+	    					layer.close(index);
 	    					var s = jQuery("#list").jqGrid('getGridParam','selrow');
 	    					var ret = jQuery("#list").jqGrid('getRowData',s);
 	    					
@@ -704,7 +705,7 @@ $(function(){
         delay : 500,
         select : function(event, ui) {
         	var result = true;
-     		$.post("../set/ylsf/ajax/profileTest",{test:ui.item.testIds,sample:$("#hiddenSampleNo").val()},function(data) {
+     		$.get("../set/ylsf/ajax/profileTest",{test:ui.item.testIds,sample:$("#hiddenSampleNo").val()},function(data) {
      			var array = jQuery.parseJSON(data);
     			for (var i=0 ; i < array.length ; i++) {
     				var result = true;

@@ -3,6 +3,7 @@ package com.smart.webapp.controller.set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.webapp.util.*;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -246,22 +248,76 @@ public class YlsfController extends BaseAuditController {
 	}
 	
 	/**
+	 * 张晋南2016-5-25
+	 * 修改
+	 * 新增getLabofYlmcBylike方法
+	 * lab 科室代码
+	 * ylmc 输入需要查询的套餐
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/ajax/ylsfList*", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public String getYlshList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String lab = request.getParameter("lab");
+		String ylmc = request.getParameter("ylmc");
+		List<Ylxh> list =  ylxhManager.getLabofYlmcBylike(lab,ylmc);
+		for(Iterator<Ylxh> it = list.iterator(); it.hasNext();){
+			Ylxh y = (Ylxh) it.next();
+			if(y.getProfiletest()==null||"".equals(y.getProfiletest()))
+				it.remove();
+		};
+		
+		if (idMap.size() == 0)
+			initMap();
+		
+		JSONArray array = new JSONArray();
+		if(null == ylmc){
+			User user =	userManager.getUserByUsername(request.getRemoteUser());
+			String lastProfile = user.getLastProfile();
+			if(lastProfile==null)
+				return null;
+			
+		    	for(String lpf:lastProfile.split(",")){
+    				JSONObject obj = new JSONObject();
+    				obj.put("test", lpf);
+    				obj.put("name", idMap.get(lpf).getName());
+    				array.put(obj);
+			 }
+		}else{
+			for (Ylxh y : list) {
+				JSONObject obj = new JSONObject();
+				obj.put("ylxh", y.getYlxh());
+				obj.put("ylmc", y.getYlmc());
+				obj.put("profiletest", y.getProfiletest());
+				array.put(obj);
+			}
+		}
+		response.setContentType("textml;charset=UTF-8");
+		response.getWriter().print(array.toString());
+		return null;
+	}
+	
+	/**
 	 * 张晋南 2016-05-25
 	 * test 用户上一次选择的项目，多次添加时默认上次的项目
 	 * @param request
 	 * @param response
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/ajax/profileTest*", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/profileTest*", method = RequestMethod.GET)
 	@ResponseBody
 	public void getProfileTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String sample = request.getParameter("sample");
 		String test = request.getParameter("test");
 		if(!"".equals(test)){
-			User operator = userManager.getUserByUsername(request.getRemoteUser());
-			operator.setLastProfile(test);
-			userManager.saveUser(operator);
+//			User operator = userManager.getUserByUsername(request.getRemoteUser());
+//			operator.setLastProfile(test);
+//			userManager.saveUser(operator);
 			if (test.endsWith(","))
 				test = test.substring(0, test.length() - 1);
 			if (idMap.size() == 0)

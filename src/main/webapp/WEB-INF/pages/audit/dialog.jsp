@@ -29,17 +29,23 @@
 </div>
 
 <div id="addTestResultDialog" style="text-align:left;display:none;">
-	<div class="form-inline">
-		<span class="form-control" style=""><fmt:message key='add.single'/></span>
-		<input  id="searchProject" class="form-control" style="width:250px;" placeholder="<fmt:message key='add.single'/>">
+	<form id="addRForm" class="form-horizontal" action="" method="post">
+	<div class="form-group">
+		<label class="col-sm-5 control-label no-padding-right" style="text-align:right;" for="searchProject"><fmt:message key='add.single'/> </label>
+        <div class="col-sm-7">
+            <input  id="searchProject" class="form-control"  placeholder="<fmt:message key='add.single'/>">
+        </div>
 	</div>
 	
-	<div class="form-inline">
+	<div class="form-group">
 		<input id="lastprofile" type="hidden" value="<c:out value='${lastprofle}'/>"  />
 		<!-- <select id="profileList" class="form-control" style="width:280px;"></select> -->
-		<input  id="packages" class="form-control" style="width:330px;" placeholder="<fmt:message key='button.add.profile'/>">
+		<button type="button" id="deleteAllTest" class="btn btn-sm btn-danger"><fmt:message key="button.empty" /></button>
+		<div class="col-sm-7">
+			<input  id="packages" class="col-sm-7 form-control "  placeholder="<fmt:message key='button.add.profile'/>">
+		</div>
 		<!-- <button id="addProfileBtn" class="btn btn-info"><fmt:message key="button.add.profile" /></button> -->
-		<button id="deleteAllTest" class="btn btn-danger"><fmt:message key="button.empty" /></button>
+		
 	</div>
 	<fieldset>
 	<legend><fmt:message key="index.message" /></legend>
@@ -47,6 +53,7 @@
 	
 	</div>
 	</fieldset>
+	</form>
 </div>
 
 <div id="addResultDialog" style="text-align:left;display:none;">
