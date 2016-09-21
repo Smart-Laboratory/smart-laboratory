@@ -1,7 +1,6 @@
 package com.smart.webapp.util;
 
 import com.smart.Constants;
-import sun.util.resources.cldr.ne.CalendarData_ne_NP;
 
 import java.util.Calendar;
 import java.util.Date;

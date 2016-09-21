@@ -37,7 +37,13 @@ p{
 	margin-bottom:1px;
 }
 .ui-autocomplete {
-    z-index: 99999999;
+    z-index: 999999999999999999!important;
+}
+.form-horizontal .form-group{
+	margin: 5px 10px!important;
+}
+#addTestList .form-inline{
+	margin: 5px 5px;
 }
 </style>
 </head>
