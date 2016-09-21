@@ -5,13 +5,11 @@ import com.smart.model.lis.CalculateFormulaVo;
 import com.smart.model.lis.Device;
 import com.smart.model.lis.TestReference;
 import com.smart.model.rule.Index;
+import com.smart.service.UserManager;
 import com.smart.service.lis.CalculateFormulaManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.DepartUtil;
-import com.smart.webapp.util.IndexMapUtil;
-import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -44,6 +42,8 @@ public class CalculateFormulaController {
     private CalculateFormulaManager calculateFormulaManager = null;
     @Autowired
     private IndexManager indexManager = null;
+    @Autowired
+    private UserManager userManager = null;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -71,10 +71,10 @@ public class CalculateFormulaController {
 
         int start = row * (page - 1);
         int end = row * page;
-
+        String lab = UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab();
         DataResponse dataResponse = new DataResponse();
         List<CalculateFormulaVo> list = new ArrayList<CalculateFormulaVo>();
-        int size = calculateFormulaManager.getCalculateFormulaListCount(query,start,end,sidx,sord);
+        int size = calculateFormulaManager.getCalculateFormulaListCount(query,lab,start,end,sidx,sord);
         dataResponse.setRecords(size);
         int x = size % (row == 0 ? size : row);
         if (x != 0) {
@@ -83,7 +83,7 @@ public class CalculateFormulaController {
         int totalPage = (size + x) / (row == 0 ? size : row);
         dataResponse.setPage(page);
         dataResponse.setTotal(totalPage);
-        list = calculateFormulaManager.getCalculateFormulaList(query,start,end,sidx,sord);
+        list = calculateFormulaManager.getCalculateFormulaList(query,lab,start,end,sidx,sord);
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 
         for(CalculateFormulaVo info :list) {
@@ -185,6 +185,7 @@ public class CalculateFormulaController {
         calculateFormula.setSampleType("1");
         calculateFormula.setTestNumb(testNumb);
         calculateFormula.setFormulaItem(formulaItem);
+        calculateFormula.setLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
         try{
             calculateFormulaManager.save(calculateFormula);
             return new JSONObject().put("result", "true").toString();

@@ -33,9 +33,11 @@ public class CalculateFormulaDaoHibernate extends GenericDaoHibernate<CalculateF
      * @param sord
      * @return
      */
-    @Override
-    public List<CalculateFormulaVo> getCalculateFormulaList(String query, int start, int end, String sidx, String sord) {
+    public List<CalculateFormulaVo> getCalculateFormulaList(String query, String lab, int start, int end, String sidx, String sord) {
         String sql = "select new com.smart.model.lis.CalculateFormulaVo(c, i.name) from CalculateFormula c,Index i where c.testId = i.indexId ";
+        if(lab != null && !lab.isEmpty()) {
+            sql += " and c.lab='" + lab + "'";
+        }
         if(query != null && !query.equals(""))
             sql += " and  i.name like '%" +query +"%'";
         sidx = sidx.equals("") ? "testId" : sidx;
@@ -59,10 +61,13 @@ public class CalculateFormulaDaoHibernate extends GenericDaoHibernate<CalculateF
      * @return
      */
     @Override
-    public int getCalculateFormulaListCount(String query, int start, int end, String sidx, String sord) {
+    public int getCalculateFormulaListCount(String query, String lab, int start, int end, String sidx, String sord) {
         String sql = "select count(*) from CalculateFormula c,Index i where c.testId = i.indexId ";
-        if(query != null && !query.equals(""))
-            sql += " and  i.name like '%" +query +"%'";
+        if(lab != null && !lab.isEmpty()) {
+            sql += " and c.lab='" + lab + "'";
+        }
+        if(query != null && !query.isEmpty())
+            sql += " and i.name like '%" +query +"%'";
         sidx = sidx.equals("") ? "testId" : sidx;
         sql +=" order by  c." +sidx + " " + sord;
         Query q = getSession().createQuery(sql);

@@ -8,6 +8,7 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
+    <title><fmt:message key="set.calculateformula"/></title>
     <link rel="stylesheet" href="<c:url value="/styles/font-awesome.css"/>" />
     <link rel="stylesheet" href="<c:url value="/styles/bootstrap-datetimepicker.min.css"/>" />
 

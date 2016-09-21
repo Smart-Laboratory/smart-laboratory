@@ -28,17 +28,14 @@ public class CalculateFormulaManagerImpl  extends GenericManagerImpl<CalculateFo
         this.dao = calculateFormulaDao;
     }
 
-    @Override
-    public List<CalculateFormulaVo> getCalculateFormulaList(String query, int start, int end, String sidx, String sord) {
-        return calculateFormulaDao.getCalculateFormulaList(query,start,end,sidx,sord);
+    public List<CalculateFormulaVo> getCalculateFormulaList(String query, String lab, int start, int end, String sidx, String sord) {
+        return calculateFormulaDao.getCalculateFormulaList(query,lab,start,end,sidx,sord);
     }
 
-    @Override
-    public int getCalculateFormulaListCount(String query, int start, int end, String sidx, String sord) {
-        return calculateFormulaDao.getCalculateFormulaListCount(query,start,end,sidx,sord);
+    public int getCalculateFormulaListCount(String query, String lab, int start, int end, String sidx, String sord) {
+        return calculateFormulaDao.getCalculateFormulaListCount(query,lab,start,end,sidx,sord);
     }
 
-    @Override
     public CalculateFormulaVo getCalculateFormulaByTestId(String testId) {
         return calculateFormulaDao.getCalculateFormulaByTestId(testId);
     }

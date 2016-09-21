@@ -59,7 +59,7 @@ public class Sample extends BaseObject {
 	private Integer hasimages=0;//是否包含图片
 	private int cycle=0;
 
-	private int auditStatus=0; //样本审核的状态
+	private int auditStatus=-1; //样本审核的状态
 	private int auditMark=0; //审核标记
 	private String markTests; //出现异常 需要标记的检验项目
 	private String notes; //自动审核的结果记录
@@ -618,10 +618,10 @@ public class Sample extends BaseObject {
 				value = "已采样";
 				break;
 			case 3:
-				value = "已送达";
+				value = "已接收";
 				break;
 			case 4:
-				value = "已接收";
+				value = "待审核";
 				break;
 			case 5:
 				value = "已审核";

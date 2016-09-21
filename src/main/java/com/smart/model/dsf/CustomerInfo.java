@@ -11,25 +11,28 @@ import javax.xml.stream.StreamFilter;
  */
 
 @Entity
-@Table(name="DSF_CUSTOMER_BASE_INFO")
-public class CustomerInfo extends BaseObject{
+@Table(name = "DSF_CUSTOMER_BASE_INFO")
+public class CustomerInfo extends BaseObject {
     private Long customerid;
     private String customername;
     private String address;
     private String clientnumber;
     private int sequence;
+    private String customerkey;
 
     public CustomerInfo() {
     }
 
-    public CustomerInfo(Long customerid, String customername, String address) {
+    public CustomerInfo(Long customerid, String customername, String address, String customerkey) {
         this.customerid = customerid;
         this.customername = customername;
         this.address = address;
+        this.customerkey = customerkey;
     }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="customer_seq")
-    @SequenceGenerator(name = "customer_seq", sequenceName = "DSF_CUSTOMER_SEQ", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
+    @SequenceGenerator(name = "customer_seq", sequenceName = "DSF_CUSTOMER_SEQ", allocationSize = 1)
     @Column(name = "customerid")
     public Long getCustomerid() {
         return customerid;
@@ -38,6 +41,7 @@ public class CustomerInfo extends BaseObject{
     public void setCustomerid(Long customerid) {
         this.customerid = customerid;
     }
+
     @Column
     public String getCustomername() {
         return customername;
@@ -46,6 +50,7 @@ public class CustomerInfo extends BaseObject{
     public void setCustomername(String customername) {
         this.customername = customername;
     }
+
     @Column
     public String getAddress() {
         return address;
@@ -54,7 +59,7 @@ public class CustomerInfo extends BaseObject{
     public void setAddress(String address) {
         this.address = address;
     }
-
+    @Column
     public String getClientnumber() {
         return clientnumber;
     }
@@ -62,13 +67,21 @@ public class CustomerInfo extends BaseObject{
     public void setClientnumber(String clientnumber) {
         this.clientnumber = clientnumber;
     }
-
+    @Column
     public int getSequence() {
         return sequence;
     }
 
     public void setSequence(int sequence) {
         this.sequence = sequence;
+    }
+    @Column(name = "customerkey")
+    public String getCustomerkey() {
+        return customerkey;
+    }
+
+    public void setCustomerkey(String customerkey) {
+        this.customerkey = customerkey;
     }
 
     @Override

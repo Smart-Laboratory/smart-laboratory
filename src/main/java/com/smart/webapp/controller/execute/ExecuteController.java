@@ -193,15 +193,18 @@ public class ExecuteController {
 			LabOrder labOrder = needSaveList.get(i);
 			boolean needNo = true;			//需要编号
 			System.out.println("执行科室：" + labOrder.getLabdepartment());
-			for(SampleNoBuilder sampleNoBuilder : autoMap.get(labOrder.getLabdepartment())) {
-				if(needNo && sampleNoBuilder.getNowNo() < sampleNoBuilder.getEndNo()) {
-					int nowNo = sampleNoBuilder.getNowNo() + 1;
-					labOrder.setSampleno(Constants.DF3.format(executeTime) + sampleNoBuilder.getSegment() + String.format("%03d", nowNo));
-					sampleNoBuilder.setNowNo(nowNo);
-					autoUtil.updateSampleNoBuilder(sampleNoBuilderManager, sampleNoBuilder);
-					needNo = false;
-				}
-			}
+            if(autoMap.containsKey(labOrder.getLabdepartment())) {
+                for(SampleNoBuilder sampleNoBuilder : autoMap.get(labOrder.getLabdepartment())) {
+                    if(needNo && sampleNoBuilder.getNowNo() < sampleNoBuilder.getEndNo()) {
+                        int nowNo = sampleNoBuilder.getNowNo() + 1;
+                        labOrder.setSampleno(Constants.DF3.format(executeTime) + sampleNoBuilder.getSegment() + String.format("%03d", nowNo));
+                        sampleNoBuilder.setNowNo(nowNo);
+                        autoUtil.updateSampleNoBuilder(sampleNoBuilderManager, sampleNoBuilder);
+                        needNo = false;
+                    }
+                }
+            }
+
 			//生成条码号
 			Sample sample = new Sample();
 			sample.setBirthday(labOrder.getBirthday());
@@ -220,7 +223,7 @@ public class ExecuteController {
 			sample.setRequestMode(labOrder.getRequestmode());
 			sample.setSampleNo(labOrder.getSampleno());
 			sample.setSex("" + labOrder.getSex());
-			sample.setSampleStatus(2);
+			sample.setSampleStatus(Constants.SAMPLE_STATUS_EXECUTED);
 			sample.setSampleType(labOrder.getSampletype());
 			sample.setSectionId(labOrder.getLabdepartment());
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());

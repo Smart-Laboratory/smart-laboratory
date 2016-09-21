@@ -6,8 +6,6 @@ import com.smart.model.lis.CalculateFormulaVo;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 /**
  * Title: CalculateFormulaDao
  * Description:计算公式
@@ -18,12 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface CalculateFormulaDao extends GenericDao<CalculateFormula, Long> {
 	
-	@Transactional
-	List<CalculateFormulaVo> getCalculateFormulaList(String query, int start, int end, String sidx, String sord);
+	List<CalculateFormulaVo> getCalculateFormulaList(String query, String lab, int start, int end, String sidx, String sord);
     
-	@Transactional
-	int getCalculateFormulaListCount (String query,  int start, int end, String sidx, String sord);
+	int getCalculateFormulaListCount (String query, String lab, int start, int end, String sidx, String sord);
     
-	@Transactional
 	CalculateFormulaVo getCalculateFormulaByTestId(String testId);
 }

@@ -237,6 +237,7 @@
                     success:function(data){
                         if(data && data.result =='true'){
                             layer.msg("数据保存成功!",{time:1000});
+                            parent.layer.close(index);
                         }
                     }
                 })
