@@ -398,7 +398,7 @@ public class InExecuteViewController {
                 sample.setRequestMode(labOrder.getRequestmode());
                 sample.setSampleNo(labOrder.getSampleno());
                 sample.setSex(ConvertUtil.null2String(labOrder.getSex()));
-                sample.setSampleStatus(2);
+                sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
                 sample.setSampleType(labOrder.getSampletype());
                 sample.setSectionId(labOrder.getLabdepartment());
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());

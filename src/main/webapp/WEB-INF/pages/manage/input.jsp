@@ -20,14 +20,20 @@
 	select {
 		height:34px;
 	}
+	.ui-autocomplete {
+		z-index: 99999999 !important;
+		margin:0;
+		padding:0;
+		border:0;
+	}
 </style>
 <body>
 <div class="row widget-main">
 	<div class="input-group col-sm-6" style="float: left;">
 		<span class="input-group-addon">医嘱号</span>
-		<input type="text" class="form-control" placeholder="医嘱号" onkeypress="receive(this,event)"></input>
+		<input type="text" class="form-control" placeholder="医嘱号" onkeypress="receive(this,event)"/>
 		<span class="input-group-addon">样本号</span>
-		<input type="text" class="form-control" value="${sampleno}" id="sampleno_text"></input>
+		<input type="text" class="form-control" value="${sampleno}" id="sampleno_text"/>
 		<span class="input-group-btn">
 			<button type="button" class="btn btn-info btn-sm">
 				<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
@@ -99,8 +105,9 @@
 
 <div id="formDialog" style="display:none;">
 	<form class="form-horizontal" role="form" style="margin-top:5px;" id="sampleForm">
+		<input type="hidden" id="sampleStatus"/>
 		<div class="form-group" style="margin-right:0px;margin-left:0px;">
-			<label class="col-sm-1 control-label no-padding-right" for="stayhospitaimode">在院方式</label>
+			<label class="col-sm-1 control-label no-padding-right" for="stayhospitalmode">在院方式</label>
 			<div class="col-sm-2">
 				<select class="col-sm-12" id="stayhospitalmode">
 					<option value="1">门诊</option>
@@ -113,24 +120,24 @@
 					<option value="8">电子档案</option>
 				</select>
 			</div>
-			<label class="col-sm-1 control-label no-padding-right" for="doctadviseno">医嘱号</label>
+			<label class="col-sm-1 control-label no-padding-right" for="barcode">医嘱号</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="doctadviseno" onkeypress="getData(this,event)"></input>
+				<input type="text" class="col-sm-12" id="barcode" onkeypress="getData(this,event)"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="sampleno">样本号</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="sampleno" onkeypress="getData(this,event)" value="${sampleno}"></input>
+				<input type="text" class="col-sm-12" id="sampleno" onkeypress="getData(this,event)" value="${sampleno}"/>
 				<input type="hidden" id="hiddenSegment" value="${segment}"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="patientid">就诊卡号</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="patientid" onkeypress="getPatient(this,event)"></input>
+				<input type="text" class="col-sm-12" id="patientid" onkeypress="getPatient(this,event)"/>
 			</div>
 		</div>
 		<div class="form-group" style="margin-right:0px;margin-left:0px;">
 			<label class="col-sm-1 control-label no-padding-right" for="patientname">姓&nbsp;名</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="patientname"></input>
+				<input type="text" class="col-sm-12" id="patientname"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="sex">性&nbsp;别</label>
 			<div class="col-sm-2">
@@ -143,7 +150,7 @@
 			<label class="col-sm-1 control-label no-padding-right" for="age">年&nbsp;龄</label>
 			<div class="col-sm-2">
 				<span class="input-icon input-icon-right" style="width:100%">
-					<input type="text" id="age" style="float:left;width:75%"></input>
+					<input type="text" id="age" style="float:left;width:75%"/>
 					<select  style="float:left;width:25%" id="ageunit">
 						<option value="岁">岁</option>
 						<option value="月">月</option>
@@ -153,44 +160,41 @@
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="diagnostic">诊&nbsp;断</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="diagnostic"></input>
+				<input type="text" class="col-sm-12" id="diagnostic"/>
 			</div>
 		</div>
 		<div class="form-group" style="margin-right:0px;margin-left:0px;">
 			<label class="col-sm-1 control-label no-padding-right" for="section">科&nbsp;室</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="section"></input>
-				<input type="text" id="sectionCode" style="display:none;"></input>
+				<input type="text" class="col-sm-12" id="section"/>
+				<input type="text" id="sectionCode" style="display:none;"/>
 			</div>
-			<label class="col-sm-1 control-label no-padding-right" for="sampletype">样本类型</label>
+			<label class="col-sm-1 control-label no-padding-right" for="sampleType">样本类型</label>
 			<div class="col-sm-2">
-				<select class="col-sm-12" id="sampletype">
-					<c:forEach var="sType" items="${typelist}">
-						<option value='<c:out value="${sType.sign}" />'><c:out value="${sType.value}" /></option>
-					</c:forEach>
-				</select>
+				<input type="text" class="col-sm-12" id="sampleType"/>
+				<input type="hidden" class="col-sm-12" id="hiddenSampleType"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="requester">送检医生</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="requester"></input>
+				<input type="text" class="col-sm-12" id="requester"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="fee">收费金额</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="fee"></input>
+				<input type="text" class="col-sm-12" id="fee"/>
 			</div>
 		</div>
 		<div class="form-group" style="margin-right:0px;margin-left:0px;">
 			<label class="col-sm-1 control-label no-padding-right" for="feestatus">收费状态</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12" id="feestatus"></input>
+				<input type="text" class="col-sm-12" id="feestatus"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="executetime">采样时间</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12 input-mask-date" id="executetime"></input>
+				<input type="text" class="col-sm-12 input-mask-date" id="executetime"/>
 			</div>
 			<label class="col-sm-1 control-label no-padding-right" for="receivetime">接收时间</label>
 			<div class="col-sm-2">
-				<input type="text" class="col-sm-12 input-mask-date" id="receivetime" value='${receivetime}'></input>
+				<input type="text" class="col-sm-12 input-mask-date" id="receivetime" value='${receivetime}'/>
 			</div>
 			<div class="col-sm-3">&nbsp;
 			</div>
@@ -200,7 +204,7 @@
 			<div class="col-sm-8" id="examTag">
 				<input type="text" name="examinaim" id="examinaim" placeholder="输入检验目的的中文、拼音" class="col-sm-12"/>
 			</div>
-			<input type="text" id="ylxh" style="display:none;"></input>
+			<input type="text" id="ylxh" style="display:none;"/>
 			<div class="col-sm-1">&nbsp;</div>
 			<div class="col-sm-2">
 				<button type="button" class="btn btn-sm btn-success" title="提交样本信息" onclick="sample()">

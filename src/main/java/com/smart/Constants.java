@@ -289,7 +289,18 @@ public final class Constants {
 	public final static String LOG_OPERATE_REDUCE = "标本编号减少";
 	public final static String LOG_OPERATE_INVERSION = "标本编号倒置";
 	public final static String LOG_OPERATE_REPLACE = "标本编号替换";
-	
+
+	/**
+	 * 样本状态，0：已开单；1：条码已打印；2：已采样；3：已接收；4：在测定；5：已审核；6：已打印
+	 */
+	public final static int SAMPLE_STATUS_REQUESTED = 0;
+	public final static int SAMPLE_STATUS_PRINT_BARCODE = 1;
+	public final static int SAMPLE_STATUS_EXECUTED = 2;
+	public final static int SAMPLE_STATUS_RECEIVED= 3;
+	public final static int SAMPLE_STATUS_TESTED = 4;
+	public final static int SAMPLE_STATUS_CHECKED = 5;
+	public final static int SAMPLE_STATUS_PRINTED = 6;
+
 	/**
 	 * 医学检验科编号
 	 */

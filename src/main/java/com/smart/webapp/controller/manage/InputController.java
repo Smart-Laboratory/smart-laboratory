@@ -53,9 +53,7 @@ public class InputController {
 				sampleno += "AAA001";
 			}
 		}
-		List<Dictionary> sampletypelist = dictionaryManager.getSampleType();
 		ModelAndView view = new ModelAndView();
-		view.addObject("typelist", sampletypelist);
 		view.addObject("receivetime", Constants.SDF.format(new Date()));
 		view.addObject("segment", segment);
 		view.addObject("sampleno", sampleno);

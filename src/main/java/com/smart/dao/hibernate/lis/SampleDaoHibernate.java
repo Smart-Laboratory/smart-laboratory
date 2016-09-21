@@ -489,7 +489,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getReceiveList(String text, String lab) {
 		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";
-		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' order by p.receivetime desc";
+		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' and sampleStatus>=3 order by p.receivetime desc";
 		return getSession().createQuery(sql).list();
 	}
 

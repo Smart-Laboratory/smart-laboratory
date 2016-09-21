@@ -15,14 +15,14 @@ function receive(obj,event) {
 		case 13 : 
 			var id=obj.value;
 			var sampleno = $("#sampleno_text").val();
-			$.get("../sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
+			$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
 				var data = JSON.parse(data);
 				if(data.success == 1) {
 					layer.msg(data.message, {icon: 2, time: 1000});
 				} else if(data.success == 2) {
 					layer.msg(data.message, {icon: 2, time: 1000});
 					var html = "";
-					html += "<tr><td><b>医嘱号</b></td><td>" + data.id + "</td></tr>";
+					html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
 					html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
 					html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
 					html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
@@ -34,7 +34,7 @@ function receive(obj,event) {
 					$("#now").html(html);
 				} else {
 					var html = "";
-					html += "<tr><td><b>医嘱号</b></td><td>" + data.id + "</td></tr>";
+					html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
 					html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
 					html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
 					html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
@@ -45,7 +45,7 @@ function receive(obj,event) {
 					html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
 					$("#now").html(html);
 					var rowData = {
-						id:data.id,
+						barcode:data.barcode,
 						sampleno:data.sampleno,
 						shm:data.shm,
 						pname:data.pname,
@@ -55,7 +55,6 @@ function receive(obj,event) {
 						age:data.age,
 						receivetime:data.receivetime,
 						exam:data.exam,
-						sampletype:data.sampletype,
 						pid:data.pid,
 						feestatus:data.feestatus,
 						diag:data.diag,
@@ -63,7 +62,9 @@ function receive(obj,event) {
 						requester:data.requester,
 						part:data.part,
 						requestmode:data.requestmode,
-						fee:data.fee
+						fee:data.fee,
+						sampleType: data.sampleType,
+						sampleTypeValue: data.sampleTypeValue
 					};
 					var ids = $('#new').jqGrid('getDataIDs');
 		            var newId = parseInt(ids[ids.length - 1] || 0) + 1;
@@ -96,11 +97,11 @@ function getData(obj,event) {
 }
 
 function getSampleData(id, type) {
-	$.get("../sample/ajax/get",{id:id,type:type},function(data) {
+	$.get(baseUrl + "/sample/ajax/get",{id:id,type:type},function(data) {
 		if(data != "") {
 			var data = JSON.parse(data);
 			$("#stayhospitalmode").val(data.stayhospitalmode);
-			$("#doctadviseno").val(data.doctadviseno);
+			$("#barcode").val(data.barcode);
 			if(data.sampleno != '0') {
 				$("#sampleno").val(data.sampleno);
 			}
@@ -118,7 +119,8 @@ function getSampleData(id, type) {
 			for(var key in ylxhMap) {
 				$tag_obj.add(ylxhMap[key], key, feeMap[key]);
 			}
-			$("#sampletype").val(data.sampletype);
+			$("#sampleType").val(data.sampleType);
+			$("#sampleTypeValue").val(data.sampleTypeValue);
 			$("#fee").val(data.fee);
 			$("#feestatus").val(data.feestatus);
 			$("#requester").val(data.requester);
@@ -144,9 +146,9 @@ function getPatient(obj,event) {
 	}
 	switch(key){
 		case 13 : 
-			$.get("../sample/ajax/getpatient",{pid:obj.value},function(data) {
+			$.get(baseUrl + "/sample/ajax/getpatient",{pid:obj.value},function(data) {
 				var data = JSON.parse(data);
-				if($("#doctadviseno").val() == "") {
+				if($("#barcode").val() == "") {
 					if(data.ispid) {
 						$("#patientid").val(data.pid);
 						$("#patientname").val(data.pname);
@@ -184,7 +186,7 @@ function isDate(str){
 } 
 
 function sample() {
-	var operate,shm,doct,sampleno,pid,section,sectionCode,pname,sex,age,diag,ylxh,exam,feestatus,requester,receivetime,executetime,fee;
+	var operate,shm,barcode,sampleno,pid,section,sectionCode,pname,sex,age,diag,ylxh,exam,feestatus,requester,receivetime,executetime,fee,ageunit,sampleType;
 	operate = $("#operate").val();
 	if(operate == 'cancel') {
 		$('#sampleForm')[0].reset();
@@ -193,7 +195,7 @@ function sample() {
 		ylxh = "";
 		exam ="";
 		shm = $("#stayhospitalmode").val();
-		doct = $("#doctadviseno").val();
+		barcode = $("#barcode").val();
 		sampleno = $("#sampleno").val();
 		pid = $("#patientid").val();
 		section = $("#section").val();
@@ -213,7 +215,7 @@ function sample() {
 				exam += $(this).text().replace("×","") + "+";
 			}
 		});
-		sampletype = $("#sampletype").val();
+		sampleType = $("#hiddenSampleType").val();
 		fee = $("#fee").val();
 		feestatus = $("#feestatus").val();
 		requester = $("#requester").val();
@@ -249,10 +251,10 @@ function sample() {
 		}
 		
 		if(post) {
-			$.post("../sample/ajax/editSample", {
+			$.post(baseUrl + "/sample/ajax/editSample", {
 				operate : operate,
 				shm : shm,
-				doct : doct,
+				barcode : barcode,
 				sampleno : sampleno,
 				pid : pid,
 				section : section,
@@ -262,7 +264,7 @@ function sample() {
 				age : age,
 				ageunit : ageunit,
 				diag : diag,
-				sampletype : sampletype,
+				sampleType : sampleType,
 				fee : fee,
 				feestatus : feestatus,
 				requester : requester,
@@ -278,7 +280,7 @@ function sample() {
 				$('#examinaim').data('tag').clear();
 				$("#sampleno").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 				var html = "";
-				html += "<tr><td><b>医嘱号</b></td><td>" + data.id + "</td></tr>";
+				html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
 				html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
 				html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
 				html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
@@ -290,7 +292,7 @@ function sample() {
 				$("#now").html(html);
 				if(data.success) {
 					var rowData = {
-						id:data.id,
+						barcode:data.barcode,
 						sampleno:data.sampleno,
 						shm:data.shm,
 						pname:data.pname,
@@ -300,7 +302,6 @@ function sample() {
 						age:data.age,
 						receivetime:data.receivetime,
 						exam:data.exam,
-						sampletype:data.sampletype,
 						pid:data.pid,
 						feestatus:data.feestatus,
 						diag:data.diag,
@@ -308,7 +309,9 @@ function sample() {
 						requester:data.requester,
 						part:data.part,
 						requestmode:data.requestmode,
-						fee:data.fee
+						fee:data.fee,
+						sampleType: data.sampleType,
+						sampleTypeValue: data.sampleTypeVaule
 					};
 					var ids = $('#new').jqGrid('getDataIDs');
 		            var newId = parseInt(ids[ids.length - 1] || 0) + 1;
@@ -343,11 +346,12 @@ function editSample() {
 	$("#sampleno").val($("#sampleno_text").val());
 	$("#operate").val("edit");
 	var id = $("#new").jqGrid('getGridParam', 'selrow');
+	var rowData = $("#new").jqGrid('getRowData',id);
     if (id == null || id == 0) {
         layer.msg('请先选择要修改的数据', {icon: 2, time: 1000});
         return false;
     }
-    getSampleData(id,1);
+    getSampleData(rowData.barcode,1);
 	layer.open({
 		type: 1,
 		area: ['1000px','360px'],
@@ -364,11 +368,12 @@ function deleteSample() {
 	$("#sampleno").val($("#sampleno_text").val());
 	$("#operate").val("delete");
 	var id = $("#new").jqGrid('getGridParam', 'selrow');
+	var rowData = $("#new").jqGrid('getRowData',id);
     if (id == null || id == 0) {
         layer.msg('请先选择要删除的数据', {icon: 2, time: 1000});
         return false;
     }
-    getSampleData(id,1);
+    getSampleData(rowData.barcode,1);
 	layer.open({
 		type: 1,
 		area: ['1000px','360px'],
@@ -392,7 +397,7 @@ $(function() {
 	$("#section").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../ajax/searchSection",
+            	url: baseUrl + "/ajax/searchSection",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -419,7 +424,7 @@ $(function() {
 	$("#requester").autocomplete({
         source: function( request, response ) {
             $.ajax({
-            	url: "../ajax/searchContactInfo",
+            	url: baseUrl + "/ajax/searchContactInfo",
                 dataType: "json",
                 data: {
                     name : request.term
@@ -437,13 +442,39 @@ $(function() {
         },
         minLength: 1
 	});
+
+	$("#sampleType").autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url: baseUrl + "/ajax/searchSampleType",
+				dataType: "json",
+				data: {
+					name : request.term
+				},
+				success: function( data ) {
+					response( $.map( data, function( result ) {
+						return {
+							label: result.sign + " : " + result.value,
+							value: result.value,
+							sign : result.sign
+						}
+					}));
+				}
+			});
+		},
+		minLength: 1,
+		select : function(event, ui) {
+			$("#sampleType").val(ui.item.value);
+			$("#hiddenSampleType").val(ui.item.sign);
+		}
+	});
 	
 	var tag_input = $('#examinaim');
 	tag_input.tag({
 		placeholder:tag_input.attr('placeholder'),
 		style:tag_input.attr('class'),
 		source: function(query, process) {
-			$.get("../ajax/searchYlsf",{query:query},function(data) {
+			$.get(baseUrl + "/ajax/searchYlsf",{query:query},function(data) {
 				var json = jQuery.parseJSON(data);
 				process(json.list);
 			});
@@ -451,13 +482,15 @@ $(function() {
 	});
 	var $tag_obj = $('#examinaim').data('tag');
 	//$tag_obj.add('Programmatically Added');
-	
+
 	$("#new").jqGrid({
-		url: "../sample/ajax/getReceived",
+		url: baseUrl + "/sample/ajax/getReceived",
 		mtype: "GET",
 		datatype: "json",
-		colNames: ['样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','检验目的','样本类型','就诊卡号','收费状态','临床诊断','生理周期','申请者','采集部位','申请模式','金额'],
+		colNames: ['样本状态','SAMPLESTATUS','样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','检验目的','样本类型','SAMPLETYPE','就诊卡号','收费状态','临床诊断','生理周期','申请者','采集部位','申请模式','金额'],
 		colModel: [
+			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 120},
+			{ name: 'sampleStatus', index: 'sampleStatus', hidden: true},
 			{ name: 'sampleno', index: 'sampleno', width: 120},
 			{ name: 'shm', index: 'shm', width: 70},
 			{ name: 'pname', index: 'pname', width: 80 },
@@ -465,10 +498,11 @@ $(function() {
 			{ name: 'bed', index: 'bed', width: 40 },
 			{ name: 'sex', index: 'sex', width: 40 },
 			{ name: 'age', index: 'age', width: 40 },
-			{ name: 'id', index: 'id', width: 80 },
+			{ name: 'barcode', index: 'barcode', width: 80 },
 			{ name: 'receivetime', index: 'receivetime', width: 130 },
 			{ name: 'exam', index: 'exam', width: 100 },
-			{ name: 'sampletype', index: 'sampletype', width: 70 },
+			{ name: 'sampleTypeValue', index: 'sampleTypeValue', width: 70 },
+			{ name: 'sampleType', index: 'sampleType', hidden: true },
 			{ name: 'pid', index: 'pid', width: 100 },
 			{ name: 'feestatus', index: 'feestatus', width: 70 },
 			{ name: 'diag', index: 'diag', width: 100 },

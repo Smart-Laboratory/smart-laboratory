@@ -62,22 +62,20 @@ public class SampleInputAjaxController {
 	private ProcessLogManager processLogManager = null;
 	@Autowired
 	private SectionManager sectionManager = null;
+	@Autowired
+	private HospitalManager hospitalManager = null;
 	
 	@RequestMapping(value = "/get*", method = RequestMethod.GET)
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String code = request.getParameter("id");
 		int type = Integer.parseInt(request.getParameter("type"));
-		if(type == 1) {
-			if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
-				code = code.substring(0,code.length()-1);
-			}
-		}
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
 		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
 		if(type == 1) {
 			try {
+				System.out.println(code);
 				sample = sampleManager.getSampleByBarcode(code);
 			} catch(Exception e) {
 				return null;
@@ -89,7 +87,7 @@ public class SampleInputAjaxController {
 			return null;
 		}
 		Process process = processManager.getBySampleId(sample.getId());
-		o.put("doctadviseno", sample.getId());
+		o.put("barcode", sample.getBarcode());
 		o.put("sampleno", sample.getSampleNo());
 		o.put("stayhospitalmode", sample.getStayHospitalMode());
 		o.put("patientid", sample.getPatientId());
@@ -103,7 +101,8 @@ public class SampleInputAjaxController {
 		o.put("requester", process.getRequester());
 		o.put("fee", sample.getFee());
 		o.put("feestatus", sample.getFeestatus());
-		o.put("sampletype", "" + sample.getSampleType());
+		o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+		o.put("sampleType", sample.getSampleType());
 		o.put("executetime", process.getExecutetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getExecutetime()));
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		Map<String, String> ylxhMap = new HashMap<String, String>();
@@ -163,10 +162,11 @@ public class SampleInputAjaxController {
 		for(Sample sample : list) {
 			Process process = processMap.get(sample.getId());
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", sample.getId());
+			map.put("barcode", sample.getBarcode());
 			map.put("shm", sample.getStayHospitalModelValue());
 			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+			map.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+			map.put("sampleType", sample.getSampleType());
 			map.put("sampleno", sample.getSampleNo());
 			map.put("pid", sample.getPatientId());
 			map.put("pname", sample.getPatientname());
@@ -182,6 +182,8 @@ public class SampleInputAjaxController {
 			map.put("requestmode", sample.getRequestMode());
 			map.put("requester", process.getRequester());
 			map.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
+			map.put("sampleStatus", sample.getSampleStatus());
+			map.put("sampleStatusValue", sample.getSampleStatusValue());
 			dataRows.add(map);
 		}
 		dataResponse.setRows(dataRows);
@@ -215,7 +217,7 @@ public class SampleInputAjaxController {
 		User user = userManager.getUserByUsername(request.getRemoteUser());
 		String operate = request.getParameter("operate");
 		String stayhospitalmode = request.getParameter("shm");
-		String doctadviseno = request.getParameter("doct");
+		String barcode = request.getParameter("barcode");
 		String sampleno = request.getParameter("sampleno");
 		String patientid = request.getParameter("pid");
 		String sectionCode = request.getParameter("sectionCode");
@@ -224,7 +226,7 @@ public class SampleInputAjaxController {
 		String age = request.getParameter("age");
 		String ageunit = request.getParameter("ageunit");
 		String diagnostic = request.getParameter("diag");
-		String sampletype = request.getParameter("sampletype");
+		String sampleType = request.getParameter("sampleType");
 		String feestatus = request.getParameter("feestatus");
 		String requester = request.getParameter("requester");
 		String receivetime = request.getParameter("receivetime");
@@ -234,8 +236,8 @@ public class SampleInputAjaxController {
 		String fee = request.getParameter("fee");
 		JSONObject o = new JSONObject();
 		if(operate.equals("delete")) {
-			sample = sampleManager.get(Long.parseLong(doctadviseno));
-			process = processManager.getBySampleId(Long.parseLong(doctadviseno));
+			sample = sampleManager.getSampleByBarcode(barcode);
+			process = processManager.getBySampleId(sample.getId());
 			
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
@@ -254,18 +256,18 @@ public class SampleInputAjaxController {
 			plog.setLogtime(new Date());
 			processLogManager.save(plog);
 			
-			sampleManager.remove(Long.parseLong(doctadviseno));
-			processManager.removeBySampleId(Long.parseLong(doctadviseno));
+			sampleManager.remove(sample.getId());
+			processManager.removeBySampleId(sample.getId());
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 			o.put("success", true);
 		} else {
-			if(operate.equals("add") && doctadviseno.isEmpty()) {
+			if(operate.equals("add") && barcode.isEmpty()) {
 				if(sampleManager.getBySampleNo(sampleno) != null) {
 					sample = new Sample();
 					process = new Process();
 					sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
 					sample.setHosSection(sectionCode);
-					sample.setSampleType(sampletype);
+					sample.setSampleType(sampleType);
 					sample.setSectionId(user.getLastLab());
 					sample.setSampleNo(sampleno);
 					sample.setPatientId(patientid);
@@ -278,7 +280,10 @@ public class SampleInputAjaxController {
 					sample.setInspectionName(examinaim);
 					sample.setYlxh(ylxh);
 					sample.setPatientname(patientname);
-					sample = sampleManager.save(sample);
+					sample.setId(sampleManager.getSampleId());
+					sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
+					sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
+					sampleManager.save(sample);
 					process.setSampleid(sample.getId());
 					process.setRequester(requester);
 					process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
@@ -309,8 +314,8 @@ public class SampleInputAjaxController {
 				}
 				
 			} else {
-				sample = sampleManager.get(Long.parseLong(doctadviseno));
-				process = processManager.getBySampleId(Long.parseLong(doctadviseno));
+				sample = sampleManager.getSampleByBarcode(barcode);
+				process = processManager.getBySampleId(sample.getId());
 				
 				SampleLog slog = new SampleLog();
 				slog.setSampleEntity(sample);
@@ -339,6 +344,7 @@ public class SampleInputAjaxController {
 				sample.setSex(sex);
 				sample.setFee(fee);
 				sample.setFeestatus(feestatus);
+				sample.setSampleType(sampleType);
 				process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 				process.setReceivetime(new Date());
 					
@@ -348,7 +354,7 @@ public class SampleInputAjaxController {
 				o.put("success", true);
 			}
 		}
-		o.put("id", sample.getId());
+		o.put("barcode", sample.getBarcode());
 		o.put("sampleno", sampleno);
 		o.put("pid", patientid);
 		o.put("pname", patientname);
@@ -363,10 +369,13 @@ public class SampleInputAjaxController {
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		o.put("shm", sample.getStayHospitalModelValue());
 		o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-		o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+		o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+		o.put("sampleType", sample.getSampleType());
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
 		o.put("requestmode", sample.getRequestMode());
 		o.put("requester", process.getRequester());
+		o.put("sampleStatus", sample.getSampleStatus());
+		o.put("sampleStatusValue", sample.getSampleStatusValue());
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
 		return null;
@@ -393,7 +402,7 @@ public class SampleInputAjaxController {
 		if(sample == null) {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
-		} else if(sample.getSampleNo() != null && !sample.getSampleNo().equals("0")) {
+		} else if(sample.getSampleStatus() >= 3) {
 			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
@@ -404,7 +413,7 @@ public class SampleInputAjaxController {
 			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 			slog.setLogtime(new Date());
 			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
@@ -412,10 +421,13 @@ public class SampleInputAjaxController {
 			plog.setProcessEntity(process);
 			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
-			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
+			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 			plog.setLogtime(new Date());
 			processLogManager.save(plog);
-			sample.setSampleNo(sampleno);
+			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
+				sample.setSampleNo(sampleno);
+			}
+			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
 			process.setReceivetime(new Date());
 			sampleManager.save(sample);
@@ -429,7 +441,7 @@ public class SampleInputAjaxController {
 			o.put("message", "医嘱号为"+ code + "的标本接收成功！");
 		}
 		if(sample != null) {
-			o.put("id", sample.getId());
+			o.put("barcode", sample.getBarcode());
 			o.put("sampleno", sample.getSampleNo());
 			o.put("pid", sample.getPatientId());
 			o.put("pname", sample.getPatientname());
@@ -444,10 +456,13 @@ public class SampleInputAjaxController {
 			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			o.put("shm", sample.getStayHospitalModelValue());
 			o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
-			o.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+			o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+			o.put("sampleType", sample.getSampleType());
 			o.put("part", sample.getPart() == null ? "" : sample.getPart());
 			o.put("requestmode", sample.getRequestMode());
 			o.put("requester", process.getRequester());
+			o.put("sampleStatus", sample.getSampleStatus());
+			o.put("sampleStatusValue", sample.getSampleStatusValue());
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
