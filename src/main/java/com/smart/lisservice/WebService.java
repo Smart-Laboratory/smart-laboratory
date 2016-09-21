@@ -8,6 +8,7 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
+import com.smart.service.rule.IndexManager;
 import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
@@ -38,12 +39,14 @@ import java.util.Map;
  */
 public class WebService {
     private DictionaryManager dictionaryManager = null;
+    private IndexManager indexManager = null;
     public WebService(){
+        indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
         dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
     }
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
-    private static TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance();
+    private TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
     private String url = "http://10.31.96.38:8080/lisservice/services/rest/";
     private HttpURLConnection connection = null;
 
@@ -375,7 +378,7 @@ public class WebService {
 
             //结果信息
             JSONArray hisTestResult= new JSONArray();
-            Map<String, Index> indexMap = testIdMapUtil.initMap();
+            Map<String, Index> indexMap = testIdMapUtil.getIdMap();
             for(TestResult testResult:resultList){
                 JSONObject object = new JSONObject();
                 object.put("testItemId",testResult.getTestId());              //检测项目ID

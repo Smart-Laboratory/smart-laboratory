@@ -17,35 +17,20 @@ public class TestIdMapUtil {
 	
 	private TestIdMapUtil() {}
 
-<<<<<<< HEAD
     public static synchronized TestIdMapUtil getInstance(IndexManager indexManager) {
-		if(instance.idMap == null || instance.nameMap == null){
-			List<Index> list = indexManager.getAll();
-			idMap = new HashMap<String, Index>();
-			nameMap = new HashMap<String, String>();
-			for (Index t : list) {
-				idMap.put(t.getIndexId(), t);
-				nameMap.put(t.getIndexId(), t.getName());
-=======
-    public  static TestIdMapUtil getInstance() {
-		if(instance.idMap == null){
-			synchronized (instance) {
-				instance.initMap();
->>>>>>> origin/master
-			}
-		}
+		if(instance.idMap == null || instance.nameMap == null) {
+            List<Index> list = indexManager.getAll();
+            idMap = new HashMap<String, Index>();
+            nameMap = new HashMap<String, String>();
+            for (Index t : list) {
+                idMap.put(t.getIndexId(), t);
+                nameMap.put(t.getIndexId(), t.getName());
+            }
+        }
 		return instance;
 	}
 
-<<<<<<< HEAD
 	public Map<String, Index> getIdMap() {
-=======
-	public  Map<String, Index> initMap(){
-		List<Index> list = indexManager.getAll();
-		for (Index t : list) {
-			idMap.put(t.getIndexId(), t);
-		}
->>>>>>> origin/master
 		return idMap;
 	}
 
