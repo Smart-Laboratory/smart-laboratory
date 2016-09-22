@@ -303,7 +303,7 @@ function openAddTestResultDialog() {
 	    					}
 	    					
 	    				} else {
-	    					alert("Failed!");
+							layer.alert("添加发生错误！", {icon: 2, title: "提示"});
 	    				}
 	    			});
     			}
@@ -713,7 +713,7 @@ $(function(){
     				if(result){
 						$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].name+"</label><input class='form-control col-sm-12 testValue' type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))'/></div>");
     				}else{
-    					alert("样本列表或者添加列表中已包含该检验项目!");
+						layer.msg("样本列表或者添加列表中已包含该检验项目！", {icon: 0, time: 1000});
     				}
     			}
     			// alert("<fmt:message key='alert.add.profile.finished' />");
@@ -770,7 +770,7 @@ $(function(){
 			if(result){
 				$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+ui.item.id+"'/><label>"+ui.item.value+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div></div>");
 			}else{
-				alert("样本列表或者添加列表中已包含该检验项目!");
+				layer.msg("样本列表或者添加列表中已包含该检验项目！", {icon: 0, time: 1000});
 			}
         	
         }
@@ -788,7 +788,7 @@ $(function(){
 						$("#rowed3").setSelection(next, true);
 					}
 				} else {
-					alert("Fail!!!");
+					layer.alert("项目删除失败！", {icon: 0, title: "提示"});
 				}
 			});
 		}
@@ -804,7 +804,7 @@ $(function(){
 						$("#sample0").setSelection(next, true);
 					}
 				} else {
-					alert("Fail!!!");
+					layer.alert("项目删除失败！", {icon: 0, title: "提示"});
 				}
 			});
 		}
@@ -820,7 +820,7 @@ $(function(){
 						$("#sample1").setSelection(next, true);
 					}
 				} else {
-					alert("Fail!!!");
+					layer.alert("项目删除失败！", {icon: 0, title: "提示"});
 				}
 			});
 		}
@@ -955,13 +955,12 @@ $(function(){
 	    		postStr += id + ":" + value;
     		}
     	});
- 		alert(postStr);
 		if (postStr != "") {
 	 		$.post("../audit/batchAddResults_statistic_save",{postStr:postStr,bdate:bdate,bsc:bsc,bsb:bsb,bse:bse}, function(data) {
 				if (data == "success") {
-					alert("Success!!!");
+					layer.msg("批量添加数据成功！", {icon: 1, time: 1000});
 				} else {
-					alert("Fail!!!");
+					layer.msg("批量添加数据失败！", {icon: 1, time: 1000});
 				}
 			});
 		}
@@ -1085,7 +1084,7 @@ function ajaxFileUpload(){
 			jQuery("#list").trigger("reloadGrid");
 		},
 		error: function(){
-			alert("error");
+			layer.alert("图片上传失败！", {icon: 1, title: "提示"});
 		}
 	});
 }
