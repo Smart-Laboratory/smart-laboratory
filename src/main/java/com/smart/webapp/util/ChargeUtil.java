@@ -3,10 +3,12 @@ package com.smart.webapp.util;
 import com.smart.Constants;
 import com.smart.lisservice.WebService;
 import com.smart.model.execute.LabOrder;
+import com.smart.model.lis.Account;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.execute.LabOrderManager;
+import com.smart.service.lis.AccountManager;
 import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.TestTubeManager;
 import com.smart.service.lis.YlxhManager;
@@ -31,10 +33,11 @@ public class ChargeUtil {
     private static ChargeUtil instance = new ChargeUtil();
 
     private ChargeUtil() {
-        ylxhManager = (YlxhManager)SpringContextUtil.getBean("ylxhManager");
-        dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
-        testTubeManager = (TestTubeManager)SpringContextUtil.getBean("testTubeManager");
-        labOrderManager = (LabOrderManager)SpringContextUtil.getBean("labOrderManager");
+        ylxhManager = (YlxhManager) SpringContextUtil.getBean("ylxhManager");
+        dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
+        testTubeManager = (TestTubeManager) SpringContextUtil.getBean("testTubeManager");
+        labOrderManager = (LabOrderManager) SpringContextUtil.getBean("labOrderManager");
+        accountManager = (AccountManager) SpringContextUtil.getBean("accountManager");
     }
 
     public static ChargeUtil getInstance() {
@@ -151,7 +154,7 @@ public class ChargeUtil {
         //不计采血费科室
         String[] departs = Config.getString("sampling.fee", "").split(",");
         Set<String> set = new HashSet<String>(Arrays.asList(departs));
-        if (set.contains(labOrder.getLabdepartment()))  return false;
+        if (set.contains(labOrder.getLabdepartment())) return false;
         try {
             //采集部位
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
@@ -197,7 +200,7 @@ public class ChargeUtil {
      * @param labOrder
      * @return 实验室接收计费
      */
-    public boolean fee(User user, LabOrder labOrder, int quantity ) {
+    public boolean fee(User user, LabOrder labOrder, int quantity) {
         boolean flag = false;
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
@@ -206,47 +209,81 @@ public class ChargeUtil {
             //采集部位
             String ylxhs = labOrder.getYlxh();
             WebService service = new WebService();
-            //计费
+
+            Map<String, List<Account>> listMap = new HashMap<String, List<Account>>();
             JSONArray paramArray = new JSONArray();
-            for(String ylxh : ylxhs.split("\\+")) {
-                JSONObject param = new JSONObject();
-                param.put("patientCode", labOrder.getBlh());
-                param.put("patientId", labOrder.getPatientid());
-                param.put("patientType", "2");
-                param.put("patientName", labOrder.getPatientname());
-                param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
-                param.put("quantity",quantity);
-                param.put("feeItemCode", ylxh);   //获取费用项目ID
-                param.put("billingDoctorNo", labOrder.getRequester());
-                param.put("billingDeptNo", labOrder.getHossection());
-                param.put("testDoctorNo", user.getUsername());
-                param.put("testDoctorDeptNo", user.getLastLab());
-                param.put("operatorNo", user.getUsername());
-                param.put("accountId", ConvertUtil.null2String(labOrder.getAccountId()));
-                paramArray.put(param);
+            if (quantity < 0) {
+                //退费
+                List<Account> accountList = accountManager.getAccountByBarcode(labOrder.getBarcode());
+                for (Account account : accountList) {
+                    JSONObject param = new JSONObject();
+                    param.put("patientCode", labOrder.getBlh());
+                    param.put("patientId", labOrder.getPatientid());
+                    param.put("patientType", "2");
+                    param.put("patientName", labOrder.getPatientname());
+                    param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
+                    param.put("quantity", -1);
+                    param.put("feeItemCode", account.getYlxh());   //获取费用项目ID
+                    param.put("billingDoctorNo", labOrder.getRequester());
+                    param.put("billingDeptNo", labOrder.getHossection());
+                    param.put("testDoctorNo", user.getUsername());
+                    param.put("testDoctorDeptNo", user.getLastLab());
+                    param.put("operatorNo", user.getUsername());
+                    param.put("accountId", ConvertUtil.null2String(account.getAccountId()));
+                    paramArray.put(param);
+                }
+            } else {
+                //计费
+                for (String ylxh : ylxhs.split("\\+")) {
+                    JSONObject param = new JSONObject();
+                    param.put("patientCode", labOrder.getBlh());
+                    param.put("patientId", labOrder.getPatientid());
+                    param.put("patientType", "2");
+                    param.put("patientName", labOrder.getPatientname());
+                    param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
+                    param.put("quantity", 1);
+                    param.put("feeItemCode", ylxh);   //获取费用项目ID
+                    param.put("billingDoctorNo", labOrder.getRequester());
+                    param.put("billingDeptNo", labOrder.getHossection());
+                    param.put("testDoctorNo", user.getUsername());
+                    param.put("testDoctorDeptNo", user.getLastLab());
+                    param.put("operatorNo", user.getUsername());
+                    param.put("accountId", "");
+                    paramArray.put(param);
+                }
             }
             //param.put("accountId", "");
-            String retValue="";
+            String retValue = "";
             retValue = service.booking(paramArray.toString());
-
-            if(retValue !=null && !retValue.isEmpty()){
+            if (retValue != null && !retValue.isEmpty()) {
+                //保存费用记录
                 JSONArray jsonArray = new JSONArray(retValue);
-                for(int i=0;i<jsonArray.length();i++){
+                List<Account> accountList = new ArrayList<Account>();
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject object = jsonArray.getJSONObject(i);
-                    labOrder.setAccountId(object.getString("AccountId"));
-                    labOrderManager.save(labOrder);
+                    Account account = new Account();
+                    account.setAccountId(object.getString("AccountId"));
+                    account.setPrice(object.getDouble("Price"));
+                    account.setBarcode(labOrder.getBarcode());
+                    account.setCount(object.getInt("Quantity"));
+                    account.setFeeId(object.getString("FeeItemCode"));
+                    account.setFeeName(object.getString("FeeItemName"));
+                    account.setOperateTime(Constants.SDF.parse(object.getString("DateTime")));
+                    account.setOperator(object.getString("OperatorNo"));
+                    account.setYlxh(object.getString("testPurposesCode"));
+                    accountList.add(account);
                 }
+                accountManager.saveAll(accountList);
                 flag = true;
             }
 
         } catch (Exception e) {
-            flag =false;
+            flag = false;
             e.printStackTrace();
             log.error(e.getMessage());
         }
         return flag;
     }
-
 
 
     private YlxhManager ylxhManager = null;
@@ -256,4 +293,6 @@ public class ChargeUtil {
     private TestTubeManager testTubeManager = null;
 
     private LabOrderManager labOrderManager = null;
+
+    private AccountManager accountManager = null;
 }

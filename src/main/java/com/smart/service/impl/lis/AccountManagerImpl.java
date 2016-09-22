@@ -7,6 +7,8 @@ import com.smart.service.lis.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by yuzh on 2016/9/22.
  */
@@ -19,5 +21,14 @@ public class AccountManagerImpl extends GenericManagerImpl<Account, Long> implem
     public void setAccountDao(AccountDao accountDao) {
         this.dao = accountDao;
         this.accountDao = accountDao;
+    }
+
+    @Override
+    public List<Account> getAccountByBarcode(String barcode) {
+        return accountDao.getAccountByBarcode(barcode);
+    }
+
+    public List<Account> saveAll(List<Account> list) {
+        return accountDao.saveAll(list);
     }
 }
