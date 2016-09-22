@@ -265,6 +265,7 @@ function openAddTestResultDialog() {
     	content: $("#addTestResultDialog"),
     	yes: function(index){
     		var result = false;
+			$("#addTestList .testValue").length
     		$("#addTestList .testValue").each(function(index,self){
 	    		if ($(self).val() != "") {
 	    			result = true;
@@ -279,12 +280,8 @@ function openAddTestResultDialog() {
 		    		var id = $(self).find(".testID").val();
 		    		var value = $(self).find(".testValue").val();
 		    		if (value != null && value != "") {
-    		    		if (postStr != "") postStr+=";";
-    		    		postStr += id + ":" + value;
-    		    		if(tcValue!=""){
-    		    			tcValue+=",";
-    		    		}
-    		    		tcValue +=id;
+    		    		postStr += id + ":" + value + ";";
+    		    		tcValue += id + ",";
 		    		}
 		    	});
     			if (postStr != "") {
@@ -650,7 +647,7 @@ $(function(){
 			var array = jQuery.parseJSON(data);
 			for (var i=0 ; i < array.length ; i++) {
 				// var html = array[i].ksdm+","+array[i].ylmc;
-					$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].test+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text'  class='testValue span2 form-control'/></div></div>");
+					$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].test+"</label><input class='form-control col-sm-12 testValue' type='text'/></div>");
 				}
 		 });
 		openAddTestResultDialog();
@@ -714,7 +711,7 @@ $(function(){
     		    			result = false;
     		    	});
     				if(result){
-						$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].name+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div></div>");
+						$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+array[i].test+"'/><label>"+array[i].name+"</label><input class='form-control col-sm-12 testValue' type='text' id='"+array[i].test+"'  onfocus='getDictionaries($(this).attr(\"id\"))'/></div>");
     				}else{
     					alert("样本列表或者添加列表中已包含该检验项目!");
     				}

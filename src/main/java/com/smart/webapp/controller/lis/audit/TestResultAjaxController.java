@@ -191,7 +191,8 @@ public class TestResultAjaxController extends BaseAuditController{
 					testModify.setType(Constants.ADD);
 					testModifyManager.save(testModify);
 					info.setModifyFlag(1);
-					info.setAuditStatus(0);
+					info.setAuditStatus(Constants.STATUS_UNAUDIT);
+					info.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
 					sampleManager.save(info);
 				}
 			}
