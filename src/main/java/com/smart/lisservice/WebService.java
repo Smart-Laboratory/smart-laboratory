@@ -45,10 +45,11 @@ public class WebService {
     public WebService(){
         indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
         dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
+        testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
     }
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
-    private TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
+    private TestIdMapUtil testIdMapUtil = null;
     private String url = Config.getString("webservice.path","");
     private HttpURLConnection connection = null;
 
