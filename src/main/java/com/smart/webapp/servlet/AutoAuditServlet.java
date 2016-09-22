@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import com.smart.lisservice.WebService;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
@@ -281,7 +282,12 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								} else {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
+														//生成PDF
 														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
+														//写入HIS
+														new WebService().saveHisResult(info,processMap.get(info.getId()),now);
+														//写入LIS用于电子病历
+														new WebService().saveLisResult(info.getBarcode(),now);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {

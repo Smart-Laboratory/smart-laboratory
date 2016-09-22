@@ -10,6 +10,7 @@ import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.Config;
+import com.smart.util.ConvertUtil;
 import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
@@ -324,7 +325,9 @@ public class WebService {
      * @param resultList    检测结果集合
      * @return
      */
-    public boolean saveHisResult(Sample sample,Process process,List<TestResult> resultList){
+    public boolean saveHisResult(Sample sample,
+                                 Process process,
+                                 List<TestResult> resultList){
         boolean flag = false;
         try {
             //if(1==1)throw new Exception("错误");
@@ -455,5 +458,55 @@ public class WebService {
         return  success;
     }
 
+    /**
+     * 将检测结果保存至LIS系统
+     * @param barcode                条码号
+     * @param testResultList        结果信息
+     * @return
+     *
+     * 用于电子病历查询
+     */
+    public boolean saveLisResult(String barcode,List<TestResult> testResultList){
+        boolean flag = false;
+        try {
+            //if(1==1)throw new Exception("错误");
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url+"saveLisResult");
+            PostMethod method = new PostMethod(url+"saveLisResult");
 
+            //结果信息
+            JSONArray param = new JSONArray();
+            for(TestResult testResult:testResultList){
+                JSONObject result = new JSONObject();
+                String inspectionId = testResult.getDeviceId()+ ConvertUtil.getFormatDate(testResult.getMeasureTime(),"yyyy-MM-dd")+testResult.getSampleNo();
+                result.put("inspectionId",inspectionId);                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
+                result.put("testItemId",testResult.getTestId());        //项目编号
+                result.put("testItemName_EN",testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
+                result.put("getTestItemName_CN",testResult.getTestName());//项目名称
+                result.put("unit",testResult.getUnit());                    //单位
+                result.put("orderNum",testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
+                result.put("reference",testResult.getReference());         //参考范围
+                result.put("resultFlag",testResult.getResultFlag());        //结果标记
+                result.put("barcode",barcode);                              //条码号
+                param.put(result);
+            }
+            RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            System.out.println(method.getResponseBodyAsString());
+
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==0) {
+                flag = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        }
+
+        return flag;
+    }
 }

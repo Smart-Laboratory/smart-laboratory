@@ -534,6 +534,8 @@ public class AuditController extends BaseAuditController {
 				reportGenerate.createReportPdf(sample.get(0), process, testResultList, false);
 				//写入HIS
 				new WebService().saveHisResult(sample.get(0),process,testResultList);
+				//写入LIS用于电子病历
+				new WebService().saveLisResult(sample.get(0).getBarcode(),testResultList);
 			} else if ("unpass".equals(op)) {
 
 			}
