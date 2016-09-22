@@ -254,6 +254,10 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end) {
 		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
+		if(lab.equals(Constants.LaboratoryAll)) {
+			sql = "from Sample s where 1=1 ";
+			code = "";
+		}
 		String[] cds = code.split(",");
 		switch (text.length()) {
 			case 8:

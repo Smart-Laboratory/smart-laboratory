@@ -89,7 +89,7 @@ public class SearchController {
 			if(text.length()<8)
 				break;
 			String code = sectionManager.getByCode(operator.getLastLab()).getSegment();
-			if(!sectionId.equals(""+Constants.LaboratoryCode+""))
+			if(!sectionId.equals(""+Constants.LaboratoryAll+""))
 				lab = sectionId;
 			samples = sampleManager.getSampleList(text, lab, 0, -3, code, 0, 0);
 			break;
@@ -122,48 +122,41 @@ public class SearchController {
 				}
 			}
 		}
-		if(type!=1 && !sectionId.equals(""+Constants.LaboratoryCode+"")){
-			for(int i=0;i<samples.size();i++){
-				if(!samples.get(i).getSectionId().equals(sectionId)){
-					samples.remove(i);
-					i--;
+		if(sampleType == null || sampleType.isEmpty()) {
+			sampleType = "#";
+		}
+		if(type!=1 && !sectionId.equals(""+Constants.LaboratoryAll+"")){
+			Iterator iterator = samples.iterator();
+			while(iterator.hasNext()) {
+				Sample s = (Sample)iterator.next();
+				if(!s.getSectionId().equals(sectionId)){
+					iterator.remove();
 				}
 			}
 		}
 		if(!sampleType.equals("#")){
-			for(int i=0;i<samples.size();i++){
-				if(!samples.get(i).getSampleType().equals(sampleType)){
-					samples.remove(i);
-					i--;
+			Iterator iterator = samples.iterator();
+			while(iterator.hasNext()) {
+				Sample s = (Sample)iterator.next();
+				if(!s.getSampleType().equals(sampleType)){
+					iterator.remove();
 				}
 			}
 		}
 		size=samples.size();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
-		int x = size % (row == 0 ? size : row);
-		if (x != 0) {
-			x = row - x;
-		}
-		int totalPage = (size + x) / (row == 0 ? size : row);
-		dataResponse.setPage(page);
-		dataResponse.setTotal(totalPage);
-		if(size-1>=end)
-			samples = samples.subList(start, end);
-		else if(size>start)
-			samples = samples.subList(start, size);
-		else {
-			return null;
-		}
-		
+		dataResponse.setPage(1);
+		dataResponse.setTotal(1);
 		Map<String, String> sMap = SampleUtil.getInstance(dictionaryManager).getMap();
 		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
-
 		for(Sample info :samples) {
 			String section = sectionutil.getLabValue(info.getSectionId());
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
 			map.put("sample", "<a href='../manage/patientList?blh="+info.getPatientblh()+"'>"+info.getSampleNo()+"</a>");
+			map.put("sampleno", info.getSampleNo());
+			map.put("barcode", info.getBarcode());
 			map.put("status", info.getAuditStatusValue());
 			map.put("inspection", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());
@@ -175,6 +168,9 @@ public class SearchController {
 			map.put("section",section);
 			map.put("patientid",info.getPatientId());
 			map.put("sampleType", sMap.get(info.getSampleType()));
+			map.put("age", info.getAge() + info.getAgeunit());
+			map.put("bed", info.getDepartBed());
+			map.put("requestMode",info.getRequestMode());
 			if (info.getSampleStatus()>=5) {
 				if (info.getIswriteback() == 1) {
 					map.put("lisPass", "<font color='red'>" + "已打印" + "</font>");

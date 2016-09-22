@@ -4,10 +4,12 @@ function getList(text) {
 		url: baseUrl + "/manage/sampleQuery/data?type=1&text="+text,
 		datatype: "json",
 		width:width,
-		colNames:['ID', '样本号', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','就诊方式','科室','就诊号','样本类型'],
+		colNames:['ID', '样本号','条码号','SAMPLENO', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','年龄','就诊方式','科室','床号','就诊号','申请方式','样本类型'],
 		colModel:[
 			{name:'id',index:'id', hidden:true},
 			{name:'sample',index:'sample',width:120, sortable:false},
+			{name:'barcode',index:'barcode',width:120, sortable:false},
+			{name:'sampleno',index:'sampleno',hidden:true},
 			{name:'status',index:'status',width:50,sortable:false},
 			{name:'lisPass',index:'lisPass',width:50, sortable:false},
 			{name:'inspection',index:'inspection',width:300, sortable:false},
@@ -16,13 +18,16 @@ function getList(text) {
 			{name:'blh',index:'blh',width:100, sortable:false},
 			{name:'sex',index:'sex',width:40, sortable:false},
 			{name:'birthday',index:'birthday',width:80, sortable:false},
+			{name:'age',index:'age',width:60, sortable:false},
 			{name:'stayHospitalMode',index:'stayHospitalMode',width:60, sortable:false,searchoptions:{value:"1:门诊;2:住院;3:急诊;"}},
 			{name:'section',index:'section',width:100, sortable:false},
+			{name:'bed',index:'bed',width:40, sortable:false},
 			{name:'patientid',index:'patientid',width:100, sortable:false},
+			{name:'requestMode',index:'requestMode',hidden:true},
 			{name:'sampleType',index:'sampleType',width:60, sortable:false}
 			],
 		rownumbers:true,
-		rowNum:20,
+		rowNum:-1,
 		height: '100%',
 		jsonReader : {repeatitems : false},
 		mtype: "GET",
@@ -111,7 +116,52 @@ $(function() {
 			$("#hiddenSampleType").val(ui.item.sign);
 		}
 	});
+
+	$("#print").click(function() {
+		if($("#printType").val() == 1) {
+			var obj = $("#list").jqGrid("getRowData");
+			jQuery(obj).each(function(){
+				startPrint(this);
+			});
+		}
+	})
 });
+
+var LODOP; //声明为全局变量
+function startPrint(data) {
+	CreateDataBill(data);
+	//开始打印
+	LODOP.PRINT();
+}
+
+function CreateDataBill(data) {
+	if (data && data != null) {
+		var patientInfo = data.bed + "  " + data.name + " " + data.age;
+		var patientInfo1 = data.blh + "  " + data.section;
+		LODOP = getLodop();
+		LODOP.PRINT_INIT("");
+		LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
+		//LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.95mm", 180, 25, patientInfo);
+		//LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.94mm", "42.6mm", 35, "128B", data.barcode);
+		LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.94mm","34.66mm",35,"128Auto",data.barcode);
+		LODOP.SET_PRINT_STYLEA(0, "ShowBarText", 0);
+		LODOP.SET_PRINT_STYLEA(0, "Horient", 2);
+		LODOP.ADD_PRINT_TEXTA("code", "19.39mm", "2.95mm", 161, 25, "*" + data.sampleno + "*");
+		LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+		LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+		if(data.requestMode =='1'){
+			LODOP.ADD_PRINT_TEXTA("patientinfo","2.99mm","8.23mm",169,25,patientInfo);
+			LODOP.ADD_PRINT_ELLIPSE(8,12,14,15,0,1);
+			LODOP.ADD_PRINT_TEXT(9,12,18,16,"急");
+			LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		}else{
+			LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.95mm", 180, 25, patientInfo);
+		}
+		LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.95mm", 180, 20, patientInfo1);
+		LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.95mm", 180, 20, data.sampleType + " " + data.inspection);
+	}
+}
 
 //张晋南 2016-5-19 查询结果详细信息打印报告----------
 function search_printBtn(SampleNo) {

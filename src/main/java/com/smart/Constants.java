@@ -305,6 +305,7 @@ public final class Constants {
 	 * 医学检验科编号
 	 */
 	public final static String LaboratoryCode = "21";
+	public final static String LaboratoryAll = "all";
 	
 	/**
 	 * 排班特殊班次

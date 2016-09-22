@@ -399,7 +399,7 @@ public class Sample extends BaseObject {
 
 	@Column(name = "AGE")
 	public String getAge() {
-		if (birthday != null) {
+		if (birthday != null && age == null) {
 			Calendar now = Calendar.getInstance();
 			Calendar previous = Calendar.getInstance();
 			previous.setTime(birthday);

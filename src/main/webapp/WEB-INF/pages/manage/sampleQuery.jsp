@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
 	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/layer/extend/layer.ext.js"/>"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
