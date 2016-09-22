@@ -285,9 +285,10 @@ public class AutoAuditServlet extends HttpServlet {
 														//生成PDF
 														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
 														//写入HIS
-														new WebService().saveHisResult(info,processMap.get(info.getId()),now);
+														WebService service = new WebService();
+														service.saveHisResult(info,processMap.get(info.getId()),now);
 														//写入LIS用于电子病历
-														new WebService().saveLisResult(info.getBarcode(),now);
+														service.saveLisResult(info.getBarcode(),now);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
