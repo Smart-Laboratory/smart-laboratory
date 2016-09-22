@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.smart.model.lis.AuditTrace;
 import com.smart.service.GenericManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 	获取审核记录
@@ -17,6 +18,7 @@ public interface AuditTraceManager extends GenericManager<AuditTrace, Long> {
 	 * @param sampleNo	样本号
 	 * @return	审核记录列表
 	 */
+	@Transactional
 	List<AuditTrace> getBySampleNo(String sampleNo);
 
 	void saveAll(List<AuditTrace> updateAuditTrace);

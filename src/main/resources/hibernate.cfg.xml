@@ -20,6 +20,7 @@
         <mapping class="com.smart.model.micro.MicroItemInfo"/>
         <mapping class="com.smart.model.doctor.SampleAndResultVo"/>
         <mapping class="com.smart.model.doctor.LeftVo"/>
+        <mapping class="com.smart.model.lis.Account"/>
         <mapping class="com.smart.model.lis.CalculateFormula"/>
         <mapping class="com.smart.model.lis.ProfileTest"/>
         <mapping class="com.smart.model.lis.TestReference"/>
