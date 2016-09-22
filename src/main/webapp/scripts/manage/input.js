@@ -499,7 +499,8 @@ $(function() {
 	});
 	var $tag_obj = $('#examinaim').data('tag');
 	//$tag_obj.add('Programmatically Added');
-
+	var clientHeight = $(window).innerHeight();
+	var height = clientHeight - $('#head').height()- $('.footer-content').height() - 200;
 	$("#new").jqGrid({
 		url: baseUrl + "/sample/ajax/getReceived",
 		mtype: "GET",
@@ -530,8 +531,10 @@ $(function() {
 			{ name: 'fee', index: 'fee', width: 40 }
 		],
 		viewrecords: true,
-		height:"100%",
-		rowNum:-1
+		shrinkToFit: true,
+		altRows:true,
+		height: height,
+		rowNum:30
 	});
 
 	labChange=function(select) {

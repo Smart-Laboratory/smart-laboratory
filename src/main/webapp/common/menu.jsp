@@ -11,7 +11,7 @@ function labChange(select) {
 	});
 }
 
-var baseUrl = "<%=request.getContextPath()%>";
+var baseUrl = baseUrl || "<%=request.getContextPath()%>";
 $(function() {
 	if( ${pageContext.request.remoteUser != null} ) {
 		var nowUrl = window.location.pathname;

@@ -431,6 +431,7 @@ public class InExecuteViewController {
                 sample.setSampleType(labOrder.getSampletype());
                 sample.setSectionId(labOrder.getLabdepartment());
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());
+                sample.setDepartBed(labOrder.getBed());
                 sample.setId(sampleManager.getSampleId());
                 //生成样本号
                 String barcode = HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId());

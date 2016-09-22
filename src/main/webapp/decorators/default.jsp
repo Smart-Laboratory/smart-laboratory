@@ -70,6 +70,7 @@
 <%= (request.getAttribute("scripts") != null) ?  request.getAttribute("scripts") : "" %>
 </body>
 <script type="text/javascript">
+    var baseUrl = baseUrl || "<%=request.getContextPath()%>";
     /**
      * 设置JQGRID 上下页图标
      * @param table

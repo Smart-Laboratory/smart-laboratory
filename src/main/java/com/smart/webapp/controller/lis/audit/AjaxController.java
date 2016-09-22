@@ -429,28 +429,5 @@ public class AjaxController extends BaseAuditController {
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(array.toString());
 	}
-	/**
-	 * 打印报告单时，保存为PDF文件
-	 * 张晋南 2016-05-23
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/saveHtml*", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean getSaveHtml(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String sampleNo = request.getParameter("sampleNo");
-		String lastNo = request.getParameter("lastNo");
-		String docIdNo = request.getParameter("docIdNo");
-		String baseurl = "http://localhost:8080/print/sample?docId="+docIdNo+"&sampleNo="+sampleNo+"&last="+lastNo;
-		String filename = new StringBuffer().append("c:\\").append(sampleNo).append(".pdf").toString();
-//		PDFConverterUtil.getInstance().processFile("c:\\", filename, baseurl);
-//		String html = PDFConversionUtil.getInstance().readFile(baseurl, "UTF-8");
-//		System.out.println(html);
-//		PDFConversionUtil.getInstance().doConversion(html, filename);
-		System.out.println();
-		System.out.println(docIdNo+"|"+sampleNo+"|"+lastNo+"|"+baseurl);
-		return true;
-	}
+
 }

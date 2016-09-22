@@ -77,7 +77,7 @@
 				样本录入明细
 			</h4>
 		</div>
-		<div class="widget-body" style="height:700px;overflow:auto;">
+		<div class="widget-body" style="overflow:auto;">
 			<div class="widget-main no-padding">
 				<table id="new" class="table table-striped table-bordered table-hover">
 				</table>

@@ -65,3 +65,6 @@
 <%= (request.getAttribute("scripts") != null) ?  request.getAttribute("scripts") : "" %>
 </body>
 </html>
+<script type="text/javascript">
+    var baseUrl = baseUrl || "<%=request.getContextPath()%>";
+</script>
