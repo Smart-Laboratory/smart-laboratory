@@ -454,6 +454,8 @@ public class SampleInputAjaxController {
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
+			ChargeUtil.getInstance().fee(user,labOrder);
+
 
 			o.put("success", 3);
 			o.put("message", "医嘱号为"+ code + "的标本接收成功！");

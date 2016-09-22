@@ -188,6 +188,57 @@ public class ChargeUtil {
         return flag;
     }
 
+    /**
+     * 收取检验项目费用
+     *
+     * @param user
+     * @param labOrder
+     * @return 实验室接收计费
+     */
+    public boolean fee(User user, LabOrder labOrder) {
+        boolean flag = false;
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
+
+        //不计采血费科室
+        String[] departs = Config.getString("sampling.fee", "").split(",");
+        Set<String> set = new HashSet<String>(Arrays.asList(departs));
+
+        try {
+            //采集部位
+            String ylxhs = labOrder.getYlxh();
+            WebService service = new WebService();
+            //计费
+            JSONArray paramArray = new JSONArray();
+            for(String ylxh : ylxhs.split("\\+")) {
+                JSONObject param = new JSONObject();
+                param.put("patientCode", labOrder.getBlh());
+                param.put("patientId", labOrder.getPatientid());
+                param.put("patientType", "2");
+                param.put("patientName", labOrder.getPatientname());
+                param.put("dateTime", labOrder.getExecutetime());//yyyy-mm-dd hh24:mi:ss
+                param.put("quantity", "1");
+                //param.put("price", "");
+                param.put("feeItemCode", ylxh);   //获取费用项目ID
+                //param.put("feeItemName", "");
+                param.put("billingDoctorNo", labOrder.getRequester());
+                param.put("billingDeptNo", labOrder.getHossection());
+                param.put("testDoctorNo", user.getDepartment());
+                param.put("testDoctorDeptNo", user.getUsername());
+                param.put("operatorNo", user.getUsername());
+                paramArray.put(param);
+            }
+            //param.put("accountId", "");
+            if (!set.contains(labOrder.getLabdepartment())) {
+                service.booking(paramArray.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return flag;
+    }
+
     private YlxhManager ylxhManager = null;
 
     private DictionaryManager dictionaryManager = null;
