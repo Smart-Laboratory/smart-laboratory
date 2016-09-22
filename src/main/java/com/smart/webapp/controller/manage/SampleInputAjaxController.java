@@ -258,11 +258,14 @@ public class SampleInputAjaxController {
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
-			ChargeUtil.getInstance().fee(user,labOrder,-1);
+			if (ChargeUtil.getInstance().fee(user, labOrder, -1)) {
+				processLogManager.save(plog);
+				sampleManager.remove(sample.getId());
+				processManager.removeBySampleId(sample.getId());
+			}
 
-			processLogManager.save(plog);
-			sampleManager.remove(sample.getId());
-			processManager.removeBySampleId(sample.getId());
+
+
 
 
 

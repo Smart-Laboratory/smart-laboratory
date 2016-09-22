@@ -318,7 +318,7 @@
                         {name: 'laborderorg', index: 'laborderorg', width: 40, hidden: true},
                         {name: 'bed', index: 'bed', width: 30},
                         {name: 'patientname', index: 'patientname', width: 60},
-                        {name: 'sex', index: 'sex', width: 30, formatter: 'select', editoptions: {value: "1:男;2:女;3:其他"}},
+                        {name: 'sex', index: 'sex', width: 30, formatter: 'select', editoptions: {value: "1:男;2:女;3:未知"}},
                         {name: 'age', index: 'age', width: 30},
                         {name: 'ageUnit', index: 'ageUnit', width: 30},
                         {name: 'testId', index: 'testId', width: 60, hidden: true},
