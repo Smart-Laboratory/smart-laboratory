@@ -258,6 +258,11 @@ public class SampleInputAjaxController {
 			
 			sampleManager.remove(sample.getId());
 			processManager.removeBySampleId(sample.getId());
+
+			//退费项目费
+			LabOrder labOrder = labOrderManager.get(sample.getId());
+			ChargeUtil.getInstance().fee(user,labOrder,-1);
+
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 			o.put("success", true);
 		} else {
@@ -454,7 +459,8 @@ public class SampleInputAjaxController {
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
-			ChargeUtil.getInstance().fee(user,labOrder);
+			//计项目费
+			ChargeUtil.getInstance().fee(user,labOrder,1);
 
 
 			o.put("success", 3);

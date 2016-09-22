@@ -6,6 +6,7 @@ import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
+import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.TestTubeManager;
 import com.smart.service.lis.YlxhManager;
@@ -33,6 +34,7 @@ public class ChargeUtil {
         ylxhManager = (YlxhManager)SpringContextUtil.getBean("ylxhManager");
         dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
         testTubeManager = (TestTubeManager)SpringContextUtil.getBean("testTubeManager");
+        labOrderManager = (LabOrderManager)SpringContextUtil.getBean("labOrderManager");
     }
 
     public static ChargeUtil getInstance() {
@@ -195,7 +197,7 @@ public class ChargeUtil {
      * @param labOrder
      * @return 实验室接收计费
      */
-    public boolean fee(User user, LabOrder labOrder) {
+    public boolean fee(User user, LabOrder labOrder, int quantity ) {
         boolean flag = false;
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
@@ -217,20 +219,27 @@ public class ChargeUtil {
                 param.put("patientType", "2");
                 param.put("patientName", labOrder.getPatientname());
                 param.put("dateTime", labOrder.getExecutetime());//yyyy-mm-dd hh24:mi:ss
-                param.put("quantity", "1");
-                //param.put("price", "");
+                param.put("quantity",quantity);
                 param.put("feeItemCode", ylxh);   //获取费用项目ID
-                //param.put("feeItemName", "");
                 param.put("billingDoctorNo", labOrder.getRequester());
                 param.put("billingDeptNo", labOrder.getHossection());
                 param.put("testDoctorNo", user.getDepartment());
                 param.put("testDoctorDeptNo", user.getUsername());
                 param.put("operatorNo", user.getUsername());
+                param.put("accountId", ConvertUtil.null2String(labOrder.getAccountId()));
                 paramArray.put(param);
             }
             //param.put("accountId", "");
+            String retValue="";
             if (!set.contains(labOrder.getLabdepartment())) {
-                service.booking(paramArray.toString());
+                retValue = service.booking(paramArray.toString());
+            }
+
+            JSONArray jsonArray = new JSONArray(retValue);
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject object = jsonArray.getJSONObject(i);
+                labOrder.setAccountId(object.getString("accountId"));
+                labOrderManager.save(labOrder);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,9 +248,13 @@ public class ChargeUtil {
         return flag;
     }
 
+
+
     private YlxhManager ylxhManager = null;
 
     private DictionaryManager dictionaryManager = null;
 
     private TestTubeManager testTubeManager = null;
+
+    private LabOrderManager labOrderManager = null;
 }

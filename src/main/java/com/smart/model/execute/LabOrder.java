@@ -68,6 +68,9 @@ public class LabOrder {
     private String container;       //标本容器
     private String volume;          //标本量
 
+	//add by zcw 20160922 费用记账ID
+	private String accountId;
+
 	@Id
 	public Long getLaborder() {
 		return laborder;
@@ -436,7 +439,15 @@ public class LabOrder {
         this.barcode = barcode;
     }
 
-    @Transient
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+	@Transient
 	public String getAge() {
 		if (birthday != null) {
 			Calendar now = Calendar.getInstance();

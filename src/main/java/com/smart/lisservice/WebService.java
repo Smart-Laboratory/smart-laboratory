@@ -430,8 +430,8 @@ public class WebService {
      * @param params  记账参数 JSON格式{"patientCode":"6000213","patientId":"123123"....}
      * @return
      */
-    public boolean booking(String params){
-        boolean success = true;
+    public String booking(String params){
+        String retVal="";
         try{
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url+"booking");
@@ -442,19 +442,17 @@ public class WebService {
             method.releaseConnection();
 
             httpClient.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
 
-            System.out.println("method.getResponseBodyAsString()==>"+method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
-                success = false;
+                retVal = "";
             }
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());
-            success = false;
+            retVal = "";
         }
-        return  success;
+        return  retVal;
     }
 
     /**
