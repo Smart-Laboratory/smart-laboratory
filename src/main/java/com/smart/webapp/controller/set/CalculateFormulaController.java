@@ -71,7 +71,7 @@ public class CalculateFormulaController {
 
         int start = row * (page - 1);
         int end = row * page;
-        String lab = UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab();
+        String lab = UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab();
         DataResponse dataResponse = new DataResponse();
         List<CalculateFormulaVo> list = new ArrayList<CalculateFormulaVo>();
         int size = calculateFormulaManager.getCalculateFormulaListCount(query,lab,start,end,sidx,sord);
@@ -185,7 +185,7 @@ public class CalculateFormulaController {
         calculateFormula.setSampleType("1");
         calculateFormula.setTestNumb(testNumb);
         calculateFormula.setFormulaItem(formulaItem);
-        calculateFormula.setLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+        calculateFormula.setLab(UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
         try{
             calculateFormulaManager.save(calculateFormula);
             return new JSONObject().put("result", "true").toString();

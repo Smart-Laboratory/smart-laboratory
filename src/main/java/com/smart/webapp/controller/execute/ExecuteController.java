@@ -59,7 +59,7 @@ public class ExecuteController {
 
 	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		String selfExecute = request.getParameter("selfexecute");
 		String selectValue = request.getParameter("selval");
 		String unExecuteRequestIds = "";

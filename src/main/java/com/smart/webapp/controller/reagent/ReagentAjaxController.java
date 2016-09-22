@@ -78,7 +78,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 		if(type == 1) {
 			
 		} else if(type == 2) {
-			List<Reagent> list = reagentManager.getReagents(name, UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+			List<Reagent> list = reagentManager.getReagents(name, UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
 			if (list != null) {
 				for (Reagent r : list) {
 					JSONObject o = new JSONObject();
@@ -316,7 +316,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 		Date now = new Date();
 		try {
 			String text = request.getParameter("text");
-			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+			User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 			Map<Long, Map<String, Object>> inmap = new HashMap<Long, Map<String, Object>>();
 			for(String s : text.split(";")) {
 				String[] idNum = s.split(":");
@@ -376,7 +376,7 @@ public class ReagentAjaxController extends ReagentBaseController {
 			String text = request.getParameter("text");
 			String barcode = request.getParameter("barcode");
 			String barcodeBatch = "";
-			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+			User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 			List<Batch> needSaveBatch = new ArrayList<Batch>();
 			List<Out> needSaveOut = new ArrayList<Out>();
 			List<Reagent> list = new ArrayList<Reagent>();

@@ -62,7 +62,8 @@ public class DeviceChannelController {
         //部门编号
         String departmentId = request.getParameter("department");
         User operator = userManager.getUserByUsername(request.getRemoteUser()); //获取当前用户
-        departmentId = operator.getLastLab();       //当前用户所选择科室
+        if(departmentId==null)
+            departmentId = operator.getLastLab();       //当前用户所选择科室
 
         String departmentName = sectionManager.getByCode(departmentId).getName(); //科室名称
         //获取仪器

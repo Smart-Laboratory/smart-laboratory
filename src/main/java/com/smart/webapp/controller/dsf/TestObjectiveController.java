@@ -58,7 +58,7 @@ public class TestObjectiveController {
     @RequestMapping(value = "/viewTestObjective*", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView viewCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+        User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         String lab = "";
         String department = user.getDepartment();
         if (user.getLastLab() != null) {

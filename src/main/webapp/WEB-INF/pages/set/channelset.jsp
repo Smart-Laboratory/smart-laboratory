@@ -69,6 +69,19 @@
  </div>
 <script type="text/javascript">
     $(function(){
+
+        labChange=function(select){
+            $.ajax({
+                type: 'POST',
+                url: "../audit/labChange?lab="+$(select).children().attr("title"),
+                success:function(){
+                    $("#labText").html($(select).children().html());
+                    window.location.href="../set/channelset?department=" + $(select).children().attr("title");
+                }
+            });
+
+        };
+
         initGrid();
         var clientHeight = $(window).innerHeight();
         var height = clientHeight - $('#head').height()- $('.footer-content').height();

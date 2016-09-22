@@ -241,7 +241,7 @@ public class SampleInputAjaxController {
 			
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
-			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			slog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
@@ -250,7 +250,7 @@ public class SampleInputAjaxController {
 			ProcessLog plog = new ProcessLog();
 			plog.setSampleLogId(slog.getId());
 			plog.setProcessEntity(process);
-			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
 			plog.setLogtime(new Date());
@@ -293,7 +293,7 @@ public class SampleInputAjaxController {
 					
 					SampleLog slog = new SampleLog();
 					slog.setSampleEntity(sample);
-					slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+					slog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 					slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 					slog.setLogoperate(Constants.LOG_OPERATE_ADD);
 					slog.setLogtime(new Date());
@@ -301,7 +301,7 @@ public class SampleInputAjaxController {
 					ProcessLog plog = new ProcessLog();
 					plog.setSampleLogId(slog.getId());
 					plog.setProcessEntity(process);
-					plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+					plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 					plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 					plog.setLogoperate(Constants.LOG_OPERATE_ADD);
 					plog.setLogtime(new Date());
@@ -319,7 +319,7 @@ public class SampleInputAjaxController {
 				
 				SampleLog slog = new SampleLog();
 				slog.setSampleEntity(sample);
-				slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				slog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 				slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 				slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 				slog.setLogtime(new Date());
@@ -327,7 +327,7 @@ public class SampleInputAjaxController {
 				ProcessLog plog = new ProcessLog();
 				plog.setSampleLogId(slog.getId());
 				plog.setProcessEntity(process);
-				plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 				plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 				plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 				plog.setLogtime(new Date());
@@ -345,7 +345,7 @@ public class SampleInputAjaxController {
 				sample.setFee(fee);
 				sample.setFeestatus(feestatus);
 				sample.setSampleType(sampleType);
-				process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+				process.setReceiver(UserUtil.getInstance().getValue(request.getRemoteUser()));
 				process.setReceivetime(new Date());
 					
 				sampleManager.save(sample);
@@ -401,7 +401,7 @@ public class SampleInputAjaxController {
 
 	@RequestMapping(value = "/receive*", method = RequestMethod.GET)
 	public String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		Sample sample = null;
 		Process process = null;
 		String code = request.getParameter("id");
@@ -428,7 +428,7 @@ public class SampleInputAjaxController {
 			process = processManager.getBySampleId(sample.getId());
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
-			slog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			slog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
@@ -437,7 +437,7 @@ public class SampleInputAjaxController {
 			ProcessLog plog = new ProcessLog();
 			plog.setSampleLogId(slog.getId());
 			plog.setProcessEntity(process);
-			plog.setLogger(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 			plog.setLogtime(new Date());
@@ -446,7 +446,7 @@ public class SampleInputAjaxController {
 				sample.setSampleNo(sampleno);
 			}
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
-			process.setReceiver(UserUtil.getInstance(userManager).getValue(request.getRemoteUser()));
+			process.setReceiver(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			process.setReceivetime(new Date());
 			sampleManager.save(sample);
 			processManager.save(process);

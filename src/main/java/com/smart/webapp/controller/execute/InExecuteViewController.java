@@ -325,7 +325,7 @@ public class InExecuteViewController {
     public String printRequestList(@RequestBody String orders, HttpServletRequest request, HttpServletResponse response) {
 
         List<LabOrderVo> labOrderVos = new ArrayList<LabOrderVo>(); //返回JSON打印信息
-        User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+        User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         WebService webService = new WebService();
         //需采集LIST
         String regex = "requestId\":\"(.*?)\",";

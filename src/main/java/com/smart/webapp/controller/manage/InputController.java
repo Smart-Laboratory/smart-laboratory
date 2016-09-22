@@ -40,7 +40,7 @@ public class InputController {
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
 		
-		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		Section section = sectionManager.getByCode(user.getLastLab());
 		String segment = section.getSegment();
 		String today = Constants.DF3.format(new Date());

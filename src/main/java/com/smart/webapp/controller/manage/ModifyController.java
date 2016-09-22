@@ -177,7 +177,7 @@ public class ModifyController {
 			SampleLog slog = sampleLogManager.get(logid);
 			ProcessLog plog = processLogManager.getBySampleLogId(logid);
 			
-			saveSampleLog(sampleManager.get(slog.getSampleId()), UserUtil.getInstance(userManager).getValue(request.getRemoteUser()), Constants.LOG_OPERATE_RECOVER);
+			saveSampleLog(sampleManager.get(slog.getSampleId()), UserUtil.getInstance().getValue(request.getRemoteUser()), Constants.LOG_OPERATE_RECOVER);
 			
 			sampleManager.save(slog.getSampleEntity());
 			processManager.save(plog.getProcessEntity());
@@ -206,7 +206,7 @@ public class ModifyController {
 		String sampleNumber = request.getParameter("sampleNumber");
 		String operation = request.getParameter("operation");
 		String operationValue = request.getParameter("operationValue");
-		String username = UserUtil.getInstance(userManager).getValue(request.getRemoteUser());
+		String username = UserUtil.getInstance().getValue(request.getRemoteUser());
 		// 1样本信息，0结果信息
 		String modifyResult = request.getParameter("modifyResult");
 		int switchValue = 0;

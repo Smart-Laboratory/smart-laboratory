@@ -39,7 +39,7 @@ public class DetailController extends ReagentBaseController {
 			initLabMap();
 		}
 
-		UserUtil userUtil = UserUtil.getInstance(userManager);
+		UserUtil userUtil = UserUtil.getInstance();
 		List<In> list = inManager.getByLab(userUtil.getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
@@ -117,7 +117,7 @@ public class DetailController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		UserUtil userUtil = UserUtil.getInstance(userManager);
+		UserUtil userUtil = UserUtil.getInstance();
 		List<Out> list = outManager.getByLab(userUtil.getUser(request.getRemoteUser()).getLastLab());
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");

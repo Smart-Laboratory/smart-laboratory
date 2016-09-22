@@ -35,7 +35,7 @@ public class StockController extends ReagentBaseController {
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
 			Reagent reagent = new Reagent();
-			reagent.setLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+			reagent.setLab(UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
 			reagent.setName(request.getParameter("name"));
 			reagent.setSpecification(request.getParameter("specification"));
 			reagent.setPlaceoforigin(request.getParameter("place"));
@@ -77,7 +77,7 @@ public class StockController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		List<Reagent> set = reagentManager.getByLab(UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab());
+		List<Reagent> set = reagentManager.getByLab(UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
 		Map<Long,Reagent> rMap = new HashMap<Long,Reagent>();
 		String ids = "";
 		for(Reagent r : set) {

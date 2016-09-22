@@ -116,7 +116,7 @@ public class SamplePrintController extends BaseAuditController {
 		//info.put("auditor", process.getCheckoperator());
 		String dzqm_imghtm = "";
 		//由于process.getCheckoperator() 有工号有姓名，需要区分
-		String username = UserUtil.getInstance(userManager).getKey(process.getCheckoperator());
+		String username = UserUtil.getInstance().getKey(process.getCheckoperator());
 		//实现获取电子签名
         String dzqm_filepath = request.getSession().getServletContext().getRealPath("")+"\\images\\bmp";
 		File dzqm_dir = new File(dzqm_filepath);

@@ -69,7 +69,7 @@ public class QcBatchController {
     	for(Section section : sections){
     		labMap.put(section.getCode(), section.getName());
     	}
-    	User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+    	User user = UserUtil.getInstance().getUser(request.getRemoteUser());
     	
     	List<Device> dList = deviceManager.getDeviceByLab(user.getLastLab());
     	for(Device d : dList){
@@ -105,7 +105,7 @@ public class QcBatchController {
 
         int size = 0;
         if(lab.isEmpty())
-        	lab = UserUtil.getInstance(userManager).getUser(request.getRemoteUser()).getLastLab();
+        	lab = UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab();
         size =  qcBatchManager.getCount(lab, deviceId, start, end, sidx, sord);
         dataResponse.setRecords(size);
         List<QcBatch> list =  qcBatchManager.getDetails(lab, deviceId,start,end,sidx,sord);

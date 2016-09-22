@@ -6,16 +6,21 @@ import java.util.Map;
 
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
+import com.smart.util.SpringContextUtil;
 
 public class UserUtil {
 	
 	private static UserUtil instance = new UserUtil();
 	private static Map<String, String> map = null;
 	private static Map<String, User> usermap = null;
+
+	private static UserManager userManager;
 	
-	private UserUtil() {}
+	private UserUtil() {
+		userManager = (UserManager) SpringContextUtil.getBean("userManager");
+	}
 	
-	public static UserUtil getInstance(UserManager userManager) {
+	public static UserUtil getInstance() {
 		if (map == null || usermap == null) {
 			map = new HashMap<String, String>();
 			usermap = new HashMap<String, User>();

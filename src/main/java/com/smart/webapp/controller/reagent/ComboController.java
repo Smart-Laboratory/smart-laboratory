@@ -38,7 +38,7 @@ public class ComboController extends ReagentBaseController {
 		if(labMap.size() == 0) {
 			initLabMap();
 		}
-		User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		String labName = user.getLastLab();
 		if(labName==null || labName.isEmpty()){
 			labName=user.getDepartment().split(",")[0];
@@ -85,7 +85,7 @@ public class ComboController extends ReagentBaseController {
 	@RequestMapping(method = RequestMethod.POST, value="/editCombo*")
     public void editReagent(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("oper").equals("add")) {
-			User user = UserUtil.getInstance(userManager).getUser(request.getRemoteUser());
+			User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 			Combo c = new Combo();
 			c.setName(request.getParameter("name"));
 			c.setCreatetime(new Date());
