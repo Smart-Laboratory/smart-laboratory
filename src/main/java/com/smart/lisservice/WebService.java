@@ -203,8 +203,7 @@ public class WebService {
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
 
             list = jsonTolist(2,obj);
-            System.out.println(obj.toString());
-
+            //System.out.println(obj.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

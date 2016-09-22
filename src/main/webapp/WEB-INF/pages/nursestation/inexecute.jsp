@@ -318,7 +318,7 @@
                         {name: 'laborderorg', index: 'laborderorg', width: 40, hidden: true},
                         {name: 'bed', index: 'bed', width: 30},
                         {name: 'patientname', index: 'patientname', width: 60},
-                        {name: 'sex', index: 'sex', width: 30, formatter: 'select', editoptions: {value: "1:男;0:女"}},
+                        {name: 'sex', index: 'sex', width: 30, formatter: 'select', editoptions: {value: "1:男;2:女;3:其他"}},
                         {name: 'age', index: 'age', width: 30},
                         {name: 'ageUnit', index: 'ageUnit', width: 30},
                         {name: 'testId', index: 'testId', width: 60, hidden: true},
@@ -595,7 +595,7 @@
 
         if (data && data != null) {
             var patientInfo = data.bedNo + "  " + data.patientName + " " + data.testTube + data.sampleQuantity;
-            var patientInfo1 = data.patientCode + "  " + data.hossection;
+            var patientInfo1 = data.patientCode + "  " + data.hossection + " "+data.age+data.ageUnit;
             LODOP = getLodop();
             LODOP.PRINT_INIT("");
             LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
@@ -617,7 +617,7 @@
                 LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.95mm", 180, 25, patientInfo);
             }
             LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.95mm", 180, 20, patientInfo1);
-            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.95mm", 180, 20, data.examitem);
+            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.95mm", 180, 20, data.sampleType+ " "+data.examitem);
             LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.95mm", 180, 25, "采集时间 " + data.requestTime);
 
 
