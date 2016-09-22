@@ -69,7 +69,7 @@ public class WebService {
             GetMethod method = new GetMethod(url + "getDepartMentList");
             method.releaseConnection();
             httpClient.executeMethod(method);
-            System.out.println("获取门诊科室信息：" + method.getResponseBodyAsString());
+            //System.out.println("获取门诊科室信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==1) {
                 JSONArray arr = obj.getJSONArray("Message");
@@ -242,7 +242,7 @@ public class WebService {
                 labOrder.setRequestmode(arr.getJSONObject(i).getInt("emergency"));
                 labOrder.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("requestDateTime")));
                 labOrder.setRequestNum(arr.getJSONObject(i).getInt("quantity"));
-                labOrder.setSex(arr.getJSONObject(i).getInt("sex"));
+                labOrder.setSex(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("sex")));
                 labOrder.setStayhospitalmode(2); //门诊1 住院2 体检3
                 labOrder.setToponymy(arr.getJSONObject(i).getString("testPart"));
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
@@ -446,7 +446,10 @@ public class WebService {
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
                 retVal = "";
+            }else {
+                retVal = obj.getString("Message");
             }
+
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());

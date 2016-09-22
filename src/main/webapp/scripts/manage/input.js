@@ -38,7 +38,7 @@ function receive(obj,event) {
 							html += "<tr><td><b>检验目的</b></td><td>" + data.exam + "</td></tr>";
 							html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
 							$("#now").html(html);
-						} else {
+						}else if(data.success == 3){
 							var html = "";
 							html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
 							html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
@@ -80,6 +80,8 @@ function receive(obj,event) {
 							$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 							$("#receive_id").val("").focus();
 							layer.msg(data.message, {icon: 1, time: 1000});
+						}else {
+							layer.msg(data.message, {icon: 2, time: 1000});
 						}
 					});
 				}

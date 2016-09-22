@@ -656,10 +656,12 @@ public class Sample extends BaseObject {
 	
 	@Transient
 	public String getSexValue() {
-		if (sex.equals("1")) {
-			return "男";
-		} else if (sex.equals("2")) {
-			return "女";
+		if(sex!=null && !sex.isEmpty()) {
+			if (sex.equals("1")) {
+				return "男";
+			} else if (sex.equals("2")) {
+				return "女";
+			}
 		}
 		return "未知";
 	}

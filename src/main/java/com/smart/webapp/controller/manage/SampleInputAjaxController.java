@@ -254,14 +254,17 @@ public class SampleInputAjaxController {
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
 			plog.setLogtime(new Date());
-			processLogManager.save(plog);
-			
-			sampleManager.remove(sample.getId());
-			processManager.removeBySampleId(sample.getId());
+
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			ChargeUtil.getInstance().fee(user,labOrder,-1);
+
+			processLogManager.save(plog);
+			sampleManager.remove(sample.getId());
+			processManager.removeBySampleId(sample.getId());
+
+
 
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 			o.put("success", true);
@@ -453,18 +456,25 @@ public class SampleInputAjaxController {
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			process.setReceivetime(new Date());
-			sampleManager.save(sample);
-			processManager.save(process);
+
 
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
 			//计项目费
-			ChargeUtil.getInstance().fee(user,labOrder,1);
+			if(ChargeUtil.getInstance().fee(user,labOrder,1)){
+				sample.setFeestatus("1");
+				sampleManager.save(sample);
+				processManager.save(process);
+				o.put("success", 3);
+				o.put("message", "医嘱号为"+ code + "的标本接收成功！");
+			}else {
+				o.put("success", 4);
+				o.put("message", "医嘱号为"+ code + "的计费失败,标本接收不成功！");
+			}
 
 
-			o.put("success", 3);
-			o.put("message", "医嘱号为"+ code + "的标本接收成功！");
+
 		}
 		if(sample != null) {
 			o.put("barcode", sample.getBarcode());

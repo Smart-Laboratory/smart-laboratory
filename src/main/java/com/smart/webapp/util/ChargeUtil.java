@@ -100,8 +100,8 @@ public class ChargeUtil {
                 //param.put("feeItemName", "");
                 param.put("billingDoctorNo", labOrder.getRequester());
                 param.put("billingDeptNo", labOrder.getHossection());
-                param.put("testDoctorNo", user.getLastLab());
-                param.put("testDoctorDeptNo", user.getUsername());
+                param.put("testDoctorNo", user.getUsername());
+                param.put("testDoctorDeptNo", user.getLastLab());
                 param.put("operatorNo", user.getUsername());
                 //param.put("accountId", "");
                 jsonArray.put(param);
@@ -151,7 +151,7 @@ public class ChargeUtil {
         //不计采血费科室
         String[] departs = Config.getString("sampling.fee", "").split(",");
         Set<String> set = new HashSet<String>(Arrays.asList(departs));
-
+        if (set.contains(labOrder.getLabdepartment()))  return false;
         try {
             //采集部位
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
@@ -167,21 +167,21 @@ public class ChargeUtil {
             param.put("patientId", labOrder.getPatientid());
             param.put("patientType", "2");
             param.put("patientName", labOrder.getPatientname());
-            param.put("dateTime", labOrder.getExecutetime());//yyyy-mm-dd hh24:mi:ss
+            param.put("dateTime", (labOrder.getExecutetime() == null) ?
+                    Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));//yyyy-mm-dd hh24:mi:ss
             param.put("quantity", "1");
             //param.put("price", "");
             param.put("feeItemCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
             //param.put("feeItemName", "");
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
-            param.put("testDoctorNo", user.getDepartment());
-            param.put("testDoctorDeptNo", user.getUsername());
+            param.put("testDoctorNo", user.getUsername());
+            param.put("testDoctorDeptNo", user.getLastLab());
             param.put("operatorNo", user.getUsername());
             //param.put("accountId", "");
-
-            if (!set.contains(labOrder.getLabdepartment())) {
-                service.booking(param.toString());
-            }
+            JSONArray params = new JSONArray();
+            params.put(param);
+            service.booking(params.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,10 +202,6 @@ public class ChargeUtil {
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
 
-        //不计采血费科室
-        String[] departs = Config.getString("sampling.fee", "").split(",");
-        Set<String> set = new HashSet<String>(Arrays.asList(departs));
-
         try {
             //采集部位
             String ylxhs = labOrder.getYlxh();
@@ -218,30 +214,33 @@ public class ChargeUtil {
                 param.put("patientId", labOrder.getPatientid());
                 param.put("patientType", "2");
                 param.put("patientName", labOrder.getPatientname());
-                param.put("dateTime", labOrder.getExecutetime());//yyyy-mm-dd hh24:mi:ss
+                param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
                 param.put("quantity",quantity);
                 param.put("feeItemCode", ylxh);   //获取费用项目ID
                 param.put("billingDoctorNo", labOrder.getRequester());
                 param.put("billingDeptNo", labOrder.getHossection());
-                param.put("testDoctorNo", user.getDepartment());
-                param.put("testDoctorDeptNo", user.getUsername());
+                param.put("testDoctorNo", user.getUsername());
+                param.put("testDoctorDeptNo", user.getLastLab());
                 param.put("operatorNo", user.getUsername());
                 param.put("accountId", ConvertUtil.null2String(labOrder.getAccountId()));
                 paramArray.put(param);
             }
             //param.put("accountId", "");
             String retValue="";
-            if (!set.contains(labOrder.getLabdepartment())) {
-                retValue = service.booking(paramArray.toString());
+            retValue = service.booking(paramArray.toString());
+
+            if(retValue !=null && !retValue.isEmpty()){
+                JSONArray jsonArray = new JSONArray(retValue);
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    labOrder.setAccountId(object.getString("AccountId"));
+                    labOrderManager.save(labOrder);
+                }
+                flag = true;
             }
 
-            JSONArray jsonArray = new JSONArray(retValue);
-            for(int i=0;i<jsonArray.length();i++){
-                JSONObject object = jsonArray.getJSONObject(i);
-                labOrder.setAccountId(object.getString("accountId"));
-                labOrderManager.save(labOrder);
-            }
         } catch (Exception e) {
+            flag =false;
             e.printStackTrace();
             log.error(e.getMessage());
         }
