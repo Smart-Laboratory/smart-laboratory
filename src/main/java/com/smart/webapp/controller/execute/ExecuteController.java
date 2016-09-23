@@ -261,7 +261,7 @@ public class ExecuteController {
             saveSuccess = false;
         }
         if(true) {
-           boolean updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getUsername(), user.getName(), Constants.DF9.format(executeTime), "");
+        	boolean updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), "");
             if(!updateStatusSuccess){
                 sampleManager.removeAll(needSaveSample);
                 processManager.removeAll(needSaveProcess);

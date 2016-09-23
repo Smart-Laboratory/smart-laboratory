@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.lisservice.WebService;
 import com.smart.model.execute.LabOrder;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.*;
@@ -236,6 +237,7 @@ public class SampleInputAjaxController {
 		String fee = request.getParameter("fee");
 		JSONObject o = new JSONObject();
 		if(operate.equals("delete")) {
+			Date time = new Date();
 			sample = sampleManager.getSampleByBarcode(barcode);
 			process = processManager.getBySampleId(sample.getId());
 			
@@ -245,7 +247,7 @@ public class SampleInputAjaxController {
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_DELETE);
-			slog.setLogtime(new Date());
+			slog.setLogtime(time);
 			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
 			plog.setSampleLogId(slog.getId());
@@ -253,17 +255,20 @@ public class SampleInputAjaxController {
 			plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
-			plog.setLogtime(new Date());
-
+			plog.setLogtime(time);
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
-			if (ChargeUtil.getInstance().fee(user, labOrder, -1)) {
+			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
+			if(updateStatusSuccess){
 				processLogManager.save(plog);
 				sampleManager.remove(sample.getId());
 				processManager.removeBySampleId(sample.getId());
 			}
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 			o.put("success", true);
 		} else {
@@ -431,6 +436,7 @@ public class SampleInputAjaxController {
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
 		} else {
+			Date receiveTime = new Date();
 			process = processManager.getBySampleId(sample.getId());
 			SampleLog slog = new SampleLog();
 			slog.setSampleEntity(sample);
@@ -438,7 +444,7 @@ public class SampleInputAjaxController {
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			slog.setLogtime(new Date());
+			slog.setLogtime(receiveTime);
 			slog = sampleLogManager.save(slog);
 			ProcessLog plog = new ProcessLog();
 			plog.setSampleLogId(slog.getId());
@@ -446,21 +452,23 @@ public class SampleInputAjaxController {
 			plog.setLogger(UserUtil.getInstance().getValue(request.getRemoteUser()));
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
-			plog.setLogtime(new Date());
+			plog.setLogtime(receiveTime);
 			processLogManager.save(plog);
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
 				sample.setSampleNo(sampleno);
 			}
+			sample.setChkoper2(user.getName());
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
-			process.setReceiver(UserUtil.getInstance().getValue(request.getRemoteUser()));
-			process.setReceivetime(new Date());
+			process.setReceiver(user.getName());
+			process.setReceivetime(receiveTime);
 
 
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
 			//计项目费
-			if(ChargeUtil.getInstance().fee(user,labOrder,1)){
+			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
+			if(updateStatusSuccess){
 				sample.setFeestatus("1");
 				sampleManager.save(sample);
 				processManager.save(process);
