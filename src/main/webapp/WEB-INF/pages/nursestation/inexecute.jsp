@@ -594,9 +594,6 @@
 
     $(function () {
         TSLAB.Custom.init();
-<<<<<<< HEAD
-
-=======
         setInterval(function() {
             var zTree = $.fn.zTree.getZTreeObj("tree");
             var nodes = zTree.getSelectedNodes();
@@ -605,7 +602,6 @@
                 zTree.setting.callback.onClick(null, zTree.setting.treeId, nodes[0]);//调用事件
             }
         }, 300000);
->>>>>>> origin/master
     })
 
 </script>
