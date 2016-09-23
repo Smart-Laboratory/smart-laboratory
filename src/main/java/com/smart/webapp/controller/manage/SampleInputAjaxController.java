@@ -265,10 +265,6 @@ public class SampleInputAjaxController {
 				sampleManager.remove(sample.getId());
 				processManager.removeBySampleId(sample.getId());
 			}
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 			o.put("success", true);
 		} else {
