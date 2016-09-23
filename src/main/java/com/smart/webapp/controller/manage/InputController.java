@@ -31,9 +31,7 @@ public class InputController {
 	@Autowired
 	private SectionManager sectionManager = null;
 	
-	@Autowired
-	private UserManager userManager = null;
-	
+
 	@Autowired
 	private SampleManager sampleManager = null;
 	
@@ -41,7 +39,10 @@ public class InputController {
     public ModelAndView handleRequest(HttpServletRequest request) throws Exception {
 		
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
-		Section section = sectionManager.getByCode(user.getLastLab());
+		String lab = user.getLastLab();
+		if(lab==null || lab.isEmpty())
+			lab = Constants.LaboratoryCode;
+		Section section = sectionManager.getByCode(lab);
 		String segment = section.getSegment();
 		String today = Constants.DF3.format(new Date());
 		String sampleno = sampleManager.getReceiveSampleno(user.getName(), user.getLastLab(), today);

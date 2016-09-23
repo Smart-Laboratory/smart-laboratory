@@ -72,16 +72,19 @@ public class DeviceRelationListController {
         List<Index> indexes = indexManager.getAll();
         JSONArray arrTree = new JSONArray();
         //加载有权限部门树形列表
-        String departmentId [] = departmentIds.split(",");
-        for (int  i=0;i<departmentId.length;i++){
-            JSONObject root = new JSONObject();
-            String departmentName = sectionManager.getByCode(departmentId[i]).getName();
-            root.put("id",""+departmentId[i]);
-            root.put("pId","0");
-            root.put("name",departmentName);
-            root.put("open","true");
-            arrTree.put(root);
+        if(departmentIds!=null){
+            String departmentId [] = departmentIds.split(",");
+            for (int  i=0;i<departmentId.length;i++){
+                JSONObject root = new JSONObject();
+                String departmentName = sectionManager.getByCode(departmentId[i]).getName();
+                root.put("id",""+departmentId[i]);
+                root.put("pId","0");
+                root.put("name",departmentName);
+                root.put("open","true");
+                arrTree.put(root);
+            }
         }
+
         //加载未配置部门项目
         System.out.println(operator.getUsername());
         if(operator.getUsername().equals("admin")){

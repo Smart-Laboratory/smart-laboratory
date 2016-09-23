@@ -57,13 +57,13 @@
 	</div>
 </div>
 
-<display:table name="indexList" cellspacing="0" cellpadding="0" requestURI="/index/list" 
-    id="indexs" class="table" partialList="true" sort="external"  
+<display:table name="indexList" cellspacing="0" cellpadding="0" requestURI="/index/list"
+    id="indexs" class="table" partialList="true" sort="external"
     size="${indexList.fullListSize}" pagesize="${indexList.objectsPerPage}">
     <display:column property="name" sortable="true" titleKey="index.name" style="width: 35%"
     	url="/index/view" paramId="id" paramProperty="id"/>
     <display:column property="indexId" sortable="true" titleKey="index.indexId" />
     <display:column property="sampleFrom" sortable="true" titleKey="index.sampleFrom" />
-    <display:column property="ruleCount" titleKey="index.ruleCount" />
+    <%--<display:column property="ruleCount" titleKey="index.ruleCount" />--%>
 </display:table>
 </div>
