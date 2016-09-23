@@ -105,17 +105,19 @@ public class ModifyController {
 		String text = request.getParameter("text");
 		String type = request.getParameter("type");
 		Sample sample = new Sample();
+		Long sampleId = 0l;
 		if(Integer.parseInt(type) == 0) {
-			if(sampleManager.exists(Long.parseLong(text))) {
-				sample = sampleManager.get(Long.parseLong(text));
+			sampleId = Long.parseLong(text);
+			if(sampleManager.exists(sampleId)) {
+				sample = sampleManager.get(sampleId);
 			}
 		} else {
 			sample = sampleManager.getBySampleNo(text);
 		}
-		Process process = processManager.getBySampleId(sample.getId());
-		System.out.println(sample.getId());
-		List<SampleLog> sampleLogList = sampleLogManager.getBySampleId(sample.getId());
-		List<ProcessLog> processLogList = processLogManager.getBySampleId(sample.getId());
+		Process process = processManager.getBySampleId(sampleId);
+		System.out.println(sampleId);
+		List<SampleLog> sampleLogList = sampleLogManager.getBySampleId(sampleId);
+		List<ProcessLog> processLogList = processLogManager.getBySampleId(sampleId);
 		Map<Long, ProcessLog> processLogMap  = new HashMap<Long, ProcessLog>();
 		for(ProcessLog pl : processLogList) {
 			processLogMap.put(pl.getSampleLogId(), pl);
