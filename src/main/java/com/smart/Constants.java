@@ -218,7 +218,7 @@ public final class Constants {
 	/**
 	 * 日期格式:yyyy年MM月dd日 HH:mm(EEE)
 	 */
-	public final static SimpleDateFormat DF9 = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss.SSSZ" );
+	public final static SimpleDateFormat DF9 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'" );
 	
 	/**
 	 * 检验流程——申请

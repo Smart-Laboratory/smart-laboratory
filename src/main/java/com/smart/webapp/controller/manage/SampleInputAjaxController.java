@@ -76,7 +76,7 @@ public class SampleInputAjaxController {
 		Sample sample = new Sample();
 		if(type == 1) {
 			try {
-				System.out.println(code);
+				System.out.println( code);
 				sample = sampleManager.getSampleByBarcode(code);
 			} catch(Exception e) {
 				return null;

@@ -203,13 +203,14 @@ public class ReportGenerate {
             TestResultVo testResultVo = new TestResultVo();
             testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             testResultVo.setTestResult(result.getTestResult());
-            if (result.getResultFlag() != null && result.getResultFlag().charAt(1) == 'A') {
-                if( result.getResultFlag().charAt(0) == 'C') {
-                    testResultVo.setResultFlag("↓");
-                } else if( result.getResultFlag().charAt(0) == 'B') {
-                    testResultVo.setResultFlag("↑");
-                }
-            }
+//            if (result.getResultFlag() != null && result.getResultFlag().charAt(1) == 'A') {
+//                if( result.getResultFlag().charAt(0) == 'C') {
+//                    testResultVo.setResultFlag("↓");
+//                } else if( result.getResultFlag().charAt(0) == 'B') {
+//                    testResultVo.setResultFlag("↑");
+//                }
+//            }
+            testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
             //上次检验结果
 //            if(hasLast) {
 //                for(String tid : sameTests) {
@@ -226,6 +227,7 @@ public class ReportGenerate {
 //                }
 //            }
             testResultVo.setUnit(result.getUnit());
+            testResultVo.setReference(result.getReference());
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
             testResultVos.add(testResultVo);
         }
@@ -242,7 +244,7 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        System.out.println(writer.toString());
+        //System.out.println(writer.toString());
         return writer.toString();
     }
 

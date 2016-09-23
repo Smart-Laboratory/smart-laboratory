@@ -147,10 +147,14 @@
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
                 补打
             </button>
-            <button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">
+            <button type="button" class="btn btn-sm  btn-success" title="打印机选择" onclick="TSLAB.Custom.printSet()">
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
                 打印设计
             </button>
+            <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
+                <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
+                <%--打印设计--%>
+            <%--</button>--%>
         </div>
         <div class="widget-box widget-color-green" id="widget-box-1" style="display: none">
             <div class="widget-header widget-header-small">
@@ -517,9 +521,23 @@
             },
             getSampleList: function (bedno, patientId) {
             },
+            printSetting:function () {
+                if (LODOP.CVERSION) {
+                    LODOP.On_Return=function(TaskID,Value){
+                        if(Value>=0)
+                            LODOP.WRITE_FILE_TEXT(0,"d:\\print.ini",Value);
+                        else
+                            alert("选择失败！");
+                    };
+                    LODOP.SELECT_PRINTER();
+                    return;
+                };
+            },
             printSet: function () {
+
                 var data = {
                     "age": "55",
+                    "ageUnit":"岁",
                     "barcode": "A12000000098",
                     "bedNo": "04",
                     "hossection": "测试科室",
@@ -532,12 +550,18 @@
                     "sampleType": "",
                     "sex": "男",
                     "examitem": "抗精子抗体测定(IgM)",
-                    "testTube": "黄色管",
+                    "testTube": "黄色管D",
                     "ward": "测试病区",
                     "wardId": "1025"
                 }
                 CreateDataBill(data)
-                LODOP.PRINT_DESIGN()
+                //var index =;
+
+//                if (LODOP.SELECT_PRINTER()>=0)
+//                    alert("选择成功!"); else alert("选择失败！");
+                //
+               // LODOP.SET_PRINTER_INDEXA( LODOP.SELECT_PRINTER());
+               // LODOP.PRINT_DESIGN()
             },
             printReport:function(){
                 $.get("/print/ajax/printReport",{sampleno:'20160530URF300', haslast:'0', type:''}, function(data){
@@ -559,8 +583,9 @@
                 private.printOldInfo();
             },
             printSet: function () {
-               // private.printSet();
-                private.printReport();
+                //private.printSet();
+                private.printSetting();  //打印机设置
+                //private.printReport();
             }
 
         }
@@ -569,16 +594,21 @@
 
     $(function () {
         TSLAB.Custom.init();
+
     })
 
 </script>
 
 <script>
-    var LODOP; //声明为全局变量
 
+    var LODOP; //声明为全局变量
+    var index=-1;
+
+    function readPrintFile() {
+        index = LODOP.GET_FILE_TEXT("d:\\print.ini");
+        LODOP.SET_PRINTER_INDEXA(index);
+    }
     function Preview(strHtml) {//打印预览
-        LODOP = getLodop();
-        //CreateDataBill(data)
         LODOP=getLodop();
         LODOP.PRINT_INIT("打印报告单");
         LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
@@ -592,38 +622,39 @@
     }
 
     function CreateDataBill(data) {
-
         if (data && data != null) {
-            var patientInfo = data.bedNo + "  " + data.patientName + " " + data.testTube + data.sampleQuantity;
-            var patientInfo1 = data.patientCode + "  " + data.hossection + " "+data.age+data.ageUnit;
+            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity;
+            var patientInfo1 = data.patientCode + " " + data.hossection + " "+data.age+data.ageUnit;
             LODOP = getLodop();
             LODOP.PRINT_INIT("");
             LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
-            //LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.95mm", 180, 25, patientInfo);
-            //LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.94mm", "42.6mm", 35, "128B", data.barcode);
-            LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.94mm","34.66mm",35,"128Auto",data.barcode);
+            //LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.85mm", 180, 25, patientInfo);
+            //LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.84mm", "42.6mm", 35, "128B", data.barcode);
+            LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.84mm","34.66mm",35,"128Auto",data.barcode);
             LODOP.SET_PRINT_STYLEA(0, "ShowBarText", 0);
             LODOP.SET_PRINT_STYLEA(0, "Horient", 2);
-            LODOP.ADD_PRINT_TEXTA("code", "19.39mm", "2.95mm", 161, 25, "*" + data.barcode + "*");
+            LODOP.ADD_PRINT_TEXTA("code", "19.39mm", "2.85mm", 161, 25, "*" + data.barcode + "*");
             LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
             LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
             if(data.requestMode =='1'){
-                LODOP.ADD_PRINT_TEXTA("patientinfo","2.99mm","8.23mm",169,25,patientInfo);
-                LODOP.ADD_PRINT_ELLIPSE(8,12,14,15,0,1);
-                LODOP.ADD_PRINT_TEXT(9,12,18,16,"急");
+                LODOP.ADD_PRINT_TEXTA("patientinfo","2.85mm","8.23mm",169,25,patientInfo);
+                //LODOP.ADD_PRINT_ELLIPSE(8,12,14,15,0,1);
+                LODOP.ADD_PRINT_TEXT(10,11,19,15,"急");
+                LODOP.SET_PRINT_STYLEA(0,"TextFrame",6);
                 LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
                 LODOP.SET_PRINT_STYLEA(0,"Bold",1);
             }else{
-                LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.95mm", 180, 25, patientInfo);
+                LODOP.ADD_PRINT_TEXTA("patientinfo", "2.89mm", "2.95mm", 180, 25, patientInfo);
             }
-            LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.95mm", 180, 20, patientInfo1);
-            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.95mm", 180, 20, data.sampleType+ " "+data.examitem);
-            LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.95mm", 180, 25, "采集时间 " + data.requestTime);
+            LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.85mm", 250, 20, patientInfo1);
+            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType+ " "+data.examitem);
+            LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.85mm", 180, 25, "采集时间 " + data.requestTime);
 
 
         }
     }
     function startPrint(data) {
+        readPrintFile();
         CreateDataBill(data);
         //开始打印
         LODOP.PRINT();

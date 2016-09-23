@@ -129,12 +129,37 @@ public final class ConvertUtil {
 
     public static String  getFormatDate(Date v, String format) {
         try {
+            if(v==null) v= new Date();
             if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(v);
-            return new SimpleDateFormat(format).format(calendar.getTime());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return simpleDateFormat.format(calendar.getTime());
         } catch (Exception ex) {
             return "";
         }
+    }
+
+    /**
+     * Lis结果标记
+     * @param flag
+     * @return
+     */
+    public static String getResultFlag(String flag){
+        String retFlag="";
+        try {
+            if (flag != null && flag.charAt(1) == 'A') {
+                if( flag.charAt(0) == 'C') {
+                    retFlag="↓";
+                } else if(flag.charAt(0) == 'B') {
+                    retFlag="↑";
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            retFlag = "";
+        }
+        return  retFlag;
     }
 }

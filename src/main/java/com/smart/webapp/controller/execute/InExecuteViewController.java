@@ -444,7 +444,7 @@ public class InExecuteViewController {
                 Process process = new Process();
                 process.setSampleid(sample.getId());
                 process.setRequesttime(labOrder.getRequesttime());
-                process.setRequester(labOrder.getRequester());
+                process.setRequester(labOrder.getRequesterName());
                 process.setExecutetime(executeTime);
                 process.setExecutor(user.getUsername());
                 process.setPrinttime(executeTime);

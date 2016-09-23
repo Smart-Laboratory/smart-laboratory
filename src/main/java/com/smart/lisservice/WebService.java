@@ -15,6 +15,7 @@ import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.IndexMapUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.TestIdMapUtil;
+import com.smart.webapp.util.UserUtil;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -238,6 +239,7 @@ public class WebService {
                 labOrder.setPatientid(arr.getJSONObject(i).getString("patientId"));
                 labOrder.setPatientname(arr.getJSONObject(i).getString("name"));
                 labOrder.setPrice(arr.getJSONObject(i).getString("amount"));
+                labOrder.setRequesterName(arr.getJSONObject(i).getString("requestDoctorName"));
                 labOrder.setRequester(arr.getJSONObject(i).getString("requestDoctor"));
                 labOrder.setRequestId(arr.getJSONObject(i).getString("requestId"));
                 labOrder.setRequestmode(arr.getJSONObject(i).getInt("emergency"));
@@ -331,6 +333,7 @@ public class WebService {
         boolean flag = false;
         try {
             //if(1==1)throw new Exception("错误");
+            UserUtil userUtil = UserUtil.getInstance();
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url+"saveHisResult");
             PostMethod method = new PostMethod(url+"saveHisResult");
@@ -340,7 +343,7 @@ public class WebService {
             hisSampleInfo.put("barCode",sample.getBarcode());
             hisSampleInfo.put("sampleNo",sample.getSampleNo());
             hisSampleInfo.put("organizationId",1001);       //机构代码
-            hisSampleInfo.put("patientType",sample.getStayHospitalModelValue());
+            hisSampleInfo.put("patientType",sample.getStayHospitalMode());
             hisSampleInfo.put("patientId",sample.getPatientId());
             hisSampleInfo.put("patientNo",sample.getPatientblh());
             hisSampleInfo.put("patientName",sample.getPatientname());
@@ -353,25 +356,25 @@ public class WebService {
             hisSampleInfo.put("diagnosis",sample.getDiagnostic());
             hisSampleInfo.put("part",sample.getPart());
             hisSampleInfo.put("cycleId",sample.getCycle());
-            hisSampleInfo.put("executeTime",process.getExecutetime());
-            hisSampleInfo.put("requesterId","");
+            hisSampleInfo.put("executeTime",ConvertUtil.getFormatDate(process.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
+            hisSampleInfo.put("requesterId",process.getRequester());
             hisSampleInfo.put("requesterName",process.getRequester());
             hisSampleInfo.put("departmentId","");
             hisSampleInfo.put("departmentName",sample.getHosSection());
-            hisSampleInfo.put("receiveTime",process.getReceivetime());
+            hisSampleInfo.put("receiveTime",ConvertUtil.getFormatDate(process.getReceivetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
             hisSampleInfo.put("testerId","");
             hisSampleInfo.put("testerName",sample.getChkoper2());
             hisSampleInfo.put("testDepartmentId","");
             hisSampleInfo.put("testDepartmentName","");
-            hisSampleInfo.put("testTime",process.getExecutetime());
+            hisSampleInfo.put("testTime",ConvertUtil.getFormatDate(process.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
             hisSampleInfo.put("auditerId","");
-            hisSampleInfo.put("auditerName",process.getCheckoperator());
-            hisSampleInfo.put("auditTime",process.getChecktime());
+            hisSampleInfo.put("auditerName",userUtil.getUser(process.getCheckoperator()).getName());
+            hisSampleInfo.put("auditTime",ConvertUtil.getFormatDate(process.getChecktime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
             hisSampleInfo.put("auditNote",sample.getNote());
             hisSampleInfo.put("sampleTypeId",sample.getSampleType());
             hisSampleInfo.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
             hisSampleInfo.put("sampleOperateStatus",0);
-            hisSampleInfo.put("sampleResultTime",process.getChecktime());
+            hisSampleInfo.put("sampleResultTime",ConvertUtil.getFormatDate(process.getChecktime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
             hisSampleInfo.put("sampleResultStatus",sample.getSampleStatus());
             hisSampleInfo.put("isPrint",sample.getPrintFlag());
             hisSampleInfo.put("isEmergency",sample.getRequestMode());
@@ -386,19 +389,20 @@ public class WebService {
             for(TestResult testResult:resultList){
                 JSONObject object = new JSONObject();
                 object.put("testItemId",testResult.getTestId());              //检测项目ID
-                object.put("testItemName_EN", indexMap.get(sample.getYlxh()).getEnglish());         //项目英文名称
+                object.put("testItemName_EN", ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getEnglish()));         //项目英文名称
                 object.put("testItemName_CN",testResult.getTestName());         //项目中文名称
                 object.put("sampleTypeId",testResult.getSampleType());            //样本类型ID
                 object.put("sampleTypeName",SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(testResult.getSampleType())));          //样本类型名称
                 object.put("testResult",testResult.getTestResult());              //结果
-                object.put("resultFlag",testResult.getResultFlag());              //结果标志
+                object.put("resultFlag",ConvertUtil.getResultFlag(testResult.getResultFlag()));              //结果标志
                 object.put("resultHint",testResult.getHint());              //结果提示
                 object.put("unit",testResult.getUnit());
                 object.put("referenceLo",testResult.getRefLo());             //下限
                 object.put("referenceHi",testResult.getRefHi());             //上限
                 object.put("reference",testResult.getReference());               //参考范围
-                object.put("order",indexMap.get(sample.getYlxh()).getPrintord());                   //结果顺序
-                object.put("method",indexMap.get(sample.getYlxh()).getMethod());                  //检测方法
+                object.put("order",ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getPrintord()));                   //结果顺序
+                object.put("method",ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getMethod()));                  //检测方法
+                object.put("resultTime",Constants.DF9.format(testResult.getMeasureTime()));
                 hisTestResult.put(object);
             }
 
@@ -412,9 +416,13 @@ public class WebService {
             httpClient.executeMethod(method);
             System.out.println(method.getResponseBodyAsString());
 
-            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
-                flag = false;
+            if(method.getResponseBodyAsString() != null && !method.getResponseBodyAsString().isEmpty()){
+                JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+                if((Integer)obj.get("State")==0) {
+                    flag = false;
+                }else {
+                    flag = true;
+                }
             }
 
         } catch (Exception e) {
@@ -479,7 +487,11 @@ public class WebService {
             JSONArray param = new JSONArray();
             for(TestResult testResult:testResultList){
                 JSONObject result = new JSONObject();
-                String inspectionId = testResult.getDeviceId()+ ConvertUtil.getFormatDate(testResult.getMeasureTime(),"yyyy-MM-dd")+testResult.getSampleNo();
+                String sampleNo = testResult.getSampleNo().substring(testResult.getSampleNo().length()-3,testResult.getSampleNo().length());
+                //System.out.println(String.format("%05d", ConvertUtil.getLongValue(sampleNo)));
+                String inspectionId = testResult.getDeviceId().replaceAll(",","")+
+                        ConvertUtil.getFormatDate(testResult.getMeasureTime(),"yyyyMMdd")+
+                        String.format("%05d", ConvertUtil.getLongValue(sampleNo));
                 result.put("inspectionId",inspectionId);                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
                 result.put("testItemId",testResult.getTestId());        //项目编号
                 result.put("testItemName_EN",testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
@@ -489,6 +501,8 @@ public class WebService {
                 result.put("reference",testResult.getReference());         //参考范围
                 result.put("resultFlag",testResult.getResultFlag());        //结果标记
                 result.put("barcode",barcode);                              //条码号
+                result.put("testResult",testResult.getTestResult());                              //结果
+
                 param.put(result);
             }
             RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");

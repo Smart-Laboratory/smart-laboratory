@@ -95,8 +95,7 @@ public class ChargeUtil {
                 param.put("patientId", labOrder.getPatientid());
                 param.put("patientType", "2");
                 param.put("patientName", labOrder.getPatientname());
-                param.put("dateTime", (labOrder.getExecutetime() == null) ?
-                        Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));
+                param.put("dateTime", ConvertUtil.getFormatDate(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
                 param.put("quantity", "1");
                 //param.put("price", "");
                 param.put("testPurposesCode", SamplingSitesUtil.getValue(ConvertUtil.null2String(labOrder.getToponymy())));   //获取费用项目ID
@@ -116,8 +115,7 @@ public class ChargeUtil {
                 param1.put("patientId", labOrder.getPatientid());
                 param1.put("patientType", "2");
                 param1.put("patientName", labOrder.getPatientname());
-                param1.put("dateTime", (labOrder.getExecutetime() == null) ?
-                        Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));
+                param1.put("dateTime", ConvertUtil.getFormatDate(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'"));
                 //yyyy-mm-dd hh24:mi:ss
                 param1.put("quantity", "1");
                 //param.put("price", "");
@@ -170,8 +168,7 @@ public class ChargeUtil {
             param.put("patientId", labOrder.getPatientid());
             param.put("patientType", "2");
             param.put("patientName", labOrder.getPatientname());
-            param.put("dateTime", (labOrder.getExecutetime() == null) ?
-                    Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));//yyyy-mm-dd hh24:mi:ss
+            param.put("dateTime", ConvertUtil.getFormatDate(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));//yyyy-mm-dd hh24:mi:ss
             param.put("quantity", "1");
             //param.put("price", "");
             param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
