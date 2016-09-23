@@ -99,8 +99,8 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getByPatientId(patientId, lab);
 	}
 
-	public String getReceiveSampleno(String name, String lab, String today) {
-		return sampleDao.getReceiveSampleno(name, lab, today);
+	public String getReceiveSampleno(String lab, String today) {
+		return sampleDao.getReceiveSampleno(lab, today);
 	}
 
 	public List<Sample> getReceiveList(String text, String lab) {
@@ -117,5 +117,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 
 	public void removeAll(List<Sample> list) {
 		sampleDao.removeAll(list);
+	}
+
+	public void updateChkoper2(String text, String chkoper2) {
+		sampleDao.updateChkoper2(text, chkoper2);
 	}
 }

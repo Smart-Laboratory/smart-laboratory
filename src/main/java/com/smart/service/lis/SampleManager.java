@@ -75,12 +75,11 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	/**
 	 *   获取d当天某一用户最后接收的样本号
-	 * @param name	用户名字
 	 * @param lab	用户所在部门
 	 * @param today 用户当天时间
 	 * @return
 	 */
-	String getReceiveSampleno(String name, String lab, String today);
+	String getReceiveSampleno(String lab, String today);
 
 	List<Sample> getReceiveList(String text, String lab);
 	
@@ -89,4 +88,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	Long getSampleId();
 
     void removeAll(List<Sample> needSaveSample);
+
+	void updateChkoper2(String text, String chkoper2);
 }

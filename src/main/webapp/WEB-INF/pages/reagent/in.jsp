@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="../scripts/reagent/in.js"></script>
 
 	<%--<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />--%>
-	<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/ui.jqgrid.css'/>" />
+	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	
 	<style type="text/css">
 	

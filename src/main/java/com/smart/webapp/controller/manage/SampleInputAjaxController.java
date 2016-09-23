@@ -264,9 +264,12 @@ public class SampleInputAjaxController {
 				processLogManager.save(plog);
 				sampleManager.remove(sample.getId());
 				processManager.removeBySampleId(sample.getId());
+				o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
+				o.put("success", true);
+			} else {
+				o.put("message", "样本号为"+ sampleno + "的标本退费失败，不能删除！");
+				o.put("success", false);
 			}
-			o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
-			o.put("success", true);
 		} else {
 			if(operate.equals("add") && barcode.isEmpty()) {
 				if(sampleManager.getBySampleNo(sampleno) != null) {
@@ -453,7 +456,7 @@ public class SampleInputAjaxController {
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
 				sample.setSampleNo(sampleno);
 			}
-			sample.setChkoper2(user.getName());
+			//sample.setChkoper2(user.getName());
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(user.getName());
 			process.setReceivetime(receiveTime);

@@ -56,9 +56,12 @@ public class AuditViewController {
 				}
 			}
 		}
+		if(lab==null || lab.isEmpty()){
+			lab=Constants.LaboratoryCode;
+		}
 
 		Map<String, Code> actiCodeMap = new HashMap<String, Code>();
-		String labCode = sectionManager.getByCode(operator.getLastLab()).getSegment();
+		String labCode = sectionManager.getByCode(lab).getSegment();
 		String activeCode = operator.getActiveCode();
 		if (!StringUtils.isEmpty(labCode)) {
 			String[] codes = labCode.split(",");
@@ -112,7 +115,7 @@ public class AuditViewController {
 		request.setAttribute("activeAuto", isAuto);
 		request.setAttribute("catcherUrl", Config.getCatcherUrl());
 		request.setAttribute("today", strToday);
-		request.setAttribute("userCode", sectionManager.getByCode(operator.getLastLab()).getSegment());
+		request.setAttribute("userCode", sectionManager.getByCode(lab).getSegment());
 		request.setAttribute("lab", lab);
 		request.setAttribute("codeList", codeList);
 		return new ModelAndView();

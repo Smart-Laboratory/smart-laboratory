@@ -57,7 +57,7 @@ public class CriticalController {
 		List<Sample> samples = sampleManager.getSampleList(Constants.DF3.format(new Date()),
 				lab, "", 6, -3);
 		List<Critical> criticals = new ArrayList<Critical>();
-		if(samples.size() > 0){
+		if(samples!=null && samples.size() > 0){
 			String hisSampleId = "";
 			for(Sample sample : samples) {
 				hisSampleId += sample.getId() + ",";

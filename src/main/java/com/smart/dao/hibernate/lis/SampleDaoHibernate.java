@@ -485,8 +485,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return getSession().createQuery(hql).list();
 	}
 
-	public String getReceiveSampleno(String name, String lab, String today) {
-		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and p.receiver='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
+	public String getReceiveSampleno(String lab, String today) {
+		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
 		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
 
@@ -516,5 +516,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		s.flush();
 		s.close();
+	}
+
+	public void updateChkoper2(String text, String chkoper2) {
+		getSession().createSQLQuery("update l_sample set chkoper2='" + chkoper2 + "' where sampleno like '" + text + "%' and chkoper2 is null").executeUpdate();
 	}
 }

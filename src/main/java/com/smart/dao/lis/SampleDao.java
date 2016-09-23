@@ -68,7 +68,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<Sample> getByPatientId(String patientId,String lab);
 
 	@Transactional
-	String getReceiveSampleno(String name, String lab, String today);
+	String getReceiveSampleno(String lab, String today);
 
 	@Transactional
 	List<Sample> getReceiveList(String text, String lab);
@@ -79,6 +79,8 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	@Transactional
 	Long getSampleId();
 
-
     void removeAll(List<Sample> list);
+
+	@Transactional
+	void updateChkoper2(String text, String chkoper2);
 }

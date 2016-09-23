@@ -9,13 +9,13 @@
 <%@ include file="/common/taglibs.jsp" %>
 <head>
 	<title><fmt:message key="set.device"/></title>
-    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
-    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-    <script type="text/javascript" src="../scripts/validform/Validform.min.js"></script>
-    <script type="text/javascript" src="../scripts/layer/layer.js"></script>
-    <script type="text/javascript" src="../scripts/set/device.js"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery-2.1.4.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery-ui.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/i18n/grid.locale-cn.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/validform/Validform.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/layer/layer.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/set/device.js'/>"></script>
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 
 </head>
