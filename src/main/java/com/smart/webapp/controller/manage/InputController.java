@@ -45,7 +45,8 @@ public class InputController {
 		Section section = sectionManager.getByCode(lab);
 		String segment = section.getSegment();
 		String today = Constants.DF3.format(new Date());
-		String sampleno = sampleManager.getReceiveSampleno(user.getName(), user.getLastLab(), today);
+		String sampleno = sampleManager.getReceiveSampleno(user.getLastLab(), today);
+		System.out.println(sampleno);
 		if(sampleno == null) {
 			sampleno = today;
 			if(segment != null && segment.indexOf(",") > 0) {
@@ -53,7 +54,10 @@ public class InputController {
 			} else {
 				sampleno += "AAA001";
 			}
+		} else {
+			sampleno = sampleno.substring(0,11) + (Integer.parseInt(sampleno.substring(11,14)) + 1);
 		}
+		System.out.println(sampleno);
 		ModelAndView view = new ModelAndView();
 		view.addObject("receivetime", Constants.SDF.format(new Date()));
 		view.addObject("segment", segment);

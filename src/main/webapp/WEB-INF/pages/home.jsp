@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
 
 <head>
@@ -21,6 +22,12 @@
     </li>
     <li>
         <a href="<c:url value='/manage/audit'/>"><fmt:message key="sample.manage.audit"/></a>
+    </li>
+    <li>
+        <a href="<c:url value='/nursestation/inexecute?ward=1001'/>">住院条码打印</a>
+    </li>
+    <li>
+        <a href="<c:url value='/manage/testerSet'/>">检验者设置</a>
     </li>
 </ul>
 </body>

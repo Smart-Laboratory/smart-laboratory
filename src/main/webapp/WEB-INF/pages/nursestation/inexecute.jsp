@@ -569,6 +569,14 @@
 
     $(function () {
         TSLAB.Custom.init();
+        setInterval(function() {
+            var zTree = $.fn.zTree.getZTreeObj("tree");
+            var nodes = zTree.getSelectedNodes();
+            if (nodes.length > 0) {
+                zTree.selectNode(nodes[0]);
+                zTree.setting.callback.onClick(null, zTree.setting.treeId, nodes[0]);//调用事件
+            }
+        }, 300000);
     })
 
 </script>

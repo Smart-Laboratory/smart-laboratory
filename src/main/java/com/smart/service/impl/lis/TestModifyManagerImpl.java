@@ -11,7 +11,7 @@ import com.smart.service.lis.TestModifyManager;
 import com.smart.service.impl.GenericManagerImpl;
 
 @Service("testModifyManager")
-public class TestModifyManagerImpl  extends GenericManagerImpl<TestModify, Long> implements TestModifyManager {
+public class TestModifyManagerImpl extends GenericManagerImpl<TestModify, Long> implements TestModifyManager {
 
 	private TestModifyDao testModifyDao;
 

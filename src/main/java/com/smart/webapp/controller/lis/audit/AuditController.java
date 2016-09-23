@@ -491,11 +491,13 @@ public class AuditController extends BaseAuditController {
 				info.setCharttest(charttest);
 				info.setPassReason(note);
 				if ("pass".equals(op)) {
-					info.setAuditStatus(1);
+					info.setAuditStatus(Constants.STATUS_PASSED);
+					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
 				} else if ("unpass".equals(op)) {
-					info.setAuditStatus(2);
+					info.setAuditStatus(Constants.STATUS_UNPASS);
+					info.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
 				}
-				info.setWriteback(1);
+				//info.setWriteback(1);
 				String text = Check.MANUAL_AUDIT;
 				if (!StringUtils.isEmpty(textHtml)) {
 					String[] t = textHtml.split(";");
@@ -530,6 +532,10 @@ public class AuditController extends BaseAuditController {
 			auditTraceManager.saveAll(updateA);
 			ReportGenerate reportGenerate = new ReportGenerate();
 			if ("pass".equals(op)) {
+				process.setCheckoperator(request.getRemoteUser());
+				process.setChecktime(new Date());
+				processManager.save(process);
+
 				//生成PDF
 				reportGenerate.createReportPdf(sample.get(0), process, testResultList, false);
 
@@ -539,7 +545,8 @@ public class AuditController extends BaseAuditController {
 				//写入LIS用于电子病历
 				service.saveLisResult(sample.get(0).getBarcode(),testResultList);
 			} else if ("unpass".equals(op)) {
-
+				process.setCheckoperator("");
+				processManager.save(process);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -637,9 +644,11 @@ public class AuditController extends BaseAuditController {
 		String ids = request.getParameter("ids");
 		String op = request.getParameter("op");
 		int status = Constants.STATUS_UNAUDIT;
+		int sampleStatus = Constants.SAMPLE_STATUS_TESTED;
 		boolean pass = false;
 		if ("pass".equals(op)) {
 			status = Constants.STATUS_PASSED;
+			sampleStatus = Constants.SAMPLE_STATUS_CHECKED;
 			pass = true;
 		} else if ("unpass".equals(op)) {
 			status = Constants.STATUS_UNPASS;
@@ -668,30 +677,52 @@ public class AuditController extends BaseAuditController {
 				}
 			}
 		}
-		List<Sample> updateP = new ArrayList<Sample>();
+		List<Sample> updateS = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
+		List<Process> updateP = new ArrayList<Process>();
+		Date checkTime = new Date();
 
 		ReportGenerate reportGenerate = new ReportGenerate();
 		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
+				info.setSampleStatus(sampleStatus);
 				info.setWriteback(1);
 				if (pass) {
 					info.setPassReason("批量通过");
 					AuditTrace a = new AuditTrace();
 					a.setSampleno(info.getSampleNo());
-					a.setChecktime(new Date());
+					a.setChecktime(checkTime);
 					a.setChecker(request.getRemoteUser());
 					a.setType(2);
 					a.setStatus(info.getAuditStatus());
 					updateA.add(a);
+					Process process = processMap.get(info.getId());
+					process.setCheckoperator(request.getRemoteUser());
+					process.setChecktime(checkTime);
+					updateP.add(process);
+
 					reportGenerate.createReportPdf(info, processMap.get(info.getId()), hisTestMap.get(info.getSampleNo()), false);
+				} else {
+					info.setPassReason("批量不通过");
+					AuditTrace a = new AuditTrace();
+					a.setSampleno(info.getSampleNo());
+					a.setChecktime(checkTime);
+					a.setChecker(request.getRemoteUser());
+					a.setType(2);
+					a.setStatus(info.getAuditStatus());
+					updateA.add(a);
+					Process process = processMap.get(info.getId());
+					process.setCheckoperator(" ");
+					process.setChecktime(checkTime);
+					updateP.add(process);
 				}
-				updateP.add(info);
+				updateS.add(info);
 			}
 		}
 		auditTraceManager.saveAll(updateA);
-		sampleManager.saveAll(updateP);
+		sampleManager.saveAll(updateS);
+		processManager.saveAll(updateP);
 		return result;
 	}
     

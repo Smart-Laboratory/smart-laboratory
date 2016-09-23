@@ -456,7 +456,7 @@ public class SampleInputAjaxController {
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
 				sample.setSampleNo(sampleno);
 			}
-			sample.setChkoper2(user.getName());
+			//sample.setChkoper2(user.getName());
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(user.getName());
 			process.setReceivetime(receiveTime);
