@@ -259,6 +259,7 @@ public class SampleInputAjaxController {
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
+			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
 			if(updateStatusSuccess){
 				processLogManager.save(plog);
 				sampleManager.remove(sample.getId());
@@ -462,6 +463,7 @@ public class SampleInputAjaxController {
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
 			//计项目费
+			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
 			if(updateStatusSuccess){
 				sample.setFeestatus("1");
 				sampleManager.save(sample);

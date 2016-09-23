@@ -106,7 +106,9 @@ public class ModifyController {
 		String type = request.getParameter("type");
 		Sample sample = new Sample();
 		if(Integer.parseInt(type) == 0) {
-			sample = sampleManager.get(Long.parseLong(text));
+			if(sampleManager.exists(Long.parseLong(text))) {
+				sample = sampleManager.get(Long.parseLong(text));
+			}
 		} else {
 			sample = sampleManager.getBySampleNo(text);
 		}
