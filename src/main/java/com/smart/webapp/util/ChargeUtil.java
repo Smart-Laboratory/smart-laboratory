@@ -99,7 +99,7 @@ public class ChargeUtil {
                         Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));
                 param.put("quantity", "1");
                 //param.put("price", "");
-                param.put("feeItemCode", SamplingSitesUtil.getValue(ConvertUtil.null2String(labOrder.getToponymy())));   //获取费用项目ID
+                param.put("testPurposesCode", SamplingSitesUtil.getValue(ConvertUtil.null2String(labOrder.getToponymy())));   //获取费用项目ID
                 //param.put("feeItemName", "");
                 param.put("billingDoctorNo", labOrder.getRequester());
                 param.put("billingDeptNo", labOrder.getHossection());
@@ -121,7 +121,7 @@ public class ChargeUtil {
                 //yyyy-mm-dd hh24:mi:ss
                 param1.put("quantity", "1");
                 //param.put("price", "");
-                param1.put("feeItemCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
+                param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
                 //param.put("feeItemName", "");
                 param1.put("billingDoctorNo", labOrder.getRequester());
                 param1.put("billingDeptNo", labOrder.getHossection());
@@ -174,7 +174,7 @@ public class ChargeUtil {
                     Constants.DF9.format(new Date()) : Constants.DF9.format(labOrder.getExecutetime()));//yyyy-mm-dd hh24:mi:ss
             param.put("quantity", "1");
             //param.put("price", "");
-            param.put("feeItemCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
+            param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
             //param.put("feeItemName", "");
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
@@ -192,99 +192,6 @@ public class ChargeUtil {
         }
         return flag;
     }
-
-    /**
-     * 收取检验项目费用
-     *
-     * @param user
-     * @param labOrder
-     * @return 实验室接收计费
-     */
-    public boolean fee(User user, LabOrder labOrder, int quantity) {
-        boolean flag = false;
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
-        Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
-
-        try {
-            //采集部位
-            String ylxhs = labOrder.getYlxh();
-            WebService service = new WebService();
-
-            Map<String, List<Account>> listMap = new HashMap<String, List<Account>>();
-            JSONArray paramArray = new JSONArray();
-            if (quantity < 0) {
-                //退费
-                List<Account> accountList = accountManager.getAccountByBarcode(labOrder.getBarcode());
-                for (Account account : accountList) {
-                    JSONObject param = new JSONObject();
-                    param.put("patientCode", labOrder.getBlh());
-                    param.put("patientId", labOrder.getPatientid());
-                    param.put("patientType", "2");
-                    param.put("patientName", labOrder.getPatientname());
-                    param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
-                    param.put("quantity", -1);
-                    param.put("feeItemCode", account.getYlxh());   //获取费用项目ID
-                    param.put("billingDoctorNo", labOrder.getRequester());
-                    param.put("billingDeptNo", labOrder.getHossection());
-                    param.put("testDoctorNo", user.getUsername());
-                    param.put("testDoctorDeptNo", user.getLastLab());
-                    param.put("operatorNo", user.getUsername());
-                    param.put("accountId", ConvertUtil.null2String(account.getAccountId()));
-                    paramArray.put(param);
-                }
-            } else {
-                //计费
-                for (String ylxh : ylxhs.split("\\+")) {
-                    JSONObject param = new JSONObject();
-                    param.put("patientCode", labOrder.getBlh());
-                    param.put("patientId", labOrder.getPatientid());
-                    param.put("patientType", "2");
-                    param.put("patientName", labOrder.getPatientname());
-                    param.put("dateTime", Constants.DF9.format(new Date()));//yyyy-mm-dd hh24:mi:ss
-                    param.put("quantity", 1);
-                    param.put("feeItemCode", ylxh);   //获取费用项目ID
-                    param.put("billingDoctorNo", labOrder.getRequester());
-                    param.put("billingDeptNo", labOrder.getHossection());
-                    param.put("testDoctorNo", user.getUsername());
-                    param.put("testDoctorDeptNo", user.getLastLab());
-                    param.put("operatorNo", user.getUsername());
-                    param.put("accountId", "");
-                    paramArray.put(param);
-                }
-            }
-            //param.put("accountId", "");
-            String retValue = "";
-            retValue = service.booking(paramArray.toString());
-            if (retValue != null && !retValue.isEmpty()) {
-                //保存费用记录
-                JSONArray jsonArray = new JSONArray(retValue);
-                List<Account> accountList = new ArrayList<Account>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    Account account = new Account();
-                    account.setAccountId(object.getString("AccountId"));
-                    account.setPrice(object.getDouble("Price"));
-                    account.setBarcode(labOrder.getBarcode());
-                    account.setCount(object.getInt("Quantity"));
-                    account.setFeeId(object.getString("FeeItemCode"));
-                    account.setFeeName(object.getString("FeeItemName"));
-                    account.setOperateTime(Constants.SDF.parse(object.getString("DateTime")));
-                    account.setOperator(object.getString("OperatorNo"));
-                    account.setYlxh(object.getString("testPurposesCode"));
-                    accountList.add(account);
-                }
-                accountManager.saveAll(accountList);
-                flag = true;
-            }
-
-        } catch (Exception e) {
-            flag = false;
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-        return flag;
-    }
-
 
     private YlxhManager ylxhManager = null;
 
