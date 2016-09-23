@@ -78,6 +78,8 @@ public class User extends BaseObject implements Serializable, UserDetails {
 	private int evaluatenum;
 	private int checknum;
 	private String pbsection;
+    private String hisId;
+
     /**
      * Default constructor - creates a new instance with no values set.
      */
@@ -407,9 +409,16 @@ public class User extends BaseObject implements Serializable, UserDetails {
 		this.pbsection = pbsection;
 	}
 
-	
+    @Column
+    public String getHisId() {
+        return hisId;
+    }
 
-	@Transient
+    public void setHisId(String hisId) {
+        this.hisId = hisId;
+    }
+
+    @Transient
 	public double getIntegration() {
 		return (double)checknum/100 + collectNum + evaluatenum;
 	}
