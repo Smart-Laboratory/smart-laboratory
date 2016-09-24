@@ -54,7 +54,7 @@ public class Index extends BaseObject implements Serializable {
 	private String importance;
 	private String knowledgename;
 	private int isprint;
-	private String printord;
+	private int printord;
 	private int needhistory;
 	private String method;
 	private String defaultvalue;
@@ -416,11 +416,11 @@ public class Index extends BaseObject implements Serializable {
 	 * 指标打印顺序
 	 */
 	@Column
-	public String getPrintord() {
+	public int getPrintord() {
 		return printord;
 	}
 
-	public void setPrintord(String printord) {
+	public void setPrintord(int printord) {
 		this.printord = printord;
 	}
 

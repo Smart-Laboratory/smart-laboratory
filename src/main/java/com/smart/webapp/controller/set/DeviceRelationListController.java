@@ -313,7 +313,7 @@ public class DeviceRelationListController {
         if(!guide.equals("")) index.setGuide(guide);
         if(!type.equals("")) index.setType(type);
         if(!unit.equals("")) index.setUnit(unit);
-        if(printord>=0) index.setPrintord(ConvertUtil.null2String(printord));
+        if(printord>=0) index.setPrintord(printord);
         //不常用信息
         String principle = ConvertUtil.null2String(request.getParameter("principle"));          //测定原理
         String workCriterion = ConvertUtil.null2String(request.getParameter("workcriterion")); //工作规范

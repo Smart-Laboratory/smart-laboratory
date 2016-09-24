@@ -123,7 +123,7 @@ public class AutoAuditServlet extends HttpServlet {
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
-                    	if (needAuditSamples != null && needAuditSamples.size() > 0) {
+						if (needAuditSamples != null && needAuditSamples.size() > 0) {
                 			String hisSampleNo = "";
 							String sampleIds = "";
                 			for(Sample sample : needAuditSamples) {
@@ -161,13 +161,16 @@ public class AutoAuditServlet extends HttpServlet {
                         	            	List<Sample> updateSample = new ArrayList<Sample>();
                         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
                         	            	List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
+											List<Process> updateProcess = new ArrayList<Process>();
+											List<TestResult> updateTestResult = new ArrayList<TestResult>();
                         	            	int begin  = num*10;
                                     		int end = num*10 + 9;
-                                    		if(end > needAuditSamples.size()-1) {
-                                    			end = needAuditSamples.size() - 1;
+                                    		if(end >= needAuditSamples.size()-1) {
+                                    			end = needAuditSamples.size();
                                     		}
                         	            	List<Sample> samples = needAuditSamples.subList(begin, end);
-                        	            	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
+											System.out.println("审核数目：" + samples.size());
+											HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
                         	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
                         	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
@@ -178,6 +181,7 @@ public class AutoAuditServlet extends HttpServlet {
 														fillUtil.fillResult(t, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 													}
                         	        				formulaUtil.formula(info, "admin", now, new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
+													hisTestMap.put(info.getSampleNo(), now);
                         	                	} catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
@@ -282,6 +286,14 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								} else {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
+                	    								Process process = processMap.get(info.getId());
+														process.setCheckoperator(new GetAutoCheckOperatorUtil().getName(info.getSectionId()));
+														process.setChecktime(new Date(nowtime));
+														updateProcess.add(process);
+														for(TestResult testResult : now) {
+															testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
+															updateTestResult.add(testResult);
+														}
 														//生成PDF
 														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
 														//写入HIS
@@ -308,7 +320,9 @@ public class AutoAuditServlet extends HttpServlet {
                                 	            }
                         	        		}
                         	        		sampleManager.saveAll(updateSample);
+											processManager.saveAll(updateProcess);
                         					criticalRecordManager.saveAll(updateCriticalRecord);
+											testResultManager.saveAll(updateTestResult);
                         					auditTraceManager.saveAll(updateAuditTrace);
                         					System.out.println(System.currentTimeMillis()-nowtime);
                         	            } catch (Exception e) {

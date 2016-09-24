@@ -520,7 +520,7 @@ public class SamplePrintController extends BaseAuditController {
 				String resultflag = "&nbsp;";
 				String last = "&nbsp;";
 				String lastflag = "&nbsp;";
-				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -532,7 +532,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+							if (idMap.get(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
@@ -613,7 +613,7 @@ public class SamplePrintController extends BaseAuditController {
 				if(lo != null && !lo.isEmpty() && (hi.isEmpty() || hi == null)) {
 					scope = lo;
 				}
-				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -625,7 +625,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+							if (idMap.get(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
@@ -703,7 +703,7 @@ public class SamplePrintController extends BaseAuditController {
 				if(lo != null && !lo.isEmpty() && ( hi == null || hi.isEmpty())) {
 					scope = lo;
 				}
-				if (Integer.parseInt(idMap.get(re.getTestId()).getPrintord()) <=2015) {
+				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -715,7 +715,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
+							if (idMap.get(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {

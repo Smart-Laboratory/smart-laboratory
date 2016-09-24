@@ -175,8 +175,9 @@ public class TestResultDaoHibernate extends
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getHisTestResult(String samplenos) {
 		return getSession().createQuery(
-				"from TestResult where sampleNo in (" + samplenos
-						+ ") order by sampleNo desc").list();
+				"select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo in (" + samplenos
+						+ ") order by i.printord")
+				.list();
 	}
 
 	@SuppressWarnings("unchecked")

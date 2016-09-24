@@ -249,8 +249,12 @@
 									aftersavefunc:function() {
 										var newVal = jQuery("#rowed3").jqGrid('getRowData',id);
 										var hl = newVal.scope.split("-");
-					        			var h = parseFloat(hl[1]);
-					        			var l = parseFloat(hl[0]);
+										var h = parseFloat(hl[1]);
+										var l = parseFloat(hl[0]);
+										if(hl.length == 3) {
+											var h = parseFloat(hl[2]);
+											var l = parseFloat(hl[1])*(-1);
+										}
 					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
 					        			var res = "";
 					        			
@@ -267,161 +271,7 @@
 											result:pre + "<span class='result_span'>" + newVal.result + "</span>"+res+"</div>"
 										});
 										$("#modifyBtn").css('display','inline');
-										switch (id) {
-											case '9046':
-												//9051
-												var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
-												var newva = (va * rbc/100).toFixed(1);
-												var newVal = jQuery("#rowed3").jqGrid('getRowData','9051');
-												var hl = newVal.scope.split("-");
-							        			var h = parseFloat(hl[1]);
-							        			var l = parseFloat(hl[0]);
-							        			var nva = parseFloat(newva);
-							        			var res = "";
-							        			
-							        			if (!isNaN(h) && !isNaN(l)) {
-							        				if (!isNaN(nva)) {
-							        					if (nva < l) {
-								        					res = "<font color='red'>↓</font>";
-								        				} else if (nva > h) {
-								        					res = "<font color='red'>↑</font>";
-								        				}
-							        				}
-							        			}
-												jQuery("#rowed3").jqGrid('setRowData', '9051', {
-													result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
-												});
-												var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
-												var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
-												var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
-												var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
-												$("#rbctotal").html(va + val0 + val1 + val2 + val3);
-												$("#rbcLabel").css('display','inline');
-												break;
-											case '9047':
-												//9055
-												var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
-												var newva = (va * rbc/100).toFixed(1);
-												var newVal = jQuery("#rowed3").jqGrid('getRowData','9055');
-												var hl = newVal.scope.split("-");
-							        			var h = parseFloat(hl[1]);
-							        			var l = parseFloat(hl[0]);
-							        			var nva = parseFloat(newva);
-							        			var res = "";
-							        			
-							        			if (!isNaN(h) && !isNaN(l)) {
-							        				if (!isNaN(nva)) {
-							        					if (nva < l) {
-								        					res = "<font color='red'>↓</font>";
-								        				} else if (nva > h) {
-								        					res = "<font color='red'>↑</font>";
-								        				}
-							        				}
-							        			}
-												jQuery("#rowed3").jqGrid('setRowData', '9055', {
-													result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
-												});
-												var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
-												var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
-												var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
-												var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
-												$("#rbctotal").html(va + val0 + val1 + val2 + val3);
-												$("#rbcLabel").css('display','inline');
-												break;
-											case '9048':
-												//9089
-												var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
-												var newva = (va * rbc/100).toFixed(2);
-												var newVal = jQuery("#rowed3").jqGrid('getRowData','9089');
-												var hl = newVal.scope.split("-");
-							        			var h = parseFloat(hl[1]);
-							        			var l = parseFloat(hl[0]);
-							        			var nva = parseFloat(newva);
-							        			var res = "";
-							        			
-							        			if (!isNaN(h) && !isNaN(l)) {
-							        				if (!isNaN(nva)) {
-							        					if (nva < l) {
-								        					res = "<font color='red'>↓</font>";
-								        				} else if (nva > h) {
-								        					res = "<font color='red'>↑</font>";
-								        				}
-							        				}
-							        			}
-												jQuery("#rowed3").jqGrid('setRowData', '9089', {
-													result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
-												});
-												var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
-												var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
-												var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
-												var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
-												$("#rbctotal").html(va + val0 + val1 + val2 + val3);
-												$("#rbcLabel").css('display','inline');
-												break;
-											case '9049':
-												//9091
-												var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
-												var newva = (va * rbc/100).toFixed(2);
-												var newVal = jQuery("#rowed3").jqGrid('getRowData','9091');
-												var hl = newVal.scope.split("-");
-							        			var h = parseFloat(hl[1]);
-							        			var l = parseFloat(hl[0]);
-							        			var nva = parseFloat(newva);
-							        			var res = "";
-							        			
-							        			if (!isNaN(h) && !isNaN(l)) {
-							        				if (!isNaN(nva)) {
-							        					if (nva < l) {
-								        					res = "<font color='red'>↓</font>";
-								        				} else if (nva > h) {
-								        					res = "<font color='red'>↑</font>";
-								        				}
-							        				}
-							        			}
-												jQuery("#rowed3").jqGrid('setRowData', '9091', {
-													result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
-												});
-												var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
-												var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
-												var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
-												var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
-												$("#rbctotal").html(va + val0 + val1 + val2 + val3);
-												$("#rbcLabel").css('display','inline');
-												break;
-											case '9050':
-												//9090
-												var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
-												var newva = (va * rbc/100).toFixed(2);
-												var newVal = jQuery("#rowed3").jqGrid('getRowData','9090');
-												var hl = newVal.scope.split("-");
-							        			var h = parseFloat(hl[1]);
-							        			var l = parseFloat(hl[0]);
-							        			var nva = parseFloat(newva);
-							        			var res = "";
-							        			
-							        			if (!isNaN(h) && !isNaN(l)) {
-							        				if (!isNaN(nva)) {
-							        					if (nva < l) {
-								        					res = "<font color='red'>↓</font>";
-								        				} else if (nva > h) {
-								        					res = "<font color='red'>↑</font>";
-								        				}
-							        				}
-							        			}
-												jQuery("#rowed3").jqGrid('setRowData', '9090', {
-													result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
-												});
-												var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
-												var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
-												var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
-												var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
-												$("#rbctotal").html(va + val0 + val1 + val2 + val3);
-												$("#rbcLabel").css('display','inline');
-												break;
-											default:
-												$("#rbcLabel").css('display','none');
-												break;
-										}
+										CalculateRbc(id);
 										
 										isEdit = false;
 									}				
@@ -619,6 +469,10 @@
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
+					if(hl.length == 3) {
+						var h = parseFloat(hl[2]);
+						var l = parseFloat(hl[1])*(-1);
+					}
         			var color = "<div class='";
         			if (ret.color == 1) {
         				color += "diff_td'>";
@@ -813,6 +667,10 @@
 										var hl = newVal.scope.split("-");
 					        			var h = parseFloat(hl[1]);
 					        			var l = parseFloat(hl[0]);
+										if(hl.length == 3) {
+											var h = parseFloat(hl[2]);
+											var l = parseFloat(hl[1])*(-1);
+										}
 					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
 					        			var res = "";
 					        			
@@ -883,6 +741,10 @@
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
+					if(hl.length == 3) {
+						var h = parseFloat(hl[2]);
+						var l = parseFloat(hl[1])*(-1);
+					}
         			var color = "<div class='";
         			if (ret.color == 1) {
         				color += "diff_td'>";
@@ -1026,6 +888,10 @@
 										var hl = newVal.scope.split("-");
 					        			var h = parseFloat(hl[1]);
 					        			var l = parseFloat(hl[0]);
+										if(hl.length == 3) {
+											var h = parseFloat(hl[2]);
+											var l = parseFloat(hl[1])*(-1);
+										}
 					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
 					        			var res = "";
 					        			if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
@@ -1091,6 +957,10 @@
         			var hl = ret.scope.split("-");
         			var h = parseFloat(hl[1]);
         			var l = parseFloat(hl[0]);
+					if(hl.length == 3) {
+						var h = parseFloat(hl[2]);
+						var l = parseFloat(hl[1])*(-1);
+					}
         			var color = "<div class='";
         			if (ret.color == 1) {
         				color += "diff_td'>";
@@ -1394,6 +1264,166 @@ function validate(formData, jqForm, options) {
         }
 	}
 	return true;
+}
+
+function CalculateRbc(id) {
+
+	switch (id) {
+		case '9046':
+			//9051
+			var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
+			var newva = (va * rbc/100).toFixed(1);
+			var newVal = jQuery("#rowed3").jqGrid('getRowData','9051');
+			var hl = newVal.scope.split("-");
+			var h = parseFloat(hl[1]);
+			var l = parseFloat(hl[0]);
+			var nva = parseFloat(newva);
+			var res = "";
+
+			if (!isNaN(h) && !isNaN(l)) {
+				if (!isNaN(nva)) {
+					if (nva < l) {
+						res = "<font color='red'>↓</font>";
+					} else if (nva > h) {
+						res = "<font color='red'>↑</font>";
+					}
+				}
+			}
+			jQuery("#rowed3").jqGrid('setRowData', '9051', {
+				result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
+			});
+			var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
+			var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
+			var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
+			var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
+			$("#rbctotal").html(va + val0 + val1 + val2 + val3);
+			$("#rbcLabel").css('display','inline');
+			break;
+		case '9047':
+			//9055
+			var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
+			var newva = (va * rbc/100).toFixed(1);
+			var newVal = jQuery("#rowed3").jqGrid('getRowData','9055');
+			var hl = newVal.scope.split("-");
+			var h = parseFloat(hl[1]);
+			var l = parseFloat(hl[0]);
+			var nva = parseFloat(newva);
+			var res = "";
+
+			if (!isNaN(h) && !isNaN(l)) {
+				if (!isNaN(nva)) {
+					if (nva < l) {
+						res = "<font color='red'>↓</font>";
+					} else if (nva > h) {
+						res = "<font color='red'>↑</font>";
+					}
+				}
+			}
+			jQuery("#rowed3").jqGrid('setRowData', '9055', {
+				result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
+			});
+			var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
+			var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
+			var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
+			var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
+			$("#rbctotal").html(va + val0 + val1 + val2 + val3);
+			$("#rbcLabel").css('display','inline');
+			break;
+		case '9048':
+			//9089
+			var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
+			var newva = (va * rbc/100).toFixed(2);
+			var newVal = jQuery("#rowed3").jqGrid('getRowData','9089');
+			var hl = newVal.scope.split("-");
+			var h = parseFloat(hl[1]);
+			var l = parseFloat(hl[0]);
+			var nva = parseFloat(newva);
+			var res = "";
+
+			if (!isNaN(h) && !isNaN(l)) {
+				if (!isNaN(nva)) {
+					if (nva < l) {
+						res = "<font color='red'>↓</font>";
+					} else if (nva > h) {
+						res = "<font color='red'>↑</font>";
+					}
+				}
+			}
+			jQuery("#rowed3").jqGrid('setRowData', '9089', {
+				result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
+			});
+			var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
+			var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
+			var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
+			var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
+			$("#rbctotal").html(va + val0 + val1 + val2 + val3);
+			$("#rbcLabel").css('display','inline');
+			break;
+		case '9049':
+			//9091
+			var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
+			var newva = (va * rbc/100).toFixed(2);
+			var newVal = jQuery("#rowed3").jqGrid('getRowData','9091');
+			var hl = newVal.scope.split("-");
+			var h = parseFloat(hl[1]);
+			var l = parseFloat(hl[0]);
+			var nva = parseFloat(newva);
+			var res = "";
+
+			if (!isNaN(h) && !isNaN(l)) {
+				if (!isNaN(nva)) {
+					if (nva < l) {
+						res = "<font color='red'>↓</font>";
+					} else if (nva > h) {
+						res = "<font color='red'>↑</font>";
+					}
+				}
+			}
+			jQuery("#rowed3").jqGrid('setRowData', '9091', {
+				result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
+			});
+			var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
+			var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
+			var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
+			var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9050').result).find(":eq(0)").html());
+			$("#rbctotal").html(va + val0 + val1 + val2 + val3);
+			$("#rbcLabel").css('display','inline');
+			break;
+		case '9050':
+			//9090
+			var rbc = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9045').result).find(":eq(0)").html());
+			var newva = (va * rbc/100).toFixed(2);
+			var newVal = jQuery("#rowed3").jqGrid('getRowData','9090');
+			var hl = newVal.scope.split("-");
+			var h = parseFloat(hl[1]);
+			var l = parseFloat(hl[0]);
+			var nva = parseFloat(newva);
+			var res = "";
+
+			if (!isNaN(h) && !isNaN(l)) {
+				if (!isNaN(nva)) {
+					if (nva < l) {
+						res = "<font color='red'>↓</font>";
+					} else if (nva > h) {
+						res = "<font color='red'>↑</font>";
+					}
+				}
+			}
+			jQuery("#rowed3").jqGrid('setRowData', '9090', {
+				result:"<div><span class='result_span'>" + nva + "</span>"+res+"</div>"
+			});
+			var val0 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9046').result).find(":eq(0)").html());
+			var val1 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9047').result).find(":eq(0)").html());
+			var val2 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9048').result).find(":eq(0)").html());
+			var val3 = parseFloat($(jQuery("#rowed3").jqGrid('getRowData','9049').result).find(":eq(0)").html());
+			$("#rbctotal").html(va + val0 + val1 + val2 + val3);
+			$("#rbcLabel").css('display','inline');
+			break;
+		default:
+			$("#rbcLabel").css('display','none');
+			break;
+	}
+
 }
 
 $(function() {
