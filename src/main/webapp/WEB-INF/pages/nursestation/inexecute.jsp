@@ -462,6 +462,7 @@
                     success: function (data) {
                         var printDatas = data.printOrders
                         var noPrintDatas = data.noPrintOrders;
+                        readPrintFile();
                         for (i = 0; i < printDatas.length; i++) {
                             startPrint(printDatas[i]);
                         }
@@ -661,7 +662,7 @@
         }
     }
     function startPrint(data) {
-        readPrintFile();
+
         CreateDataBill(data);
         //开始打印
         LODOP.PRINT();
