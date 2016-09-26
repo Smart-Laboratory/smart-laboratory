@@ -264,7 +264,6 @@ function openAddTestResultDialog() {
     	btn: ['添加', '取消'],
     	content: $("#addTestResultDialog"),
     	yes: function(index){
-    		alert(1111);
     		var result = false;
 			$("#addTestList .testValue").length
     		$("#addTestList .testValue").each(function(index,self){
@@ -272,7 +271,6 @@ function openAddTestResultDialog() {
 	    			result = true;
 	    		}
 	    	});
-			alert(result)
     		if (!result) {
     			// alert("<fmt:message key='alert.input.testresult'/>");
     		} else {
@@ -286,7 +284,6 @@ function openAddTestResultDialog() {
     		    		tcValue += id + ",";
 		    		}
 		    	});
-				alert("postStr==>"+postStr)
     			if (postStr != "") {
 	    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
 	    				if (data) {
