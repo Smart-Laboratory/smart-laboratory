@@ -384,7 +384,7 @@
                 // var height=$('.laftnav').height()-$('#widget-box-2').height()-116;
                 $("#tableList1").jqGrid({
                     datatype: "json",
-                    //caption:"未采集标本",
+                    //caption:"已采集标本",
                     colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '病区', '床号', '病历号', '姓名', '性别', '年龄', '单位',
                         '项目名称', '标本类型', '样本条码', '申请科室', '申请时间', '诊断', '患者类型',
                         '打印时间', '急诊'],
@@ -406,7 +406,7 @@
                         {name: 'requestTime', index: 'requestTime', width: 120},
                         {name: 'diagnose', index: 'diagnose', width: 100},
                         {name: 'patientType', index: 'patientType', width: 60,formatter: 'select',editoptions: {value: "1:门诊;2:住院;3:其他"}},
-                        {name: 'printTime', index: 'printTime', width: 120},
+                        {name: 'printTime', index: 'printTime', width: 120,order:true},
                         {
                             name: 'requestMode',
                             index: 'requestMode',
@@ -526,7 +526,7 @@
                 if (LODOP.CVERSION) {
                     LODOP.On_Return=function(TaskID,Value){
                         if(Value>=0)
-                            LODOP.WRITE_FILE_TEXT(0,"d:\\print.ini",Value);
+                            LODOP.WRITE_FILE_TEXT(0,"c:\\print.ini",Value);
                         else
                             alert("选择失败！");
                     };
@@ -613,7 +613,7 @@
     var index=-1;
 
     function readPrintFile() {
-        index = LODOP.GET_FILE_TEXT("d:\\print.ini");
+        index = LODOP.GET_FILE_TEXT("c:\\print.ini");
         LODOP.SET_PRINTER_INDEXA(index);
     }
     function Preview(strHtml) {//打印预览

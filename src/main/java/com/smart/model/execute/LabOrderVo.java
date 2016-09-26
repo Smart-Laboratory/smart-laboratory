@@ -1,5 +1,7 @@
 package com.smart.model.execute;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 
 /**
@@ -25,11 +27,15 @@ public class LabOrderVo implements Serializable{
     private String examitem;            //检验目的
     private String sampleType;          //样本类型
     private String requester;           //申请人
+    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
     private String requestTime;         //申请时间
     private String diagnose;            //临床诊断
     private String patientType;         //病人类型
+    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
     private String executeTime;         //采集时间
+    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
     private String printTime;           //打印时间
+    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
     private String makePrintTime;       //补打时间
     private String requestMode;         //是否急诊
     private String sampleQuantity;      //采集量

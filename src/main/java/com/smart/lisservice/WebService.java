@@ -366,7 +366,7 @@ public class WebService {
             hisSampleInfo.put("testerName",sample.getChkoper2());
             hisSampleInfo.put("testDepartmentId","");
             hisSampleInfo.put("testDepartmentName","");
-            hisSampleInfo.put("testTime",ConvertUtil.getFormatDate(process.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
+            hisSampleInfo.put("testTime",ConvertUtil.getFormatDate(process.getPrinttime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
             hisSampleInfo.put("auditerId","");
             hisSampleInfo.put("auditerName",userUtil.getUser(process.getCheckoperator()).getName());
             hisSampleInfo.put("auditTime",ConvertUtil.getFormatDate(process.getChecktime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));

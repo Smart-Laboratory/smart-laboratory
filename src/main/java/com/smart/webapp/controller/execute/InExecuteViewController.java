@@ -483,7 +483,8 @@ public class InExecuteViewController {
                         labOrderVo.setWard(ConvertUtil.null2String(labOrder.getWardId()));
                         labOrderVo.setWardName(ConvertUtil.null2String(labOrder.getWardName()));
                         labOrderVo.setBedNo(labOrder.getBed());
-                        labOrderVo.setRequestTime(ConvertUtil.getFormatDate(labOrder.getRequesttime(), "yyyy-MM-dd hh:mm:ss"));
+                        labOrderVo.setRequestTime(ConvertUtil.getFormatDate(process.getRequesttime()));
+                        labOrderVo.setPrintTime(ConvertUtil.getFormatDate(process.getPrinttime()));
                         int sex = ConvertUtil.getIntValue(ConvertUtil.null2String(labOrder.getSex()),3);
                         if (sex == 1) {
                             labOrderVo.setSex("男");

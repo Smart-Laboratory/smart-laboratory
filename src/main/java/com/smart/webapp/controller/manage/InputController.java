@@ -55,7 +55,7 @@ public class InputController {
 				sampleno += "AAA001";
 			}
 		} else {
-			sampleno = sampleno.substring(0,11) + (Integer.parseInt(sampleno.substring(11,14)) + 1);
+			sampleno = sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1));
 		}
 		System.out.println(sampleno);
 		ModelAndView view = new ModelAndView();

@@ -130,11 +130,11 @@ public final class ConvertUtil {
     public static String  getFormatDate(Date v, String format) {
         try {
             if(v==null) v= new Date();
-            if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
+            if(format==null || format.isEmpty()) format="yyyy-MM-dd hh:mm:ss";
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(v);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+           // simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDateFormat.format(calendar.getTime());
         } catch (Exception ex) {
             return "";

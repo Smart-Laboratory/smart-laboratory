@@ -56,7 +56,7 @@ public class TestResultDaoHibernate extends
 
 		return getSession()
 				.createQuery(
-						"select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"
+						"select t from TestResult t, Index i where t.testId=i.indexId and t.sampleNo='"
 								+ sampleNo + "' order by i.printord").list();
 
 	}
