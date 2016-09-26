@@ -119,18 +119,22 @@ public class FillFieldUtil {
 					if (value.charAt(0) == '.') {
 						value = "0" + value;
 					}
-					
+
 					if (reflo != null) {
 						if (reflo.contains(".") && reflo.split("[.]").length > 1) {
 							int round = reflo.split("[.]")[1].length();
 							StringBuilder sb = new StringBuilder("#0.");
-							for(int i = 0; i < round; i++) {
+							for (int i = 0; i < round; i++) {
 								sb.append("0");
 							}
-							DecimalFormat df  = new DecimalFormat(sb.toString());
+							DecimalFormat df = new DecimalFormat(sb.toString());
 							value = df.format(Double.parseDouble(value));
 						} else {
-							value = value.split("[.]")[0];
+							if (value.split("[.]")[0].equals("-0")) {
+								value = "0";
+							} else {
+								value = value.split("[.]")[0];
+							}
 						}
 					}
 				}
@@ -249,5 +253,6 @@ public class FillFieldUtil {
 		}
 		return null;
 	}
+	
 }
 
