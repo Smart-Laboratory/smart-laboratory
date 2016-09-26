@@ -22,6 +22,7 @@ import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.YlxhManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
+import jdk.nashorn.api.scripting.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -108,17 +109,20 @@ public class InExecuteViewController {
 
         Map<String, List> resultMap = new HashMap<String, List>();
         long startTime = System.currentTimeMillis();   //获取开始时间
-        labOrdersService = new WebService().getInExcuteInfo(ward, bedNo, patientId);//重新初始化
+        WebService webService = new WebService();
+        org.codehaus.jettison.json.JSONArray patientList = webService.getInPatientList(ward);
+        labOrdersService = webService.getInExcuteInfo(ward, bedNo, patientId);//重新初始化
 
-        System.out.println("labOrdersService==>"+labOrdersService.size());
+        //System.out.println("labOrdersService==>"+labOrdersService.size());
         long endTime = System.currentTimeMillis(); //获取结束时间
+
 
         JSONArray nodes = new JSONArray();
         JSONObject root = new JSONObject();
-        if (labOrdersService != null && labOrdersService.size() > 0) {
-            root.put("id", labOrdersService.get(0).getWardId());
+        if (patientList != null && patientList.length() > 0) {
+            root.put("id", patientList.getJSONObject(0).getString("InpatientWardId"));
             root.put("pId", "0");
-            root.put("name", "[" + labOrdersService.get(0).getWardId() + "]" + labOrdersService.get(0).getWardName());
+            root.put("name", "[" +  patientList.getJSONObject(0).getString("InpatientWardId") + "]" +  patientList.getJSONObject(0).getString("InpatientWard"));
             root.put("open", "true");
         }
         nodes.add(root);
@@ -136,25 +140,23 @@ public class InExecuteViewController {
                 resultMap.put(key, laborderList);
             }
         }
-        for (String key : resultMap.keySet()) {
-            List<LabOrder> labOrders1 = resultMap.get(key);
-            String name = "[" + ward + labOrders1.get(0).getBed() + "]." + labOrders1.get(0).getPatientname() + "." + labOrders1.get(0).getBlh();
+        for (int i=0;i<patientList.length();i++) {
+            org.codehaus.jettison.json.JSONObject object = patientList.getJSONObject(i);
+            String name = "[" + ward + object.getString("Bedno") + "]." + object.getString("Name") + "." + object.getString("PatientCode");
             JSONObject node = new JSONObject();
-            node.put("id", labOrders1.get(0).getPatientid());
+            node.put("id", object.getString("PatientId"));
             node.put("pId", ward);
             node.put("name", name);
-            node.put("bedNo", labOrders1.get(0).getBed());
-            node.put("patientCode", labOrders1.get(0).getBlh());
-            node.put("patientName", labOrders1.get(0).getPatientname());
-            node.put("ward", labOrders1.get(0).getWardId());
-            node.put("wardName", labOrders1.get(0).getWardName());
-            node.put("birthday", ConvertUtil.getFormatDate(labOrders1.get(0).getBirthday(), "yyyy-MM-dd"));
-            node.put("requestTime", ConvertUtil.getFormatDate(labOrders1.get(0).getRequesttime(), "yyyy-MM-dd HH:MM:SS"));
-            node.put("age", labOrders1.get(0).getAge());
-            node.put("ageUnit", labOrders1.get(0).getAgeUnit());
-            node.put("requester", labOrders1.get(0).getRequester());
-            node.put("hossectionName", labOrders1.get(0).getHossectionName());
-            node.put("sex", labOrders1.get(0).getSex());
+            node.put("bedNo", object.getString("Bedno"));
+            node.put("patientCode", object.getString("PatientCode"));
+            node.put("patientName", object.getString("Name"));
+            node.put("ward", object.getString("InpatientWardId"));
+            node.put("wardName", object.getString("InpatientWard"));
+            node.put("birthday", object.getString("Birthday"));
+            node.put("requestTime", object.getString("InDateTime"));
+            node.put("age", object.getString("Age"));
+            node.put("ageUnit", object.getString("AgeUnit"));
+            node.put("sex", object.getString("Sex"));
             //node.put("laborders", labOrders1);
             nodes.add(node);
         }
@@ -214,7 +216,7 @@ public class InExecuteViewController {
             beCollectedList = labOrders;
         }
 
-        List<Object[]> labOrderList = null;
+        List<Object[]> labOrderList = new ArrayList<Object[]>();
         try {
             labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
         }catch (Exception e){
@@ -288,8 +290,8 @@ public class InExecuteViewController {
                 while (iterator.hasNext()) {
                     LabOrder labOrder = (LabOrder) iterator.next();
                     String requestDetailId = ConvertUtil.null2String(labOrder.getLaborderorg());
-                    if (requestDetailIds.indexOf(requestDetailId + ",", 0) >= 0) {
-                        System.out.println("1111");
+                    if (!requestDetailIds.isEmpty() && requestDetailIds.indexOf(requestDetailId + ",") >= 0) {
+                        //System.out.println("1111");
                         iterator.remove();
                     }
                     //排除非ICU项目

@@ -152,8 +152,8 @@
                 打印设计
             </button>
             <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
-                <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
-                <%--打印设计--%>
+            <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
+            <%--打印设计--%>
             <%--</button>--%>
         </div>
         <div class="widget-box widget-color-green" id="widget-box-1" style="display: none">
@@ -322,7 +322,13 @@
                         {name: 'laborderorg', index: 'laborderorg', width: 40, hidden: true},
                         {name: 'bed', index: 'bed', width: 30},
                         {name: 'patientname', index: 'patientname', width: 60},
-                        {name: 'sex', index: 'sex', width: 30, formatter: 'select', editoptions: {value: "1:男;2:女;3:未知"}},
+                        {
+                            name: 'sex',
+                            index: 'sex',
+                            width: 30,
+                            formatter: 'select',
+                            editoptions: {value: "1:男;2:女;3:未知"}
+                        },
                         {name: 'age', index: 'age', width: 30},
                         {name: 'ageUnit', index: 'ageUnit', width: 30},
                         {name: 'testId', index: 'testId', width: 60, hidden: true},
@@ -330,7 +336,7 @@
                         {name: 'sampleTypeName', index: 'sampleTypeName', width: 60},
                         {name: 'price', index: 'price', width: 60},
                         {name: 'requesttime', index: 'requesttime', width: 100},
-                        {name: 'requester', index: 'requester', width: 60},
+                        {name: 'requesterName', index: 'requesterName', width: 60},
                         {
                             name: 'requestmode',
                             index: 'requestmode',
@@ -385,15 +391,16 @@
                 $("#tableList1").jqGrid({
                     datatype: "json",
                     //caption:"已采集标本",
-                    colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '病区', '床号', '病历号', '姓名', '性别', '年龄', '单位',
-                        '项目名称', '标本类型', '样本条码', '申请科室', '申请时间', '诊断', '患者类型',
+                    colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '病区', '床号', '样本条码', '病历号', '姓名', '性别', '年龄', '单位',
+                        '项目名称', '标本类型', '申请科室', '申请时间', '诊断', '患者类型',
                         '打印时间', '急诊'],
                     colModel: [{name: 'requestId', index: 'requestId', width: 40, hidden: true},
-                        {name: 'laborder', index: 'laborder', width: 40, hidden: true,key:true},
+                        {name: 'laborder', index: 'laborder', width: 40, hidden: true, key: true},
                         {name: 'laborderOrg', index: 'laborderOrg', width: 40, hidden: true},
                         {name: 'patientId', index: 'patientId', width: 40, hidden: true},
                         {name: 'ward', index: 'ward', width: 100},
                         {name: 'bedNo', index: 'bedNo', width: 60},
+                        {name: 'barcode', index: 'barcode', width: 110},
                         {name: 'patientCode', index: 'patientCode', width: 100},
                         {name: 'patientName', index: 'patientName', width: 100},
                         {name: 'sex', index: 'sex', width: 40},
@@ -401,12 +408,17 @@
                         {name: 'ageUnit', index: 'ageUnit', width: 40},
                         {name: 'examitem', index: 'examitem', width: 150},
                         {name: 'sampleType', index: 'sampleType', width: 60},
-                        {name: 'barcode', index: 'barcode', width: 100},
                         {name: 'hossection', index: 'hossection', width: 100},
                         {name: 'requestTime', index: 'requestTime', width: 120},
                         {name: 'diagnose', index: 'diagnose', width: 100},
-                        {name: 'patientType', index: 'patientType', width: 60,formatter: 'select',editoptions: {value: "1:门诊;2:住院;3:其他"}},
-                        {name: 'printTime', index: 'printTime', width: 120,order:true},
+                        {
+                            name: 'patientType',
+                            index: 'patientType',
+                            width: 60,
+                            formatter: 'select',
+                            editoptions: {value: "1:门诊;2:住院;3:其他"}
+                        },
+                        {name: 'printTime', index: 'printTime', width: 120, order: true},
                         {
                             name: 'requestMode',
                             index: 'requestMode',
@@ -512,7 +524,7 @@
                 } else {
                     var table = $('#patientInfo');
                     var html = '<tr><td>姓&#12288;名：' + data.patientName + '</td><td>性&#12288;&#12288;别：' + ((data.sex == 1) ? '男' : '女') + '</td><td>年&#12288;&#12288;龄：' + data.age + data.ageUnit + '</td><td>病&#12288;&#12288;区：' + data.wardName + '</td><td>床&#12288;&#12288;号：' + data.bedNo + '</td></tr>';
-                    html += '<tr><td>病员号：' + data.patientCode + '</td><td>出生日期：' + data.birthday + '</td><td>送检医生：' + data.requester + '</td><td>送检单位：' + data.hossectionName + '</td><td>接收日期：' + data.requestTime + '</td></tr>';
+                    html += '<tr><td>病员号：' + data.patientCode + '</td><td>出生日期：' + data.birthday + '</td>><td>入院日期：' + data.requestTime + '</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
                     table.html("");
                     table.append(html);
                     var height = $('.laftnav').height() - $('#widget-box-2').height() - $('#widget-box-1').height() - 120;
@@ -522,23 +534,25 @@
             },
             getSampleList: function (bedno, patientId) {
             },
-            printSetting:function () {
+            printSetting: function () {
+               readPrintFile();
                 if (LODOP.CVERSION) {
-                    LODOP.On_Return=function(TaskID,Value){
-                        if(Value>=0)
-                            LODOP.WRITE_FILE_TEXT(0,"c:\\print.ini",Value);
+                    LODOP.On_Return = function (TaskID, Value) {
+                        if (Value >= 0)
+                            LODOP.WRITE_FILE_TEXT(0, "c:\\print.ini", Value);
                         else
                             alert("选择失败！");
                     };
                     LODOP.SELECT_PRINTER();
                     return;
-                };
+                }
+                ;
             },
             printSet: function () {
 
                 var data = {
                     "age": "55",
-                    "ageUnit":"岁",
+                    "ageUnit": "岁",
                     "barcode": "A12000000098",
                     "bedNo": "04",
                     "hossection": "测试科室",
@@ -561,11 +575,11 @@
 //                if (LODOP.SELECT_PRINTER()>=0)
 //                    alert("选择成功!"); else alert("选择失败！");
                 //
-               // LODOP.SET_PRINTER_INDEXA( LODOP.SELECT_PRINTER());
-               // LODOP.PRINT_DESIGN()
+                // LODOP.SET_PRINTER_INDEXA( LODOP.SELECT_PRINTER());
+                // LODOP.PRINT_DESIGN()
             },
-            printReport:function(){
-                $.get("/print/ajax/printReport",{sampleno:'20160530URF300', haslast:'0', type:''}, function(data){
+            printReport: function () {
+                $.get("/print/ajax/printReport", {sampleno: '20160530URF300', haslast: '0', type: ''}, function (data) {
                     console.log(data)
                     Preview(data);
                 })
@@ -595,7 +609,7 @@
 
     $(function () {
         TSLAB.Custom.init();
-        setInterval(function() {
+        setInterval(function () {
             var zTree = $.fn.zTree.getZTreeObj("tree");
             var nodes = zTree.getSelectedNodes();
             if (nodes.length > 0) {
@@ -610,16 +624,16 @@
 <script>
 
     var LODOP; //声明为全局变量
-    var index=-1;
+    var index = -1;
 
     function readPrintFile() {
         index = LODOP.GET_FILE_TEXT("c:\\print.ini");
         LODOP.SET_PRINTER_INDEXA(index);
     }
     function Preview(strHtml) {//打印预览
-        LODOP=getLodop();
+        LODOP = getLodop();
         LODOP.PRINT_INIT("打印报告单");
-        LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
+        LODOP.ADD_PRINT_HTM("0", 0, "RightMargin:0cm", "BottomMargin:0mm", strHtml);
         //LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
         LODOP.PREVIEW();
     }
@@ -632,30 +646,30 @@
     function CreateDataBill(data) {
         if (data && data != null) {
             var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity;
-            var patientInfo1 = data.patientCode + " " + data.hossection + " "+data.age+data.ageUnit;
+            var patientInfo1 = data.patientCode + " " + data.hossection + " " + data.age + data.ageUnit;
             LODOP = getLodop();
             LODOP.PRINT_INIT("");
             LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
             //LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.85mm", 180, 25, patientInfo);
             //LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.84mm", "42.6mm", 35, "128B", data.barcode);
-            LODOP.ADD_PRINT_BARCODEA("barcode","10.42mm","2.84mm","34.66mm",35,"128Auto",data.barcode);
+            LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.84mm", "34.66mm", 35, "128Auto", data.barcode);
             LODOP.SET_PRINT_STYLEA(0, "ShowBarText", 0);
             LODOP.SET_PRINT_STYLEA(0, "Horient", 2);
             LODOP.ADD_PRINT_TEXTA("code", "19.39mm", "2.85mm", 161, 25, "*" + data.barcode + "*");
             LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
             LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
-            if(data.requestMode =='1'){
-                LODOP.ADD_PRINT_TEXTA("patientinfo","2.85mm","8.23mm",169,25,patientInfo);
+            if (data.requestMode == '1') {
+                LODOP.ADD_PRINT_TEXTA("patientinfo", "2.85mm", "8.23mm", 169, 25, patientInfo);
                 //LODOP.ADD_PRINT_ELLIPSE(8,12,14,15,0,1);
-                LODOP.ADD_PRINT_TEXT(10,11,19,15,"急");
-                LODOP.SET_PRINT_STYLEA(0,"TextFrame",6);
-                LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
-                LODOP.SET_PRINT_STYLEA(0,"Bold",1);
-            }else{
+                LODOP.ADD_PRINT_TEXT(10, 11, 19, 15, "急");
+                LODOP.SET_PRINT_STYLEA(0, "TextFrame", 6);
+                LODOP.SET_PRINT_STYLEA(0, "FontSize", 10);
+                LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+            } else {
                 LODOP.ADD_PRINT_TEXTA("patientinfo", "2.89mm", "2.95mm", 180, 25, patientInfo);
             }
             LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.85mm", 250, 20, patientInfo1);
-            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType+ " "+data.examitem);
+            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType + " " + data.examitem);
             LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.85mm", 180, 25, "采集时间 " + data.requestTime);
 
 

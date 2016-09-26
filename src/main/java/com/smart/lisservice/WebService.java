@@ -85,7 +85,7 @@ public class WebService {
             GetMethod method2 = new GetMethod(url + "getWardList");
             method.releaseConnection();
             httpClient.executeMethod(method2);
-            System.out.println("获取住院信息：" + method2.getResponseBodyAsString());
+            //System.out.println("获取住院信息：" + method2.getResponseBodyAsString());
             JSONObject obj2 = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj2.get("State")==1) {
                 JSONArray arr = obj2.getJSONArray("Message");
@@ -153,6 +153,29 @@ public class WebService {
         return patient;
     }
 
+    /**
+     *  获取信息病人信息
+     * @param ward  病区
+     * @return
+     */
+    public JSONArray getInPatientList(String ward) {
+        JSONArray patientList = new JSONArray();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url);
+            GetMethod method = new GetMethod(url + "getInPatientList?ward=" + ward);
+            method.releaseConnection();
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==1) {
+                patientList =  obj.getJSONArray("Message");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return patientList;
+    }
+
     public List<LabOrder> getExecuteInfo(String patientId, String requestmode, String from, String to) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
@@ -162,7 +185,7 @@ public class WebService {
                     + "&fromDate=" + from + "&toDate=" + to);
             method.releaseConnection();
             httpClient.executeMethod(method);
-            System.out.println("1获取采样信息：" + method.getResponseBodyAsString());
+            //System.out.println("1获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             list = jsonTolist(1,obj);
         } catch (Exception e) {
@@ -179,7 +202,7 @@ public class WebService {
             GetMethod method = new GetMethod(url + "getOutPatientRequestInfo?requestDetailId=" + unExecuteRequestIds);
             method.releaseConnection();
             httpClient.executeMethod(method);
-            System.out.println("获取采样信息：" + method.getResponseBodyAsString());
+            //System.out.println("获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             list = jsonTolist(1,obj);
         }catch(Exception e){
@@ -189,21 +212,19 @@ public class WebService {
     }
 
     /**
-     * 获取住院病人列表信息
+     * 获取住院病人申请单列表信息
      * @param ward  病区
      * @return
      */
     public List<LabOrder> getInExcuteInfo(String ward,String bedNo,String patientId){
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
-            url += "getInPatientRequestInfo";
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url);
-            GetMethod method = new GetMethod(url + "?ward=" + ward +"&bedNo="+bedNo +"&patientId="+patientId);
+            httpClient.getHostConfiguration().setHost(url + "getInPatientRequestInfo");
+            GetMethod method = new GetMethod(url + "getInPatientRequestInfo" + "?ward=" + ward +"&bedNo="+bedNo +"&patientId="+patientId);
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-
             list = jsonTolist(2,obj);
             //System.out.println(obj.toString());
         } catch (Exception e) {
@@ -230,7 +251,7 @@ public class WebService {
                 labOrder.setHossectionName(arr.getJSONObject(i).getString("requestDepartmentName"));         //申请科室名称
                 labOrder.setWardId(arr.getJSONObject(i).getString("ward"));                         //病区ID
                 labOrder.setWardName(arr.getJSONObject(i).getString("wardName"));                   //病区名称
-                labOrder.setBirthday(Constants.SDF.parse(arr.getJSONObject(i).getString("birthday")));
+                labOrder.setBirthday(Constants.DF2.parse(arr.getJSONObject(i).getString("birthday")));
                 labOrder.setBlh(arr.getJSONObject(i).getString("patientFileCode"));
                 labOrder.setCycle(0);
                 labOrder.setLaborderorg(arr.getJSONObject(i).getString("requestDetailId"));
@@ -305,7 +326,7 @@ public class WebService {
             method.releaseConnection();
 
             httpClient.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
+            //System.out.println(method.getResponseBodyAsString());
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
@@ -414,7 +435,7 @@ public class WebService {
             method.releaseConnection();
 
             httpClient.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
+            //System.out.println(method.getResponseBodyAsString());
 
             if(method.getResponseBodyAsString() != null && !method.getResponseBodyAsString().isEmpty()){
                 JSONObject obj = new JSONObject(method.getResponseBodyAsString());
@@ -510,7 +531,7 @@ public class WebService {
             method.releaseConnection();
 
             httpClient.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
+            //System.out.println(method.getResponseBodyAsString());
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {

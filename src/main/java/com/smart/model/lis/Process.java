@@ -26,7 +26,8 @@ public class Process extends BaseObject {
 	
 	private long id;
 
-	private String requester;
+	private String requester;		//开单人工号
+	private String requesterName;	//开单人姓名
 	private Date requesttime;
 	private String executor;
 	private Date executetime;
@@ -202,5 +203,13 @@ public class Process extends BaseObject {
 
 	public int hashCode() {
 		return 0;
+	}
+
+	public String getRequesterName() {
+		return requesterName;
+	}
+
+	public void setRequesterName(String requesterName) {
+		this.requesterName = requesterName;
 	}
 }
