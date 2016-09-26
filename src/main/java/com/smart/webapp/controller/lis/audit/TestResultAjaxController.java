@@ -153,7 +153,6 @@ public class TestResultAjaxController extends BaseAuditController{
 			
 			String tcValues = request.getParameter("tcValues");
 			String[] tcResult = tcValues.split(",");
-			System.out.println(tcValues);
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
             
 

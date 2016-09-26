@@ -412,6 +412,7 @@ function clearData() {
 
 $(function() {
 	$("#sampletype").val("C");
+	$("#receive_id").focus();
 	
 	$("#section").autocomplete({
         source: function( request, response ) {

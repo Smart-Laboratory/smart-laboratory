@@ -768,7 +768,7 @@ $(function(){
 	    			result = false;
 	    	});
 			if(result){
-				$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+ui.item.id+"'/><label>"+ui.item.value+"</label><div class='input-group col-sm-12'><input class='form-control col-sm-12' type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))' class='testValue span2 form-control'/></div></div>");
+				$("#addTestList").append("<div style='padding: 2px 5px'><input type='hidden' class='testID' value='"+ui.item.id+"'/><label>"+ui.item.value+"</label><input class='form-control col-sm-12 testValue' type='text' id='"+ui.item.id+"'  onfocus='getDictionaries($(this).attr(\"id\"))'/></div>");
 			}else{
 				layer.msg("样本列表或者添加列表中已包含该检验项目！", {icon: 0, time: 1000});
 			}

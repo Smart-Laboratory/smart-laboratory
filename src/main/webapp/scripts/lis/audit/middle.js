@@ -497,7 +497,7 @@
     					ab:"<a href='javascript:show_knowledge(\""+ret.knowledgeName+"\")'>"+ret.ab+"</a>"
     				});
         			
-        			if (hl.length != 2) {
+        			if (hl.length != 2 && hl.length != 3) {
         				jQuery("#rowed3").jqGrid('setRowData', v, {
         					result:color+"<span class='result_span'>"+ret.result+"</span></div>"
         				});
@@ -516,7 +516,7 @@
         			var res3 = "";
         			var res4 = "";
         			var res5 = "";
-        			
+
         			if (!isNaN(h) && !isNaN(l)) {
         				if (!isNaN(va)) {
         					if (va < l) {
@@ -769,7 +769,7 @@
     					ab:"<a href='javascript:show_knowledge(\""+ret.knowledgeName+"\")'>"+ret.ab+"</a>"
     				});
         			
-        			if (hl.length != 2) {
+        			if (hl.length != 2 && hl.length != 3) {
         				jQuery("#sample0").jqGrid('setRowData', v, {
         					result:color+"<span class='two_result_span'>"+ret.result+"</span></div>"
         				});
@@ -985,7 +985,7 @@
     					ab:"<a href='javascript:show_knowledge(\""+ret.knowledgeName+"\")'>"+ret.ab+"</a>"
     				});
         			
-        			if (hl.length != 2) {
+        			if (hl.length != 2 && hl.length != 3) {
         				jQuery("#sample1").jqGrid('setRowData', v, {
         					result:color+"<span class='two_result_span'>"+ret.result+"</span></div>"
         				});
