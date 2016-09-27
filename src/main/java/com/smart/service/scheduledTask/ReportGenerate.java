@@ -56,7 +56,7 @@ public class ReportGenerate {
         List<SyncResult> wswlist = null;
 
         velocityContext.put("type", type);
-        velocityContext.put("blh", sample.getPatientblh());
+        velocityContext.put("blh", ConvertUtil.null2String(sample.getPatientblh()));
         velocityContext.put("patientName", sample.getPatientname());
         velocityContext.put("sex", sample.getSexValue());
         velocityContext.put("age", sample.getAge());
@@ -227,7 +227,7 @@ public class ReportGenerate {
 //                }
 //            }
             testResultVo.setUnit(result.getUnit());
-            testResultVo.setReference(result.getReference());
+            testResultVo.setReference(ConvertUtil.null2String(result.getReference()));
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
             testResultVos.add(testResultVo);
         }

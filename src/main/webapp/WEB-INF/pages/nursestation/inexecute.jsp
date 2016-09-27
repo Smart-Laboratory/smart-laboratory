@@ -18,10 +18,6 @@
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ztree/zTreeStyle_flat.css'/>"/>
     <title>标本采集</title>
-    <!--打印控件-->
-    <%--<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>--%>
-    <%--<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0 pluginspage="install_lodop32.exe"></embed>--%>
-    <%--</object>--%>
 </head>
 <style>
     .laftnav {
@@ -210,7 +206,9 @@
 
 <div style="clear: both"></div>
 <script type="text/javascript">
+
     var TSLAB = TSLAB || {};
+    var lastsel;
     TSLAB.Custom = (function () {
         var private = {
             initHieght: function () {
@@ -474,7 +472,6 @@
                     success: function (data) {
                         var printDatas = data.printOrders
                         var noPrintDatas = data.noPrintOrders;
-                        readPrintFile();
                         for (i = 0; i < printDatas.length; i++) {
                             startPrint(printDatas[i]);
                         }
@@ -532,14 +529,26 @@
                     $('#widget-box-1').show();
                 }
             },
-            getSampleList: function (bedno, patientId) {
+            setCookie: function (name, value) {
+                var Days = 9999999;
+                var exp = new Date();
+                exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+                document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
             },
+            getCookie: function (name) {
+                var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+                if (arr = document.cookie.match(reg))
+                    return unescape(arr[2]);
+                else
+                    return null;
+            },
+
             printSetting: function () {
-               readPrintFile();
+                //readPrintFile();
                 if (LODOP.CVERSION) {
                     LODOP.On_Return = function (TaskID, Value) {
                         if (Value >= 0)
-                            LODOP.WRITE_FILE_TEXT(0, "c:\\print.ini", Value);
+                            private.setCookie("lis_print", Value);
                         else
                             alert("选择失败！");
                     };
@@ -547,9 +556,12 @@
                     return;
                 }
                 ;
+            },setPrintIndex:function(index){
+                var index = private.getCookie("lis_print");
+                LODOP = getLodop();
+                LODOP.SET_PRINTER_INDEX(index)
             },
             printSet: function () {
-
                 var data = {
                     "age": "55",
                     "ageUnit": "岁",
@@ -570,14 +582,8 @@
                     "wardId": "1025"
                 }
                 CreateDataBill(data)
-                //var index =;
-
-//                if (LODOP.SELECT_PRINTER()>=0)
-//                    alert("选择成功!"); else alert("选择失败！");
-                //
-                // LODOP.SET_PRINTER_INDEXA( LODOP.SELECT_PRINTER());
-                // LODOP.PRINT_DESIGN()
-            },
+            }
+            ,
             printReport: function () {
                 $.get("/print/ajax/printReport", {sampleno: '20160530URF300', haslast: '0', type: ''}, function (data) {
                     console.log(data)
@@ -598,9 +604,13 @@
                 private.printOldInfo();
             },
             printSet: function () {
-                //private.printSet();
                 private.printSetting();  //打印机设置
-                //private.printReport();
+            },
+            setPrintIndex:function () {
+                private.setPrintIndex();
+            },
+            getCookie:function (name) {
+                return private.getCookie(name);
             }
 
         }
@@ -626,10 +636,24 @@
     var LODOP; //声明为全局变量
     var index = -1;
 
-    function readPrintFile() {
-        index = LODOP.GET_FILE_TEXT("c:\\print.ini");
-        LODOP.SET_PRINTER_INDEXA(index);
-    }
+//    function readPrintFile(callback) {
+//        LODOP = getLodop();
+//        if (LODOP.CVERSION) CLODOP.On_Return = function (TaskID, Value) {
+//            LODOP.SET_PRINTER_INDEX(Value);
+//            if (typeof callback === "function") {
+//                callback();
+//            }
+//        };
+//        var strResult = LODOP.GET_FILE_TEXT("c:/print.ini");
+//        if (!LODOP.CVERSION)
+//        //本地打印
+//            flag = false;
+//        else
+//        //云打印
+//            flag = true;
+//
+//
+//    }
     function Preview(strHtml) {//打印预览
         LODOP = getLodop();
         LODOP.PRINT_INIT("打印报告单");
@@ -647,7 +671,7 @@
         if (data && data != null) {
             var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity;
             var patientInfo1 = data.patientCode + " " + data.hossection + " " + data.age + data.ageUnit;
-            LODOP = getLodop();
+            // LODOP = getLodop();
             LODOP.PRINT_INIT("");
             LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
             //LODOP.ADD_PRINT_TEXTA("patientinfo", "2.99mm", "2.85mm", 180, 25, patientInfo);
@@ -676,9 +700,8 @@
         }
     }
     function startPrint(data) {
-
         CreateDataBill(data);
-        //开始打印
+        TSLAB.Custom.setPrintIndex();
         LODOP.PRINT();
     }
 </script>

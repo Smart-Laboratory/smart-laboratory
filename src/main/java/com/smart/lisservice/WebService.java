@@ -510,7 +510,7 @@ public class WebService {
                 JSONObject result = new JSONObject();
                 String sampleNo = testResult.getSampleNo().substring(testResult.getSampleNo().length()-3,testResult.getSampleNo().length());
                 //System.out.println(String.format("%05d", ConvertUtil.getLongValue(sampleNo)));
-                String inspectionId = testResult.getDeviceId().replaceAll(",","")+
+                String inspectionId = ConvertUtil.null2String(testResult.getDeviceId()).replaceAll(",","")+
                         ConvertUtil.getFormatDate(testResult.getMeasureTime(),"yyyyMMdd")+
                         String.format("%05d", ConvertUtil.getLongValue(sampleNo));
                 result.put("inspectionId",inspectionId);                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008

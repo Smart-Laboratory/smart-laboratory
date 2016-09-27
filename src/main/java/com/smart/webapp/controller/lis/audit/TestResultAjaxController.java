@@ -1,17 +1,14 @@
 package com.smart.webapp.controller.lis.audit;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.service.lis.TestReferenceManager;
 import com.smart.webapp.util.AgeUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +151,8 @@ public class TestResultAjaxController extends BaseAuditController{
 			String tcValues = request.getParameter("tcValues");
 			String[] tcResult = tcValues.split(",");
             FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
-            
+			TestIdMapUtil testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
+			Map<String, Index> indexMap = testIdMapUtil.getIdMap();
 
 			Sample info = sampleManager.getBySampleNo(sample);
 
@@ -174,6 +172,7 @@ public class TestResultAjaxController extends BaseAuditController{
 					nt.setMeasureTime(new Date());
 					nt.setResultFlag("AAAAAA");
 					nt.setEditMark(Constants.ADD_FLAG);
+					nt.setTestName(testIdMapUtil.getIdMap().get(idValue[0]).getName());
 					Index index = fillUtil.getIndex(idValue[0]);
 					if (index != null) {
 						nt.setSampleType(""+ index.getSampleFrom());
