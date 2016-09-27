@@ -117,7 +117,7 @@ function getReciveList(){
 		rowNum:20,
 		height:'100%',
 		rownumbers:true,
-		caption : "标本送出列表",
+		caption : "标本接收列表",
 		viewrecords:true,
 		jsonReader:{repeatitems:false},
 		mtype:"GET",

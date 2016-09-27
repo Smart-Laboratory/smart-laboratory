@@ -10,11 +10,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 <head>
 	<title>标本交接</title>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/jquery-ui.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/bootstrap.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ace-elements.min.js"/>"></script>
+
     <script type="text/javascript" src="<c:url value="/scripts/bootstrap-tag.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/i18n/grid.locale-cn.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.form.js"/>"></script>
@@ -23,17 +19,10 @@
     <script type="text/javascript" src="<c:url value="/scripts/validform/Validform.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/jquery.bootstrap-duallistbox.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/bootstrap-datetimepicker.min.js"/>"></script>
-    <script type="text/javascript" src="../scripts/manage/sampleHandover.js"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/manage/sampleHandover.js"/>"></script>
 
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/font-awesome.css"/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/bootstrap-datetimepicker.min.css"/>" />
-    <!-- page specific plugin styles -->
-    <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/bootstrap-duallistbox.min.css"/>"/>
-    <link rel="stylesheet" type="text/css"  href="<c:url value="/styles/ztree/zTreeStyle.css"/>" type="text/css">
 
 </head>
 <style>
@@ -154,7 +143,7 @@
 										<div class="col-sm-2"><h5><fmt:message key='ward.section'/></h5></div>	
 										<div class="col-sm-5"><h4><b id="ward"></b></h4></div>
 										<div class="col-sm-2"><h5><fmt:message key='patient.departbed'/></h5></div>	
-										<div class="col-sm-3"><h4><b id="bed"></b></h5></div>
+										<div class="col-sm-3"><h4><b id="bed"></b></h4></div>
 									</div>
 									<div class="col-sm-12">
 										<div class="col-sm-2"><h5><fmt:message key='ward.type'/></h5></div>	
@@ -170,7 +159,6 @@
 								
 							</div>
 							
-							<h4>标本送出列表</h4>
 							<div id="outListDiv" class="col-sm-12" style="overflow:auto;">
 								<table id="outList" class="table table-striped table-bordered table-hover"></table>
 								<div id="pager"></div>
@@ -184,17 +172,17 @@
                         <div class="col-sm-12">
 							<div class="row" style="margin-top:10px;">
 								<div style="float:left;width:30%">
-									<div class="col-sm-5"><h3 style=" text-align: right; margin: 10px 10px;"><fmt:message key="sample.id"/></h3></div>
-									<div class="col-sm-7"><input type="text" style="height:45px;" id="doctin" name="doctin" class="form-control" onkeypress="getData(this,event);"></div>
+									<div class="col-sm-5"><h5 style=" text-align: right; margin: 10px 10px;"><fmt:message key="sample.id"/></h5></div>
+									<div class="col-sm-7"><input type="text" id="doctin" name="doctin" class="form-control" onkeypress="getData(this,event);"></div>
 								</div>
 								<div style="float:left;width:30%">
-									<div class="col-sm-5"><h3 style=" text-align: right; margin: 10px 10px;"><fmt:message key="tat.receiver"/></h3></div>
-									<div class="col-sm-7"><input type="text" id="operator" style="height:45px;" name="operator" class="form-control" value="${name}"></div>
+									<div class="col-sm-5"><h5 style=" text-align: right; margin: 10px 10px;"><fmt:message key="tat.receiver"/></h5></div>
+									<div class="col-sm-7"><input type="text" id="operator" name="operator" class="form-control" value="${name}"></div>
 								</div>
 								<div style="float:left;width:30%">
-									<div class="col-sm-5"><h3 style=" text-align: right; margin: 10px 10px;"><fmt:message key="receive.point"/></h3></div>
+									<div class="col-sm-5"><h5 style=" text-align: right; margin: 10px 10px;"><fmt:message key="receive.point"/></h5></div>
 									<div class="col-sm-7">
-										<select id="point" style="height:45px;" name="point" class="form-control">
+										<select id="point" name="point" class="form-control">
 											<c:forEach items="${pointList}" var="point">
 											<option value="${point.code}">${point.name}</option>
 											</c:forEach>
@@ -202,7 +190,7 @@
 									</div>
 								</div>
 								<div style="float:left;width:10%">
-									<button id="refuse" type="button" class="btn btn-danger"><fmt:message key='invalidSamples.refuse'/></button>
+									<button id="refuse" type="button" class="btn btn-sm btn-danger"><fmt:message key='invalidSamples.refuse'/></button>
 								</div>
 							</div>
 							<hr style="height:3px;"/>
@@ -246,7 +234,6 @@
 								
 							</div>
 							
-							<h4>标本接收列表</h4>
 							<div id="receiveListDiv" class="col-sm-12" style="overflow:auto;">
 								<table id="receiveList" class="table table-striped table-bordered table-hover"></table>
 								<div id="rpager"></div>

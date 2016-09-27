@@ -31,7 +31,6 @@
 </head>
 <div class="row">
 <div class="col-sm-10">
-<h1><fmt:message key="invalidSamplesDetail.heading"/></h1>
 <form:form commandName="invalidSample" method="post" action="invalidSampleForm" name="invalidSampleForm">
 <form:errors path="*" cssClass="error" element="div"/>
 <form:hidden path="id"/>
@@ -40,10 +39,9 @@
 <form:hidden path="sampleId"/>
 
 <div class="col-sm-12" style="float:left">
-	<div class="form-inline" style="margin-bottom:10px;">
-		<label for="sampleSearch"><fmt:message key="invalidSamplesList.search"/></label>
-		<input id="sampleSearch" type="text" class="form-control" placeholder="please enter id"/>
-		<button type="button" id="addInvalidSample" class="btn btn-primary"><fmt:message key="button.add"/></button>
+	<div class="form-inline" style="margin-top:10px;margin-bottom:10px;">
+		<input id="sampleSearch" type="text" class="form-control" placeholder="<fmt:message key="invalidSamplesList.search"/>"/>
+		<button type="button" id="addInvalidSample" class="btn btn-sm btn-primary"><fmt:message key="button.add"/></button>
 	</div>
 	<div id="sampleInfo" class="clearfix alert alert-info " style="margin-bottom:10px;">
 		<div class="col-sm-12" style="margin-bottom:10px;">

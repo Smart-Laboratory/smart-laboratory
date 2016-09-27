@@ -71,7 +71,6 @@ public class FillFieldUtil {
 
 	private int fillReference(TestResult result, double age, int cycle, int sex) {
 
-		System.out.println("开始完善参考范围");
 		int direct = 0;
 		String testid = result.getTestId();
 		String value = result.getTestResult();

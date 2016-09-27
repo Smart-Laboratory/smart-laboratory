@@ -182,7 +182,7 @@ public class AutoAuditServlet extends HttpServlet {
 													}
                         	        				formulaUtil.formula(info, "admin", now, new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 													hisTestMap.put(info.getSampleNo(), now);
-                        	                	} catch (Exception e) {
+												} catch (Exception e) {
                          	        				samples.remove(info);
                          	        				e.printStackTrace();
                          	        			}
@@ -276,7 +276,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								
                 	    							}
                 	    							//bayesCheck.doCheck(info); // Bayes审核及学习
-                	    							
+
                 	    							if (info.getAuditStatus() == Constants.STATUS_PASSED) {
                 	    								info.setWriteback(1);
                 	    								if (info.getCheckerOpinion()!=null 
@@ -290,10 +290,6 @@ public class AutoAuditServlet extends HttpServlet {
 														process.setCheckoperator(new GetAutoCheckOperatorUtil().getName(info.getSectionId()));
 														process.setChecktime(new Date(nowtime));
 														updateProcess.add(process);
-														for(TestResult testResult : now) {
-															testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
-															updateTestResult.add(testResult);
-														}
 														//生成PDF
 														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
 														//写入HIS
@@ -314,6 +310,12 @@ public class AutoAuditServlet extends HttpServlet {
                     								a.setType(1);
                     								a.setStatus(info.getAuditStatus());
                     								updateAuditTrace.add(a);
+
+													//保存参考范围
+													for(TestResult testResult : now) {
+														testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
+														updateTestResult.add(testResult);
+													}
                         	        			} catch (Exception e) {
                                 	                e.printStackTrace();
                                 	                continue;
