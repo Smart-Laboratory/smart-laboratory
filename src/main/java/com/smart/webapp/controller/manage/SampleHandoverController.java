@@ -25,7 +25,6 @@ import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.ReceivePointManager;
-import com.smart.service.lis.SampleManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.WardManager;
 import com.smart.webapp.util.DataResponse;
@@ -45,7 +44,7 @@ public class SampleHandoverController {
 	
 	@Autowired
 	private RMIService rmiService = null;
-	
+
 	@Autowired
 	private ReceivePointManager receivePointManager = null;
 	
@@ -81,7 +80,7 @@ public class SampleHandoverController {
 			long doct = Long.parseLong(request.getParameter("doct"));
 			String operator = request.getParameter("operator");
 			String lab = pointMap.get(operator.substring(operator.indexOf("(")+1, operator.indexOf(")")));
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 			
 			SyncPatient sp = rmiService.getSampleByDoct(doct);
 			if(sp == null) {
@@ -159,7 +158,7 @@ public class SampleHandoverController {
 			long doct = Long.parseLong(request.getParameter("doct"));
 			String operator = request.getParameter("operator");
 			String lab = pointMap.get(operator.substring(operator.indexOf("(")+1, operator.indexOf(")")));
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 			
 			SyncPatient sp = rmiService.getSampleByDoct(doct);
 			if(sp == null) {
@@ -243,7 +242,7 @@ public class SampleHandoverController {
 		
 		Map<Long, SyncPatient> sMap = new HashMap<Long,SyncPatient>();
 		List<Process> processes  = new ArrayList<Process>();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
 		
 		int size = 0;
 		if(type.equals("1")){//标本送出
@@ -320,7 +319,7 @@ public class SampleHandoverController {
 		
 		Map<Long, SyncPatient> sMap = new HashMap<Long,SyncPatient>();
 		List<Process> processes  = new ArrayList<Process>();
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
 		
 		int size = 0;
 		if(type.equals("1")){//标本送出
@@ -379,8 +378,6 @@ public class SampleHandoverController {
 		
 	}
 	
-	@Autowired
-	private SampleManager sampleManager;
 	@Autowired
 	private ProcessManager processManager;
 	@Autowired

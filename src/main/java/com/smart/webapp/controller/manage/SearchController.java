@@ -24,7 +24,6 @@ import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/manage/sampleQuery*")
@@ -41,7 +40,7 @@ public class SearchController {
 		if (operator.getLastLab() != null) {
 			lab = operator.getLastLab();
 		}
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		if (department != null) {
 			for (String s : department.split(",")) {
 				depart.put(s, sectionutil.getLabValue(s));
@@ -149,7 +148,7 @@ public class SearchController {
 		dataResponse.setPage(1);
 		dataResponse.setTotal(1);
 		Map<String, String> sMap = SampleUtil.getInstance(dictionaryManager).getMap();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		for(Sample info :samples) {
 			String section = sectionutil.getLabValue(info.getSectionId());
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -194,8 +193,6 @@ public class SearchController {
 	private SampleManager sampleManager;
 	@Autowired
 	private DictionaryManager dictionaryManager;
-	@Autowired
-	private RMIService rmiService;
 	@Autowired
 	private SectionManager sectionManager;
 }

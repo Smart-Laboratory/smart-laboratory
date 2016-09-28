@@ -9,14 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONArray;
 import com.smart.Constants;
 import com.smart.lisservice.WebService;
-import com.smart.model.lis.Hospital;
 import com.smart.service.lis.*;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
-import org.drools.core.base.evaluators.IsAEvaluatorDefinition.IsAEvaluator;
-import org.omg.CORBA.PRIVATE_MEMBER;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,17 +29,9 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
 import com.smart.service.execute.ExecuteUnusualManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.execute.SampleNoBuilderManager;
-import com.smart.service.impl.zy.RMIServiceImpl;
-import com.zju.api.model.ExecuteInfo;
-import com.zju.api.model.Patient;
-import com.zju.api.service.RMIService;
-
-
-
 
 @Controller
 @RequestMapping("/manage*")
@@ -276,7 +264,7 @@ public class ExecuteController {
             object.put("sex", labOrder.getSex());
             object.put("age", labOrder.getAge());
             object.put("ageUnit", labOrder.getAgeUnit());
-            object.put("labDepartment", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(labOrder.getLabdepartment()));
+            object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
             object.put("patientCode",labOrder.getBlh());
             object.put("executeTime",labOrder.getExecutetime());
             object.put("requestMode",labOrder.getRequestmode());
@@ -286,7 +274,7 @@ public class ExecuteController {
             object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
             object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
             object.put("testName", labOrder.getExamitem());
-            object.put("hosSectionName", SectionUtil.getInstance(rmiService, sectionManager).getValue(labOrder.getHossection()));
+            object.put("hosSectionName", SectionUtil.getInstance(sectionManager).getValue(labOrder.getHossection()));
             object.put("ageUnit", labOrder.getAgeUnit());
             object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
             object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
@@ -319,7 +307,7 @@ public class ExecuteController {
 		if(list==null || list.size()==0)
 			return null;
 		
-		SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
 		for(LabOrder l : list){
 			html.append("<div style='background:#999;width:450px;height:350px;padding:10px 10px;margin:15px 10px;float:left;'>");
 			html.append("<div id='top' style='text-align:center;'>"+
@@ -490,10 +478,6 @@ public class ExecuteController {
 		
 	}
 	
-	@Autowired
-	private RMIService rmiService;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private SampleManager sampleManager;
 	@Autowired

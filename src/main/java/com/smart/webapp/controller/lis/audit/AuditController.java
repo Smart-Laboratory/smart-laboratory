@@ -493,9 +493,15 @@ public class AuditController extends BaseAuditController {
 				if ("pass".equals(op)) {
 					info.setAuditStatus(Constants.STATUS_PASSED);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
+					for(TestResult t : testResultList) {
+						t.setTestStatus(Constants.STATUS_PASSED);
+					}
 				} else if ("unpass".equals(op)) {
 					info.setAuditStatus(Constants.STATUS_UNPASS);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
+					for(TestResult t : testResultList) {
+						t.setTestStatus(Constants.STATUS_UNPASS);
+					}
 				}
 				//info.setWriteback(1);
 				String text = Check.MANUAL_AUDIT;
@@ -529,6 +535,7 @@ public class AuditController extends BaseAuditController {
 				updatePassTrace(request,info.getSampleNo(),ids);
 			}
 			sampleManager.saveAll(updateP);
+			testResultManager.saveAll(testResultList);
 			auditTraceManager.saveAll(updateA);
 			ReportGenerate reportGenerate = new ReportGenerate();
 			if ("pass".equals(op)) {
@@ -680,6 +687,7 @@ public class AuditController extends BaseAuditController {
 		List<Sample> updateS = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
 		List<Process> updateP = new ArrayList<Process>();
+		List<TestResult> updateT = new ArrayList<TestResult>();
 		Date checkTime = new Date();
 
 		ReportGenerate reportGenerate = new ReportGenerate();
@@ -688,6 +696,11 @@ public class AuditController extends BaseAuditController {
 				info.setAuditStatus(status);
 				info.setSampleStatus(sampleStatus);
 				info.setWriteback(1);
+				List<TestResult> now = hisTestMap.get(info.getSampleNo());
+				for(TestResult testResult : now) {
+					testResult.setTestStatus(sampleStatus);
+					updateT.add(testResult);
+				}
 				if (pass) {
 					info.setPassReason("批量通过");
 					AuditTrace a = new AuditTrace();
@@ -702,7 +715,13 @@ public class AuditController extends BaseAuditController {
 					process.setChecktime(checkTime);
 					updateP.add(process);
 
-					reportGenerate.createReportPdf(info, processMap.get(info.getId()), hisTestMap.get(info.getSampleNo()), false);
+					//生成PDF
+					reportGenerate.createReportPdf(info, process, now, false);
+					WebService service = new WebService();
+					//写入HIS
+					service.saveHisResult(info,process,now);
+					//写入LIS用于电子病历
+					service.saveLisResult(info.getBarcode(),now);
 				} else {
 					info.setPassReason("批量不通过");
 					AuditTrace a = new AuditTrace();
@@ -723,6 +742,7 @@ public class AuditController extends BaseAuditController {
 		auditTraceManager.saveAll(updateA);
 		sampleManager.saveAll(updateS);
 		processManager.saveAll(updateP);
+		testResultManager.saveAll(updateT);
 		return result;
 	}
     

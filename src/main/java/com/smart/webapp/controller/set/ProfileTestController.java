@@ -92,7 +92,7 @@ public class ProfileTestController {
             map.put("profiledescribe", info.getProfileDescribe());
             map.put("devicename", DeviceUtil.getInstance(deviceManager).getValue(info.getDeviceId()));
             map.put("frequencytime", info.getFrequencyTime());
-            map.put("sectionname", DepartUtil.getInstance(sectionManager).getValue(info.getSection()));
+            map.put("sectionname", SectionUtil.getInstance(sectionManager).getLabValue(info.getSection()));
             map.put("sampletype", info.getSampleType());
             dataRows.add(map);
         }
@@ -176,7 +176,7 @@ public class ProfileTestController {
             jsonProfiletest.put("frequencyTime",profileTest.getFrequencyTime());
             jsonProfiletest.put("sampleType",profileTest.getSampleType());
             jsonProfiletest.put("sectionId",profileTest.getSection());
-            jsonProfiletest.put("sectionName", DepartUtil.getInstance(sectionManager).getValue(profileTest.getSection()));
+            jsonProfiletest.put("sectionName", SectionUtil.getInstance(sectionManager).getLabValue(profileTest.getSection()));
             jsonProfiletest.put("useNow",profileTest.getUseNow());
             try {
                 if (!indexid.equals("")) {

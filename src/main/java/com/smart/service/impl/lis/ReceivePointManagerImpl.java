@@ -28,4 +28,14 @@ public class ReceivePointManagerImpl extends GenericManagerImpl<ReceivePoint, Lo
 	public List<ReceivePoint> getByName(String name){
 		return receivePointDao.getByName(name);
 	}
+
+	public int getPointCount(String query, String type) {
+		return receivePointDao.getPointCount(query, type);
+	}
+
+	public List<ReceivePoint> getList(String query, String type, int start, int end, String sidx, String sord) {
+		return receivePointDao.getList(query, type, start, end, sidx, sord);
+	}
+
+
 }

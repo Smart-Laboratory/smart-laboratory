@@ -469,7 +469,7 @@ function openOpStatusDialog() {
     		if ($("#hiddenIsPass").val() == "true") {
     			var note = $("#selectNoteDiv input[name='passReason']:checked").parent().find(".selectLabel").html();
     			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
-    			$.post("../audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest,ids:ids},function(data) {
+    			$.post(baseUrl + "/audit/manual",{sample:sample, operate:"pass", note:note, text:text, checktest:checktest,ids:ids},function(data) {
     				if (data == true) {
     					$("#passreason").html(text);
     					var s = jQuery("#list").jqGrid('getGridParam','selrow');
@@ -487,7 +487,7 @@ function openOpStatusDialog() {
     		} else {
     			var text = $("#noteText").val();
     			var text = $("#noteText").val().replace(/[\r\n]/g, "").replace(/[\n]/g, "");
-    			$.post("../audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest,ids:ids},function(data) {
+    			$.post(baseUrl + "/audit/manual",{sample:sample, operate:"unpass", note:"", text:text, checktest:checktest,ids:ids},function(data) {
     				if (data == true) {
     					$("#passreason").html(text);
     					var s = jQuery("#list").jqGrid('getGridParam','selrow');

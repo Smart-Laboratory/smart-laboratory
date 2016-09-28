@@ -142,7 +142,7 @@ public class CollectController extends BaseAuditController {
 		Sample info = sampleManager.getBySampleNo(sample);
 		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		if (info != null) {
 			map.put("id", info.getId());
 			map.put("name", info.getPatientname());

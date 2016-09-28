@@ -74,7 +74,7 @@ public class CriticalController {
 				crMap.put(cr.getSampleid(), cr);
 			}
 			int index = 0;
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 			for (Sample sample : samples) {
 				if(crMap.get(sample.getId()) != null) {
 					Critical ctl = new Critical();
@@ -171,7 +171,7 @@ public class CriticalController {
 			for (com.zju.api.model.Patient p : patients) {
 				patientMap.put(p.getPatientId(), p);
 			}
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 			int index = 0;
 			for (Sample sample : samples) {
 				if (crMap.get(sample.getId()) != null) {
@@ -312,7 +312,7 @@ public class CriticalController {
 			
 			if (info.getStayHospitalMode() == 2) {
 				root.put("isInHospital", true);
-				SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+				SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 				String section = sectionutil.getValue(info.getHosSection());
 				root.put("wardSection", section);
 				String[] array = section.split("\\(");
@@ -366,7 +366,7 @@ public class CriticalController {
 	
 	@Autowired
 	private RMIService rmiService = null;
-	
+
 	@Autowired
 	private CriticalRecordManager criticalRecordManager = null;
 	

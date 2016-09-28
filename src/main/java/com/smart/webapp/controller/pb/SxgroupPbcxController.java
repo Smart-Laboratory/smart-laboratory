@@ -34,7 +34,6 @@ import com.smart.service.SxSchoolManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/pb/sxgroupPbcx*")
@@ -51,9 +50,6 @@ public class SxgroupPbcxController extends PbBaseController{
 	
 	@Autowired
 	private SectionManager sectionManager;
-	
-	@Autowired
-	private RMIService rmiService;
 	
 	SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat md = new SimpleDateFormat("MM-dd");
@@ -331,7 +327,7 @@ public class SxgroupPbcxController extends PbBaseController{
 		
 	private Map<WInfo, String> getSxWinfoList(String section,String tomonth){
 		
-		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
+		section = SectionUtil.getInstance(sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);

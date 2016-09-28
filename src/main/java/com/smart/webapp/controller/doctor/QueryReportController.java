@@ -8,12 +8,10 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
-import com.smart.model.rule.Index;
 import com.smart.service.doctor.DoctorQueryManager;
 import com.smart.service.reagent.OutManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
-import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.zju.api.model.SyncResult;
@@ -127,7 +125,7 @@ public class QueryReportController  extends BaseAuditController {
         patientInfo.put("age", ConvertUtil.null2String(info.getAge()));
         patientInfo.put("examinaim", ConvertUtil.null2String(info.getInspectionName()));
         patientInfo.put("diagnostic", ConvertUtil.null2String(info.getDiagnostic()));
-        patientInfo.put("section", ConvertUtil.null2String(DepartUtil.getInstance(sectionManager).getValue(info.getSectionId())));
+        patientInfo.put("section", ConvertUtil.null2String(SectionUtil.getInstance(sectionManager).getLabValue(info.getSectionId())));
         patientInfo.put("sex", ConvertUtil.null2String(info.getSexValue()));
         patientInfo.put("medicalnumber", ConvertUtil.null2String(info.getPatientblh()));
         patientInfo.put("bedno",ConvertUtil.null2String(info.getDepartBed()));
@@ -961,7 +959,7 @@ public class QueryReportController  extends BaseAuditController {
      * @throws JSONException
      */
     private JSONObject getSampleInfo(Sample info) throws JSONException{
-        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+        SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
         JSONObject patientInfo = new JSONObject();
         patientInfo.put("id", ConvertUtil.null2String(info.getPatientId()));
         patientInfo.put("name", info.getPatientname());

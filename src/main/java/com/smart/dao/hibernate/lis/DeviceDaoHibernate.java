@@ -52,11 +52,11 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
      */
 	@Override
 	public int getDeviceCount(String query, String type) {
-		String sql = "select count(1) cnt from l_device ";
+		String sql = "select count(1) cnt from l_device d where 1=1";
 		if(type != null && !type.equals(""))
-			sql += " and  d.type = " +type;
+			sql += " and  d.\"TYPE\" = " +type;
 		if(query != null && !query.equals(""))
-			sql += " and  d.name like '%" +query +"%'";
+			sql += " and (d.\"NAME\" like '%" +query +"%' or d.\"ID\" like '%"+query+"%')";
 
 		Query q =  getSession().createSQLQuery(sql);
 		return new Integer(q.uniqueResult() + "");
@@ -80,7 +80,7 @@ public class DeviceDaoHibernate extends GenericDaoHibernate<Device, Long> implem
 	
 	@SuppressWarnings("unchecked")
 	public List<Device> getDeviceList(String name){
-		return getSession().createQuery("from Device where name like '" + name + "%'  or id like '"+name+"%' order by name,id").list();
+		return getSession().createQuery("from Device where name like '" + name + "%' or id like '"+name+"%' order by name,id").list();
 	}
 
 	@SuppressWarnings("unchecked")

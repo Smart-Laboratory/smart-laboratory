@@ -81,10 +81,10 @@
 			</span>
             </div>
         </div>
-        <div class="col-xs-12 content">
-            <table id="tableList"></table>
-            <div id="pager"></div>
-        </div>
+    </div>
+    <div class="col-xs-12 content">
+        <table id="tableList"></table>
+        <div id="pager"></div>
     </div>
 </div>
 <div style="clear: both"></div>
@@ -92,7 +92,7 @@
     <form id="addForm" class="form-horizontal" action="<c:url value='../set/device/saveDevice'/>" method="post">
         <div class="form-group">
             <div class="space-4"></div>
-            <label class="col-xs-3 control-label no-padding-right" for="name"> 编号 </label>
+            <label class="col-xs-3 control-label no-padding-right" for="id"> 编号 </label>
             <div class="col-xs-8">
                 <input type="text" id="id" name="id" placeholder="编号" class="col-xs-8"/>
             </div>
