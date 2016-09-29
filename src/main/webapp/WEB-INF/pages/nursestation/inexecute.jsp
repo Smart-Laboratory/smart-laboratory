@@ -530,7 +530,7 @@
                 }
             },
             setCookie: function (name, value) {
-                var Days = 9999999;
+                var Days = 9999;
                 var exp = new Date();
                 exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
                 document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
@@ -669,8 +669,8 @@
 
     function CreateDataBill(data) {
         if (data && data != null) {
-            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity;
-            var patientInfo1 = data.patientCode + " " + data.hossection + " " + data.age + data.ageUnit;
+            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity+data.age + data.ageUnit;;
+            var patientInfo1 = data.patientCode + " " + data.hossection
             // LODOP = getLodop();
             LODOP.PRINT_INIT("");
             LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");

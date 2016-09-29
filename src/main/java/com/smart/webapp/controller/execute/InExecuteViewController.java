@@ -300,7 +300,7 @@ public class InExecuteViewController {
                         iterator.remove();
                     }
                 }
-                System.out.println(beCollectedList.size());
+                //System.out.println(beCollectedList.size());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -312,7 +312,7 @@ public class InExecuteViewController {
 
         //endTime = System.currentTimeMillis(); //获取结束时间
         //System.out.println("程序运行时间5： " + (endTime - startTime) + "ms");
-        System.out.println(JSON.toJSONString(jsonObject, filter));
+        //System.out.println(JSON.toJSONString(jsonObject, filter));
         return JSON.toJSONString(jsonObject, filter);
     }
 
@@ -457,8 +457,10 @@ public class InExecuteViewController {
                 // 1 执行(门诊)  2 取消执行(门诊)  3 接受计费(住院)  4 退费(住院)  5 打印 (住院)  6 取消打印7 预约时间
                 String retval = inExcuteManager.saveInExcute(sample, process, labOrder);
 
-                JSONObject retObj = JSON.parseObject(retval);
+                //生成PDA数据
+                webService.savePdaInfo(sample,process);
 
+                JSONObject retObj = JSON.parseObject(retval);
                 if (retObj.getBoolean("state")) {
                     if (!webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, user.getLastLab(), "", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), sample.getBarcode())) {
                         Sample sample1 = sampleManager.get(retObj.getLong("sample1Id"));
@@ -503,6 +505,8 @@ public class InExecuteViewController {
             }
             //计采血费
             ChargeUtil.getInstance().bloodCollectionFee(user,labOrderList1);
+
+
             //打印
         } catch (Exception e) {
             e.printStackTrace();

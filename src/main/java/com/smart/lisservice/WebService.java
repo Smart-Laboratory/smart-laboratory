@@ -8,14 +8,13 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
+import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
 import com.smart.util.SpringContextUtil;
-import com.smart.webapp.util.IndexMapUtil;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.TestIdMapUtil;
-import com.smart.webapp.util.UserUtil;
+import com.smart.webapp.util.*;
+import com.zju.api.service.RMIService;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -28,6 +27,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.core.MediaType;
 import java.net.HttpURLConnection;
@@ -43,10 +43,14 @@ import java.util.Map;
 public class WebService {
     private DictionaryManager dictionaryManager = null;
     private IndexManager indexManager = null;
+    private SectionManager sectionManager;
+    private RMIService rmiService;
     public WebService(){
         indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
         dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
         testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
+        sectionManager = (SectionManager) SpringContextUtil.getBean("sectionManager");
+        rmiService = (RMIService) SpringContextUtil.getBean("rmiService");
     }
     private JaxWsProxyFactoryBean jwpfb ;
     private static final Log log = LogFactory.getLog(WebService.class);
@@ -544,5 +548,129 @@ public class WebService {
         }
 
         return flag;
+    }
+
+    /**
+     * 将检测结果保存至LIS系统--PDA
+     * @param sample
+     * @param process        结果信息
+     * @return
+     *
+     * 用于电子病历查询
+     */
+    public boolean savePdaInfo(Sample sample,Process process){
+        boolean flag = true;
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url+"savePdaInfo");
+            PostMethod method = new PostMethod(url+"savePdaInfo");
+            //结果信息
+            JSONObject param = new JSONObject();
+            param.put("patientId",sample.getPatientId());
+            param.put("patientNo",sample.getPatientblh());
+            param.put("barcode",sample.getBarcode());
+            param.put("itemId",sample.getYlxh());
+            param.put("itemName",sample.getInspectionName());
+            if(process.getChecktime() != null) {
+                param.put("reportTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                param.put("reportName",process.getCheckoperator());
+            }
+            if(process.getRequesttime() != null) {
+                param.put("requestTime", ConvertUtil.getFormatDateGMT(process.getRequesttime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                param.put("requestName", process.getRequester());
+            }
+            if(process.getReceivetime() != null) {
+                param.put("receiveTime", ConvertUtil.getFormatDateGMT(process.getReceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                param.put("receiveName", process.getReceiver());
+            }
+            param.put("wardId",sample.getHosSection());
+            param.put("wardName", SectionUtil.getInstance(rmiService, sectionManager).getValue(sample.getHosSection()));                              //条码号
+
+            RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==0) {
+                flag = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    /**
+     * 将检测结果保存至LIS系统--PDA
+     * @param sample
+     * @param process        结果信息
+     * @return
+     *
+     * 用于电子病历查询
+     */
+    public boolean updatePdaStatus(String ids){
+        boolean flag = true;
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url+"updatePdaStatus");
+            PostMethod method = new PostMethod(url+"updatePdaStatus");
+            //结果信息
+            //JSONObject param = new JSONObject(ids);
+            //param.put("ids",ids);
+
+            RequestEntity requestEntity = new StringRequestEntity(ids,"application/json", "UTF-8");
+            method.setRequestEntity(requestEntity);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==0) {
+                flag = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    /**
+     * 从LIS PDA信息表获取采集信息
+     *
+     * @return
+     */
+    public List<Process> getPdaInfo(){
+        List<Process> processList = new ArrayList<Process>();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url+"getPdaInfo");
+            GetMethod method = new GetMethod(url+"getPdaInfo");
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+
+            if ((Integer) obj.get("State") == 1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i=0;i<arr.length();i++){
+                    Process process = new Process();
+                    process.setSampleid(ConvertUtil.getLongValue(arr.getJSONObject(i).getString("barcode").replace("A1200","")));
+                    process.setExecutetime(Constants.SDF.parse(arr.getJSONObject(i).getString("executeTime")));
+                    process.setExecutor(ConvertUtil.null2String(arr.getJSONObject(i).getString("executeName")));
+                    process.setSendtime(Constants.SDF.parse(arr.getJSONObject(i).getString("sendTime")));
+                    process.setSender(ConvertUtil.null2String(arr.getJSONObject(i).getString("sendName")));
+                    processList.add(process);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return processList;
     }
 }

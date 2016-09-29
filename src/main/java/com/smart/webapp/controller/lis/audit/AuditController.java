@@ -544,6 +544,9 @@ public class AuditController extends BaseAuditController {
 				service.saveHisResult(sample.get(0),process,testResultList);
 				//写入LIS用于电子病历
 				service.saveLisResult(sample.get(0).getBarcode(),testResultList);
+				//写入PDA信息
+				service.savePdaInfo(sample.get(0),process);
+
 			} else if ("unpass".equals(op)) {
 				process.setCheckoperator("");
 				processManager.save(process);

@@ -57,7 +57,7 @@ public final class GenericPdfUtil {
         try {
             os = new FileOutputStream(Config.getPdfPath()+fileName);
             ITextRenderer renderer = new ITextRenderer(800,600);
-            System.out.println("====>"+html);
+            //System.out.println("====>"+html);
             renderer.setDocumentFromString(html);
             //解决中文支持问题
             ITextFontResolver fontResolver = renderer.getFontResolver();

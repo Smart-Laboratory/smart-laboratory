@@ -264,7 +264,7 @@ public class ReportGenerate {
      */
     public void createReportPdf(Sample sample,Process process,List<TestResult> testResultList,boolean hasLast) throws Exception {
         String html = getReportHtml(sample,process,testResultList,hasLast);
-        GenericPdfUtil.html2Pdf(sample.getSampleNo()+".pdf",html);
+        GenericPdfUtil.html2Pdf(sample.getBarcode()+".pdf",html);
     }
 
     private synchronized void initLikeLabMap() {

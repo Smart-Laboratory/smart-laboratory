@@ -286,10 +286,18 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								} else {
                 	    									info.setCheckerOpinion(Check.AUTO_AUDIT);
                 	    								}
+                	    								info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
                 	    								Process process = processMap.get(info.getId());
 														process.setCheckoperator(new GetAutoCheckOperatorUtil().getName(info.getSectionId()));
 														process.setChecktime(new Date(nowtime));
 														updateProcess.add(process);
+
+														//保存参考范围
+														for(TestResult testResult : now) {
+															testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
+															updateTestResult.add(testResult);
+														}
+
 														//生成PDF
 														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
 														//写入HIS
@@ -311,11 +319,7 @@ public class AutoAuditServlet extends HttpServlet {
                     								a.setStatus(info.getAuditStatus());
                     								updateAuditTrace.add(a);
 
-													//保存参考范围
-													for(TestResult testResult : now) {
-														testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
-														updateTestResult.add(testResult);
-													}
+
                         	        			} catch (Exception e) {
                                 	                e.printStackTrace();
                                 	                continue;

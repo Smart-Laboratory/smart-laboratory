@@ -465,6 +465,10 @@ public class SampleInputAjaxController {
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			//计试管费、采血针费
 			ChargeUtil.getInstance().tubeFee(user,labOrder);
+
+			//add by zcw 20160929 样本接收更新PDA接收时间
+			new WebService().savePdaInfo(sample,process);
+
 			//计项目费
 			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
 			if(updateStatusSuccess){
