@@ -44,7 +44,7 @@ public class SampleTraceDoctController {
 	
 	@Autowired
 	private RMIService rmiService = null;
-	
+
 	@Autowired
 	private SectionManager sectionManager = null;
 	
@@ -391,7 +391,7 @@ public class SampleTraceDoctController {
 		SyncPatient p = rmiService.getSampleByDoct(Long.parseLong(id));
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		if (p != null) {
 			map.put("id", p.getPATIENTID());
 			map.put("name", p.getPATIENTNAME());

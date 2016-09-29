@@ -1,6 +1,5 @@
 package com.smart.webapp.controller.execute;
 
-import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.zju.api.model.ExecuteInfo;
 import com.smart.model.lis.Patient;
 import com.smart.Constants;
 import com.smart.model.execute.LabOrder;
@@ -30,7 +28,6 @@ import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/manage/execute*")
@@ -87,7 +84,7 @@ public class ExecuteViewController {
 		if(samples!=null && samples.size()==0){
 			map.put("samples", null);
 		}else{
-			SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
 			for(Sample s : samples){
 				String depart = sectionUtil.getValue(s.getSectionId());
 				if(depart!=null && !depart.isEmpty()){
@@ -171,7 +168,7 @@ public class ExecuteViewController {
 	}
 
     private JSONObject getJsonObject(LabOrder labOrder, Ylxh ylxh) {
-        SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+        SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("zxbz", labOrder.getZxbz());
         if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
@@ -517,8 +514,6 @@ public class ExecuteViewController {
 	
 	@Autowired
 	private UserManager userManager;
-	@Autowired
-	private RMIService rmiService;
 	@Autowired
 	private InvalidSampleManager invalidSampleManager;
 	@Autowired

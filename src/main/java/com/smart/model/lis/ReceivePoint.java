@@ -17,7 +17,7 @@ public class ReceivePoint {
 	private String code;
 	private int type;
 	private String lab;
-	
+
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_RECEIVE_POINT")
@@ -61,7 +61,7 @@ public class ReceivePoint {
 	public String getLab() {
 		return lab;
 	}
-	
+
 	public void setLab(String lab) {
 		this.lab = lab;
 	}

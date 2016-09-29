@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,11 +33,7 @@ import com.smart.service.SxArrangeManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.WorkCountManager;
 import com.smart.service.lis.SectionManager;
-import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
-
-
 
 @Controller
 @RequestMapping("/pb/pb*")
@@ -494,7 +488,7 @@ public class PbController {
 			return wInfoManager.getByType(2);
 		}
 		
-		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
+		section = SectionUtil.getInstance(sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);
@@ -526,7 +520,4 @@ public class PbController {
 		return wInfos;
 				
 	}
-	
-	@Autowired
-	private RMIService rmiService;
 }

@@ -4,7 +4,6 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
 import com.smart.service.DictionaryManager;
-import com.smart.service.UserManager;
 import com.smart.service.lis.*;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.Config;
@@ -13,7 +12,6 @@ import com.smart.util.GenericPdfUtil;
 import com.smart.util.SpringContextUtil;
 import com.smart.webapp.util.*;
 import com.zju.api.model.SyncResult;
-import com.zju.api.service.RMIService;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -50,7 +48,7 @@ public class ReportGenerate {
         int type = 1;
         String webPath= Config.getString("web.path","");
         String sampleNo = sample.getSampleNo();
-        SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+        SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
         //Patient patient = patientManager.getByPatientId(sample.getPatientId());
         //List<TestResult> list = testResultManager.getPrintTestBySampleNo(sample.getSampleNo());
         List<SyncResult> wswlist = null;
@@ -277,15 +275,11 @@ public class ReportGenerate {
         indexManager = (IndexManager)SpringContextUtil.getBean("indexManager");
         sectionManager = (SectionManager)SpringContextUtil.getBean("sectionManager");
         dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
-        rmiService = (RMIService)SpringContextUtil.getBean("rmiService");
-        userManager = (UserManager)SpringContextUtil.getBean("userManager");
         likeLabManager = (LikeLabManager)SpringContextUtil.getBean("likeLabManager");
     }
 
     private SectionManager sectionManager = null;
     private DictionaryManager dictionaryManager = null;
-    private RMIService rmiService = null;
-    private UserManager userManager = null;
     private IndexManager indexManager = null;
     private LikeLabManager likeLabManager = null;
 

@@ -11,8 +11,8 @@ import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.SampleUtil;
+import com.smart.webapp.util.SectionUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -93,7 +93,7 @@ public class DeviceRelationController {
 
         }
         //获取所有部门信息
-        Map<String,String> departmentList = DepartUtil.getInstance(sectionManager).getMap();
+        Map<String,String> departmentList = SectionUtil.getInstance(sectionManager).getLabMap();
         //获取标本信息
         Map<String,String> sampleList = SampleUtil.getInstance(dictionaryManager).getMap();
 

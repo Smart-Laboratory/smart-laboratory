@@ -18,7 +18,7 @@ public class SectionUtil {
 	private SectionUtil () {}
 	
 	//public static SectionUtil getInstance(SyncManager manager) {
-	public static SectionUtil getInstance(RMIService rmi, SectionManager sectionManager) {
+	public static SectionUtil getInstance(SectionManager sectionManager) {
 		if (map == null || map.size() == 0) {
 			map = new HashMap<String, String>();
 			for(Section s : new WebService().getSectionList()) {
@@ -66,5 +66,9 @@ public class SectionUtil {
 		    }
 		}
 		return value;
+	}
+
+	public Map<String,String> getLabMap() {
+		return labMap;
 	}
 }

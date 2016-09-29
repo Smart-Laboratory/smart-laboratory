@@ -1,3 +1,4 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <script type="text/javascript" src="../scripts/lis/audit/top.js"></script>
 
 <div>
@@ -20,9 +21,10 @@
 			<span id="info_dangerous_undeal"><c:out value="${dangerous_undeal}" /></span>
 		</div>
 		<div class="form-group" style="float: right; margin-right:10px;">
-			<button id="writeBackPartBtn" class="btn btn-default" style="height:28px;padding:0px 0px;"><fmt:message key="writebackpart" /></button>
-			<button id="writeBackBtn" class="btn btn-success" style="height:28px;padding:0px 0px;"><fmt:message key="writeback" /></button>
-			<button class="btn btn-sm btn-info" id="AuditCodeSetting" style="height:28px;padding:0px 0px;"><fmt:message key="code.setting"/></button>
+			<button id="writeBackPartBtn" class="btn btn-default" style="height:28px;padding:0px 0px;display: none;"><fmt:message key="writebackpart" /></button>
+			<button id="writeBackBtn" class="btn btn-success" style="height:28px;padding:0px 0px;display: none;"><fmt:message key="writeback" /></button>
+			<button class="btn btn-sm btn-info" id="AuditCodeSetting" style="height:28px;padding:0px 0px;display: none;"><fmt:message key="code.setting"/></button>
+			<button id="showNoSampleInfoTest" class="btn btn-warning" style="height:28px;padding:0px 0px;">查看暂无医嘱的标本结果</button>
 			<button id="pageRefreshBtn" class="btn btn-info" style="height:28px;padding:0px 0px;">
 				<span class="glyphicon glyphicon-refresh" style="margin:1px;"></span>
 			</button>

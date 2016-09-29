@@ -43,7 +43,6 @@ import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import com.smart.webapp.util.UserUtil;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/manage/modify*")
@@ -76,9 +75,6 @@ public class ModifyController {
 	@Autowired
 	private DictionaryManager dictionaryManager = null;
 	
-	@Autowired
-	private RMIService rmiService = null;
-
 	@Autowired
 	private SectionManager sectionManager = null;
 	
@@ -161,8 +157,8 @@ public class ModifyController {
 			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sl.getSampleType()));
 			map.put("fee", sl.getFee());
 			map.put("diag", sl.getDiagnostic());
-			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getValue(sl.getHosSection()));
-			map.put("lab", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sl.getSectionId()));
+			map.put("section", SectionUtil.getInstance(sectionManager).getValue(sl.getHosSection()));
+			map.put("lab", SectionUtil.getInstance(sectionManager).getLabValue(sl.getSectionId()));
 			map.put("requester", pl.getRequester());
 			map.put("receiver", pl.getReceiver());
 			map.put("receivetime", pl.getReceivetime());

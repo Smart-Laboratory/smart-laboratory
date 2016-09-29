@@ -7,13 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
-import com.smart.lisservice.WebService;
 import com.smart.model.user.User;
 import com.smart.service.UserManager;
 import com.smart.service.lis.HospitalManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +44,6 @@ public class UserController {
 	private HospitalManager hospitalManager = null;
 	
 	@Autowired
-	private RMIService rmiService = null;
-	
-	@Autowired
 	private SectionManager sectionManager = null;
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -67,7 +62,7 @@ public class UserController {
     	String ispb = request.getParameter("ispb");
     	
     	JSONObject obj = new JSONObject();
-    	SectionUtil sectionUtil = SectionUtil.getInstance(rmiService, sectionManager);
+    	SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
     	User user = userManager.getUserByUsername(request.getRemoteUser());
     	String department = user.getDepartment();
     	if(ispb!=null && ispb.equals("1")){

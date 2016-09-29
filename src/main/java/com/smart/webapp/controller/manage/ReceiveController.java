@@ -69,7 +69,7 @@ public class ReceiveController {
 			long doct = Long.parseLong(request.getParameter("doct"));
 			String operator = request.getParameter("operator");
 			String lab = pointMap.get(operator.substring(operator.indexOf("(")+1, operator.indexOf(")")));
-			SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+			SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 			
 			SyncPatient sp = rmiService.getSampleByDoct(doct);
 			if(sp == null) {

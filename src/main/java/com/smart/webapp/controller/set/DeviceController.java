@@ -6,7 +6,6 @@ import com.smart.service.DictionaryManager;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.DepartUtil;
 import com.smart.webapp.util.DeviceTypeUtil;
 import com.smart.webapp.util.SectionUtil;
 import org.codehaus.jettison.json.JSONArray;
@@ -112,7 +111,7 @@ public class DeviceController {
             map.put("typename", DeviceTypeUtil.getInstance(dictionaryManager).getValue(info.getType()));
             map.put("name", info.getName());
             map.put("lab", info.getLab());
-            map.put("labname", DepartUtil.getInstance(sectionManager).getValue(info.getLab()));
+            map.put("labname", SectionUtil.getInstance(sectionManager).getLabValue(info.getLab()));
             map.put("comport", info.getComport());
             map.put("baudrate", info.getBaudrate());
             map.put("parity", info.getParity());
@@ -135,7 +134,7 @@ public class DeviceController {
         //仪器类型
         Map<String, String> typeList = DeviceTypeUtil.getInstance(dictionaryManager).getMap();
         //实验室部门信息
-        Map<String, String> departList = DepartUtil.getInstance(sectionManager).getMap();
+        Map<String, String> departList = SectionUtil.getInstance(sectionManager).getLabMap();
 //        for(String key:typeList.keySet()){
 //            System.out.println(key+"====="+typeList.get(key));
 //        }

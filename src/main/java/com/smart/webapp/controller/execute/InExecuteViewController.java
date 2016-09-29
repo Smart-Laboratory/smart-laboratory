@@ -41,7 +41,6 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
-
 public class InExecuteViewController {
 
     @Autowired

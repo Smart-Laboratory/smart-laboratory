@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +33,6 @@ import com.smart.service.UserManager;
 import com.smart.service.WInfoManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.SectionUtil;
-import com.zju.api.service.RMIService;
 
 @Controller
 @RequestMapping("/pb/sxgroupPb*")
@@ -51,9 +49,6 @@ public class SxgroupPbController {
 	
 	@Autowired
 	private UserManager userManager;
-	
-	@Autowired
-	private RMIService rmiService;
 	
 	@Autowired
 	private SectionManager sectionManager;
@@ -76,7 +71,7 @@ public class SxgroupPbController {
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
 		
 		User user = userManager.getUserByUsername(request.getRemoteUser());
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		String department = user.getPbsection();
 		Map<String, String> depart = new HashMap<String, String>();
 		String section = request.getParameter("section");
@@ -249,7 +244,7 @@ public class SxgroupPbController {
 		
 	private Map<WInfo, String> getSxWinfoList(String section,String tomonth){
 		String sectionCode = section;
-		section = SectionUtil.getInstance(rmiService, sectionManager).getLabValue(section);
+		section = SectionUtil.getInstance(sectionManager).getLabValue(section);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(tomonth.split("-")[0]));
 		cal.set(Calendar.MONTH, Integer.parseInt(tomonth.split("-")[1])-1);

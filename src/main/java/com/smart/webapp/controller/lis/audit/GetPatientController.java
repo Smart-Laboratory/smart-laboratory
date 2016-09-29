@@ -67,7 +67,7 @@ public class GetPatientController extends BaseAuditController {
 		List<TestResult> list = testResultManager.getTestBySampleNo(info.getSampleNo());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		
 		if (info != null) {
 			map.put("id", info.getId());

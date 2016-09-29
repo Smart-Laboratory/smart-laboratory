@@ -1,7 +1,6 @@
 package com.smart.webapp.controller.print;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -18,11 +17,6 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.service.scheduledTask.ReportGenerate;
 import com.smart.util.ConvertUtil;
-import com.smart.util.GenericPdfUtil;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -64,7 +58,7 @@ public class SamplePrintController extends BaseAuditController {
 		int hasLast = Integer.parseInt(request.getParameter("haslast"));
 		int type = 1;
 		JSONObject info = new JSONObject();
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		Sample s = sampleManager.getBySampleNo(sampleno);
 		Process process = processManager.getBySampleId(s.getId());
 		List<TestResult> list = testResultManager.getPrintTestBySampleNo(s.getSampleNo());
@@ -902,7 +896,7 @@ public class SamplePrintController extends BaseAuditController {
 		int hasLast = ConvertUtil.getIntValue(request.getParameter("haslast"),0);
 		int type = 1;
 
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		Sample s = sampleManager.getBySampleNo(sampleno);
 		Process process = processManager.getBySampleId(s.getId());
 		Patient patient = patientManager.getByPatientId(s.getPatientId());

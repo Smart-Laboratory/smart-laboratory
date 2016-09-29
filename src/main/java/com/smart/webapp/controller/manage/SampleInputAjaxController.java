@@ -70,7 +70,7 @@ public class SampleInputAjaxController {
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String code = request.getParameter("id");
 		int type = Integer.parseInt(request.getParameter("type"));
-		SectionUtil sectionutil = SectionUtil.getInstance(rmiService, sectionManager);
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
 		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
@@ -165,7 +165,7 @@ public class SampleInputAjaxController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("barcode", sample.getBarcode());
 			map.put("shm", sample.getStayHospitalModelValue());
-			map.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
+			map.put("section", SectionUtil.getInstance(sectionManager).getLabValue(sample.getSectionId()));
 			map.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			map.put("sampleType", sample.getSampleType());
 			map.put("sampleno", sample.getSampleNo());
@@ -378,7 +378,7 @@ public class SampleInputAjaxController {
 		o.put("feestatus", sample.getFeestatus());
 		o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 		o.put("shm", sample.getStayHospitalModelValue());
-		o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
+		o.put("section", SectionUtil.getInstance(sectionManager).getLabValue(sample.getSectionId()));
 		o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 		o.put("sampleType", sample.getSampleType());
 		o.put("part", sample.getPart() == null ? "" : sample.getPart());
@@ -500,7 +500,7 @@ public class SampleInputAjaxController {
 			o.put("feestatus", sample.getFeestatus());
 			o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			o.put("shm", sample.getStayHospitalModelValue());
-			o.put("section", SectionUtil.getInstance(rmiService, sectionManager).getLabValue(sample.getSectionId()));
+			o.put("section", SectionUtil.getInstance(sectionManager).getLabValue(sample.getSectionId()));
 			o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
 			o.put("sampleType", sample.getSampleType());
 			o.put("part", sample.getPart() == null ? "" : sample.getPart());
