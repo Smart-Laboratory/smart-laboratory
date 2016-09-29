@@ -10,7 +10,7 @@
 
 <div id="left" class="col-sm-3">
 	<div class="col-sm-12">
-		<button data-toggle="dropdown" class="btn btn-info dropdown-toggle col-sm-6">
+		<button data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle col-sm-6">
 			<fmt:message key='batch.deal'/>
 			<span class="ace-icon fa fa-caret-down icon-on-right"></span>
 		</button>
@@ -23,10 +23,10 @@
 			<li><a id="batchAddResultsBtn" href="#"><fmt:message key='batch.add.results'/></a></li>
 			<li><a id="samplePrintBtn" href="#"><fmt:message key='audit.danger.print'/></a></li>
 		</ul>
-		<button id="auditBtn" type="button" class="btn btn-success col-sm-2"><fmt:message key='audit'/></button>
-		<button id="sampleDelete" type="button" class="btn btn-danger col-sm-2"><fmt:message key='button.delete'/></button>
+		<button id="auditBtn" type="button" class="btn btn-sm btn-success col-sm-2"><fmt:message key='audit'/></button>
+		<button id="sampleDelete" type="button" class="btn btn-sm btn-danger col-sm-2"><fmt:message key='button.delete'/></button>
 		
-		<button id="sampleListRefreshBtn" class="btn btn-success col-sm-2">
+		<button id="sampleListRefreshBtn" class="btn btn-sm btn-success col-sm-2">
 			<span class="glyphicon glyphicon-refresh"></span>
 		</button>
 	</div>

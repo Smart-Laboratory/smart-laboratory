@@ -54,7 +54,9 @@ public class AutoAuditServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 941602442597073184L;
 	
-	public void init() throws ServletException {  
+	public void init() throws ServletException {
+
+		//初始化context，设置所需的所有Manager
 		ServletContext context = getServletContext();
     	ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
     	final SampleManager sampleManager = (SampleManager) ctx.getBean("sampleManager");
@@ -82,6 +84,7 @@ public class AutoAuditServlet extends HttpServlet {
         	Long start = System.currentTimeMillis();
         	List<Rule> ruleList = bagManager.getRuleByBag("1");
         	System.out.println("获取规则包：" + (System.currentTimeMillis()-start) + "毫秒");
+			//构建规则库
         	if (!DroolsRunner.getInstance().isBaseInited()) {
         		AnalyticUtil analyticUtil = new AnalyticUtil(dictionaryManager, itemManager, resultManager);
         		Reader reader = analyticUtil.getReader(ruleList);
@@ -90,6 +93,7 @@ public class AutoAuditServlet extends HttpServlet {
     		}
             final DroolsRunner droolsRunner = DroolsRunner.getInstance();
     		final Set<String> hasRuleSet = new HashSet<String>();
+			//初始化基础字典
     		for (Item i : itemManager.getAll()) {
     			String testid = i.getIndexId();
     			hasRuleSet.add(testid);
@@ -102,6 +106,7 @@ public class AutoAuditServlet extends HttpServlet {
     		for (LikeLab ll : list) {
     			likeLabMap.put(ll.getLab(), ll.getLikeLab());
     		}
+    		//初始化参考范围和计算项目Util， 各个审核对象
             final FillFieldUtil fillUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
             final FormulaUtil formulaUtil = FormulaUtil.getInstance(calculateFormulaManager, testResultManager, indexManager, fillUtil);
             final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
@@ -115,6 +120,8 @@ public class AutoAuditServlet extends HttpServlet {
             final Alarm3Check alarm3Check = new Alarm3Check(ruleManager);
             final ExtremeCheck extremeCheck = new ExtremeCheck(ruleManager);
             System.out.println("初始化常量完成" + (System.currentTimeMillis()-start) + "毫秒");
+
+			//开启审核线程
             Thread autoAudit = new Thread(new Runnable(){
 				public void run() {
 					int autocount = 0;
@@ -122,6 +129,7 @@ public class AutoAuditServlet extends HttpServlet {
         				autocount++;
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
+						//获取待审核样本的所有信息，包括基本信息，TAT信息和结果信息
                     	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
 						if (needAuditSamples != null && needAuditSamples.size() > 0) {
                 			String hisSampleNo = "";
@@ -148,6 +156,8 @@ public class AutoAuditServlet extends HttpServlet {
                     				}
                 				}
                 			}
+
+                			//由于一次审核标本数过多，开启多线程，50*10
                     		for(int i = 0; i < 50; i++) {
                         		final int num = i;
                         		if(num*10 > needAuditSamples.size()) {
@@ -171,7 +181,8 @@ public class AutoAuditServlet extends HttpServlet {
                         	            	List<Sample> samples = needAuditSamples.subList(begin, end);
 											System.out.println("审核数目：" + samples.size());
 											HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
-                        	            	Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
+                        	            	//获取待审核标本的历史记录
+											Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
                         	                for (Sample info : samples) {
                         	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
 												Set<String> testIdSet = new HashSet<String>();
@@ -239,6 +250,7 @@ public class AutoAuditServlet extends HttpServlet {
                          	        				e.printStackTrace();
                          	        			}	
                         	        		}
+                        	        		//开始自动审核
                         	        		for (Sample info : samples) {
                         	        			try {
                         	        				List<TestResult> now = hisTestMap.get(info.getSampleNo());
@@ -277,6 +289,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    							}
                 	    							//bayesCheck.doCheck(info); // Bayes审核及学习
 
+													//自动审核通过后，各标本的相关信息修改，设置，完成各个系统的接口数据回写
                 	    							if (info.getAuditStatus() == Constants.STATUS_PASSED) {
                 	    								info.setWriteback(1);
                 	    								if (info.getCheckerOpinion()!=null 
@@ -303,6 +316,7 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								cr.setSampleid(info.getId());
                 	    								updateCriticalRecord.add(cr);
                 	    							}
+                	    							//审核踪迹记录
                 	    							AuditTrace a = new AuditTrace();
                     								a.setSampleno(info.getSampleNo());
                     								a.setChecktime(new Date());
@@ -321,6 +335,7 @@ public class AutoAuditServlet extends HttpServlet {
                                 	                continue;
                                 	            }
                         	        		}
+                        	        		//保存所改变的数据信息
                         	        		sampleManager.saveAll(updateSample);
 											processManager.saveAll(updateProcess);
                         					criticalRecordManager.saveAll(updateCriticalRecord);
