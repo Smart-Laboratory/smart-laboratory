@@ -148,7 +148,7 @@ public class TestResultDaoHibernate extends
 	public List<TestResult> getPrintTestBySampleNo(String sampleno) {
 		return getSession()
 				.createQuery(
-						"select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"
+						"select t from TestResult t, Index i where t.testId=i.indexId and t.sampleNo='"
 								+ sampleno
 								+ "' and i.isprint=1 order by i.printord")
 				.list();
@@ -188,7 +188,7 @@ public class TestResultDaoHibernate extends
 
 	@SuppressWarnings("unchecked")
 	public List<TestResult> getNoInfoSampleNo(String text) {
-		String sql = "from TestResult where sampleNo like '" + text + "%' and testStatus=-1 order by sampleNo";
+		String sql = "select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo like '" + text + "%' and t.testStatus=-1 order by t.sampleNo, i.printord";
 		return getSession().createQuery(sql).list();
 	}
 

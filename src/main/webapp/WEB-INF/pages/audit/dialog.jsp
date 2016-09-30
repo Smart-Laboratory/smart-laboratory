@@ -266,6 +266,22 @@
 </div>
 
 <div id="noSampleInfoDialog" style="text-align:left;display:none;">
-	<ul id="noSampleList" class="col-sm-3"></ul>
-	<table id="noInfoTable" class="col-sm-9"></table>
+	<style>
+		.infoActive {
+			background-color: #E4EFC9;
+		}
+		.resultActive {
+			display: table-row;
+		}
+		.resultNoActive {
+			display:none;
+		}
+
+	</style>
+	<div class="col-sm-3">
+		<table id="noSampleList" class="table"></table>
+	</div>
+	<div class="col-sm-9">
+		<table id="noInfoTable" class="table"></table>
+	</div>
 </div>

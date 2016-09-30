@@ -1,14 +1,48 @@
 /*
+ *  修改
+ */
+function changeNoInfoResult(obj) {
+	$('.infoActive').removeClass("infoActive");
+	$(obj).addClass("infoActive");
+	$('.resultActive').removeClass("resultActive").addClass("resultNoActive");
+	$("." + $(obj).html().replace(" ","")).each(function () {
+		$(this).removeClass("resultNoActive").addClass("resultActive");
+	});
+}
+
+/*
  *  打开实验室检验段设置弹窗
  */
 function openNoSampleInfoDialog() {
 	$.get(baseUrl + "/audit/ajax/getNoSampleInfo",function(data){
 		var array = jQuery.parseJSON(data);
-		var html = "";
+		var html = "<tr><th>无结果样本信息</th></tr>";
+		var html2 = "";
 		for(var i in array) {
-			html +="<li>" + array[i].sampleNo + "</li>";
+			if(i == 0) {
+				html +="<tr><td><a href='#' onclick='changeNoInfoResult(this)' class='infoActive'>" + array[i].sampleNo + "</a></td></tr>";
+				html2 += "<tr class='" + array[i].sampleNo + " resultActive'><th colspan='3'>" + array[i].sampleNo + "</th></tr>"
+				for(var j in array[i].testList) {
+					html2 += "<tr class='" + array[i].sampleNo + " resultActive'>"
+					html2 += "<td>" + array[i].testList[j].testName + "</td>";
+					html2 += "<td>" + array[i].testList[j].testResult + "</td>";
+					html2 += "<td>" + array[i].testList[j].reference + "</td>";
+					html2 += "</tr>";
+				}
+			} else {
+				html +="<tr><td><a href='#' onclick='changeNoInfoResult(this)'> " + array[i].sampleNo + "</a></td></tr>";
+				html2 += "<tr class='" + array[i].sampleNo + " resultNoActive'><th colspan='3'>" + array[i].sampleNo + "</th></tr>"
+				for(var j in array[i].testList) {
+					html2 += "<tr class='" + array[i].sampleNo + " resultNoActive'>"
+					html2 += "<td>" + array[i].testList[j].testName + "</td>";
+					html2 += "<td>" + array[i].testList[j].testResult + "</td>";
+					html2 += "<td>" + array[i].testList[j].reference + "</td>";
+					html2 += "</tr>";
+				}
+			}
 		}
-		$("#noSampleList").html(html)
+		$("#noSampleList").html(html);
+		$("#noInfoTable").html(html2);
 	});
 	layer.open({
 		type: 1,
