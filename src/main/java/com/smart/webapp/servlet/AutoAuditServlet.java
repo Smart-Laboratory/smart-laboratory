@@ -317,7 +317,7 @@ public class AutoAuditServlet extends HttpServlet {
 														WebService service = new WebService();
 														service.saveHisResult(info,processMap.get(info.getId()),now);
 														//写入LIS用于电子病历
-														service.saveLisResult(info.getBarcode(),now);
+														service.saveLisResult(info,process,now);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {

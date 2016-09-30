@@ -246,9 +246,12 @@ $(function(){
 		//CreateDataBill(data)
 		LODOP=getLodop();
 		LODOP.PRINT_INIT("打印报告单");
+		LODOP.SET_PRINT_PAGESIZE(2,0,0,'A5');
 		LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
 		//LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
-		LODOP.PREVIEW();
+		LODOP.SET_PRINTER_INDEX(-1);
+		LODOP.PRINT();
+		//LODOP.PREVIEW();
 	}
 
 	//张晋南 2016-5-12 染色体打印报告
@@ -273,8 +276,8 @@ $(function(){
 		//alert($("#chartPanel").height());
 	});
 	function printReport(sampleno){
-		$.get("/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
-			console.log(data)
+		$.get(baseUrl+"/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
+			//console.log(data)
 			Preview(data);
 		})
 	}

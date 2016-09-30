@@ -550,7 +550,7 @@ public class AuditController extends BaseAuditController {
 				//写入HIS
 				service.saveHisResult(sample.get(0),process,testResultList);
 				//写入LIS用于电子病历
-				service.saveLisResult(sample.get(0).getBarcode(),testResultList);
+				service.saveLisResult(sample.get(0),process,testResultList);
 				//写入PDA信息
 				service.savePdaInfo(sample.get(0),process);
 
@@ -724,7 +724,7 @@ public class AuditController extends BaseAuditController {
 					//写入HIS
 					service.saveHisResult(info,process,now);
 					//写入LIS用于电子病历
-					service.saveLisResult(info.getBarcode(),now);
+					service.saveLisResult(info,process,now);
 				} else {
 					info.setPassReason("批量不通过");
 					AuditTrace a = new AuditTrace();

@@ -494,29 +494,66 @@ public class WebService {
 
     /**
      * 将检测结果保存至LIS系统
-     * @param barcode                条码号
+     * @param sample                条码号
      * @param testResultList        结果信息
      * @return
      *
      * 用于电子病历查询
      */
-    public boolean saveLisResult(String barcode,List<TestResult> testResultList){
+    public boolean saveLisResult(Sample sample,Process process,List<TestResult> testResultList){
         boolean flag = false;
         try {
-            //if(1==1)throw new Exception("错误");
+
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url+"saveLisResult");
             PostMethod method = new PostMethod(url+"saveLisResult");
+            UserUtil userUtil = UserUtil.getInstance();
+
+            JSONObject sampleInfo = new JSONObject();
+            String sampleNo = sample.getSampleNo().substring(sample.getSampleNo().length()-3,sample.getSampleNo().length());
+
+            String inspectionId = ConvertUtil.null2String(ConvertUtil.getFormatDate(process.getChecktime(),"yyyyMMdd")+
+                    String.format("%05d", ConvertUtil.getLongValue(sampleNo)));
+
+            //样本信息
+            sampleInfo.put("inspectionId",sample.getBarcode());
+            sampleInfo.put("patientId",sample.getPatientId());
+            sampleInfo.put("patientNo",sample.getPatientblh());
+            sampleInfo.put("patientName",sample.getPatientname());
+            sampleInfo.put("sex",sample.getSex());
+            sampleInfo.put("age",sample.getAge());
+            sampleInfo.put("ageUnit",sample.getAgeunit());
+            sampleInfo.put("department",sample.getHosSection());
+            sampleInfo.put("wardName",sample.getHosSection());
+            sampleInfo.put("bedNo",sample.getDepartBed());
+            if(process.getKsreceivetime() != null) {
+                sampleInfo.put("testTime", ConvertUtil.getFormatDateGMT(process.getKsreceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                sampleInfo.put("testerHisId",userUtil.getUser(process.getKsreceiver()).getHisId());
+                sampleInfo.put("testerName",userUtil.getUser(process.getKsreceiver()).getName());
+            }
+            if(process.getRequesttime() != null) {
+                sampleInfo.put("requestTime", ConvertUtil.getFormatDateGMT(process.getRequesttime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                sampleInfo.put("requestName",process.getRequesterName());
+            }
+            if(process.getReceivetime() != null) {
+                sampleInfo.put("receiveTime", ConvertUtil.getFormatDateGMT(process.getReceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                sampleInfo.put("receiveName",process.getReceiver());
+            }
+            if(process.getReceivetime() != null) {
+                sampleInfo.put("reportTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                sampleInfo.put("reportName",process.getCheckoperator());
+            }
+            sampleInfo.put("sampleType",sample.getSampleType());
+            sampleInfo.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
+            sampleInfo.put("testId",sample.getYlxh());
+            sampleInfo.put("testName",sample.getInspectionName());
+            sampleInfo.put("barcode",sample.getBarcode());
+            sampleInfo.put("sampleNo",sample.getSampleNo());
 
             //结果信息
-            JSONArray param = new JSONArray();
+            JSONArray jsonTestResult= new JSONArray();
             for(TestResult testResult:testResultList){
                 JSONObject result = new JSONObject();
-                String sampleNo = testResult.getSampleNo().substring(testResult.getSampleNo().length()-3,testResult.getSampleNo().length());
-                //System.out.println(String.format("%05d", ConvertUtil.getLongValue(sampleNo)));
-                String inspectionId = ConvertUtil.null2String(testResult.getDeviceId()).replaceAll(",","")+
-                        ConvertUtil.getFormatDate(testResult.getMeasureTime(),"yyyyMMdd")+
-                        String.format("%05d", ConvertUtil.getLongValue(sampleNo));
                 result.put("inspectionId",inspectionId);                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
                 result.put("testItemId",testResult.getTestId());        //项目编号
                 result.put("testItemName_EN",testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
@@ -525,12 +562,16 @@ public class WebService {
                 result.put("orderNum",testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
                 result.put("reference",testResult.getReference());         //参考范围
                 result.put("resultFlag",testResult.getResultFlag());        //结果标记
-                result.put("barcode",barcode);                              //条码号
+                result.put("barcode",sample.getBarcode());                              //条码号
                 result.put("testResult",testResult.getTestResult());                              //结果
-
-                param.put(result);
+                jsonTestResult.put(result);
             }
-            RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");
+
+            JSONObject testInfo = new JSONObject();
+            testInfo.put("inspectionInfo",sampleInfo);
+            testInfo.put("inspectionItemList",jsonTestResult);
+
+            RequestEntity requestEntity = new StringRequestEntity(testInfo.toString(),"application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
@@ -584,7 +625,7 @@ public class WebService {
                 param.put("receiveName", process.getReceiver());
             }
             param.put("wardId",sample.getHosSection());
-            param.put("wardName", SectionUtil.getInstance(rmiService, sectionManager).getValue(sample.getHosSection()));                              //条码号
+            param.put("wardName", SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));                              //条码号
 
             RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
@@ -606,8 +647,7 @@ public class WebService {
 
     /**
      * 将检测结果保存至LIS系统--PDA
-     * @param sample
-     * @param process        结果信息
+     * @param ids
      * @return
      *
      * 用于电子病历查询

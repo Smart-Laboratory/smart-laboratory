@@ -197,9 +197,16 @@
                                                 <input class="form-control" id="guide" name="guide" type="text" value="${index.guide}" placeholder="指南"/>
                                             </div>
                                             <label class="col-sm-1 control-label"  style="padding-left: 2px;">显示历史记录</label>
-                                            <div class="col-sm-5">
+                                            <div class="col-sm-2">
                                                 <label class="control-label pull-left inline">
-                                                    <input id="needhistory" type="checkbox" <c:if test="${index.needhistory=='1'}">checked</c:if> name="needhistory" value="1" class="ace ace-switch ace-switch-3">
+                                                    <input id="needhistory" type="checkbox" <c:if test="${index.needhistory=='1'}">checked</c:if> name="needhistory" value="${index.needhistory}" class="ace ace-switch ace-switch-3">
+                                                    <span class="lbl middle"></span>
+                                                </label>
+                                            </div>
+                                            <label class="col-sm-1 control-label"  style="padding-left: 2px;">是否打印</label>
+                                            <div class="col-sm-2">
+                                                <label class="control-label pull-left inline">
+                                                    <input id="isprint" type="checkbox" <c:if test="${index.isprint=='1'}">checked</c:if> name="isprint" value="${index.isprint}" class="ace ace-switch ace-switch-3">
                                                     <span class="lbl middle"></span>
                                                 </label>
                                             </div>

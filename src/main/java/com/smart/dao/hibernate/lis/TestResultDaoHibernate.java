@@ -150,7 +150,7 @@ public class TestResultDaoHibernate extends
 				.createQuery(
 						"select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo='"
 								+ sampleno
-								+ "' and t.isprint=1 order by i.printord")
+								+ "' and i.isprint=1 order by i.printord")
 				.list();
 	}
 

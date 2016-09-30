@@ -86,7 +86,7 @@ public class DeviceRelationListController {
         }
 
         //加载未配置部门项目
-        System.out.println(operator.getUsername());
+        //System.out.println(operator.getUsername());
         if(operator.getUsername().equals("admin")){
             JSONObject other = new JSONObject();
             other.put("id","other");
@@ -298,6 +298,7 @@ public class DeviceRelationListController {
         String guide = ConvertUtil.null2String(request.getParameter("guide"));
         String type = ConvertUtil.null2String(request.getParameter("type"));
         int printord = ConvertUtil.getIntValue(request.getParameter("printord"),0);
+        int isprint = ConvertUtil.getIntValue(request.getParameter("isprint"),0);
 
         if(!name.equals("")) index.setName(name);
         if(!eglish.equals("")) index.setEnglish(eglish);
@@ -314,6 +315,7 @@ public class DeviceRelationListController {
         if(!type.equals("")) index.setType(type);
         if(!unit.equals("")) index.setUnit(unit);
         if(printord>=0) index.setPrintord(printord);
+        index.setIsprint(isprint);
         //不常用信息
         String principle = ConvertUtil.null2String(request.getParameter("principle"));          //测定原理
         String workCriterion = ConvertUtil.null2String(request.getParameter("workcriterion")); //工作规范
