@@ -68,6 +68,7 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 	public void saveAll(List<TestResult> list) {
 		testResultDao.saveAll(list);
 	}
+	
 	public void deleteAll(List<TestResult> list) {
 		testResultDao.deleteAll(list);
 	}
@@ -78,5 +79,9 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 
 	public List<TestResult> getSampleByCode(String code) {
 		return testResultDao.getSampleByCode(code);
+	}
+
+	public List<TestResult> getNoInfoSampleNo(String text) {
+		return testResultDao.getNoInfoSampleNo(text);
 	}
 }

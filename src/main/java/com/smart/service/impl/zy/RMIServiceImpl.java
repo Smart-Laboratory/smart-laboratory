@@ -354,8 +354,8 @@ public class RMIServiceImpl implements RMIService {
 		jdbcTemplate.update("update l_patientinfo set ksreceivetime=sysdate, ksreceiver='" + operator + "' where doctadviseno=" + doct);
 	}
 	
-	public void sampleOut(long doct, String operator) {
-		jdbcTemplate.update("update l_patientinfo set sendtime=sysdate, sender='" + operator + "' where doctadviseno=" + doct);
+	public void sampleOut(long doct, String operator,String sendlist) {
+		jdbcTemplate.update("update l_laborder set sendtime=sysdate, sender='" + operator + "', notes='"+sendlist+"' where laborder=" + doct);
 	}
 
 	public List<SyncReagent> getSyncReagent(String barcode) {
@@ -638,18 +638,6 @@ public class RMIServiceImpl implements RMIService {
 		return null;
 	}
 	
-	public List<SyncPatient> getOutList(String sender,Date sendtime){
-		String sql = "select * from l_patientinfo p where p.sender='"+sender+"' and p.sendtime between "
-				+ "to_date('"+ymdh.format(sendtime)+"','yyyy-mm-dd hh24:mi:ss') and to_date('"+ymd.format(sendtime)+" 23:59:59','yyyy-mm-dd hh24:mi:ss') order by p.sendtime desc";
-		System.out.println(sql);
-		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
-		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
-		        SyncPatient p = new SyncPatient();
-		        setField(rs, p);
-		        return p;
-		    }
-		});
-	}
 	/**
 	 * 根据医嘱号字符串 取样本信息
 	 * @param doctadvisenos
@@ -657,7 +645,6 @@ public class RMIServiceImpl implements RMIService {
 	 */
 	public List<SyncPatient> getByDoctadvisenos(String doctadvisenos){
 		String sql = "select * from l_patientinfo p where p.doctadviseno in ("+doctadvisenos+") ";
-		System.out.println(sql);
 		return jdbcTemplate.query(sql, new RowMapper<SyncPatient>() {
 		    public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
 		        SyncPatient p = new SyncPatient();
@@ -691,7 +678,12 @@ public class RMIServiceImpl implements RMIService {
 		    }
 		});
 	}
-	
+
+	@Override
+	public int getSendListCount(String s, String s1, String s2, String s3, int i) {
+		return 0;
+	}
+
 	public int getReceiveListCount(String receiver, Date starttime, Date endtime){
 		String hql = "";
 		if(endtime == null){
@@ -707,15 +699,127 @@ public class RMIServiceImpl implements RMIService {
 		return jdbcTemplate.queryForObject(hql, Integer.class);
 	}
 
-	public List<SyncPatient> getSendList(String arg0, Date arg1, Date arg2,
-			String arg3, String arg4, int arg5, int arg6, int arg7) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * 获取一段时间内的标本送出清单号
+	 * @param from
+	 * @param to
+	 * @param section
+	 * @return
+	 */
+	public List<String> getSendListNo(String from, String to, String section){
+		String sql = "select DISTINCT(notes) from l_laborder where notes is not null and executetime between " +
+				"to_date('"+from+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+to+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+		if(section != null){
+			sql += " and labdepartment ='"+section+"'";
+		}
+
+		List<String> listNo = jdbcTemplate.queryForList(sql, String.class);
+		return listNo;
 	}
 
-	public int getSendListCount(String arg0, Date arg1, Date arg2, String arg3,
-			String arg4, int arg5) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * 获取送出标本列表
+	 * @param from
+	 * @param to
+	 * @param section
+	 * @param sendListNo 清单号
+	 * @param stayhospitalmode 门诊/住院
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<SyncPatient> getSendList(String from, String to, String section, String sendListNo, int stayhospitalmode,int start,int end){
+		StringBuilder sql = new StringBuilder();
+		if(stayhospitalmode==0)
+			stayhospitalmode=1;
+		sql.append("select p.*,o.computername from l_patientinfo p,l_laborder o where p.doctadviseno=o.laborder and  p.stayhospitalmode=1 ");
+		if(section != null && !section.isEmpty()){
+			sql.append(" and p.labdepartment='"+section+"'");
+		}
+		if(sendListNo !=null && !sendListNo.isEmpty()){
+			sql.append(" and  p.doctadviseno in( select laborder from l_laborder where notes='"+sendListNo+"' ) ");
+		}else{
+			if(from == to){
+				sql.append(" and o.notes like '"+from+"%' ");
+			}else{
+				sql.append(" and  o.sendtime between " +
+						"to_date('"+from+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+to+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ");
+			}
+
+		}
+		sql.append(" order by p.doctadviseno");
+		String newsql = sql.toString();
+		if(end>0 && end>start){
+			newsql = "select b.* from (select rownum num0,a.* from ("+sql.toString()+") a order by num0 asc) b where num0>="+start+" and num0<"+end;
+		}
+
+		return jdbcTemplate.query(newsql, new RowMapper<SyncPatient>() {
+			public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
+				SyncPatient p = new SyncPatient();
+				setField(rs, p);
+				return p;
+			}
+		});
+	}
+
+	public int getSendListCount(int isOut, int stayhospitalmode, String from, String to, String section){
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(*) from l_laborder where stayhospitalmode=1 and executetime between " +
+				"to_date('"+from+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+to+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ");
+		if(isOut ==1 ){
+			sql.append(" and sendtime is not null");
+		}else{
+			sql.append(" and sendtime is null");
+		}
+
+		if(section!=null && !section.isEmpty()){
+			sql.append(" and labdepartment = '"+section+"'");
+		}
+
+		return jdbcTemplate.queryForObject(sql.toString(), Integer.class);
+	}
+
+	public List<SyncPatient> getWaitSendList(String from, String to, String section, int stayhospitalmode,int start,int end) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select o.computername,o.laborder as doctadviseno, o.PATIENTNAME, o.PATIENTID,o.EXAMITEM,o.LABDEPARTMENT,o.EXECUTETIME,o.EXECUTOR,o.SENDTIME,o.SENDER"
+				+ " from l_laborder o where  o.stayhospitalmode=1 and o.executetime between " +
+				"to_date('"+from+" 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('"+to+" 23:59:59','yyyy-mm-dd hh24:mi:ss') ");
+		sql.append(" and o.sendtime is null");
+
+		if(section!=null && !section.isEmpty()){
+			sql.append(" and o.labdepartment = '"+section+"'");
+		}
+		sql.append(" order by o.laborder asc");
+
+		String newsql = sql.toString();
+		if(end>0 && end>start){
+			newsql = "select b.* from (select rownum num0,a.* from ("+sql.toString()+") a order by num0 asc) b where num0>="+start+" and num0<="+end;
+		}
+
+		List<SyncPatient> list = new ArrayList<SyncPatient>();
+		list = jdbcTemplate.query(newsql, new RowMapper<SyncPatient>() {
+			public SyncPatient mapRow(ResultSet rs, int rowNum) throws SQLException {
+				SyncPatient p = new SyncPatient();
+				//		        setField(rs, p);
+				p.setCOMPUTERNAME(rs.getString("computername"));
+				p.setDOCTADVISENO(rs.getLong("doctadviseno"));
+				p.setPATIENTNAME(rs.getString("patientname"));
+				p.setPATIENTID(rs.getString("patientid"));
+				p.setEXAMINAIM(rs.getString("examitem"));
+				p.setLABDEPARTMENT(rs.getString("labdepartment"));
+				try {
+					p.setEXECUTETIME(rs.getString("executetime")==null?null:Constants.SDF.parse(rs.getString("executetime")));
+					p.setSENDTIME(rs.getString("sendtime")==null?null:Constants.SDF.parse(rs.getString("sendtime")));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				p.setEXECUTOR(rs.getString("executor"));
+				p.setSENDER(rs.getString("sender"));
+				return p;
+			}
+		});
+
+		return list;
 	}
 }

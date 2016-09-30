@@ -1,3 +1,65 @@
+/*
+ *  修改
+ */
+function changeNoInfoResult(obj) {
+	$('.infoActive').removeClass("infoActive");
+	$(obj).addClass("infoActive");
+	$('.resultActive').removeClass("resultActive").addClass("resultNoActive");
+	$("." + $(obj).html().replace(" ","")).each(function () {
+		$(this).removeClass("resultNoActive").addClass("resultActive");
+	});
+}
+
+/*
+ *  打开实验室检验段设置弹窗
+ */
+function openNoSampleInfoDialog() {
+	$.get(baseUrl + "/audit/ajax/getNoSampleInfo",function(data){
+		var array = jQuery.parseJSON(data);
+		var html = "<tr><th>无结果样本信息</th></tr>";
+		var html2 = "";
+		for(var i in array) {
+			if(i == 0) {
+				html +="<tr><td><a href='#' onclick='changeNoInfoResult(this)' class='infoActive'>" + array[i].sampleNo + "</a></td></tr>";
+				html2 += "<tr class='" + array[i].sampleNo + " resultActive'><th colspan='3'>" + array[i].sampleNo + "</th></tr>"
+				for(var j in array[i].testList) {
+					html2 += "<tr class='" + array[i].sampleNo + " resultActive'>"
+					html2 += "<td>" + array[i].testList[j].testName + "</td>";
+					html2 += "<td>" + array[i].testList[j].testResult + "</td>";
+					html2 += "<td>" + array[i].testList[j].reference + "</td>";
+					html2 += "</tr>";
+				}
+			} else {
+				html +="<tr><td><a href='#' onclick='changeNoInfoResult(this)'> " + array[i].sampleNo + "</a></td></tr>";
+				html2 += "<tr class='" + array[i].sampleNo + " resultNoActive'><th colspan='3'>" + array[i].sampleNo + "</th></tr>"
+				for(var j in array[i].testList) {
+					html2 += "<tr class='" + array[i].sampleNo + " resultNoActive'>"
+					html2 += "<td>" + array[i].testList[j].testName + "</td>";
+					html2 += "<td>" + array[i].testList[j].testResult + "</td>";
+					html2 += "<td>" + array[i].testList[j].reference + "</td>";
+					html2 += "</tr>";
+				}
+			}
+		}
+		$("#noSampleList").html(html);
+		$("#noInfoTable").html(html2);
+	});
+	layer.open({
+		type: 1,
+		shade: 0.4,
+		skin: 'layui-layer-lan',
+		area:['600px','480px'],
+		title: '无样本信息结果',
+		content: $('#noSampleInfoDialog'),
+		cancel: function(index){
+			layer.close(index);
+		}
+	});
+}
+
+/*
+ *  打开实验室检验段设置弹窗
+ */
 function openCodeSetDialog() {
 	layer.open({
 	  type: 1,
@@ -11,6 +73,10 @@ function openCodeSetDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开需写回标本展示弹窗
+ */
 function openAllNeedWriteBackDialog() {
 	layer.open({
 	  type: 1,
@@ -24,6 +90,10 @@ function openAllNeedWriteBackDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开部分写回标本展示弹窗
+ */
 function openWriteBackPartDialog() {
 	layer.open({
 	  type: 1,
@@ -37,6 +107,10 @@ function openWriteBackPartDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开SOP文档展示弹窗
+ */
 function openSopDetailDialog(type) {
 	switch (type) {
 	case 0:
@@ -93,6 +167,10 @@ function openSopDetailDialog(type) {
 		break;
 	}
 }
+
+/*
+ *  打开历史记录曲线图展示弹窗
+ */
 function openChartDialog() {
 	layer.open({
 	  type: 1,
@@ -108,6 +186,10 @@ function openChartDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开样本修改展示弹窗
+ */
 function openTestModifyDialog() {
 	layer.open({
 	  type: 1,
@@ -121,6 +203,10 @@ function openTestModifyDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开项目知识库展示弹窗
+ */
 function openKnowledgeDialog() {
 	layer.open({
 	  type: 1,
@@ -134,6 +220,10 @@ function openKnowledgeDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开项目统计展示弹窗
+ */
 function openStatisticDialog() {
 	layer.open({
 	  type: 1,
@@ -147,6 +237,10 @@ function openStatisticDialog() {
 	  }
 	});
 }
+
+/*
+ *  打开手工审核弹窗
+ */
 function openAuditDialog() {
 	layer.open({
 	  type: 1,
@@ -163,6 +257,10 @@ function openAuditDialog() {
 	  }
 	});
 }
+
+/*
+ *  打印预览
+ */
 function openAuditPrintDialog() {
 	layer.open({
 		  type: 1,
@@ -176,6 +274,10 @@ function openAuditPrintDialog() {
 		  }
 	})
 }
+
+/*
+ *  打印预览
+ */
 function openSamplePrintDialog() {
 	layer.open({
 		  type: 1,
@@ -189,6 +291,10 @@ function openSamplePrintDialog() {
 		  }
 	})
 }
+
+/*
+ *  添加解释弹窗
+ */
 function openAddResultDialog() {
 	layer.open({
 	  type: 1,
@@ -202,6 +308,10 @@ function openAddResultDialog() {
 	  }
 	});
 }
+
+/*
+ *  收藏Form弹窗
+ */
 function openCollectDialog() {
 	layer.open({
 	  type: 1,
@@ -215,6 +325,10 @@ function openCollectDialog() {
 	  }
 	});
 }
+
+/*
+ *  图片上传预览
+ */
 function openUploadDialog() {
 	layer.open({
 	  type: 1,
@@ -228,6 +342,10 @@ function openUploadDialog() {
 	  }
 	});
 }
+
+/*
+ *  图片内容
+ */
 function openImageDialog() {
 	layer.open({
 	  type: 1,
@@ -241,6 +359,10 @@ function openImageDialog() {
 	  }
 	});
 }
+
+/*
+ *  TAT展示
+ */
 function openTatDialog() {
 	layer.open({
 	  type: 1,
@@ -254,6 +376,10 @@ function openTatDialog() {
 	  }
 	});
 }
+
+/*
+ *  添加检验结果
+ */
 function openAddTestResultDialog() {
 	layer.open({
 		type: 1,
@@ -285,7 +411,7 @@ function openAddTestResultDialog() {
 		    		}
 		    	});
     			if (postStr != "") {
-	    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
+	    			$.post(baseUrl + "/audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
 	    				if (data) {
 	    					$("#lastprofile").val(tcValue);
 	    					layer.close(index);
@@ -315,6 +441,9 @@ function openAddTestResultDialog() {
 	})
 }
 
+/*
+ *  通过不通过弹窗
+ */
 function openOpStatusDialog() {
 	layer.ready(function() {
 		$("#noteText").val("");
@@ -508,6 +637,10 @@ function openOpStatusDialog() {
     	}
 	});
 }
+
+/*
+ *  批量添加检验结果弹窗
+ */
 function openBatchAddResultsDialog() {
 	layer.open({
 	  type: 1,
@@ -521,6 +654,10 @@ function openBatchAddResultsDialog() {
 	  }
 	});
 }
+
+/*
+ *  标本审核踪迹
+ */
 function openAuditTraceDialog() {
 	layer.open({
 	  type: 1,
@@ -568,6 +705,7 @@ function setDefaultValue(){
 // var date = new Date().Format("yyyyMMdd");
 		$("#batchAddResults_statistic_date").val(new Date().Format("yyyyMMdd"));
 	}
+
 $(function(){
 	// 对Date的扩展，将 Date 转化为指定格式的String
 	// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
@@ -594,6 +732,10 @@ $(function(){
 	$(".ui-dialog-buttonset button").each(function(index,self){
 		$(self).addClass('btn');
 	});
+
+	$("#showNoSampleInfoTest").click(function(){
+		openNoSampleInfoDialog();
+	})
 	
 	$("#diseaseSelect").autocomplete({
         source: function( request, response ) {

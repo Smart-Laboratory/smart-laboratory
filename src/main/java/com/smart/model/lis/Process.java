@@ -191,8 +191,6 @@ public class Process extends BaseObject {
 		this.printtime = printtime;
 	}
 
-	
-
 	public String toString() {
 		return null;
 	}

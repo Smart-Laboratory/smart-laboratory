@@ -256,6 +256,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
 		if(lab.equals(Constants.LaboratoryAll)) {
 			sql = "from Sample s where 1=1 ";
+		}
+		if(code == null) {
 			code = "";
 		}
 		String[] cds = code.split(",");
@@ -273,7 +275,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				}
 				break;
 			case 11:
-				if (StringUtils.isNumeric(text.substring(0, 8)) && code.indexOf(text.substring(8)) != -1) {
+				if (StringUtils.isNumeric(text.substring(0, 8)) && (code.isEmpty() || code.indexOf(text.substring(8, 11)) != -1)) {
 					sql += "and s.sampleNo like '" + text + "%'";
 				} else {
 					sql += "and s.sampleNo like '" + text.substring(0, 8) + "%'";
@@ -281,7 +283,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				break;
 			case 14:
 				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) &&
-						code.indexOf(text.substring(8, 11)) != -1) {
+						(code.isEmpty() || code.indexOf(text.substring(8, 11)) != -1)) {
 					sql += "and s.sampleNo='" + text + "'";
 				}
 				break;
@@ -289,7 +291,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
 						&& StringUtils.isNumeric(text.substring(11, 14))
 						&& StringUtils.isNumeric(text.substring(15, 18))
-						&& code.indexOf(text.substring(8, 11)) != -1) {
+						&& (code.isEmpty() || code.indexOf(text.substring(8, 11)) != -1)) {
 					sql += "and s.sampleNo>='" + text.substring(0, 14)
 							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
 				}
@@ -332,7 +334,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		sql += " order by s.sampleNo";
 		Query q =  getSession().createQuery(sql);
 
-		System.out.print(q.getQueryString());
+		System.out.println(q.getQueryString());
 		if( end != 0){
 			q.setFirstResult(start);
 			q.setMaxResults(end);

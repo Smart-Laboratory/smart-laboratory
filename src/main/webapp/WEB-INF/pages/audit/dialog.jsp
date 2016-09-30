@@ -264,3 +264,24 @@
 <div id="auditTraceDialog" style="text-align:left;display:none;">
 	<table class="table" id="audit_trace_information"></table>
 </div>
+
+<div id="noSampleInfoDialog" style="text-align:left;display:none;">
+	<style>
+		.infoActive {
+			background-color: #E4EFC9;
+		}
+		.resultActive {
+			display: table-row;
+		}
+		.resultNoActive {
+			display:none;
+		}
+
+	</style>
+	<div class="col-sm-3">
+		<table id="noSampleList" class="table"></table>
+	</div>
+	<div class="col-sm-9">
+		<table id="noInfoTable" class="table"></table>
+	</div>
+</div>

@@ -17,6 +17,7 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.service.scheduledTask.ReportGenerate;
 import com.smart.util.ConvertUtil;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -344,11 +345,15 @@ public class SamplePrintController extends BaseAuditController {
 						if(tr.getResultFlag().charAt(0) != 'A') {
 							isneed = 1;
 						}
-						if(hisnum < 5) {
+						if(hisnum < 5 && StringUtils.isNumericSpace(tr.getTestResult().replace(",",""))) {
 							try {
 								reArr.add(Double.parseDouble(tr.getTestResult()));
-								hiArr.add(Double.parseDouble(tr.getRefHi()));
-								loArr.add(Double.parseDouble(tr.getRefLo()));
+								if(tr.getRefLo() != null && StringUtils.isNumericSpace(tr.getRefLo().replace(".",""))) {
+									loArr.add(Double.parseDouble(tr.getRefLo()));
+								}
+								if(tr.getRefHi() != null && StringUtils.isNumericSpace(tr.getRefHi().replace(".",""))) {
+									hiArr.add(Double.parseDouble(tr.getRefHi()));
+								}
 								timeArr.add(Constants.DF7.format(tr.getMeasureTime()));
 							} catch(NumberFormatException nfe) {
 								continue;
