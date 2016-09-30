@@ -44,6 +44,8 @@ public class Process extends BaseObject {
 	private Date printtime;
 	private long sampleid;
 
+	private String sendlist;
+
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="SEQ_PROCESS")
@@ -191,7 +193,14 @@ public class Process extends BaseObject {
 		this.printtime = printtime;
 	}
 
-	
+	@Column
+	public String getSendlist() {
+		return sendlist;
+	}
+
+	public void setSendlist(String sendlist) {
+		this.sendlist = sendlist;
+	}
 
 	public String toString() {
 		return null;
