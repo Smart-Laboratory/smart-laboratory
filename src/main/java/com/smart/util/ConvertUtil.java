@@ -155,6 +155,20 @@ public final class ConvertUtil {
         }
     }
 
+    public static String  getFormatDate(Date v, int value) {
+        try {
+            if(v==null) v= new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(v);
+            SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            calendar.add(Calendar.DAY_OF_MONTH, value);
+            //进行时间转换
+            String date = sim.format(calendar.getTime());
+            return sim.format(calendar.getTime());
+        } catch (Exception ex) {
+            return "";
+        }
+    }
     /**
      * Lis结果标记
      * @param flag

@@ -512,8 +512,7 @@ public class WebService {
             JSONObject sampleInfo = new JSONObject();
             String sampleNo = sample.getSampleNo().substring(sample.getSampleNo().length()-3,sample.getSampleNo().length());
 
-            String inspectionId = ConvertUtil.null2String(ConvertUtil.getFormatDate(process.getChecktime(),"yyyyMMdd")+
-                    String.format("%05d", ConvertUtil.getLongValue(sampleNo)));
+            //String inspectionId = sample.getBarcode();
 
             //样本信息
             sampleInfo.put("inspectionId",sample.getBarcode());
@@ -554,7 +553,7 @@ public class WebService {
             JSONArray jsonTestResult= new JSONArray();
             for(TestResult testResult:testResultList){
                 JSONObject result = new JSONObject();
-                result.put("inspectionId",inspectionId);                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
+                result.put("inspectionId",sample.getBarcode());                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
                 result.put("testItemId",testResult.getTestId());        //项目编号
                 result.put("testItemName_EN",testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
                 result.put("getTestItemName_CN",testResult.getTestName());//项目名称

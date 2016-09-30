@@ -11,6 +11,7 @@
 </head>
 
 <script type="text/javascript">
+	var baseUrl = baseUrl || "<%=request.getContextPath()%>";
 	function navSearchBtnClick() {
 		if ($("#nav-search-panel").css('display') == "none") {
 			$("#nav-search-panel").css('display','block');

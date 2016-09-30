@@ -1,5 +1,7 @@
 
 function getList(text, lab) {
+	var clientHeight= $(window).innerHeight();
+	var height =clientHeight-$('#head').height()- $('#header').height()-$('.footer-content').height()-180;
 	jQuery("#list").jqGrid({ 
     	url:"../audit/data?sample="+text+"&lab="+lab, 
     	datatype: "json",
@@ -13,10 +15,10 @@ function getList(text, lab) {
     		{name:'sample',index:'sample', width:160, align:"right"},
     		{name:'flag',index:'flag', hidden:true},
     		{name:'size',index:'size', hidden:true}], 
-    	rowNum:25,
+    	rowNum:100,
     	viewrecords:true,
     	shrinkToFit:true,
-    	height: '100%',
+    	height: height,
     	jsonReader : {repeatitems : false},
     	mtype: "GET", 
     	pager: '#pager',

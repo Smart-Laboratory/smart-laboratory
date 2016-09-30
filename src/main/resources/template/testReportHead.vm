@@ -2,11 +2,11 @@
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td>
-                <div class="llogo"><img src="$!requestUrl/images/l_logo.jpg"/></div>
+                <div class="llogo"><img src="$!requestUrl/images/l_logo.png"/></div>
             </td>
             <td style="text-align:center"><span class="headtitle">检验报告单</span></td>
             <td>
-                <div class="rlogo"><img src="$!requestUrl/images/r_logo.jpg"/></div>
+                <div class="rlogo"><img src="$!requestUrl/images/r_logo.png"/></div>
             </td>
         </tr>
         <tr>

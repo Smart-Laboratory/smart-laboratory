@@ -242,7 +242,7 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        //System.out.println(writer.toString());
+        System.out.println(writer.toString());
         return writer.toString();
     }
 

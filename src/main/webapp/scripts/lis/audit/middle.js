@@ -141,12 +141,19 @@
         		$("#diagnostic").html("<a href='#' onclick='show_knowledge(\""+data.diagnosticKnow+"\")'>"+data.diagnostic+"</a>");
         	}
         	$("#diagnosisValue").val(data.diagnostic);
-        	if(data.description != null) {
+			var index;
+			if(data.description != null) {
         		var reason = data.description.replace(/<p>/g,"").replace(/<\/p>/g,";");
-            	$("#passreason").html(reason);
-            	$("#passLabel").css('display','block');
+				index = layer.tips('<b>提示:</b>'+reason, '#gview_rowed3 .ui-jqgrid-title', {
+					time:0,
+					offset:0,
+					shift: 6
+				});
+            	// $("#passreason").html(reason);
+            	// $("#passLabel").css('display','block');
         	} else {
-        		$("#passLabel").css('display','none');
+				layer.closeAll();
+				//$("#passLabel").css('display','none');
         	}
         	
         	if(data.bed == null){
@@ -203,7 +210,10 @@
         var cl = "";
         var isEdit = false;
         var width = $("#mid").width();
-        jQuery("#rowed3").jqGrid({
+		var clientHeight= $(window).innerHeight();
+
+		var height =clientHeight-$('#head').height()- $('#header').height()- $('#patientinfo').height()-$('.footer-content').height()-150;
+		jQuery("#rowed3").jqGrid({
 		   	url:"../audit/sample?id="+sampleNo,
 			datatype: "json",
 			width:width,
@@ -228,7 +238,9 @@
 		   		{name:'editMark',index:'editMark',hidden:true},
 		   		{name:'lastEdit',index:'lastEdit',hidden:true}
 		   	],
-		   	height: "100%",
+			viewrecords:true,
+			shrinkToFit:true,
+			height: height,
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: "",

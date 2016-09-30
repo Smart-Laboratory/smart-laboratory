@@ -34,10 +34,10 @@
 <div id="mid" class="col-sm-9" >
 	<div id="patientinfo" class="col-sm-9">
 		<h2 style="display:none;" id="sampleTitle"></h2>
-		<div id='passLabel' class="alert alert-success" style="display:none;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
-			<b><fmt:message key="passreason"/>&nbsp;</b>
-			<b id="passreason"></b>
-		</div>
+		<%--<div id='passLabel' class="alert alert-success" style="display:none;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">--%>
+			<%--<b><fmt:message key="passreason"/>&nbsp;</b>--%>
+			<%--<b id="passreason"></b>--%>
+		<%--</div>--%>
 		<div class="clearfix alert alert-info" style="margin-bottom:0px;padding:2px;padding-bottom:2px;">
 			<table style="width: 100%" cellpadding="0" cellspacing="0" class="patientinfo">
 				<colgroup>
@@ -172,15 +172,17 @@
 			<input type="hidden" id="hiddenIsPass"/>
 			<input type="hidden" id="hiddenAuditConfirm" value="${activeAuto}"/>
 		</div>
-		<div id="colorHelp" style="float:left;margin-top:3px;width:100%">
+		<div id="colorHelp" style="float:left;margin-top:3px;">
+
 		</div>
-		<div id="critical_div" style="float:left;width:100%">
-			<div id="critical_alert" class="alert" style="margin-bottom:0px;">
-				<b id="critical_title" style="font-size:18px;margin-right:20px;"></b>
-				<span id="critical_time"></span>
-				<div id="critical_info"></div>
-			</div>
+		<div id="critical_div" style="float:right;display: inline;">
+			<%--<div id="critical_alert" class="alert" style="margin-bottom:0px;">--%>
+			<b id="critical_title" style="font-size:16px;margin-right:20px;"></b>
+			<span id="critical_time"></span>
+			<div id="critical_info"></div>
+			<%--</div>--%>
 		</div>
+		<div style="clear: both"></div>
 		<div id="relative-tests" style="float:left;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;margin-top:2px;width:500px;">
 			<div id='showGalleria'></div>
 		</div>

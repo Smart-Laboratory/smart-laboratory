@@ -83,7 +83,11 @@ public class InExecuteViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ward = ConvertUtil.null2String(request.getParameter("ward"));
-        return new ModelAndView().addObject("ward", ward);
+        User user = UserUtil.getInstance().getUser(request.getRemoteUser());
+        ModelAndView modelAndView  = new ModelAndView();
+        modelAndView.addObject("ward", ward);
+        modelAndView.addObject("userid", user.getUsername());
+        return modelAndView;
     }
 
 
@@ -214,10 +218,21 @@ public class InExecuteViewController {
         } else {
             beCollectedList = labOrders;
         }
+        java.util.Calendar rightNow = java.util.Calendar.getInstance();
+        java.text.SimpleDateFormat sim = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //得到当前时间，+3天
+        rightNow.add(java.util.Calendar.DAY_OF_MONTH, 3);
+        //如果是后退几天，就写 -天数 例如：
+        rightNow.add(java.util.Calendar.DAY_OF_MONTH, -3);
+        //进行时间转换
+        String date = sim.format(rightNow.getTime());
+        System.out.println(date);
 
         List<Object[]> labOrderList = new ArrayList<Object[]>();
         try {
-            labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null);
+            //取最新五天记录
+            String startDate = ConvertUtil.getFormatDate(new Date(),-5);
+            labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null,startDate);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -237,7 +252,7 @@ public class InExecuteViewController {
             Process process  = (Process) objects[2];
 
             //排除非ICU项目
-            if(!labOrder.getYlxh().equals("22813") && !labOrder.getYlxh().equals("22814")) continue;
+            //if(!labOrder.getYlxh().equals("22813") && !labOrder.getYlxh().equals("22814")) continue;
             LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
             if (ylxh != null) {
@@ -295,9 +310,9 @@ public class InExecuteViewController {
                     }
                     //排除非ICU项目
                    // System.out.println("labOrder.getYlxh()==>"+labOrder.getYlxh().equals("22813"));
-                    if(!labOrder.getYlxh().equals("22813") &&  !labOrder.getYlxh().equals("22814")) {
-                        iterator.remove();
-                    }
+//                    if(!labOrder.getYlxh().equals("22813") &&  !labOrder.getYlxh().equals("22814")) {
+//                        iterator.remove();
+//                    }
                 }
                 //System.out.println(beCollectedList.size());
             }

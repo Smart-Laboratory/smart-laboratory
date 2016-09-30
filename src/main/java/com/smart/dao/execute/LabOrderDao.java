@@ -33,6 +33,8 @@ public interface LabOrderDao extends GenericDao<LabOrder, Long>{
 
 	List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds);
 
+	List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds,String startDate);
+
 	List<LabOrder> saveAll(List<LabOrder> list);
 
     void removeAll(List<LabOrder> list);

@@ -107,11 +107,11 @@ select {
 }
 
 #gview_s3list .ui-jqgrid-hdiv {
-	overflow-y:hidden;
+	/*overflow-y:hidden;*/
 }
 
 #gview_rowed3 .ui-jqgrid-bdiv {
-	overflow-y:hidden;s
+	/*overflow-y:hidden;*/
 }
 
 #addTestForm td {

@@ -143,9 +143,13 @@
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
                 补打
             </button>
-            <button type="button" class="btn btn-sm  btn-success" title="打印机选择" onclick="TSLAB.Custom.printSet()">
+            <button type="button" class="btn btn-sm  btn-pink" title="打印机选择" onclick="TSLAB.Custom.printSet()">
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                打印设计
+                打印设定
+            </button>
+            <button type="button" class="btn btn-sm btn-purple" title="打印机选择" onclick="TSLAB.Custom.openUrl()">
+                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                 交叉配血条码打印
             </button>
             <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
             <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
@@ -582,11 +586,13 @@
                     "wardId": "1025"
                 }
                 CreateDataBill(data)
-            }
-            ,
+            },
+            openUrl:function () {
+                window.open("http://10.31.96.39:108/nurs/sample?patward=${ward}&nursid=${userid}");
+            },
             printReport: function () {
-                $.get("/print/ajax/printReport", {sampleno: '20160530URF300', haslast: '0', type: ''}, function (data) {
-                    console.log(data)
+                $.get(baseUrl+"/print/ajax/printReport", {sampleno: '20160530URF300', haslast: '0', type: ''}, function (data) {
+                    //console.log(data)
                     Preview(data);
                 })
             }
@@ -611,6 +617,9 @@
             },
             getCookie:function (name) {
                 return private.getCookie(name);
+            },
+            openUrl:function () {
+                private.openUrl();
             }
 
         }

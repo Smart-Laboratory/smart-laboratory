@@ -44,6 +44,9 @@ p{
 	margin: 5px 5px;
 }
 </style>
+    <script>
+        var baseUrl = baseUrl || "<%=request.getContextPath()%>";
+    </script>
 </head>
 
 

@@ -63,6 +63,10 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	 * @return
 	 */
 	public List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds){
+		return getByRequestIds(ward,bedNo,patientId,requestIds,"");
+	}
+
+	public List<Object[]> getByRequestIds(String ward,String bedNo,String patientId,List requestIds,String startDate){
 		String sql ="select l,s,p from LabOrder l, Sample s,Process p where l.barcode = s.barcode and s.id = p.sampleid";
 
 		if(ward !=null && !ward.isEmpty()){
@@ -77,7 +81,9 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		if(requestIds !=null && requestIds.size()>0){
 			sql += " and  l.requestId in (:requestIds)";
 		}
-
+		if(startDate !=null && !startDate.isEmpty()){
+			sql += " and  l.requesttime >=to_date(:startDate,'yyyy-mm-dd hh24:mi:ss')";
+		}
 		sql += " order by l.barcode desc";
 		Query query = getSession().createQuery(sql);
 		if(ward !=null && !ward.isEmpty()){
@@ -92,10 +98,12 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 		if(requestIds !=null && requestIds.size()>0){
 			query.setParameterList("requestIds",requestIds);
 		}
+		if(startDate !=null && !startDate.isEmpty()){
+			query.setString("startDate",startDate);
+		}
 
 		return query.list();
 	}
-
 
 
 	public List<LabOrder> saveAll(List<LabOrder> list) {
