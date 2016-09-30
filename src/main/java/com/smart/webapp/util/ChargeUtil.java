@@ -58,7 +58,12 @@ public class ChargeUtil {
         try {
             for (LabOrder labOrder : labOrderList) {
                 //采集部位
-                Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
+                Ylxh ylxh = new Ylxh();
+                if(labOrder.getYlxh().indexOf("+") > 0 ){
+                    ylxh = ylxhMap.get(labOrder.getYlxh().split("[+]")[0]);
+                } else {
+                    ylxh = ylxhMap.get(labOrder.getYlxh());
+                }
                 String part = ylxh.getCjbw();
 
                 String sampleType = SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx());
