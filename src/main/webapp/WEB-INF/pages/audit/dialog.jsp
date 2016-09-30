@@ -264,3 +264,8 @@
 <div id="auditTraceDialog" style="text-align:left;display:none;">
 	<table class="table" id="audit_trace_information"></table>
 </div>
+
+<div id="noSampleInfoDialog" style="text-align:left;display:none;">
+	<ul id="noSampleList" class="col-sm-3"></ul>
+	<table id="noInfoTable" class="col-sm-9"></table>
+</div>
