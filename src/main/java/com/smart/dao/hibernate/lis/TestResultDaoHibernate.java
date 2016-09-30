@@ -186,4 +186,10 @@ public class TestResultDaoHibernate extends
 				"from TestResult where sampleNo like '" + code + "%'").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<TestResult> getNoInfoSampleNo(String text) {
+		String sql = "from TestResult where sampleNo like '" + text + "%' and testStatus=-1 order by sampleNo";
+		return getSession().createQuery(sql).list();
+	}
+
 }

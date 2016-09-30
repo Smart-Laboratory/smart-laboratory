@@ -2,7 +2,25 @@
  *  打开实验室检验段设置弹窗
  */
 function openNoSampleInfoDialog() {
-
+	$.get(baseUrl + "/audit/ajax/getNoSampleInfo",function(data){
+		var array = jQuery.parseJSON(data);
+		var html = "";
+		for(var i in array) {
+			html +="<li>" + array[i].sampleNo + "</li>";
+		}
+		$("#noSampleList").html(html)
+	});
+	layer.open({
+		type: 1,
+		shade: 0.4,
+		skin: 'layui-layer-lan',
+		area:['600px','480px'],
+		title: '无样本信息结果',
+		content: $('#noSampleInfoDialog'),
+		cancel: function(index){
+			layer.close(index);
+		}
+	});
 }
 
 /*
@@ -359,7 +377,7 @@ function openAddTestResultDialog() {
 		    		}
 		    	});
     			if (postStr != "") {
-	    			$.post("../audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
+	    			$.post(baseUrl + "/audit/add",{test:postStr,sample:sample,tcValues:tcValue},function(data){
 	    				if (data) {
 	    					$("#lastprofile").val(tcValue);
 	    					layer.close(index);

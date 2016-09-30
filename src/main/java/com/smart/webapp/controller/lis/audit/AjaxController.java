@@ -51,6 +51,48 @@ public class AjaxController extends BaseAuditController {
 	
 	@Autowired
 	private OutManager outManager;
+
+	/**
+	 * 获取无样本信息的标本结果
+	 * yuzh 2016-9-30
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(method=RequestMethod.GET, value="/getNoSampleInfo")
+	@ResponseBody
+	public void getNoSampleInfoList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<TestResult> list = testResultManager.getNoInfoSampleNo(Constants.DF3.format(new Date()));
+		Map<String, List<TestResult>> map = new HashMap<String, List<TestResult>>();
+		for(TestResult testResult : list) {
+			if(map.containsKey(testResult.getSampleNo())) {
+				map.get(testResult.getSampleNo()).add(testResult);
+			} else {
+				List<TestResult> testResultList = new ArrayList<TestResult>();
+				testResultList.add(testResult);
+				map.put(testResult.getSampleNo(), testResultList);
+			}
+		}
+		JSONArray jsonArray = new JSONArray();
+		for(String s : map.keySet()) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("sampleNo", s);
+			JSONArray array = new JSONArray();
+			for(TestResult tr : map.get(s)) {
+				JSONObject json = new JSONObject();
+				json.put("sampleNo", tr.getSampleNo());
+				json.put("testName", tr.getTestName());
+				json.put("testResult", tr.getTestResult());
+				json.put("reference", tr.getRefLo() + " " + tr.getRefHi());
+				array.put(json);
+			}
+			jsonObject.put("testList", array);
+			jsonArray.put(jsonObject);
+		}
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().print(jsonArray.toString());
+	}
 	
 	@RequestMapping(value = "/singleChart*", method = RequestMethod.GET)
 	@ResponseBody
@@ -134,9 +176,13 @@ public class AjaxController extends BaseAuditController {
 					total = total + d;
 					count = count +1;
 					resultList.add(d);
-        			loArr.add(Double.parseDouble(list.get(i).getRefLo()));
+					if(list.get(i).getRefLo() != null && StringUtils.isNumericSpace(list.get(i).getRefLo().replace(".",""))) {
+						loArr.add(Double.parseDouble(list.get(i).getRefLo()));
+					}
+					if(list.get(i).getRefHi() != null && StringUtils.isNumericSpace(list.get(i).getRefHi().replace(".",""))) {
+						hiArr.add(Double.parseDouble(list.get(i).getRefHi()));
+					}
             		reArr.add(Double.parseDouble(list.get(i).getTestResult()));
-            		hiArr.add(Double.parseDouble(list.get(i).getRefHi()));
             		timeArr.add(Constants.SDF.format(list.get(i).getMeasureTime()));
             	}
         	}
@@ -221,10 +267,6 @@ public class AjaxController extends BaseAuditController {
 		response.getWriter().print(obj.toString());
 		return null;
 	}
-	
-	
-	
-	
 	
 	/**
 	 * 文件上传

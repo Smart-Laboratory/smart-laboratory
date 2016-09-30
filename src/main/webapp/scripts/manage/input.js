@@ -76,7 +76,7 @@ function receive(obj,event) {
 							};
 							var ids = $('#new').jqGrid('getDataIDs');
 							var newId = parseInt(ids[ids.length - 1] || 0) + 1;
-							$("#new").jqGrid('addRowData', newId, rowData);
+							$("#new").jqGrid('addRowData', newId, rowData, "first");
 							$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
 							$("#receive_id").val("").focus();
 							layer.msg(data.message, {icon: 1, time: 1000});
