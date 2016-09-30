@@ -1,7 +1,7 @@
 
 function getList(text, lab) {
 	var clientHeight= $(window).innerHeight();
-	var height =clientHeight-$('#head').height()- $('#header').height()-$('.footer-content').height()-180;
+	var height =clientHeight-$('#head').height()- $('#header').height()-$('.footer-content').height()-170;
 	jQuery("#list").jqGrid({ 
     	url:"../audit/data?sample="+text+"&lab="+lab, 
     	datatype: "json",

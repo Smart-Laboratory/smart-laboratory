@@ -280,13 +280,13 @@ h2 {
 	display:none;
 }
 #need_writeback_table .wb_lab {
-	display:none;e
+	display:none;
 }
 #tasklist_table .ut_id {
 	display:none;
 }
 
-.ui-tabs-vertical { width: 580; }
+.ui-tabs-vertical { width: 580px; }
 .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
 .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
 .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
@@ -353,3 +353,14 @@ h2 {
 	color : #000;
 	padding:0;
 }
+.ui-jqgrid tr.ui-row-ltr td, .ui-jqgrid tr.ui-row-rtl td {
+	padding: 2px 4px !important;
+}
+.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th {
+	border-top: 1px solid #E1E1E1 !important;
+}
+table{
+	border-collapse: inherit !important;
+}
+
+

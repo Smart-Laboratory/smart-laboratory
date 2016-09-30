@@ -56,7 +56,9 @@
 		#profileTab .table>tbody>tr, .table>tbody>tr, .table>tfoot>tr, .table>tfoot>tr, .table>thead>tr, .table>thead>tr {
 			border: 1px solid #ddd;
 		}
-
+		#tab-1{
+			overflow: auto;
+		}
 	</style>
 </head>
 <body>
@@ -122,7 +124,7 @@
 		</ul>
 
 		<div class="tab-content">
-			<div id="tab-1" class="tab-pane active">
+			<div id="tab-1" class="tab-pane active" >
 				<table class="table" id="testTable">
 					<tr>
 						<th>必做项目</th>

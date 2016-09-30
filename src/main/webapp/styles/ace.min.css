@@ -12947,12 +12947,12 @@ th .lbl:only-child,td .lbl:only-child {
 }
 
 .ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
-    height: 45px !important
+        height: 35px !important
 }
 
 .ui-jqgrid .ui-jqgrid-htable th div {
-    padding-top: 12px;
-    padding-bottom: 12px
+    padding-top: 8px;
+    padding-bottom: 7px
 }
 
 .ui-jqgrid-hdiv .ui-jqgrid-htable {

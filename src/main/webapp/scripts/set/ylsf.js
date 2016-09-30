@@ -307,6 +307,10 @@ function getList(lab) {
 
 
 $(function() {
+	var clientHeight= $(window).innerHeight();
+	var height =clientHeight-$('#head').height()-$('#header').height()- $('#toolbar').height()-$('#profileTab').height()-$('.footer-content').height()-85;
+	//设置高度
+	$('#tab-1').height(height);
 	$("#YlxhForm").Validform({
 		tiptype:4,
 		callback:function(){

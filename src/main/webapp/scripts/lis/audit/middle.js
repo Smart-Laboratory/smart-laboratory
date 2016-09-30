@@ -211,8 +211,7 @@
         var isEdit = false;
         var width = $("#mid").width();
 		var clientHeight= $(window).innerHeight();
-
-		var height =clientHeight-$('#head').height()- $('#header').height()- $('#patientinfo').height()-$('.footer-content').height()-150;
+		var height =clientHeight-$('#head').height()- $('#header').height()- $('#patientinfo').height()-$('.footer-content').height()-135;
 		jQuery("#rowed3").jqGrid({
 		   	url:"../audit/sample?id="+sampleNo,
 			datatype: "json",
