@@ -29,7 +29,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		super(Sample.class);
 	}
 
-	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	private SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String date, String lab, String code, int mark, int status) {

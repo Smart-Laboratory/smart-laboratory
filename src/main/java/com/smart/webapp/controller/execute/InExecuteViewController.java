@@ -577,7 +577,7 @@ public class InExecuteViewController {
             labOrderVo.setExecuteTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
             labOrderVo.setWard(labOrder.getWardId() + " " + labOrder.getWardName());
             labOrderVo.setBedNo(labOrder.getBed());
-            labOrderVo.setRequestTime(ConvertUtil.getFormatDate(labOrder.getRequesttime(), "yyyy-MM-dd hh:mm:ss"));
+            labOrderVo.setRequestTime(ConvertUtil.getFormatDate(labOrder.getRequesttime()));
             labOrder.setDiagnostic(labOrder.getDiagnostic());
             int sex = ConvertUtil.getIntValue("" + labOrder.getSex());
             if (sex == 1) {
