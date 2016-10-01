@@ -194,8 +194,8 @@ $(function(){
 		shrinkToFit: true,
 		altRows:true,
 		height: height,
-		rowNum: 10,
-		rowList:[10,20,30],
+		rowNum: 20,
+		rowList:[20,30,40],
 		rownumbers: true, // 显示行号
 		rownumWidth: 35, // the width of the row numbers columns
 		pager: "#pager",

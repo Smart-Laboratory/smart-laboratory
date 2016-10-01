@@ -43,6 +43,7 @@ public class Ylxh extends BaseObject {
 	private String pinyin;
 	private String wubi;
 	private String segment; //实验室检验段
+	private String nightSegment; //夜班实验室检验段
 	
 	/**
 	 * 医疗序号
@@ -250,6 +251,15 @@ public class Ylxh extends BaseObject {
 
 	public void setSegment(String segment) {
 		this.segment = segment;
+	}
+
+	@Column
+	public String getNightSegment() {
+		return nightSegment;
+	}
+
+	public void setNightSegment(String nightSegment) {
+		this.nightSegment = nightSegment;
 	}
 
 	public String toString() {

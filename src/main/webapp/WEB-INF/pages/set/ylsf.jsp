@@ -262,6 +262,16 @@
 					</select>
 				</div>
 			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="nightSegment"> 夜班检验段 </label>
+				<div class="col-xs-8">
+					<select type="text" id="nightSegment" name="nightSegment" class="col-xs-8" style="height:33px;">
+						<c:forEach items="${nightSegments }" var="night">
+							<option value="${night }">${night }</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-6">
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">

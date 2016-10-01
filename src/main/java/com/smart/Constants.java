@@ -318,4 +318,9 @@ public final class Constants {
 	 * 各专业组组长名字
 	 */
 	public final static String LEADER_ICU = "张园园";
+
+	/**
+	 * 夜班组实验室部门代号
+	 */
+	public final static String DEPART_NIGHT = "211200";
 }

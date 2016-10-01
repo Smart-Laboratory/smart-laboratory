@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.Constants;
 import com.smart.webapp.util.*;
 
 import org.apache.commons.logging.Log;
@@ -58,6 +59,7 @@ public class YlsfController extends BaseAuditController {
 		view.addObject("lab", lab);
 		view.addObject("labs", sectionManager.getAll());
 		view.addObject("segments", SectionUtil.getInstance(sectionManager).getLabCode(lab).split(","));
+		view.addObject("nightSegments", SectionUtil.getInstance(sectionManager).getLabCode(Constants.DEPART_NIGHT).split(","));
         return view;
     }
 	
@@ -120,6 +122,7 @@ public class YlsfController extends BaseAuditController {
 			map.put("sgsl", y.getSgsl());
 			map.put("ksdm", ConvertUtil.null2String(y.getKsdm()));
 			map.put("segment", ConvertUtil.null2String(y.getSegment()));
+			map.put("nightSegment", ConvertUtil.null2String(y.getNightSegment()));
 			dataRows.add(map);
 		}
 
