@@ -253,5 +253,20 @@ public class FillFieldUtil {
 		return null;
 	}
 
+	public void updateTestReferenceMap(List<TestReference> list) {
+		for(TestReference testReference : list) {
+			if(testReferenceMap.containsKey(testReference.getTestId())) {
+				testReferenceMap.get(testReference.getTestId()).add(testReference);
+			} else {
+				List<TestReference> references = new ArrayList<TestReference>();
+				list.add(testReference);
+				testReferenceMap.put(testReference.getTestId(), references);
+			}
+		}
+	}
+
+	public void removeFromTestReferenceMap(TestReference testReference) {
+		testReferenceMap.get(testReference.getTestId()).remove(testReference);
+	}
 }
 

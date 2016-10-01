@@ -37,4 +37,18 @@ public class CalculateFormulaMapUtil {
     public Map<String, List<CalculateFormula>> getFormulaMap(){
         return formulaMap;
     }
+
+    public void updateFormulaMap(CalculateFormula calculateFormula) {
+        if(formulaMap.containsKey(calculateFormula.getLab())) {
+            formulaMap.get(calculateFormula.getLab()).add(calculateFormula);
+        } else {
+            List<CalculateFormula> calculateFormulas = new ArrayList<CalculateFormula>();
+            calculateFormulas.add(calculateFormula);
+            formulaMap.put(calculateFormula.getLab(), calculateFormulas);
+        }
+    }
+
+    public void removeFromMap(CalculateFormula calculateFormula) {
+        formulaMap.get(calculateFormula.getLab()).remove(calculateFormula);
+    }
 }

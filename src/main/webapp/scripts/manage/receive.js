@@ -26,7 +26,7 @@ function receiveSample(id) {
 		var doct = $("#doctin").val().substr(0,8);
 		$.ajax({
 	  		type:'GET',
-			url: "../manage//sampleHandover/ajax/sample?doct=" + doct + "&operator=" + $("#operator").val() + "(" + $("#point").val() + ")",
+			url: baseUrl + "/manage/sampleHandover/ajax/sample?doct=" + doct + "&operator=" + $("#operator").val() + "(" + $("#point").val() + ")",
 	  		success: function(data) {
 	  			data = jQuery.parseJSON(data);
 	  			$("#alert").css("display","block");

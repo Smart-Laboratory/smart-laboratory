@@ -7,6 +7,7 @@ import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.webapp.util.DataResponse;
 import com.smart.webapp.util.DeviceTypeUtil;
+import com.smart.webapp.util.DeviceUtil;
 import com.smart.webapp.util.SectionUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -165,7 +166,8 @@ public class DeviceController {
                 return success.toString();
             }
         }
-        deviceManager.save(device);
+        device = deviceManager.save(device);
+        DeviceUtil.getInstance(deviceManager).updateMap(device);
         success.put("success", "0");
         return success.toString();
     }

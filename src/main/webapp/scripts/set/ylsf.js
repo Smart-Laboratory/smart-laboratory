@@ -209,7 +209,7 @@ function search(){
 	}).trigger('reloadGrid');//重新载入
 }
 
-function  clearData(){
+function clearData(){
 	$("#ylxh").removeAttr("disabled");
 	$("#ylmc").removeAttr("disabled");
 	$("#price").removeAttr("disabled");
@@ -228,21 +228,21 @@ function getList(lab) {
 		width:$('.leftContent').width()-10,
 		colNames:['序号', '检验目的','英文名称','价格','检验段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM'],
     	colModel:[ 
-    		{name:'ylxh',index:'ylxh', width:60, sortable:false},
-    		{name:'ylmc',index:'ylmc',width:160, sortable:false},
-    		{name:'english',index:'english',width:50, sortable:false},
-    		{name:'price',index:'price',width:30, sortable:false},
-			{name:'segment',index:'segment',width:30, sortable:false},
-    		{name:'mzpbStr',index:'mzpbStr',width:50, sortable:false},
-    		{name:'zypbStr',index:'zypbStr',width:50, sortable:false},
-    		{name:'yblxzw',index:'yblxzw',width:50, sortable:false},
-    		{name:'sglx',index:'sglx',width:50, sortable:false},
-    		{name:'bbl',index:'bbl',width:50, sortable:false},
-    		{name:'qbgsj',index:'qbgsj',width:50, sortable:false},
-    		{name:'qbgdd',index:'qbgdd',width:50, sortable:false},
-			{name:'cjbw',index:'cjbw',width:50, sortable:false},
-			{name:'sgsl',index:'sgsl',width:50, sortable:false},
-			{name:'sfhbStr',index:'sfhbStr',width:50, sortable:false},
+    		{name:'ylxh',index:'ylxh', width:60, sortable:true},
+    		{name:'ylmc',index:'ylmc',width:200, sortable:true},
+    		{name:'english',index:'english',width:80, sortable:true},
+    		{name:'price',index:'price',width:50, sortable:false},
+			{name:'segment',index:'segment',width:50, sortable:false},
+    		{name:'mzpbStr',index:'mzpbStr',width:70, sortable:false},
+    		{name:'zypbStr',index:'zypbStr',width:70, sortable:false},
+    		{name:'yblxzw',index:'yblxzw',width:100, sortable:false},
+    		{name:'sglx',index:'sglx',width:80, sortable:false},
+    		{name:'bbl',index:'bbl',width:60, sortable:false},
+    		{name:'qbgsj',index:'qbgsj',width:80, sortable:false},
+    		{name:'qbgdd',index:'qbgdd',width:80, sortable:false},
+			{name:'cjbw',index:'cjbw',width:80, sortable:false},
+			{name:'sgsl',index:'sgsl',width:80, sortable:false},
+			{name:'sfhbStr',index:'sfhbStr',width:80, sortable:false},
 			{name:'yblx',index:'yblx',hidden:true},
     		{name:'ptest',index:'ptest', hidden:true},
     		{name:'ptest2',index:'ptest2', hidden:true},
@@ -294,8 +294,9 @@ function getList(lab) {
 		ondblClickRow: function (id) {
 			editYlxh();
 		},
+		repeatitems: false,
 		viewrecords: true,
-		shrinkToFit: true,
+		shrinkToFit: false,
 		altRows:true,
 		height: height,
 		rowNum: 20,

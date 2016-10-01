@@ -187,7 +187,8 @@ public class CalculateFormulaController {
         calculateFormula.setFormulaItem(formulaItem);
         calculateFormula.setLab(UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
         try{
-            calculateFormulaManager.save(calculateFormula);
+            calculateFormula = calculateFormulaManager.save(calculateFormula);
+            CalculateFormulaMapUtil.getInstance(calculateFormulaManager).updateFormulaMap(calculateFormula);
             return new JSONObject().put("result", "true").toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -209,6 +210,7 @@ public class CalculateFormulaController {
         try {
             CalculateFormula calculateFormula =  calculateFormulaManager.getCalculateFormulaByTestId(testid).getCalculateFormula();
             calculateFormulaManager.remove(calculateFormula);
+            CalculateFormulaMapUtil.getInstance(calculateFormulaManager).removeFromMap(calculateFormula);
             return  new JSONObject().put("result","true").toString();
         }catch (Exception e){
             e.printStackTrace();

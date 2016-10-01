@@ -11,8 +11,10 @@ import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
+import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -226,7 +228,8 @@ public class DeviceRelationController {
         if(!type.equals("")) index.setType(type);
         if(!unit.equals("")) index.setUnit(unit);
         try{
-            indexManager.save(index);
+            index = indexManager.save(index);
+            TestIdMapUtil.getInstance(indexManager).updateMap(index);
             return new JSONObject().put("result", "true").toString();
         }catch (Exception e){
             throw  e;
@@ -260,7 +263,8 @@ public class DeviceRelationController {
         if(!notes.equals("")) index.setNotes(notes);
         if(!methodName.equals("")) index.setMethodName(methodName);
         try{
-            indexManager.save(index);
+            index = indexManager.save(index);
+            TestIdMapUtil.getInstance(indexManager).updateMap(index);
             return new JSONObject().put("result", "true").toString();
         }catch (Exception e){
             throw  e;
@@ -312,6 +316,7 @@ public class DeviceRelationController {
         try
         {
             testReferenceManager.saveTestReferences(testReferences);  //批量保存数据
+            FillFieldUtil.getInstance(indexManager, testReferenceManager).updateTestReferenceMap(testReferences);
             return new JSONObject().put("result","true").toString();
         }catch (Exception e){
             e.printStackTrace();
@@ -334,6 +339,8 @@ public class DeviceRelationController {
         int sex = ConvertUtil.getIntValue(request.getParameter("sex"),-1);
         int orderno = ConvertUtil.getIntValue(request.getParameter("orderno"),-1);
         try {
+            TestReference testReference = testReferenceManager.getTestReference(testid,sex,orderno);
+            FillFieldUtil.getInstance(indexManager, testReferenceManager).removeFromTestReferenceMap(testReference);
             testReferenceManager.deleteTestReference(testid,sex,orderno);
             return  new JSONObject().put("result","true").toString();
         }catch (Exception e){

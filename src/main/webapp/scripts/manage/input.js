@@ -20,6 +20,7 @@ function receive(obj,event) {
 				if(data.success == 0) {
 					layer.msg(data.message, {icon: 2, time: 1000});
 					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
+					$("#receive_id").val("").focus();
 				} else {
 					$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
 						var data = JSON.parse(data);
@@ -78,12 +79,12 @@ function receive(obj,event) {
 							var newId = parseInt(ids[ids.length - 1] || 0) + 1;
 							$("#new").jqGrid('addRowData', newId, rowData, "first");
 							$("#sampleno_text").val(data.newSampleNo);
-							$("#receive_id").val("").focus();
 							layer.msg(data.message, {icon: 1, time: 1000});
 						}else {
 							layer.msg(data.message, {icon: 2, time: 1000});
 						}
 					});
+					$("#receive_id").val("").focus();
 				}
 			});
 			break;

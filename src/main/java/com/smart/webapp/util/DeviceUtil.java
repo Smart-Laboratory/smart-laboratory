@@ -52,4 +52,8 @@ public class DeviceUtil {
         return value;
     }
 
+    public void updateMap(Device device) {
+        map.put(device.getId(), device.getName());
+    }
+
 }

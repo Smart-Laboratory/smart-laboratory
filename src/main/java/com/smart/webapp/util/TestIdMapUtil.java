@@ -37,4 +37,9 @@ public class TestIdMapUtil {
 	public Map<String, String> getNameMap() {
 		return nameMap;
 	}
+
+	public void updateMap(Index index) {
+		idMap.put(index.getIndexId(), index);
+		nameMap.put(index.getIndexId(), index.getName());
+	}
 }
