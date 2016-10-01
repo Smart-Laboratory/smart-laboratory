@@ -73,7 +73,7 @@ function deleteSection(){
 		return false;
 	}
 	layer.confirm('确定删除选择数据？', {icon: 2, title:'警告'}, function(index){
-		$.post('section/remove',{id:id},function(data) {});
+		$.post('/set/section/remove',{id:id},function(data) {});
 		$("#sectionList").trigger('reloadGrid');
 		layer.close(index);
 	});

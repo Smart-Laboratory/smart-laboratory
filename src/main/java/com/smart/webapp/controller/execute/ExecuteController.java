@@ -85,7 +85,7 @@ public class ExecuteController {
 		if(!executeRequestIds.isEmpty()) {
 			executeList.addAll(labOrderManager.getByRequestIds(executeRequestIds));
 		}
-		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
 
 		double fee=0;
 		boolean isFirst = true;
@@ -480,8 +480,6 @@ public class ExecuteController {
 	
 	@Autowired
 	private SampleManager sampleManager;
-	@Autowired
-	private YlxhManager ylxhManager;
 	@Autowired
 	private SampleNoBuilderManager sampleNoBuilderManager;
 	@Autowired

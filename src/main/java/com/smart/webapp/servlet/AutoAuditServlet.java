@@ -166,7 +166,6 @@ public class AutoAuditServlet extends HttpServlet {
                         		new Thread(new Runnable(){
                             		public void run() {
                         	            try {
-											ReportGenerate reportGenerate = new ReportGenerate();
                         	            	long nowtime = System.currentTimeMillis();
                         	            	List<Sample> updateSample = new ArrayList<Sample>();
                         	            	List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
@@ -310,14 +309,8 @@ public class AutoAuditServlet extends HttpServlet {
 															testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
 															updateTestResult.add(testResult);
 														}
-
-														//生成PDF
-														reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
-														//写入HIS
-														WebService service = new WebService();
-														service.saveHisResult(info,processMap.get(info.getId()),now);
-														//写入LIS用于电子病历
-														service.saveLisResult(info,process,now);
+														//生成PDF，写HIS、电子病历、PDA
+														new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
                 	    							}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {

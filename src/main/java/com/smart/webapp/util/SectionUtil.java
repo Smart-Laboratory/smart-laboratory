@@ -3,6 +3,7 @@ package com.smart.webapp.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.smart.drools.P;
 import com.smart.lisservice.WebService;
 import com.smart.model.lis.Section;
 import com.smart.service.lis.SectionManager;
@@ -14,7 +15,8 @@ public class SectionUtil {
 	private static SectionUtil instance = new SectionUtil();
 	private static Map<String, String> map = null;
 	private static Map<String, String> labMap = null;
-	
+	private static Map<String, Section> departMap = null;
+
 	private SectionUtil () {}
 	
 	//public static SectionUtil getInstance(SyncManager manager) {
@@ -29,6 +31,12 @@ public class SectionUtil {
 			labMap = new HashMap<String, String>();
 			for (Section s : sectionManager.getAll()) {
 				labMap.put(s.getCode(), s.getName());
+			}
+		}
+		if (departMap == null || departMap.size() == 0) {
+			departMap = new HashMap<String, Section>();
+			for (Section section : sectionManager.getAll()) {
+				departMap.put(section.getCode(), section);
 			}
 		}
 		return instance;
@@ -70,5 +78,19 @@ public class SectionUtil {
 
 	public Map<String,String> getLabMap() {
 		return labMap;
+	}
+
+	public void updateSection(Section section) {
+		departMap.put(section.getCode(), section);
+		labMap.put(section.getCode(), section.getName());
+	}
+
+	public void removeSectionFromMap(Section section) {
+		departMap.remove(section.getCode());
+		labMap.remove(section.getCode());
+	}
+
+	public String getLabCode(String code) {
+		return departMap.get(code).getSegment();
 	}
 }

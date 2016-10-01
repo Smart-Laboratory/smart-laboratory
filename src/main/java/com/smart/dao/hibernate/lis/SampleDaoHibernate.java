@@ -256,6 +256,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
 		if(lab.equals(Constants.LaboratoryAll)) {
 			sql = "from Sample s where 1=1 ";
+			code = "";
 		}
 		if(code == null) {
 			code = "";
@@ -488,7 +489,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	public String getReceiveSampleno(String lab, String today) {
-		String sql = "select s.sampleno from l_sample s, l_process p where s.section_id='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
+		String sql = "select s.sampleno from l_sample s where s.section_id='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
 		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
 

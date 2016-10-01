@@ -1,17 +1,13 @@
 package com.smart.webapp.util;
 
-import com.smart.Constants;
 import com.smart.lisservice.WebService;
 import com.smart.model.execute.LabOrder;
-import com.smart.model.lis.Account;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.AccountManager;
-import com.smart.service.lis.DiagnosisManager;
 import com.smart.service.lis.TestTubeManager;
-import com.smart.service.lis.YlxhManager;
 import com.smart.util.Config;
 import com.smart.util.ConvertUtil;
 import com.smart.util.SpringContextUtil;
@@ -33,7 +29,6 @@ public class ChargeUtil {
     private static ChargeUtil instance = new ChargeUtil();
 
     private ChargeUtil() {
-        ylxhManager = (YlxhManager) SpringContextUtil.getBean("ylxhManager");
         dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
         testTubeManager = (TestTubeManager) SpringContextUtil.getBean("testTubeManager");
         labOrderManager = (LabOrderManager) SpringContextUtil.getBean("labOrderManager");
@@ -53,7 +48,7 @@ public class ChargeUtil {
      */
     public boolean bloodCollectionFee(User user, List<LabOrder> labOrderList) {
         boolean flag = false;
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
         try {
             for (LabOrder labOrder : labOrderList) {
@@ -151,7 +146,7 @@ public class ChargeUtil {
      */
     public boolean tubeFee(User user, LabOrder labOrder) {
         boolean flag = false;
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
 
         //不计采血费科室
@@ -194,8 +189,6 @@ public class ChargeUtil {
         }
         return flag;
     }
-
-    private YlxhManager ylxhManager = null;
 
     private DictionaryManager dictionaryManager = null;
 

@@ -127,7 +127,7 @@ public class ExecuteViewController {
 		} else {
 			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
 		}
-		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
 		StringBuilder html = new StringBuilder();
 		LabOrder labOrder = new LabOrder();
 		Ylxh ylxh = new Ylxh();
@@ -524,6 +524,4 @@ public class ExecuteViewController {
 	private SectionManager sectionManager;
 	@Autowired
 	private PatientManager patientManager;
-	@Autowired
-	private YlxhManager ylxhManager;
 }

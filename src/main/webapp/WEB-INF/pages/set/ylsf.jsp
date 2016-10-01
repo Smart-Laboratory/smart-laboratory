@@ -269,6 +269,13 @@
 					</select>
 				</div>
 			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="segment"> 检验段 </label>
+				<div class="col-xs-8">
+					<select type="text" id="segment" name="segment" class="col-xs-8" style="height:33px;">
+					</select>
+				</div>
+			</div>
 		</div>
 		<input type="hidden" id="profiletest" name="profiletest"/>
 		<input type="hidden" id="profiletest2" name="profiletest2"/>

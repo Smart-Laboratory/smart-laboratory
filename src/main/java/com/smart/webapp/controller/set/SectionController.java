@@ -5,7 +5,9 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.SectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -148,6 +150,7 @@ public class SectionController {
 		section.setName(name);
 		section.setSegment(segment);
 		sectionManager.save(section);
+		SectionUtil.getInstance(sectionManager).updateSection(section);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,value="/addCode")
@@ -159,26 +162,39 @@ public class SectionController {
 		sectionCode.setDescribe(describe);
 		sectionCodeManager.save(sectionCode);
 	}
-    
-    @RequestMapping(method = RequestMethod.POST,value="/delete")
-    public ModelAndView deleteSection(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	sectionManager.remove(Long.parseLong(request.getParameter("id")));
-    	return new ModelAndView("redirect:/set/section");
-    }
+
+	/**
+	 * 根据实验室部门编码获取检验段信息
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(method = RequestMethod.GET,value="/ajax/getCode")
+	public String getSectionCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String code = request.getParameter("code");
+		String segment = SectionUtil.getInstance(sectionManager).getLabCode(code);
+		response.setContentType("text/html; charset=UTF-8");
+		if(segment != null && !segment.isEmpty()) {
+			response.getWriter().write(segment);
+		}
+		return null;
+	}
 
 	/**
 	 * 删除
-	 * @param id
 	 * @param request
 	 * @param response
 	 * @return
      * @throws Exception
      */
-	@RequestMapping(value = "/remove")
+	@RequestMapping(method = RequestMethod.POST, value = "/remove")
 	public void remove(HttpServletRequest request, HttpServletResponse response)throws Exception{
 		try{
 			Long id = ConvertUtil.getLongValue(request.getParameter("id"));
+			Section section = sectionManager.get(id);
 			sectionManager.remove(id);
+			SectionUtil.getInstance(sectionManager).removeSectionFromMap(section);
 		}catch (Exception e){
 			e.printStackTrace();
 		}

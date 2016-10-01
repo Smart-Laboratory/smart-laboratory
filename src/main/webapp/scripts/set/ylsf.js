@@ -60,6 +60,7 @@ function editYlxh() {
 	$('#cjbw').val(rowData.cjbw);
 	$('#sgsl').val(rowData.sgsl);
 	$('#sfhb').val(rowData.sfhb);
+	$('#segment').val(rowData.segment);
 
 	layer.open({
 		type: 1,
@@ -74,7 +75,7 @@ function editYlxh() {
 		yes: function(index, layero){
 			$.ajax({
 			  type: 'POST',
-			  url: '../set/ylsf/editYlsf',
+			  url: baseUrl + '/set/ylsf/editYlsf',
 			  dataType: 'json',
 			  data: $("#YlxhForm").serialize(),
 			  success: function(data){
@@ -120,7 +121,7 @@ function addTest() {
 			layer.msg(rowData.ylmc + "的关联项目已包含"+ $("#searchIndex").val() +"，无需重复添加",{icon:2,time: 1000});
 		}
 	} else {
-		$.post('../set/ylsf/editProfile',{
+		$.post(baseUrl + '/set/ylsf/editProfile',{
 			type:type,
 			edit:'add',
 			index:$("#searchIndexId").val(),
@@ -263,7 +264,7 @@ function getList(lab) {
 			$("#testTable2").empty();
 			$("#testTable3").empty();
 			var html='', html2='', html3='';
-			$.get('../set/ylsf/ajax/getTests',{ylxh:ret.ylxh},function(data) {
+			$.get(baseUrl + '/set/ylsf/ajax/getTests',{ylxh:ret.ylxh},function(data) {
 				var json = jQuery.parseJSON(data);
 				if(json.profiletest) {
 					html += "<tr><th>必做项目</th><th>&nbsp;</th></tr>";
@@ -394,6 +395,17 @@ $(function() {
 				$("#searchTypeValue").val(1);
 			}
         }
+	});
+
+	$("#ksdm").change(function () {
+		$.get(baseUrl + "/set/section/ajax/getCode",{code:$(this).val()}, function (data) {
+			$("#segment").html("");
+			for(var i in data.split(",")) {
+				if(data.split(",")[i] != "") {
+					$("#segment").append("<option value='" + data.split(",")[i] + "'>" + data.split(",")[i] + "</option>");
+				}
+			}
+		});
 	});
 	
 	

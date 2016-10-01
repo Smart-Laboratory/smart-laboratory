@@ -109,6 +109,9 @@ public class AuditController extends BaseAuditController {
 		final List<Sample> updateSample = new ArrayList<Sample>();
 		final List<CriticalRecord> updateCriticalRecord = new ArrayList<CriticalRecord>();
 		final Map<Long, Process> processMap = new HashMap<Long, Process>();
+		final List<Process> updateProcess = new ArrayList<Process>();
+		final List<TestResult> updateTestResult = new ArrayList<TestResult>();
+		final List<AuditTrace> updateAuditTrace = new ArrayList<AuditTrace>();
     	log.debug("开始手工审核...");
     	System.out.println("开始手工审核...");
     	HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
@@ -248,9 +251,9 @@ public class AuditController extends BaseAuditController {
 						testIdSet.add(t.getTestId());
 						fillUtil.fillResult(t, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 					}
-					testResultManager.saveAll(now);
                 	formulaUtil.formula(info, "admin", now, new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
-    				System.out.println(info.getSampleNo()+" : " + now.size());
+					hisTestMap.put(info.getSampleNo(), now);
+					System.out.println(info.getSampleNo()+" : " + now.size());
     				String lab = info.getSectionId();
     				if(likeLabMap.containsKey(lab)) {
     					lab = likeLabMap.get(lab);
@@ -322,7 +325,6 @@ public class AuditController extends BaseAuditController {
 			
     		public void run() {
     			int index = 0;
-				ReportGenerate reportGenerate = new ReportGenerate();
         		for (Sample info : samples) {
         			try {
 	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
@@ -354,17 +356,29 @@ public class AuditController extends BaseAuditController {
 							info.setRuleIds(ruleId);
 						}
 						//bayesCheck.doCheck(info); // Bayes审核及学习
-						
+
 						if (info.getAuditStatus() == Constants.STATUS_PASSED) {
 							info.setWriteback(1);
-							if (info.getCheckerOpinion()!=null 
+							if (info.getCheckerOpinion()!=null
 									&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)
-										&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)) {
+									&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)) {
 								info.setCheckerOpinion(info.getCheckerOpinion() + " " + Check.AUTO_AUDIT);
 							} else {
 								info.setCheckerOpinion(Check.AUTO_AUDIT);
 							}
-							reportGenerate.createReportPdf(info, processMap.get(info.getId()), now, false);
+							info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
+							Process process = processMap.get(info.getId());
+							process.setCheckoperator(new GetAutoCheckOperatorUtil().getName(info.getSectionId()));
+							process.setChecktime(new Date());
+							updateProcess.add(process);
+
+							//保存参考范围
+							for(TestResult testResult : now) {
+								testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
+								updateTestResult.add(testResult);
+							}
+							//生成PDF，写HIS、电子病历、PDA
+							new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
 						}
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
@@ -375,7 +389,8 @@ public class AuditController extends BaseAuditController {
 						a.setChecktime(new Date());
 						a.setChecker("Robot");
 						a.setType(1);
-						a.setStatus(info.getAuditStatus());	
+						a.setStatus(info.getAuditStatus());
+						updateAuditTrace.add(a);
         			} catch (Exception e) {
         				e.printStackTrace();
 						log.error("样本:" + info.getSampleNo() + "审核出错！", e);
@@ -386,8 +401,11 @@ public class AuditController extends BaseAuditController {
 						task.setFinishCount(++index);
 					}
         		}
-        		sampleManager.saveAll(updateSample);
+				sampleManager.saveAll(updateSample);
+				processManager.saveAll(updateProcess);
 				criticalRecordManager.saveAll(updateCriticalRecord);
+				testResultManager.saveAll(updateTestResult);
+				auditTraceManager.saveAll(updateAuditTrace);
 				for(Sample sample : updateSample) {
 					if(sample.getAuditStatus() == Check.PASS) {
 
@@ -537,22 +555,12 @@ public class AuditController extends BaseAuditController {
 			sampleManager.saveAll(updateP);
 			testResultManager.saveAll(testResultList);
 			auditTraceManager.saveAll(updateA);
-			ReportGenerate reportGenerate = new ReportGenerate();
 			if ("pass".equals(op)) {
 				process.setCheckoperator(request.getRemoteUser());
 				process.setChecktime(new Date());
 				processManager.save(process);
-
-				//生成PDF
-				reportGenerate.createReportPdf(sample.get(0), process, testResultList, false);
-
-				WebService service = new WebService();
-				//写入HIS
-				service.saveHisResult(sample.get(0),process,testResultList);
-				//写入LIS用于电子病历
-				service.saveLisResult(sample.get(0),process,testResultList);
-				//写入PDA信息
-				service.savePdaInfo(sample.get(0),process);
+				//生成PDF，写HIS、电子病历、PDA
+				new WriteOtherSystemUtil().writeOtherSystem(sample.get(0), process, testResultList);
 
 			} else if ("unpass".equals(op)) {
 				process.setCheckoperator("");
@@ -693,7 +701,6 @@ public class AuditController extends BaseAuditController {
 		List<TestResult> updateT = new ArrayList<TestResult>();
 		Date checkTime = new Date();
 
-		ReportGenerate reportGenerate = new ReportGenerate();
 		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
@@ -717,14 +724,8 @@ public class AuditController extends BaseAuditController {
 					process.setCheckoperator(request.getRemoteUser());
 					process.setChecktime(checkTime);
 					updateP.add(process);
-
-					//生成PDF
-					reportGenerate.createReportPdf(info, process, now, false);
-					WebService service = new WebService();
-					//写入HIS
-					service.saveHisResult(info,process,now);
-					//写入LIS用于电子病历
-					service.saveLisResult(info,process,now);
+					//生成PDF，写HIS、电子病历、PDA
+					new WriteOtherSystemUtil().writeOtherSystem(info, process, now);
 				} else {
 					info.setPassReason("批量不通过");
 					AuditTrace a = new AuditTrace();

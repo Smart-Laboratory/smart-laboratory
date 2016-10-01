@@ -44,8 +44,6 @@ public class SampleInputAjaxController {
 	private RMIService rmiService = null;
 	
 	@Autowired
-	private YlxhManager ylxhManager = null;
-	@Autowired
 	private UserManager userManager = null;
 	@Autowired
 	private LabOrderManager labOrderManager = null;
@@ -71,7 +69,7 @@ public class SampleInputAjaxController {
 		String code = request.getParameter("id");
 		int type = Integer.parseInt(request.getParameter("type"));
 		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
-		YlxhUtil ylxhUtil = YlxhUtil.getInstance(ylxhManager);
+		YlxhUtil ylxhUtil = YlxhUtil.getInstance();
 		JSONObject o = new JSONObject();
 		Sample sample = new Sample();
 		if(type == 1) {
@@ -454,7 +452,18 @@ public class SampleInputAjaxController {
 			plog.setLogtime(receiveTime);
 			processLogManager.save(plog);
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
-				sample.setSampleNo(sampleno);
+				String segment = "";
+				if(sample.getYlxh().indexOf("+") > 0) {
+					segment = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]).getSegment();
+				}
+				if(segment.equals(sampleno.substring(8,11))) {
+					sample.setSampleNo(sampleno);
+				} else {
+					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);
+					sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
+					sample.setSampleNo(sampleno);
+				}
+				o.put("newSampleNo", sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1)));
 			}
 			//sample.setChkoper2(user.getName());
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);

@@ -19,7 +19,6 @@ import com.alibaba.fastjson.*;
 import com.smart.service.lis.HospitalManager;
 import com.smart.service.lis.ProcessManager;
 import com.smart.service.lis.SampleManager;
-import com.smart.service.lis.YlxhManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import jdk.nashorn.api.scripting.JSObject;
@@ -45,9 +44,6 @@ public class InExecuteViewController {
 
     @Autowired
     private LabOrderManager labOrderManager;
-
-    @Autowired
-    private YlxhManager ylxhManager;
 
     @Autowired
     private DictionaryManager dictionaryManager;
@@ -244,7 +240,7 @@ public class InExecuteViewController {
         String requestDetailIds = "";
         JSONArray spideredList = new JSONArray();
 
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
         for (Object[] objects : labOrderList) {
             LabOrder labOrder = (LabOrder) objects[0];
@@ -482,7 +478,7 @@ public class InExecuteViewController {
                         LabOrder labOrder1 = labOrderManager.get(retObj.getLong("labOrderId"));
                         inExcuteManager.removeInExcute(sample1, process1, labOrder1);
                     } else {
-                        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+                        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
                         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
 
                         LabOrderVo labOrderVo = new LabOrderVo();
@@ -560,7 +556,7 @@ public class InExecuteViewController {
 
         List<LabOrder> labOrderList = labOrderManager.getByIds(ids);
         List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         for (LabOrder labOrder : labOrderList) {
             LabOrderVo labOrderVo = new LabOrderVo();
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
@@ -599,7 +595,7 @@ public class InExecuteViewController {
     }
 
     private void setLisInfo(LabOrder labOrder) {
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance(ylxhManager).getMap();
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
         /**
          * LIS获取相关信息

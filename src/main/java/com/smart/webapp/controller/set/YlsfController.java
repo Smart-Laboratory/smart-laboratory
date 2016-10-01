@@ -134,7 +134,7 @@ public class YlsfController extends BaseAuditController {
 		JSONObject success = new JSONObject();
 		try {
 			ylxh = ylxhManager.save(ylxh);
-			YlxhUtil.getInstance(ylxhManager).updateMap(ylxh);
+			YlxhUtil.getInstance().updateMap(ylxh);
 			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

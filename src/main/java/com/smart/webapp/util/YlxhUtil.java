@@ -6,6 +6,7 @@ import java.util.Map;
 import com.smart.model.lis.Ylxh;
 import com.smart.service.lis.YlxhManager;
 import com.smart.util.ConvertUtil;
+import com.smart.util.SpringContextUtil;
 
 public class YlxhUtil {
 
@@ -13,9 +14,13 @@ public class YlxhUtil {
 
 	private static Map<String, Ylxh> map = null;
 
-	private YlxhUtil() {}
+	private static YlxhManager ylxhManager = null;
 
-	public static YlxhUtil getInstance(YlxhManager ylxhManager) {
+	private YlxhUtil() {
+		ylxhManager = (YlxhManager) SpringContextUtil.getBean("ylxhManager");
+	}
+
+	public static YlxhUtil getInstance() {
 		if (map == null) {
 			map = new HashMap<String, Ylxh>();
 			for (Ylxh ylxh : ylxhManager.getAll()) {

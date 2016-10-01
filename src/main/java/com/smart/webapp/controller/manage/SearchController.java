@@ -88,8 +88,6 @@ public class SearchController {
 			if(text.length()<8)
 				break;
 			String code = sectionManager.getByCode(operator.getLastLab()).getSegment();
-			if(!sectionId.equals(""+Constants.LaboratoryAll+""))
-				lab = sectionId;
 			samples = sampleManager.getSampleList(text, lab, 0, -3, code, 0, 0);
 			break;
 

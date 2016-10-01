@@ -26,11 +26,7 @@ import com.smart.webapp.util.UserUtil;
 public class InputController {
 	
 	@Autowired
-	private DictionaryManager dictionaryManager = null;
-	
-	@Autowired
 	private SectionManager sectionManager = null;
-	
 
 	@Autowired
 	private SampleManager sampleManager = null;
