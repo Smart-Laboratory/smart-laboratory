@@ -272,12 +272,9 @@ $(function(){
 		if(sampeNo !=''){
 			printReport(sampeNo);
 		}
-
-		//alert($("#chartPanel").height());
 	});
 	function printReport(sampleno){
 		$.get(baseUrl+"/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
-			//console.log(data)
 			Preview(data);
 		})
 	}
@@ -330,7 +327,6 @@ $(function(){
 		},'json');
 	
  	setInterval(function() {
- 		
  		$.get("../audit/count",{}, function(data) {
  			$("#today_info_unaudit").html(data.todayunaudit);
  			$("#today_info_unpass").html(data.todayunpass);
@@ -345,7 +341,7 @@ $(function(){
  			}
  			$("#audit_status_info").html("");
  		},'json');
- 	}, 15000);
+ 	}, 1000*60*30);
 // 	alert($("#menuheader").getAttribute("display"));
  	$("#fullScreen").click(function(){
  		if ($("#isfulltag").val() == 0) {

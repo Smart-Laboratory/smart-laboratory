@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,6 +101,10 @@ public class SampleController {
 			map.put("id", info.getId());
 			map.put("mark", info.getAuditMarkValue());
 			map.put("sample", info.getSampleNo());
+			String patientName="";
+			if(!"".equals(ConvertUtil.null2String(info.getDepartBed())))
+				patientName = info.getDepartBed() + ConvertUtil.null2String(info.getPatientname());
+			map.put("patientName", patientName);
 			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());
 			map.put("size", 0);
