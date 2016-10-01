@@ -185,7 +185,7 @@ public class YlsfController extends BaseAuditController {
 				y.setProfiletest3(profiletest);
 			}
 			y = ylxhManager.save(y);
-			YlxhUtil.updateMap(y);
+			YlxhUtil.getInstance().updateMap(y);
 			success.put("success", profiletest);
 		} catch (Exception e) {
 			e.printStackTrace();

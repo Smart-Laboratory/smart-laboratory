@@ -140,4 +140,8 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	public Index getAntibioticById(String id){
 		return indexDao.getAntibioticById(id);
 	}
+
+	public List<Index> getIndexByLab(String lab) {
+		return indexDao.getIndexByLab(lab);
+	}
 }

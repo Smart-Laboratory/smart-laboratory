@@ -11,6 +11,7 @@ import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.webapp.util.ChannelUtil;
 import com.smart.webapp.util.DeviceUtil;
+import com.smart.webapp.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -94,7 +95,6 @@ public class DeviceChannelController {
             JSONObject node = new JSONObject();
             node.put("id",entry.getKey());
             node.put("name",entry.getValue());
-            node.put("name",entry.getValue());
             jsonArray.put(node);
         }
        // System.out.println(jsonArray.toString());
@@ -145,7 +145,7 @@ public class DeviceChannelController {
     @RequestMapping(value = "/getData*",method = RequestMethod.POST,produces = "application/json; charset=utf-8" )
     @ResponseBody
     public String getChannelData(@RequestParam(value = "deviceid") String deviceid, HttpServletRequest request, HttpServletResponse response) throws  Exception{
-        List<Index> indexes = indexManager.getIndexs("","",false,0,0,"","");
+        List<Index> indexes = indexManager.getIndexByLab(UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab());
         List<Channel> channels = new ArrayList<Channel>();
         JSONArray jsonArray = new JSONArray();
         for(Index index :indexes){

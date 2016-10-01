@@ -207,6 +207,15 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 	}
 
 	/**
+	 * 根据实验室部门获取项目
+	 * @param lab
+	 * @return
+	 */
+	public List<Index> getIndexByLab(String lab) {
+		return getSession().createQuery("from Index where labdepartment like '%" + lab + ",%'").list();
+	}
+
+	/**
 	 *
 	 * @param query
 	 * @param type  类别

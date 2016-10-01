@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.smart.model.rule.Index;
 import com.smart.service.GenericManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *  指标Index的操作
@@ -17,6 +18,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param indexName 指标名称
 	 * @return
 	 */
+	@Transactional
 	List<Index> getIndexs(String indexName);
 	
 	/**
@@ -26,6 +28,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param isAsc	排序方式
 	 * @return
 	 */
+	@Transactional
 	List<Index> getIndexs(int pageNum, String field, boolean isAsc);
 
 	/**
@@ -37,6 +40,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
      * @param sord
      * @return
      */
+	@Transactional
 	List<Index> getIndexs(String query,String departmentid, boolean isAdmin,int start, int end, String sidx, String sord);
 
 	/**
@@ -48,11 +52,13 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	int getIndexsCount(String query, String departmentid,boolean isAdmin,int start, int end, String sidx, String sord);
 	/**
 	 *  指标总数
 	 * @return
 	 */
+	@Transactional
 	int getIndexsCount();
 	
 	/**
@@ -63,6 +69,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param isAsc
 	 * @return
 	 */
+	@Transactional
 	List<Index> getIndexs(String sample, int pageNum, String field, boolean isAsc);
 	
 	/**
@@ -70,6 +77,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sample
 	 * @return
 	 */
+	@Transactional
 	int getIndexsCount(String sample);
 	
 	/**
@@ -78,6 +86,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param labDepartment
 	 * @return
 	 */
+	@Transactional
 	List getIndexsByIdandLab(String indexId ,String labDepartment);
 	
 	/**
@@ -88,6 +97,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param isAsc
 	 * @return
 	 */
+	@Transactional
 	List<Index> getIndexsByName(String name, int pageNum, String field, boolean isAsc);
 	
 	/**
@@ -95,6 +105,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param name
 	 * @return
 	 */
+	@Transactional
 	int getIndexsByNameCount(String name);
 	
 	/**
@@ -102,6 +113,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param indexId	4位的指标ID
 	 * @return
 	 */
+	@Transactional
 	Index getIndex(String indexId);
 
 	/**
@@ -109,6 +121,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param ids
 	 * @return
      */
+	@Transactional
 	List<Index> getIndexsByQueryIds(String ids);
 
 	/**
@@ -120,6 +133,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	List<Index> getBacteriaList(String query,int start, int end, String sidx, String sord);
 
 	/**
@@ -131,6 +145,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	int getBacteriaListCount(String query,int start, int end, String sidx, String sord);
 
 	/**
@@ -138,6 +153,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param id
 	 * @return
      */
+	@Transactional
 	Index getBacteriaById(String id);
 
 	/**
@@ -149,6 +165,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	List<Index> getAntibioticList(String query, int start, int end, String sidx, String sord) ;
 
 	/**
@@ -160,6 +177,7 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param sord
      * @return
      */
+	@Transactional
 	int getAntibioticListCount(String query, int start, int end, String sidx, String sord);
 
 	/**
@@ -167,6 +185,9 @@ public interface IndexManager extends GenericManager<Index, Long> {
 	 * @param id
 	 * @return
      */
+	@Transactional
 	Index getAntibioticById(String id);
 
+	@Transactional
+    List<Index> getIndexByLab(String lastLab);
 }

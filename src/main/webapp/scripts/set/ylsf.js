@@ -140,13 +140,13 @@ function addTest() {
 				if(searchType == 0) {
 					if(type == '1') {
 						$("#s3list").jqGrid('setCell',rowId,'ptest',data.success);
-						$("#testTable").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+						$("#testTable").append("<tr><td>" + $("#searchIndexId").val() +"</td><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 					} else if(type =='2') {
 						$("#s3list").jqGrid('setCell',rowId,'ptest2',data.success);
-						$("#testTable2").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+						$("#testTable2").append("<tr><td>" + $("#searchIndexId").val() +"</td><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 					} else {
 						$("#s3list").jqGrid('setCell',rowId,'ptest3',data.success);
-						$("#testTable3").append("<tr><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
+						$("#testTable3").append("<tr><td>" + $("#searchIndexId").val() +"</td><td>" + $("#searchIndex").val() +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ $("#searchIndex").val() + "\",\"" +$("#searchIndexId").val() + "\")'>删除</button></td></tr>");
 					}
 					$("#searchIndexId").val('');
 					$("#searchIndex").val('');
@@ -269,7 +269,7 @@ function getList(lab) {
 				if(json.profiletest) {
 					html += "<tr><th>必做项目</th><th>&nbsp;</th></tr>";
 					for(var i in json.profiletest) {
-						html += "<tr><td>" + json.profiletest[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest[i].name + "\",\"" + json.profiletest[i].id + "\")'>删除</button></td></tr>"
+						html += "<tr><td>" + json.profiletest[i].id +"</td><td>" + json.profiletest[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest[i].name + "\",\"" + json.profiletest[i].id + "\")'>删除</button></td></tr>"
 					}
 					$("#testTable").html(html);
 				}
@@ -277,7 +277,7 @@ function getList(lab) {
 				if(json.profiletest2) {
 					html2 += "<tr><th>可选项目</th><th>&nbsp;</th></tr>";
 					for(var i in json.profiletest2) {
-						html2 += "<tr><td>" + json.profiletest2[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest2[i].name + "\",\"" + json.profiletest2[i].id + "\")'>删除</button></td></tr>"
+						html2 += "<tr><td>" + json.profiletest2[i].id +"</td><td>" + json.profiletest2[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest2[i].name + "\",\"" + json.profiletest2[i].id + "\")'>删除</button></td></tr>"
 					}
 					$("#testTable2").html(html2);
 				}
@@ -285,7 +285,7 @@ function getList(lab) {
 				if(json.profiletest3) {
 					html3 += "<tr><th>关联项目</th><th>&nbsp;</th></tr>";
 					for(var i in json.profiletest3) {
-						html3 += "<tr><td>" + json.profiletest3[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest3[i].name + "\",\"" + json.profiletest3[i].id + "\")'>删除</button></td></tr>"
+						html3 += "<tr><td>" + json.profiletest3[i].id +"</td><td>" + json.profiletest3[i].name +"</td><td><button class='btn btn-minier btn-danger' onclick='removeTest(this,\""+ json.profiletest3[i].name + "\",\"" + json.profiletest3[i].id + "\")'>删除</button></td></tr>"
 					}
 					$("#testTable3").html(html3);
 				}

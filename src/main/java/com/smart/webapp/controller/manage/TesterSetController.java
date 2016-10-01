@@ -5,6 +5,7 @@ import com.smart.model.Dictionary;
 import com.smart.model.lis.Device;
 import com.smart.model.lis.Section;
 import com.smart.model.lis.TesterSet;
+import com.smart.model.lis.TesterSetPK;
 import com.smart.model.user.User;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SampleManager;
@@ -67,41 +68,25 @@ public class TesterSetController {
         List<Device> deviceList = deviceManager.getDeviceByLab(user.getLastLab());
         String segments = sectionManager.getByCode(user.getLastLab()).getSegment();
         List<TesterSet> returnList = new ArrayList<TesterSet>();
+        Set<TesterSetPK> usedPK = new HashSet<TesterSetPK>(); //已有的仪器检验段组合
         if(segments != null && !segments.isEmpty()) {
             List<TesterSet> needSaveList = new ArrayList<TesterSet>();
             if(testerSetList.size() > 0) {
                 for(TesterSet testerSet : testerSetList) {
-                    returnList.add(testerSet);
-                    for(Device device : deviceList) {
-                        if(testerSet.getDeviceId().equals(device.getId())) {
-                            for(String segment : segments.split(",")) {
-                                if(!testerSet.getSegment().equals(segment)) {
-                                    TesterSet ts= new TesterSet();
-                                    ts.setDeviceId(device.getId());
-                                    ts.setSegment(segment);
-                                    ts.setLab(user.getLastLab());
-                                    needSaveList.add(ts);
-                                }
-                            }
-                        } else {
-                            for(String segment : segments.split(",")) {
-                                TesterSet ts= new TesterSet();
-                                ts.setDeviceId(device.getId());
-                                ts.setSegment(segment);
-                                ts.setLab(user.getLastLab());
-                                needSaveList.add(ts);
-                            }
-                        }
-                    }
+                    usedPK.add(new TesterSetPK(testerSet.getSegment(), testerSet.getDeviceId()));
                 }
+                returnList.addAll(testerSetList);
             } else {
                 for(Device device : deviceList) {
                     for(String segment : segments.split(",")) {
-                        TesterSet testerSet= new TesterSet();
-                        testerSet.setDeviceId(device.getId());
-                        testerSet.setSegment(segment);
-                        testerSet.setLab(user.getLastLab());
-                        needSaveList.add(testerSet);
+                        if(!usedPK.contains(new TesterSetPK(device.getId(), segment))) {
+                            usedPK.add(new TesterSetPK(device.getId(), segment));
+                            TesterSet testerSet= new TesterSet();
+                            testerSet.setDeviceId(device.getId());
+                            testerSet.setSegment(segment);
+                            testerSet.setLab(user.getLastLab());
+                            needSaveList.add(testerSet);
+                        }
                     }
                 }
             }

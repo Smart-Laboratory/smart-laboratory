@@ -145,10 +145,10 @@
             //url: "../set/dictionary/getList",
             //postData:{deviceid:typeid},
             datatype: "json",
-            colNames: ['通道名称', 'testid','试验名称', '样本类型'],
+            colNames: ['通道名称', '检验项目ID','试验名称', '样本类型'],
             colModel: [
                 { name: 'channel', index: 'channel', width: 60,editable : true },
-                { name: 'testid', index: 'testid', width: 60,hidden:true},
+                { name: 'testid', index: 'testid', width: 60},
                 { name: 'testname', index: 'testname', width: 60},
                 { name: 'sampletype', index: 'sampletype', width: 100,editable : true }
             ],
