@@ -455,12 +455,19 @@ public class SampleInputAjaxController {
 				String segment = "";
 				if(sample.getYlxh().indexOf("+") > 0) {
 					segment = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]).getSegment();
+				} else {
+					segment = YlxhUtil.getInstance().getYlxh(sample.getYlxh()).getSegment();
 				}
 				if(segment.equals(sampleno.substring(8,11))) {
 					sample.setSampleNo(sampleno);
 				} else {
 					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);
-					sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
+					if (receiveSampleNo == null) {
+						sampleno = Constants.DF3.format(receiveTime) + segment + "001";
+					} else {
+						sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
+					}
+
 					sample.setSampleNo(sampleno);
 				}
 				o.put("newSampleNo", sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1)));
