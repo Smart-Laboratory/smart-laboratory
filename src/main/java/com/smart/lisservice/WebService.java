@@ -405,7 +405,8 @@ public class WebService {
             hisSampleInfo.put("isEmergency",sample.getRequestMode());
             hisSampleInfo.put("testId",sample.getYlxh());
             hisSampleInfo.put("testName",sample.getInspectionName());
-            hisSampleInfo.put("reportUrl","");
+            String reportUrl=Config.getString("report.path","")+"&patienttype="+sample.getStayHospitalModelValue()+"&patientid="+sample.getPatientId()+"&sampleid="+sample.getBarcode();
+            hisSampleInfo.put("reportUrl",reportUrl);
             hisSampleInfo.put("patientCode",sample.getPatientblh());
 
             //结果信息
@@ -522,8 +523,8 @@ public class WebService {
             sampleInfo.put("sex",sample.getSex());
             sampleInfo.put("age",sample.getAge());
             sampleInfo.put("ageUnit",sample.getAgeunit());
-            sampleInfo.put("department",sample.getHosSection());
-            sampleInfo.put("wardName",sample.getHosSection());
+            sampleInfo.put("department",SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
+            sampleInfo.put("wardName",SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
             sampleInfo.put("bedNo",sample.getDepartBed());
             if(process.getKsreceivetime() != null) {
                 sampleInfo.put("testTime", ConvertUtil.getFormatDateGMT(process.getKsreceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
@@ -548,6 +549,11 @@ public class WebService {
             sampleInfo.put("testName",sample.getInspectionName());
             sampleInfo.put("barcode",sample.getBarcode());
             sampleInfo.put("sampleNo",sample.getSampleNo());
+            sampleInfo.put("patientType",sample.getStayHospitalMode());
+            sampleInfo.put("sampleStatus",sample.getSampleStatus());
+            sampleInfo.put("fileState","可打");
+            sampleInfo.put("filePath","E:\\GenerateReport\\ReportTemp\\"+sample.getBarcode()+".pdf");
+            sampleInfo.put("filePath1","\\\\10.31.96.39\\GenerateReport\\ReportTemp\\"+sample.getBarcode()+".pdf");
 
             //结果信息
             JSONArray jsonTestResult= new JSONArray();
