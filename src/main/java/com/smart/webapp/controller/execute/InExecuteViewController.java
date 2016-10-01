@@ -227,7 +227,7 @@ public class InExecuteViewController {
         List<Object[]> labOrderList = new ArrayList<Object[]>();
         try {
             //取最新五天记录
-            String startDate = ConvertUtil.getFormatDate(new Date(),-5);
+            String startDate = ConvertUtil.getFormatDate(new Date(),-3);
             labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null,startDate);
         }catch (Exception e){
             e.printStackTrace();
