@@ -463,7 +463,7 @@ public class SampleInputAjaxController {
 				} else {
 					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);
 					if (receiveSampleNo == null) {
-						sampleno = Constants.DF3.format(receiveTime) + segment + "001";
+						sampleno = Constants.DF3.format(receiveTime) + segment + "501";
 					} else {
 						sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
 					}
