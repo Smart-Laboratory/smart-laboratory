@@ -259,8 +259,7 @@ public class TestResult extends BaseObject{
      */
     @Transient
     public String getReference() {
-        if(refLo==null) refLo="";
-        if(refHi==null) refHi="";
+        if(refLo==null || refHi == null) return "";
         if (refLo.isEmpty() && refHi.isEmpty()) {
             return "-";
         } else if (refLo.isEmpty() && (!refHi.isEmpty())) {
