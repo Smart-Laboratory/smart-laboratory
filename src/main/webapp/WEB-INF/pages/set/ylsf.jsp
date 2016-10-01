@@ -273,6 +273,9 @@
 				<label class="col-xs-4 control-label no-padding-right" for="segment"> 检验段 </label>
 				<div class="col-xs-8">
 					<select type="text" id="segment" name="segment" class="col-xs-8" style="height:33px;">
+						<c:forEach items="${segments }" var="labcode">
+							<option value="${labcode}">${labcode}</option>
+						</c:forEach>
 					</select>
 				</div>
 			</div>

@@ -10,7 +10,7 @@ import com.smart.util.SpringContextUtil;
 
 public class YlxhUtil {
 
-	private static YlxhUtil instance = new YlxhUtil();
+	private static YlxhUtil instance = null;
 
 	private static Map<String, Ylxh> map = null;
 
@@ -21,7 +21,9 @@ public class YlxhUtil {
 	}
 
 	public static YlxhUtil getInstance() {
-		if (map == null) {
+		if(instance == null) {
+			instance = new YlxhUtil();
+			System.out.println(instance == null);
 			map = new HashMap<String, Ylxh>();
 			for (Ylxh ylxh : ylxhManager.getAll()) {
 				map.put(ConvertUtil.null2String(ylxh.getYlxh()), ylxh);

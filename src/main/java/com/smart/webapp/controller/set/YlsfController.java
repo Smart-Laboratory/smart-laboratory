@@ -57,6 +57,7 @@ public class YlsfController extends BaseAuditController {
 		ModelAndView view = new ModelAndView();
 		view.addObject("lab", lab);
 		view.addObject("labs", sectionManager.getAll());
+		view.addObject("segments", SectionUtil.getInstance(sectionManager).getLabCode(lab).split(","));
         return view;
     }
 	

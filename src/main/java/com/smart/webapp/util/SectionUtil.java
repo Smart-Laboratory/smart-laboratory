@@ -7,6 +7,7 @@ import com.smart.drools.P;
 import com.smart.lisservice.WebService;
 import com.smart.model.lis.Section;
 import com.smart.service.lis.SectionManager;
+import com.smart.util.ConvertUtil;
 import com.zju.api.model.Ksdm;
 import com.zju.api.service.RMIService;
 
@@ -91,6 +92,6 @@ public class SectionUtil {
 	}
 
 	public String getLabCode(String code) {
-		return departMap.get(code).getSegment();
+		return ConvertUtil.null2String(departMap.get(code).getSegment());
 	}
 }
