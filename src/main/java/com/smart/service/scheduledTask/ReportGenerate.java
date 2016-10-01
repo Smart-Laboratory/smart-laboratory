@@ -61,7 +61,7 @@ public class ReportGenerate {
         velocityContext.put("ageUnit", sample.getAgeunit());
         velocityContext.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
         velocityContext.put("diagnostic", sample.getDiagnostic());
-        velocityContext.put("note", sample.getNote());
+        velocityContext.put("note", ConvertUtil.null2String(sample.getNote()));
         velocityContext.put("barCode", sample.getBarcode());
         velocityContext.put("sampleNo", sample.getSampleNo());
         velocityContext.put("sampleId", sample.getId());
