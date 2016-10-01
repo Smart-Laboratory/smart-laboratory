@@ -118,6 +118,7 @@ public class YlsfController extends BaseAuditController {
 			map.put("cjbw", ConvertUtil.null2String(y.getCjbw()));
 			map.put("sgsl", y.getSgsl());
 			map.put("ksdm", ConvertUtil.null2String(y.getKsdm()));
+			map.put("segment", ConvertUtil.null2String(y.getSegment()));
 			dataRows.add(map);
 		}
 

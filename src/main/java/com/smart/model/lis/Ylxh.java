@@ -42,6 +42,7 @@ public class Ylxh extends BaseObject {
 	private int sgsl=0;		//试管数量
 	private String pinyin;
 	private String wubi;
+	private String segment; //实验室检验段
 	
 	/**
 	 * 医疗序号
@@ -240,6 +241,15 @@ public class Ylxh extends BaseObject {
 
 	public void setWubi(String wubi) {
 		this.wubi = wubi;
+	}
+
+	@Column
+	public String getSegment() {
+		return segment;
+	}
+
+	public void setSegment(String segment) {
+		this.segment = segment;
 	}
 
 	public String toString() {

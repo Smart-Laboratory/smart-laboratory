@@ -175,7 +175,7 @@ public class SectionController {
      * @throws Exception
      */
 	@RequestMapping(value = "/remove")
-	public void Remove(HttpServletRequest request, HttpServletResponse response)throws Exception{
+	public void remove(HttpServletRequest request, HttpServletResponse response)throws Exception{
 		try{
 			Long id = ConvertUtil.getLongValue(request.getParameter("id"));
 			sectionManager.remove(id);
