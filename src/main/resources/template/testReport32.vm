@@ -93,7 +93,7 @@
         }
 
         .footer tr td {
-            font-size: 7.5pt;
+            /*font-size: 7.5pt;*/
         }
 
         .headtitle {
@@ -138,24 +138,27 @@
                             <col width="40%"/>
                             <col width="15%"/>
                             <col width="5%"/>
-                            <col width="30%"/>
-                            <col width="10%"/>
+                            <col width="15%"/>
+                            <col width="25%"/>
                         </colgroup>
                         <tr>
                             <th>检验项目</th>
                             <th>结果</th>
                             <th>&#160;</th>
-                            <th>参考值</th>
                             <th>单位</th>
+                            <th>参考值</th>
                         </tr>
+                        #set($listSize1=$!results.size()%2)
+                        #set($listSize2=$!results.size()/2)
                         #foreach($item in $results)
-                            #if($velocityCount<=20)
+                            #if($velocityCount<=($!listSize2 +$!listSize1))
                                 <tr>
                                     <td >$!item.testName</td>
                                     <td>$!item.testResult</td>
                                     <td>$!item.resultFlag</td>
-                                    <td>$!item.reference</td>
                                     <td>$!item.unit</td>
+                                    <td>$!item.reference</td>
+
                                 </tr>
                             #end
                         #end
@@ -167,24 +170,24 @@
                             <col width="40%"/>
                             <col width="15%"/>
                             <col width="5%"/>
-                            <col width="30%"/>
-                            <col width="10%"/>
+                            <col width="15%"/>
+                            <col width="25%"/>
                         </colgroup>
                         <tr>
                             <th style="padding-left: 15px;">检验项目</th>
                             <th>结果</th>
                             <th>&#160;</th>
-                            <th>参考值</th>
                             <th>单位</th>
+                            <th>参考值</th>
                         </tr>
                         #foreach($item in $results)
-                            #if($velocityCount>=20)
+                            #if($velocityCount>=$listSize2)
                                 <tr>
                                     <td style="padding-left: 15px;">$!item.testName</td>
                                     <td>$!item.testResult</td>
                                     <td>$!item.resultFlag</td>
-                                    <td>$!item.reference</td>
                                     <td>$!item.unit</td>
+                                    <td>$!item.reference</td>
                                 </tr>
                             #end
                         #end

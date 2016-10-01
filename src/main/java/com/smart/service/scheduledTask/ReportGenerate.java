@@ -83,9 +83,9 @@ public class ReportGenerate {
         //info.put("auditor", process.getCheckoperator());
         String dzqm_imghtm = "";
         //由于process.getCheckoperator() 有工号有姓名，需要区分
-        String username = UserUtil.getInstance().getKey(ConvertUtil.null2String(process.getCheckoperator()));
+        String username = UserUtil.getInstance().getValue(ConvertUtil.null2String(process.getCheckoperator()));
         //实现获取电子签名
-        String dzqm_filepath = webPath+"\\images\\bmp";
+        String dzqm_filepath = webPath+"/images/bmp/"+username+".bmp";
         File dzqm_dir = new File(dzqm_filepath);
 
         //System.out.println(" request.getContextPath()==>"+ requestUrl  );
@@ -98,9 +98,10 @@ public class ReportGenerate {
                 }
             }
         }
+
         velocityContext.put("requestUrl", webPath);
-        velocityContext.put("auditro", dzqm_imghtm);
-        velocityContext.put("checker",ConvertUtil.null2String(process.getCheckoperator()));
+        velocityContext.put("auditro", dzqm_filepath);
+        velocityContext.put("checker",username);
         velocityContext.put("receivetime",ConvertUtil.getFormatDate(process.getReceivetime()));
         velocityContext.put("checktime", ConvertUtil.getFormatDate(process.getChecktime()));
         velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getExecutetime()));

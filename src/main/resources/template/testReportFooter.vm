@@ -12,10 +12,12 @@
         <tr>
             <td>检验者:$!tester</td>
             <td>复审者:
-                #if($!auditro=="")
-                  $!checker
+                #if("$!auditro" == "")
+                    $!checker
+                #else
+                    <img id="auditor" alt="" src="$!auditro" border="0" width="60px" height="17px"/>
                 #end
-                <img id="auditor" alt="" src="$!auditro" border="0" width="60px" height="17px"/>
+
             </td>
             <td>受检者电话:</td>
             <td>&#160;</td>
