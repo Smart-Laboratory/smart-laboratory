@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import com.smart.model.LabelValue;
+import org.apache.lucene.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -125,12 +126,13 @@ public final class ConvertUtil {
     }
     public static String  getFormatDate(Date v) {
         return getFormatDate(v,"");
+
     }
 
     public static String  getFormatDate(Date v, String format) {
         try {
             if(v==null) v= new Date();
-            if(format==null || format.isEmpty()) format="yyyy-MM-dd hh:mm:ss";
+            if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(v);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
@@ -144,7 +146,7 @@ public final class ConvertUtil {
     public static String  getFormatDateGMT(Date v, String format) {
         try {
             if(v==null) v= new Date();
-            if(format==null || format.isEmpty()) format="yyyy-MM-dd hh:mm:ss";
+            if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(v);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
