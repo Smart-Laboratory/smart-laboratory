@@ -28,6 +28,7 @@
         .head {
             width: 100%;
             padding-bottom:2px;
+            font-size: 10pt !important;
         }
 
         .patientinfo {
@@ -71,18 +72,11 @@
             border-bottom: 1px solid #000;
             padding-bottom:2px;
         }
-        .resultList{
-            table-layout: fixed;
-        }
-        .resultList td{
+        .result table tr td {
             text-align: left;
-            #if($!resultSize.size <10)
-                font-size: 10.5pt;
+            #if($!results.size() <10)
+                font-size: 10.5pt !important;
             #end
-            height: 15px;
-            line-height: 15px;
-            overflow:hidden;
-            white-space:nowrap;
         }
         .footer {
             width: 100%;
@@ -93,11 +87,11 @@
         }
 
         .footer tr td {
-            font-size: 7.5pt;
+            font-size: 9pt;
         }
 
         .headtitle {
-            font-size: 16pt;
+            font-size: 18pt;
             font-weight: bold;
         }
 

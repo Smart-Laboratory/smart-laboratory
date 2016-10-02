@@ -28,6 +28,7 @@
         .head {
             width: 100%;
             padding-bottom:2px;
+            font-size: 10pt !important;
         }
 
         .patientinfo {
@@ -76,7 +77,7 @@
         }
         .resultList td{
             text-align: left;
-            #if($!resultSize.size <10)
+            #if($!results.size() <10)
                 font-size: 10.5pt;
             #end
             height: 15px;

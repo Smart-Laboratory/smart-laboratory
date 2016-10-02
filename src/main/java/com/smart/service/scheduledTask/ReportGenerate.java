@@ -20,6 +20,7 @@ import org.apache.velocity.app.VelocityEngine;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -84,24 +85,27 @@ public class ReportGenerate {
         //info.put("auditor", process.getCheckoperator());
         String dzqm_imghtm = "";
         //由于process.getCheckoperator() 有工号有姓名，需要区分
-        String username = "刘敏杰";// UserUtil.getInstance().getValue(ConvertUtil.null2String(process.getCheckoperator()));
+        String userNo =   ConvertUtil.null2String(process.getCheckoperator());
+
         //实现获取电子签名
         String dzqm_filepath ="";
 //        URL base = this.getClass().getResource("");
 //        String path= new File(base.getFile(),".../.../.../").getCanonicalPath();
 
         String path=System.getProperty("search.root");
+
+
         System.out.println("path->"+path);
-        File file = new File(path+"/images/bmp/"+username+".bmp");
+        File file = new File(path+"/images/bmp/"+userNo+".png");
         if(file.exists()){
-            dzqm_filepath = webPath+"/images/bmp/"+username+".bmp";
+            dzqm_filepath = webPath+"/images/bmp/"+userNo+".png";
         }else {
             dzqm_filepath = "";
         }
         //System.out.println(" request.getContextPath()==>"+ requestUrl  );
         velocityContext.put("requestUrl", webPath);
         velocityContext.put("auditro", dzqm_filepath);
-        velocityContext.put("checker",username);
+        velocityContext.put("checker",UserUtil.getInstance().getValue(userNo));
         velocityContext.put("receivetime",ConvertUtil.getFormatDate(process.getReceivetime()));
         velocityContext.put("checktime", ConvertUtil.getFormatDate(process.getChecktime()));
         velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getExecutetime()));

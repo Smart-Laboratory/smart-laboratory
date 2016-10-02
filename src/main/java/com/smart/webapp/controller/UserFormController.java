@@ -205,7 +205,7 @@ public class UserFormController extends BaseFormController {
 				//去掉后缀
 				int dot = dzqm_f.getName().lastIndexOf('.'); 
 				if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
-					dzqm_imghtm += "../images/bmp/" + dzqm_f.getName() + ";";
+					dzqm_imghtm += request.getContextPath()+"/images/bmp/" + dzqm_f.getName() + ";";
 				}
 			}
 		}

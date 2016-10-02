@@ -25,7 +25,7 @@
         <tr>
             #if($!staymode ==2)
                 <td>病&#12288;&#12288;区:<span>$!section</span></td>
-                <td>住&#8194;院&#8194;号:<span>$!blh</span></td>
+                <td>病&#8194;历&#8194;号:<span>$!blh</span></td>
             #else
                 <td>科&#12288;&#12288;别:<span>$!section</span></td>
                 <td>就&#8194;诊&#8194;号:<span>$!blh</span></td>

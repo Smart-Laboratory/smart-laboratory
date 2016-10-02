@@ -149,7 +149,7 @@
             </button>
             <button type="button" class="btn btn-sm btn-purple" title="打印机选择" onclick="TSLAB.Custom.openUrl()">
                 <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                 交叉配血条码打印
+                交叉配血条码打印
             </button>
             <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
             <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
@@ -369,13 +369,13 @@
                         jQuery('#tableList').editRow(id, false);
                     },
                     gridComplete: function () {
-                        var ids = jQuery("#tableList").jqGrid('getDataIDs');
-                        for (var i = 0; i < ids.length; i++) {
-                            var rowData = $("#tableList").getRowData(ids[i]);
-                            if (rowData.requestmode == 1) {
-                                $('#' + ids[i]).find("td").css("color", "red");
-                            }
-                        }
+//                        var ids = jQuery("#tableList").jqGrid('getDataIDs');
+//                        for (var i = 0; i < ids.length; i++) {
+//                            var rowData = $("#tableList").getRowData(ids[i]);
+//                            if (rowData.requestmode == 1) {
+//                                $('#' + ids[i]).find("td").css("color", "red");
+//                            }
+//                        }
                     },
                     multiselect: true,
                     //multikey : "ctrlKey",
@@ -393,18 +393,26 @@
                 $("#tableList1").jqGrid({
                     datatype: "json",
                     //caption:"已采集标本",
-                    colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '病区', '床号', '样本条码', '病历号', '姓名', '性别', '年龄', '单位',
+                    colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '急诊', '病区', '床号', '样本条码', '病历号', '姓名', '性别', '年龄', '单位',
                         '项目名称', '标本类型', '申请科室', '申请时间', '诊断', '患者类型',
-                        '打印时间', '急诊'],
+                        '打印时间'],
                     colModel: [{name: 'requestId', index: 'requestId', width: 40, hidden: true},
                         {name: 'laborder', index: 'laborder', width: 40, hidden: true, key: true},
                         {name: 'laborderOrg', index: 'laborderOrg', width: 40, hidden: true},
                         {name: 'patientId', index: 'patientId', width: 40, hidden: true},
+                        {
+                            name: 'requestMode',
+                            index: 'requestMode',
+                            width: 60,
+                            formatter: 'select',
+                            editoptions: {value: "1:是;0:否"}
+                            ,cellattr: addCellAttr
+                        },
                         {name: 'ward', index: 'ward', width: 100},
                         {name: 'bedNo', index: 'bedNo', width: 60},
                         {name: 'barcode', index: 'barcode', width: 110},
                         {name: 'patientCode', index: 'patientCode', width: 100},
-                        {name: 'patientName', index: 'patientName', width: 100},
+                        {name: 'patientName', index: 'patientName', width: 100,cellattr: addCellAttr},
                         {name: 'sex', index: 'sex', width: 40},
                         {name: 'age', index: 'age', width: 40},
                         {name: 'ageUnit', index: 'ageUnit', width: 40},
@@ -420,14 +428,7 @@
                             formatter: 'select',
                             editoptions: {value: "1:门诊;2:住院;3:其他"}
                         },
-                        {name: 'printTime', index: 'printTime', width: 120, order: true},
-                        {
-                            name: 'requestMode',
-                            index: 'requestMode',
-                            width: 60,
-                            formatter: 'select',
-                            editoptions: {value: "1:是;0:否"}
-                        }
+                        {name: 'printTime', index: 'printTime', width: 120, order: true}
                     ],
                     onSelectRow: function (id) {
                         if (id && id !== lastsel) {
@@ -437,13 +438,6 @@
                         jQuery('#tableList').editRow(id, false);
                     },
                     gridComplete: function () {
-                        var ids = jQuery("#tableList1").jqGrid('getDataIDs');
-                        for (var i = 0; i < ids.length; i++) {
-                            var rowData = $("#tableList1").getRowData(ids[i]);
-                            if (rowData.requestMode == 1) {
-                                $('#tableList1 #' + ids[i]).find("td").css("color", "red");
-                            }
-                        }
                     },
                     multiselect: true,
                     //multikey : "ctrlKey",
@@ -560,7 +554,7 @@
                     return;
                 }
                 ;
-            },setPrintIndex:function(index){
+            }, setPrintIndex: function (index) {
                 var index = private.getCookie("lis_print");
                 LODOP = getLodop();
                 LODOP.SET_PRINTER_INDEX(index)
@@ -587,11 +581,15 @@
                 }
                 CreateDataBill(data)
             },
-            openUrl:function () {
+            openUrl: function () {
                 window.open("http://10.31.96.39:108/nurs/sample?patward=${ward}&nursid=${userid}");
             },
             printReport: function () {
-                $.get(baseUrl+"/print/ajax/printReport", {sampleno: '20160530URF300', haslast: '0', type: ''}, function (data) {
+                $.get(baseUrl + "/print/ajax/printReport", {
+                    sampleno: '20160530URF300',
+                    haslast: '0',
+                    type: ''
+                }, function (data) {
                     //console.log(data)
                     Preview(data);
                 })
@@ -612,13 +610,13 @@
             printSet: function () {
                 private.printSetting();  //打印机设置
             },
-            setPrintIndex:function () {
+            setPrintIndex: function () {
                 private.setPrintIndex();
             },
-            getCookie:function (name) {
+            getCookie: function (name) {
                 return private.getCookie(name);
             },
-            openUrl:function () {
+            openUrl: function () {
                 private.openUrl();
             }
 
@@ -638,6 +636,13 @@
         }, 300000);
     })
 
+    function addCellAttr(rowId, val, rawObject, cm, rdata) {
+        //console.log(rdata)
+        if (rdata.requestMode == 1 || val==1) {
+           // console.log( $(row).children('td'));
+            return"style='color:red'";
+        }
+    }
 </script>
 
 <script>
@@ -645,24 +650,7 @@
     var LODOP; //声明为全局变量
     var index = -1;
 
-//    function readPrintFile(callback) {
-//        LODOP = getLodop();
-//        if (LODOP.CVERSION) CLODOP.On_Return = function (TaskID, Value) {
-//            LODOP.SET_PRINTER_INDEX(Value);
-//            if (typeof callback === "function") {
-//                callback();
-//            }
-//        };
-//        var strResult = LODOP.GET_FILE_TEXT("c:/print.ini");
-//        if (!LODOP.CVERSION)
-//        //本地打印
-//            flag = false;
-//        else
-//        //云打印
-//            flag = true;
-//
-//
-//    }
+
     function Preview(strHtml) {//打印预览
         LODOP = getLodop();
         LODOP.PRINT_INIT("打印报告单");
@@ -678,7 +666,8 @@
 
     function CreateDataBill(data) {
         if (data && data != null) {
-            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity+data.age + data.ageUnit;;
+            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity + data.age + data.ageUnit;
+            ;
             var patientInfo1 = data.patientCode + " " + data.hossection
             // LODOP = getLodop();
             LODOP.PRINT_INIT("");

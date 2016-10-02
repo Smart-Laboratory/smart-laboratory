@@ -263,7 +263,7 @@ function ajaxFileUploads(){
 		}
     }
 	$.ajaxFileUpload({
-		url:'../audit/ajax/uploadElectronicSignatureImg',
+		url:baseUrl+'/audit/ajax/uploadElectronicSignatureImg',
 		secureuri:false,
 		fileElementId: arrId,  
 		dataType: 'json',//返回数据的类型  
@@ -282,4 +282,4 @@ function ajaxFileUploads(){
 
 <v:javascript formName="user" staticJavascript="false"/>
 <script type="text/javascript" src="<c:url value="/scripts/validator.jsp"/>"></script>
-<script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
+<script type="text/javascript" src="<c:url value="/scripts/ajaxfileupload.js"/>"></script>

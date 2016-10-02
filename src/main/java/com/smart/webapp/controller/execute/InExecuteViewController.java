@@ -214,20 +214,13 @@ public class InExecuteViewController {
         } else {
             beCollectedList = labOrders;
         }
-        java.util.Calendar rightNow = java.util.Calendar.getInstance();
-        java.text.SimpleDateFormat sim = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //得到当前时间，+3天
-        rightNow.add(java.util.Calendar.DAY_OF_MONTH, 3);
-        //如果是后退几天，就写 -天数 例如：
-        rightNow.add(java.util.Calendar.DAY_OF_MONTH, -3);
-        //进行时间转换
-        String date = sim.format(rightNow.getTime());
-        System.out.println(date);
 
         List<Object[]> labOrderList = new ArrayList<Object[]>();
         try {
             //取最新五天记录
-            String startDate = ConvertUtil.getFormatDate(new Date(),-3);
+            Calendar cal = Calendar.getInstance();//使用默认时区和语言环境获得一个日历。
+            cal.add(Calendar.DAY_OF_MONTH, -3);//取当前日期的前一天.
+            String startDate = Constants.SDF.format(cal.getTime());
             labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null,startDate);
         }catch (Exception e){
             e.printStackTrace();
@@ -353,6 +346,7 @@ public class InExecuteViewController {
         //再次判断提交对象是否已经采集
         //获取病区已采集标本
         try {
+
             List<Object[]> labOrderList = labOrderManager.getByRequestIds("", "", "", requestIds);
             //已采集明细ID
             String requestDetailIds = "";
