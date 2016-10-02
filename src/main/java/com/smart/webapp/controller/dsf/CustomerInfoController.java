@@ -184,6 +184,7 @@ public class CustomerInfoController {
                 baseJsonObject.put("customerid", customerInfo.getCustomerid());
                 baseJsonObject.put("customername", customerInfo.getCustomername());
                 baseJsonObject.put("address", customerInfo.getAddress());
+                baseJsonObject.put("clientnumber",customerInfo.getClientnumber());
                 baseJsonObject.put("customerkey",customerInfo.getCustomerkey());
                 obj.put("baseCust", baseJsonObject);
                 //客户联系人

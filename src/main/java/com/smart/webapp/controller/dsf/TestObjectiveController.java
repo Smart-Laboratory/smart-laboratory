@@ -121,17 +121,6 @@ public class TestObjectiveController {
             map.put("id",y.getId());
             map.put("ylxh", y.getYlxh());
             map.put("ylmc", y.getYlmc());
-            map.put("english", y.getEnglish());
-            map.put("mzpb", y.getMzpb());
-            map.put("zypb", y.getZypb());
-            map.put("mzpbStr", y.getMzpb() == 1 ? "是" : "否");
-            map.put("zypbStr", y.getZypb() == 1 ? "是" : "否");
-            map.put("price", y.getPrice());
-            map.put("qbgdd", y.getQbgdd());
-            map.put("qbgsj", y.getQbgsj());
-            map.put("yblx", y.getYblx());
-            map.put("bbl", y.getBbl());
-            map.put("sglx", y.getSglx());
             map.put("ptest", ConvertUtil.null2String(y.getProfiletest()));
             map.put("ptest2", ConvertUtil.null2String(y.getProfiletest2()));
             map.put("ptest3", ConvertUtil.null2String(y.getProfiletest3()));
