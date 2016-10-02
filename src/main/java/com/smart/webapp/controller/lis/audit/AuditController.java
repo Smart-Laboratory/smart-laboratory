@@ -512,9 +512,8 @@ public class AuditController extends BaseAuditController {
 					//判断检验者与审核者是否一样
 					User user = userManager.getUserByUsername(request.getRemoteUser());
 					String userName=user.getName();
-					if(process.getReceiver().equals(userName)){
+					if(info.getChkoper2().equals(userName)){
 						return "检验者与审核者相同,不允许通过";
-
 					}
 					info.setAuditStatus(Constants.STATUS_PASSED);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
