@@ -40,7 +40,7 @@ public class PdaTatSchedule {
                 sampleIds+=",";
                 updateIds+=",";
             }
-            updateIds+="'A120"+String.format("%8d",ConvertUtil.null2String(process.getSampleid()))+"'";
+            updateIds+="'A1200"+String.format("%8d",ConvertUtil.null2String(process.getSampleid()))+"'";
             sampleIds += ConvertUtil.null2String(process.getSampleid());
             processMap.put(process.getSampleid(),process);
         }
