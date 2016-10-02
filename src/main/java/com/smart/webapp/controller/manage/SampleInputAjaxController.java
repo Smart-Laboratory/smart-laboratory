@@ -428,7 +428,7 @@ public class SampleInputAjaxController {
 			} else {
 				ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
 			}
-			sample.setSectionId(ylxh.getKsdm());
+			//sample.setSectionId(ylxh.getKsdm());
 		}
 		if(sample == null) {
 			o.put("success", 1);
