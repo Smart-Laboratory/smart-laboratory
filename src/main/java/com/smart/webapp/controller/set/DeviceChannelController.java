@@ -9,6 +9,7 @@ import com.smart.service.lis.ChannelManager;
 import com.smart.service.lis.DeviceManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.ChannelUtil;
 import com.smart.webapp.util.DeviceUtil;
 import com.smart.webapp.util.UserUtil;
@@ -165,11 +166,11 @@ public class DeviceChannelController {
                     channel.setSampleType(index.getSampleFrom());
                     channel.setChannel("");
                 }
-                jsonObject.put("deviceid",channel.getDeviceId()+"");
-                jsonObject.put("testid",channel.getTestId()+"");
-                jsonObject.put("testname",index.getName()+"");
-                jsonObject.put("channel",channel.getChannel()+"");
-                jsonObject.put("sampletype",channel.getSampleType()+"");
+                jsonObject.put("deviceid", ConvertUtil.null2String(channel.getDeviceId()));
+                jsonObject.put("testid", ConvertUtil.null2String(channel.getTestId()));
+                jsonObject.put("testname", ConvertUtil.null2String(index.getName()));
+                jsonObject.put("channel", ConvertUtil.null2String(channel.getChannel()));
+                jsonObject.put("sampletype", ConvertUtil.null2String(channel.getSampleType()));
                 jsonArray.put(jsonObject);
             }
         }

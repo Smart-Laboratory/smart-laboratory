@@ -405,7 +405,7 @@ public class WebService {
             hisSampleInfo.put("isEmergency",sample.getRequestMode());
             hisSampleInfo.put("testId",sample.getYlxh());
             hisSampleInfo.put("testName",sample.getInspectionName());
-            String reportUrl=Config.getString("report.path","")+"&patienttype="+sample.getStayHospitalModelValue()+"&patientid="+sample.getPatientId()+"&sampleid="+sample.getBarcode();
+            String reportUrl=Config.getString("report.path","")+"&patienttype="+sample.getStayHospitalMode()+"&patientid="+sample.getPatientId()+"&sampleid="+sample.getBarcode();
             hisSampleInfo.put("reportUrl",reportUrl);
             hisSampleInfo.put("patientCode",sample.getPatientblh());
 
@@ -566,7 +566,7 @@ public class WebService {
                 result.put("unit",testResult.getUnit());                    //单位
                 result.put("orderNum",testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
                 result.put("reference",testResult.getReference());         //参考范围
-                result.put("resultFlag",testResult.getResultFlag());        //结果标记
+                result.put("resultFlag",ConvertUtil.getResultFlag(testResult.getResultFlag()));        //结果标记
                 result.put("barcode",sample.getBarcode());                              //条码号
                 result.put("testResult",testResult.getTestResult());                              //结果
                 jsonTestResult.put(result);

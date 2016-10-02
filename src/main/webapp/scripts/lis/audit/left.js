@@ -179,7 +179,7 @@ $(function () {
         if (s.length != 0 && confirm("确认通过这 " + s.length + " 个样本？")) {
             $.post("../audit/batch", {ids: ids, op: "pass"}, function (data) {
                 if (data == true) {
-                    jQuery("#list").trigger("reloadGrid");
+                   Query("#list").trigger("reloadGrid");
                 }
             });
         }

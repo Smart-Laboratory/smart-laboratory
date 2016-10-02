@@ -19,6 +19,7 @@ import org.apache.velocity.app.VelocityEngine;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -83,22 +84,21 @@ public class ReportGenerate {
         //info.put("auditor", process.getCheckoperator());
         String dzqm_imghtm = "";
         //由于process.getCheckoperator() 有工号有姓名，需要区分
-        String username = UserUtil.getInstance().getValue(ConvertUtil.null2String(process.getCheckoperator()));
+        String username = "刘敏杰";// UserUtil.getInstance().getValue(ConvertUtil.null2String(process.getCheckoperator()));
         //实现获取电子签名
-        String dzqm_filepath = webPath+"/images/bmp/"+username+".bmp";
-        File dzqm_dir = new File(dzqm_filepath);
+        String dzqm_filepath ="";
+//        URL base = this.getClass().getResource("");
+//        String path= new File(base.getFile(),".../.../.../").getCanonicalPath();
 
-        //System.out.println(" request.getContextPath()==>"+ requestUrl  );
-        if (dzqm_dir.exists()) {
-            for (File dzqm_f : dzqm_dir.listFiles()) {
-                //去掉后缀
-                int dot = dzqm_f.getName().lastIndexOf('.');
-                if (dzqm_f.getName().substring(0, dot).equals(username)&&(dzqm_f.getName().toUpperCase().endsWith(".BMP") )) {
-                    dzqm_imghtm += webPath+"/images/bmp/" + dzqm_f.getName() + ";";
-                }
-            }
+        String path=System.getProperty("search.root");
+        System.out.println("path->"+path);
+        File file = new File(path+"/images/bmp/"+username+".bmp");
+        if(file.exists()){
+            dzqm_filepath = webPath+"/images/bmp/"+username+".bmp";
+        }else {
+            dzqm_filepath = "";
         }
-
+        //System.out.println(" request.getContextPath()==>"+ requestUrl  );
         velocityContext.put("requestUrl", webPath);
         velocityContext.put("auditro", dzqm_filepath);
         velocityContext.put("checker",username);
@@ -243,7 +243,7 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        //System.out.println(writer.toString());
+        System.out.println(writer.toString());
         return writer.toString();
     }
 

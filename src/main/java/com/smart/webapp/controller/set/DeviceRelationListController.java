@@ -12,6 +12,7 @@ import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.FillFieldUtil;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
 import org.codehaus.jettison.json.JSONArray;
@@ -388,6 +389,8 @@ public class DeviceRelationListController {
             indexManager.save(index);
             if(testReferences.size()>0) {
                 testReferenceManager.saveTestReferences(testReferences);  //批量保存数据
+                //更新缓存
+                FillFieldUtil.getInstance(indexManager, testReferenceManager).updateTestReferenceMap(testReferences);
             }
             //return new ModelAndView("redirect:/set/devicerelation","result", "true");
             return new JSONObject().put("result", "true").toString();

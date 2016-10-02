@@ -486,11 +486,11 @@ public class AuditController extends BaseAuditController {
 		return true;
 	}
     
-    @RequestMapping(value = "/manual*", method = RequestMethod.POST)
+    @RequestMapping(value = "/manual*", method = RequestMethod.POST ,produces = "application/text; charset=utf-8")
 	@ResponseBody
-	public boolean manualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String manualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		boolean result = false;
-
+		response.setContentType("text/html;charset=UTF-8");
 		String op = request.getParameter("operate");
 		String note = request.getParameter("note");
 		String sampleNo = request.getParameter("sample");
@@ -509,6 +509,13 @@ public class AuditController extends BaseAuditController {
 				info.setCharttest(charttest);
 				info.setPassReason(note);
 				if ("pass".equals(op)) {
+					//判断检验者与审核者是否一样
+					User user = userManager.getUserByUsername(request.getRemoteUser());
+					String userName=user.getName();
+					if(process.getReceiver().equals(userName)){
+						return "检验者与审核者相同,不允许通过";
+
+					}
 					info.setAuditStatus(Constants.STATUS_PASSED);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
 					for(TestResult t : testResultList) {
@@ -570,7 +577,7 @@ public class AuditController extends BaseAuditController {
 			e.printStackTrace();
 			log.error("通过或不通过出错！", e);
 		}
-		return result;
+		return "";
 	}
     
     private void updatePassTrace(HttpServletRequest request,String sampleno,String ids){
@@ -700,6 +707,8 @@ public class AuditController extends BaseAuditController {
 		List<Process> updateP = new ArrayList<Process>();
 		List<TestResult> updateT = new ArrayList<TestResult>();
 		Date checkTime = new Date();
+
+
 
 		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {

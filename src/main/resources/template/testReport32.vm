@@ -76,7 +76,7 @@
         }
         .resultList td{
             text-align: left;
-            #if($!resultSize <10)
+            #if($!resultSize.size <10)
                 font-size: 10.5pt;
             #end
             height: 15px;
@@ -97,7 +97,7 @@
         }
 
         .headtitle {
-            font-size: 16pt;
+            font-size: 18pt;
             font-weight: bold;
         }
 
@@ -150,6 +150,7 @@
                         </tr>
                         #set($listSize1=$!results.size()%2)
                         #set($listSize2=$!results.size()/2)
+
                         #foreach($item in $results)
                             #if($velocityCount<=($!listSize2 +$!listSize1))
                                 <tr>
@@ -181,7 +182,7 @@
                             <th>参考值</th>
                         </tr>
                         #foreach($item in $results)
-                            #if($velocityCount>=$listSize2)
+                            #if($velocityCount>$listSize2)
                                 <tr>
                                     <td style="padding-left: 15px;">$!item.testName</td>
                                     <td>$!item.testResult</td>

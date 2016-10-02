@@ -407,6 +407,8 @@ public class SampleInputAjaxController {
 		Process process = null;
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
+
+
 //
 //		System.out.println("code.charAT=="+code.charAt(code.length()-1));
 //		if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
@@ -418,10 +420,21 @@ public class SampleInputAjaxController {
 		} catch(Exception e) {
 			sample = null;
 		}
+
+		Ylxh ylxh = new Ylxh();
+		if(sample != null) {
+			if (sample.getYlxh().indexOf("+") > 0) {
+				ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
+			} else {
+				ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
+			}
+			sample.setSectionId(ylxh.getKsdm());
+		}
 		if(sample == null) {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
 		} else if(!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
+
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不属于当前专业组，不能接收！");
 		} else if(sample.getSampleStatus() >= 3) {
@@ -449,30 +462,25 @@ public class SampleInputAjaxController {
 			processLogManager.save(plog);
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
 				String segment = "";
-                Ylxh ylxh = new Ylxh();
-                if(sample.getYlxh().indexOf("+") > 0) {
-                    ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
-                } else {
-                    ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
-                }
 
-                //夜班判断，当天17:30之后，7:30之前
+
+                //白班判断，当天7:30之后，17:30之前
                 Calendar nightBegin = Calendar.getInstance();
-                nightBegin.set(Calendar.HOUR_OF_DAY, 17);
+                nightBegin.set(Calendar.HOUR_OF_DAY, 7);
                 nightBegin.set(Calendar.MINUTE, 30);
                 nightBegin.set(Calendar.SECOND, 0);
                 Calendar nightEnd = Calendar.getInstance();
-                nightEnd.set(Calendar.HOUR_OF_DAY, 7);
+                nightEnd.set(Calendar.HOUR_OF_DAY, 17);
                 nightEnd.set(Calendar.MINUTE, 30);
                 nightEnd.set(Calendar.SECOND, 0);
-                if(receiveTime.getTime() >= nightBegin.getTimeInMillis() || receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
+                if(receiveTime.getTime() >= nightBegin.getTimeInMillis() && receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
 					sample.setSectionId(Constants.DEPART_NIGHT);
-					segment = ylxh.getNightSegment();
-                } else {
 					segment = ylxh.getSegment();
+                } else {
+					segment = ylxh.getNightSegment();
                 }
 
-				if(segment.equals(sampleno.substring(8,11))) {
+				if(segment != null && segment.equals(sampleno.substring(8,11))) {
 					sample.setSampleNo(sampleno);
 				} else {
 					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);

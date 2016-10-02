@@ -34,6 +34,17 @@
         </param-value>
     </context-param>
 
+    <!--获取路径-->
+    <listener>
+        <listener-class>
+            org.springframework.web.util.WebAppRootListener
+        </listener-class>
+    </listener>
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>search.root</param-value>
+    </context-param>
+
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

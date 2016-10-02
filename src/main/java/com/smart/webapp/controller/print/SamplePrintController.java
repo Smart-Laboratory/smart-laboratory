@@ -342,7 +342,7 @@ public class SamplePrintController extends BaseAuditController {
 					}
 					int hisnum = 0;
 					for(TestResult tr : tl) {
-						if(tr.getResultFlag().charAt(0) != 'A') {
+						if(tr.getResultFlag() != null && tr.getResultFlag().isEmpty() && tr.getResultFlag().charAt(0) != 'A') {
 							isneed = 1;
 						}
 						if(hisnum < 5 && StringUtils.isNumericSpace(tr.getTestResult().replace(",",""))) {

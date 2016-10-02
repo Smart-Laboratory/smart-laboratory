@@ -76,7 +76,7 @@
         }
         .resultList td{
             text-align: left;
-            #if($!resultSize <10)
+            #if($!resultSize.size <10)
                 font-size: 10.5pt;
             #end
             height: 15px;
