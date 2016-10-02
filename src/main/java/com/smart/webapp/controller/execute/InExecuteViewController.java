@@ -451,8 +451,8 @@ public class InExecuteViewController {
                 process.setSampleid(sample.getId());
                 process.setRequesttime(labOrder.getRequesttime());
                 process.setRequester(labOrder.getRequesterName());
-                process.setExecutetime(executeTime);
-                process.setExecutor(user.getUsername());
+//                process.setExecutetime(executeTime);
+//                process.setExecutor(user.getUsername());
                 process.setPrinttime(executeTime);
                 labOrder.setLaborder(sample.getId());
 
