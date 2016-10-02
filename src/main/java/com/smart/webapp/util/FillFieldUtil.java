@@ -98,7 +98,10 @@ public class FillFieldUtil {
                         result.setRefLo(testReference.getReference().substring(1));
                         result.setRefHi("");
                     } else if (testReference.getReference().indexOf("<") == 0) {
-                        int round = testReference.getReference().substring(1).split("[.]")[1].length();
+						int round = 0;
+                    	if(testReference.getReference().substring(1).indexOf(".") > 0) {
+                    		round = testReference.getReference().substring(1).split("[.]")[1].length();
+						}
                         StringBuilder sb = new StringBuilder("#0.");
                         for(int i = 0; i < round; i++) {
                             sb.append("0");
@@ -127,7 +130,9 @@ public class FillFieldUtil {
 								sb.append("0");
 							}
 							DecimalFormat df = new DecimalFormat(sb.toString());
-							value = df.format(Double.parseDouble(value));
+							if(isDouble(value)) {
+								value = df.format(Double.parseDouble(value));
+							}
 						} else {
 							if (value.split("[.]")[0].equals("-0")) {
 								value = "0";

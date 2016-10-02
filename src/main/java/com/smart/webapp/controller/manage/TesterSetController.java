@@ -76,17 +76,16 @@ public class TesterSetController {
                     usedPK.add(new TesterSetPK(testerSet.getSegment(), testerSet.getDeviceId()));
                 }
                 returnList.addAll(testerSetList);
-            } else {
-                for(Device device : deviceList) {
-                    for(String segment : segments.split(",")) {
-                        if(!usedPK.contains(new TesterSetPK(device.getId(), segment))) {
-                            usedPK.add(new TesterSetPK(device.getId(), segment));
-                            TesterSet testerSet= new TesterSet();
-                            testerSet.setDeviceId(device.getId());
-                            testerSet.setSegment(segment);
-                            testerSet.setLab(user.getLastLab());
-                            needSaveList.add(testerSet);
-                        }
+            }
+            for(Device device : deviceList) {
+                for(String segment : segments.split(",")) {
+                    if(!usedPK.contains(new TesterSetPK(segment,device.getId()))) {
+                        usedPK.add(new TesterSetPK(segment,device.getId()));
+                        TesterSet testerSet= new TesterSet();
+                        testerSet.setDeviceId(device.getId());
+                        testerSet.setSegment(segment);
+                        testerSet.setLab(user.getLastLab());
+                        needSaveList.add(testerSet);
                     }
                 }
             }

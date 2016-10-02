@@ -3,7 +3,7 @@
 function labChange(select) {
 	$.ajax({
 		type: 'POST',
-		url: "../audit/labChange?lab="+$(select).children().attr("title"),
+		url: baseUrl + "/audit/labChange?lab="+$(select).children().attr("title"),
 		success:function(data){
 			var section = $(select).children().attr("title");
 			$("#labText").html($(select).children().html());

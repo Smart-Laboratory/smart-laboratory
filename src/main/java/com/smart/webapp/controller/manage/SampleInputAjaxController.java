@@ -1,17 +1,15 @@
 package com.smart.webapp.controller.manage;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.lisservice.WebService;
 import com.smart.model.execute.LabOrder;
+import com.smart.model.lis.*;
+import com.smart.model.lis.Process;
 import com.smart.service.execute.LabOrderManager;
 import com.smart.service.lis.*;
 import com.smart.util.ConvertUtil;
@@ -24,11 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
-import com.smart.model.lis.Patient;
-import com.smart.model.lis.Process;
-import com.smart.model.lis.ProcessLog;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.SampleLog;
 import com.smart.model.user.User;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
@@ -428,6 +421,9 @@ public class SampleInputAjaxController {
 		if(sample == null) {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
+		} else if(!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
+			o.put("success", 1);
+			o.put("message", "医嘱号为"+ code + "的标本不属于当前专业组，不能接收！");
 		} else if(sample.getSampleStatus() >= 3) {
 			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
@@ -453,17 +449,35 @@ public class SampleInputAjaxController {
 			processLogManager.save(plog);
 			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
 				String segment = "";
-				if(sample.getYlxh().indexOf("+") > 0) {
-					segment = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]).getSegment();
-				} else {
-					segment = YlxhUtil.getInstance().getYlxh(sample.getYlxh()).getSegment();
-				}
+                Ylxh ylxh = new Ylxh();
+                if(sample.getYlxh().indexOf("+") > 0) {
+                    ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
+                } else {
+                    ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
+                }
+
+                //夜班判断，当天17:30之后，7:30之前
+                Calendar nightBegin = Calendar.getInstance();
+                nightBegin.set(Calendar.HOUR_OF_DAY, 17);
+                nightBegin.set(Calendar.MINUTE, 30);
+                nightBegin.set(Calendar.SECOND, 0);
+                Calendar nightEnd = Calendar.getInstance();
+                nightEnd.set(Calendar.HOUR_OF_DAY, 7);
+                nightEnd.set(Calendar.MINUTE, 30);
+                nightEnd.set(Calendar.SECOND, 0);
+                if(receiveTime.getTime() >= nightBegin.getTimeInMillis() || receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
+					sample.setSectionId(Constants.DEPART_NIGHT);
+					segment = ylxh.getNightSegment();
+                } else {
+					segment = ylxh.getSegment();
+                }
+
 				if(segment.equals(sampleno.substring(8,11))) {
 					sample.setSampleNo(sampleno);
 				} else {
 					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);
 					if (receiveSampleNo == null) {
-						sampleno = Constants.DF3.format(receiveTime) + segment + "501";
+						sampleno = Constants.DF3.format(receiveTime) + segment + "001";
 					} else {
 						sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
 					}

@@ -296,7 +296,7 @@
                         }).trigger('reloadGrid');//重新载入
 
                         //全选
-                        $("#tableList").trigger("jqGridSelectAll", true);
+                        //$("#tableList").trigger("jqGridSelectAll", true);
                         //$("#tableList1").trigger("jqGridSelectAll",true);
 
                         //加载病人信息

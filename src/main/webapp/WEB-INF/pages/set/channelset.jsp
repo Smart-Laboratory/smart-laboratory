@@ -161,7 +161,7 @@
             },
             viewrecords: true,
             autowidth:true,
-            rowNum:100,
+            rowNum:200,
             altRows:true,
             //height: 300,
             height: height,

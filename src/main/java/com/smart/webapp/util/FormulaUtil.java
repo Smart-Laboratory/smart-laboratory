@@ -44,8 +44,14 @@ public class FormulaUtil {
 	
 	public void formula(Sample info, String operator, List<TestResult> list, double age, int sex) {
 		String lab = info.getSectionId();
-
-		List<CalculateFormula> items = formulaMap.get(lab);
+		List<CalculateFormula> items = new ArrayList<CalculateFormula>();
+		if(lab.equals(Constants.DEPART_NIGHT)) {
+			for(String s : formulaMap.keySet()) {
+				items.addAll(formulaMap.get(s));
+			}
+		} else {
+			items = formulaMap.get(lab);
+		}
 		List<TestResult> updatelist = new ArrayList<TestResult>();
 		if (items != null && items.size() != 0) {
 			Map<String, TestResult> testMap = new HashMap<String, TestResult>();
@@ -117,6 +123,7 @@ public class FormulaUtil {
 						t.setMeasureTime(new Date());
 						t.setOperator(operator);
 						t.setIsprint(isprint);
+						t.setTestName(index.getName());
 						t.setTestResult(testResultManager.getFormulaResult(fm));
 						fillUtil.fillResult(t, info.getCycle(), age, sex);
 						//testResultManager.save(t);
