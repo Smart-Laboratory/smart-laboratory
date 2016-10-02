@@ -244,6 +244,7 @@ public class InExecuteViewController {
         List<LabOrderVo> labOrderVoList = new ArrayList<LabOrderVo>();
         for (Object[] objects : labOrderList) {
             LabOrder labOrder = (LabOrder) objects[0];
+
             Sample sample = (Sample) objects[1];
             Process process  = (Process) objects[2];
 
@@ -254,7 +255,6 @@ public class InExecuteViewController {
             if (ylxh != null) {
                 labOrderVo.setSampleType(SampleUtil.getInstance(dictionaryManager).getValue(ylxh.getYblx()));
             }
-
             labOrderVo.setPatientCode(labOrder.getBlh());
             labOrderVo.setPatientName(labOrder.getPatientname());
             labOrderVo.setBarcode(labOrder.getBarcode());

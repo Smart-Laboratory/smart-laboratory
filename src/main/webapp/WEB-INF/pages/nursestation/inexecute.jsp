@@ -279,7 +279,6 @@
                     success: function (data) {
                         var beollected = data.beollected;
                         var spidered = data.spidered;
-
                         //加载未采集标本
                         $("#tableList").clearGridData();   //清空原grid数据
                         jQuery("#tableList").jqGrid('setGridParam', {
@@ -289,6 +288,7 @@
                         }).trigger('reloadGrid');//重新载入
 
                         //加载已采集标本
+                        $("#tableList1").clearGridData();   //清空原grid数据
                         jQuery("#tableList1").jqGrid('setGridParam', {
                             datatype: 'local',
                             rowNum: spidered.length,
