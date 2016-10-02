@@ -56,6 +56,12 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 	@Transactional
 	List<TestResult> getSampleByCode(String string);
 
+	/**
+	 * key:old value:new
+	 * @param text 日期：20161002
+	 * @param  code   检验段：CBC，CBA，CBD
+	 * @return
+	 */
 	@Transactional
-    List<TestResult> getNoInfoSampleNo(String text);
+    List<TestResult> getNoInfoSampleNo(String text,String code);
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.util.ConvertUtil;
+import com.smart.webapp.util.SectionUtil;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -57,7 +58,8 @@ public class AjaxController extends BaseAuditController {
 	@RequestMapping(method=RequestMethod.GET, value="/getNoSampleInfo")
 	@ResponseBody
 	public void getNoSampleInfoList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<TestResult> list = testResultManager.getNoInfoSampleNo(Constants.DF3.format(new Date()));
+		String lab = UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab();
+		List<TestResult> list = testResultManager.getNoInfoSampleNo(Constants.DF3.format(new Date()), SectionUtil.getInstance(sectionManager).getLabCode(lab));
 		Map<String, List<TestResult>> map = new LinkedHashMap<String, List<TestResult>>();
 		for(TestResult testResult : list) {
 			if(map.containsKey(testResult.getSampleNo())) {

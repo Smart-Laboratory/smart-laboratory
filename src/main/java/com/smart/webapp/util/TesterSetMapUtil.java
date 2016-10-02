@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class TesterSetMapUtil {
     private static Map<String, String> map = null;
-    private static TesterSetMapUtil instance = new TesterSetMapUtil();
+    private static TesterSetMapUtil instance = null;
 
     private static TesterSetManager testerSetManager = null;
 
@@ -21,10 +21,13 @@ public class TesterSetMapUtil {
     }
 
     public static TesterSetMapUtil getInstance() {
-        if(instance.map == null) {
+        if(instance == null) {
+            instance = new TesterSetMapUtil();
             instance.map = new HashMap<String, String>();
             for(TesterSet testerSet : testerSetManager.getAll()) {
-                instance.map.put(testerSet.getSegment(), testerSet.getTester());
+                if(testerSet.getTester() != null && !testerSet.getTester().isEmpty()) {
+                    instance.map.put(testerSet.getSegment(), testerSet.getTester());
+                }
             }
         }
         return instance;
@@ -38,7 +41,9 @@ public class TesterSetMapUtil {
         instance = new TesterSetMapUtil();
         instance.map = new HashMap<String, String>();
         for(TesterSet testerSet : testerSetManager.getAll()) {
-            instance.map.put(testerSet.getSegment(), testerSet.getTester());
+            if(testerSet.getTester() != null && !testerSet.getTester().isEmpty()) {
+                instance.map.put(testerSet.getSegment(), testerSet.getTester());
+            }
         }
     }
 

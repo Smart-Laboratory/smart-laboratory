@@ -81,7 +81,7 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		return testResultDao.getSampleByCode(code);
 	}
 
-	public List<TestResult> getNoInfoSampleNo(String text) {
-		return testResultDao.getNoInfoSampleNo(text);
+	public List<TestResult> getNoInfoSampleNo(String text, String code) {
+		return testResultDao.getNoInfoSampleNo(text, code);
 	}
 }

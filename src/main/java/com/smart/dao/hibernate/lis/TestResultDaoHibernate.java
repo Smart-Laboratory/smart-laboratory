@@ -187,8 +187,20 @@ public class TestResultDaoHibernate extends
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TestResult> getNoInfoSampleNo(String text) {
-		String sql = "select t from TestResult as t, Index as i where t.testId=i.indexId and t.sampleNo like '" + text + "%' and t.testStatus=-1 order by t.sampleNo, i.printord";
+	public List<TestResult> getNoInfoSampleNo(String text, String code) {
+		String sql = "select t from TestResult t, Index i where t.testId=i.indexId";
+		if(!code.isEmpty()) {
+			sql +=" and (";
+			for(int i = 0; i < code.split(",").length; i++) {
+				if(i == 0) {
+					sql += "t.sampleNo like '" + text + code.split(",")[0] + "%'";
+				} else {
+					sql += "or t.sampleNo like '" + text + code.split(",")[0] + "%'";
+				}
+			}
+			sql +=")";
+		}
+		sql += " and t.testStatus=-1 order by t.sampleNo, i.printord";
 		return getSession().createQuery(sql).list();
 	}
 

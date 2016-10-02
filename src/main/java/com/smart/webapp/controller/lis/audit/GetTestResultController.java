@@ -630,22 +630,12 @@ public class GetTestResultController extends BaseAuditController {
 		String sampleNo = request.getParameter("sampleNo");
 
 		if (!StringUtils.isEmpty(testId) && !StringUtils.isEmpty(sampleNo)) {
-			TestResult testResult = testResultManager.getSingleTestResult(sampleNo, testId);
-			testResult.setEditMark(Constants.DELETE_FLAG);
-			testResultManager.save(testResult);
-			// testResultManager.remove(new TestResultPK(sampleNo, testId));
-//			TestModify testModify = new TestModify();
-//			testModify.setModifyTime(new Date());
-//			testModify.setModifyUser(request.getRemoteUser());
-//			testModify.setSampleNo(sampleNo);
-//			testModify.setTestId(testId);
-//			testModify.setNewValue(testResult.getTestResult());
-//			testModify.setType(Constants.DELETE);
-//			testModifyManager.save(testModify);
-			Sample info = sampleManager.getBySampleNo(sampleNo);
-			info.setModifyFlag(1);
-			// info.setWriteBack(1);
-			sampleManager.save(info);
+			try {
+				TestResult testResult = testResultManager.getSingleTestResult(sampleNo, testId);
+				testResultManager.remove(testResult);
+			} catch (Exception e) {
+				return false;
+			}
 		} else {
 			return false;
 		}

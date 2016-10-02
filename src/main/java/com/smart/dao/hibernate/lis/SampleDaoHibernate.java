@@ -489,7 +489,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	public String getReceiveSampleno(String lab, String today) {
-		String sql = "select s.sampleno from l_sample s where s.section_id='" + lab + "' and s.sampleno like '" + today + "%' and rownum=1 order by s.sampleno desc";
+		String sql = "select * from (select s.sampleno from l_sample s where s.section_id='" + lab + "' and s.sampleno like '" + today + "%' order by s.sampleno desc) where rownum=1";
 		return (String)getSession().createSQLQuery(sql).uniqueResult();
 	}
 

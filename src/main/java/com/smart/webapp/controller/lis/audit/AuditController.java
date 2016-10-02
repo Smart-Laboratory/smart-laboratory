@@ -503,6 +503,8 @@ public class AuditController extends BaseAuditController {
 		
 		List<Sample> updateP = new ArrayList<Sample>();
 		List<AuditTrace> updateA = new ArrayList<AuditTrace>();
+		User user = userManager.getUserByUsername(request.getRemoteUser());
+		String userName=user.getName();
 
 		try {
 			for (Sample info : sample) {
@@ -510,10 +512,11 @@ public class AuditController extends BaseAuditController {
 				info.setPassReason(note);
 				if ("pass".equals(op)) {
 					//判断检验者与审核者是否一样
-					User user = userManager.getUserByUsername(request.getRemoteUser());
-					String userName=user.getName();
+					if(info.getChkoper2() == null || info.getChkoper2().isEmpty()) {
+						return "检验者为空，请先设置检验者！";
+					}
 					if(info.getChkoper2().equals(userName)){
-						return "检验者与审核者相同,不允许通过";
+						return "检验者与审核者相同,不允许通过！";
 					}
 					info.setAuditStatus(Constants.STATUS_PASSED);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
@@ -660,9 +663,9 @@ public class AuditController extends BaseAuditController {
 		return false;
 	}
     
-    @RequestMapping(value = "/batch*", method = RequestMethod.POST)
+    @RequestMapping(value = "/batch*", method = RequestMethod.POST,produces = "application/text; charset=utf-8")
 	@ResponseBody
-	public boolean batchManualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String batchManualAudit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		boolean result = true;
 
 		String ids = request.getParameter("ids");
@@ -707,8 +710,6 @@ public class AuditController extends BaseAuditController {
 		List<TestResult> updateT = new ArrayList<TestResult>();
 		Date checkTime = new Date();
 
-
-
 		for (Sample info : samples) {
 			if (info.getAuditStatus() != -1) {
 				info.setAuditStatus(status);
@@ -720,6 +721,12 @@ public class AuditController extends BaseAuditController {
 					updateT.add(testResult);
 				}
 				if (pass) {
+					if(info.getChkoper2() == null || info.getChkoper2().isEmpty()) {
+						return "检验者为空，请先设置检验者！";
+					}
+					if(info.getChkoper2().equals(UserUtil.getInstance().getValue(request.getRemoteUser()))){
+						return "检验者与审核者相同,不允许通过！";
+					}
 					info.setPassReason("批量通过");
 					AuditTrace a = new AuditTrace();
 					a.setSampleno(info.getSampleNo());
@@ -755,7 +762,7 @@ public class AuditController extends BaseAuditController {
 		sampleManager.saveAll(updateS);
 		processManager.saveAll(updateP);
 		testResultManager.saveAll(updateT);
-		return result;
+		return "";
 	}
     
     @RequestMapping(value = "/count*", method = RequestMethod.GET)

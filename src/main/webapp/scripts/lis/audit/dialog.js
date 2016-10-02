@@ -620,24 +620,22 @@ function openOpStatusDialog() {
                     ids: ids
                 }, function (data) {
                     console.log("data===>" + data);
-                    if (data != '') {
-                        alert(data);
+                    if (data == '') {
+                        jQuery("#list").trigger("reloadGrid");
+                        $("#passreason").html(text);
+                        var s = jQuery("#list").jqGrid('getGridParam', 'selrow');
+                        jQuery("#list").jqGrid('setRowData', s, {status: "已通过"});
+
+                        $("#needEdit").val(false);
+                        $("#testAdd").css('display', 'inline');
+                        $("#testDelete").css('display', 'inline');
+                        $("#auditUnpassBtn").css('display', 'inline');
+                        $("#auditPassBtn").css('display', 'none');
+                        $("#collectBtn").css('display', 'inline');
                         layer.close(index);
                     } else {
-                        if (data == '') {
-                            jQuery("#list").trigger("reloadGrid");
-                            $("#passreason").html(text);
-                            var s = jQuery("#list").jqGrid('getGridParam', 'selrow');
-                            jQuery("#list").jqGrid('setRowData', s, {status: "已通过"});
-
-                            $("#needEdit").val(false);
-                            $("#testAdd").css('display', 'inline');
-                            $("#testDelete").css('display', 'inline');
-                            $("#auditUnpassBtn").css('display', 'inline');
-                            $("#auditPassBtn").css('display', 'none');
-                            $("#collectBtn").css('display', 'inline');
-                            layer.close(index);
-                        }
+                        layer.alert(data, {icon: 2, title: "提示"});
+                        layer.close(index);
                     }
                 });
             } else {
@@ -660,6 +658,9 @@ function openOpStatusDialog() {
                         $("#auditUnpassBtn").css('display', 'none');
                         $("#auditPassBtn").css('display', 'inline');
                         $("#collectBtn").css('display', 'none');
+                        layer.close(index);
+                    } else {
+                        layer.alert(data, {icon: 2, title: "提示"});
                         layer.close(index);
                     }
                 });
@@ -958,7 +959,7 @@ $(function () {
     $("#testDelete").click(function () {
         var ii = jQuery("#rowed3").jqGrid('getGridParam', 'selrow');
         if (ii != null) {
-            $.post("../audit/delete", {sampleNo: $("#hiddenSampleNo").val(), id: ii}, function (data) {
+            $.post(baseUrl + "/audit/delete", {sampleNo: $("#hiddenSampleNo").val(), id: ii}, function (data) {
                 if (data == true) {
                     var s = jQuery("#rowed3").jqGrid('getGridParam', 'selrow');
                     var next = $("#" + s).next("tr").attr("id");

@@ -481,6 +481,7 @@ public class SampleInputAjaxController {
                 }
                 //ICU取白班
 				if(user.getLastLab().equals("210800")){
+					sample.setSectionId("210800");
 					segment = ylxh.getSegment();
 				}
 				if(segment != null && segment.equals(sampleno.substring(8,11))) {

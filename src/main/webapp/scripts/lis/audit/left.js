@@ -177,9 +177,11 @@ $(function () {
             ids += s[c];
         }
         if (s.length != 0 && confirm("确认通过这 " + s.length + " 个样本？")) {
-            $.post("../audit/batch", {ids: ids, op: "pass"}, function (data) {
-                if (data == true) {
-                   Query("#list").trigger("reloadGrid");
+            $.post(baseUrl + "/audit/batch", {ids: ids, op: "pass"}, function (data) {
+                if (data == '') {
+                   jQuery("#list").trigger("reloadGrid");
+                } else {
+                    layer.alert(data, {icon: 2, title: "提示"});
                 }
             });
         }
@@ -195,9 +197,8 @@ $(function () {
             ids += s[c];
         }
         if (s.length != 0 && confirm("确认不通过这 " + s.length + " 条样本？")) {
-            $.post("../audit/batch", {ids: ids, op: "unpass"}, function (data) {
-
-                if (data == true) {
+            $.post(baseUrl + "/audit/batch", {ids: ids, op: "unpass"}, function (data) {
+                if (data == '') {
                     for (var c in s) {
                         jQuery("#list").jqGrid('setRowData', s[c], {status: "<font color='red'><fmt:message key='audit.unpass'/></font>"});
                     }
