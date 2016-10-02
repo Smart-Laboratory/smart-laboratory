@@ -474,9 +474,9 @@ public class SampleInputAjaxController {
                 nightEnd.set(Calendar.MINUTE, 30);
                 nightEnd.set(Calendar.SECOND, 0);
                 if(receiveTime.getTime() >= nightBegin.getTimeInMillis() && receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
-					sample.setSectionId(Constants.DEPART_NIGHT);
 					segment = ylxh.getSegment();
                 } else {
+					sample.setSectionId(Constants.DEPART_NIGHT);
 					segment = ylxh.getNightSegment();
                 }
                 //ICU取白班
