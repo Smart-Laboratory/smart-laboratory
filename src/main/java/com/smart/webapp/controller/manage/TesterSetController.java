@@ -13,6 +13,7 @@ import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TesterSetManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.DataResponse;
+import com.smart.webapp.util.TesterSetMapUtil;
 import com.smart.webapp.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -130,6 +131,7 @@ public class TesterSetController {
             testerSet.setSetTime(date);
             testerSet.setTester(name);
             testerSetManager.save(testerSet);
+            TesterSetMapUtil.getInstance().updateMap(testerSet);
             sampleManager.updateChkoper2(Constants.DF3.format(date) + segment, name);
         } catch (Exception e) {
             e.printStackTrace();

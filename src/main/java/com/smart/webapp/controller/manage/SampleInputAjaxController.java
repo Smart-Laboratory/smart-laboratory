@@ -495,9 +495,10 @@ public class SampleInputAjaxController {
 
 					sample.setSampleNo(sampleno);
 				}
+				//设置检验者
+				sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
 				o.put("newSampleNo", sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1)));
 			}
-			//sample.setChkoper2(user.getName());
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(user.getName());
 			process.setReceivetime(receiveTime);

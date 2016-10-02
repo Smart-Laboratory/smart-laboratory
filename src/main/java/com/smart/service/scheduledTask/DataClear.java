@@ -1,7 +1,9 @@
 package com.smart.service.scheduledTask;
 
+import com.smart.model.lis.TesterSet;
 import com.smart.service.execute.SampleNoBuilderManager;
 import com.smart.service.lis.TesterSetManager;
+import com.smart.webapp.util.TesterSetMapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,6 @@ public class DataClear {
     public void run() {
         sampleNoBuilderManager.clearNo();
         testerSetManager.clearTester();
+        TesterSetMapUtil.getInstance().rebuildMap();
     }
 }
