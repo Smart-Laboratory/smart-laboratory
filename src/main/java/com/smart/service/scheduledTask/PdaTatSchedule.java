@@ -36,13 +36,19 @@ public class PdaTatSchedule {
         String sampleIds = "";
         String updateIds="";
         int i=0;
+
         for(Process process:processes){
             if(i>50) break;
             if(!sampleIds.isEmpty()){
                 sampleIds+=",";
                 updateIds+=",";
             }
-            updateIds+="'A1200"+String.format("%8d",ConvertUtil.null2String(process.getSampleid()))+"'";
+            try {
+                updateIds+="'A1200"+ConvertUtil.null2String(process.getSampleid())+"'";
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             sampleIds += ConvertUtil.null2String(process.getSampleid());
             processMap.put(process.getSampleid(),process);
             i++;

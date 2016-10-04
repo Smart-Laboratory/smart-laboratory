@@ -190,4 +190,26 @@ public final class ConvertUtil {
         }
         return  retFlag;
     }
+
+    public static String getResultFlag2(String flag){
+        String retFlag="";
+        try {
+            if(flag==null || flag.isEmpty())
+                return "";
+            if(flag.charAt(0)=='A'){
+                retFlag = "z         ";
+            }else if(flag.charAt(0)=='B'){
+                retFlag = "g         ";
+            }else if (flag.charAt(0)=='B'){
+                retFlag = "d         ";
+            }else {
+                retFlag = "z         ";
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            retFlag = "";
+        }
+        return  retFlag;
+    }
 }

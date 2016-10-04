@@ -562,7 +562,7 @@ public class WebService {
                 result.put("unit",testResult.getUnit());                    //单位
                 result.put("orderNum",testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
                 result.put("reference",testResult.getReference());         //参考范围
-                result.put("resultFlag",ConvertUtil.getResultFlag(testResult.getResultFlag()));        //结果标记
+                result.put("resultFlag",ConvertUtil.getResultFlag2(testResult.getResultFlag()));        //结果标记
                 result.put("barcode",sample.getBarcode());                              //条码号
                 result.put("testResult",testResult.getTestResult());                              //结果
                 jsonTestResult.put(result);
