@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
 	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
-    <script type="text/javascript" src="/scripts/manage/modify.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/manage/modify.js"/>"></script>
 
 </head>
 <style>

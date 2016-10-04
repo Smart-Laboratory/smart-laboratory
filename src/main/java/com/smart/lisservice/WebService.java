@@ -335,8 +335,9 @@ public class WebService {
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
                 retVal = obj.getString("Message");
+            }else {
+                retVal = "";
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             retVal = "计费异常";
@@ -475,14 +476,11 @@ public class WebService {
             RequestEntity requestEntity = new StringRequestEntity(params,"application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
-
             httpClient.executeMethod(method);
-
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
                 retVal = obj.getString("Message");
             }
-
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());

@@ -542,7 +542,7 @@ $(function() {
 		altRows:true,
 		width: $('#samplelist').width()-17,
 		height: height,
-		rowNum:30
+		rowNum:100
 	});
 
 	labChange=function(select) {

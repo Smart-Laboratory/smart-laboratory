@@ -251,7 +251,7 @@ public class SampleInputAjaxController {
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
-			if(!updateStatusSuccess.isEmpty()){
+			if(updateStatusSuccess.isEmpty()){
 				processLogManager.save(plog);
 				sampleManager.remove(sample.getId());
 				processManager.removeBySampleId(sample.getId());
@@ -429,16 +429,16 @@ public class SampleInputAjaxController {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
 			return o.toString();
-		} else if(!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
-			o.put("success", 1);
-			o.put("message", "医嘱号为"+ code + "的标本不属于当前专业组，不能接收！");
-			return o.toString();
 		} else if(sample.getSampleStatus() >= 3) {
 			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
 			return o.toString();
-		} else {
+		}else if(!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
+			o.put("success", 1);
+			o.put("message", "医嘱号为"+ code + "的标本不属于当前专业组，不能接收！");
+			return o.toString();
+		}  else {
 			Date receiveTime = new Date();
 			process = processManager.getBySampleId(sample.getId());
 			SampleLog slog = new SampleLog();
@@ -506,7 +506,7 @@ public class SampleInputAjaxController {
 
 			//计项目费
 			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
-			if(!updateStatusSuccess.isEmpty()){
+			if(updateStatusSuccess.isEmpty()){
 				sample.setFeestatus("1");
 				sampleManager.save(sample);
 				processManager.save(process);
