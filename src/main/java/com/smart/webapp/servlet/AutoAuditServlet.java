@@ -130,7 +130,7 @@ public class AutoAuditServlet extends HttpServlet {
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
 						//获取待审核样本的所有信息，包括基本信息，TAT信息和结果信息
-                    	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today));
+                    	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today) +"ICU"); //暂时只审核ICU血气
 						if (needAuditSamples != null && needAuditSamples.size() > 0) {
                 			String hisSampleNo = "";
 							String sampleIds = "";

@@ -101,16 +101,17 @@ public class ModifyController {
 		String text = request.getParameter("text");
 		String type = request.getParameter("type");
 		Sample sample = new Sample();
+		Process process = new Process();
 		Long sampleId = 0l;
 		if(Integer.parseInt(type) == 0) {
 			sampleId = Long.parseLong(text);
 			if(sampleManager.exists(sampleId)) {
 				sample = sampleManager.get(sampleId);
+				process = processManager.getBySampleId(sampleId);
 			}
 		} else {
 			sample = sampleManager.getBySampleNo(text);
 		}
-		Process process = processManager.getBySampleId(sampleId);
 		System.out.println(sampleId);
 		List<SampleLog> sampleLogList = sampleLogManager.getBySampleId(sampleId);
 		List<ProcessLog> processLogList = processLogManager.getBySampleId(sampleId);
@@ -129,13 +130,18 @@ public class ModifyController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			SampleLog sl = new SampleLog();
 			ProcessLog pl = new ProcessLog();
+			boolean hasData = true;
 			if(i == 0) {
-				sl.setSampleEntity(sample);
-				pl.setProcessEntity(process);
-				map.put("logtime", "当前记录");
-				map.put("logip", "");
-				map.put("logger", "");
-				map.put("logoperate", "");
+				if(sample != null) {
+					sl.setSampleEntity(sample);
+					pl.setProcessEntity(process);
+					map.put("logtime", "当前记录");
+					map.put("logip", "");
+					map.put("logger", "");
+					map.put("logoperate", "");
+				} else {
+					hasData = false;
+				}
 			} else {
 				sl = sampleLogList.get(i-1);
 				pl = processLogMap.get(sl.getId());
@@ -144,24 +150,26 @@ public class ModifyController {
 				map.put("logger", sl.getLogger());
 				map.put("logoperate", sl.getLogoperate());
 			}
-			map.put("id", sl.getId() == null ? "" : sl.getId());
-			map.put("sampleid", sl.getSampleId());
-			map.put("sampleno", sl.getSampleNo());
-			map.put("shm", sl.getStayHospitalModelValue());
-			map.put("pname", sl.getPatientname());
-			map.put("pid", sl.getPatientId());
-			map.put("sex", sl.getSexValue());
-			map.put("age", sl.getAge() + sl.getAgeunit());
-			map.put("bed", sl.getDepartBed());
-			map.put("exam", sl.getInspectionName());
-			map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sl.getSampleType()));
-			map.put("fee", sl.getFee());
-			map.put("diag", sl.getDiagnostic());
-			map.put("section", SectionUtil.getInstance(sectionManager).getValue(sl.getHosSection()));
-			map.put("lab", SectionUtil.getInstance(sectionManager).getLabValue(sl.getSectionId()));
-			map.put("requester", pl.getRequester());
-			map.put("receiver", pl.getReceiver());
-			map.put("receivetime", pl.getReceivetime());
+			if(hasData) {
+				map.put("id", sl.getId() == null ? "" : sl.getId());
+				map.put("sampleid", sl.getSampleId());
+				map.put("sampleno", sl.getSampleNo());
+				map.put("shm", sl.getStayHospitalModelValue());
+				map.put("pname", sl.getPatientname());
+				map.put("pid", sl.getPatientId());
+				map.put("sex", sl.getSexValue());
+				map.put("age", sl.getAge() + sl.getAgeunit());
+				map.put("bed", sl.getDepartBed());
+				map.put("exam", sl.getInspectionName());
+				map.put("sampletype", SampleUtil.getInstance(dictionaryManager).getValue(sl.getSampleType()));
+				map.put("fee", sl.getFee());
+				map.put("diag", sl.getDiagnostic());
+				map.put("section", SectionUtil.getInstance(sectionManager).getValue(sl.getHosSection()));
+				map.put("lab", SectionUtil.getInstance(sectionManager).getLabValue(sl.getSectionId()));
+				map.put("requester", pl.getRequester());
+				map.put("receiver", pl.getReceiver());
+				map.put("receivetime", pl.getReceivetime());
+			}
 			dataRows.add(map);
 		}
 		dataResponse.setRows(dataRows);
