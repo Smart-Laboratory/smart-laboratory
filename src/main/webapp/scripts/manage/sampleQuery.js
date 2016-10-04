@@ -98,16 +98,16 @@ $(function() {
 		elem: '#from',
 		event: 'focus',
 		festival: true,
-		format: 'YYYY-MM-DD'
+		format: 'YYYYMMDD'
 	});
 	laydate({
 		elem: '#to',
 		event: 'focus',
 		festival: true,
-		format: 'YYYY-MM-DD'
+		format: 'YYYYMMDD'
 	});
-	$( "#from" ).val(new Date().Format("yyyy-MM-dd"));
-	$( "#to" ).val(new Date().Format("yyyy-MM-dd"));
+	$( "#from" ).val(new Date().Format("yyyyMMdd"));
+	$( "#to" ).val(new Date().Format("yyyyMMdd"));
 
 	$("#sampleTypeSearch").autocomplete({
 		source: function( request, response ) {

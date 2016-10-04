@@ -183,12 +183,13 @@
                     regional : 'cn',
                     autoWidth:true,
                     /*width: $('.leftContent').width(),*/
-                    colNames: ['id', '试验编号',  '中文名称','样本类型'],
+                    colNames: ['id', '试验编号',  '中文名称','样本类型','SAMPLETYPEVALUE'],
                     colModel: [
                         {name: 'id', index: 'id', width: 100,  hidden: true},
                         {name: 'indexid', index: 'index_id', width: 80,sorttype:'text',sortable:true},
                         {name: 'name', index: 'name', width: 300},
-                        {name: 'sampletype', index: 'sampletype', width: 80}
+                        {name: 'sampletype', index: 'sampletype', width: 80},
+                        {name: 'sampletypeval', index: 'sampletypeval',  hidden: true}
                     ],
                     loadComplete: function () {
                         var table = this;
@@ -201,7 +202,7 @@
                     },
                     ondblClickRow: function (id) {
                         var rowData = public.indexGrid.jqGrid('getRowData',id);
-                        Calculate.typetoinput(rowData.indexid+"["+rowData.sampletype,'1',rowData.name);
+                        Calculate.typetoinput(rowData.indexid+"["+rowData.sampletypeval,'1',rowData.name);
                     },
                     //multiselect : true,
                     altRows:true,

@@ -121,22 +121,22 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' order by s.id desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId in (" + lab + ") order by s.id desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("from Sample s where s.patientblh ='" + blh + "' and s.sectionId=" + lab + " order by s.id desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}else if(patientId!=null && !patientId.isEmpty()){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' order by s.id desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' and s.sectionId in (" + lab + ") order by s.id desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId =" + patientId + "' and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("from Sample s where s.patientId ='" + patientId + "' and s.sectionId=" + lab + " order by s.id desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}

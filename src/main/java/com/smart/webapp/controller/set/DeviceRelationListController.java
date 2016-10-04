@@ -159,6 +159,7 @@ public class DeviceRelationListController {
             map.put("indexid", ConvertUtil.null2String(info.getIndexId()));
             map.put("name", ConvertUtil.null2String(info.getName()));
             map.put("english", ConvertUtil.null2String(info.getEnglish()));
+            map.put("sampletypeval", info.getSampleFrom());
             map.put("sampletype", ConvertUtil.null2String(SampleUtil.getInstance(dictionaryManager).getValue(info.getSampleFrom())));
             map.put("testclass", ConvertUtil.null2String(info.getTestClass()));
 
