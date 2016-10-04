@@ -44,6 +44,8 @@ public class Ylxh extends BaseObject {
 	private String wubi;
 	private String segment; //实验室检验段
 	private String nightSegment; //夜班实验室检验段
+
+	private String template;		//报告单模板名称
 	
 	/**
 	 * 医疗序号
@@ -274,4 +276,11 @@ public class Ylxh extends BaseObject {
 		return 0;
 	}
 
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
 }

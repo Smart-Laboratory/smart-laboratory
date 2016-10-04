@@ -1,9 +1,8 @@
 #*
 author:zhou
-description:乙肝三第定量模板
+description:乙肝三第定性模板
 date:2016-10-04
 *#
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -125,8 +124,6 @@ date:2016-10-04
             padding-bottom: 2px;
         }
     </style>
-
-
 </head>
 <body>
 <div class="content">
@@ -135,28 +132,25 @@ date:2016-10-04
     <div class="result">
         <table cellpadding="0" cellspacing="0">
             <colgroup>
-                <col width="35%"/>
+                <col width="50%"/>
                 <col width="15%"/>
                 <col width="35%"/>
-                <col width="10%"/>
             </colgroup>
             <tr>
                 <th>检验项目</th>
                 <th>结果</th>
-                <th>参考值</th>
-                <th>单位</th>
+                <th>注释</th>
             </tr>
             #foreach($item in $results)
                 <tr>
                     <td>
-                    #if($!item.resultFlag=='阳性')
-                        <span style="background: #eee">阳性$!item.testResult</span>
-                    #else
-                        阴性$!item.testResult
-                    #end
+                        #if($!item.testResult=='阳性')
+                            <span style="background: #eee">$!item.testResult</span>
+                        #else
+                            $!item.testResult
+                        #end
                     </td>
                     <td>$!item.reference</td>
-                    <td>$!item.unit</td>
                 </tr>
             #end
         </table>

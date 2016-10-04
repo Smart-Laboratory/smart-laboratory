@@ -211,13 +211,6 @@ public class ReportGenerate {
             TestResultVo testResultVo = new TestResultVo();
             testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             testResultVo.setTestResult(result.getTestResult());
-//            if (result.getResultFlag() != null && result.getResultFlag().charAt(1) == 'A') {
-//                if( result.getResultFlag().charAt(0) == 'C') {
-//                    testResultVo.setResultFlag("↓");
-//                } else if( result.getResultFlag().charAt(0) == 'B') {
-//                    testResultVo.setResultFlag("↑");
-//                }
-//            }
             testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
             //上次检验结果
 //            if(hasLast) {
@@ -245,9 +238,17 @@ public class ReportGenerate {
         engine.setProperty(Velocity.RESOURCE_LOADER, "class");
         engine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         engine.init();
+
+
+
         String tmplate="/template/testReport.vm";
         if(testResultVos.size()>20){
             tmplate ="/template/testReport32.vm";
+        }
+        //根据检验套餐获取报告单模板
+        Ylxh ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
+        if(ylxh.getTemplate()!=null && !ylxh.getTemplate().isEmpty()){
+            tmplate = ylxh.getTemplate();
         }
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
