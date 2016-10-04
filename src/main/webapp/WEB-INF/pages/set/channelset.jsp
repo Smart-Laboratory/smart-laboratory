@@ -76,7 +76,7 @@
                 url: "../audit/labChange?lab="+$(select).children().attr("title"),
                 success:function(){
                     $("#labText").html($(select).children().html());
-                    window.location.href="../set/channelset?department=" + $(select).children().attr("title");
+                    window.location.href= baseUrl + "/set/channelset?department=" + $(select).children().attr("title");
                 }
             });
 
@@ -102,7 +102,7 @@
                 onClick: function(event, treeId, treeNode, clickFlag){
                     var deviceid =treeNode.id||'';
                     jQuery("#tableList").jqGrid('setGridParam',{
-                        url: "../set/channelset/getData",
+                        url: baseUrl + "/set/channelset/getData",
                         datatype : 'json',
                         mtype: 'POST',
                         repeatitems : false,

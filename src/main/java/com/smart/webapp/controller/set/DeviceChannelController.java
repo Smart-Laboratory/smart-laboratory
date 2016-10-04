@@ -12,6 +12,7 @@ import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.ChannelUtil;
 import com.smart.webapp.util.DeviceUtil;
+import com.smart.webapp.util.SectionUtil;
 import com.smart.webapp.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -67,9 +68,9 @@ public class DeviceChannelController {
         if(departmentId==null)
             departmentId = operator.getLastLab();       //当前用户所选择科室
 
-        String departmentName = sectionManager.getByCode(departmentId).getName(); //科室名称
+        String departmentName = SectionUtil.getInstance(sectionManager).getLabValue(departmentId); //科室名称
         //获取仪器
-        List<Index> indexes = indexManager.getIndexs("","",false,0,0,"","");
+        List<Index> indexes = indexManager.getIndexs("",departmentId,false,0,0,"","");
         JSONArray jsonArray = new JSONArray();
         String instruments = "";
         for(Index index :indexes){
