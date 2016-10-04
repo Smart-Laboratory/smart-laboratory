@@ -35,7 +35,7 @@
 		<span class="input-group-addon">样本号</span>
 		<input type="text" class="form-control" value="${sampleno}" id="sampleno_text"/>
 		<span class="input-group-btn">
-			<button type="button" class="btn btn-info btn-sm">
+			<button type="button" class="btn btn-info btn-sm" title="查询样本" onclick="searchSample()">
 				<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 				查询
 			</button>
@@ -51,9 +51,9 @@
 				<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 				修改
 			</button>
-			<button type="button" class="btn btn-sm btn-danger" title="删除样本" onclick="deleteSample()">
+			<button type="button" class="btn btn-sm btn-warning" title="退回样本" onclick="deleteSample()">
 				<i class="ace-icon fa fa-times bigger-110"></i>
-				删除
+				退回
 			</button>
 			<button type="button" class="btn btn-sm btn-info" title="打印签收单" onclick="print()" disabled>
 				<i class="ace-icon fa fa-print bigger-110"></i>

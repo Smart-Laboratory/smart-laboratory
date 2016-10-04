@@ -3,6 +3,15 @@ function deleteYlxh(obj) {
 	$("#fee").val(parseInt(fee) - parseInt(obj.id));
 }
 
+function searchSample() {
+	$("#new").jqGrid('resetSelection');
+	if($("#" + $("#sampleno_text").val()).length > 0) {
+		$("#new").jqGrid('setSelection',$("#sampleno_text").val());
+	} else {
+		layer.alert("样本号" + $("#sampleno_text").val() + "的标本未接收，查询不到！", {icon: 2, title: "提示"});
+	}
+}
+
 function receive(obj,event) {
 	var e=e||event;
     var key = event.keyCode;
@@ -515,7 +524,7 @@ $(function() {
 		colModel: [
 			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 70},
 			{ name: 'sampleStatus', index: 'sampleStatus', hidden: true},
-			{ name: 'sampleno', index: 'sampleno', width: 120,cellattr: addCellAttr},
+			{ name: 'sampleno', index: 'sampleno', width: 120,cellattr: addCellAttr, key: true},
 			{ name: 'shm', index: 'shm', width: 70},
 			{ name: 'pname', index: 'pname', width: 80 },
 			{ name: 'section', index: 'section', width: 80 },
@@ -542,7 +551,7 @@ $(function() {
 		altRows:true,
 		width: $('#samplelist').width()-17,
 		height: height,
-		rowNum:100
+		rowNum:500
 	});
 
 	labChange=function(select) {

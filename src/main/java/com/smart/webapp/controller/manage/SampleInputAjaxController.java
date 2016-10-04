@@ -247,18 +247,21 @@ public class SampleInputAjaxController {
 			plog.setLogip(InetAddress.getLocalHost().getHostAddress());
 			plog.setLogoperate(Constants.LOG_OPERATE_DELETE);
 			plog.setLogtime(time);
+			processLogManager.save(plog);
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
 			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
 			if(updateStatusSuccess.isEmpty()){
-				processLogManager.save(plog);
-				sampleManager.remove(sample.getId());
-				processManager.removeBySampleId(sample.getId());
-				o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
+				sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
+				process.setReceiver("");
+				process.setReceivetime(null);
+				sampleManager.save(sample);
+				processManager.save(process);
+				o.put("message", "样本号为"+ sampleno + "的标本退回成功！");
 				o.put("success", true);
 			} else {
-				o.put("message", "样本号为"+ sampleno + "的标本退费失败，不能删除！" + updateStatusSuccess);
+				o.put("message", "样本号为"+ sampleno + "的标本退费失败，无法退回！" + updateStatusSuccess);
 				o.put("success", false);
 			}
 		} else {
