@@ -299,7 +299,7 @@ public class WebService {
      * @param expand
      * @return
      */
-    public boolean requestUpdate(int requestType,
+    public String requestUpdate(int requestType,
                                  String itemId,
                                  int exeType,
                                  String exeDeptCode,
@@ -308,7 +308,7 @@ public class WebService {
                                  String exeDoctorName,
                                  String exeDate,
                                  String expand) {
-        boolean success = true;
+        String retVal = "";
         try {
             //if(1==1)throw new Exception("错误");
             HttpClient httpClient = new HttpClient();
@@ -334,14 +334,14 @@ public class WebService {
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
-                success = false;
+                retVal = obj.getString("Message");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            success = false;
+            retVal = "计费异常";
         }
-        return success;
+        return retVal;
     }
 
 
@@ -480,8 +480,6 @@ public class WebService {
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
             if((Integer)obj.get("State")==0) {
-                retVal = "";
-            }else {
                 retVal = obj.getString("Message");
             }
 
@@ -706,9 +704,13 @@ public class WebService {
                 for(int i=0;i<arr.length();i++){
                     Process process = new Process();
                     process.setSampleid(ConvertUtil.getLongValue(arr.getJSONObject(i).getString("barcode").replace("A1200","")));
-                    process.setExecutetime(Constants.SDF.parse(arr.getJSONObject(i).getString("executeTime")));
+                    if(arr.getJSONObject(i).getString("executeTime")!=null &&  !arr.getJSONObject(i).getString("executeTime").isEmpty()){
+                        process.setExecutetime(Constants.SDF.parse(arr.getJSONObject(i).getString("executeTime")));
+                    }
                     process.setExecutor(ConvertUtil.null2String(arr.getJSONObject(i).getString("executeName")));
-                    process.setSendtime(Constants.SDF.parse(arr.getJSONObject(i).getString("sendTime")));
+                    if(arr.getJSONObject(i).getString("sendTime")!=null &&  !arr.getJSONObject(i).getString("sendTime").isEmpty()){
+                        process.setSendtime(Constants.SDF.parse(arr.getJSONObject(i).getString("sendTime")));
+                    }
                     process.setSender(ConvertUtil.null2String(arr.getJSONObject(i).getString("sendName")));
                     processList.add(process);
                 }

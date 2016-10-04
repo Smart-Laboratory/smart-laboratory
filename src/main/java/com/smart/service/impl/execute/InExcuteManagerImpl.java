@@ -59,11 +59,11 @@ public class InExcuteManagerImpl implements InExcuteManager {
             jsonObject.put("sample1Id",sample1Id);
             jsonObject.put("processId",processId);
             jsonObject.put("labOrderId",labOrderId);
-            jsonObject.put("state", 1);
+            jsonObject.put("state", true);
         }catch (Exception e){
             e.printStackTrace();
             try {
-                jsonObject.put("state", 0);
+                jsonObject.put("state", false);
             }catch (JSONException je){
                 je.printStackTrace();
             }

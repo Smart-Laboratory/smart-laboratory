@@ -250,15 +250,15 @@ public class SampleInputAjaxController {
 
 			//退费项目费
 			LabOrder labOrder = labOrderManager.get(sample.getId());
-			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
-			if(updateStatusSuccess){
+			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
+			if(!updateStatusSuccess.isEmpty()){
 				processLogManager.save(plog);
 				sampleManager.remove(sample.getId());
 				processManager.removeBySampleId(sample.getId());
 				o.put("message", "样本号为"+ sampleno + "的标本删除成功！");
 				o.put("success", true);
 			} else {
-				o.put("message", "样本号为"+ sampleno + "的标本退费失败，不能删除！");
+				o.put("message", "样本号为"+ sampleno + "的标本退费失败，不能删除！" + updateStatusSuccess);
 				o.put("success", false);
 			}
 		} else {
@@ -400,20 +400,15 @@ public class SampleInputAjaxController {
 	}
 
 
-	@RequestMapping(value = "/receive*", method = RequestMethod.GET)
-	public String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value = "/receive*", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public  String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		Sample sample = null;
 		Process process = null;
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
 
-
-//
-//		System.out.println("code.charAT=="+code.charAt(code.length()-1));
-//		if(code.charAt(code.length()-1)>57 || code.charAt(code.length()-1)<48) {
-//			code = code.substring(0,code.length()-1);
-//		}
 		JSONObject o = new JSONObject();
 		try {
 			sample = sampleManager.getSampleByBarcode(code);
@@ -433,14 +428,16 @@ public class SampleInputAjaxController {
 		if(sample == null) {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
+			return o.toString();
 		} else if(!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
-
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不属于当前专业组，不能接收！");
+			return o.toString();
 		} else if(sample.getSampleStatus() >= 3) {
 			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");
+			return o.toString();
 		} else {
 			Date receiveTime = new Date();
 			process = processManager.getBySampleId(sample.getId());
@@ -460,22 +457,13 @@ public class SampleInputAjaxController {
 			plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
 			plog.setLogtime(receiveTime);
 			processLogManager.save(plog);
-			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0")) {
+			if(sample.getSampleNo() == null || sample.getSampleNo().equals("0") || sample.getSampleNo().isEmpty()) {
 				String segment = "";
-
-
-                //白班判断，当天7:30之后，17:30之前
-                Calendar nightBegin = Calendar.getInstance();
-                nightBegin.set(Calendar.HOUR_OF_DAY, 7);
-                nightBegin.set(Calendar.MINUTE, 30);
-                nightBegin.set(Calendar.SECOND, 0);
-                Calendar nightEnd = Calendar.getInstance();
-                nightEnd.set(Calendar.HOUR_OF_DAY, 17);
-                nightEnd.set(Calendar.MINUTE, 30);
-                nightEnd.set(Calendar.SECOND, 0);
-                if(receiveTime.getTime() >= nightBegin.getTimeInMillis() && receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
+                if(!isNight()) {
+                	//白班
 					segment = ylxh.getSegment();
                 } else {
+                	//夜班
 					sample.setSectionId(Constants.DEPART_NIGHT);
 					segment = ylxh.getNightSegment();
                 }
@@ -483,6 +471,11 @@ public class SampleInputAjaxController {
 				if(user.getLastLab().equals("210800")){
 					sample.setSectionId("210800");
 					segment = ylxh.getSegment();
+				}
+				if(segment==null || segment.isEmpty()) {
+					o.put("success", 5);
+					o.put("message", "检验段没有设置，不允许接收，请检查！");
+					return o.toString();
 				}
 				if(segment != null && segment.equals(sampleno.substring(8,11))) {
 					sample.setSampleNo(sampleno);
@@ -493,7 +486,6 @@ public class SampleInputAjaxController {
 					} else {
 						sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
 					}
-
 					sample.setSampleNo(sampleno);
 				}
 				//设置检验者
@@ -513,8 +505,8 @@ public class SampleInputAjaxController {
 			new WebService().savePdaInfo(sample,process);
 
 			//计项目费
-			boolean updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
-			if(updateStatusSuccess){
+			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
+			if(!updateStatusSuccess.isEmpty()){
 				sample.setFeestatus("1");
 				sampleManager.save(sample);
 				processManager.save(process);
@@ -522,11 +514,8 @@ public class SampleInputAjaxController {
 				o.put("message", "医嘱号为"+ code + "的标本接收成功！");
 			}else {
 				o.put("success", 4);
-				o.put("message", "医嘱号为"+ code + "的计费失败,标本接收不成功！");
+				o.put("message", "医嘱号为"+ code + "的计费失败！" +updateStatusSuccess);
 			}
-
-
-
 		}
 		if(sample != null) {
 			o.put("barcode", sample.getBarcode());
@@ -552,8 +541,27 @@ public class SampleInputAjaxController {
 			o.put("sampleStatus", sample.getSampleStatus());
 			o.put("sampleStatusValue", sample.getSampleStatusValue());
 		}
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(o.toString());
-		return null;
+		return o.toString();
+	}
+
+	private boolean isNight(){
+		boolean flag = false;
+		//白班判断，当天7:30之后，17:30之前
+		Calendar nightBegin = Calendar.getInstance();
+		nightBegin.set(Calendar.HOUR_OF_DAY, 7);
+		nightBegin.set(Calendar.MINUTE, 30);
+		nightBegin.set(Calendar.SECOND, 0);
+		Calendar nightEnd = Calendar.getInstance();
+		nightEnd.set(Calendar.HOUR_OF_DAY, 17);
+		nightEnd.set(Calendar.MINUTE, 30);
+		nightEnd.set(Calendar.SECOND, 0);
+		Date receiveTime = new Date();
+		if(receiveTime.getTime() >= nightBegin.getTimeInMillis() && receiveTime.getTime() <= nightEnd.getTimeInMillis()) {
+			flag = false;	//白班
+		}else {
+			flag = true;	//晚班
+		}
+		return  flag;
+
 	}
 }

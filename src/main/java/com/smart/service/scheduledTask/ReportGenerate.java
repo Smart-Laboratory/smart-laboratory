@@ -1,5 +1,6 @@
 package com.smart.service.scheduledTask;
 
+import com.smart.Constants;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
@@ -108,7 +109,11 @@ public class ReportGenerate {
         velocityContext.put("checker",UserUtil.getInstance().getValue(userNo));
         velocityContext.put("receivetime",ConvertUtil.getFormatDate(process.getReceivetime()));
         velocityContext.put("checktime", ConvertUtil.getFormatDate(process.getChecktime()));
-        velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getExecutetime()));
+        if(process.getExecutetime()==null){
+            velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getPrinttime()));
+        }else {
+            velocityContext.put("executetime", ConvertUtil.getFormatDate(process.getExecutetime()));
+        }
         velocityContext.put("examinaim", sample.getInspectionName());
         velocityContext.put("date", sampleNo.substring(0, 4) + "年" + sampleNo.substring(4, 6) + "月" + sampleNo.substring(6, 8) + "日");
         Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
@@ -247,7 +252,7 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        System.out.println(writer.toString());
+        //System.out.println(writer.toString());
         return writer.toString();
     }
 

@@ -466,7 +466,8 @@ public class InExecuteViewController {
 
                 JSONObject retObj = JSON.parseObject(retval);
                 if (retObj.getBoolean("state")) {
-                    if (!webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, user.getLastLab(), "", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), sample.getBarcode())) {
+                    String val  =webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, user.getLastLab(), "", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), sample.getBarcode());
+                    if (!val.isEmpty()) {
                         Sample sample1 = sampleManager.get(retObj.getLong("sample1Id"));
                         Process process1 = processManager.get(retObj.getLong("processId"));
                         LabOrder labOrder1 = labOrderManager.get(retObj.getLong("labOrderId"));

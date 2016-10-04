@@ -35,7 +35,7 @@
     </task:scheduled-tasks>
     <!-- PDA采集信息(每两分钟执行一次) START -->
     <task:scheduled-tasks>
-        <task:scheduled ref="pdaTatSchedule" method="run" cron="0 0/2 * * * ?"/>
+        <task:scheduled ref="pdaTatSchedule" method="run" cron="0 0/5 * * * ?"/>
     </task:scheduled-tasks>
     <!-- PDA采集信息 END -->
     <!-- Activates scanning of @Autowired -->

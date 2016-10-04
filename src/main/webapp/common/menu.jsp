@@ -7,6 +7,7 @@ function labChange(select) {
 		success:function(data){
 			var section = $(select).children().attr("title");
 			$("#labText").html($(select).children().html());
+			window.location.reload();
 		}
 	});
 }

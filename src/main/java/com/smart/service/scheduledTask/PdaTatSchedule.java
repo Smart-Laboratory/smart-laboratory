@@ -35,7 +35,9 @@ public class PdaTatSchedule {
         Map<Long,Process> processMap = new HashMap<Long,Process>();
         String sampleIds = "";
         String updateIds="";
+        int i=0;
         for(Process process:processes){
+            if(i>50) break;
             if(!sampleIds.isEmpty()){
                 sampleIds+=",";
                 updateIds+=",";
@@ -43,15 +45,21 @@ public class PdaTatSchedule {
             updateIds+="'A1200"+String.format("%8d",ConvertUtil.null2String(process.getSampleid()))+"'";
             sampleIds += ConvertUtil.null2String(process.getSampleid());
             processMap.put(process.getSampleid(),process);
+            i++;
         }
         List<Process> processList = processManager.getHisProcess(sampleIds);
         for(Process process:processList){
             Process process_1 = processMap.get(process.getSampleid());
             if(process_1 != null){
-                process.setExecutor(process_1.getExecutor());
-                process.setExecutetime(process_1.getExecutetime());
-                process.setSender(process_1.getSender());
-                process.setSendtime(process_1.getSendtime());
+                if(process_1.getExecutetime()!=null){
+                    process.setExecutor(process_1.getExecutor());
+                    process.setExecutetime(process_1.getExecutetime());
+                }
+                if(process_1.getSendtime() !=null){
+                    process.setSender(process_1.getSender());
+                    process.setSendtime(process_1.getSendtime());
+                }
+
 
             }
         }

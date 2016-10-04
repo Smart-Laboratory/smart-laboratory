@@ -89,7 +89,7 @@ public class ChargeUtil {
                 LabOrder labOrder = labOrderMap.get(key).get(0);
 
                 //不计采血费、试管费
-                if (set.contains(labOrder.getLabdepartment())) continue;
+                if (set.contains(labOrder.getHossection())) continue;
 
                 param.put("patientCode", labOrder.getBlh());
                 param.put("patientId", labOrder.getPatientid());
@@ -152,7 +152,7 @@ public class ChargeUtil {
         //不计采血费科室
         String[] departs = Config.getString("sampling.fee", "").split(",");
         Set<String> set = new HashSet<String>(Arrays.asList(departs));
-        if (set.contains(labOrder.getLabdepartment())) return false;
+        if (set.contains(labOrder.getHossection())) return false;
         try {
             //采集部位
             Ylxh ylxh = ylxhMap.get(labOrder.getYlxh());
@@ -173,6 +173,8 @@ public class ChargeUtil {
             //param.put("price", "");
             param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
             //param.put("feeItemName", "");
+            param.put("feeItemCode","");
+            param.put("feeItemName","");
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
             param.put("testDoctorNo", user.getUsername());

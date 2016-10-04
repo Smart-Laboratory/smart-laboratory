@@ -248,9 +248,9 @@ public class ExecuteController {
             e.printStackTrace();
             saveSuccess = false;
         }
-        if(true) {
-        	boolean updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(executeTime,"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
-            if(!updateStatusSuccess){
+        if(saveSuccess) {
+        	String updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(executeTime,"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
+            if(!updateStatusSuccess.isEmpty()){
                 sampleManager.removeAll(needSaveSample);
                 processManager.removeAll(needSaveProcess);
                 labOrderManager.removeAll(needSaveLabOrder);
@@ -406,10 +406,7 @@ public class ExecuteController {
 		
 		return new ModelAndView().addObject("html", o);
 	}
-	
-	
-	
-	
+
 	
 	public void initSampleTypeMap(){
 		List<Dictionary> sampletypelist = dictionaryManager.getSampleType();

@@ -159,9 +159,18 @@ public class DeviceRelationListController {
             map.put("indexid", ConvertUtil.null2String(info.getIndexId()));
             map.put("name", ConvertUtil.null2String(info.getName()));
             map.put("english", ConvertUtil.null2String(info.getEnglish()));
-            map.put("sampletype", ConvertUtil.null2String(info.getSampleFrom()));
+            map.put("sampletype", ConvertUtil.null2String(SampleUtil.getInstance(dictionaryManager).getValue(info.getSampleFrom())));
             map.put("testclass", ConvertUtil.null2String(info.getTestClass()));
-            map.put("labdepartment", ConvertUtil.null2String(info.getLabdepartment()));
+
+            String departmentNames = "";
+            if(!ConvertUtil.null2String(info.getLabdepartment()).isEmpty()){
+                String[] arrayDepart = info.getLabdepartment().split(",");
+                for(String depart:arrayDepart){
+                    if(!departmentNames.isEmpty()) departmentNames+=",";
+                    departmentNames += ConvertUtil.null2String(SectionUtil.getInstance(sectionManager).getLabValue(depart));
+                }
+            }
+            map.put("labdepartment", departmentNames);
             map.put("unit", ConvertUtil.null2String(info.getUnit()));
             dataRows.add(map);
         }

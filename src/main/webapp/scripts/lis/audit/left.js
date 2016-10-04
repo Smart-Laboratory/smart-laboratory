@@ -24,7 +24,7 @@ function getList(text, lab) {
                 searchoptions: {value: "0:所有;1:自动;2:差值;3:比值;4:少做;5:复检;6:危急;7:警戒1;8:警戒2;9:极值;10:Bayes"}
             },
             {name: 'lisPass', index: 'lisPass', width: 20},
-            {name: 'patientName', index: 'patientName', width: 110},
+            {name: 'patientName', index: 'patientName', width: 100},
             {name: 'sample', index: 'sample', width: 140, align: "right"},
             {name: 'flag', index: 'flag', hidden: true},
             {name: 'size', index: 'size', hidden: true}],

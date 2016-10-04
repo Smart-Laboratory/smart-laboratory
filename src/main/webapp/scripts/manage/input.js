@@ -23,7 +23,7 @@ function receive(obj,event) {
 					$("#receive_id").val("").focus();
 				} else {
 					$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
-						var data = JSON.parse(data);
+						//var data = JSON.parse(data);
 						if(data.success == 1) {
 							layer.msg(data.message, {icon: 2, time: 1000});
 						} else if(data.success == 2) {
@@ -80,8 +80,10 @@ function receive(obj,event) {
 							$("#new").jqGrid('addRowData', newId, rowData, "first");
 							$("#sampleno_text").val(data.newSampleNo);
 							layer.msg(data.message, {icon: 1, time: 1000});
+						}else if(data.success == 4) {
+							layer.alert(data.message);
 						}else {
-							layer.msg(data.message, {icon: 2, time: 1000});
+							layer.msg(data.message, {icon: 2, time: 2000});
 						}
 					});
 					$("#receive_id").val("").focus();
@@ -504,7 +506,7 @@ $(function() {
 	var $tag_obj = $('#examinaim').data('tag');
 	//$tag_obj.add('Programmatically Added');
 	var clientHeight = $(window).innerHeight();
-	var height = clientHeight - $('#head').height()- $('.footer-content').height() - 200;
+	var height = clientHeight - $('#head').height()- $('.footer-content').height() - 170;
 	$("#new").jqGrid({
 		url: baseUrl + "/sample/ajax/getReceived",
 		mtype: "GET",
@@ -513,7 +515,7 @@ $(function() {
 		colModel: [
 			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 70},
 			{ name: 'sampleStatus', index: 'sampleStatus', hidden: true},
-			{ name: 'sampleno', index: 'sampleno', width: 120},
+			{ name: 'sampleno', index: 'sampleno', width: 120,cellattr: addCellAttr},
 			{ name: 'shm', index: 'shm', width: 70},
 			{ name: 'pname', index: 'pname', width: 80 },
 			{ name: 'section', index: 'section', width: 80 },
@@ -526,7 +528,7 @@ $(function() {
 			{ name: 'sampleTypeValue', index: 'sampleTypeValue', width: 70 },
 			{ name: 'sampleType', index: 'sampleType', hidden: true },
 			{ name: 'pid', index: 'pid', width: 100 },
-			{ name: 'feestatus', index: 'feestatus', width: 70 },
+			{ name: 'feestatus', index: 'feestatus', width: 70,formatter: 'select',editoptions: {value: "0:未收费;1:已收费"},cellattr: addCellAttr },
 			{ name: 'diag', index: 'diag', width: 100 },
 			{ name: 'cycle', index: 'cycle', width: 70 },
 			{ name: 'requester', index: 'requester', width: 70 },
@@ -535,8 +537,10 @@ $(function() {
 			{ name: 'fee', index: 'fee', width: 40 }
 		],
 		viewrecords: true,
-		shrinkToFit: true,
+		shrinkToFit: false,
+		repeatitems: false,
 		altRows:true,
+		width: $('#samplelist').width()-17,
 		height: height,
 		rowNum:30
 	});
@@ -554,4 +558,9 @@ $(function() {
 		});
 	}
 });
+function addCellAttr(rowId, val, rawObject, cm, rdata) {
+	if (rdata.feestatus == 0 || val==0) {
+		return"style='color:red'";
+	}
 
+}

@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -252,7 +253,7 @@ public class GetTestResultController extends BaseAuditController {
 				if (lo != null && hi != null) {
 					map.put("scope", lo + "-" + hi);
 				} else {
-					map.put("scope", "");
+					map.put("scope", ConvertUtil.null2String(lo));
 				}
 				map.put("unit", tr.getUnit());
 				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
