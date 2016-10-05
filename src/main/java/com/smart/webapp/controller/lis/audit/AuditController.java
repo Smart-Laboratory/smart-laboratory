@@ -357,7 +357,7 @@ public class AuditController extends BaseAuditController {
 						}
 						//bayesCheck.doCheck(info); // Bayes审核及学习
 
-						if (info.getAuditStatus() == Constants.STATUS_PASSED) {
+						if (info.getAuditStatus() == Constants.STATUS_PASSED && info.getSampleNo().indexOf("ICU") > 0) {
 							info.setWriteback(1);
 							if (info.getCheckerOpinion()!=null
 									&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)
@@ -379,6 +379,8 @@ public class AuditController extends BaseAuditController {
 							}
 							//生成PDF，写HIS、电子病历、PDA
 							new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
+						} else {
+							info.setAuditStatus(Constants.STATUS_UNPASS);
 						}
 						updateSample.add(info);
 						if (info.getAuditMark() == 6) {
