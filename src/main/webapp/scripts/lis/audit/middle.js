@@ -128,7 +128,7 @@
         	$("#audit_reason").html(data.reason);
         	$("#pName").html("<a href='../manage/patientList?patientId=" + data.patientId + "&blh=" + data.blh + "' target='_blank'>" + data.name + "</a>");
         	$("#pAge").html(data.age);
-        	$("#blh").html("<a href='http://10.31.96.34/zwemr2/SysLogin.aspx?lcation=inside&ly=D&edt=N&gs=krd&pid=" + data.blh + "&gh=" + data.requester + "' target='_blank'>" + data.blh + "</a>");
+        	$("#blh").html("<a href='http://10.31.96.34/zwemr2/SysLogin.aspx?lcation=inside&ly=D&edt=N&gs=krd&pid=" + data.blh + "&gh=1111' target='_blank'>" + data.blh + "</a>");
         	$("#doctadviseno").html(data.id);
         	$("#pSex").html(data.sex);
         	$("#pSection").html(data.section);
