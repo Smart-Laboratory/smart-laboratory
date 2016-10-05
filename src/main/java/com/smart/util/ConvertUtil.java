@@ -177,16 +177,20 @@ public final class ConvertUtil {
     public static String getResultFlag(String flag){
         String retFlag="";
         try {
-            if (flag != null && flag.charAt(1) == 'A') {
-                if( flag.charAt(0) == 'C') {
-                    retFlag="↓";
-                } else if(flag.charAt(0) == 'B') {
-                    retFlag="↑";
-                }
+            if(flag==null || flag.isEmpty())
+                return "";
+            if(flag.charAt(0)=='A'){
+                retFlag = "正常";
+            }else if(flag.charAt(0)=='B'){
+                retFlag = "↑";
+            }else if (flag.charAt(0)=='C'){
+                retFlag = "↓";
+            }else {
+                retFlag = "正常";
             }
         }catch (Exception e){
             e.printStackTrace();
-            retFlag = "";
+            retFlag = "正常";
         }
         return  retFlag;
     }
@@ -200,7 +204,7 @@ public final class ConvertUtil {
                 retFlag = "z         ";
             }else if(flag.charAt(0)=='B'){
                 retFlag = "g         ";
-            }else if (flag.charAt(0)=='B'){
+            }else if (flag.charAt(0)=='C'){
                 retFlag = "d         ";
             }else {
                 retFlag = "z         ";

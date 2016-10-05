@@ -53,6 +53,14 @@
             </c:if>
         </div>
 
+        <spring:bind path="user.password">
+            <div class="form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
+        </spring:bind>
+        <appfuse:label styleClass="control-label" key="user.password"/>
+        <form:input cssClass="form-control" path="password" id="password"/>
+        <form:errors path="password" cssClass="help-block"/>
+        </div>
+
         <spring:bind path="user.passwordHint">
         <div class="form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
         </spring:bind>
