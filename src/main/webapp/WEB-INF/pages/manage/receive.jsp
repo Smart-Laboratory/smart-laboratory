@@ -1,9 +1,11 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
     <title><fmt:message key="sample.manage.receive"/></title>
     <meta name="menu" content="SampleManage"/>
-    <script type="text/javascript" src="../scripts/manage/receive.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/layer/layer.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/manage/receive.js"/>"></script>
 </head>
 <body>
 <div class="col-sm-12">

@@ -1,8 +1,14 @@
 $(function() {
 	
 	$("#doctin").focus();
-	
-	
+
+	$("#refuse").click(function(){
+		if($("#doctadviseno").val()) {
+			window.open("../quality/invalidSampleForm?id="+$("#doctadviseno").val());
+		} else {
+			layer.msg("无标本信息，请先输入条码号！", {icon: 2, time: 1000});
+		}
+	});
 	
 });
 

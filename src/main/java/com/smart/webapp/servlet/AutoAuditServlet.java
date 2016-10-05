@@ -127,7 +127,7 @@ public class AutoAuditServlet extends HttpServlet {
         				System.out.println("第" + autocount + "次审核");
                     	Date today = new Date();
 						//获取待审核样本的所有信息，包括基本信息，TAT信息和结果信息
-                    	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today) +"ICU"); //暂时只审核ICU血气
+                    	final List<Sample> needAuditSamples = sampleManager.getNeedAudit(Constants.DF3.format(today)); //暂时只审核ICU血气
 						if (needAuditSamples != null && needAuditSamples.size() > 0) {
                 			String hisSampleNo = "";
 							String sampleIds = "";
@@ -286,8 +286,8 @@ public class AutoAuditServlet extends HttpServlet {
                 	    							//bayesCheck.doCheck(info); // Bayes审核及学习
 
 													//自动审核通过后，各标本的相关信息修改，设置，完成各个系统的接口数据回写
-                	    							if (info.getAuditStatus() == Constants.STATUS_PASSED) {
-                	    								info.setWriteback(1);
+                	    							if (info.getAuditStatus() == Constants.STATUS_PASSED && info.getSampleNo().indexOf("ICU") > 0) {
+                	    								//info.setWriteback(1);
                 	    								if (info.getCheckerOpinion()!=null 
                 	    										&& !info.getCheckerOpinion().contains(Check.AUTO_AUDIT)
                 	    											&& !info.getCheckerOpinion().contains(Check.MANUAL_AUDIT)) {
@@ -308,7 +308,9 @@ public class AutoAuditServlet extends HttpServlet {
 														}
 														//生成PDF，写HIS、电子病历、PDA
 														new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
-                	    							}
+                	    							} else {
+														info.setAuditStatus(Constants.STATUS_UNPASS);
+													}
                 	    							updateSample.add(info);
                 	    							if (info.getAuditMark() == 6) {
                 	    								cr.setSampleid(info.getId());
