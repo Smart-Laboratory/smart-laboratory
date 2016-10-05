@@ -1437,6 +1437,22 @@ function CalculateRbc(id) {
 
 }
 
+function implementTest() {
+	var id = jQuery("#list").jqGrid('getGridParam','selrow');
+	if(id == null) {
+		layer.msg("请选择需要录入项目的标本", {icon: 2, time: 1000});
+	} else {
+		var ret = jQuery("#list").jqGrid('getRowData',id);
+		if(ret.lisPass == "√") {
+			layer.msg("标本" + ret.sample + "已审核通过，无法添加。如果必要，请先撤回该标本！", {icon: 0, time: 1000});
+		} else {
+			$.post(baseUrl + "/audit/implementTest",{id:id},function(data) {
+				$("#list").jqGrid('setSelection',id);
+			});
+		}
+	}
+}
+
 $(function() {
 	
 	

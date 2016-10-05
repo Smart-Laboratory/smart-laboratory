@@ -204,4 +204,8 @@ public class TestResultDaoHibernate extends
 		return getSession().createQuery(sql).list();
 	}
 
+	public void updateSampleNo(String oldSampleNo, String samplenNo) {
+		getSession().createSQLQuery("update l_testresult set sampleno='"+ samplenNo + "' where sampleno='" + oldSampleNo + "'").executeUpdate();
+	}
+
 }

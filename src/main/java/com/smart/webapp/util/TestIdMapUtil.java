@@ -34,6 +34,14 @@ public class TestIdMapUtil {
 		return idMap;
 	}
 
+	public Index getIndex(String testId) {
+		if(idMap.containsKey(testId)) {
+			return idMap.get(testId);
+		} else {
+			return new Index();
+		}
+	}
+
 	public Map<String, String> getNameMap() {
 		return nameMap;
 	}

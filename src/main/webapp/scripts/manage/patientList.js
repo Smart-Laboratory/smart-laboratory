@@ -107,7 +107,7 @@
         		{name:'sample',index:'sample',width:120, sortable:false},
         		{name:'examinaim',index:'examinaim',width:80, sortable:false}, 
         		{name:'type',index:'type',width:40, sortable:false}], 
-        	rowNum:20,
+        	rowNum:16,
         	height: '100%',
         	jsonReader : {repeatitems : false},
         	mtype: "GET", 

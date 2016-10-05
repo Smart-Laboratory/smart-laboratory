@@ -64,4 +64,7 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 	 */
 	@Transactional
     List<TestResult> getNoInfoSampleNo(String text,String code);
+
+	@Transactional
+    void updateSampleNo(String oldSampleNo, String sampleno);
 }

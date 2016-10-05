@@ -24,8 +24,8 @@ function getList(text, lab) {
                 searchoptions: {value: "0:所有;1:自动;2:差值;3:比值;4:少做;5:复检;6:危急;7:警戒1;8:警戒2;9:极值;10:Bayes"}
             },
             {name: 'lisPass', index: 'lisPass', width: 20},
-            {name: 'patientName', index: 'patientName', width: 100},
-            {name: 'sample', index: 'sample', width: 140, align: "right"},
+            {name: 'patientName', index: 'patientName', width: 90},
+            {name: 'sample', index: 'sample', width: 150, align: "right"},
             {name: 'flag', index: 'flag', hidden: true},
             {name: 'size', index: 'size', hidden: true}],
         rowNum: 100,
@@ -57,20 +57,23 @@ function getList(text, lab) {
             $("#testDelete").css('display', 'inline');
             $("#auditUnpassBtn").css('display', 'inline');
             $("#auditPassBtn").css('display', 'inline');
+            $("#testImplement").css('display', 'inline');
 
             $("#needEdit").val(true);
             if (ret.status == "未审核") {
                 $("#unaudit_reason_btn").hide();
             } else if (ret.status == "已通过") {
                 $("#unaudit_reason_btn").hide();
-                $("#testAdd").css('display', 'inline');
-                $("#testDelete").css('display', 'inline');
+                $("#testImplement").css('display', 'none');
+                $("#testAdd").css('display', 'none');
+                $("#testDelete").css('display', 'none');
                 $("#auditPassBtn").css('display', 'none');
                 $("#needEdit").val(false);
             } else if (ret.status == "无结果") {
                 $("#unaudit_reason_btn").hide();
                 $("#testAdd").css('display', 'inline');
                 $("#testDelete").css('display', 'inline');
+                $("#testImplement").css('display', 'inline');
                 $("#auditUnpassBtn").css('display', 'none');
                 $("#auditPassBtn").css('display', 'none');
                 $("#collectBtn").css('display', 'none');

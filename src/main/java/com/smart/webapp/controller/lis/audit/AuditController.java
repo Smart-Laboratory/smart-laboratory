@@ -327,6 +327,9 @@ public class AuditController extends BaseAuditController {
     			int index = 0;
         		for (Sample info : samples) {
         			try {
+        				if(info.getSampleStatus() >= Constants.SAMPLE_STATUS_CHECKED) {
+        					continue;
+						}
 	                	List<TestResult> now = hisTestMap.get(info.getSampleNo());
 	                	CriticalRecord cr = new CriticalRecord();
 	        			info.setMarkTests("");

@@ -56,6 +56,8 @@ public class SampleInputAjaxController {
 	private SectionManager sectionManager = null;
 	@Autowired
 	private HospitalManager hospitalManager = null;
+	@Autowired
+	private TestResultManager testResultManager = null;
 	
 	@RequestMapping(value = "/get*", method = RequestMethod.GET)
 	public String getsp(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -110,25 +112,6 @@ public class SampleInputAjaxController {
 		}
 		o.put("ylxhMap", ylxhMap);
 		o.put("feeMap", feeMap);
-		/*SyncPatient sp = rmiService.getSampleByDoct(Long.parseLong(code));
-		o.put("doctadviseno", sp.getDOCTADVISENO());
-		o.put("sampleno", sp.getSAMPLENO());
-		o.put("stayhospitalmode", sp.getSTAYHOSPITALMODE());
-		o.put("patientid", sp.getPATIENTID());
-		o.put("section", sectionutil.getValue(sp.getSECTION()));
-		o.put("sectionCode", sp.getSECTION());
-		o.put("patientname", sp.getPATIENTNAME());
-		o.put("sex", sp.getSEX());
-		o.put("age", sp.getAge());
-		o.put("diagnostic", sp.getDIAGNOSTIC());
-		o.put("examinaim", sp.getEXAMINAIM());
-		o.put("requester", sp.getREQUESTER());
-		o.put("fee", sp.getFEE());
-		o.put("feestatus", sp.getFEESTATUS());
-		o.put("sampletype", "" + sp.getSAMPLETYPE());
-		o.put("executetime", sp.getEXECUTETIME() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(sp.getEXECUTETIME()));
-		o.put("receivetime", Constants.SDF.format(new Date()));
-		o.put("ylxh", sp.getYLXH());*/
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(o.toString());
 		return null;
@@ -337,6 +320,7 @@ public class SampleInputAjaxController {
 				plog.setLogtime(new Date());
 				processLogManager.save(plog);
 
+				String oldSampleNo = sample.getSampleNo();
 				sample.setSampleNo(sampleno);
 				sample.setInspectionName(examinaim);
 				sample.setYlxh(ylxh);
@@ -354,6 +338,7 @@ public class SampleInputAjaxController {
 					
 				sampleManager.save(sample);
 				processManager.save(process);
+				testResultManager.updateSampleNo(oldSampleNo, sampleno);
 				o.put("message", "样本号为"+ sampleno + "的标本编辑成功！");
 				o.put("success", true);
 			}

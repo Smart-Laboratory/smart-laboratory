@@ -627,8 +627,9 @@ function openOpStatusDialog() {
                         jQuery("#list").jqGrid('setRowData', s, {status: "已通过"});
 
                         $("#needEdit").val(false);
-                        $("#testAdd").css('display', 'inline');
-                        $("#testDelete").css('display', 'inline');
+                        $("#testImplement").css('display', 'none');
+                        $("#testAdd").css('display', 'none');
+                        $("#testDelete").css('display', 'none');
                         $("#auditUnpassBtn").css('display', 'inline');
                         $("#auditPassBtn").css('display', 'none');
                         $("#collectBtn").css('display', 'inline');
@@ -653,6 +654,7 @@ function openOpStatusDialog() {
                         $("#passreason").html(text);
                         var s = jQuery("#list").jqGrid('getGridParam', 'selrow');
                         jQuery("#list").jqGrid('setRowData', s, {status: "<font color='red'>未通过</font>"});
+                        $("#testImplement").css('display', 'inline');
                         $("#testAdd").css('display', 'inline');
                         $("#testDelete").css('display', 'inline');
                         $("#auditUnpassBtn").css('display', 'none');

@@ -223,8 +223,10 @@ public class DroolsRunner {
 				p.setS(sex);
 				ksession.insert(p);
 				for (TestResult t : test.values()) {
-					I i = new I(t.getTestId(), t.getSampleType(), t.getUnit(), t.getTestResult());
-					ksession.insert(i);
+					if(t.getTestResult() != null && !t.getTestResult().isEmpty()) {
+						I i = new I(t.getTestId(), t.getSampleType(), t.getUnit(), t.getTestResult());
+						ksession.insert(i);
+					}
 				}
 				ksession.fireAllRules();
 				result = (R) ksession.getGlobal("r");

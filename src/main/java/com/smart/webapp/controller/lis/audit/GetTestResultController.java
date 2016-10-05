@@ -12,8 +12,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.rule.Index;
 import com.smart.util.ConvertUtil;
+import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +29,6 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestModify;
 import com.smart.model.lis.TestResult;
 import com.smart.service.lis.TestModifyManager;
-import com.smart.webapp.util.DataResponse;
 import com.zju.api.model.SyncResult;
 
 
@@ -85,111 +87,111 @@ public class GetTestResultController extends BaseAuditController {
 				lab = likeLabMap.get(lab);
 			}
 			List<Sample> list = sampleManager.getHistorySample(info.getPatientId(), info.getPatientblh(), lab);
-			String hisSampleId = "";
-			String hisSampleNo = "";
-			for(Sample sample : list) {
-				hisSampleId += sample.getId() + ",";
-				hisSampleNo += "'" + sample.getSampleNo() + "',";
-			}
-			List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
-			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-			Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
-			Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
-			for(Process p : processList) {
-				hisProcessMap.put(p.getSampleid(), p);
-			}
-			for(TestResult tr : testList) {
-				if(hisTestMap.containsKey(tr.getSampleNo())) {
-					hisTestMap.get(tr.getSampleNo()).add(tr);
-				} else {
-					List<TestResult> tlist = new ArrayList<TestResult>();
-					tlist.add(tr);
-					hisTestMap.put(tr.getSampleNo(), tlist);
-				}
-			}
-			
-			Date receivetime = null;
-			receivetime = process.getReceivetime();
-			long curInfoReceiveTime = receivetime.getTime();
-			int index = 0;
-			Map<String, String> rmap = null;
-			Set<String> testIdSet = new HashSet<String>();
-			for (TestResult t : testResults) {
-				testIdSet.add(t.getTestId());
-			}
-			String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
-			
-			int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
 			if(list!=null && list.size()>0){
-			for (Sample pinfo : list) {
-				boolean isHis = false;
-				List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
-				if(his != null) {
-					for (TestResult test: his) {
-						String testid = test.getTestId();
-						Set<String> sameTests = util.getKeySet(testid);
-						sameTests.add(testid);
-						for (String id : sameTests) {
-							if (testIdSet.contains(id)) {
-								isHis = true;
+				String hisSampleId = "";
+				String hisSampleNo = "";
+				for(Sample sample : list) {
+					hisSampleId += sample.getId() + ",";
+					hisSampleNo += "'" + sample.getSampleNo() + "',";
+				}
+				List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
+				List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
+				Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
+				Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
+				for(Process p : processList) {
+					hisProcessMap.put(p.getSampleid(), p);
+				}
+				for(TestResult tr : testList) {
+					if(hisTestMap.containsKey(tr.getSampleNo())) {
+						hisTestMap.get(tr.getSampleNo()).add(tr);
+					} else {
+						List<TestResult> tlist = new ArrayList<TestResult>();
+						tlist.add(tr);
+						hisTestMap.put(tr.getSampleNo(), tlist);
+					}
+				}
+
+				Date receivetime = null;
+				receivetime = process.getReceivetime();
+				long curInfoReceiveTime = receivetime.getTime();
+				int index = 0;
+				Map<String, String> rmap = null;
+				Set<String> testIdSet = new HashSet<String>();
+				for (TestResult t : testResults) {
+					testIdSet.add(t.getTestId());
+				}
+				String day = info.getSampleNo().substring(4, 6) + "/" + info.getSampleNo().substring(6, 8);
+
+				int year = Integer.parseInt(info.getSampleNo().substring(0, 4));
+				for (Sample pinfo : list) {
+					boolean isHis = false;
+					List<TestResult> his = hisTestMap.get(pinfo.getSampleNo());
+					if(his != null) {
+						for (TestResult test: his) {
+							String testid = test.getTestId();
+							Set<String> sameTests = util.getKeySet(testid);
+							sameTests.add(testid);
+							for (String id : sameTests) {
+								if (testIdSet.contains(id)) {
+									isHis = true;
+									break;
+								}
+							}
+							if (isHis) {
 								break;
 							}
 						}
-						if (isHis) {
+					}
+					Date preceivetime = null;
+					Process hisProcess = hisProcessMap.get(pinfo.getId());
+					if (hisProcess == null || pinfo.getSampleNo() == null || hisProcess.getReceivetime() == null) {
+						continue;
+					}
+					preceivetime = hisProcess.getReceivetime();
+					String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
+					int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
+					if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
+						if (index > 4)
+							break;
+						switch (index) {
+						case 0:
+							rmap = resultMap1;
+							break;
+						case 1:
+							rmap = resultMap2;
+							break;
+						case 2:
+							rmap = resultMap3;
+							break;
+						case 3:
+							rmap = resultMap4;
+							break;
+						case 4:
+							rmap = resultMap5;
 							break;
 						}
+						for (TestResult result : his) {
+							rmap.put(result.getTestId(), result.getTestResult());
+						}
+						if (!"".equals(hisDate)) {
+							hisDate += ",";
+						}
+						if(pyear == year) {
+							isLastYear--;
+						}
+						if(pyear >= year-1) {
+							isLastTwoYear--;
+						}
+						hisDate += pDay + ":" + pinfo.getSampleNo();
+						index++;
+					}
+					if (day.equals(pDay) && sameSample(info, pinfo) && pyear == year) {
+						if (!"".equals(sameSample)) {
+							sameSample += ",";
+						}
+						sameSample += pinfo.getSampleNo();
 					}
 				}
-				Date preceivetime = null;
-				Process hisProcess = hisProcessMap.get(pinfo.getId());
-				if (hisProcess == null || pinfo.getSampleNo() == null || hisProcess.getReceivetime() == null) {
-					continue;
-				}
-				preceivetime = hisProcess.getReceivetime();
-				String pDay = pinfo.getSampleNo().substring(4, 6) + "/" + pinfo.getSampleNo().substring(6, 8);
-				int pyear = Integer.parseInt(pinfo.getSampleNo().substring(0, 4));
-				if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
-					if (index > 4)
-						break;
-					switch (index) {
-					case 0:
-						rmap = resultMap1;
-						break;
-					case 1:
-						rmap = resultMap2;
-						break;
-					case 2:
-						rmap = resultMap3;
-						break;
-					case 3:
-						rmap = resultMap4;
-						break;
-					case 4:
-						rmap = resultMap5;
-						break;
-					}
-					for (TestResult result : his) {
-						rmap.put(result.getTestId(), result.getTestResult());
-					}
-					if (!"".equals(hisDate)) {
-						hisDate += ",";
-					}
-					if(pyear == year) {
-						isLastYear--;
-					}
-					if(pyear >= year-1) {
-						isLastTwoYear--;
-					}
-					hisDate += pDay + ":" + pinfo.getSampleNo();
-					index++;
-				}
-				if (day.equals(pDay) && sameSample(info, pinfo) && pyear == year) {
-					if (!"".equals(sameSample)) {
-						sameSample += ",";
-					}
-					sameSample += pinfo.getSampleNo();
-				}
-			}
 			}
 		}
 		int color = 0;
@@ -507,6 +509,8 @@ public class GetTestResultController extends BaseAuditController {
 		String result = request.getParameter("result");
 		String testId = request.getParameter("id");
 		String sampleNo = request.getParameter("sampleNo");
+
+		FillFieldUtil fillFieldUtil = FillFieldUtil.getInstance(indexManager, testReferenceManager);
 		
 //		if (fillUtil == null) {
 //			List<Describe> desList = syncManager.getAllDescribe();
@@ -580,7 +584,7 @@ public class GetTestResultController extends BaseAuditController {
 			testResult.setMeasureTime(new Date()); 
 			
 			testResult.setResultFlag("AAAAAA");
-//			fillUtil.fillResult(testResult, info);
+			fillFieldUtil.fillResult(testResult, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 			if (testResult.getEditMark() == 0) {
 				testResult.setEditMark(Constants.MANUAL_EDIT_FLAG);
 			} else if (testResult.getEditMark() % Constants.MANUAL_EDIT_FLAG != 0) {
@@ -690,6 +694,60 @@ public class GetTestResultController extends BaseAuditController {
 
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
+	}
+
+	/**
+	 * 补全一个标本的所有缺少的项目
+	 *
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/implementTest*", method = RequestMethod.POST)
+	@ResponseBody
+	public void implementTest(HttpServletRequest request) throws Exception {
+
+		Long id = Long.parseLong(request.getParameter("id"));
+		Sample sample = sampleManager.get(id);
+		Set<String> testSet = new HashSet<String>();
+		//获取该标本所有项目id集合
+		if(sample.getYlxh().indexOf("+") > 0) {
+			for(String ylxh : sample.getYlxh().split("[+]")) {
+				for(String test : YlxhUtil.getInstance().getYlxh(ylxh).getProfiletest().split(",")) {
+					testSet.add(test);
+				}
+			}
+		} else {
+			for(String test : YlxhUtil.getInstance().getYlxh(sample.getYlxh()).getProfiletest().split(",")) {
+				testSet.add(test);
+			}
+		}
+
+		List<TestResult> list = testResultManager.getTestBySampleNo(sample.getSampleNo());
+		Set<String> haveTestSet = new HashSet<String>(); //已有检验项目id集合；
+		for(TestResult testResult : list) {
+			haveTestSet.add(testResult.getTestId());
+		}
+		List<TestResult> needSaveTests = new ArrayList<TestResult>();
+		Date now = new Date();
+		for(String testId : testSet) {
+			if(!haveTestSet.contains(testId)) {
+				Index index = TestIdMapUtil.getInstance(indexManager).getIndex(testId);
+				TestResult testResult = new TestResult();
+				testResult.setSampleNo(sample.getSampleNo());
+				testResult.setTestId(testId);
+				testResult.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
+				testResult.setMeasureTime(now);
+				testResult.setOperator(request.getRemoteUser());
+				testResult.setTestName(index.getName());
+				testResult.setMethod(index.getMethod());
+				testResult.setUnit(index.getUnit());
+				testResult.setIsprint(index.getIsprint());
+				testResult.setSampleType(index.getSampleFrom());
+				needSaveTests.add(testResult);
+			}
+		}
+		testResultManager.saveAll(needSaveTests);
 	}
 	
 }

@@ -38,4 +38,6 @@ public interface TestResultDao extends GenericDao<TestResult, TestResultPK> {
 	List<TestResult> getSampleByCode(String code);
 
     List<TestResult> getNoInfoSampleNo(String text, String code);
+
+    void updateSampleNo(String oldSampleNo, String samplenNo);
 }
