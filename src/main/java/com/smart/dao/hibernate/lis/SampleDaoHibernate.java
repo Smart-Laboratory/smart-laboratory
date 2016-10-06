@@ -57,7 +57,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			builder.append("modifyFlag=1");
 		} else if(status == 4){
 			builder.append(" and ");
-			builder.append("sampleStatus<5");
+			builder.append("sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED);
 		} else if(status == 5){
 			builder = new StringBuilder();
 			builder.append("from Sample where hasimages=1 order by sampleNo");
@@ -98,7 +98,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getNeedAudit(String day) {
 		Session session = getSession();
-		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) and sampleStatus<5 order by auditMark");
+		Query q =  session.createQuery("from Sample where sampleNo like '" + day + "%' and (auditStatus=0 or auditMark=4) and sampleStatus=" + Constants.SAMPLE_STATUS_TESTED + " order by auditMark");
 		q.setFirstResult(0);
 		q.setMaxResults(500);
 		List<Sample> list = q.list();
@@ -121,22 +121,22 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=5 order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=5 and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=5 and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}else if(patientId!=null && !patientId.isEmpty()){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=5 order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId =" + patientId + "' and s.sampleStatus>=5 and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId =" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=5 and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}
@@ -253,9 +253,9 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end) {
-		String sql = "from Sample s where s.sectionId in (" + lab + ") ";
+		String sql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED + " and s.sectionId in (" + lab + ") ";
 		if(lab.equals(Constants.LaboratoryAll)) {
-			sql = "from Sample s where 1=1 ";
+			sql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
 			code = "";
 		}
 		if(code == null) {
@@ -320,7 +320,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				sql += " and s.modifyFlag=1";
 				break;
 			case 4:
-				sql += " and s.sampleStatus<5";
+				sql += " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED;
 				break;
 			case 5:
 				sql += " and s.hasimages=1";
@@ -345,10 +345,14 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	public int getSampleCount(String text, String lab, int mark, int status, String code) {
 		String sql = "select count(s.id) from Sample s where s.sectionId in (" + lab + ") ";
-		String[] cds = new String[0];
-		if(code != null) {
-			cds = code.split(",");
+		if(lab.equals(Constants.LaboratoryAll)) {
+			sql = "select count(s.id) from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
+			code = "";
 		}
+		if(code == null) {
+			code = "";
+		}
+		String[] cds = code.split(",");
 		switch (text.length()) {
 			case 8:
 				if (StringUtils.isNumeric(text)) {
@@ -405,7 +409,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				sql += " and s.modifyFlag=1";
 				break;
 			case 4:
-				sql += " and s.sampleStatus<5";
+				sql += " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED;
 				break;
 			case 5:
 				sql += " and s.hasimages=1";
@@ -496,7 +500,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	@SuppressWarnings("unchecked")
 	public List<Sample> getReceiveList(String text, String lab) {
 		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";
-		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' and sampleStatus>=3 order by p.receivetime desc";
+		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' and sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED + " order by p.receivetime desc";
 		return getSession().createQuery(sql).list();
 	}
 

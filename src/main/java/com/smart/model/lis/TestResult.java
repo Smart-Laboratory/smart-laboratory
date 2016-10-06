@@ -255,7 +255,7 @@ public class TestResult extends BaseObject{
 	/**
      * Returns the reference.
      * 
-     * @return refLo +" -- " + refHi
+     * @return refLo +" - " + refHi
      */
     @Transient
     public String getReference() {
@@ -267,7 +267,7 @@ public class TestResult extends BaseObject{
         } else if (refHi.isEmpty() && (!refLo.isEmpty())) {
             return refLo;
         } else {
-            return refLo + "--" + refHi;
+            return refLo + "-" + refHi;
         }
     }
 

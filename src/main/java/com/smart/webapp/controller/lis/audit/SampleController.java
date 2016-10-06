@@ -108,15 +108,6 @@ public class SampleController {
 			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());
 			map.put("size", 0);
-			if (info.getSampleStatus()>=5) {
-				if (info.getIswriteback() == 1) {
-					map.put("lisPass", "<font color='red'>" + Constants.TRUE + "</font>");
-				} else {
-					map.put("lisPass", Constants.TRUE);
-				}
-			} else {
-				map.put("lisPass", "");
-			}
 			dataRows.add(map);
 		}
 		dataResponse.setRows(dataRows);

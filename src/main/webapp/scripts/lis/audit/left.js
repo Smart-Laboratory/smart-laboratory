@@ -6,7 +6,7 @@ function getList(text, lab) {
         url: "../audit/data?sample=" + text + "&lab=" + lab,
         datatype: "json",
         width: $("#sampleListPanel").width(),
-        colNames: ['id', '状态', '标记', '', '姓名', '样本号', 'FLAG', 'SIZE'],
+        colNames: ['id', '状态', '标记',  '姓名', '样本号', 'FLAG', 'SIZE'],
         colModel: [
             {name: 'id', index: 'id', hidden: true},
             {
@@ -23,7 +23,6 @@ function getList(text, lab) {
                 stype: 'select',
                 searchoptions: {value: "0:所有;1:自动;2:差值;3:比值;4:少做;5:复检;6:危急;7:警戒1;8:警戒2;9:极值;10:Bayes"}
             },
-            {name: 'lisPass', index: 'lisPass', width: 20},
             {name: 'patientName', index: 'patientName', width: 90},
             {name: 'sample', index: 'sample', width: 150, align: "right"},
             {name: 'flag', index: 'flag', hidden: true},

@@ -2,6 +2,7 @@ package com.smart.service.lis;
 
 import com.smart.model.lis.TestReference;
 import com.smart.service.GenericManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,8 +15,15 @@ import java.util.List;
  * @Version:
  */
 public interface TestReferenceManager  extends GenericManager<TestReference,Long> {
-    void saveTestReferences(List<TestReference> testReferences)  throws Exception;
+
+    List<TestReference> saveTestReferences(List<TestReference> testReferences);
+
+    @Transactional
     List<TestReference> getTestRefenreceListByTestId(String testid);
+
+    @Transactional
     TestReference getTestReference(String testid, int sex, int orderno);
+
+    @Transactional
     void deleteTestReference(String testid, int sex, int orderno) throws Exception;
 }

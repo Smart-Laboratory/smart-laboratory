@@ -526,13 +526,13 @@ public class AuditController extends BaseAuditController {
 					info.setAuditStatus(Constants.STATUS_PASSED);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_CHECKED);
 					for(TestResult t : testResultList) {
-						t.setTestStatus(Constants.STATUS_PASSED);
+						t.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
 					}
 				} else if ("unpass".equals(op)) {
 					info.setAuditStatus(Constants.STATUS_UNPASS);
 					info.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
 					for(TestResult t : testResultList) {
-						t.setTestStatus(Constants.STATUS_UNPASS);
+						t.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 					}
 				}
 				//info.setWriteback(1);

@@ -113,7 +113,7 @@ public class FormulaUtil {
 							t.setSampleNo(info.getSampleNo());
 							t.setTestId(testid);
 							t.setSampleType(sampletype);
-							t.setTestStatus(1);
+							t.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 							t.setCorrectFlag("3");
 							t.setEditMark(Constants.ADD_FLAG);
 						}

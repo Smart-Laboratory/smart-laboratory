@@ -418,7 +418,7 @@ public class GetTestResultController extends BaseAuditController {
 						sameSample += pinfo.getSampleNo();
 					}
 				}
-			}
+				}
 		}
 		int color = 0;
 		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
@@ -595,7 +595,7 @@ public class GetTestResultController extends BaseAuditController {
 //			formulaUtil.formula(info, request.getRemoteUser());
 			
 			info.setModifyFlag(1);
-			info.setAuditStatus(0);
+			info.setAuditStatus(Constants.STATUS_UNAUDIT);
 			sampleManager.save(info);
 			
 			TestModify testModify = new TestModify();

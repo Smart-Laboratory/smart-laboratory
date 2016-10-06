@@ -21,15 +21,13 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param testid
      * @return
      */
-	@Transactional
     List<TestReference> getTestRefenreceListByTestId(String testid);
 
     /**
      * 保存参考范围
      * @param testReferences
      */
-
-    void saveTestReferences(List<TestReference> testReferences);
+    List<TestReference> saveTestReferences(List<TestReference> testReferences);
 
     /**
      * 获取参考范围
@@ -38,7 +36,6 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param orderno
      * @return
      */
-    @Transactional
     TestReference getTestReference(String testid, int sex, int orderno);
 
     /**
@@ -47,6 +44,5 @@ public interface TestReferenceDao extends GenericDao<TestReference,Long> {
      * @param sex
      * @param orderno
      */
-	@Transactional
     void deleteTestReference(String testid, int sex, int orderno);
 }

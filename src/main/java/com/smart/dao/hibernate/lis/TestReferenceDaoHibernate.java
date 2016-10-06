@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,17 +39,16 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
      * 批量保存参考范围
      * @param testReferences  //仪器通道List
      */
-    @Override
-    public void saveTestReferences(List<TestReference> testReferences) {
+    public List<TestReference> saveTestReferences(List<TestReference> testReferences) {
         Session session = null;
+        List<TestReference> returnList  = new ArrayList<TestReference>();
         if(testReferences !=null && testReferences.size()>0){
             try{
-                session = getSession();     //获取session
+                session = getSessionFactory().openSession();     //获取session
                 session.beginTransaction(); //开启事务
                 TestReference testReference  = null;
                 for(int i = 0; i < testReferences.size(); i++){
-                    testReference = testReferences.get(i);
-                    session.saveOrUpdate(testReference);
+                    returnList.add((TestReference)session.merge(testReferences.get(i)));
                 }
                 // 批插入的对象立即写入数据库并释放内存
                 session.flush();
@@ -61,6 +61,7 @@ public class TestReferenceDaoHibernate  extends GenericDaoHibernate<TestReferenc
                 session.close(); // 关闭Session
             }
         }
+        return returnList;
     }
 
     /**

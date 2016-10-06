@@ -298,7 +298,7 @@
                     </td>
                     <td>
                         <c:choose>
-                            <c:when test="${sampelist.sampleStatus>=6}">已打印 </c:when>
+                            <c:when test="${sampelist.sampleStatus>=8}">已打印 </c:when>
                             <c:otherwise>
                                 <c:choose> <c:when test="${sampelist.auditStatus>=-1}">
                                     <font color='red'>无结果</font>
