@@ -24,7 +24,7 @@
 			<li><a id="samplePrintBtn" href="#"><fmt:message key='audit.danger.print'/></a></li>
 		</ul>
 		<button id="auditBtn" type="button" class="btn btn-sm btn-success col-sm-2"><fmt:message key='audit'/></button>
-		<button id="sampleDelete" type="button" class="btn btn-sm btn-danger col-sm-2"><fmt:message key='button.delete'/></button>
+		<%--<button id="sampleDelete" type="button" class="btn btn-sm btn-danger col-sm-2"><fmt:message key='button.delete'/></button>--%>
 		
 		<button id="sampleListRefreshBtn" class="btn btn-sm btn-success col-sm-2">
 			<span class="glyphicon glyphicon-refresh"></span>
