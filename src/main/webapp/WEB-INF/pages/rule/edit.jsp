@@ -563,7 +563,7 @@
 		initItemPanel();
 		layer.open({
 			type: 1,
-			area: ['700px','300px'],
+			area: ['900px','300px'],
 			fix: true, //不固定
 			skin: 'layui-layer-lan',
 			maxmin: false,
