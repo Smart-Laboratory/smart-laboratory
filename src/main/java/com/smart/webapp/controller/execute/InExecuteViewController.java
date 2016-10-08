@@ -334,6 +334,7 @@ public class InExecuteViewController {
         User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         WebService webService = new WebService();
         HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("workid"));
+        String ward = request.getParameter("ward");
                 //需采集LIST
         String regex = "requestId\":\"(.*?)\",";
         List<String> requestIds = new ArrayList<String>();
@@ -468,7 +469,7 @@ public class InExecuteViewController {
 
                 JSONObject retObj = JSON.parseObject(retval);
                 if (retObj.getBoolean("state")) {
-                    String val  =webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, user.getLastLab(), "", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), sample.getBarcode());
+                    String val  =webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, ward, "", hospitalUser.getId(), hospitalUser.getName(), Constants.DF9.format(executeTime), sample.getBarcode());
                     if (! val.isEmpty()) {
                         Sample sample1 = sampleManager.get(retObj.getLong("sample1Id"));
                         Process process1 = processManager.get(retObj.getLong("processId"));
