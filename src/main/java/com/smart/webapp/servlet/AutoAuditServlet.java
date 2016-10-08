@@ -119,7 +119,8 @@ public class AutoAuditServlet extends HttpServlet {
             System.out.println("初始化常量完成" + (System.currentTimeMillis()-start) + "毫秒");
 
 			//开启审核线程
-            Thread autoAudit = new Thread(new Runnable(){
+            Thread
+					autoAudit = new Thread(new Runnable(){
 				public void run() {
 					int autocount = 0;
         			while (!Thread.interrupted()) {// 线程未中断执行循环

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.smart.util.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,9 @@ public class InputController {
 		view.addObject("receivetime", Constants.SDF.format(new Date()));
 		view.addObject("segment", segment);
 		view.addObject("sampleno", sampleno);
+		String date = ConvertUtil.getFormatDate(new Date(),"yyyy-MM-dd");
+		view.addObject("fromDate",date);
+		view.addObject("toDate",date);
         return view;
     }
 

@@ -494,9 +494,31 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Sample> getReceiveList(String text, String lab) {
-		//String hql = "from Sample where sampleNo like '" + text + "%' and sectionId='" + lab + "' order by sampleNo desc";
-		String sql = "select s from Sample s, Process p where s.id=p.sampleid and s.sectionId = '" + lab + "' and s.sampleNo like '" + text + "%' and sampleStatus>=3 order by p.receivetime desc";
+	public List<Object[]> getReceiveList(String text, String lab) {
+		return this.getReceiveList(text,lab,"","","");
+	}
+
+	public List<Object[]> getReceiveList(String sampleNo, String sectionId,String sampleStatus,String fromDate,String toDate) {
+		String sql = "select s,p from Sample s, Process p where s.id=p.sampleid";
+		if(sectionId!=null && !sectionId.isEmpty()){
+			sql += " and s.sectionId = '" + sectionId + "'";
+		}
+		if(sampleNo!=null && !sampleNo.isEmpty()){
+			sql += " and s.sampleNo like '" + sampleNo + "%'";
+		}
+		if(sampleStatus!=null && !sampleStatus.isEmpty()){
+			sql += " and s.sampleStatus = " + sampleStatus;
+		}else {
+			sql += " and s.sampleStatus >=3 ";
+		}
+		if(fromDate!=null && !fromDate.isEmpty()){
+			sql += " and p.receivetime >=to_date('"+fromDate+"','yyyy-mm-dd')";
+		}
+
+		if(toDate!=null && !toDate.isEmpty()){
+			sql += " and p.receivetime <=to_date('"+toDate+"','yyyy-mm-dd')";
+		}
+		sql += " order by p.receivetime desc";
 		return getSession().createQuery(sql).list();
 	}
 

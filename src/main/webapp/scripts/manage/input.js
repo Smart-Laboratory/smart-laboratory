@@ -4,12 +4,14 @@ function deleteYlxh(obj) {
 }
 
 function searchSample() {
-	$("#new").jqGrid('resetSelection');
-	if($("#" + $("#sampleno_text").val()).length > 0) {
-		$("#new").jqGrid('setSelection',$("#sampleno_text").val());
-	} else {
-		layer.alert("样本号" + $("#sampleno_text").val() + "的标本未接收，查询不到！", {icon: 2, title: "提示"});
-	}
+	$("#new").jqGrid("clearGridData");
+	$('#new').jqGrid('setGridParam',{
+		url: baseUrl+'/sample/ajax/getReceived',
+		datatype : 'json',
+		//发送数据
+		postData : {sampleNo:$('#sampleno_text').val()||'',fromDate:$('#fromDate').val()||'',toDate:$('#toDate').val()||'',sampleStatus:$('#samplestatus').val()||''},
+		page : 1
+	}).trigger('reloadGrid');//重新载入
 }
 
 function receive(obj,event) {
@@ -515,11 +517,12 @@ $(function() {
 	var $tag_obj = $('#examinaim').data('tag');
 	//$tag_obj.add('Programmatically Added');
 	var clientHeight = $(window).innerHeight();
-	var height = clientHeight - $('#head').height()- $('.footer-content').height() - 170;
+	var height = clientHeight - $('#head').height()- $('.footer-content').height() - 185;
 	$("#new").jqGrid({
 		url: baseUrl + "/sample/ajax/getReceived",
 		mtype: "GET",
 		datatype: "json",
+		postData : {sampleNo:$('#sampleno_text').val()||'',fromDate:$('#fromDate').val()||'',toDate:$('#toDate').val()||'',sampleStatus:$('#samplestatus').val()||''},
 		colNames: ['样本状态','SAMPLESTATUS','样本号', '在院方式', '姓名','科室','床号','性别','年龄','医嘱号','接收时间','检验目的','样本类型','SAMPLETYPE','就诊卡号','收费状态','临床诊断','生理周期','申请者','采集部位','申请模式','金额'],
 		colModel: [
 			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 70},
@@ -548,8 +551,10 @@ $(function() {
 		viewrecords: true,
 		shrinkToFit: false,
 		repeatitems: false,
+		rownumbers: true, // 显示行号
+		rownumWidth: 35, // the width of the row numbers colum
 		altRows:true,
-		width: $('#samplelist').width()-17,
+		width: $('#samplelist').width()-20,
 		height: height,
 		rowNum:500
 	});

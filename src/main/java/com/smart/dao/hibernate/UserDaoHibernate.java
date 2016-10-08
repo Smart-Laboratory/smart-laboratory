@@ -58,7 +58,13 @@ public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements
             log.debug("user's id: " + user.getId());
         }
         Session s = getSession();
-        s.saveOrUpdate(user);
+        //s.merge("com.smart.model.user.User",user);
+        try {
+            s.saveOrUpdate(user);
+        }
+        catch (Exception e){
+            s.refresh(user);
+        }
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
         s.flush();
         return user;

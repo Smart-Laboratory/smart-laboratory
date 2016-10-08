@@ -103,10 +103,15 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getReceiveSampleno(lab, today);
 	}
 
-	public List<Sample> getReceiveList(String text, String lab) {
+	public List<Object[]> getReceiveList(String text, String lab) {
 		return sampleDao.getReceiveList(text, lab);
 	}
-	
+
+	@Override
+	public List<Object[]> getReceiveList(String sampleNo, String sectionId, String sampleStatus, String fromDate, String toDate) {
+		return sampleDao.getReceiveList(sampleNo,sectionId,sampleStatus,fromDate,toDate);
+	}
+
 	public List<Sample> getOutList(String sender,Date sendtime){
 		return sampleDao.getOutList(sender, sendtime);
 	}

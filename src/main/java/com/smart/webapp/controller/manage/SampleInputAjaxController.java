@@ -140,19 +140,33 @@ public class SampleInputAjaxController {
 		DataResponse dataResponse = new DataResponse();
 		String today = Constants.DF3.format(new Date());
 		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
-		List<Sample> list = sampleManager.getReceiveList(today, lab);
+
+		String fromDate=ConvertUtil.null2String(request.getParameter("fromDate"));
+		String toDate=ConvertUtil.null2String(request.getParameter("toDate"));
+		String sampleNo=ConvertUtil.null2String(request.getParameter("sampleNo"));
+		String sampleStatus=ConvertUtil.null2String(request.getParameter("samplestatus"));
+
+		if(fromDate.isEmpty() || toDate.isEmpty()) {
+			Date now = new Date();
+			fromDate = ConvertUtil.getFormatDate(now, "yyyy-MM-dd");
+			toDate = ConvertUtil.getFormatDate(now, "yyyy-MM-dd");
+		}
+
+		List<Object[]> list = sampleManager.getReceiveList(sampleNo, lab,sampleStatus,fromDate,toDate);
 		if(list == null || list.size() == 0) {
 			return null;
 		}
-		List<Process> processList = processManager.getBySampleCondition(today, lab);
-		Map<Long, Process> processMap = new HashMap<Long, Process>();
-		for(Process p : processList) {
-			processMap.put(p.getSampleid(), p);
-		}
+//		List<Process> processList = list[1];
+//		Map<Long, Process> processMap = new HashMap<Long, Process>();
+//		for(Process p : processList) {
+//			processMap.put(p.getSampleid(), p);
+//		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(list.size());
-		for(Sample sample : list) {
-			Process process = processMap.get(sample.getId());
+		for(Object obj[] : list) {
+			//Process process = processMap.get(sample.getId());
+			Process process = (Process) obj[1];
+			Sample sample = (Sample) obj[0];
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("barcode", sample.getBarcode());
 			map.put("shm", sample.getStayHospitalModelValue());
@@ -172,7 +186,7 @@ public class SampleInputAjaxController {
 			map.put("feestatus", sample.getFeestatus());
 			map.put("part", sample.getPart() == null ? "" : sample.getPart());
 			map.put("requestmode", sample.getRequestMode());
-			map.put("requester", process.getRequester());
+			map.put("requester", ConvertUtil.null2String(process.getRequester()));
 			map.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
 			map.put("sampleStatus", sample.getSampleStatus());
 			map.put("sampleStatusValue", sample.getSampleStatusValue());
@@ -354,6 +368,7 @@ public class SampleInputAjaxController {
 					
 				sampleManager.save(sample);
 				processManager.save(process);
+
 				o.put("message", "样本号为"+ sampleno + "的标本编辑成功！");
 				o.put("success", true);
 			}
