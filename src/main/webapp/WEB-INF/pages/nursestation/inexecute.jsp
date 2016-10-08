@@ -470,7 +470,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: "../nursestation/inexecute/printRequestList",
+                    url: "../nursestation/inexecute/printRequestList?userid=" + ${userid} + "&ward=" + ${ward},
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(saveDatas),

@@ -80,10 +80,11 @@ public class InExecuteViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ward = ConvertUtil.null2String(request.getParameter("ward"));
-        User user = UserUtil.getInstance().getUser(request.getRemoteUser());
+        String userId = ConvertUtil.null2String(request.getParameter("userid"));
+        //User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         ModelAndView modelAndView  = new ModelAndView();
         modelAndView.addObject("ward", ward);
-        modelAndView.addObject("userid", user.getUsername());
+        modelAndView.addObject("userid", userId);
         return modelAndView;
     }
 
@@ -333,7 +334,7 @@ public class InExecuteViewController {
         List<LabOrderVo> labOrderVos = new ArrayList<LabOrderVo>(); //返回JSON打印信息
         User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         WebService webService = new WebService();
-        HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("workid"));
+        HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("userid"));
         String ward = request.getParameter("ward");
                 //需采集LIST
         String regex = "requestId\":\"(.*?)\",";
@@ -512,7 +513,7 @@ public class InExecuteViewController {
                 }
             }
             //计采血费
-            ChargeUtil.getInstance().bloodCollectionFee(user,labOrderList1);
+            ChargeUtil.getInstance().bloodCollectionFee(ward, hospitalUser.getWorkid(), hospitalUser.getName(),labOrderList1);
 
 
             //打印
