@@ -7,6 +7,7 @@
         <pattern>*ajax*</pattern>
         <pattern>*print*</pattern>
         <pattern>/doctor/*</pattern>
+        <pattern>/nursestation/*</pattern>
     </excludes>
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>

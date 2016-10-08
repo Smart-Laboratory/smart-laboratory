@@ -11,6 +11,7 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
+import com.smart.model.util.HospitalUser;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.execute.InExcuteManager;
@@ -79,10 +80,11 @@ public class InExecuteViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ward = ConvertUtil.null2String(request.getParameter("ward"));
-        User user = UserUtil.getInstance().getUser(request.getRemoteUser());
+        String userId = ConvertUtil.null2String(request.getParameter("userid"));
+        //User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         ModelAndView modelAndView  = new ModelAndView();
         modelAndView.addObject("ward", ward);
-        modelAndView.addObject("userid", user.getUsername());
+        modelAndView.addObject("userid", userId);
         return modelAndView;
     }
 
@@ -332,7 +334,9 @@ public class InExecuteViewController {
         List<LabOrderVo> labOrderVos = new ArrayList<LabOrderVo>(); //返回JSON打印信息
         User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         WebService webService = new WebService();
-        //需采集LIST
+        HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("userid"));
+        String ward = request.getParameter("ward");
+                //需采集LIST
         String regex = "requestId\":\"(.*?)\",";
         List<String> requestIds = new ArrayList<String>();
         Matcher matcher = Pattern.compile(regex).matcher(orders);
@@ -440,7 +444,7 @@ public class InExecuteViewController {
                 sample.setDepartBed(labOrder.getBed());
                 sample.setId(sampleManager.getSampleId());
                 //生成样本号
-                String barcode = HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId());
+                String barcode = "A120" + String.format("%08d", sample.getId());
                 sample.setBarcode(barcode);
                 sample.setAge(labOrder.getAge());
                 sample.setAgeunit(labOrder.getAgeUnit());
@@ -466,7 +470,7 @@ public class InExecuteViewController {
 
                 JSONObject retObj = JSON.parseObject(retval);
                 if (retObj.getBoolean("state")) {
-                    String val  =webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, user.getLastLab(), "", user.getHisId(), user.getName(), Constants.DF9.format(executeTime), sample.getBarcode());
+                    String val  =webService.requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 5, ward, "", hospitalUser.getId(), hospitalUser.getName(), Constants.DF9.format(executeTime), sample.getBarcode());
                     if (! val.isEmpty()) {
                         Sample sample1 = sampleManager.get(retObj.getLong("sample1Id"));
                         Process process1 = processManager.get(retObj.getLong("processId"));
@@ -509,7 +513,7 @@ public class InExecuteViewController {
                 }
             }
             //计采血费
-            ChargeUtil.getInstance().bloodCollectionFee(user,labOrderList1);
+            ChargeUtil.getInstance().bloodCollectionFee(ward, hospitalUser.getWorkid(), hospitalUser.getName(),labOrderList1);
 
 
             //打印

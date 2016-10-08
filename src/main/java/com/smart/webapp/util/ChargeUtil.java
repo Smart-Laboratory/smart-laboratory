@@ -46,7 +46,7 @@ public class ChargeUtil {
      * @param labOrderList
      * @return 标本采集打印条码计费
      */
-    public boolean bloodCollectionFee(User user, List<LabOrder> labOrderList) {
+    public boolean bloodCollectionFee(String depart, String userId, String userName, List<LabOrder> labOrderList) {
         boolean flag = false;
         Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
@@ -102,9 +102,9 @@ public class ChargeUtil {
                 //param.put("feeItemName", "");
                 param.put("billingDoctorNo", labOrder.getRequester());
                 param.put("billingDeptNo", labOrder.getHossection());
-                param.put("testDoctorNo", user.getUsername());
-                param.put("testDoctorDeptNo", user.getLastLab());
-                param.put("operatorNo", user.getUsername());
+                param.put("testDoctorNo", userName);
+                param.put("testDoctorDeptNo", depart);
+                param.put("operatorNo", userId);
                 //param.put("accountId", "");
                 jsonArray.put(param);
                 //service.booking(param.toString());
@@ -123,9 +123,9 @@ public class ChargeUtil {
                 //param.put("feeItemName", "");
                 param1.put("billingDoctorNo", labOrder.getRequester());
                 param1.put("billingDeptNo", labOrder.getHossection());
-                param1.put("testDoctorNo", user.getLastLab());
-                param1.put("testDoctorDeptNo", user.getUsername());
-                param1.put("operatorNo", user.getUsername());
+                param1.put("testDoctorNo", userName);
+                param1.put("testDoctorDeptNo", depart);
+                param1.put("operatorNo", userId);
                 jsonArray.put(param1);
 
             }

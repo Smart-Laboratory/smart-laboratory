@@ -291,15 +291,18 @@ public final class Constants {
 	public final static String LOG_OPERATE_REPLACE = "标本编号替换";
 
 	/**
-	 * 样本状态，0：已开单；1：条码已打印；2：已采样；3：已接收；4：在测定；5：已审核；6：已打印
+	 * 样本状态，-1：已退回；0：已开单；1：条码已打印；2：已采样；3:已送出； 4：已送达；5：已接收；6：在测定；7：已审核；8：已打印
 	 */
 	public final static int SAMPLE_STATUS_REQUESTED = 0;
 	public final static int SAMPLE_STATUS_PRINT_BARCODE = 1;
 	public final static int SAMPLE_STATUS_EXECUTED = 2;
-	public final static int SAMPLE_STATUS_RECEIVED= 3;
-	public final static int SAMPLE_STATUS_TESTED = 4;
-	public final static int SAMPLE_STATUS_CHECKED = 5;
-	public final static int SAMPLE_STATUS_PRINTED = 6;
+	public final static int SAMPLE_STATUS_SENDED = 3;
+	public final static int SAMPLE_STATUS_ARRIVED = 4;
+	public final static int SAMPLE_STATUS_RECEIVED= 5;
+	public final static int SAMPLE_STATUS_TESTED = 6;
+	public final static int SAMPLE_STATUS_CHECKED = 7;
+	public final static int SAMPLE_STATUS_PRINTED = 8;
+	public final static int SAMPLE_STATUS_BACKED = -1;
 
 	/**
 	 * 医学检验科编号

@@ -31,9 +31,8 @@ public class TestReferenceManagerImpl  extends GenericManagerImpl<TestReference,
      * 保存参考范围
      * @param testReferences
      */
-    @Override
-    public void saveTestReferences(List<TestReference> testReferences)  throws Exception{
-        testReferenceDao.saveTestReferences(testReferences);
+    public List<TestReference> saveTestReferences(List<TestReference> testReferences) {
+        return testReferenceDao.saveTestReferences(testReferences);
     }
 
     /**
@@ -41,7 +40,6 @@ public class TestReferenceManagerImpl  extends GenericManagerImpl<TestReference,
      * @param testid    //项目ID
      * @return
      */
-    @Override
     public List<TestReference> getTestRefenreceListByTestId(String testid) {
         return testReferenceDao.getTestRefenreceListByTestId(testid);
     }
@@ -53,7 +51,6 @@ public class TestReferenceManagerImpl  extends GenericManagerImpl<TestReference,
      * @param orderno
      * @return
      */
-    @Override
     public TestReference getTestReference(String testid, int sex, int orderno)  {
         return testReferenceDao.getTestReference(testid,sex,orderno);
     }
@@ -64,7 +61,6 @@ public class TestReferenceManagerImpl  extends GenericManagerImpl<TestReference,
      * @param sex
      * @param orderno
      */
-    @Override
     public void deleteTestReference(String testid, int sex, int orderno) throws Exception{
         this.testReferenceDao.deleteTestReference(testid,sex,orderno);
     }

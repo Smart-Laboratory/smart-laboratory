@@ -604,29 +604,41 @@ public class Sample extends BaseObject {
 		return value;
 	}
 
+	/**
+	 * 样本状态，-1：已退回；0：已开单；1：条码已打印；2：已采样；3:已送出； 4：已送达；5：已接收；6：在测定；7：已审核；8：已打印
+	 */
 	@Transient
 	public String getSampleStatusValue() {
 		String value = "";
 		switch (getSampleStatus()) {
+			case -1:
+				value = "已退回";
+				break;
 			case 0:
 				value = "已开单";
 				break;
 			case 1:
-				value = "条码打印";
+				value = "条码已打印";
 				break;
 			case 2:
 				value = "已采样";
 				break;
 			case 3:
-				value = "已接收";
+				value = "已送出";
 				break;
 			case 4:
-				value = "待审核";
+				value = "已送达";
 				break;
 			case 5:
-				value = "已审核";
+				value = "已接收";
 				break;
 			case 6:
+				value = "待审核";
+				break;
+			case 7:
+				value = "已审核";
+				break;
+			case 8:
 				value = "已打印";
 				break;
 		}

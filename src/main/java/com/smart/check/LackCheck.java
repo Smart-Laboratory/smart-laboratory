@@ -61,7 +61,7 @@ public class LackCheck implements Check {
 			Set<String> testIdSet = new HashSet<String>();
 			if (list != null) {
 				for (TestResult r : list)
-					if(idMap.containsKey(r.getTestId())) {
+					if(idMap.containsKey(r.getTestId()) && r.getTestResult() != null && !r.getTestResult().isEmpty()) {
 						testIdSet.add(r.getTestId());
 					}
 			} else {

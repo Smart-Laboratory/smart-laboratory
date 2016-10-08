@@ -4,6 +4,7 @@ function deleteYlxh(obj) {
 }
 
 function searchSample() {
+
 	$("#new").jqGrid("clearGridData");
 	$('#new').jqGrid('setGridParam',{
 		url: baseUrl+'/sample/ajax/getReceived',
@@ -12,6 +13,17 @@ function searchSample() {
 		postData : {sampleNo:$('#sampleno_text').val()||'',fromDate:$('#fromDate').val()||'',toDate:$('#toDate').val()||'',sampleStatus:$('#samplestatus').val()||''},
 		page : 1
 	}).trigger('reloadGrid');//重新载入
+
+	// $("#new").jqGrid('resetSelection');
+	// if($("#" + $("#sampleno_text").val()).length > 0) {
+	// 	$("#new").jqGrid('setSelection',$("#sampleno_text").val());
+	// 	$("#" + $("#sampleno_text").val()).animate({
+	// 		scrollTop: $(this.hash).offset().top() - 60
+	// 	}, 1500);
+	// } else {
+	// 	layer.alert("样本号" + $("#sampleno_text").val() + "的标本未接收，查询不到！", {icon: 2, title: "提示"});
+	// }
+
 }
 
 function receive(obj,event) {

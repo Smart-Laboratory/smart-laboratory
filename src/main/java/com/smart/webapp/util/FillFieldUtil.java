@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.smart.model.lis.TestReference;
-import com.smart.model.reagent.In;
 import com.smart.model.rule.Index;
 import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
@@ -60,7 +59,7 @@ public class FillFieldUtil {
 		filleResultFlag(result, li_direct);
 		return result;
 	}
-	
+
 	public void fillReference(String testid,JSONObject obj) throws JSONException{
 		if (testReferenceMap.containsKey(testid)) {
 			List<TestReference> referList = testReferenceMap.get(testid);

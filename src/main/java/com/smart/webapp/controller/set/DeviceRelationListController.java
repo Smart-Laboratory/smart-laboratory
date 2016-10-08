@@ -399,8 +399,8 @@ public class DeviceRelationListController {
             indexManager.save(index);
             if(testReferences.size()>0) {
                 //更新缓存
-                FillFieldUtil.getInstance(indexManager, testReferenceManager).updateTestReferenceMap(testReferences);
                 testReferenceManager.saveTestReferences(testReferences);  //批量保存数据
+                FillFieldUtil.getInstance(indexManager, testReferenceManager).updateTestReferenceMap(testReferences);
             }
             //return new ModelAndView("redirect:/set/devicerelation","result", "true");
             return new JSONObject().put("result", "true").toString();

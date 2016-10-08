@@ -447,6 +447,7 @@ public class PatientListController extends BaseAuditController {
 			map.put("id",info.getId());
 			map.put("sample",info.getSampleNo());
 			//map.put("receivetime", info.getExecutetime() == null ? "" : sdf.format(info.getExecutetime()));
+
 			if (info.getAuditStatus() == -1) {
 				map.put("type", "<font color='red'>无结果</font>");
 			} else {

@@ -8,7 +8,11 @@
 <%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 <head>
-    <script src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/jquery-2.1.4.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/bootstrap.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ace-elements.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/bootstrap-tag.min.js"/>"></script>
     <script src="<c:url value="/scripts/jquery-ui.min.js"/>"></script>
     <script src="<c:url value="/scripts/i18n/grid.locale-cn.js"/>"></script>
     <script src="<c:url value="/scripts/jquery.jqGrid.js"/>"></script>
@@ -17,7 +21,10 @@
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/>"/>
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ztree/zTreeStyle_flat.css'/>"/>
-    <title>标本采集</title>
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
+    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
+    <title>条码打印 | 智慧实验室</title>
 </head>
 <style>
     .laftnav {
@@ -463,7 +470,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: "../nursestation/inexecute/printRequestList",
+                    url: "../nursestation/inexecute/printRequestList?userid=" + ${userid} + "&ward=" + ${ward},
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(saveDatas),

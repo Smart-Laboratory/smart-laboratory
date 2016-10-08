@@ -23,7 +23,6 @@ public class YlxhUtil {
 	public static YlxhUtil getInstance() {
 		if(instance == null) {
 			instance = new YlxhUtil();
-			System.out.println(instance == null);
 			map = new HashMap<String, Ylxh>();
 			for (Ylxh ylxh : ylxhManager.getAll()) {
 				map.put(ConvertUtil.null2String(ylxh.getYlxh()), ylxh);

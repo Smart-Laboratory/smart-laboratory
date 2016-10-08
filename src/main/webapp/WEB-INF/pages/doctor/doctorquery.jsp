@@ -577,7 +577,7 @@
                     var headOtherInfo = '';
                     if(sampleInfo.sampleNo.indexOf("BAA")>=0){
                     	
-                    }else if(sampleInfo.sampleStatus>=6) {
+                    }else if(sampleInfo.sampleStatus>=8) {
                         headOtherInfo = '已打印';
                     }else{
                         if(sampleInfo.auditStatus <= -1){
