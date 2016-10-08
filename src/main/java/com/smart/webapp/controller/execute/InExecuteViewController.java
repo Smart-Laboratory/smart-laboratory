@@ -11,6 +11,7 @@ import com.smart.model.lis.Process;
 import com.smart.model.lis.Sample;
 import com.smart.model.lis.Ylxh;
 import com.smart.model.user.User;
+import com.smart.model.util.HospitalUser;
 import com.smart.service.DictionaryManager;
 import com.smart.service.UserManager;
 import com.smart.service.execute.InExcuteManager;
@@ -332,7 +333,8 @@ public class InExecuteViewController {
         List<LabOrderVo> labOrderVos = new ArrayList<LabOrderVo>(); //返回JSON打印信息
         User user = UserUtil.getInstance().getUser(request.getRemoteUser());
         WebService webService = new WebService();
-        //需采集LIST
+        HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("workid"));
+                //需采集LIST
         String regex = "requestId\":\"(.*?)\",";
         List<String> requestIds = new ArrayList<String>();
         Matcher matcher = Pattern.compile(regex).matcher(orders);
@@ -440,7 +442,7 @@ public class InExecuteViewController {
                 sample.setDepartBed(labOrder.getBed());
                 sample.setId(sampleManager.getSampleId());
                 //生成样本号
-                String barcode = HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId());
+                String barcode = "A120" + String.format("%08d", sample.getId());
                 sample.setBarcode(barcode);
                 sample.setAge(labOrder.getAge());
                 sample.setAgeunit(labOrder.getAgeUnit());

@@ -57,7 +57,7 @@
             <div class="form-group${(not empty status.errorMessage) ? ' has-error' : ''}">
         </spring:bind>
         <appfuse:label styleClass="control-label" key="user.password"/>
-        <form:input cssClass="form-control" path="password" id="password"/>
+        <form:input type="password" cssClass="form-control" path="password" id="password"/>
         <form:errors path="password" cssClass="help-block"/>
         </div>
 

@@ -7,6 +7,7 @@ import com.smart.model.execute.LabOrder;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
+import com.smart.model.util.HospitalUser;
 import com.smart.service.DictionaryManager;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.rule.IndexManager;
@@ -65,6 +66,31 @@ public class WebService {
     public SampleAndResultVo getRequestInfo() {
 
         return new SampleAndResultVo(new Sample(), new Process(), new TestResult());
+    }
+
+    public  List<HospitalUser> getHospitalUserList() {
+        List<HospitalUser> list = new ArrayList<HospitalUser>();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url);
+            GetMethod method = new GetMethod(url + "getHospitalUserList");
+            method.releaseConnection();
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            if((Integer)obj.get("State")==1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for(int i = 0; i < arr.length(); i++) {
+                    HospitalUser hospitalUser = new HospitalUser();
+                    hospitalUser.setId(arr.getJSONObject(i).getString("Id"));
+                    hospitalUser.setWorkid(arr.getJSONObject(i).getString("WorkId"));
+                    hospitalUser.setName(arr.getJSONObject(i).getString("Name"));
+                    list.add(hospitalUser);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public List<Section> getSectionList() {
