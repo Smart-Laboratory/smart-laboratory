@@ -473,9 +473,9 @@ public class SampleInputAjaxController {
 					sample.setSectionId(Constants.DEPART_NIGHT);
 					segment = ylxh.getNightSegment();
                 }
-                //ICU取白班
-				if(user.getLastLab().equals("210800")){
-					sample.setSectionId("210800");
+                //非夜班科室取白班
+				if("210800,210400,210300".indexOf(user.getLastLab()) >= 0){
+					sample.setSectionId(user.getLastLab());
 					segment = ylxh.getSegment();
 				}
 				if(segment==null || segment.isEmpty()) {
