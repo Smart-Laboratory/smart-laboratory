@@ -352,11 +352,9 @@ public class SampleInputAjaxController {
 					
 				sampleManager.save(sample);
 				processManager.save(process);
-<<<<<<< HEAD
 
-=======
 				testResultManager.updateSampleNo(oldSampleNo, sampleno);
->>>>>>> 804fa13e8f505c253a49c54cffe967ae558888ec
+
 				o.put("message", "样本号为"+ sampleno + "的标本编辑成功！");
 				o.put("success", true);
 			}
