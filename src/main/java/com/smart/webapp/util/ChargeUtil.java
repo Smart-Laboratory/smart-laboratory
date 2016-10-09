@@ -98,9 +98,9 @@ public class ChargeUtil {
                 param.put("dateTime", ConvertUtil.getFormatDateGMT(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
                 param.put("quantity", "1");
                 //param.put("price", "");
-                param.put("testPurposesCode", SamplingSitesUtil.getValue(ConvertUtil.null2String(labOrder.getToponymy())));   //获取费用项目ID
+                //param.put("testPurposesCode", SamplingSitesUtil.getValue(ConvertUtil.null2String(labOrder.getToponymy())));   //获取费用项目ID
                 param.put("feeItemCode","10054");
-                param.put("feeItemName","静脉采血");
+                //param.put("feeItemName","静脉采血");
                 //param.put("feeItemName", "");
                 param.put("billingDoctorNo", ConvertUtil.null2String(labOrder.getRequester()));
                 param.put("billingDeptNo", ConvertUtil.null2String(labOrder.getHossection()));
@@ -121,9 +121,15 @@ public class ChargeUtil {
                 //yyyy-mm-dd hh24:mi:ss
                 param1.put("quantity", "1");
                 //param.put("price", "");
+<<<<<<< HEAD
                 param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
                 param1.put("feeItemCode","16040");
                 param1.put("feeItemName","静脉采血器(针头)(BD 21G)");
+=======
+                //param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
+                param.put("feeItemCode","16040");
+                //param.put("feeItemName","静脉采血器(针头)(BD 21G)");
+>>>>>>> 4197c085f4d0faa1cbff6c726767a76c696efe85
                 //param.put("feeItemName", "");
                 param1.put("billingDoctorNo", ConvertUtil.null2String(labOrder.getRequester()));
                 param1.put("billingDeptNo", ConvertUtil.null2String(labOrder.getHossection()));
@@ -175,9 +181,9 @@ public class ChargeUtil {
             param.put("dateTime", ConvertUtil.getFormatDateGMT(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));//yyyy-mm-dd hh24:mi:ss
             param.put("quantity", "1");
             //param.put("price", "");
-            param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
+            //param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
+            param.put("feeItemCode", "16041");
             //param.put("feeItemName", "");
-            param.put("feeItemCode","16041");
             param.put("feeItemName","采血器(普通真空试管)");
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
