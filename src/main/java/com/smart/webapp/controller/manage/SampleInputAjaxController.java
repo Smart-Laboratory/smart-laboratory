@@ -247,9 +247,24 @@ public class SampleInputAjaxController {
 			processLogManager.save(plog);
 
 			//退费项目费
-			LabOrder labOrder = labOrderManager.get(sample.getId());
-			String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
-			if(updateStatusSuccess.isEmpty()){
+			if("1".equals(sample.getFeestatus())){
+				//已计费
+				LabOrder labOrder = labOrderManager.get(sample.getId());
+				String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
+				if(updateStatusSuccess.isEmpty()){
+					sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
+					process.setReceiver("");
+					process.setReceivetime(null);
+					sampleManager.save(sample);
+					processManager.save(process);
+					o.put("message", "样本号为"+ sampleno + "的标本退回成功！");
+					o.put("success", true);
+				} else {
+					o.put("message", "样本号为"+ sampleno + "的标本退费失败，无法退回！" + updateStatusSuccess);
+					o.put("success", false);
+				}
+			}else {
+				//未记费标本直接修改
 				sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
 				process.setReceiver("");
 				process.setReceivetime(null);
@@ -257,10 +272,8 @@ public class SampleInputAjaxController {
 				processManager.save(process);
 				o.put("message", "样本号为"+ sampleno + "的标本退回成功！");
 				o.put("success", true);
-			} else {
-				o.put("message", "样本号为"+ sampleno + "的标本退费失败，无法退回！" + updateStatusSuccess);
-				o.put("success", false);
 			}
+
 		} else {
 			if(operate.equals("add") && barcode.isEmpty()) {
 				if(sampleManager.getBySampleNo(sampleno) != null) {
@@ -433,7 +446,7 @@ public class SampleInputAjaxController {
 			o.put("success", 1);
 			o.put("message", "医嘱号为"+ code + "的标本不存在！");
 			return o.toString();
-		} else if(sample.getSampleStatus() >= 3) {
+		} else if(sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
 			process = processManager.getBySampleId(sample.getId());
 			o.put("success", 2);
 			o.put("message", "医嘱号为"+ code + "的标本已编号接收！");

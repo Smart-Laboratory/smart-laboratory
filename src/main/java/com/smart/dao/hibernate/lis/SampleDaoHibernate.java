@@ -517,11 +517,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 			sql += " and s.sampleStatus >= " +Constants.SAMPLE_STATUS_RECEIVED ;
 		}
 		if(fromDate!=null && !fromDate.isEmpty()){
-			sql += " and p.receivetime >=to_date('"+fromDate+"','yyyy-mm-dd')";
+			sql += " and p.receivetime >=to_date('"+fromDate+" 00:00:00','yyyy-mm-dd hh24:mi:ss')";
 		}
 
 		if(toDate!=null && !toDate.isEmpty()){
-			sql += " and p.receivetime <=to_date('"+toDate+"','yyyy-mm-dd')";
+			sql += " and p.receivetime <=to_date('"+toDate+" 23:59:59','yyyy-mm-dd hh24:mi:ss')";
 		}
 		sql += " order by p.receivetime desc";
 

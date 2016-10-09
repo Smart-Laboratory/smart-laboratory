@@ -24,7 +24,7 @@
         <a href="<c:url value='/manage/audit'/>"><fmt:message key="sample.manage.audit"/></a>
     </li>
     <li>
-        <a href="<c:url value='/nursestation/inexecute?ward=1001'/>">住院条码打印</a>
+        <a href="<c:url value='/nursestation/inexecute?ward=1001&userid=${pageContext.request.remoteUser}'/>">住院条码打印</a>
     </li>
     <li>
         <a href="<c:url value='/manage/testerSet'/>">检验者设置</a>

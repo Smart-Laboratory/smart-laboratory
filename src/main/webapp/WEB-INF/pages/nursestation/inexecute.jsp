@@ -21,9 +21,9 @@
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/>"/>
     <script src="<c:url value="/scripts/jquery.ztree.all-3.5.js"/>"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ztree/zTreeStyle_flat.css'/>"/>
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/bootstrap.min.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/font-awesome.css'/>" />
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ace.min.css'/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value='/styles/bootstrap.min.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/styles/font-awesome.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ace.min.css'/>"/>
     <title>条码打印 | 智慧实验室</title>
 </head>
 <style>
@@ -124,97 +124,98 @@
         /* padding-left: 10px; */
     }
 </style>
-<div class="row">
-    <div class="col-xs-3 treelist">
-        <div class="laftnav">
-            <div class="lazy_header">
+<div class="main-container" id="content">
+    <div class="row">
+        <div class="col-xs-3 treelist">
+            <div class="laftnav">
+                <div class="lazy_header">
                 <span class="lazy-list-title">
                 <i class="fa fa-bars"></i>
                 <span class="tip" style="cursor:pointer;">病人列表</span>
                 </span>
-            </div>
-            <div style="overflow: auto;" id="leftTree">
-                <%--<ul class="nav nav-pills nav-stacked" id="tree">--%>
-                <ul id="tree" class="ztree"></ul>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-9">
-        <div style="padding-top: 5px;">
-            <button type="button" class="btn btn-sm btn-primary " title="打印" onclick="TSLAB.Custom.printInfo()">
-                <i class="ace-icon fa fa-fire bigger-110"></i>
-                打印
-            </button>
-            <button type="button" class="btn btn-sm  btn-success" title="补打" onclick="TSLAB.Custom.printOldInfo()">
-                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                补打
-            </button>
-            <button type="button" class="btn btn-sm  btn-pink" title="打印机选择" onclick="TSLAB.Custom.printSet()">
-                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                打印设定
-            </button>
-            <button type="button" class="btn btn-sm btn-purple" title="打印机选择" onclick="TSLAB.Custom.openUrl()">
-                <i class="ace-icon fa fa-pencil-square bigger-110"></i>
-                交叉配血条码打印
-            </button>
-            <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
-            <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
-            <%--打印设计--%>
-            <%--</button>--%>
-        </div>
-        <div class="widget-box widget-color-green" id="widget-box-1" style="display: none">
-            <div class="widget-header widget-header-small">
-                <h6 class="widget-title">病人信息</h6>
-                <div class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="ace-icon fa fa-chevron-down"></i>
-                    </a>
                 </div>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alert alert-info"
-                           id="patientInfo">
-                    </table>
+                <div style="overflow: auto;" id="leftTree">
+                    <%--<ul class="nav nav-pills nav-stacked" id="tree">--%>
+                    <ul id="tree" class="ztree"></ul>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="widget-box widget-color-green" id="widget-box-2">
-            <div class="widget-header widget-header-small">
-                <h6 class="widget-title">未采集标本</h6>
-                <div class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="ace-icon fa fa-chevron-down"></i>
-                    </a>
+        <div class="col-xs-9">
+            <div style="padding-top: 5px;">
+                <button type="button" class="btn btn-sm btn-primary " title="打印" onclick="TSLAB.Custom.printInfo()">
+                    <i class="ace-icon fa fa-fire bigger-110"></i>
+                    打印
+                </button>
+                <button type="button" class="btn btn-sm  btn-success" title="补打" onclick="TSLAB.Custom.printOldInfo()">
+                    <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                    补打
+                </button>
+                <button type="button" class="btn btn-sm  btn-pink" title="打印机选择" onclick="TSLAB.Custom.printSet()">
+                    <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                    打印设定
+                </button>
+                <button type="button" class="btn btn-sm btn-purple" title="打印机选择" onclick="TSLAB.Custom.openUrl()">
+                    <i class="ace-icon fa fa-pencil-square bigger-110"></i>
+                    交叉配血条码打印
+                </button>
+                <%--<button type="button" class="btn btn-sm  btn-success" title="打印设计" onclick="TSLAB.Custom.printSet()">--%>
+                <%--<i class="ace-icon fa fa-pencil-square bigger-110"></i>--%>
+                <%--打印设计--%>
+                <%--</button>--%>
+            </div>
+            <div class="widget-box widget-color-green" id="widget-box-1" style="display: none">
+                <div class="widget-header widget-header-small">
+                    <h6 class="widget-title">病人信息</h6>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alert alert-info"
+                               id="patientInfo">
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="widget-body">
-                <div class="widget-main">
-                    <table id="tableList"></table>
-                    <div id="pager"></div>
+            <div class="widget-box widget-color-green" id="widget-box-2">
+                <div class="widget-header widget-header-small">
+                    <h6 class="widget-title">未采集标本</h6>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <table id="tableList"></table>
+                        <div id="pager"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="widget-box widget-color-green" id="widget-box-3">
-            <div class="widget-header widget-header-small">
-                <h6 class="widget-title">已采集标本</h6>
-                <div class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="ace-icon fa fa-chevron-down"></i>
-                    </a>
+            <div class="widget-box widget-color-green" id="widget-box-3">
+                <div class="widget-header widget-header-small">
+                    <h6 class="widget-title">已采集标本</h6>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-down"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="widget-body">
-                <div class="widget-main" id="colletionList">
-                    <table id="tableList1"></table>
-                    <div id="pager1"></div>
+                <div class="widget-body">
+                    <div class="widget-main" id="colletionList">
+                        <table id="tableList1"></table>
+                        <div id="pager1"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div style="clear: both"></div>
 <script type="text/javascript">
 
@@ -413,13 +414,13 @@
                             width: 60,
                             formatter: 'select',
                             editoptions: {value: "1:是;0:否"}
-                            ,cellattr: addCellAttr
+                            , cellattr: addCellAttr
                         },
                         {name: 'ward', index: 'ward', width: 100},
                         {name: 'bedNo', index: 'bedNo', width: 60},
                         {name: 'barcode', index: 'barcode', width: 110},
                         {name: 'patientCode', index: 'patientCode', width: 100},
-                        {name: 'patientName', index: 'patientName', width: 100,cellattr: addCellAttr},
+                        {name: 'patientName', index: 'patientName', width: 100, cellattr: addCellAttr},
                         {name: 'sex', index: 'sex', width: 40},
                         {name: 'age', index: 'age', width: 40},
                         {name: 'ageUnit', index: 'ageUnit', width: 40},
@@ -470,7 +471,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: "../nursestation/inexecute/printRequestList?userid=" + ${userid} + "&ward=" + ${ward},
+                    url: "../nursestation/inexecute/printRequestList?userid=" + ${userid} +"&ward=" + ${ward},
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(saveDatas),
@@ -645,9 +646,9 @@
 
     function addCellAttr(rowId, val, rawObject, cm, rdata) {
         //console.log(rdata)
-        if (rdata.requestMode == 1 || val==1) {
-           // console.log( $(row).children('td'));
-            return"style='color:red'";
+        if (rdata.requestMode == 1 || val == 1) {
+            // console.log( $(row).children('td'));
+            return "style='color:red'";
         }
     }
 </script>
