@@ -121,15 +121,9 @@ public class ChargeUtil {
                 //yyyy-mm-dd hh24:mi:ss
                 param1.put("quantity", "1");
                 //param.put("price", "");
-<<<<<<< HEAD
-                param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
+               // param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
                 param1.put("feeItemCode","16040");
-                param1.put("feeItemName","静脉采血器(针头)(BD 21G)");
-=======
-                //param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
-                param.put("feeItemCode","16040");
-                //param.put("feeItemName","静脉采血器(针头)(BD 21G)");
->>>>>>> 4197c085f4d0faa1cbff6c726767a76c696efe85
+                //param1.put("feeItemName","静脉采血器(针头)(BD 21G)");
                 //param.put("feeItemName", "");
                 param1.put("billingDoctorNo", ConvertUtil.null2String(labOrder.getRequester()));
                 param1.put("billingDeptNo", ConvertUtil.null2String(labOrder.getHossection()));
