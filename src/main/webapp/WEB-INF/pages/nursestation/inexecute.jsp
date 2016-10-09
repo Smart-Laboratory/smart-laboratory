@@ -327,7 +327,7 @@
                         '项目代码', '项目名称', '标本种类', '金额', '申请时间',
                         '申请医生', '是否急诊', 'patientid', 'ylxh',
                         'sampleno', 'hossection', 'hossectionName', 'birthday', 'stayhospitalmode', 'blh',
-                        'diagnostic', 'labdepartment', 'requestNum', 'count', 'wardid', 'wardname', 'qbgsj'],
+                        'diagnostic', 'labdepartment', 'requestNum', 'count', 'wardid', 'wardname','requester','qbgsj'],
                     colModel: [{name: 'requestId', index: 'requestId', width: 40, hidden: true},
                         {name: 'laborderorg', index: 'laborderorg', width: 40, hidden: true},
                         {name: 'bed', index: 'bed', width: 30},
@@ -368,6 +368,7 @@
                         {name: 'count', index: 'count', width: 40, hidden: true},
                         {name: 'wardId', index: 'wardId', width: 40, hidden: true},
                         {name: 'wardName', index: 'wardName', width: 40, hidden: true},
+                        {name: 'requester', index: 'requester', width: 60, hidden: true},
                         {name: 'qbgsj', index: 'qbgsj', width: 40, hidden: true}],
                     onSelectRow: function (id) {
                         if (id && id !== lastsel) {

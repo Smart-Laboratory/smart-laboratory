@@ -513,7 +513,7 @@ public class InExecuteViewController {
                 }
             }
             //计采血费
-            ChargeUtil.getInstance().bloodCollectionFee(ward, hospitalUser.getWorkid(), hospitalUser.getName(),labOrderList1);
+            ChargeUtil.getInstance().bloodCollectionFee(ward, hospitalUser.getId(), hospitalUser.getName(),labOrderList1);
 
 
             //打印

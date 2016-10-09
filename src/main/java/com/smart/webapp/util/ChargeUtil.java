@@ -42,7 +42,7 @@ public class ChargeUtil {
     /**
      * 收取采血费
      *
-     * @param user
+     * @param
      * @param labOrderList
      * @return 标本采集打印条码计费
      */
@@ -102,9 +102,9 @@ public class ChargeUtil {
                 param.put("feeItemCode","10054");
                 param.put("feeItemName","静脉采血");
                 //param.put("feeItemName", "");
-                param.put("billingDoctorNo", labOrder.getRequester());
-                param.put("billingDeptNo", labOrder.getHossection());
-                param.put("testDoctorNo", userName);
+                param.put("billingDoctorNo", ConvertUtil.null2String(labOrder.getRequester()));
+                param.put("billingDeptNo", ConvertUtil.null2String(labOrder.getHossection()));
+                param.put("testDoctorNo", ConvertUtil.null2String(userName));
                 param.put("testDoctorDeptNo", depart);
                 param.put("operatorNo", userId);
                 //param.put("accountId", "");
@@ -114,20 +114,20 @@ public class ChargeUtil {
                 //收取采血针费
                 JSONObject param1 = new JSONObject();
                 param1.put("patientCode", labOrder.getBlh());
-                param1.put("patientId", labOrder.getPatientid());
+                param1.put("patientId", ConvertUtil.null2String(labOrder.getPatientid()));
                 param1.put("patientType", "2");
-                param1.put("patientName", labOrder.getPatientname());
+                param1.put("patientName", ConvertUtil.null2String(labOrder.getPatientname()));
                 param1.put("dateTime", ConvertUtil.getFormatDateGMT(labOrder.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'"));
                 //yyyy-mm-dd hh24:mi:ss
                 param1.put("quantity", "1");
                 //param.put("price", "");
                 param1.put("testPurposesCode", SamplingSitesUtil.getValue(labOrder.getToponymy() + "采血针"));   //获取费用项目ID
-                param.put("feeItemCode","16040");
-                param.put("feeItemName","静脉采血器(针头)(BD 21G)");
+                param1.put("feeItemCode","16040");
+                param1.put("feeItemName","静脉采血器(针头)(BD 21G)");
                 //param.put("feeItemName", "");
-                param1.put("billingDoctorNo", labOrder.getRequester());
-                param1.put("billingDeptNo", labOrder.getHossection());
-                param1.put("testDoctorNo", userName);
+                param1.put("billingDoctorNo", ConvertUtil.null2String(labOrder.getRequester()));
+                param1.put("billingDeptNo", ConvertUtil.null2String(labOrder.getHossection()));
+                param1.put("testDoctorNo", ConvertUtil.null2String(userName));
                 param1.put("testDoctorDeptNo", depart);
                 param1.put("operatorNo", userId);
                 jsonArray.put(param1);
@@ -181,7 +181,7 @@ public class ChargeUtil {
             param.put("feeItemName","采血器(普通真空试管)");
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
-            param.put("testDoctorNo", user.getUsername());
+            param.put("testDoctorNo", user.getHisId());
             param.put("testDoctorDeptNo", user.getLastLab());
             param.put("operatorNo", user.getUsername());
             //param.put("accountId", "");
