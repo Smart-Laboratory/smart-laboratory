@@ -218,10 +218,6 @@
 </div>
 <div style="clear: both"></div>
 <script type="text/javascript">
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
     var baseUrl = baseUrl || "<%=request.getContextPath()%>";
     var TSLAB = TSLAB || {};
     var lastsel;
