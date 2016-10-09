@@ -218,7 +218,7 @@
 </div>
 <div style="clear: both"></div>
 <script type="text/javascript">
-
+    var baseUrl = baseUrl || "<%=request.getContextPath()%>";
     var TSLAB = TSLAB || {};
     var lastsel;
     TSLAB.Custom = (function () {
@@ -471,7 +471,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: "../nursestation/inexecute/printRequestList?userid=" + ${userid} +"&ward=" + ${ward},
+                    url: baseUrl + "/nursestation/inexecute/printRequestList?userid=${userid}&ward=${ward}",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(saveDatas),
