@@ -415,7 +415,6 @@ function openAddTestResultDialog() {
                 });
                 if (postStr != "") {
                     $.post(baseUrl + "/audit/add", {test: postStr, sample: sample, tcValues: tcValue}, function (data) {
-                        alert(data)
                         if (data) {
                             $("#lastprofile").val(tcValue);
                             layer.close(index);
