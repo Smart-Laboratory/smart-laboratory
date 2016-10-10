@@ -205,19 +205,16 @@ public class YlsfController extends BaseAuditController {
 
 		Long ylxh = Long.parseLong(request.getParameter("ylxh"));
 		Ylxh y = ylxhManager.get(ylxh);
-		if(idMap == null || idMap.size() == 0) {
-			initMap();
-		}
 		String profiletest = ConvertUtil.null2String(y.getProfiletest());
 		String profiletest2 = ConvertUtil.null2String(y.getProfiletest2());
 		String profiletest3 = ConvertUtil.null2String(y.getProfiletest3());
 		if(!profiletest.isEmpty()) {
 			JSONArray jsonArray = new JSONArray();
 			for(String s : profiletest.split(",")) {
-				if(idMap.containsKey(s)) {
+				if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(s)) {
 					JSONObject o = new JSONObject();
 					o.put("id", s);
-					o.put("name", idMap.get(s).getName());
+					o.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(s).getName());
 					jsonArray.put(o);
 				}
 			}
@@ -226,10 +223,10 @@ public class YlsfController extends BaseAuditController {
 		if(!profiletest2.isEmpty()) {
 			JSONArray jsonArray = new JSONArray();
 			for(String s : profiletest2.split(",")) {
-				if(idMap.containsKey(s)) {
+				if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(s)) {
 					JSONObject o = new JSONObject();
 					o.put("id", s);
-					o.put("name", idMap.get(s).getName());
+					o.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(s).getName());
 					jsonArray.put(o);
 				}
 			}
@@ -238,10 +235,10 @@ public class YlsfController extends BaseAuditController {
 		if(!profiletest3.isEmpty()) {
 			JSONArray jsonArray = new JSONArray();
 			for(String s : profiletest3.split(",")) {
-				if(idMap.containsKey(s)) {
+				if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(s)) {
 					JSONObject o = new JSONObject();
 					o.put("id", s);
-					o.put("name", idMap.get(s).getName());
+					o.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(s).getName());
 					jsonArray.put(o);
 				}
 			}
@@ -276,9 +273,6 @@ public class YlsfController extends BaseAuditController {
 				it.remove();
 		};
 		
-		if (idMap.size() == 0)
-			initMap();
-		
 		JSONArray array = new JSONArray();
 		if(null == ylmc){
 			User user =	userManager.getUserByUsername(request.getRemoteUser());
@@ -289,7 +283,7 @@ public class YlsfController extends BaseAuditController {
 		    	for(String lpf:lastProfile.split(",")){
     				JSONObject obj = new JSONObject();
     				obj.put("test", lpf);
-    				obj.put("name", idMap.get(lpf).getName());
+    				obj.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(lpf).getName());
     				array.put(obj);
 			 }
 		}else{
@@ -325,8 +319,6 @@ public class YlsfController extends BaseAuditController {
 //			userManager.saveUser(operator);
 			if (test.endsWith(","))
 				test = test.substring(0, test.length() - 1);
-			if (idMap.size() == 0)
-				initMap();
 			String[] testId = test.split(",");
 			Set<String> testSet = new HashSet<String>();
 			List<TestResult> testResult = testResultManager.getTestBySampleNo(sample);
@@ -336,7 +328,7 @@ public class YlsfController extends BaseAuditController {
 			for (String t : testId) {
 				if (testSet.contains(t))
 					continue;
-				String name = idMap.get(t).getName();
+				String name = TestIdMapUtil.getInstance(indexManager).getIndex(t).getName();
 				JSONObject obj = new JSONObject();
 				obj.put("test", t);
 				obj.put("name", name);

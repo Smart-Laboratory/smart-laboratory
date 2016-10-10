@@ -1,6 +1,5 @@
 package com.smart.lisservice;
 
-import com.alibaba.fastjson.JSON;
 import com.smart.Constants;
 import com.smart.model.doctor.SampleAndResultVo;
 import com.smart.model.execute.LabOrder;

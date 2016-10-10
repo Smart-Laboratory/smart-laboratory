@@ -65,8 +65,6 @@ public class TestResultAjaxController extends BaseAuditController{
 		userManager.saveUser(operator);
 		if (test.endsWith(","))
 			test = test.substring(0, test.length() - 1);
-		if (idMap.size() == 0)
-			initMap();
 		String[] testId = test.split(",");
 		Set<String> testSet = new HashSet<String>();
 		List<TestResult> testResult = testResultManager.getTestBySampleNo(sample);
@@ -76,7 +74,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		for (String t : testId) {
 			if (testSet.contains(t))
 				continue;
-			String name = idMap.get(t).getName();
+			String name = TestIdMapUtil.getInstance(indexManager).getIndex(t).getName();
 			JSONObject obj = new JSONObject();
 			obj.put("test", t);
 			obj.put("name", name);
@@ -86,7 +84,7 @@ public class TestResultAjaxController extends BaseAuditController{
 		response.getWriter().print(array.toString());
 	}
 	
-	@RequestMapping(value = "/tat*", method = RequestMethod.GET)
+	@RequestMapping(value = "/tat*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getTAT(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

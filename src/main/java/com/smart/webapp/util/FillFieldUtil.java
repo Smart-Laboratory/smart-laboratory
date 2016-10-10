@@ -121,7 +121,7 @@ public class FillFieldUtil {
 						value = "0" + value;
 					}
 
-					if (reflo != null) {
+					if (reflo != null && isDouble(reflo)) {
 						if (reflo.contains(".") && reflo.split("[.]").length > 1) {
 							int round = reflo.split("[.]")[1].length();
 							StringBuilder sb = new StringBuilder("#0.");

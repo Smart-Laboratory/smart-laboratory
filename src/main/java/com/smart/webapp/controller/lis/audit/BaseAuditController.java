@@ -118,17 +118,12 @@ public class BaseAuditController {
 	protected TestReferenceManager testReferenceManager = null;
 
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
-    protected Map<String, Index> idMap = new HashMap<String, Index>();
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();
     protected Map<String, String> diagMap = new HashMap<String, String>();
     protected Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
     protected Map<String, String> likeLabMap = new HashMap<String, String>();
     protected Map<String, String> deviceMap = new HashMap<String, String>();
     protected Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
-
-	protected synchronized void initMap() {
-		idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
-	}
 
 	protected synchronized void initDeviceMap() {
 		List<Device> list = deviceManager.getAll();

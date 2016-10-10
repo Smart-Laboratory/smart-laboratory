@@ -8,12 +8,14 @@ import com.smart.model.lis.Sample;
 import com.smart.model.lis.TestResult;
 import com.smart.model.reagent.Out;
 import com.smart.model.reagent.Reagent;
+import com.smart.model.rule.Index;
 import com.smart.service.doctor.DoctorQueryManager;
 import com.smart.service.reagent.OutManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
 import com.smart.webapp.util.SampleUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import com.zju.api.model.SyncResult;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -229,9 +231,6 @@ public class QueryReportController  extends BaseAuditController {
         return new ModelAndView();
     }
     private void getResult(String samplenos, List<Object[]> sampleAndResultVos, JSONArray jsonResult) {
-		if(idMap.size() == 0) {
-			initMap();
-		}
     	//数据初始化，获得每一化验单的检验项目列表
     	Map<String, Set<String>> nowtestMap = new LinkedHashMap<String, Set<String>>();
 		Map<String, Set<String>> histestMap = new LinkedHashMap<String, Set<String>>();
@@ -354,7 +353,7 @@ public class QueryReportController  extends BaseAuditController {
 	            int color = 0;
 	            for(SampleAndResultVo vo : list) {
 	            	TestResult re = vo.getTestResult();
-	            	if(idMap.containsKey(re.getTestId())) {
+	            	if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(re.getTestId())) {
 	            		color = 0;
 		                String id = re.getTestId();
 		                if (colorMap.containsKey(id)) {
@@ -364,8 +363,8 @@ public class QueryReportController  extends BaseAuditController {
 		            	JSONObject json = new JSONObject();
 		            	json.put("id", id);
 		                json.put("color", color);
-		                json.put("ab", idMap.get(re.getTestId()).getEnglish());
-		                json.put("name", idMap.get(re.getTestId()).getName());
+		                json.put("ab", TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getEnglish());
+		                json.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getName());
 		                json.put("result", re.getTestResult());
 		                json.put("last","");
 		                json.put("last1","");
@@ -398,7 +397,7 @@ public class QueryReportController  extends BaseAuditController {
 		                    json.put("scope", "");
 		                }
 		                json.put("unit", re.getUnit());
-		                json.put("knowledgeName", idMap.get(re.getTestId()).getKnowledgename());
+		                json.put("knowledgeName", TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getKnowledgename());
 		                json.put("editMark", re.getEditMark());
 		                dataRows.put(json);
 	            	}
@@ -485,9 +484,6 @@ public class QueryReportController  extends BaseAuditController {
         if (sampleNo == null) {
             throw new NullPointerException();
         }
-        if (idMap.size() == 0)
-            initMap();
-
         if (deviceMap.size() == 0)
             initDeviceMap();
 
@@ -641,15 +637,16 @@ public class QueryReportController  extends BaseAuditController {
                 color = colorMap.get(id);
             }
             JSONObject jsonObject = new JSONObject();
-            if (idMap.containsKey(id)) {
+            if (TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(id)) {
 //			if(true){
+                Index index = TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId());
                 String testId = tr.getTestId();
                 Set<String> sameTests = util.getKeySet(testId);
                 sameTests.add(testId);
                 jsonObject.put("id", id);
                 jsonObject.put("color", color);
-                jsonObject.put("ab", idMap.get(tr.getTestId()).getEnglish());
-                jsonObject.put("name", idMap.get(tr.getTestId()).getName());
+                jsonObject.put("ab", index.getEnglish());
+                jsonObject.put("name", index.getName());
                 jsonObject.put("result", tr.getTestResult());
                 jsonObject.put("last","");
                 jsonObject.put("last1","");
@@ -683,7 +680,7 @@ public class QueryReportController  extends BaseAuditController {
                     jsonObject.put("scope", "");
                 }
                 jsonObject.put("unit", tr.getUnit());
-                jsonObject.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+                jsonObject.put("knowledgeName", index.getKnowledgename());
                 jsonObject.put("editMark", tr.getEditMark());
                 jsonObject.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
                 dataRows.put(jsonObject);
@@ -754,14 +751,11 @@ public class QueryReportController  extends BaseAuditController {
             map.put("hmList", "");
         }
 
-        if (idMap.size() == 0)
-            initMap();
-
         if(list.size()>1) {
-            if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && idMap.containsKey(list.get(0).getTestId())) {
-                map.put("name", idMap.get(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
+            if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(list.get(0).getTestId())) {
+                map.put("name", TestIdMapUtil.getInstance(indexManager).getIdMap().get(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
             } else {
-                map.put("name", idMap.get(list.get(0).getTestId()).getName());
+                map.put("name", TestIdMapUtil.getInstance(indexManager).getIdMap().get(list.get(0).getTestId()).getName());
             }
             int num = list.size();
             int count = 0;

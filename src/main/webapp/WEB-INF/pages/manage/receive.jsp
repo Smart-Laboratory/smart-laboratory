@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div style="float:left;width:10%">
-			<button id="refuse" type="button" class="btn btn-danger"><fmt:message key='invalidSamples.refuse'/></button>
+			<button id="refuse" type="button" class="btn btn-sm btn-danger"><fmt:message key='invalidSamples.refuse'/></button>
 		</div>
 	</div>
 	<hr style="height:3px;"/>

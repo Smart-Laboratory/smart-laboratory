@@ -17,6 +17,7 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.service.scheduledTask.ReportGenerate;
 import com.smart.util.ConvertUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -98,9 +99,6 @@ public class SamplePrintController extends BaseAuditController {
 		info.put("section", sectionutil.getValue(s.getHosSection()));
 		if(contactMap.size() == 0) {
 			initContactInforMap();
-		}
-		if(idMap.size() == 0) {
-			initMap();
 		}
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
@@ -292,9 +290,6 @@ public class SamplePrintController extends BaseAuditController {
 		if(contactMap.size() == 0) {
 			initContactInforMap();
 		}
-		if(idMap.size() == 0) {
-			initMap();
-		}
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
 		}
@@ -315,7 +310,7 @@ public class SamplePrintController extends BaseAuditController {
 			List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
 			Map<String, List<TestResult>> chartTestMap = new HashMap<String, List<TestResult>>();
 			for(TestResult tr : testList) {
-				if(idMap.containsKey(tr.getTestId()) && idMap.get(tr.getTestId()).getNeedhistory() == 1) {
+				if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(tr.getTestId()) && TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getNeedhistory() == 1) {
 					if(chartTestMap.containsKey(tr.getTestId())) {
 						chartTestMap.get(tr.getTestId()).add(tr);
 					} else {
@@ -335,7 +330,7 @@ public class SamplePrintController extends BaseAuditController {
 					List<Double> hiArr = new ArrayList<Double>();
 					List<String> timeArr = new ArrayList<String>();
 					JSONObject testchart = new JSONObject();
-					testchart.put("title", idMap.get(testid).getName());
+					testchart.put("title", TestIdMapUtil.getInstance(indexManager).getIndex(testid).getName());
 					int isneed = 0;
 					if(s.getCharttest() != null && s.getCharttest().indexOf(testid) >= 0) {
 						isneed = 1;
@@ -396,9 +391,6 @@ public class SamplePrintController extends BaseAuditController {
 		if(contactMap.size() == 0) {
 			initContactInforMap();
 		}
-		if(idMap.size() == 0) {
-			initMap();
-		}
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
 		}
@@ -438,7 +430,7 @@ public class SamplePrintController extends BaseAuditController {
 				List<Double> hiArr = new ArrayList<Double>();
 				List<String> timeArr = new ArrayList<String>();
 				JSONObject testchart = new JSONObject();
-				testchart.put("title", idMap.get(testid).getName());
+				testchart.put("title", TestIdMapUtil.getInstance(indexManager).getIndex(testid).getName());
 				int isneed = 0;
 				int hisnum = 0;
 				for(TestResult tr : tl) {
@@ -506,7 +498,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='height:20px;margin-left:2%;width:96%;'>");
 				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:25%;'>" + idMap.get(re.getTestId()).getName());
+				html.append("<div style='float:left;width:25%;'>" + TestIdMapUtil.getInstance(indexManager).getIdMap().get(re.getTestId()).getName());
 				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
 					html.append("[" + re.getMethod() + "]");
 				}
@@ -519,7 +511,7 @@ public class SamplePrintController extends BaseAuditController {
 				String resultflag = "&nbsp;";
 				String last = "&nbsp;";
 				String lastflag = "&nbsp;";
-				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
+				if (TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -531,7 +523,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (idMap.get(tid).getPrintord() <=2015) {
+							if (TestIdMapUtil.getInstance(indexManager).getIdMap().get(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
@@ -548,7 +540,7 @@ public class SamplePrintController extends BaseAuditController {
 				}
 				html.append("<div style='float:left;width:3%;'>" + lastflag + "</div>");
 				html.append("<div style='float:left;width:10%;text-align:center;'>" + (re.getUnit() == null ? "&nbsp;" : re.getUnit()) + "</div>");
-				html.append("<div style='float:left;width:25%;text-align:center;'>" + idMap.get(re.getTestId()).getDescription() + "</div>");
+				html.append("<div style='float:left;width:25%;text-align:center;'>" + TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getDescription() + "</div>");
 				html.append("</div>");
 			}
 		} else if(type == 2) {
@@ -594,7 +586,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='float:left;width:50%;border-left:1px solid #000000;border-top:2px solid #000000;font-size:10px;'>");
 				}
 				html.append("<div style='float:left;width:100%;'>");
-				html.append("<div style='float:left;width:34%;'>" + idMap.get(re.getTestId()).getName() + "</div>");
+				html.append("<div style='float:left;width:34%;'>" + TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getName() + "</div>");
 				if(re.getTestResult().indexOf(Constants.YANG) >= 0) {
 					html.append("<div style='float:left;width:13%;background:#C0C0C0;'>" + re.getTestResult() + "</div>");
 				} else {
@@ -612,7 +604,7 @@ public class SamplePrintController extends BaseAuditController {
 				if(lo != null && !lo.isEmpty() && (hi.isEmpty() || hi == null)) {
 					scope = lo;
 				}
-				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
+				if (TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -624,7 +616,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (idMap.get(tid).getPrintord() <=2015) {
+							if (TestIdMapUtil.getInstance(indexManager).getIndex(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {
@@ -680,7 +672,7 @@ public class SamplePrintController extends BaseAuditController {
 					html.append("<div style='float:left;width:5%;'>&nbsp;</div>");
 				}
 				html.append("<div style='float:left;width:5%;'>" + i + "</div>");
-				html.append("<div style='float:left;width:30%;'>" + idMap.get(re.getTestId()).getName());
+				html.append("<div style='float:left;width:30%;'>" + TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getName());
 				if(re.getMethod() != null && !re.getMethod().isEmpty()) {
 					html.append("[" + re.getMethod() + "]");
 				}
@@ -702,7 +694,7 @@ public class SamplePrintController extends BaseAuditController {
 				if(lo != null && !lo.isEmpty() && ( hi == null || hi.isEmpty())) {
 					scope = lo;
 				}
-				if (idMap.get(re.getTestId()).getPrintord() <=2015) {
+				if (TestIdMapUtil.getInstance(indexManager).getIndex(re.getTestId()).getPrintord() <=2015) {
 					if(re.getResultFlag().charAt(0) == 'C') {
 						resultflag = "↓";
 					} else if(re.getResultFlag().charAt(0) == 'B') {
@@ -714,7 +706,7 @@ public class SamplePrintController extends BaseAuditController {
 					for(String tid : sameTests) {
 						if(resultMap.size() != 0 && resultMap.containsKey(tid)) {
 							last = resultMap.get(tid).getTestResult();
-							if (idMap.get(tid).getPrintord() <=2015) {
+							if (TestIdMapUtil.getInstance(indexManager).getIndex(tid).getPrintord() <=2015) {
 								if(resultMap.get(tid).getResultFlag().charAt(0) == 'C') {
 									lastflag = "↓";
 								} else if(resultMap.get(tid).getResultFlag().charAt(0) == 'B') {

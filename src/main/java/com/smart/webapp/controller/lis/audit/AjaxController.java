@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -142,14 +143,11 @@ public class AjaxController extends BaseAuditController {
 			map.put("hmList", "");
 		}
 		
-		if (idMap.size() == 0)
-			initMap();
-		
         if(list.size()>1) {
-        	if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && idMap.containsKey(list.get(0).getTestId())) {
-        		map.put("name", idMap.get(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
+        	if(list.get(0).getUnit() != null && !list.get(0).getUnit().isEmpty() && TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(list.get(0).getTestId())) {
+        		map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(list.get(0).getTestId()).getName() + " (" + list.get(0).getUnit() + ")");
         	} else {
-        		map.put("name", idMap.get(list.get(0).getTestId()).getName());
+        		map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(list.get(0).getTestId()).getName());
         	}
         	int num = list.size();
         	int count = 0;
@@ -230,8 +228,6 @@ public class AjaxController extends BaseAuditController {
 		history = "('" + history.replaceAll(",", "','") + "')";
 		List<TestResult> hisTests = testResultManager.getRelative(info.getPatientId(), info.getPatientblh(), history);
 		if(hisTests.size()>0) {
-			if (idMap.size() == 0)
-				initMap();
 			Map<String, String> htmlMap = new HashMap<String, String>();
 			html += "<table>";
 			for(int i=0; i<hisTests.size(); i++) {
@@ -239,13 +235,13 @@ public class AjaxController extends BaseAuditController {
 				if(map.get(tr.getTestId()) < 3) {
 					if(htmlMap.containsKey(tr.getSampleNo())) {
 						String s = htmlMap.get(tr.getSampleNo()) 
-								+ "<td>" + idMap.get(tr.getTestId()).getName() + "</td>"
+								+ "<td>" + TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getName() + "</td>"
 								+ "<td width='50px;'>" + tr.getTestResult() + "</td>";
 						htmlMap.put(tr.getSampleNo(), s);
 					} else {
 						htmlMap.put(tr.getSampleNo(), 
 								"<tr><td>" + tr.getSampleNo() + "</td>"
-								+ "<td>" + idMap.get(tr.getTestId()).getName() + "</td>"
+								+ "<td>" + TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getName() + "</td>"
 								+ "<td width='50px;'>" + tr.getTestResult() + "</td>");
 					}
 					map.put(tr.getTestId(), map.get(tr.getTestId()) + 1);

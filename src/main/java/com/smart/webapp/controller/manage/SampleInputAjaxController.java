@@ -252,7 +252,8 @@ public class SampleInputAjaxController {
 				LabOrder labOrder = labOrderManager.get(sample.getId());
 				String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
 				if(updateStatusSuccess.isEmpty()){
-					sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
+					sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
+					sample.setSampleNo("0");
 					process.setReceiver("");
 					process.setReceivetime(null);
 					sampleManager.save(sample);
@@ -265,7 +266,8 @@ public class SampleInputAjaxController {
 				}
 			}else {
 				//未记费标本直接修改
-				sample.setSampleStatus(Constants.SAMPLE_STATUS_PRINT_BARCODE);
+				sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
+				sample.setSampleNo("0");
 				process.setReceiver("");
 				process.setReceivetime(null);
 				sampleManager.save(sample);
