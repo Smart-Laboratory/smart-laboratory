@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,9 +75,7 @@ public class ExplainController extends BaseAuditController {
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
-		if (idMap.size() == 0)
-			initMap();
-		ExplainUtil explainUtil = new ExplainUtil(itemManager, dictionaryManager, idMap);
+		ExplainUtil explainUtil = new ExplainUtil(itemManager, dictionaryManager, TestIdMapUtil.getInstance(indexManager).getIdMap());
 		for (Rule rule : rules) {
 			String reason = "";
 			if(needReason)

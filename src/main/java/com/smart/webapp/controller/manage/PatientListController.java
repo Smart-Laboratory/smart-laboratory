@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,6 @@ import com.smart.model.lis.TestResult;
 import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.ReasoningModifyManager;
 import com.smart.webapp.controller.lis.audit.BaseAuditController;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.IndexMapUtil;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.ExplainUtil;
 
 @Controller
 @RequestMapping("/manage/patientList*")
@@ -122,10 +119,7 @@ public class PatientListController extends BaseAuditController {
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
 
-		if (idMap.size() == 0)
-			initMap();
-		
-		ExplainUtil explainUtil = new ExplainUtil(itemManager, dictionaryManager, idMap);
+		ExplainUtil explainUtil = new ExplainUtil(itemManager, dictionaryManager, TestIdMapUtil.getInstance(indexManager).getIdMap());
 		for (Rule rule : rules) {
 			String reason = explainUtil.getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
@@ -218,8 +212,6 @@ public class PatientListController extends BaseAuditController {
 		if (sampleNo == null) {
 			throw new NullPointerException();
 		}
-		if (idMap.size() == 0)
-			initMap();
 		if(likeLabMap.size() == 0) {
 			initLikeLabMap();
 		}
@@ -338,15 +330,15 @@ public class PatientListController extends BaseAuditController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			if (idMap.containsKey(id)) {
+			if (TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(id)) {
 //			if(true){
 				String testId = tr.getTestId();
 				Set<String> sameTests = util.getKeySet(testId);
 				sameTests.add(testId);
 				map.put("id", id);
 				map.put("color", color);
-				map.put("ab", idMap.get(tr.getTestId()).getEnglish());
-				map.put("name", idMap.get(tr.getTestId()).getName());
+				map.put("ab", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getEnglish());
+				map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getName());
 				map.put("result", tr.getTestResult());
 				map.put("last","");
 				map.put("last1","");
@@ -374,7 +366,7 @@ public class PatientListController extends BaseAuditController {
 					map.put("scope", "");
 				}
 				map.put("unit", tr.getUnit());
-				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+				map.put("knowledgeName", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				dataRows.add(map);
@@ -468,9 +460,6 @@ public class PatientListController extends BaseAuditController {
 
 	@RequestMapping(method = {RequestMethod.GET})
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(idMap.size()==0){
-			initMap();
-		}
 		ModelAndView view=new ModelAndView();
 		String patientId = request.getParameter("patientId");
 		String blh = request.getParameter("blh");

@@ -928,9 +928,6 @@ public class AuditController extends BaseAuditController {
 
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(traceList.size());
-		if (idMap.size() == 0)
-			initMap();
-
 		for (AuditTrace t : traceList) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("sampleno", t.getSampleno());
@@ -1028,14 +1025,11 @@ public class AuditController extends BaseAuditController {
 		DataResponse dataResponse = new DataResponse();
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		
-		if (idMap.size() == 0)
-			initMap();
-
 		for (Statistic s : statisticList) {
-			if(idMap.containsKey(s.getTestid())){
+			if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(s.getTestid())){
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", s.getTestid());
-				map.put("name", idMap.get(s.getTestid()).getName());
+				map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(s.getTestid()).getName());
 				map.put("num", s.getNum());
 				map.put("average", deFormat.format(s.getAverage()));
 				map.put("max", s.getMax());
@@ -1101,12 +1095,9 @@ public class AuditController extends BaseAuditController {
 		String []pfts = pft.getProfileTest().split(",");
 		//获取结果范围
 		
-		
-		if (idMap.size() == 0)
-			initMap();
 		JSONArray array = new JSONArray();
 		for (String pftString : pfts) {
-			if(idMap.containsKey(pftString)){
+			if(TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(pftString)){
 				JSONObject obj = new JSONObject();
 				fillUtil.fillReference(pftString,obj);
 				
@@ -1117,8 +1108,8 @@ public class AuditController extends BaseAuditController {
 					obj.put("unit","");
 				}
 				obj.put("id", pftString);
-				obj.put("name", idMap.get(pftString).getName());
-				obj.put("value", idMap.get(pftString).getDefaultvalue());
+				obj.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(pftString).getName());
+				obj.put("value", TestIdMapUtil.getInstance(indexManager).getIndex(pftString).getDefaultvalue());
 				array.put(obj);
 			}
 		}

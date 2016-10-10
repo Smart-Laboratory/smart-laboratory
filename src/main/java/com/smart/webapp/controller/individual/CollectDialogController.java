@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -154,13 +155,12 @@ public class CollectDialogController extends BaseAuditController {
 		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(rules.size());
-		if (idMap.size() == 0) initMap();
-		
+
 		for (Rule rule : rules) {
 //			String reason = getItem(new JSONObject(rule.getRelation()), new StringBuilder()).toString();
 			for (Result re : rule.getResults()) {
 				if (re.getCategory() == null || customResult == null || customResult.contains(re.getCategory())) {
-					double rank = new ExplainUtil(itemManager, dictionaryManager, idMap).getRank(rule, re);
+					double rank = new ExplainUtil(itemManager, dictionaryManager, TestIdMapUtil.getInstance(indexManager).getIdMap()).getRank(rule, re);
 					if (rule.getType() == 0) {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("id", rule.getId() + "+" + re.getId());

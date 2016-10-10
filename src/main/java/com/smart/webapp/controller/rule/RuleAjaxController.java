@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -193,8 +194,6 @@ public class RuleAjaxController extends BaseAuditController {
 		String id = request.getParameter("id");
 		String json = null;
 		
-		if(idMap.size() == 0) initMap();
-
 		if (!StringUtils.isEmpty(id)) {
 			Rule r = ruleManager.get(Long.parseLong(id));
 			try {
@@ -217,7 +216,7 @@ public class RuleAjaxController extends BaseAuditController {
 			String unit = i.getUnit();
 			unit = StringUtils.isEmpty(unit) ? "" : ("," + unit);
 			map.put("I" + i.getId().toString(),
-					idMap.get(i.getIndexId()).getName() + ":" + i.getValue() + " (" + idMap.get(i.getIndexId()).getSampleFrom()
+					TestIdMapUtil.getInstance(indexManager).getIndex(i.getIndexId()).getName() + ":" + i.getValue() + " (" + TestIdMapUtil.getInstance(indexManager).getIndex(i.getIndexId()).getSampleFrom()
 							+ unit + ")");
 		}
 		List<Dictionary> pInfo = dictionaryManager.getPatientInfo("");

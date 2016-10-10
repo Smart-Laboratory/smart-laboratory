@@ -432,10 +432,10 @@ public class DeviceRelationListController {
     public String deleteIndex(@RequestParam(value = "id") Long id, HttpServletRequest request,HttpServletResponse response) throws Exception {
         try {
             indexManager.remove(id);
-            return  new JSONObject().put("result","true").toString();
+            return new JSONObject().put("result","true").toString();
         }catch (Exception e){
             e.printStackTrace();
-            return  new JSONObject().put("result","false").toString();
+            return new JSONObject().put("result","false").toString();
         }
     }
 
@@ -455,10 +455,10 @@ public class DeviceRelationListController {
         int orderno = ConvertUtil.getIntValue(request.getParameter("orderno"),-1);
         try {
             testReferenceManager.deleteTestReference(testid,sex,orderno);
-            return  new JSONObject().put("result","true").toString();
+            return new JSONObject().put("result","true").toString();
         }catch (Exception e){
             e.printStackTrace();
-            return  new JSONObject().put("result","false").toString();
+            return new JSONObject().put("result","false").toString();
         }
     }
 

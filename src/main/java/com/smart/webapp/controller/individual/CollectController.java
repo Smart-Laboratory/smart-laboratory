@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -74,7 +75,6 @@ public class CollectController extends BaseAuditController {
 		int row = Integer.parseInt(rows);
 		List<CollectSample> list = collectSampleManager.getCollectSample(userid);
 
-		if (idMap.size() == 0) initMap();
 		if (!StringUtils.isEmpty(select) && select.equals("2")) {
 			list = collectSampleManager.getAll();
 		}
@@ -138,7 +138,6 @@ public class CollectController extends BaseAuditController {
 		if (sample == null) {
 			throw new NullPointerException();
 		}
-		if (idMap.size() == 0) initMap();
 		Sample info = sampleManager.getBySampleNo(sample);
 		Process process = processManager.getBySampleId(info.getId());
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -163,7 +162,7 @@ public class CollectController extends BaseAuditController {
 						String result = rule.getResultName();
 						String itemString = "";
 						for (Item i : rule.getItems()) {
-							itemString = itemString + idMap.get(i.getIndexId()).getName() + "、";
+							itemString = itemString + TestIdMapUtil.getInstance(indexManager).getIndex(i.getIndexId()).getName() + "、";
 						}
 						if (note != null && !note.isEmpty()) {
 							note = note + "<br>" + itemString.substring(0, itemString.length() - 1) + "异常，" + result;
@@ -220,8 +219,6 @@ public class CollectController extends BaseAuditController {
 		if (sampleNo == null) {
 			throw new NullPointerException();
 		}
-		if (idMap.size() == 0)
-			initMap();
 		if (deviceMap.size() == 0)
 			initDeviceMap();
 		
@@ -347,12 +344,12 @@ public class CollectController extends BaseAuditController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			if (idMap.containsKey(id)) {
+			if (TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(id)) {
 				String testId = now.get(i).getTestId();
 				map.put("id", id);
 				map.put("color", color);
-				map.put("name", idMap.get(now.get(i).getTestId()).getName());
-				map.put("ab", idMap.get(now.get(i).getTestId()).getEnglish());
+				map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(now.get(i).getTestId()).getName());
+				map.put("ab", TestIdMapUtil.getInstance(indexManager).getIndex(now.get(i).getTestId()).getEnglish());
 				map.put("result", now.get(i).getTestResult());
 				map.put("last", resultMap1.size() != 0 && resultMap1.containsKey(testId) ? resultMap1.get(testId) : "");
 				map.put("last1", resultMap2.size() != 0 && resultMap2.containsKey(testId) ? resultMap2.get(testId) : "");
@@ -367,7 +364,7 @@ public class CollectController extends BaseAuditController {
 					map.put("scope", "");
 				}
 				map.put("unit", now.get(i).getUnit());
-				map.put("knowledgeName", idMap.get(now.get(i).getTestId()).getKnowledgename());
+				map.put("knowledgeName", TestIdMapUtil.getInstance(indexManager).getIndex(now.get(i).getTestId()).getKnowledgename());
 				map.put("editMark", now.get(i).getEditMark());
 				dataRows.add(map);
 			}
@@ -402,10 +399,7 @@ public class CollectController extends BaseAuditController {
 		DataResponse dataResponse = new DataResponse();
 		int page = Integer.parseInt(pages);
 		int row = Integer.parseInt(rows);
-
-		if (idMap.size() == 0) initMap();
 		List<Evaluate> list = evaluateManager.getByBA(sampleno, collector);
-		
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		int listSize = 0;
 		if (list != null)

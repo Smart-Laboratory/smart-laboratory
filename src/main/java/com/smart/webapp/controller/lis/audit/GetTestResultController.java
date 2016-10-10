@@ -60,9 +60,6 @@ public class GetTestResultController extends BaseAuditController {
 		if (sampleNo == null) {
 			throw new NullPointerException();
 		}
-		if (idMap.size() == 0)
-			initMap();
-		
 		if (deviceMap.size() == 0)
 			initDeviceMap();
 		
@@ -216,15 +213,15 @@ public class GetTestResultController extends BaseAuditController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			if (idMap.containsKey(id)) {
+			if (TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(id)) {
 //			if(true){
 				String testId = tr.getTestId();
 				Set<String> sameTests = util.getKeySet(testId);
 				sameTests.add(testId);
 				map.put("id", id);
 				map.put("color", color);
-				map.put("ab", idMap.get(tr.getTestId()).getEnglish());
-				map.put("name", idMap.get(tr.getTestId()).getName());
+				map.put("ab", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getEnglish());
+				map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getName());
 				map.put("result", tr.getTestResult());
 				map.put("last","");
 				map.put("last1","");
@@ -258,7 +255,7 @@ public class GetTestResultController extends BaseAuditController {
 					map.put("scope", ConvertUtil.null2String(lo));
 				}
 				map.put("unit", tr.getUnit());
-				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+				map.put("knowledgeName", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				dataRows.add(map);
@@ -299,9 +296,6 @@ public class GetTestResultController extends BaseAuditController {
 			throw new NullPointerException();
 		}
 		
-		if (idMap.size() == 0)
-			initMap();
-
 		if (deviceMap.size() == 0)
 			initDeviceMap();
 		
@@ -446,14 +440,14 @@ public class GetTestResultController extends BaseAuditController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			if (idMap.containsKey(id)) {
+			if (TestIdMapUtil.getInstance(indexManager).getIdMap().containsKey(id)) {
 				String testId = tr.getTestId();
 				Set<String> sameTests = util.getKeySet(testId);
 				sameTests.add(testId);
 				map.put("id", id);
 				map.put("color", color);
-				map.put("ab", idMap.get(tr.getTestId()).getEnglish());
-				map.put("name", idMap.get(tr.getTestId()).getName());
+				map.put("ab", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getEnglish());
+				map.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getName());
 				map.put("result", tr.getTestResult());
 				map.put("last","");
 				map.put("last1","");
@@ -474,7 +468,7 @@ public class GetTestResultController extends BaseAuditController {
 					map.put("scope", "");
 				}
 				map.put("unit", tr.getUnit());
-				map.put("knowledgeName", idMap.get(tr.getTestId()).getKnowledgename());
+				map.put("knowledgeName", TestIdMapUtil.getInstance(indexManager).getIndex(tr.getTestId()).getKnowledgename());
 				map.put("editMark", tr.getEditMark());
 				map.put("lastEdit", editMap.size() == 0 || !editMap.containsKey(id) ? "" : "上次结果 " + editMap.get(id));
 				map.put("checktime", Constants.DF5.format(tr.getMeasureTime()));
@@ -677,12 +671,9 @@ public class GetTestResultController extends BaseAuditController {
 
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(modifyList.size());
-		if (idMap.size() == 0)
-			initMap();
-
 		for (TestModify t : modifyList) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("test",  idMap.get(t.getTestId()).getName());
+			map.put("test",  TestIdMapUtil.getInstance(indexManager).getIndex(t.getTestId()).getName());
 			map.put("type", t.getType());
 			map.put("oldValue", t.getOldValue());
 			map.put("newValue", t.getNewValue());

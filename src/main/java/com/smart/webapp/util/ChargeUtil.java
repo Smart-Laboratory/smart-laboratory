@@ -176,9 +176,15 @@ public class ChargeUtil {
             param.put("quantity", "1");
             //param.put("price", "");
             //param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
-            param.put("feeItemCode", "16041");
-            //param.put("feeItemName", "");
-            param.put("feeItemName","采血器(普通真空试管)");
+            if(labOrder.getContainer().equals("红色管")) {
+                param.put("feeItemCode", "16041");
+                //param.put("feeItemName", "");
+                param.put("feeItemName","采血器(普通真空试管)");
+            } else {
+                param.put("feeItemCode", "16042");
+                param.put("feeItemName","采血器(特殊真空试管)");
+            }
+
             param.put("billingDoctorNo", labOrder.getRequester());
             param.put("billingDeptNo", labOrder.getHossection());
             param.put("testDoctorNo", user.getHisId());

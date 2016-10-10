@@ -4,7 +4,7 @@ $(function() {
 
 	$("#refuse").click(function(){
 		if($("#doctadviseno").val()) {
-			window.open("../quality/invalidSampleForm?id="+$("#doctadviseno").val());
+			window.open(baseUrl + "/quality/invalidSampleForm?id="+$("#doctadviseno").val());
 		} else {
 			layer.msg("无标本信息，请先输入条码号！", {icon: 2, time: 1000});
 		}
@@ -27,12 +27,12 @@ function getData(obj,event) {
 
 function receiveSample(id) {
 	if($("#operator").val() == "") {
-		alert("接收者不能为空，请输入接受者姓名！")
+		layer.msg("接收者不能为空，请输入接受者姓名！", {icon: 2, time: 1000});
 	} else {
-		var doct = $("#doctin").val().substr(0,8);
+		var doct = $("#doctin").val();
 		$.ajax({
 	  		type:'GET',
-			url: baseUrl + "/manage/sampleHandover/ajax/sample?doct=" + doct + "&operator=" + $("#operator").val() + "(" + $("#point").val() + ")",
+			url: baseUrl + "/manage/receive/ajax/sample?barcode=" + doct + "&operator=" + $("#operator").val() + "(" + $("#point").val() + ")",
 	  		success: function(data) {
 	  			data = jQuery.parseJSON(data);
 	  			$("#alert").css("display","block");
