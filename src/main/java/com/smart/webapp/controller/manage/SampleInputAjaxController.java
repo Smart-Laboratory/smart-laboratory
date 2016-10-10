@@ -128,13 +128,14 @@ public class SampleInputAjaxController {
 		String toDate=ConvertUtil.null2String(request.getParameter("toDate"));
 		String sampleNo=ConvertUtil.null2String(request.getParameter("sampleNo"));
 		String sampleStatus=ConvertUtil.null2String(request.getParameter("samplestatus"));
+		int isSearch = ConvertUtil.getIntValue(request.getParameter("isSearch"),0);
 
 		if(fromDate.isEmpty() || toDate.isEmpty()) {
 			Date now = new Date();
 			fromDate = ConvertUtil.getFormatDate(now, "yyyy-MM-dd");
 			toDate = ConvertUtil.getFormatDate(now, "yyyy-MM-dd");
 		}
-
+		if(isSearch==0)sampleNo="";
 		List<Object[]> list = sampleManager.getReceiveList(sampleNo, lab,sampleStatus,fromDate,toDate);
 		if(list == null || list.size() == 0) {
 			return null;

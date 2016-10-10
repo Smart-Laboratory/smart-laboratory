@@ -160,4 +160,6 @@ public interface IndexDao extends GenericDao<Index, Long> {
 	Index getAntibioticById(String id);
 
     List<Index> getIndexByLab(String lab);
+
+	String getMaxIndexId();
 }

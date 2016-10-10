@@ -144,4 +144,9 @@ public class IndexManagerImpl extends GenericManagerImpl<Index, Long> implements
 	public List<Index> getIndexByLab(String lab) {
 		return indexDao.getIndexByLab(lab);
 	}
+
+	@Override
+	public synchronized String getMaxIndexId() {
+		return indexDao.getMaxIndexId();
+	}
 }

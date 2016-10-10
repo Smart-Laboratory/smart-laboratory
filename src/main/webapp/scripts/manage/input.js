@@ -10,7 +10,7 @@ function searchSample() {
 		url: baseUrl+'/sample/ajax/getReceived',
 		datatype : 'json',
 		//发送数据
-		postData : {sampleNo:$('#sampleno_text').val()||'',fromDate:$('#fromDate').val()||'',toDate:$('#toDate').val()||'',sampleStatus:$('#samplestatus').val()||''},
+		postData : {sampleNo:$('#sampleno_text').val()||'',fromDate:$('#fromDate').val()||'',toDate:$('#toDate').val()||'',sampleStatus:$('#samplestatus').val()||'',isSearch:'1'},
 		page : 1
 	}).trigger('reloadGrid');//重新载入
 

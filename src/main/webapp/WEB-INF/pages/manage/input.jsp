@@ -82,8 +82,8 @@
                     <span class="input-group-addon">样本状态</span>
                     <select class="form-control" id="samplestatus">
                         <option value="1">未接收</option>
-                        <option value="2" selected>已接收</option>
-                        <option value="3">已审核</option>
+                        <option value="5" selected>已接收</option>
+                        <option value="7">已审核</option>
                     </select>
                 </div>
             </div>

@@ -190,4 +190,6 @@ public interface IndexManager extends GenericManager<Index, Long> {
 
 	@Transactional
     List<Index> getIndexByLab(String lastLab);
+
+	String getMaxIndexId();
 }

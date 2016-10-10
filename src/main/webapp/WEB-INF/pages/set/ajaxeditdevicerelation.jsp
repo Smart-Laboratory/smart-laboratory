@@ -251,15 +251,19 @@
                                             </div>
                                         </div>
                                         <div class="form-group controls controls-row">
-                                            <label class="col-sm-1 control-label" for="outdate">失效日期</label>
+                                            <label class="col-sm-1 control-label" for="tea">知识名称</label>
                                             <div class="col-sm-5">
-                                                <div class="input-group">
-                                                    <input id="outdate" type="text"  name="outdate" value="${index.outDate}" class="form-control" />
-                                                <span class="input-group-addon">
-                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                </span>
-                                                </div>
+                                                <input type="text"  class="col-sm-12" name="knowledgename" id="knowledgename" value="${index.knowledgename}"/>
                                             </div>
+                                            <%--<label class="col-sm-1 control-label" for="outdate">失效日期</label>--%>
+                                            <%--<div class="col-sm-5">--%>
+                                                <%--<div class="input-group">--%>
+                                                    <%--<input id="outdate" type="text"  name="outdate" value="${index.outDate}" class="form-control" />--%>
+                                                <%--<span class="input-group-addon">--%>
+                                                    <%--<i class="fa fa-calendar bigger-110"></i>--%>
+                                                <%--</span>--%>
+                                                <%--</div>--%>
+                                            <%--</div>--%>
                                             <label class="col-sm-1 control-label" for="inuredate">生效日期</label>
                                             <div class="col-sm-5">
                                                 <input class="form-control" id="inuredate" type="text" value="${index.inureDate}" placeholder="生效日期" disabled/>

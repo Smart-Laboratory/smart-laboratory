@@ -273,4 +273,10 @@ public class IndexDaoHibernate extends GenericDaoHibernate<Index, Long> implemen
 			return indexs.get(0);
 		}
 	}
+
+	public String getMaxIndexId(){
+		String sql = "select (max(index_id) +1) indexid from lab_index";
+		Query q =  getSession().createSQLQuery(sql);
+		return String.valueOf(q.uniqueResult());
+	}
 }

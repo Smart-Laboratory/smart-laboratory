@@ -11,10 +11,7 @@ import com.smart.service.lis.SectionManager;
 import com.smart.service.lis.TestReferenceManager;
 import com.smart.service.rule.IndexManager;
 import com.smart.util.ConvertUtil;
-import com.smart.webapp.util.DataResponse;
-import com.smart.webapp.util.FillFieldUtil;
-import com.smart.webapp.util.SampleUtil;
-import com.smart.webapp.util.SectionUtil;
+import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -210,9 +207,16 @@ public class DeviceRelationListController {
 
         JSONArray jsonRefArray = new JSONArray();       //参考范围DATA
         JSONArray jsonDicArray = new JSONArray();       //项目字典DATA
+
+
+        //新增返回编号
+        Index index = new Index();
+        if(method.equals("add")){
+            index.setIndexId(indexManager.getMaxIndexId());
+        }
         if(id >0) {
             //获取指标信息
-            Index index = indexManager.get(id);
+            index = indexManager.get(id);
 
             //生成项目字典
             String dictionaries = ConvertUtil.null2String(index.getDictionaries());
@@ -248,10 +252,9 @@ public class DeviceRelationListController {
                 jsonObject.put("orderno", ConvertUtil.null2String(t.getOrderNo()));
                 jsonRefArray.put(jsonObject);
             }
-
-            view.addObject("index",index);                  //指标信息
             view.addObject("sampleType",SampleUtil.getInstance(dictionaryManager).getValue(index.getSampleFrom())); //样本类型中文
         }
+        view.addObject("index",index);                  //指标信息
         //返回常用信息
         //JSONObject jsonIndex = toJSON(index);
         JSONObject jsonDeviceList = new JSONObject(mDevices);
@@ -305,27 +308,30 @@ public class DeviceRelationListController {
         String testClass = ConvertUtil.null2String(request.getParameter("testclass"));
         int needHistory = ConvertUtil.getIntValue(request.getParameter("needhistory"),0);
         String method = ConvertUtil.null2String(request.getParameter("method"));
+        String knowledgename = ConvertUtil.null2String(request.getParameter("knowledgename"));
         String description = ConvertUtil.null2String(request.getParameter("description"));
         String guide = ConvertUtil.null2String(request.getParameter("guide"));
         String type = ConvertUtil.null2String(request.getParameter("type"));
         int printord = ConvertUtil.getIntValue(request.getParameter("printord"),0);
         int isprint = ConvertUtil.getIntValue(request.getParameter("isprint"),0);
 
-        if(!name.equals("")) index.setName(name);
-        if(!eglish.equals("")) index.setEnglish(eglish);
-        if(!sampleFrom.equals("")) index.setSampleFrom(sampleFrom);
-        if(!defaultValue.equals("")) index.setDefaultvalue(defaultValue);
-        if(qcNeed >=0 ) index.setNeedhistory(qcNeed);
-        if(!tea.equals("")) index.setTEA(tea);
-        if(!ccv.equals("")) index.setCCV(ccv);
-        if(!testClass.equals("")) index.setTestClass(testClass);
-        if(needHistory>=0) index.setNeedhistory(needHistory);
-        if(!method.equals("")) index.setMethod(method);
-        if(!description.equals("")) index.setDescription(description);
-        if(!guide.equals("")) index.setGuide(guide);
-        if(!type.equals("")) index.setType(type);
-        if(!unit.equals("")) index.setUnit(unit);
-        if(printord>=0) index.setPrintord(printord);
+        index.setName(name);
+        index.setEnglish(eglish);
+        index.setSampleFrom(sampleFrom);
+        index.setDefaultvalue(defaultValue);
+        index.setNeedhistory(qcNeed);
+        index.setTEA(tea);
+        index.setCCV(ccv);
+        index.setTestClass(testClass);
+        index.setNeedhistory(needHistory);
+        index.setMethod(method);
+        index.setDescription(description);
+        index.setGuide(guide);
+        index.setType(type);
+        index.setUnit(unit);
+        index.setPrintord(printord);
+        index.setKnowledgename(knowledgename);
+
         index.setIsprint(isprint);
         //不常用信息
         String principle = ConvertUtil.null2String(request.getParameter("principle"));          //测定原理
@@ -335,18 +341,18 @@ public class DeviceRelationListController {
         String notes= ConvertUtil.null2String(request.getParameter("notes"));                   //注意事项
         String methodName = ConvertUtil.null2String(request.getParameter("methodname"));        //方法名称
 
-        if(!principle.equals("")) index.setPrinciple(principle);
-        if(!workCriterion.equals("")) index.setWorkCriterion(workCriterion);
-        if(!increasedHint.equals("")) index.setIncreasedHint(increasedHint);
-        if(!decreasedHint.equals("")) index.setDecreasedHint(decreasedHint);
-        if(!notes.equals("")) index.setNotes(notes);
-        if(!methodName.equals("")) index.setMethodName(methodName);
+        index.setPrinciple(principle);
+        index.setWorkCriterion(workCriterion);
+        index.setIncreasedHint(increasedHint);
+        index.setDecreasedHint(decreasedHint);
+        index.setNotes(notes);
+        index.setMethodName(methodName);
 
         //部门仪器信息
         String labDepartment = request.getParameter("department");  //部门
         String instrument = request.getParameter("instrument");     //仪器
-        if(!labDepartment.equals("")) index.setLabdepartment(labDepartment);
-        if(!instrument.equals("")) index.setInstrument(instrument);
+        index.setLabdepartment(labDepartment);
+        index.setInstrument(instrument);
 
         //项目字典
         String dictionariesData = request.getParameter("dictionariesData");
@@ -397,6 +403,9 @@ public class DeviceRelationListController {
 
         try{
             indexManager.save(index);
+            //更新缓存
+            TestIdMapUtil.getInstance(indexManager).updateMap(index);
+
             if(testReferences.size()>0) {
                 //更新缓存
                 testReferenceManager.saveTestReferences(testReferences);  //批量保存数据
@@ -484,6 +493,8 @@ public class DeviceRelationListController {
         jsonObject.put("outdate",ConvertUtil.null2String(index.getOutDate()));
         jsonObject.put("defaultvalue",ConvertUtil.null2String(index.getDefaultvalue()));
         jsonObject.put("qcneed",ConvertUtil.null2String(index.getQcNeed()));
+        jsonObject.put("knowledgeName",ConvertUtil.null2String(index.getKnowledgename()));
+
 
         //不常用信息
         jsonObject.put("principle",ConvertUtil.null2String(index.getPrinciple()));
