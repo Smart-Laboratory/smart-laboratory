@@ -206,14 +206,12 @@
 	
 	function getSample(sampleNo) {
 
-        var lastsel;
         var cl = "";
-        var isEdit = false;
         var width = $("#mid").width();
 		var clientHeight= $(window).innerHeight();
 		var height =clientHeight-$('#head').height()- $('#header').height()- $('#patientinfo').height()-$('.footer-content').height()-135;
 		jQuery("#rowed3").jqGrid({
-		   	url:"../audit/sample?id="+sampleNo,
+		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
 			width:width,
 			jsonReader : {repeatitems : false, userdata : "userdata"},  
@@ -243,60 +241,44 @@
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: "",
-			onSelectRow: function(id) {
+			ondblClickRow: function(id) {
 				$("#rbcLabel").css('display','none');
 				if($("#needEdit").val() == "true") {
-					if (lastsel) {
-						if (lastsel == id) {
-							if (!isEdit) {
-								isEdit = true;
-								var ret = jQuery("#rowed3").jqGrid('getRowData',id);
-								var pre = "<div class='"+$(ret.result).attr('class')+"'>";
-								cl = pre + $(ret.result).html() + "</div>";
-								lastval = $(ret.result).find(":eq(0)").html();
-								jQuery("#rowed3").jqGrid('setRowData', id, {result:lastval});
-								jQuery("#rowed3").jqGrid('editRow',id, {
-									keys:true,
-									aftersavefunc:function() {
-										var newVal = jQuery("#rowed3").jqGrid('getRowData',id);
-										var hl = newVal.scope.split("-");
-										var h = parseFloat(hl[1]);
-										var l = parseFloat(hl[0]);
-										if(hl.length == 3) {
-											var h = parseFloat(hl[2]);
-											var l = parseFloat(hl[1])*(-1);
-										}
-					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
-					        			var res = "";
-					        			
-					        			if (!isNaN(h) && !isNaN(l)) {
-					        				if (!isNaN(va)) {
-					        					if (va < l) {
-						        					res = "<font color='red'>↓</font>";
-						        				} else if (va > h) {
-						        					res = "<font color='red'>↑</font>";
-						        				}
-					        				}
-					        			}
-										jQuery("#rowed3").jqGrid('setRowData', id, {
-											result:pre + "<span class='result_span'>" + newVal.result + "</span>"+res+"</div>"
-										});
-										$("#modifyBtn").css('display','inline');
-										CalculateRbc(id);
-										
-										isEdit = false;
-									}				
-								});
+					var ret = jQuery("#rowed3").jqGrid('getRowData',id);
+					var pre = "<div class='"+$(ret.result).attr('class')+"'>";
+					cl = pre + $(ret.result).html() + "</div>";
+					lastval = $(ret.result).find(":eq(0)").html();
+					jQuery("#rowed3").jqGrid('setRowData', id, {result:lastval});
+					jQuery("#rowed3").jqGrid('editRow',id, {
+						keys:true,
+						aftersavefunc:function() {
+							var newVal = jQuery("#rowed3").jqGrid('getRowData',id);
+							var hl = newVal.scope.split("-");
+							var h = parseFloat(hl[1]);
+							var l = parseFloat(hl[0]);
+							if(hl.length == 3) {
+								var h = parseFloat(hl[2]);
+								var l = parseFloat(hl[1])*(-1);
 							}
-						} else {
-							jQuery('#rowed3').jqGrid('restoreRow', lastsel);
-							if (isEdit) {
-								jQuery("#rowed3").jqGrid('setRowData', lastsel, {result:cl});
+							var va = parseFloat(newVal.result.replace("<","").replace(">",""));
+							var res = "";
+
+							if (!isNaN(h) && !isNaN(l)) {
+								if (!isNaN(va)) {
+									if (va < l) {
+										res = "<font color='red'>↓</font>";
+									} else if (va > h) {
+										res = "<font color='red'>↑</font>";
+									}
+								}
 							}
-							isEdit = false;
+							jQuery("#rowed3").jqGrid('setRowData', id, {
+								result:pre + "<span class='result_span'>" + newVal.result + "</span>"+res+"</div>"
+							});
+							$("#modifyBtn").css('display','inline');
+							CalculateRbc(id);
 						}
-					}
-					lastsel=id;
+					});
 				}
 			},
 			onRightClickRow: function(id) {

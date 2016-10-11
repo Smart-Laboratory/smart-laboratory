@@ -153,7 +153,7 @@ function writeBackOnce(code, lab, user) {
 		if (data.result == 0) {
 			layer.msg("正在写回中...", {time: 1000});
 		} else if (data.result == 1) {
-			$.get("。。/audit/count",{}, function(data) {
+			$.get(baseUrl + "/audit/count",{}, function(data) {
 	 			$("#today_info_unaudit").html(data.todayunaudit);
 	 			$("#today_info_unpass").html(data.todayunpass);
 	 			$("#need_write_back").html(data.needwriteback);

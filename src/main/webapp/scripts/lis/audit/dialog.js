@@ -1021,7 +1021,6 @@ $(function () {
         openTatDialog();
         var doc = $("#hiddenDocId").val();
         $.get("../audit/tat", {id: doc}, function (data) {
-            data = jQuery.parseJSON(data);
             $("#tat_request").html(data.request);
             $("#tat_execute").html(data.execute);
             $("#tat_receive").html(data.receive);
