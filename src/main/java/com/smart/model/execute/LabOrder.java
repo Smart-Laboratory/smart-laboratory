@@ -1,7 +1,9 @@
 package com.smart.model.execute;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,7 +18,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="l_laborder")
-public class LabOrder {
+public class LabOrder implements Serializable {
+	private static final long serialVersionUID = 6573866858687240081L;
 	private Long laborder; //同医嘱号
 
 	private String requestId;

@@ -863,7 +863,7 @@
 		   	rowNum: 50,
 		    caption: "",
 			onSelectRow: function(id) {
-				
+
 				if($("#needEdit").val() == "true") {
 					if (lastsel) {
 						if (lastsel == id) {

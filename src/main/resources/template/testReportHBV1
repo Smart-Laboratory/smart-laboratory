@@ -125,8 +125,6 @@ date:2016-10-04
             padding-bottom: 2px;
         }
     </style>
-
-
 </head>
 <body>
 <div class="content">
@@ -148,7 +146,7 @@ date:2016-10-04
             </tr>
             #foreach($item in $results)
                 <tr>
-                    <td>
+                    <td >$!item.testName</td>
                     #if($!item.resultFlag=='阳性')
                         <span style="background: #eee">阳性$!item.testResult</span>
                     #else

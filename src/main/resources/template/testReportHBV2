@@ -143,8 +143,9 @@ date:2016-10-04
             </tr>
             #foreach($item in $results)
                 <tr>
+                    <td >$!item.testName</td>
                     <td>
-                        #if($!item.testResult=='阳性')
+                        #if($!item.testResult=='阳性' && ($!item.testName !='乙肝表面抗体' ||  $!item.testName !='乙肝e抗体'))
                             <span style="background: #eee">$!item.testResult</span>
                         #else
                             $!item.testResult
