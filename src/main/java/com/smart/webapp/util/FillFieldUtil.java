@@ -80,39 +80,42 @@ public class FillFieldUtil {
             for(TestReference testReference : referList) {
                 ageLow = new AgeUtil().getAge(String.valueOf(testReference.getAgeLow()), testReference.getAgeLowUnit());
                 ageHigh = new AgeUtil().getAge(String.valueOf(testReference.getAgeHigh()), testReference.getAgeHighUnit());
-                if((sex == testReference.getSex() || testReference.getSex() == 3) && testid.equals(testReference.getTestId()) && age >= ageLow && age < ageHigh) {
-                	if(testReference.getReference().indexOf("-") >= 0) {
-						String[] refArr = testReference.getReference().split("-");
-                        if(refArr.length == 2) {
-                            result.setRefLo(refArr[0]);
-                            result.setRefHi(refArr[1]);
-                        } else if (refArr.length == 3) {
-                            result.setRefLo("-" + refArr[1]);
-                            result.setRefHi(refArr[2]);
-                        } else {
-                            result.setRefLo(testReference.getReference());
-                            result.setRefHi("");
-                        }
-                    } else if (testReference.getReference().indexOf(">") == 0) {
-                        result.setRefLo(testReference.getReference().substring(1));
-                        result.setRefHi("");
-                    } else if (testReference.getReference().indexOf("<") == 0) {
-						int round = 0;
-                    	if(testReference.getReference().substring(1).indexOf(".") > 0) {
-                    		round = testReference.getReference().substring(1).split("[.]")[1].length();
+				if(testid.equals(testReference.getTestId()) && age >= ageLow && age < ageHigh) {
+					if((sex == testReference.getSex() || testReference.getSex() == 3)) {
+						if(testReference.getReference().indexOf("-") >= 0) {
+							String[] refArr = testReference.getReference().split("-");
+							if(refArr.length == 2) {
+								result.setRefLo(refArr[0]);
+								result.setRefHi(refArr[1]);
+							} else if (refArr.length == 3) {
+								result.setRefLo("-" + refArr[1]);
+								result.setRefHi(refArr[2]);
+							} else {
+								result.setRefLo(testReference.getReference());
+								result.setRefHi("");
+							}
+						} else if (testReference.getReference().indexOf(">") == 0) {
+							result.setRefLo(testReference.getReference().substring(1));
+							result.setRefHi("");
+						} else if (testReference.getReference().indexOf("<") == 0) {
+							int round = 0;
+							if(testReference.getReference().substring(1).indexOf(".") > 0) {
+								round = testReference.getReference().substring(1).split("[.]")[1].length();
+							}
+							StringBuilder sb = new StringBuilder("#0.");
+							for(int i = 0; i < round; i++) {
+								sb.append("0");
+							}
+							DecimalFormat df  = new DecimalFormat(sb.toString());
+							result.setRefLo(df.format(0d));
+							result.setRefHi(testReference.getReference().substring(1));
+						} else {
+							result.setRefLo(testReference.getReference());
+							result.setRefHi("");
 						}
-                        StringBuilder sb = new StringBuilder("#0.");
-                        for(int i = 0; i < round; i++) {
-                            sb.append("0");
-                        }
-                        DecimalFormat df  = new DecimalFormat(sb.toString());
-                        result.setRefLo(df.format(0d));
-                        result.setRefHi(testReference.getReference().substring(1));
-                    } else {
-                        result.setRefLo(testReference.getReference());
-                        result.setRefHi("");
-                    }
-                }
+					}
+				}
+
             }
 			String reflo = result.getRefLo();
 			try {
