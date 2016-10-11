@@ -245,8 +245,11 @@
                     }
                 };
                 $.ajax({
-                    url: '../nursestation/inexecute/getList',
-                    data: {ward: '${ward}'},
+                    url: baseUrl + '/nursestation/inexecute/getList',
+                    data: {
+                        ward: '${ward}',
+                        userid: '${userid}'
+                    },
                     type: 'POST',
                     dataType: "json",
                     ContentType: "application/json; charset=utf-8",
@@ -273,9 +276,10 @@
                     data.bedNo = treeNode.bedNo;
                     data.patientId = treeNode.id
                 }
+                data.userid = "${userid}";
                 var index;
                 $.ajax({
-                    url: '../nursestation/inexecute/getRequestList',
+                    url: baseUrl + '/nursestation/inexecute/getRequestList',
                     data: data,
                     type: 'POST',
                     dataType: "json",

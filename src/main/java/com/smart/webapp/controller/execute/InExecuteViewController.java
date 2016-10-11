@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -42,10 +41,9 @@ import java.util.regex.Pattern;
  * Created by zcw on 2016/8/22.
  * 住院标本采集控制器
  */
-
+@Scope("session")
 @Controller
 @RequestMapping(value = "/nursestation/inexecute*")
-@Scope("session")
 public class InExecuteViewController extends RequestContextListener implements Serializable {
 
     @Autowired
@@ -78,12 +76,9 @@ public class InExecuteViewController extends RequestContextListener implements S
         }
     };
 
-
     private Map<String, String> sampleTypeMap = new HashMap<String, String>();
 
-    private ThreadLocal<List<LabOrder>> labOrdersService  = new ThreadLocal<List<LabOrder>>();
-
-
+    private List<LabOrder> labOrdersService = new ArrayList<LabOrder>();
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -120,8 +115,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         long startTime = System.currentTimeMillis();   //获取开始时间
         WebService webService = new WebService();
         org.codehaus.jettison.json.JSONArray patientList = webService.getInPatientList(ward);
-        List<LabOrder> orderList = webService.getInExcuteInfo(ward, bedNo, patientId);
-        labOrdersService.set(orderList);//重新初始化
+        labOrdersService = webService.getInExcuteInfo(ward, bedNo, patientId);//重新初始化
 
         //System.out.println("labOrdersService==>"+labOrdersService.size());
         long endTime = System.currentTimeMillis(); //获取结束时间
@@ -137,7 +131,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         }
         nodes.add(root);
         //按病人床位号+patientId分组
-        for (Iterator it = orderList.iterator(); it.hasNext(); ) {
+        for (Iterator it = labOrdersService.iterator(); it.hasNext(); ) {
             LabOrder labOrder = (LabOrder) it.next();
             setLisInfo(labOrder);
             String key = labOrder.getBed() + "_" + labOrder.getPatientid();
@@ -190,20 +184,15 @@ public class InExecuteViewController extends RequestContextListener implements S
         //Long startTime = System.currentTimeMillis(); //获取结束时间
         Map<String, List> resultMap = new HashMap<String, List>();
 //        System.out.println("labOrdersService11=>"+labOrdersService.size());
-        //System.out.println("ward " + ward + " size " + labOrdersService.get().size());
-        List<LabOrder> orderList  = (List<LabOrder> )labOrdersService.get();
-        if(orderList == null) {
-            orderList = new ArrayList<LabOrder>();
-        }
         List<LabOrder> labOrders = new ArrayList<LabOrder>();
         if (!ward.isEmpty() && !bedNo.isEmpty() && !patientId.isEmpty()) {
-            for (LabOrder labOrder : orderList) {
+            for (LabOrder labOrder : labOrdersService) {
                 if (labOrder.getWardId().equals(ward) && labOrder.getBed().equals(bedNo) && labOrder.getPatientid().equals(patientId)) {
                     labOrders.add(labOrder);
                 }
             }
         } else {
-            labOrders = orderList;//取所有记录
+            labOrders = labOrdersService;//取所有记录
         }
         //Long endTime = System.currentTimeMillis(); //获取结束时间
        // System.out.println("程序运行时间1： " + (endTime - startTime) + "ms");
@@ -360,7 +349,7 @@ public class InExecuteViewController extends RequestContextListener implements S
 
         List<LabOrder> labOrders = JSON.parseArray(orders, LabOrder.class);     //申请打印记录
         List<LabOrder> hasPrintLaborder = new ArrayList<LabOrder>(); //已打印记录
-        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
+
         //再次判断提交对象是否已经采集
         //获取病区已采集标本
         try {
@@ -403,14 +392,11 @@ public class InExecuteViewController extends RequestContextListener implements S
                 List<LabOrder> labOrderList1 = labOrderMap.get(key);
                 for (LabOrder labOrder : labOrderList1) {
                     if (labOrder.getZxbz() == 1) continue;
-                    Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
                     //合并判断条件： 样本类型、检验部门、取报告时间
                     String key1 = labOrder.getRequestId() + "_" +
                             ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
                             ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
-                            ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
-                            ConvertUtil.null2String(ylxh.getSglx())+"_"+
-                            ConvertUtil.null2String(ylxh.getSgsl());
+                            ConvertUtil.null2String(labOrder.getQbgsj());
 
                     if (!unLabOrderlistMap.isEmpty() && unLabOrderlistMap.containsKey(key1)) {
                         LabOrder labOrder1 = unLabOrderlistMap.get(key1);
@@ -494,7 +480,7 @@ public class InExecuteViewController extends RequestContextListener implements S
                         LabOrder labOrder1 = labOrderManager.get(retObj.getLong("labOrderId"));
                         inExcuteManager.removeInExcute(sample1, process1, labOrder1);
                     } else {
-
+                        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
                         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
 
                         LabOrderVo labOrderVo = new LabOrderVo();
