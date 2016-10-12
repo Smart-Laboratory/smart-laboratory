@@ -1,4 +1,25 @@
-	function getPatient(docNo) {
+/*
+ *  打开历史记录曲线图展示弹窗
+ */
+function openChartDialog() {
+	layer.open({
+		type: 1,
+		shade: 0.4,
+		skin: 'layui-layer-lan',
+		area: ['680px', '540px'],
+		title: '样本项目试剂信息和历史记录',
+		content: $('#chartDialog'),
+		cancel: function (index) {
+			layer.close(index);
+			//关闭浏览器右键
+			document.oncontextmenu = function () {
+				return true;
+			};
+		}
+	});
+}
+
+function getPatient(docNo) {
 		$.get("../manage/patientList/patient",{id:docNo},function(data){
 			$("#midContent").css('display','block');
 			$("#sampleTitle").html(data.examinaim);
@@ -29,7 +50,7 @@
 	function getSample(sampleNo) {
         var cl = "";
 		jQuery("#rowed3").jqGrid({
-		   	url:"../manage/patientList/sample?id="+sampleNo,
+		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
 			jsonReader : {repeatitems : false},  
 		   	colNames:['ID','项目', '结果','历史', '历史1', '历史2', '参考范围', '单位'],
@@ -48,31 +69,200 @@
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: " ",
+			onRightClickRow: function(id) {
+				//关闭浏览器右键
+				document.oncontextmenu=function(){return false;};
+				var sample=$("#hiddenSampleNo").val();
+				$.get(baseUrl + "/audit/ajax/singleChart",{id:id, sample:sample},function(data){
+					$("#chartAlert").css("display","none");
+					openChartDialog();
+					$("#hmInfo").empty();
+					for (var i=0; i< data.hmList.length; i++) {
+						$("#hmInfo").append(data.hmList[i]);
+					}
+
+					if (data.num > 1) {
+						$("#tongji_max").html(data.max);
+						$("#tongji_min").html(data.min);
+						$("#tongji_mid").html(data.mid);
+						$("#tongji_ave").html(data.ave);
+						$("#tongji_sd").html(data.sd);
+						$("#tongji_cov").html(data.cov);
+						var xset = data.time;
+						var yset1 = data.lo;
+						var yset2 = data.re;
+						var yset3 = data.hi;
+						var chart = new Highcharts.Chart({
+							title: {
+								text: data.name
+							},
+							credits: {
+								enabled:false
+							},
+							chart: {
+								renderTo: 'singleChartPanel',
+								type: 'line',
+								marginRight: 130,
+								marginBottom: 25
+							},
+							xAxis: {
+								type: 'datetime',
+								categories: xset
+							},
+							yAxis: {
+								title: {
+									text: '结果'
+								},
+								plotLines: [{
+									value: 0,
+									width: 1,
+									color: '#808080'
+								}]
+							},
+							legend: {
+								layout: 'vertical',
+								align: 'right',
+								verticalAlign: 'middle',
+								borderWidth: 0
+							},
+							series: [{
+								name: '低值',
+								data: yset1
+							}, {
+								name: '检验结果',
+								data: yset2
+							}, {
+								name: '高值',
+								data: yset3
+							}]
+						});
+					} else {
+						$("#chartAlert").css("display","block");
+					}
+				});
+			},
 			loadComplete: function() {
-				$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
+				if ($("#sampleTitle").html() == "") {
+//					$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
+				}
+				var hisDate = jQuery("#rowed3").jqGrid("getGridParam", "userData").hisDate;
+				var sameSample = jQuery("#rowed3").jqGrid("getGridParam", "userData").sameSample;
+				var isLastYear = jQuery("#rowed3").jqGrid("getGridParam", "userData").isLastYear;
+				var isLastTwoYear = jQuery("#rowed3").jqGrid("getGridParam", "userData").isLastTwoYear;
+				$("#rowed3_last").html("历史");
+				$("#rowed3_last1").html("历史");
+				$("#rowed3_last2").html("历史");
+				$("#rowed3_last").css('color','#000000');
+				$("#rowed3_last1").css('color','#000000');
+				$("#rowed3_last2").css('color','#000000');
+				if (hisDate != null && hisDate != "") {
+					$("#hisLastResult").val(1);
+					var his = hisDate.split(",");
+					if (his.length == 1) {
+						$("#rowed3_last").html(his[0].split(":")[0]);
+						$("#rowed3_last").attr('title',his[0].split(":")[1]);
+					}else if (his.length == 2) {
+						$("#rowed3_last").html(his[0].split(":")[0]);
+						$("#rowed3_last").attr('title',his[0].split(":")[1]);
+						$("#rowed3_last1").html(his[1].split(":")[0]);
+						$("#rowed3_last1").attr('title',his[1].split(":")[1]);
+					}else if (his.length >= 3) {
+						$("#rowed3_last").html(his[0].split(":")[0]);
+						$("#rowed3_last").attr('title',his[0].split(":")[1]);
+						$("#rowed3_last1").html(his[1].split(":")[0]);
+						$("#rowed3_last1").attr('title',his[1].split(":")[1]);
+						$("#rowed3_last2").html(his[2].split(":")[0]);
+						$("#rowed3_last2").attr('title',his[2].split(":")[1]);
+					}
+				} else {
+					$("#hisLastResult").val(0);
+				}
 				$.each(jQuery('#rowed3').jqGrid('getCol','id', false), function(k,v) {
-        			var ret = jQuery("#rowed3").jqGrid('getRowData',v);
-        			if (ret.last != null && ret.last != "")
-        				$("#hisLastResult").val(1);
-        			else
-        				$("#hisLastResult").val(0);
-        			var hl = ret.scope.split("-");
-        			var h = parseFloat(hl[1]);
-        			var l = parseFloat(hl[0]);
-        			var va = parseFloat(ret.result);
-        			var res = "";
-        			var color = "<div>";
-        			
-        			if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
-        				if (va < l) {
-        					res = "<font color='red'>\u2193</font>";
-        				} else if (va > h) {
-        					res = "<font color='red'>\u2191</font>";
-        				}
-        			}
-        			jQuery("#rowed3").jqGrid('setRowData', v, {result:color+"<span class='result_span'>"+ret.result+"</span>"+res+"</div>"});
-        		}); 
-			}
+					var ret = jQuery("#rowed3").jqGrid('getRowData',v);
+					var hl = ret.scope.split("-");
+					var h = parseFloat(hl[1]);
+					var l = parseFloat(hl[0]);
+					if(hl.length == 3) {
+						var h = parseFloat(hl[2]);
+						var l = parseFloat(hl[1])*(-1);
+					}
+					var color = "<div class='";
+					if (ret.color == 1) {
+						color += "diff_td'>";
+					} else if (ret.color == 2) {
+						color += "ratio_td'>";
+					} else if (ret.color == 3) {
+						color += "dan_td'>";
+					} else if (ret.color == 4) {
+						color += "re_td'>";
+					} else if (ret.color == 5) {
+						color += "al2_td'>";
+					} else if (ret.color == 6) {
+						color += "al3_td'>";
+					} else if (ret.color == 7) {
+						color += "ex_td'>";
+					} else {
+						color += "'>";
+					}
+
+					jQuery("#rowed3").jqGrid('setRowData', v, {
+						name:"<a href='javascript:show_knowledge(\""+ret.knowledgeName+"\")'>"+ret.name+"</a>",
+						ab:"<a href='javascript:show_knowledge(\""+ret.knowledgeName+"\")'>"+ret.ab+"</a>"
+					});
+
+					if (hl.length != 2 && hl.length != 3) {
+						jQuery("#rowed3").jqGrid('setRowData', v, {
+							result:color+"<span class='result_span'>"+ret.result+"</span></div>"
+						});
+						return true;
+					}
+
+					var va = parseFloat(ret.result.replace("<","").replace(">",""));
+					var la = parseFloat(ret.last.replace("<","").replace(">",""));
+					var la1 = parseFloat(ret.last1.replace("<","").replace(">",""));
+					var la2 = parseFloat(ret.last2.replace("<","").replace(">",""));
+					var res = "";
+					var res1 = "";
+					var res2 = "";
+					var res3 = "";
+
+					if (!isNaN(h) && !isNaN(l)) {
+						if (!isNaN(va)) {
+							if (va < l) {
+								res = "<font color='red'>↓</font>";
+							} else if (va > h) {
+								res = "<font color='red'>↑</font>";
+							}
+						}
+
+						if (!isNaN(la)) {
+							if (la < l) {
+								res1 = "<font color='red'>↓</font>";
+							} else if (la > h) {
+								res1 = "<font color='red'>↑</font>";
+							}
+						}
+
+						if (!isNaN(la1)) {
+							if (la1 < l) {
+								res2 = "<font color='red'>↓</font>";
+							} else if (la1 > h) {
+								res2 = "<font color='red'>↑</font>";
+							}
+						}
+
+						if (!isNaN(la2)) {
+							if (la2 < l) {
+								res3 = "<font color='red'>↓</font>";
+							} else if (la2 > h) {
+								res3 = "<font color='red'>↑</font>";
+							}
+						}
+
+					}
+				});
+			},
+			editurl: "../audit/edit?sampleNo=" + sampleNo
 		});
 	}
 	

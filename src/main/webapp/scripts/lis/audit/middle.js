@@ -1096,7 +1096,7 @@
 			if(j!=0) {
 				var jsonObj = {};
 				jsonObj["title"] = title[j];
-				jsonObj["content"] = dataArray[j];
+				jsonObj["content"] = dataArray[j].replace("<\/div>", "");
 				jsonArr.push(jsonObj)
 			}
 		}

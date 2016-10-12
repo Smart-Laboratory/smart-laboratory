@@ -6,14 +6,17 @@
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 
-    <script type="text/javascript" src="../scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery-2.1.4.min.js'/> "></script>
 	<script type="text/javascript" src="<c:url value='/scripts/jquery.tablednd_0_5.js'/> "></script>
-    <script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
-    <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
-    <script type="text/javascript" src="../scripts/jquery.form.js"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery-ui.min.js'/> "></script>
+    <script type="text/javascript" src="<c:url value='/scripts/i18n/grid.locale-cn.js'/> "></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery.jqGrid.js'/> "></script>
+    <script type="text/javascript" src="<c:url value='/scripts/jquery.form.js'/> "></script>
+	<script type="text/javascript" src="<c:url value='/scripts/highcharts.js'/> "></script>
+	<script type="text/javascript" src="<c:url value='/scripts/layer/layer.js'/> "></script>
+	<script type="text/javascript" src="<c:url value='/scripts/layer/extend/layer.ext.js'/> "></script>
     
-    <script type="text/javascript" src="../scripts/manage/patientList.js"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/manage/patientList.js'/> "></script>
 <style>
 .ui-jqgrid-title{
 	font-size:16px;
@@ -135,6 +138,18 @@
 	</div> --%>
 	</div>
 
+</div>
+
+<div id="chartDialog" style="text-align:left;display:none;" >
+	<p class="alert alert-danger" id="chartAlert"><fmt:message key='result.chart.alert'/></p>
+	<div id="singleChartPanel" style="width:640px;height:320px"></div>
+	<table id="chartTongji" class="table">
+		<tbody>
+		<tr><th><fmt:message key='tongji.min' /></th><td><span id="tongji_min"></span></td><th><fmt:message key='tongji.max'/></th><td><span id="tongji_max"></span></td><th><fmt:message key='tongji.mid' /></th><td><span id="tongji_mid"></span></td></tr>
+		<tr><th><fmt:message key='tongji.ave'/></th><td><span id="tongji_ave"></span></td><th><fmt:message key='tongji.sd' /></th><td><span id="tongji_sd"></span></td><th><fmt:message key='tongji.cov'/></th><td><span id="tongji_cov"></span></td></tr>
+		</tbody>
+	</table>
+	<div id="hmInfo"></div>
 </div>
 
 

@@ -402,7 +402,7 @@ public class InExecuteViewController extends RequestContextListener implements S
                         LabOrder labOrder1 = unLabOrderlistMap.get(key1);
                         String examItem = ConvertUtil.null2String(labOrder1.getExamitem()) + "+" + ConvertUtil.null2String(labOrder.getExamitem());
                         String strYlxh = ConvertUtil.null2String(labOrder1.getYlxh()) + "+" + ConvertUtil.null2String(labOrder.getYlxh());
-                        String price = "" + (Double.parseDouble(labOrder.getPrice()) + Double.parseDouble(labOrder.getPrice()));
+                        String price = "" + (Double.parseDouble(labOrder1.getPrice()) + Double.parseDouble(labOrder.getPrice()));
                         String detailId = ConvertUtil.null2String(labOrder1.getLaborderorg()) + "," + ConvertUtil.null2String(labOrder.getLaborderorg());
                         labOrder1.setExamitem(examItem);
                         labOrder1.setYlxh(strYlxh);
