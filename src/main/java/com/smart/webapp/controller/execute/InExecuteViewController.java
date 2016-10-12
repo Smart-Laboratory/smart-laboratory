@@ -373,7 +373,7 @@ public class InExecuteViewController extends RequestContextListener implements S
             }
 
             //未采集标本按requestId分组
-            Map<String, List<LabOrder>> labOrderMap = new HashMap<String, List<LabOrder>>();
+            Map<String, List<LabOrder>> labOrderMap = new LinkedHashMap<String, List<LabOrder>>();
             for (LabOrder labOrder : labOrders) {
                 setLisInfo(labOrder);
                 if (!labOrderMap.isEmpty() && labOrderMap.containsKey(labOrder.getRequestId())) {
@@ -387,7 +387,7 @@ public class InExecuteViewController extends RequestContextListener implements S
             }
 
             //合并标本
-            Map<String, LabOrder> unLabOrderlistMap = new HashMap<String, LabOrder>();//合并后记录集
+            Map<String, LabOrder> unLabOrderlistMap = new LinkedHashMap<String, LabOrder>();//合并后记录集
             for (String key : labOrderMap.keySet()) {
                 List<LabOrder> labOrderList1 = labOrderMap.get(key);
                 for (LabOrder labOrder : labOrderList1) {
