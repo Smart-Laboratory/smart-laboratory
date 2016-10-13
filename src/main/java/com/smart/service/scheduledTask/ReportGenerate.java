@@ -209,7 +209,13 @@ public class ReportGenerate {
             Set<String> sameTests = util.getKeySet(testId);
             sameTests.add(testId);
             TestResultVo testResultVo = new TestResultVo();
-            testResultVo.setTestName(idMap.get(result.getTestId()).getName());
+            //危急值判断
+            if(result.getResultFlag() != null && result.getResultFlag().charAt(2) == 'D') {
+                testResultVo.setTestName("" + idMap.get(result.getTestId()).getName());
+            } else {
+                testResultVo.setTestName(idMap.get(result.getTestId()).getName());
+            }
+
             testResultVo.setTestResult(result.getTestResult());
             testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
             //上次检验结果
