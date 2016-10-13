@@ -115,7 +115,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         long startTime = System.currentTimeMillis();   //获取开始时间
         WebService webService = new WebService();
         org.codehaus.jettison.json.JSONArray patientList = webService.getInPatientList(ward);
-        labOrdersService = webService.getInExcuteInfo(ward, bedNo, patientId);//重新初始化
+        labOrdersService = webService.getInExcuteInfo(ward, "", patientId);//重新初始化
 
         //System.out.println("labOrdersService==>"+labOrdersService.size());
         long endTime = System.currentTimeMillis(); //获取结束时间
@@ -134,7 +134,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         for (Iterator it = labOrdersService.iterator(); it.hasNext(); ) {
             LabOrder labOrder = (LabOrder) it.next();
             setLisInfo(labOrder);
-            String key = labOrder.getBed() + "_" + labOrder.getPatientid();
+            String key =  labOrder.getPatientid();
             if (!resultMap.isEmpty() && resultMap.containsKey(key)) { //如果已经存在这个数组，就放在这里
                 List laborderList = resultMap.get(key);
                 laborderList.add(labOrder);
@@ -185,9 +185,9 @@ public class InExecuteViewController extends RequestContextListener implements S
         Map<String, List> resultMap = new HashMap<String, List>();
 //        System.out.println("labOrdersService11=>"+labOrdersService.size());
         List<LabOrder> labOrders = new ArrayList<LabOrder>();
-        if (!ward.isEmpty() && !bedNo.isEmpty() && !patientId.isEmpty()) {
+        if (!ward.isEmpty()  && !patientId.isEmpty()) {
             for (LabOrder labOrder : labOrdersService) {
-                if (labOrder.getWardId().equals(ward) && labOrder.getBed().equals(bedNo) && labOrder.getPatientid().equals(patientId)) {
+                if (labOrder.getWardId().equals(ward)  && labOrder.getPatientid().equals(patientId)) {
                     labOrders.add(labOrder);
                 }
             }
@@ -200,7 +200,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         while (it.hasNext()) {
             LabOrder labOrder = (LabOrder) it.next();
             setLisInfo(labOrder);       //获取LIS相关信息
-            String key = labOrder.getBed() + "_" + labOrder.getPatientid();
+            String key = labOrder.getPatientid();
             if (!resultMap.isEmpty() && resultMap.containsKey(key)) { //如果已经存在这个数组，就放在这里
                 List laborderList = resultMap.get(key);
                 laborderList.add(labOrder);
@@ -214,8 +214,8 @@ public class InExecuteViewController extends RequestContextListener implements S
         //System.out.println("程序运行时间2： " + (endTime - startTime) + "ms");
 
         List<LabOrder> beCollectedList = new ArrayList<LabOrder>();
-        if (!bedNo.isEmpty() && !patientId.isEmpty()) {
-            beCollectedList = resultMap.get(bedNo + "_" + patientId);
+        if ( !patientId.isEmpty()) {
+            beCollectedList = resultMap.get(patientId);
         } else {
             beCollectedList = labOrders;
         }
@@ -226,7 +226,7 @@ public class InExecuteViewController extends RequestContextListener implements S
             Calendar cal = Calendar.getInstance();//使用默认时区和语言环境获得一个日历。
             cal.add(Calendar.DAY_OF_MONTH, -3);//取当前日期的前一天.
             String startDate = Constants.SDF.format(cal.getTime());
-            labOrderList = labOrderManager.getByRequestIds(ward, bedNo, patientId, null,startDate);
+            labOrderList = labOrderManager.getByRequestIds(ward, "", patientId, null,startDate);
         }catch (Exception e){
             e.printStackTrace();
         }
