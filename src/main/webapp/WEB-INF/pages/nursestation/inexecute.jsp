@@ -707,7 +707,7 @@
             LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType +' '+ data.examitem);
             LODOP.SET_PRINT_STYLEA(0,"FontSize",6);
             LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.85mm", 180, 25, "采集时间 " + data.requestTime);
-
+            LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
 
         }
     }
