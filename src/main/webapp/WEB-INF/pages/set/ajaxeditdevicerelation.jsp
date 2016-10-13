@@ -530,8 +530,6 @@
                 console.log(dicDatas);
                 //dicDatas = public.arrayToJson(dicDatas);
                 $('#dictionariesData').text(dicDatas);
-                //console.log(dicDatas);
-                //return false;
                 $.ajax({
                     url: cache.saveUrl,
                     type: 'POST',
@@ -813,5 +811,11 @@
                $("#hiddenSamplefrom").val(ui.item.sign);
            }
        });
+
+
     })
+
+   $('#isprint').on('switch-change', function () {
+       alert(1)
+   });
 </script>

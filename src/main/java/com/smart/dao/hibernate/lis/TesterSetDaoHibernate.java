@@ -22,7 +22,7 @@ public class TesterSetDaoHibernate extends GenericDaoHibernate<TesterSet, Tester
 
     @SuppressWarnings("unchecked")
     public List<TesterSet> getByLab(String lab) {
-        return getSession().createQuery("from TesterSet where lab='" + lab + "' order by segment asc").list();
+        return getSession().createQuery("from TesterSet where lab='" + lab + "' order by deviceId,segment asc").list();
     }
 
     public List<TesterSet> saveAll(List<TesterSet> list) {

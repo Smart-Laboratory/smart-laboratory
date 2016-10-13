@@ -331,7 +331,6 @@ public class DeviceRelationListController {
         index.setUnit(unit);
         index.setPrintord(printord);
         index.setKnowledgename(knowledgename);
-
         index.setIsprint(isprint);
         //不常用信息
         String principle = ConvertUtil.null2String(request.getParameter("principle"));          //测定原理
@@ -405,7 +404,6 @@ public class DeviceRelationListController {
             indexManager.save(index);
             //更新缓存
             TestIdMapUtil.getInstance(indexManager).updateMap(index);
-
             if(testReferences.size()>0) {
                 //更新缓存
                 testReferenceManager.saveTestReferences(testReferences);  //批量保存数据
