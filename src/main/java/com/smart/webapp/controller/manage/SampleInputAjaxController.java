@@ -120,6 +120,7 @@ public class SampleInputAjaxController {
 	@RequestMapping(value = "/getReceived*", method = RequestMethod.GET)
 	@ResponseBody
 	public DataResponse getOldData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		DataResponse dataResponse = new DataResponse();
 		String today = Constants.DF3.format(new Date());
 		String lab = userManager.getUserByUsername(request.getRemoteUser()).getLastLab();
@@ -129,6 +130,7 @@ public class SampleInputAjaxController {
 		String sampleNo=ConvertUtil.null2String(request.getParameter("sampleNo"));
 		String sampleStatus=ConvertUtil.null2String(request.getParameter("samplestatus"));
 		int isSearch = ConvertUtil.getIntValue(request.getParameter("isSearch"),0);
+
 
 		if(fromDate.isEmpty() || toDate.isEmpty()) {
 			Date now = new Date();
@@ -426,8 +428,9 @@ public class SampleInputAjaxController {
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		Sample sample = null;
 		Process process = null;
-		String code = request.getParameter("id");
+		String code = ConvertUtil.null2String(request.getParameter("id")).toUpperCase();
 		String sampleno = request.getParameter("sampleno");
+
 
 		JSONObject o = new JSONObject();
 		try {
