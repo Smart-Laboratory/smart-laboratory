@@ -80,7 +80,8 @@ public class FillFieldUtil {
             for(TestReference testReference : referList) {
                 ageLow = new AgeUtil().getAge(String.valueOf(testReference.getAgeLow()), testReference.getAgeLowUnit());
                 ageHigh = new AgeUtil().getAge(String.valueOf(testReference.getAgeHigh()), testReference.getAgeHighUnit());
-                if((sex == testReference.getSex() || testReference.getSex() == 3) && testid.equals(testReference.getTestId()) && age >= ageLow && age < ageHigh) {
+                if((sex == testReference.getSex() || testReference.getSex() == 3) && testid.equals(testReference.getTestId())
+                        && age >= ageLow && age < ageHigh && testReference.getReference() != null) {
                 	if(testReference.getReference().indexOf("-") >= 0) {
 						String[] refArr = testReference.getReference().split("-");
                         if(refArr.length == 2) {
