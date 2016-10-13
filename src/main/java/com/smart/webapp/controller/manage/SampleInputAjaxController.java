@@ -404,27 +404,26 @@ public class SampleInputAjaxController {
 		return null;
 	}
 
-	@RequestMapping(value = "/hasSameSample*", method = RequestMethod.GET)
-	public String sameSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value = "/hasSameSample*", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String sameSample(HttpServletRequest request) throws Exception {
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
 		Sample sample = sampleManager.getBySampleNo(sampleno);
 		JSONObject o = new JSONObject();
-		if(sample != null && !sample.getBarcode().equals(code)) {
+		if(sample != null) {
 			o.put("success", 0);
 			o.put("message", "样本号为" + sampleno + "的标本已存在，不能对条码为" + code + "的标本编号！");
 		} else {
 			o.put("success", 1);
 		}
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(o.toString());
-		return null;
+		return o.toString();
 	}
 
 
 	@RequestMapping(value = "/receive*", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public  String receiveSample(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String receiveSample(HttpServletRequest request) throws Exception {
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		Sample sample = null;
 		Process process = null;

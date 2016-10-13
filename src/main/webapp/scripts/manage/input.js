@@ -39,7 +39,6 @@ function receive(obj,event) {
 			var id=obj.value;
 			var sampleno = $("#sampleno_text").val();
 			$.get(baseUrl + "/sample/ajax/hasSameSample",{id:id,sampleno:sampleno},function(data) {
-				var data = JSON.parse(data);
 				if(data.success == 0) {
 					layer.msg(data.message, {icon: 2, time: 1000});
 					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));

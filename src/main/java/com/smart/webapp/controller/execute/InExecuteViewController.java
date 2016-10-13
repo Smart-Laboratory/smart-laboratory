@@ -350,6 +350,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         List<LabOrder> labOrders = JSON.parseArray(orders, LabOrder.class);     //申请打印记录
         List<LabOrder> hasPrintLaborder = new ArrayList<LabOrder>(); //已打印记录
 
+        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
         //再次判断提交对象是否已经采集
         //获取病区已采集标本
         try {
@@ -392,11 +393,15 @@ public class InExecuteViewController extends RequestContextListener implements S
                 List<LabOrder> labOrderList1 = labOrderMap.get(key);
                 for (LabOrder labOrder : labOrderList1) {
                     if (labOrder.getZxbz() == 1) continue;
-                    //合并判断条件： 样本类型、检验部门、取报告时间
+                    Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
+                    //合并判断条件： 样本类型、检验部门、取报告时间、标本量、试管类型、检验段
                     String key1 = labOrder.getRequestId() + "_" +
                             ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
                             ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
-                            ConvertUtil.null2String(labOrder.getQbgsj());
+                            ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
+                            ConvertUtil.null2String(ylxh.getSglx())+"_"+
+                            ConvertUtil.null2String(ylxh.getSgsl())+"_"+
+                            ConvertUtil.null2String(ylxh.getSegment());
 
                     if (!unLabOrderlistMap.isEmpty() && unLabOrderlistMap.containsKey(key1)) {
                         LabOrder labOrder1 = unLabOrderlistMap.get(key1);
@@ -480,7 +485,6 @@ public class InExecuteViewController extends RequestContextListener implements S
                         LabOrder labOrder1 = labOrderManager.get(retObj.getLong("labOrderId"));
                         inExcuteManager.removeInExcute(sample1, process1, labOrder1);
                     } else {
-                        Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
                         Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
 
                         LabOrderVo labOrderVo = new LabOrderVo();
