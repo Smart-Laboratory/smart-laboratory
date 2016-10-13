@@ -122,7 +122,7 @@ public class FillFieldUtil {
 						value = "0" + value;
 					}
 
-					if (reflo != null && isDouble(reflo) && isDouble(refhi)) {
+					if (reflo != null && isDouble(reflo) && isDouble(refhi) && isDouble(value)) {
 						if (reflo.contains(".") && reflo.split("[.]").length > 1) {
 							int round = reflo.split("[.]")[1].length();
 							StringBuilder sb = new StringBuilder("#0.");
@@ -200,15 +200,21 @@ public class FillFieldUtil {
                 flags[0] = 'A';
             }
 		} else {
-			if(ls_refhi.indexOf("X10E") > 0 && ls_result.indexOf("X10E") > 0) {
+			if(ls_reflo.indexOf("X10E") > 0 || ls_refhi.indexOf("X10E") > 0 || ls_result.indexOf("X10E") > 0) {
 				double doubleResult = Double.parseDouble(ls_result.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_result.split("E")[1]));
 				double doubleRefLo = 0d;
+				double doubleRefHi = 0d;
 				if(ls_reflo.indexOf("X10E") < 0) {
 					doubleRefLo = Double.parseDouble(ls_reflo);
 				} else {
 					doubleRefLo = Double.parseDouble(ls_reflo.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_reflo.split("E")[1]));
 				}
-				double doubleRefHi = Double.parseDouble(ls_refhi.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_refhi.split("E")[1]));
+				if(ls_refhi.indexOf("X10E") < 0) {
+					doubleRefHi = Double.parseDouble(ls_refhi);
+				} else {
+					doubleRefHi = Double.parseDouble(ls_refhi.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_refhi.split("E")[1]));
+				}
+
 				if (doubleResult < doubleRefLo) {
 					flags[0] = 'C';
 				} else if (doubleResult > doubleRefHi) {
