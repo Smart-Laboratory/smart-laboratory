@@ -378,7 +378,6 @@ public class AuditController extends BaseAuditController {
 							//保存参考范围
 							for(TestResult testResult : now) {
 								testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
-								updateTestResult.add(testResult);
 							}
 							//生成PDF，写HIS、电子病历、PDA
 							new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
@@ -386,6 +385,7 @@ public class AuditController extends BaseAuditController {
 							info.setAuditStatus(Constants.STATUS_UNPASS);
 						}
 						updateSample.add(info);
+						updateTestResult.addAll(now);
 						if (info.getAuditMark() == 6) {
 							updateCriticalRecord.add(cr);
 						}

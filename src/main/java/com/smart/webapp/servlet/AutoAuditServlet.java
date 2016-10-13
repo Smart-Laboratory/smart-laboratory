@@ -305,7 +305,6 @@ public class AutoAuditServlet extends HttpServlet {
 														//保存参考范围
 														for(TestResult testResult : now) {
 															testResult.setTestStatus(Constants.SAMPLE_STATUS_CHECKED);
-															updateTestResult.add(testResult);
 														}
 														//生成PDF，写HIS、电子病历、PDA
 														new WriteOtherSystemUtil().writeOtherSystem(info,process,now);
@@ -313,6 +312,7 @@ public class AutoAuditServlet extends HttpServlet {
 														info.setAuditStatus(Constants.STATUS_UNPASS);
 													}
                 	    							updateSample.add(info);
+													updateTestResult.addAll(now);
                 	    							if (info.getAuditMark() == 6) {
                 	    								cr.setSampleid(info.getId());
                 	    								updateCriticalRecord.add(cr);

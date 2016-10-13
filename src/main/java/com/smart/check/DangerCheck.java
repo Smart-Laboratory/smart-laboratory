@@ -56,6 +56,7 @@ public class DangerCheck implements Check {
 							result = false;
 							markTests += i.getIndexId() + DANGER_COLOR;
 							criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
+							tr.setResultFlag(tr.getResultFlag().replace(tr.getResultFlag().charAt(2), 'D')); //标记危急值项目
 						}
 					} else {
 						for(String s : set) {
@@ -65,7 +66,7 @@ public class DangerCheck implements Check {
 									result = false;
 									markTests += i.getIndexId() + DANGER_COLOR;
 									criticalContent.add(i.getName() + ":" + tr.getTestResult()); //标记危急值
-								
+									tr.setResultFlag(tr.getResultFlag().replace(tr.getResultFlag().charAt(2), 'D')); //标记危急值项目
 								}
 							}
 						}
@@ -86,7 +87,7 @@ public class DangerCheck implements Check {
 			info.setAuditStatus(UNPASS);
 			info.setAuditMark(DANGER_MARK);
 		}
-		
+
 		return result;
 	}
 }

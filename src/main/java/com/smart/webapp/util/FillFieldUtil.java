@@ -115,13 +115,14 @@ public class FillFieldUtil {
                 }
             }
 			String reflo = result.getRefLo();
+			String refhi = result.getRefHi();
 			try {
 				if (value != null && value.length() > 0) {
 					if (value.charAt(0) == '.') {
 						value = "0" + value;
 					}
 
-					if (reflo != null && isDouble(reflo)) {
+					if (reflo != null && isDouble(reflo) && isDouble(refhi)) {
 						if (reflo.contains(".") && reflo.split("[.]").length > 1) {
 							int round = reflo.split("[.]")[1].length();
 							StringBuilder sb = new StringBuilder("#0.");
@@ -199,13 +200,31 @@ public class FillFieldUtil {
                 flags[0] = 'A';
             }
 		} else {
-			flags[1] = 'B';
-			if (ls_result.indexOf("+") > -1 || ls_result.indexOf("阳") > -1) {
-				flags[0] = 'B';
-			} else if (ls_result.indexOf("-") > -1 || ls_result.indexOf("阴") > -1) {
-				flags[0] = 'A';
-			} else {
-				flags[0] = 'B';
+			if(ls_refhi.indexOf("X10E") > 0 && ls_result.indexOf("X10E") > 0) {
+				double doubleResult = Double.parseDouble(ls_result.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_result.split("E")[1]));
+				double doubleRefLo = 0d;
+				if(ls_reflo.indexOf("X10E") < 0) {
+					doubleRefLo = Double.parseDouble(ls_reflo);
+				} else {
+					doubleRefLo = Double.parseDouble(ls_reflo.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_reflo.split("E")[1]));
+				}
+				double doubleRefHi = Double.parseDouble(ls_refhi.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_refhi.split("E")[1]));
+				if (doubleResult < doubleRefLo) {
+					flags[0] = 'C';
+				} else if (doubleResult > doubleRefHi) {
+					flags[0] = 'B';
+				} else {
+					flags[0] = 'A';
+				}
+			}else {
+				flags[1] = 'B';
+				if (ls_result.indexOf("+") > -1 || ls_result.indexOf("阳") > -1) {
+					flags[0] = 'B';
+				} else if (ls_result.indexOf("-") > -1 || ls_result.indexOf("阴") > -1) {
+					flags[0] = 'A';
+				} else {
+					flags[0] = 'B';
+				}
 			}
 		}
 		// 把flags写回resultFlag
