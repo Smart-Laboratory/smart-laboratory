@@ -394,14 +394,18 @@ public class InExecuteViewController extends RequestContextListener implements S
                 for (LabOrder labOrder : labOrderList1) {
                     if (labOrder.getZxbz() == 1) continue;
                     Ylxh ylxh = ylxhMap.get(labOrder.getYlxh().split("\\+")[0]);
-                    //合并判断条件： 样本类型、检验部门、取报告时间、标本量、试管类型、检验段
+                    //合并判断条件： 样本类型、检验部门、取报告时间、标本量、试管类型、检验段、采集部位
                     String key1 = labOrder.getRequestId() + "_" +
                             ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
                             ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
                             ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
                             ConvertUtil.null2String(ylxh.getSglx())+"_"+
                             ConvertUtil.null2String(ylxh.getSgsl())+"_"+
-                            ConvertUtil.null2String(ylxh.getSegment());
+                            ConvertUtil.null2String(ylxh.getSegment())+"_"+
+                            ConvertUtil.null2String(ylxh.getCjbw());
+                    if(ylxh.getSfhb() == 0) {
+                        key1 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
+                    }
 
                     if (!unLabOrderlistMap.isEmpty() && unLabOrderlistMap.containsKey(key1)) {
                         LabOrder labOrder1 = unLabOrderlistMap.get(key1);

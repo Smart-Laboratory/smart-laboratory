@@ -337,11 +337,14 @@ public class AuditController extends BaseAuditController {
 	        			info.setAuditMark(Check.AUTO_MARK);
 	        			info.setNotes("");
 	        			info.setRuleIds("");
+						boolean lack = lackCheck.doCheck(info, now);
 	        			if(!hasRuleCheck.doCheck(info, now)) {
+							if (!lack) {
+								info.setAuditMark(Check.LACK_MARK);
+							}
 	        				updateSample.add(info);
 	        				continue;
 	        			}
-						boolean lack = lackCheck.doCheck(info, now);
 						diffCheck.doCheck(info, now, diffData);
 						Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
 						ratioCheck.doCheck(info, now);

@@ -257,15 +257,21 @@ public class AutoAuditServlet extends HttpServlet {
                 	        	        			info.setAuditMark(Check.AUTO_MARK);
                 	        	        			info.setNotes("");
                 	        	        			info.setRuleIds("");
+													boolean lack = lackCheck.doCheck(info, now);
                 	        	        			if(!hasRuleCheck.doCheck(info, now)) {
+														if (!lack) {
+															info.setAuditMark(Check.LACK_MARK);
+														}
                 	        	        				updateSample.add(info);
                 	        	        				continue;
                 	        	        			}
                 	        	        			if(!jyzCheck.doCheck(info, now)) {
+														if (!lack) {
+															info.setAuditMark(Check.LACK_MARK);
+														}
                 	        	        				updateSample.add(info);
                 	        	        				continue;
                 	        	        			}
-                	    							boolean lack = lackCheck.doCheck(info, now);
                 	    							diffCheck.doCheck(info, now, diffData);
                 	    							Map<String, Boolean> diffTests = diffCheck.doFiffTests(info, now, diffData);
                 	    							ratioCheck.doCheck(info, now);
@@ -275,9 +281,9 @@ public class AutoAuditServlet extends HttpServlet {
                 	    								alarm2Check.doCheck(info, r, diffTests, now);
                 	    								alarm3Check.doCheck(info, r, diffTests, now);
                 	    								extremeCheck.doCheck(info, r, diffTests, now);
-                	    								if (!lack && info.getAuditMark() != Check.LACK_MARK) {
-                	    									info.setAuditMark(Check.LACK_MARK);
-                	    								}
+														if (!lack && info.getAuditMark() != Check.LACK_MARK) {
+															info.setAuditMark(Check.LACK_MARK);
+														}
                 	    								dangerCheck.doCheck(info, r, now, cr);
                 	    								String ruleId = CheckUtil.toString(r.getRuleIds());
                     	    							info.setRuleIds(ruleId);
