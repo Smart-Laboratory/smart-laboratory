@@ -201,7 +201,7 @@ public class FillFieldUtil {
                 flags[0] = 'A';
             }
 		} else {
-			if(ls_reflo.indexOf("X10E") > 0 || ls_refhi.indexOf("X10E") > 0 || ls_result.indexOf("X10E") > 0) {
+			if((ls_reflo.indexOf("X10E") > 0 || ls_refhi.indexOf("X10E") > 0) && ls_result.indexOf("X10E") > 0) {
 				double doubleResult = Double.parseDouble(ls_result.split("X")[0]) * Math.pow(10, Integer.parseInt(ls_result.split("E")[1]));
 				double doubleRefLo = 0d;
 				double doubleRefHi = 0d;

@@ -705,7 +705,7 @@
             LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.85mm", 250, 20, patientInfo1);
 
             LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType +' '+ data.examitem);
-            LODOP.SET_PRINT_STYLEA(0,"FontSize",6);
+            LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
             LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.85mm", 180, 25, "采集时间 " + data.requestTime);
             LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
 
