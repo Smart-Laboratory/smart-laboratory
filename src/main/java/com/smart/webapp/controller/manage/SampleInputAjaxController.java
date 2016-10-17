@@ -406,7 +406,7 @@ public class SampleInputAjaxController {
 
 	@RequestMapping(value = "/hasSameSample*", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String sameSample(HttpServletRequest request) throws Exception {
+	public synchronized String sameSample(HttpServletRequest request) throws Exception {
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
 		Sample sample = sampleManager.getBySampleNo(sampleno);
