@@ -93,6 +93,7 @@ public class FormulaUtil {
 					
 					fm = fm.replace("sex", String.valueOf(sex));
 					fm = fm.replace("age", String.valueOf(age));
+					//fm = fm.replace("cycle", String.valueOf(info.getCycle()));
 					
 					if (age == 0) {
 						isFloat = false;

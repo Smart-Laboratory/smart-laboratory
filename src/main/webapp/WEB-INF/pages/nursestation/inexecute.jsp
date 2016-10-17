@@ -679,7 +679,7 @@
 
     function CreateDataBill(data) {
         if (data && data != null) {
-            var patientInfo = data.bedNo + " " + data.patientName + " " + data.testTube + data.sampleQuantity + data.age + data.ageUnit;
+            var patientInfo = data.bedNo + " " + data.patientName + " "+ data.sex + " " + data.age + data.ageUnit + " " + data.testTube + data.sampleQuantity;
             var patientInfo1 = data.patientCode + " " + data.hossection
             // LODOP = getLodop();
             LODOP.PRINT_INIT("");
@@ -700,12 +700,17 @@
                 LODOP.SET_PRINT_STYLEA(0, "FontSize", 10);
                 LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
             } else {
-                LODOP.ADD_PRINT_TEXTA("patientinfo", "2.89mm", "2.95mm", 180, 25, patientInfo);
+                LODOP.ADD_PRINT_TEXTA("patientinfo", "2.89mm", "2.95mm", 200, 25, patientInfo);
             }
             LODOP.ADD_PRINT_TEXTA("patientinfo1", 23, "2.85mm", 250, 20, patientInfo1);
 
-            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, data.sampleType +' '+ data.examitem);
-            LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
+            var exam = data.sampleType +' '+ data.examitem;
+            LODOP.ADD_PRINT_TEXTA("testinfo", "23.36mm", "2.85mm", 180, 20, exam);
+            if(exam.length > 18) {
+                LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
+            } else {
+                LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+            }
             LODOP.ADD_PRINT_TEXTA("datetime", "31.56mm", "2.85mm", 180, 25, "采集时间 " + data.requestTime);
             LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
 

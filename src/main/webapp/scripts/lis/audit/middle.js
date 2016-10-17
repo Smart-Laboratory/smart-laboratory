@@ -36,7 +36,7 @@
 	var isFirst = true;
 	function getPatient(ret) {
  		var docNo = ret.id;
-		$.get("../audit/patient",{id:docNo},function(data){
+		$.get(baseUrl + "/audit/patient",{id:docNo},function(data){
 			if (data.isOverTime) {
 				$("#tatBtn").html("<b style='color: #FF4500;'>TAT超时</b>");
 			} else {
@@ -130,6 +130,7 @@
         	$("#pAge").html(data.age);
         	$("#blh").html("<a href='http://10.31.96.34/zwemr2/SysLogin.aspx?lcation=inside&ly=D&edt=N&gs=krd&pid=" + data.blh + "&gh=1111' target='_blank'>" + data.blh + "</a>");
         	$("#doctadviseno").html(data.id);
+			$("#requester").html(data.requester);
         	$("#pSex").html(data.sex);
         	$("#pSection").html(data.section);
         	//$("#pSection").attr("title",data.section);

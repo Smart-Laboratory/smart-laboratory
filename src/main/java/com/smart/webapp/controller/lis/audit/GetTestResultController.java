@@ -735,6 +735,7 @@ public class GetTestResultController extends BaseAuditController {
 				testResult.setUnit(index.getUnit());
 				testResult.setIsprint(index.getIsprint());
 				testResult.setSampleType(index.getSampleFrom());
+				testResult.setTestResult(index.getDefaultvalue());
 				needSaveTests.add(testResult);
 			}
 		}

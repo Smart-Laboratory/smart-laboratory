@@ -61,11 +61,12 @@
 					<td>床&#8195;&#8195;号:</span><b id="pBed"></b></td>
 				</tr>
 				<tr>
-					<td colspan="3">诊&#8195;断:</span><b id="diagnostic"></b>
+					<td colspan="2">诊&#8195;断:</span><b id="diagnostic"></b>
 						<input type="hidden" id="diagnosisValue" />
 						<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
 						<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
 					</div></td>
+					<td>开单医生:</span><b id="requester"></b></td>
 				</tr>
 			</table>
 		</div>

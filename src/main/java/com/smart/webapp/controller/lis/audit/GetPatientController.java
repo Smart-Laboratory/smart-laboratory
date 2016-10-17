@@ -119,7 +119,6 @@ public class GetPatientController extends BaseAuditController {
 			map.put("blh", info.getPatientblh());
 			
 			String code = info.getSampleNo().substring(8, 11);
-			map.put("requester", "");
 			map.put("isOverTime", false);
 			map.put("requester", process.getRequester());
 			if(slgiMap.containsKey(code)) {
