@@ -83,6 +83,7 @@ public class WebService {
                     hospitalUser.setId(arr.getJSONObject(i).getString("Id"));
                     hospitalUser.setWorkid(arr.getJSONObject(i).getString("WorkId"));
                     hospitalUser.setName(arr.getJSONObject(i).getString("Name"));
+                    hospitalUser.setPhone(arr.getJSONObject(i).getString("Phone"));
                     list.add(hospitalUser);
                 }
             }
