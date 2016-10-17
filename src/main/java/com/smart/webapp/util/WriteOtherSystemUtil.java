@@ -17,7 +17,11 @@ public class WriteOtherSystemUtil {
     public void writeOtherSystem(Sample sample, Process process, List<TestResult> testResultList) throws Exception {
         ReportGenerate reportGenerate = new ReportGenerate();
         //生成PDF
-        reportGenerate.createReportPdf(sample, process, testResultList, false);
+        try {
+            reportGenerate.createReportPdf(sample, process, testResultList, false);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         WebService service = new WebService();
         //写入HIS
         service.saveHisResult(sample,process,testResultList);
