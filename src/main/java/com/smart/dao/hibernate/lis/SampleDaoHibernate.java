@@ -282,19 +282,19 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 					sql += "and s.sampleNo like '" + text.substring(0, 8) + "%'";
 				}
 				break;
-			case 14:
+			case 15:
 				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) &&
 						(code.isEmpty() || code.indexOf(text.substring(8, 11)) != -1)) {
 					sql += "and s.sampleNo='" + text + "'";
 				}
 				break;
-			case 18:
+			case 20:
 				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
-						&& StringUtils.isNumeric(text.substring(11, 14))
-						&& StringUtils.isNumeric(text.substring(15, 18))
+						&& StringUtils.isNumeric(text.substring(11, 15))
+						&& StringUtils.isNumeric(text.substring(16, 20))
 						&& (code.isEmpty() || code.indexOf(text.substring(8, 11)) != -1)) {
-					sql += "and s.sampleNo>='" + text.substring(0, 14)
-							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+					sql += "and s.sampleNo>='" + text.substring(0, 15)
+							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(16, 20) + "'";
 				}
 				break;
 			default:
@@ -371,19 +371,19 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 					sql += "and s.sampleNo like '" + text + "%'";
 				}
 				break;
-			case 14:
+			case 15:
 				if (StringUtils.isNumeric(text.substring(0, 8)) && StringUtils.isNumeric(text.substring(11)) &&
 						code.indexOf(text.substring(8, 11)) != -1) {
 					sql += "and s.sampleNo='" + text + "'";
 				}
 				break;
-			case 18:
+			case 20:
 				if (text.indexOf('-') != 0 && StringUtils.isNumeric(text.substring(0, 8))
-						&& StringUtils.isNumeric(text.substring(11, 14))
-						&& StringUtils.isNumeric(text.substring(15, 18))
+						&& StringUtils.isNumeric(text.substring(11, 15))
+						&& StringUtils.isNumeric(text.substring(16, 20))
 						&& code.indexOf(text.substring(8, 11)) != -1) {
-					sql += "and s.sampleNo>='" + text.substring(0, 14)
-							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(15, 18) + "'";
+					sql += "and s.sampleNo>='" + text.substring(0, 15)
+							+ "' and s.sampleNo<='" + text.substring(0, 11) + text.substring(16, 20) + "'";
 				}
 				break;
 			default:

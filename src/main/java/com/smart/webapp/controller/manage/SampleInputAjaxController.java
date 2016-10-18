@@ -281,7 +281,7 @@ public class SampleInputAjaxController {
 
 		} else {
 			if(operate.equals("add") && barcode.isEmpty()) {
-				if(sampleManager.getBySampleNo(sampleno) != null) {
+				if(sampleManager.getBySampleNo(sampleno) == null) {
 					sample = new Sample();
 					process = new Process();
 					sample.setStayHospitalMode(Integer.parseInt(stayhospitalmode));
@@ -300,9 +300,12 @@ public class SampleInputAjaxController {
 					sample.setYlxh(ylxh);
 					sample.setPatientname(patientname);
 					sample.setId(sampleManager.getSampleId());
-					sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
+					//生成条码号
+					sample.setBarcode("A120" + String.format("%08d", sample.getId()));
+					//sample.setId(sampleManager.getSampleId());
+					//sample.setBarcode(HospitalUtil.getInstance(hospitalManager).getHospital(user.getHospitalId()).getIdCard() + String.format("%08d", sample.getId()));
 					sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
-					sampleManager.save(sample);
+					sample = sampleManager.save(sample);
 					process.setSampleid(sample.getId());
 					process.setRequester(requester);
 					process.setExecutetime(executetime.isEmpty() ? null : Constants.SDF.parse(executetime));
@@ -504,15 +507,15 @@ public class SampleInputAjaxController {
 				} else {
 					String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime)+segment);
 					if (receiveSampleNo == null) {
-						sampleno = Constants.DF3.format(receiveTime) + segment + "001";
+						sampleno = Constants.DF3.format(receiveTime) + segment + "0001";
 					} else {
-						sampleno = receiveSampleNo.substring(0,11) + String.format("%03d", (Integer.parseInt(receiveSampleNo.substring(11,14)) + 1));
+						sampleno = receiveSampleNo.substring(0,11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11)) + 1));
 					}
 					sample.setSampleNo(sampleno);
 				}
 				//设置检验者
 				sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-				o.put("newSampleNo", sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1)));
+				o.put("newSampleNo", sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
 			}
 			sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 			process.setReceiver(user.getName());
