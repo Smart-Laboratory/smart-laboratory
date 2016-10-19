@@ -15,6 +15,7 @@ import com.smart.service.lis.*;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.codehaus.jettison.json.JSONObject;
+import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -412,6 +413,7 @@ public class SampleInputAjaxController {
 	public synchronized String sameSample(HttpServletRequest request) throws Exception {
 		String code = request.getParameter("id");
 		String sampleno = request.getParameter("sampleno");
+		sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
 		Sample sample = sampleManager.getBySampleNo(sampleno);
 		JSONObject o = new JSONObject();
 		if(sample != null) {
@@ -432,6 +434,7 @@ public class SampleInputAjaxController {
 		Process process = null;
 		String code = ConvertUtil.null2String(request.getParameter("id")).toUpperCase();
 		String sampleno = request.getParameter("sampleno");
+		sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
 
 
 		JSONObject o = new JSONObject();
