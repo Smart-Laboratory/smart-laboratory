@@ -185,6 +185,10 @@ public class AutoAuditServlet extends HttpServlet {
 												Map<Long, List<TestResult>> diffData = new HashMap<Long, List<TestResult>>();
 												for (Sample info : samples) {
 													List<TestResult> now = hisTestMap.get(info.getSampleNo());
+													if(now == null) {
+														samples.remove(info);
+														continue;
+													}
 													Set<String> testIdSet = new HashSet<String>();
 													try {
 														for (TestResult t : now) {

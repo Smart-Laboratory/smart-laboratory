@@ -538,7 +538,7 @@ $(function() {
 		colModel: [
 			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 70},
 			{ name: 'sampleStatus', index: 'sampleStatus', hidden: true},
-			{ name: 'sampleno', index: 'sampleno', width: 120,cellattr: addCellAttr, key: true},
+			{ name: 'sampleno', index: 'sampleno', width: 130,cellattr: addCellAttr, key: true},
 			{ name: 'shm', index: 'shm', width: 70},
 			{ name: 'pname', index: 'pname', width: 80 },
 			{ name: 'section', index: 'section', width: 80 },
