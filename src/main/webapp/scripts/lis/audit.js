@@ -173,7 +173,7 @@ $(function(){
 		$("#hiddenIsPass").val(true);
 		$("#passNotes").html("<b>通过原因</b>");
 		
-		if (selectNoteAdd) {
+		/*if (selectNoteAdd) {
 			if ($("#lastDepLab").val() == '1300101' || $("#lastDepLab").val() == '1300200' || $("#lastDepLab").val() == '1300100' || $("#lastDepLab").val() == '1300201') {
 				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason' checked><span class='label selectLabel'>标本重新检测</span></label>");
 				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>推片显微镜检查</span></label>");
@@ -188,8 +188,15 @@ $(function(){
 				$("#selectNoteDiv").append("<label class='radio-inline'><input type='radio' name='passReason'><span class='label selectLabel'>其它</span></label>");
 			}
 			selectNoteAdd = false;
-		}
-		openOpStatusDialog();
+		}*/
+        $.get(baseUrl + "/audit/isLack",{sampleno: $("#hiddenSampleNo").val()},function(data) {
+        	if(data.isLack) {
+				alert("sdfdsjfl;")
+			} else {
+
+			}
+            openOpStatusDialog();
+        });
 	});
 	
 	$("#auditUnpassBtn").click(function(){
@@ -225,7 +232,7 @@ $(function(){
 			if ($("#auditAllbtn").prop("checked")) {
 				reaudit = true;
 			}
-			$.get("../audit/result",{sample:text,reaudit:reaudit},function() {});
+			$.get(baseUrl + "/audit/result",{sample:text,reaudit:reaudit},function() {});
 		}
 	});
 

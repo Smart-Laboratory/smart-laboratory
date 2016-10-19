@@ -18,6 +18,7 @@ import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.service.lis.*;
 import com.smart.service.rule.*;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -76,7 +77,7 @@ public class AutoAuditServlet extends HttpServlet {
         System.out.println("Initializing context...");
 
         	final Map<String, String> indexNameMap = TestIdMapUtil.getInstance(indexManager).getNameMap();
-        	final Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
+        	final Map<String, Ylxh> ylxhMap = new HashMap<String, Ylxh>();
         	final Map<String, String> likeLabMap = new HashMap<String, String>();
         	Long start = System.currentTimeMillis();
         	List<Rule> ruleList = bagManager.getRuleByBag("1");
@@ -101,7 +102,7 @@ public class AutoAuditServlet extends HttpServlet {
     		}
     		List<Ylxh> ylxhList = ylxhManager.getYlxh();
     		for (Ylxh y : ylxhList) {
-    			ylxhMap.put(y.getYlxh(), y);
+    			ylxhMap.put(ConvertUtil.null2String(y.getYlxh()), y);
     		}
     		List<LikeLab> list = likeLabManager.getAll();
     		for (LikeLab ll : list) {

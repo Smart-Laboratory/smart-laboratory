@@ -71,9 +71,6 @@ public class AuditController extends BaseAuditController {
     @RequestMapping(value = "/result*", method = RequestMethod.GET)
 	public void getAuditResult(HttpServletRequest request, HttpServletResponse response) throws Exception {
     	
-    	if(ylxhMap.size() == 0) {
-    		initYLXHMap();
-    	}
     	if(likeLabMap.size() == 0) {
     		initLikeLabMap();
     	}
@@ -311,7 +308,7 @@ public class AuditController extends BaseAuditController {
 		}
         log.debug("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
         System.out.println("样本信息初始化，计算样本参考范围、计算项目，获取样本历史数据");
-        final Check lackCheck = new LackCheck(ylxhMap, indexNameMap);
+        final Check lackCheck = new LackCheck(YlxhUtil.getInstance().getMap(), indexNameMap);
         final DiffCheck diffCheck = new DiffCheck(droolsRunner, indexNameMap, ruleManager);
         final Check ratioCheck = new RatioCheck(droolsRunner, indexNameMap, ruleManager);
         final Check hasRuleCheck = new HasRuleCheck(hasRuleSet);
@@ -855,6 +852,28 @@ public class AuditController extends BaseAuditController {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * 判断样本检测结果是否齐全
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/isLack*", method = RequestMethod.GET ,produces = "application/text; charset=utf-8")
+	@ResponseBody
+	public String isLack(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String sampleNo = request.getParameter("sampleNo");
+		Sample sample = sampleManager.getBySampleNo(sampleNo);
+		List<TestResult> testResultList = testResultManager.getTestBySampleNo(sampleNo);
+		LackCheck lackCheck = new LackCheck(YlxhUtil.getInstance().getMap(), TestIdMapUtil.getInstance(indexManager).getNameMap());
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("lack", lackCheck.doCheck(sample, testResultList));
+		jsonObject.put("note", sample.getNotes());
+		return jsonObject.toString();
 	}
 	
 	@RequestMapping(value = "/autoAudit*", method = RequestMethod.GET)

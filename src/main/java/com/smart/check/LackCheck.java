@@ -16,11 +16,11 @@ import com.smart.webapp.util.IndexMapUtil;
 
 public class LackCheck implements Check {
 
-	private Map<Long, Ylxh> ylxhMap = null;
+	private Map<String, Ylxh> ylxhMap = null;
 	private Map<String, String> idMap = null;
 	private static IndexMapUtil util = IndexMapUtil.getInstance(); //检验项映射
 	
-	public LackCheck(Map<Long, Ylxh> ylxhMap, Map<String, String> idMap) {
+	public LackCheck(Map<String, Ylxh> ylxhMap, Map<String, String> idMap) {
 		this.ylxhMap = ylxhMap;
 		this.idMap = idMap;
 	}

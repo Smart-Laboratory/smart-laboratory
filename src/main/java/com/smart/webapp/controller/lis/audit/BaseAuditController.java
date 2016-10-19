@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.smart.service.lis.*;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.TestIdMapUtil;
+import com.smart.webapp.util.YlxhUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -120,7 +122,6 @@ public class BaseAuditController {
 	protected static HisIndexMapUtil util = HisIndexMapUtil.getInstance(); //检验项映射
     protected Map<String, Integer> slgiMap = new HashMap<String, Integer>();
     protected Map<String, String> diagMap = new HashMap<String, String>();
-    protected Map<Long, Ylxh> ylxhMap = new HashMap<Long, Ylxh>();
     protected Map<String, String> likeLabMap = new HashMap<String, String>();
     protected Map<String, String> deviceMap = new HashMap<String, String>();
     protected Map<String, ContactInfor> contactMap = new HashMap<String, ContactInfor>();
@@ -145,14 +146,7 @@ public class BaseAuditController {
 			diagMap.put(d.getDiagnosisName(), d.getKnowledgeName());
 		}
 	}
-	
-	protected synchronized void initYLXHMap() {
-		List<Ylxh> list = ylxhManager.getAll();
-		for (Ylxh y : list) {
-			ylxhMap.put(y.getYlxh(), y);
-		}
-	}
-	
+
 	protected synchronized void initLikeLabMap() {
 		List<LikeLab> list = likeLabManager.getAll();
 		for (LikeLab ll : list) {
@@ -195,8 +189,6 @@ public class BaseAuditController {
 	}
 	
 	protected boolean sameSample(Sample info, Sample pinfo) {
-		if (ylxhMap.size() == 0)
-			initYLXHMap();
 		if (!info.getSampleNo().equals(pinfo.getSampleNo())) {
 			String ylxh = info.getYlxh();
 			String ylxh2 = pinfo.getYlxh();
@@ -214,7 +206,7 @@ public class BaseAuditController {
 						String[] linshi_xh = xh.split("\\[");
 						xh = linshi_xh[0];
 					}
-					Ylxh y = ylxhMap.get(Long.parseLong(xh));
+					Ylxh y = YlxhUtil.getInstance().getYlxh(xh);
 					if (y!=null && y.getProfiletest() != null) {
 						for (String s : y.getProfiletest().split(",")) {
 							infoSet.add(s);
@@ -228,7 +220,7 @@ public class BaseAuditController {
 						String[] linshi_xh = xh.split("\\[");
 						xh = linshi_xh[0];
 					}
-					Ylxh y = ylxhMap.get(Long.parseLong(xh));
+					Ylxh y = YlxhUtil.getInstance().getYlxh(xh);
 					if (y != null && y.getProfiletest() != null) {
 						for (String s : y.getProfiletest().split(",")) {
 							infoSet.add(s);

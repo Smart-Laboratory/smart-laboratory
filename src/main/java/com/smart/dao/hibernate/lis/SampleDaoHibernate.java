@@ -134,7 +134,7 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId =" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
 					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
