@@ -771,7 +771,6 @@ public class SampleInputAjaxController {
             sample.setFeestatus(ConvertUtil.null2String(labOrder.getFeestatus()));
             sample.setHosSection(labOrder.getHossection());
             sample.setPart(labOrder.getToponymy());
-            sample.setPatientblh(labOrder.getBlh());
             sample.setPatientname(labOrder.getPatientname());
             sample.setRequestMode(labOrder.getRequestmode());
             sample.setSampleNo(labOrder.getSampleno());
