@@ -102,8 +102,11 @@ public class SampleController {
 			map.put("mark", info.getAuditMarkValue());
 			map.put("sample", info.getSampleNo());
 			String patientName="";
-			if(!"".equals(ConvertUtil.null2String(info.getDepartBed())))
+			if(!"".equals(ConvertUtil.null2String(info.getDepartBed()))) {
 				patientName = info.getDepartBed() + ConvertUtil.null2String(info.getPatientname());
+			} else {
+				patientName = ConvertUtil.null2String(info.getPatientname());
+			}
 			map.put("patientName", patientName);
 			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());

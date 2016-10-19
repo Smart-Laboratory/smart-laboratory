@@ -190,12 +190,13 @@ $(function(){
 			selectNoteAdd = false;
 		}*/
         $.get(baseUrl + "/audit/isLack",{sampleno: $("#hiddenSampleNo").val()},function(data) {
-        	if(data.isLack) {
-				alert("sdfdsjfl;")
+			alert(data.lack)
+        	if(data.lack) {
+				openOpStatusDialog();
 			} else {
-
+				layer.alert(data.message, {icon: 2, title: "提示"});
 			}
-            openOpStatusDialog();
+
         });
 	});
 	
