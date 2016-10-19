@@ -41,7 +41,7 @@ function receive(obj,event) {
 			$.get(baseUrl + "/sample/ajax/hasSameSample",{id:id,sampleno:sampleno},function(data) {
 				if(data.success == 0) {
 					layer.msg(data.message, {icon: 2, time: 1000});
-					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11,14)) + 1),3));
+					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11)) + 1),4));
 					$("#receive_id").val("").focus();
 				} else {
 					$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
@@ -267,7 +267,7 @@ function sample() {
 		msg = "患者姓名不能为空！";
 		post = false;
 	}
-	if(sampleno.length != 14) {
+	if(sampleno.length != 15) {
 		msg = "样本号长度错误，格式不正确！";
 		post = false;
 	} else {
@@ -279,8 +279,8 @@ function sample() {
 			msg = "样本号检验段格式不正确！";
 			post = false;
 		}
-		if(isNaN(Number(sampleno.substring(11,14)))) {
-			msg = "样本号后3位编号不是数字！";
+		if(isNaN(Number(sampleno.substring(11)))) {
+			msg = "样本号后4位编号不是数字！";
 			post = false;
 		}
 	}

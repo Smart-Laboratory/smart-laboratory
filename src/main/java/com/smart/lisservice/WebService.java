@@ -85,6 +85,7 @@ public class WebService {
                     hospitalUser.setId(arr.getJSONObject(i).getString("Id"));
                     hospitalUser.setWorkid(arr.getJSONObject(i).getString("WorkId"));
                     hospitalUser.setName(arr.getJSONObject(i).getString("Name"));
+                    hospitalUser.setPhone(arr.getJSONObject(i).getString("Phone"));
                     list.add(hospitalUser);
                 }
             }
@@ -167,7 +168,7 @@ public class WebService {
             if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
                 patient.setAddress(arr.getJSONObject(0).getString("PatientAddress"));
-                patient.setBirthday(Constants.SDF.parse(arr.getJSONObject(0).getString("Birthday")));
+                patient.setBirthday(Constants.DF2.parse(arr.getJSONObject(0).getString("Birthday")));
                 patient.setBlh(arr.getJSONObject(0).getString("PatientFileCode"));
                 patient.setIdCard(arr.getJSONObject(0).getString("IdCard"));
                 patient.setSex(arr.getJSONObject(0).getString("Sex"));

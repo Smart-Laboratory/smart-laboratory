@@ -313,7 +313,7 @@ function getPatient(docNo) {
     				getSample(ret.sample);
     				isFirstTime = false;
         		} else {
-        			jQuery("#rowed3").jqGrid("setGridParam",{url:"../manage/patientList/sample?id="+ret.sample}).trigger("reloadGrid");
+        			jQuery("#rowed3").jqGrid("setGridParam",{url:baseUrl + "/audit/sample?id="+ret.sample}).trigger("reloadGrid");
         		}
         		
         		if ($("#historyTabs").tabs('option', 'active') == 0) {
@@ -389,7 +389,7 @@ function getPatient(docNo) {
 		
 		//张晋南 2016-5-19 查询结果详细信息打印报告----------
 		$("#search_detailed_printBtn").click(function() {
-			$('#printFrame').empty();
+			/*$('#printFrame').empty();
 			var id = $("#hiddenDocId").val();
 			var sample = $("#hiddenSampleNo").val();
 			var last = 0;
@@ -398,8 +398,18 @@ function getPatient(docNo) {
 			}
 			$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' src=\"../print/sample?docId=" + id + "&sampleNo=" + sample + "&last=" + last + "\"/>");
 			$("#auditPrint").dialog("open");
-			$("#iframe_print").height(450);
+			$("#iframe_print").height(450);*/
+			var sampeNo =$("#hiddenSampleNo").val() ||'';
+			if(sampeNo !=''){
+				printReport(sampeNo);
+			}
 		});
+		function printReport(sampleno){
+			$.get(baseUrl+"/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
+				Preview(data);
+			})
+		}
+
 		$("#auditPrint").dialog({
 			autoOpen: false,
 			resizable: false,
@@ -444,4 +454,16 @@ function getPatient(docNo) {
 	  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
 	  return fmt;   
 	};
-	
+
+function Preview(strHtml) {//打印预览
+	LODOP = getLodop();
+	//CreateDataBill(data)
+	LODOP=getLodop();
+	LODOP.PRINT_INIT("打印报告单");
+	LODOP.SET_PRINT_PAGESIZE(2,0,0,'A5');
+	LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
+	//LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
+	LODOP.SET_PRINTER_INDEX(-1);
+	LODOP.PRINT();
+	//LODOP.PREVIEW();
+}

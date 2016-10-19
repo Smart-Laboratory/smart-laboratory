@@ -148,17 +148,17 @@ public class AuditController extends BaseAuditController {
     		} else if (sample.length() == 11 && StringUtils.isNumeric(sample.substring(0, 8))) {
     			preText = sample.substring(0, 8);
     			code = sample.substring(8);
-    		} else if (sample.length() == 14) {
+    		} else if (sample.length() == 15) {
     			preText = sample;
     			code = sample.substring(8, 11);
-    		} else if (sample.length() == 18) {
+    		} else if (sample.length() == 20) {
     			preText = sample.substring(0, 8);
     			code = sample.substring(8, 11);
     		} else {
     			throw new Exception("格式不符合要求!");
     		}
     		List<Sample> patientInfo = new ArrayList<Sample>();
-    		if (sample.length() != 14) {
+    		if (sample.length() != 15) {
     			List<Sample> patientUnauditList = sampleManager.getSampleList(preText, operator.getLastLab(), code, 0, status);
     			patientInfo.addAll(patientUnauditList);
     			if (auto != null) {
@@ -172,9 +172,9 @@ public class AuditController extends BaseAuditController {
     			}
     		}
 
-    		if (sample.length() == 18) {
-    			int start = Integer.valueOf(sample.substring(11, 14));
-    			int end = Integer.valueOf(sample.substring(15, 18));
+    		if (sample.length() == 20) {
+    			int start = Integer.valueOf(sample.substring(11, 15));
+    			int end = Integer.valueOf(sample.substring(16, 20));
     			System.out.println(start + "," + end);
     			Iterator<Sample> itr = patientInfo.iterator();
     			while (itr.hasNext()) {

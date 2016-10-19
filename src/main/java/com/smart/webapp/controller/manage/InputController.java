@@ -47,12 +47,12 @@ public class InputController {
 		if(sampleno == null) {
 			sampleno = today;
 			if(segment != null && segment.indexOf(",") > 0) {
-				sampleno += segment.split(",")[0] + "001";
+				sampleno += segment.split(",")[0] + "0001";
 			} else {
-				sampleno += "AAA001";
+				sampleno += "AAA0001";
 			}
 		} else {
-			sampleno = sampleno.substring(0,11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11,14)) + 1));
+			sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1));
 		}
 		System.out.println(sampleno);
 		ModelAndView view = new ModelAndView();

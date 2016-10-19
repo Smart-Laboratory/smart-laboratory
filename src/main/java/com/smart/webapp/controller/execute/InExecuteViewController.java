@@ -455,7 +455,7 @@ public class InExecuteViewController extends RequestContextListener implements S
                 sample.setStayHospitalMode(labOrder.getStayhospitalmode());
                 sample.setDepartBed(labOrder.getBed());
                 sample.setId(sampleManager.getSampleId());
-                //生成样本号
+                //生成条码号
                 String barcode = "A120" + String.format("%08d", sample.getId());
                 sample.setBarcode(barcode);
                 sample.setAge(labOrder.getAge());
