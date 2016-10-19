@@ -418,6 +418,7 @@ public class SampleInputAjaxController {
         String code = request.getParameter("id");
         String sampleno = request.getParameter("sampleno");
         Sample sample = sampleManager.getBySampleNo(sampleno);
+        sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
         JSONObject o = new JSONObject();
         if (sample != null) {
             o.put("success", 0);
@@ -437,6 +438,7 @@ public class SampleInputAjaxController {
         Process process = null;
         String code = ConvertUtil.null2String(request.getParameter("id")).toUpperCase();
         String sampleno = request.getParameter("sampleno");
+        sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
 
         int mode = ConvertUtil.getStayHospitalMode(code);
         if (mode == 4) {
@@ -519,13 +521,13 @@ public class SampleInputAjaxController {
                     if (receiveSampleNo == null) {
                         sampleno = Constants.DF3.format(receiveTime) + segment + "0001";
                     } else {
-                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11, receiveSampleNo.length())) + 1));
+                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11)) + 1));
                     }
                     sample.setSampleNo(sampleno);
                 }
                 //设置检验者
                 sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%03d", (Integer.parseInt(sampleno.substring(11, 14)) + 1)));
+                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
             }
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             process.setReceiver(user.getName());
@@ -676,13 +678,13 @@ public class SampleInputAjaxController {
                     if (receiveSampleNo == null) {
                         sampleno = Constants.DF3.format(receiveTime) + segment + "0001";
                     } else {
-                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11, receiveSampleNo.length())) + 1));
+                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11)) + 1));
                     }
                     sample.setSampleNo(sampleno);
                 }
                 //设置检验者
                 sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11, sampleno.length())) + 1)));
+                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
             }
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 
