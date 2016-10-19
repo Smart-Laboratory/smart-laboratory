@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.TestIdMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -77,7 +78,7 @@ public class GetPatientController extends BaseAuditController {
 				map.put("examinaim", "");
 			}
 			map.put("mode", info.getRequestMode());
-			map.put("stayhospitalmode", info.getStayHospitalMode()==1 ? "门诊":"住院");
+			map.put("stayhospitalmode", ConvertUtil.getStayHospitalModelValue(info.getStayHospitalMode()));
 			map.put("diagnostic", info.getDiagnostic());
 			if(diagMap.containsKey(info.getDiagnostic())) {
 				map.put("diagnosticKnow", diagMap.get(info.getDiagnostic()));

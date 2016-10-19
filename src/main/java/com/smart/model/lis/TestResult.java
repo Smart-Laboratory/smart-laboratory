@@ -9,6 +9,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.smart.util.ConvertUtil;
 import org.hibernate.annotations.IndexColumn;
 
 import com.smart.model.BaseObject;
@@ -259,7 +260,8 @@ public class TestResult extends BaseObject{
      */
     @Transient
     public String getReference() {
-        if(refLo==null || refHi == null) return "";
+        refLo = ConvertUtil.null2String(refLo);
+        refHi = ConvertUtil.null2String(refHi);
         if (refLo.isEmpty() && refHi.isEmpty()) {
             return "-";
         } else if (refLo.isEmpty() && (!refHi.isEmpty())) {

@@ -124,6 +124,28 @@ public final class ConvertUtil {
             return def;
         }
     }
+    public static Float getFloatValue(String v) {
+        return getFloatValue(v, 0);
+    }
+
+    public static Float getFloatValue(String v, float def) {
+        try {
+            return Float.parseFloat(v);
+        } catch (Exception ex) {
+            return def;
+        }
+    }
+    public static Double getDoubleValue(String v) {
+        return getDoubleValue(v, 0);
+    }
+
+    public static Double getDoubleValue(String v, double def) {
+        try {
+            return Double.parseDouble(v);
+        } catch (Exception ex) {
+            return def;
+        }
+    }
     public static String  getFormatDate(Date v) {
         return getFormatDate(v,"");
 
@@ -190,7 +212,13 @@ public final class ConvertUtil {
                     retFlag = " ";
                 }
             } else if(flag.charAt(1) == 'B') {
-                retFlag = " ";
+                if(flag.charAt(0)=='A'){
+                    retFlag = "阴性";
+                }else if(flag.charAt(0)=='B'){
+                    retFlag = "阳性";
+                }else {
+                    retFlag = " ";
+                }
             }
 
         }catch (Exception e){
@@ -220,5 +248,43 @@ public final class ConvertUtil {
             retFlag = "";
         }
         return  retFlag;
+    }
+
+    /**
+     * 根据条码判断住院类型
+     * @param barcode
+     * @return
+     */
+    public static int getStayHospitalMode(String barcode){
+        int mode = 1;
+        if(barcode.indexOf("A12006")>=0){
+            mode = 2;
+        }else if(barcode.indexOf("A12001")>=0){
+            mode = 4;       //体检
+        }else {
+            mode = 1;
+        }
+        return mode;
+    }
+    public static  String getStayHospitalModelValue(int model) {
+        String value = "";
+        switch (model) {
+            case 1:
+                value = "门诊";
+                break;
+            case 2:
+                value = "病房";
+                break;
+            case 3:
+                value = "急诊";
+                break;
+            case 4:
+                value = "体检";
+                break;
+            default:
+                value = "";
+                break;
+        }
+        return value;
     }
 }

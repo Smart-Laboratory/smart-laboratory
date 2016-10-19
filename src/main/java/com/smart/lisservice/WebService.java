@@ -45,21 +45,23 @@ public class WebService {
     private IndexManager indexManager = null;
     private SectionManager sectionManager;
     private RMIService rmiService;
-    public WebService(){
+
+    public WebService() {
         indexManager = (IndexManager) SpringContextUtil.getBean("indexManager");
         dictionaryManager = (DictionaryManager) SpringContextUtil.getBean("dictionaryManager");
         testIdMapUtil = TestIdMapUtil.getInstance(indexManager);
         sectionManager = (SectionManager) SpringContextUtil.getBean("sectionManager");
         rmiService = (RMIService) SpringContextUtil.getBean("rmiService");
     }
-    private JaxWsProxyFactoryBean jwpfb ;
+
+    private JaxWsProxyFactoryBean jwpfb;
     private static final Log log = LogFactory.getLog(WebService.class);
     private TestIdMapUtil testIdMapUtil = null;
-    private String url = Config.getString("webservice.path","");
+    private String url = Config.getString("webservice.path", "");
     private HttpURLConnection connection = null;
 
-    public String getBacteriaList(){
-        return  null;//client.path("getBacteriaList").accept(MediaType.APPLICATION_JSON).get(String.class);
+    public String getBacteriaList() {
+        return null;//client.path("getBacteriaList").accept(MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public SampleAndResultVo getRequestInfo() {
@@ -67,7 +69,7 @@ public class WebService {
         return new SampleAndResultVo(new Sample(), new Process(), new TestResult());
     }
 
-    public  List<HospitalUser> getHospitalUserList() {
+    public List<HospitalUser> getHospitalUserList() {
         List<HospitalUser> list = new ArrayList<HospitalUser>();
         try {
             HttpClient httpClient = new HttpClient();
@@ -76,9 +78,9 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
+            if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                for(int i = 0; i < arr.length(); i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     HospitalUser hospitalUser = new HospitalUser();
                     hospitalUser.setId(arr.getJSONObject(i).getString("Id"));
                     hospitalUser.setWorkid(arr.getJSONObject(i).getString("WorkId"));
@@ -102,9 +104,9 @@ public class WebService {
             httpClient.executeMethod(method);
             //System.out.println("获取门诊科室信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
+            if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                for(int i = 0; i < arr.length(); i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
                     s.setCode(arr.getJSONObject(i).getString("Id"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
@@ -116,9 +118,9 @@ public class WebService {
             httpClient.executeMethod(method2);
             //System.out.println("获取住院信息：" + method2.getResponseBodyAsString());
             JSONObject obj2 = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj2.get("State")==1) {
+            if ((Integer) obj2.get("State") == 1) {
                 JSONArray arr = obj2.getJSONArray("Message");
-                for(int i = 0; i < arr.length(); i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
                     s.setCode(arr.getJSONObject(i).getString("Id"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
@@ -141,9 +143,9 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
+            if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                for(int i = 0; i < arr.length(); i++) {
+                for (int i = 0; i < arr.length(); i++) {
                     list.add(arr.getJSONObject(i).getString("itemName"));
                 }
             }
@@ -162,13 +164,13 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
+            if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
                 patient.setAddress(arr.getJSONObject(0).getString("PatientAddress"));
                 patient.setBirthday(Constants.SDF.parse(arr.getJSONObject(0).getString("Birthday")));
                 patient.setBlh(arr.getJSONObject(0).getString("PatientFileCode"));
                 patient.setIdCard(arr.getJSONObject(0).getString("IdCard"));
-                patient.setSex( arr.getJSONObject(0).getString("Sex"));
+                patient.setSex(arr.getJSONObject(0).getString("Sex"));
                 patient.setInfantFlag("0");
                 patient.setPatientId(arr.getJSONObject(0).getString("PatientCode"));
                 patient.setPatientName(arr.getJSONObject(0).getString("Name"));
@@ -183,8 +185,9 @@ public class WebService {
     }
 
     /**
-     *  获取信息病人信息
-     * @param ward  病区
+     * 获取信息病人信息
+     *
+     * @param ward 病区
      * @return
      */
     public JSONArray getInPatientList(String ward) {
@@ -196,8 +199,8 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==1) {
-                patientList =  obj.getJSONArray("Message");
+            if ((Integer) obj.get("State") == 1) {
+                patientList = obj.getJSONArray("Message");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,7 +219,7 @@ public class WebService {
             httpClient.executeMethod(method);
             //System.out.println("1获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            list = jsonTolist(1,obj);
+            list = jsonTolist(1, obj);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,8 +236,8 @@ public class WebService {
             httpClient.executeMethod(method);
             //System.out.println("获取采样信息：" + method.getResponseBodyAsString());
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            list = jsonTolist(1,obj);
-        }catch(Exception e){
+            list = jsonTolist(1, obj);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
@@ -242,19 +245,20 @@ public class WebService {
 
     /**
      * 获取住院病人申请单列表信息
-     * @param ward  病区
+     *
+     * @param ward 病区
      * @return
      */
-    public List<LabOrder> getInExcuteInfo(String ward,String bedNo,String patientId){
+    public List<LabOrder> getInExcuteInfo(String ward, String bedNo, String patientId) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
             HttpClient httpClient = new HttpClient();
             httpClient.getHostConfiguration().setHost(url + "getInPatientRequestInfo");
-            GetMethod method = new GetMethod(url + "getInPatientRequestInfo" + "?ward=" + ward +"&bedNo="+bedNo +"&patientId="+patientId);
+            GetMethod method = new GetMethod(url + "getInPatientRequestInfo" + "?ward=" + ward + "&bedNo=" + bedNo + "&patientId=" + patientId);
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            list = jsonTolist(2,obj);
+            list = jsonTolist(2, obj);
             //System.out.println(obj.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,14 +267,45 @@ public class WebService {
     }
 
     /**
-     *  JSON转LabOrder List
-     * @param stayhospitalmode   门诊1 住院2 体检3
-     * @param obj               JSONObject
+     * 获取体检病人申请信息
+     *
+     * @param barcode   条码号
+     * @param patientId 病人号
+     * @param fromDate  开始日期
+     * @param toDate    结束日期
+     * @return
+     */
+    public List<LabOrder> getExaminationRequestInfo(String barcode,
+                                                    String patientId,
+                                                    String fromDate,
+                                                    String toDate) {
+        List<LabOrder> list = new ArrayList<LabOrder>();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url);
+            GetMethod method = new GetMethod(url + "getExaminationRequestInfo?barcode=" + barcode + "&patientId=" + patientId
+                    + "&fromDate=" + fromDate + "&toDate=" + toDate);
+            method.releaseConnection();
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+            list = jsonTolist(4, obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * JSON转LabOrder List
+     *
+     * @param stayhospitalmode 门诊1 住院2 体检3
+     * @param obj              JSONObject
      * @return
      * @throws JSONException
      * @throws Exception
      */
-    private  List<LabOrder> jsonTolist(int stayhospitalmode,JSONObject obj) throws JSONException,Exception{
+    private List<LabOrder> jsonTolist(int stayhospitalmode,
+                                      JSONObject obj) throws JSONException, Exception {
         List<LabOrder> list = new ArrayList<LabOrder>();
         if ((Integer) obj.get("State") == 1) {
             JSONArray arr = obj.getJSONArray("Message");
@@ -296,12 +331,13 @@ public class WebService {
                 labOrder.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("requestDateTime")));
                 labOrder.setRequestNum(arr.getJSONObject(i).getInt("quantity"));
                 labOrder.setSex(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("sex")));
-                labOrder.setStayhospitalmode(2); //门诊1 住院2 体检3
+                labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检4
                 labOrder.setToponymy(arr.getJSONObject(i).getString("testPart"));
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
+                labOrder.setExamitem(arr.getJSONObject(i).getString("itemName"));
                 labOrder.setZxbz(arr.getJSONObject(i).getInt("status"));
                 labOrder.setBed(arr.getJSONObject(i).getString("bedno"));
-                labOrder.setSampletype( arr.getJSONObject(i).getString("sampleType"));
+                labOrder.setSampletype(arr.getJSONObject(i).getString("sampleType"));
                 labOrder.setAge(arr.getJSONObject(i).getString("age"));
                 labOrder.setAgeUnit(arr.getJSONObject(i).getString("ageUnit"));
                 list.add(labOrder);
@@ -312,6 +348,7 @@ public class WebService {
 
     /**
      * HIS申请状态变更
+     *
      * @param requestType
      * @param itemId
      * @param exeType
@@ -324,32 +361,32 @@ public class WebService {
      * @return
      */
     public String requestUpdate(int requestType,
-                                 String itemId,
-                                 int exeType,
-                                 String exeDeptCode,
-                                 String exeDeptName,
-                                 String exeDoctorCode,
-                                 String exeDoctorName,
-                                 String exeDate,
-                                 String expand) {
+                                String itemId,
+                                int exeType,
+                                String exeDeptCode,
+                                String exeDeptName,
+                                String exeDoctorCode,
+                                String exeDoctorName,
+                                String exeDate,
+                                String expand) {
         String retVal = "";
         try {
             //if(1==1)throw new Exception("错误");
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"requestUpdate");
-            PostMethod method = new PostMethod(url+"requestUpdate");
+            httpClient.getHostConfiguration().setHost(url + "requestUpdate");
+            PostMethod method = new PostMethod(url + "requestUpdate");
             JSONObject object = new JSONObject();
-            object.put("requestType",requestType);
-            object.put("itemId",itemId);
-            object.put("exeType",exeType);
-            object.put("exeDeptCode",exeDeptCode);
-            object.put("exeDeptName",exeDeptName);
-            object.put("exeDoctorCode",exeDoctorCode);
-            object.put("exeDoctorName",exeDoctorName);
-            object.put("exeDate",exeDate);
-            object.put("expand",expand);
+            object.put("requestType", requestType);
+            object.put("itemId", itemId);
+            object.put("exeType", exeType);
+            object.put("exeDeptCode", exeDeptCode);
+            object.put("exeDeptName", exeDeptName);
+            object.put("exeDoctorCode", exeDoctorCode);
+            object.put("exeDoctorName", exeDoctorName);
+            object.put("exeDate", exeDate);
+            object.put("expand", expand);
 
-            RequestEntity requestEntity = new StringRequestEntity(object.toString(),"application/json", "UTF-8");
+            RequestEntity requestEntity = new StringRequestEntity(object.toString(), "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
@@ -357,9 +394,9 @@ public class WebService {
             //System.out.println(method.getResponseBodyAsString());
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
+            if ((Integer) obj.get("State") == 0) {
                 retVal = obj.getString("Message");
-            }else {
+            } else {
                 retVal = "";
             }
         } catch (Exception e) {
@@ -372,106 +409,107 @@ public class WebService {
 
     /**
      * 将检测结果保存至HIS系统
-     * @param sample        样本信息
-     * @param process       流转记录
-     * @param resultList    检测结果集合
+     *
+     * @param sample     样本信息
+     * @param process    流转记录
+     * @param resultList 检测结果集合
      * @return
      */
     public boolean saveHisResult(Sample sample,
                                  Process process,
-                                 List<TestResult> resultList){
+                                 List<TestResult> resultList) {
         boolean flag = false;
         try {
             //if(1==1)throw new Exception("错误");
             UserUtil userUtil = UserUtil.getInstance();
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"saveHisResult");
-            PostMethod method = new PostMethod(url+"saveHisResult");
+            httpClient.getHostConfiguration().setHost(url + "saveHisResult");
+            PostMethod method = new PostMethod(url + "saveHisResult");
             JSONObject hisSampleInfo = new JSONObject();
 
             //样本信息
-            hisSampleInfo.put("barCode",sample.getBarcode());
-            hisSampleInfo.put("sampleNo",sample.getSampleNo());
-            hisSampleInfo.put("organizationId",1001);       //机构代码
-            hisSampleInfo.put("patientType",sample.getStayHospitalMode());
-            hisSampleInfo.put("patientId",sample.getPatientId());
-            hisSampleInfo.put("patientNo",sample.getPatientblh());
-            hisSampleInfo.put("patientName",sample.getPatientname());
-            hisSampleInfo.put("sex",sample.getSex());
-            hisSampleInfo.put("age",sample.getAge());
-            hisSampleInfo.put("ageUnit",sample.getAgeunit());
-            hisSampleInfo.put("isBaby",0);
-            hisSampleInfo.put("bedNo",sample.getDepartBed());
-            hisSampleInfo.put("diagnosisId","");
-            hisSampleInfo.put("diagnosis",sample.getDiagnostic());
-            hisSampleInfo.put("part",sample.getPart());
-            hisSampleInfo.put("cycleId",sample.getCycle());
-            hisSampleInfo.put("executeTime",ConvertUtil.getFormatDateGMT(process.getExecutetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
-            hisSampleInfo.put("requesterId",process.getRequester());
-            hisSampleInfo.put("requesterName",process.getRequester());
-            hisSampleInfo.put("departmentId","");
-            hisSampleInfo.put("departmentName",sample.getHosSection());
-            hisSampleInfo.put("receiveTime",ConvertUtil.getFormatDateGMT(process.getReceivetime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
-            hisSampleInfo.put("testerId","");
-            hisSampleInfo.put("testerName",sample.getChkoper2());
-            hisSampleInfo.put("testDepartmentId","");
-            hisSampleInfo.put("testDepartmentName","");
-            hisSampleInfo.put("testTime",ConvertUtil.getFormatDateGMT(process.getPrinttime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
-            hisSampleInfo.put("auditerId","");
-            hisSampleInfo.put("auditerName",userUtil.getUser(process.getCheckoperator()).getName());
-            hisSampleInfo.put("auditTime",ConvertUtil.getFormatDateGMT(process.getChecktime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
-            hisSampleInfo.put("auditNote",sample.getNote());
-            hisSampleInfo.put("sampleTypeId",sample.getSampleType());
+            hisSampleInfo.put("barCode", sample.getBarcode());
+            hisSampleInfo.put("sampleNo", sample.getSampleNo());
+            hisSampleInfo.put("organizationId", 1001);       //机构代码
+            hisSampleInfo.put("patientType", sample.getStayHospitalMode());
+            hisSampleInfo.put("patientId", sample.getPatientId());
+            hisSampleInfo.put("patientNo", sample.getPatientblh());
+            hisSampleInfo.put("patientName", sample.getPatientname());
+            hisSampleInfo.put("sex", sample.getSex());
+            hisSampleInfo.put("age", sample.getAge());
+            hisSampleInfo.put("ageUnit", sample.getAgeunit());
+            hisSampleInfo.put("isBaby", 0);
+            hisSampleInfo.put("bedNo", sample.getDepartBed());
+            hisSampleInfo.put("diagnosisId", "");
+            hisSampleInfo.put("diagnosis", sample.getDiagnostic());
+            hisSampleInfo.put("part", sample.getPart());
+            hisSampleInfo.put("cycleId", sample.getCycle());
+            hisSampleInfo.put("executeTime", ConvertUtil.getFormatDateGMT(process.getExecutetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            hisSampleInfo.put("requesterId", process.getRequester());
+            hisSampleInfo.put("requesterName", process.getRequester());
+            hisSampleInfo.put("departmentId", "");
+            hisSampleInfo.put("departmentName", sample.getHosSection());
+            hisSampleInfo.put("receiveTime", ConvertUtil.getFormatDateGMT(process.getReceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            hisSampleInfo.put("testerId", "");
+            hisSampleInfo.put("testerName", sample.getChkoper2());
+            hisSampleInfo.put("testDepartmentId", "");
+            hisSampleInfo.put("testDepartmentName", "");
+            hisSampleInfo.put("testTime", ConvertUtil.getFormatDateGMT(process.getPrinttime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            hisSampleInfo.put("auditerId", "");
+            hisSampleInfo.put("auditerName", userUtil.getUser(process.getCheckoperator()).getName());
+            hisSampleInfo.put("auditTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            hisSampleInfo.put("auditNote", sample.getNote());
+            hisSampleInfo.put("sampleTypeId", sample.getSampleType());
             hisSampleInfo.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
-            hisSampleInfo.put("sampleOperateStatus",0);
-            hisSampleInfo.put("sampleResultTime",ConvertUtil.getFormatDateGMT(process.getChecktime(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ));
-            hisSampleInfo.put("sampleResultStatus",sample.getSampleStatus());
-            hisSampleInfo.put("isPrint",sample.getPrintFlag());
-            hisSampleInfo.put("isEmergency",sample.getRequestMode());
-            hisSampleInfo.put("testId",sample.getYlxh());
-            hisSampleInfo.put("testName",sample.getInspectionName());
-            String reportUrl=Config.getString("report.path","")+"&patienttype="+sample.getStayHospitalMode()+"&patientid="+sample.getPatientId()+"&sampleid="+sample.getBarcode();
-            hisSampleInfo.put("reportUrl",reportUrl);
-            hisSampleInfo.put("patientCode",sample.getPatientblh());
+            hisSampleInfo.put("sampleOperateStatus", 0);
+            hisSampleInfo.put("sampleResultTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            hisSampleInfo.put("sampleResultStatus", sample.getSampleStatus());
+            hisSampleInfo.put("isPrint", sample.getPrintFlag());
+            hisSampleInfo.put("isEmergency", sample.getRequestMode());
+            hisSampleInfo.put("testId", sample.getYlxh());
+            hisSampleInfo.put("testName", sample.getInspectionName());
+            String reportUrl = Config.getString("report.path", "") + "&patienttype=" + sample.getStayHospitalMode() + "&patientid=" + sample.getPatientId() + "&sampleid=" + sample.getBarcode();
+            hisSampleInfo.put("reportUrl", reportUrl);
+            hisSampleInfo.put("patientCode", sample.getPatientblh());
 
             //结果信息
-            JSONArray hisTestResult= new JSONArray();
+            JSONArray hisTestResult = new JSONArray();
             Map<String, Index> indexMap = testIdMapUtil.getIdMap();
-            for(TestResult testResult:resultList){
+            for (TestResult testResult : resultList) {
                 JSONObject object = new JSONObject();
-                object.put("testItemId",testResult.getTestId());              //检测项目ID
+                object.put("testItemId", testResult.getTestId());              //检测项目ID
                 object.put("testItemName_EN", ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getEnglish()));         //项目英文名称
-                object.put("testItemName_CN",testResult.getTestName());         //项目中文名称
-                object.put("sampleTypeId",testResult.getSampleType());            //样本类型ID
-                object.put("sampleTypeName",SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(testResult.getSampleType())));          //样本类型名称
-                object.put("testResult",testResult.getTestResult());              //结果
-                object.put("resultFlag",ConvertUtil.getResultFlag(testResult.getResultFlag()));              //结果标志
-                object.put("resultHint",testResult.getHint());              //结果提示
-                object.put("unit",testResult.getUnit());
-                object.put("referenceLo",testResult.getRefLo());             //下限
-                object.put("referenceHi",testResult.getRefHi());             //上限
-                object.put("reference",testResult.getReference());               //参考范围
-                object.put("order",ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getPrintord()));                   //结果顺序
-                object.put("method",ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getMethod()));                  //检测方法
-                object.put("resultTime",Constants.DF9.format(testResult.getMeasureTime()));
+                object.put("testItemName_CN", testResult.getTestName());         //项目中文名称
+                object.put("sampleTypeId", testResult.getSampleType());            //样本类型ID
+                object.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(testResult.getSampleType())));          //样本类型名称
+                object.put("testResult", testResult.getTestResult());              //结果
+                object.put("resultFlag", ConvertUtil.getResultFlag(testResult.getResultFlag()));              //结果标志
+                object.put("resultHint", testResult.getHint());              //结果提示
+                object.put("unit", testResult.getUnit());
+                object.put("referenceLo", testResult.getRefLo());             //下限
+                object.put("referenceHi", testResult.getRefHi());             //上限
+                object.put("reference", testResult.getReference());               //参考范围
+                object.put("order", ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getPrintord()));                   //结果顺序
+                object.put("method", ConvertUtil.null2String(indexMap.get(testResult.getTestId()).getMethod()));                  //检测方法
+                object.put("resultTime", Constants.DF9.format(testResult.getMeasureTime()));
                 hisTestResult.put(object);
             }
 
             JSONObject hisTestInfo = new JSONObject();
-            hisTestInfo.put("sampleInfo",hisSampleInfo);
-            hisTestInfo.put("testResultList",hisTestResult);
-            RequestEntity requestEntity = new StringRequestEntity(hisTestInfo.toString(),"application/json", "UTF-8");
+            hisTestInfo.put("sampleInfo", hisSampleInfo);
+            hisTestInfo.put("testResultList", hisTestResult);
+            RequestEntity requestEntity = new StringRequestEntity(hisTestInfo.toString(), "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
             httpClient.executeMethod(method);
             //System.out.println(method.getResponseBodyAsString());
 
-            if(method.getResponseBodyAsString() != null && !method.getResponseBodyAsString().isEmpty()){
+            if (method.getResponseBodyAsString() != null && !method.getResponseBodyAsString().isEmpty()) {
                 JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-                if((Integer)obj.get("State")==0) {
+                if ((Integer) obj.get("State") == 0) {
                     flag = false;
-                }else {
+                } else {
                     flag = true;
                 }
             }
@@ -487,116 +525,120 @@ public class WebService {
 
     /**
      * 记账
-     * @param params  记账参数 JSON格式{"patientCode":"6000213","patientId":"123123"....}
+     *
+     * @param params 记账参数 JSON格式{"patientCode":"6000213","patientId":"123123"....}
      * @return
      */
-    public String booking(String params){
-        String retVal="";
-        try{
+    public String booking(String params) {
+        String retVal = "";
+        try {
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"booking");
-            PostMethod method = new PostMethod(url+"booking");
+            httpClient.getHostConfiguration().setHost(url + "booking");
+            PostMethod method = new PostMethod(url + "booking");
 
-            RequestEntity requestEntity = new StringRequestEntity(params,"application/json", "UTF-8");
+            RequestEntity requestEntity = new StringRequestEntity(params, "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
+            if ((Integer) obj.get("State") == 0) {
                 retVal = obj.getString("Message");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             retVal = "";
         }
-        return  retVal;
+        return retVal;
     }
 
     /**
      * 将检测结果保存至LIS系统
-     * @param sample                条码号
-     * @param testResultList        结果信息
-     * @return
      *
-     * 用于电子病历查询
+     * @param sample         条码号
+     * @param testResultList 结果信息
+     * @return 用于电子病历查询
      */
-    public boolean saveLisResult(Sample sample,Process process,List<TestResult> testResultList){
+    public boolean saveLisResult(Sample sample,
+                                 Process process,
+                                 List<TestResult> testResultList) {
         boolean flag = false;
         try {
 
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"saveLisResult");
-            PostMethod method = new PostMethod(url+"saveLisResult");
+            httpClient.getHostConfiguration().setHost(url + "saveLisResult");
+            PostMethod method = new PostMethod(url + "saveLisResult");
             UserUtil userUtil = UserUtil.getInstance();
 
             JSONObject sampleInfo = new JSONObject();
-            String sampleNo = sample.getSampleNo().substring(sample.getSampleNo().length()-3,sample.getSampleNo().length());
+            String sampleNo = sample.getSampleNo().substring(sample.getSampleNo().length() - 3, sample.getSampleNo().length());
 
             //String inspectionId = sample.getBarcode();
 
             //样本信息
-            sampleInfo.put("inspectionId",sample.getBarcode());
-            sampleInfo.put("patientId",sample.getPatientId());
-            sampleInfo.put("patientNo",sample.getPatientblh());
-            sampleInfo.put("patientName",sample.getPatientname());
-            sampleInfo.put("sex",sample.getSex());
-            sampleInfo.put("age",sample.getAge());
-            sampleInfo.put("ageUnit",sample.getAgeunit());
-            sampleInfo.put("department",SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
-            sampleInfo.put("wardName",SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
-            sampleInfo.put("bedNo",sample.getDepartBed());
-            if(process.getKsreceivetime() != null) {
+            sampleInfo.put("inspectionId", sample.getBarcode());
+            sampleInfo.put("patientId", sample.getPatientId());
+            sampleInfo.put("patientNo", sample.getPatientblh());
+            sampleInfo.put("patientName", sample.getPatientname());
+            sampleInfo.put("sex", sample.getSex());
+            sampleInfo.put("age", sample.getAge());
+            sampleInfo.put("ageUnit", sample.getAgeunit());
+            sampleInfo.put("department", SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
+            sampleInfo.put("wardName", SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));
+            sampleInfo.put("bedNo", sample.getDepartBed());
+            if (process.getKsreceivetime() != null) {
                 sampleInfo.put("testTime", ConvertUtil.getFormatDateGMT(process.getKsreceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                sampleInfo.put("testerHisId",userUtil.getUser(process.getKsreceiver()).getHisId());
-                sampleInfo.put("testerName",userUtil.getUser(process.getKsreceiver()).getName());
+                sampleInfo.put("testerHisId", userUtil.getUser(process.getKsreceiver()).getHisId());
+                sampleInfo.put("testerName", userUtil.getUser(process.getKsreceiver()).getName());
             }
-            if(process.getRequesttime() != null) {
+            if (process.getRequesttime() != null) {
                 sampleInfo.put("requestTime", ConvertUtil.getFormatDateGMT(process.getRequesttime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                sampleInfo.put("requestName",process.getRequesterName());
+                sampleInfo.put("requestName", process.getRequesterName());
             }
-            if(process.getReceivetime() != null) {
+            if (process.getReceivetime() != null) {
                 sampleInfo.put("receiveTime", ConvertUtil.getFormatDateGMT(process.getReceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                sampleInfo.put("receiveName",process.getReceiver());
+                sampleInfo.put("receiveName", process.getReceiver());
             }
-            if(process.getReceivetime() != null) {
+            if (process.getChecktime() != null) {
+                sampleInfo.put("auditTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                sampleInfo.put("auditName", process.getCheckoperator());
                 sampleInfo.put("reportTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                sampleInfo.put("reportName",process.getCheckoperator());
+                sampleInfo.put("reportName", process.getCheckoperator());
             }
-            sampleInfo.put("sampleType",sample.getSampleType());
+            sampleInfo.put("sampleType", sample.getSampleType());
             sampleInfo.put("sampleTypeName", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
-            sampleInfo.put("testId",sample.getYlxh());
-            sampleInfo.put("testName",sample.getInspectionName());
-            sampleInfo.put("barcode",sample.getBarcode());
-            sampleInfo.put("sampleNo",sample.getSampleNo());
-            sampleInfo.put("patientType",sample.getStayHospitalMode());
-            sampleInfo.put("sampleStatus",sample.getSampleStatus());
-            sampleInfo.put("fileState","可打");
-            sampleInfo.put("filePath","E:\\GenerateReport\\ReportTemp\\"+sample.getBarcode()+".pdf");
-            sampleInfo.put("filePath1","\\\\10.31.96.39\\GenerateReport\\ReportTemp\\"+sample.getBarcode()+".pdf");
+            sampleInfo.put("testId", sample.getYlxh());
+            sampleInfo.put("testName", sample.getInspectionName());
+            sampleInfo.put("barcode", sample.getBarcode());
+            sampleInfo.put("sampleNo", sample.getSampleNo());
+            sampleInfo.put("patientType", sample.getStayHospitalMode());
+            sampleInfo.put("sampleStatus", sample.getSampleStatus());
+            sampleInfo.put("fileState", "可打");
+            sampleInfo.put("filePath", "E:\\GenerateReport\\ReportTemp\\" + sample.getBarcode() + ".pdf");
+            sampleInfo.put("filePath1", "\\\\10.31.96.39\\GenerateReport\\ReportTemp\\" + sample.getBarcode() + ".pdf");
 
             //结果信息
-            JSONArray jsonTestResult= new JSONArray();
-            for(TestResult testResult:testResultList){
+            JSONArray jsonTestResult = new JSONArray();
+            for (TestResult testResult : testResultList) {
                 JSONObject result = new JSONObject();
-                result.put("inspectionId",sample.getBarcode());                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
-                result.put("testItemId",testResult.getTestId());        //项目编号
-                result.put("testItemName_EN",testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
-                result.put("getTestItemName_CN",testResult.getTestName());//项目名称
-                result.put("unit",testResult.getUnit());                    //单位
-                result.put("orderNum",testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
-                result.put("reference",testResult.getReference());         //参考范围
-                result.put("resultFlag",ConvertUtil.getResultFlag2(testResult.getResultFlag()));        //结果标记
-                result.put("barcode",sample.getBarcode());                              //条码号
-                result.put("testResult",testResult.getTestResult());                              //结果
+                result.put("inspectionId", sample.getBarcode());                //仪器代号+测定日期+样本编号(5位) ABL8002015122200008
+                result.put("testItemId", testResult.getTestId());        //项目编号
+                result.put("testItemName_EN", testIdMapUtil.getIdMap().get(testResult.getTestId()).getEnglish());   //项目英文名称
+                result.put("getTestItemName_CN", testResult.getTestName());//项目名称
+                result.put("unit", testResult.getUnit());                    //单位
+                result.put("orderNum", testIdMapUtil.getIdMap().get(testResult.getTestId()).getPrintord());          //序号
+                result.put("reference", testResult.getReference());         //参考范围
+                result.put("resultFlag", ConvertUtil.getResultFlag2(testResult.getResultFlag()));        //结果标记
+                result.put("barcode", sample.getBarcode());                              //条码号
+                result.put("testResult", testResult.getTestResult());                              //结果
                 jsonTestResult.put(result);
             }
 
             JSONObject testInfo = new JSONObject();
-            testInfo.put("inspectionInfo",sampleInfo);
-            testInfo.put("inspectionItemList",jsonTestResult);
+            testInfo.put("inspectionInfo", sampleInfo);
+            testInfo.put("inspectionItemList", jsonTestResult);
 
-            RequestEntity requestEntity = new StringRequestEntity(testInfo.toString(),"application/json", "UTF-8");
+            RequestEntity requestEntity = new StringRequestEntity(testInfo.toString(), "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
@@ -604,7 +646,7 @@ public class WebService {
             //System.out.println(method.getResponseBodyAsString());
 
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
+            if ((Integer) obj.get("State") == 0) {
                 flag = false;
             }
 
@@ -618,47 +660,46 @@ public class WebService {
 
     /**
      * 将检测结果保存至LIS系统--PDA
-     * @param sample
-     * @param process        结果信息
-     * @return
      *
-     * 用于电子病历查询
+     * @param sample
+     * @param process 结果信息
+     * @return 用于电子病历查询
      */
-    public boolean savePdaInfo(Sample sample,Process process){
+    public boolean savePdaInfo(Sample sample, Process process) {
         boolean flag = true;
         try {
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"savePdaInfo");
-            PostMethod method = new PostMethod(url+"savePdaInfo");
+            httpClient.getHostConfiguration().setHost(url + "savePdaInfo");
+            PostMethod method = new PostMethod(url + "savePdaInfo");
             //结果信息
             JSONObject param = new JSONObject();
-            param.put("patientId",sample.getPatientId());
-            param.put("patientNo",sample.getPatientblh());
-            param.put("barcode",sample.getBarcode());
-            param.put("itemId",sample.getYlxh());
-            param.put("itemName",sample.getInspectionName());
-            if(process.getChecktime() != null) {
+            param.put("patientId", sample.getPatientId());
+            param.put("patientNo", sample.getPatientblh());
+            param.put("barcode", sample.getBarcode());
+            param.put("itemId", sample.getYlxh());
+            param.put("itemName", sample.getInspectionName());
+            if (process.getChecktime() != null) {
                 param.put("reportTime", ConvertUtil.getFormatDateGMT(process.getChecktime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                param.put("reportName",process.getCheckoperator());
+                param.put("reportName", process.getCheckoperator());
             }
-            if(process.getRequesttime() != null) {
+            if (process.getRequesttime() != null) {
                 param.put("requestTime", ConvertUtil.getFormatDateGMT(process.getRequesttime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
                 param.put("requestName", process.getRequester());
             }
-            if(process.getReceivetime() != null) {
+            if (process.getReceivetime() != null) {
                 param.put("receiveTime", ConvertUtil.getFormatDateGMT(process.getReceivetime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
                 param.put("receiveName", process.getReceiver());
             }
-            param.put("wardId",sample.getHosSection());
+            param.put("wardId", sample.getHosSection());
             param.put("wardName", SectionUtil.getInstance(sectionManager).getValue(sample.getHosSection()));                              //条码号
 
-            RequestEntity requestEntity = new StringRequestEntity(param.toString(),"application/json", "UTF-8");
+            RequestEntity requestEntity = new StringRequestEntity(param.toString(), "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
+            if ((Integer) obj.get("State") == 0) {
                 flag = false;
             }
 
@@ -672,28 +713,27 @@ public class WebService {
 
     /**
      * 将检测结果保存至LIS系统--PDA
-     * @param ids
-     * @return
      *
-     * 用于电子病历查询
+     * @param ids
+     * @return 用于电子病历查询
      */
-    public boolean updatePdaStatus(String ids){
+    public boolean updatePdaStatus(String ids) {
         boolean flag = true;
         try {
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"updatePdaStatus");
-            PostMethod method = new PostMethod(url+"updatePdaStatus");
+            httpClient.getHostConfiguration().setHost(url + "updatePdaStatus");
+            PostMethod method = new PostMethod(url + "updatePdaStatus");
             //结果信息
             //JSONObject param = new JSONObject(ids);
             //param.put("ids",ids);
 
-            RequestEntity requestEntity = new StringRequestEntity(ids,"application/json", "UTF-8");
+            RequestEntity requestEntity = new StringRequestEntity(ids, "application/json", "UTF-8");
             method.setRequestEntity(requestEntity);
             method.releaseConnection();
 
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            if((Integer)obj.get("State")==0) {
+            if ((Integer) obj.get("State") == 0) {
                 flag = false;
             }
 
@@ -710,12 +750,12 @@ public class WebService {
      *
      * @return
      */
-    public List<Process> getPdaInfo(){
+    public List<Process> getPdaInfo() {
         List<Process> processList = new ArrayList<Process>();
         try {
             HttpClient httpClient = new HttpClient();
-            httpClient.getHostConfiguration().setHost(url+"getPdaInfo");
-            GetMethod method = new GetMethod(url+"getPdaInfo");
+            httpClient.getHostConfiguration().setHost(url + "getPdaInfo");
+            GetMethod method = new GetMethod(url + "getPdaInfo");
             method.releaseConnection();
 
             httpClient.executeMethod(method);
@@ -723,14 +763,14 @@ public class WebService {
 
             if ((Integer) obj.get("State") == 1) {
                 JSONArray arr = obj.getJSONArray("Message");
-                for(int i=0;i<arr.length();i++){
+                for (int i = 0; i < arr.length(); i++) {
                     Process process = new Process();
-                    process.setSampleid(ConvertUtil.getLongValue(arr.getJSONObject(i).getString("barcode").replace("A1200","")));
-                    if(arr.getJSONObject(i).getString("executeTime")!=null &&  !arr.getJSONObject(i).getString("executeTime").isEmpty()){
+                    process.setSampleid(ConvertUtil.getLongValue(arr.getJSONObject(i).getString("barcode").replace("A1200", "")));
+                    if (arr.getJSONObject(i).getString("executeTime") != null && !arr.getJSONObject(i).getString("executeTime").isEmpty()) {
                         process.setExecutetime(Constants.SDF.parse(arr.getJSONObject(i).getString("executeTime")));
                     }
                     process.setExecutor(ConvertUtil.null2String(arr.getJSONObject(i).getString("executeName")));
-                    if(arr.getJSONObject(i).getString("sendTime")!=null &&  !arr.getJSONObject(i).getString("sendTime").isEmpty()){
+                    if (arr.getJSONObject(i).getString("sendTime") != null && !arr.getJSONObject(i).getString("sendTime").isEmpty()) {
                         process.setSendtime(Constants.SDF.parse(arr.getJSONObject(i).getString("sendTime")));
                     }
                     process.setSender(ConvertUtil.null2String(arr.getJSONObject(i).getString("sendName")));

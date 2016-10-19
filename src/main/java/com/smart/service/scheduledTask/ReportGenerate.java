@@ -90,8 +90,6 @@ public class ReportGenerate {
 
         //实现获取电子签名
         String dzqm_filepath ="";
-//        URL base = this.getClass().getResource("");
-//        String path= new File(base.getFile(),".../.../.../").getCanonicalPath();
 
         String path=System.getProperty("search.root");
 
@@ -117,90 +115,6 @@ public class ReportGenerate {
         velocityContext.put("examinaim", sample.getInspectionName());
         velocityContext.put("date", sampleNo.substring(0, 4) + "年" + sampleNo.substring(4, 6) + "月" + sampleNo.substring(6, 8) + "日");
         Map<String, TestResult> resultMap1 = new HashMap<String, TestResult>();
-        String hisTitle1 = "";
-        String lab = sample.getSectionId();
-//        if(likeLabMap.containsKey(lab)) {
-//            lab = likeLabMap.get(lab);
-//        }
-//        if(hasLast && type<4) {
-//            List<Sample> history = sampleManager.getHistorySample(sample.getPatientId(), sample.getPatientblh(), lab);
-//            String hisSampleId = "";
-//            String hisSampleNo = "";
-//            for(Sample sample1 : history) {
-//                hisSampleId += sample1.getId() + ",";
-//                hisSampleNo += "'" + sample1.getSampleNo() + "',";
-//            }
-//            List<Process> processList = processManager.getHisProcess(hisSampleId.substring(0, hisSampleId.length()-1));
-//            List<TestResult> testList = testResultManager.getHisTestResult(hisSampleNo.substring(0, hisSampleNo.length()-1));
-//            Map<Long, Process> hisProcessMap = new HashMap<Long, Process>();
-//            Map<String, List<TestResult>> hisTestMap = new HashMap<String, List<TestResult>>();
-//            for(Process p : processList) {
-//                hisProcessMap.put(p.getSampleid(), p);
-//            }
-//            for(TestResult tr : testList) {
-//                if(hisTestMap.containsKey(tr.getSampleNo())) {
-//                    hisTestMap.get(tr.getSampleNo()).add(tr);
-//                } else {
-//                    List<TestResult> tlist = new ArrayList<TestResult>();
-//                    tlist.add(tr);
-//                    hisTestMap.put(tr.getSampleNo(), tlist);
-//                }
-//            }
-//            Date receivetime = null;
-//            receivetime = process.getReceivetime();
-//            long curInfoReceiveTime = receivetime.getTime();
-//            int index = 0;
-//            Map<String, TestResult> rmap = null;
-//            Set<String> testIdSet = new HashSet<String>();
-//            for (TestResult t : testResultList) {
-//                testIdSet.add(t.getTestId());
-//            }
-//            if(history != null && history.size()>0){
-//                for (Sample pinfo : history) {
-//                    String psampleno = pinfo.getSampleNo();
-//                    if(psampleno.equals(sampleNo)) {
-//                        continue;
-//                    }
-//                    boolean isHis = false;
-//                    List<TestResult> his = hisTestMap.get(psampleno);
-//                    if(his != null) {
-//                        for (TestResult test: his) {
-//                            String testid = test.getTestId();
-//                            Set<String> sameTests = util.getKeySet(testid);
-//                            sameTests.add(testid);
-//                            for (String id : sameTests) {
-//                                if (testIdSet.contains(id)) {
-//                                    isHis = true;
-//                                    break;
-//                                }
-//                            }
-//                            if (isHis) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    Date preceivetime = null;
-//                    preceivetime = hisProcessMap.get(pinfo.getId()).getReceivetime();
-//                    if (preceivetime == null || pinfo.getSampleNo() == null) {
-//                        continue;
-//                    }
-//                    if (preceivetime.getTime() < curInfoReceiveTime && isHis) {
-//                        if (index > 4)
-//                            break;
-//                        switch (index) {
-//                            case 0:
-//                                rmap = resultMap1;
-//                                hisTitle1 = psampleno.substring(2,4) + "/" + psampleno.substring(4,6) + "/" + psampleno.substring(6,8);
-//                                break;
-//                        }
-//                        for (TestResult tr : hisTestMap.get(psampleno)) {
-//                            rmap.put(tr.getTestId(), tr);
-//                        }
-//                        index++;
-//                    }
-//                }
-//            }
-//        }
 
         List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
         Map<String, Index> idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
@@ -218,21 +132,6 @@ public class ReportGenerate {
 
             testResultVo.setTestResult(result.getTestResult());
             testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
-            //上次检验结果
-//            if(hasLast) {
-//                for(String tid : sameTests) {
-//                    if(resultMap1.size() != 0 && resultMap1.containsKey(tid)) {
-//                        testResultVo.setHisTestResult1(resultMap1.get(tid).getTestResult());
-//                        if (Integer.parseInt(idMap.get(tid).getPrintord()) <=2015) {
-//                            if(resultMap1.get(tid).getResultFlag().charAt(0) == 'C') {
-//                                testResultVo.setHisResultFlag1("↓");
-//                            } else if(resultMap1.get(tid).getResultFlag().charAt(0) == 'B') {
-//                                testResultVo.setHisResultFlag1("↑");
-//                            }
-//                        }
-//                    }
-//                }
-//            }
             testResultVo.setUnit(result.getUnit());
             testResultVo.setReference(ConvertUtil.null2String(result.getReference()));
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
