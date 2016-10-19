@@ -258,6 +258,9 @@ public class AutoAuditServlet extends HttpServlet {
 												for (Sample info : samples) {
 													try {
 														List<TestResult> now = hisTestMap.get(info.getSampleNo());
+														if(now == null) {
+															continue;
+														}
 														CriticalRecord cr = new CriticalRecord();
 														info.setMarkTests("");
 														info.setAuditStatus(Check.PASS);
