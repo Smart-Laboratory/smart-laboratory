@@ -253,15 +253,16 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	@SuppressWarnings("unchecked")
 	public List<Sample> getSampleList(String text, String lab, int mark, int status, String code, int start, int end) {
-		String sql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED + " and s.sectionId in (" + lab + ") ";
+		String hql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED + " and s.sectionId in (" + lab + ") ";
 		if(lab.equals(Constants.LaboratoryAll)) {
-			sql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
+			hql = "from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
 			code = "";
 		}
 		if(code == null) {
 			code = "";
 		}
 		String[] cds = code.split(",");
+		String sql = hql;
 		switch (text.length()) {
 			case 8:
 				if (StringUtils.isNumeric(text)) {
@@ -320,7 +321,10 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				sql += " and s.modifyFlag=1";
 				break;
 			case 4:
-				sql += " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED;
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.MONTH, -1);
+				String lastMonth = Constants.DF3.format(calendar.getTime());
+				sql = hql + " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED + "and s.sampleNo>'" + lastMonth + "'";
 				break;
 			case 5:
 				sql += " and s.hasimages=1";
@@ -344,15 +348,16 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 	}
 
 	public int getSampleCount(String text, String lab, int mark, int status, String code) {
-		String sql = "select count(s.id) from Sample s where s.sectionId in (" + lab + ") ";
+		String hql = "select count(s.id) from Sample s where s.sectionId in (" + lab + ") ";
 		if(lab.equals(Constants.LaboratoryAll)) {
-			sql = "select count(s.id) from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
+			hql = "select count(s.id) from Sample s where s.sampleStatus>=" + Constants.SAMPLE_STATUS_RECEIVED;
 			code = "";
 		}
 		if(code == null) {
 			code = "";
 		}
 		String[] cds = code.split(",");
+		String sql = hql;
 		switch (text.length()) {
 			case 8:
 				if (StringUtils.isNumeric(text)) {
@@ -409,7 +414,10 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 				sql += " and s.modifyFlag=1";
 				break;
 			case 4:
-				sql += " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED;
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.MONTH, -1);
+				String lastMonth = Constants.DF3.format(calendar.getTime());
+				sql = hql + " and s.sampleStatus<" + Constants.SAMPLE_STATUS_CHECKED + "and s.sampleNo>'" + lastMonth + "'";
 				break;
 			case 5:
 				sql += " and s.hasimages=1";

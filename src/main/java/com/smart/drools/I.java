@@ -37,6 +37,7 @@ public class I {
 				this.setV(fvalue);
 			}
 		} catch (NumberFormatException e) {
+			this.setV(0);
 			if (value.contains("阴性") || value.contains("正常") || value.equals("-")) {
 				this.setU("-");
 				this.setV(1);
@@ -63,7 +64,6 @@ public class I {
 				}
 				this.setV(count);
 			}
-			this.setV(0);
 		}
 	}
 

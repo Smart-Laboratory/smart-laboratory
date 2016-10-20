@@ -190,11 +190,15 @@ $(function(){
 			selectNoteAdd = false;
 		}*/
         $.get(baseUrl + "/audit/isLack",{sampleno: $("#hiddenSampleNo").val()},function(data) {
-			alert(data.lack)
         	if(data.lack) {
 				openOpStatusDialog();
 			} else {
-				layer.alert(data.message, {icon: 2, title: "提示"});
+				layer.confirm(data.message + "确定发送该报告吗？", {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					openOpStatusDialog();
+				}, function(){
+				});
 			}
 
         });

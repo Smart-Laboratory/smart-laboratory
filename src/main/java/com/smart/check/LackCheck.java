@@ -41,7 +41,7 @@ public class LackCheck implements Check {
 					String[] linshi_xh = xh.split("\\[");
 					xh = linshi_xh[0];
 				}
-				Ylxh y = ylxhMap.get(Long.parseLong(xh));
+				Ylxh y = ylxhMap.get(xh);
 				if (y!= null && y.getProfiletest() != null) {
 					for (String s : y.getProfiletest().split(",")) {
 						xhList.add(s);
@@ -128,7 +128,7 @@ public class LackCheck implements Check {
 					String[] linshi_xh = xh.split("\\[");
 					xh = linshi_xh[0];
 				}
-				Ylxh y = ylxhMap.get(Long.parseLong(xh));
+				Ylxh y = ylxhMap.get(xh);
 				if (y!= null && y.getProfiletest() != null) {
 					for (String s : y.getProfiletest().split(",")) {
 						xhList.add(s);
