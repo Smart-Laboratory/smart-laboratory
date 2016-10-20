@@ -259,6 +259,7 @@ public class InExecuteViewController extends RequestContextListener implements S
             labOrderVo.setAge(labOrder.getAge());
             labOrderVo.setAgeUnit(labOrder.getAgeUnit());
             labOrderVo.setHossection(labOrder.getHossectionName());
+            labOrderVo.setExamnum(labOrder.getYlxh().split("[+]").length);
             labOrderVo.setExamitem(labOrder.getExamitem());
             if (ylxh != null) {
                 labOrderVo.setSampleQuantity(ConvertUtil.null2String(ylxh.getBbl()));

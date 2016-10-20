@@ -407,7 +407,7 @@
                     datatype: "json",
                     //caption:"已采集标本",
                     colNames: ['laborder', 'requestId', 'laborderOrg', 'patientId', '急诊', '病区', '床号', '样本条码', '病历号', '姓名', '性别', '年龄', '单位',
-                        '项目名称', '标本类型', '申请科室', '申请时间', '诊断', '患者类型',
+                        '项目数', '项目名称', '标本类型', '申请科室', '申请时间', '诊断', '患者类型',
                         '打印时间'],
                     colModel: [{name: 'requestId', index: 'requestId', width: 40, hidden: true},
                         {name: 'laborder', index: 'laborder', width: 40, hidden: true, key: true},
@@ -429,6 +429,7 @@
                         {name: 'sex', index: 'sex', width: 40},
                         {name: 'age', index: 'age', width: 40},
                         {name: 'ageUnit', index: 'ageUnit', width: 40},
+                        {name: 'examnum', index: 'examnum', width: 50, align: 'center', cellattr: addNumCellAttr},
                         {name: 'examitem', index: 'examitem', width: 150},
                         {name: 'sampleType', index: 'sampleType', width: 60},
                         {name: 'hossection', index: 'hossection', width: 100},
@@ -650,9 +651,15 @@
     })
 
     function addCellAttr(rowId, val, rawObject, cm, rdata) {
-        //console.log(rdata)
         if (rdata.requestMode == 1 || val == 1) {
             // console.log( $(row).children('td'));
+            return "style='color:red'";
+        }
+    }
+
+    function addNumCellAttr(rowId, val, rawObject, cm, rdata) {
+        console.log(rdata)
+        if(rdata.examnum > 1) {
             return "style='color:red'";
         }
     }

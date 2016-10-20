@@ -24,6 +24,7 @@ public class LabOrderVo implements Serializable{
     private String sex;                 //性别
     private String age;                 //年龄
     private String ageUnit;             //年龄单位
+    private Integer examnum;            //样本包含检验目的数目
     private String examitem;            //检验目的
     private String sampleType;          //样本类型
     private String requester;           //申请人
@@ -256,5 +257,13 @@ public class LabOrderVo implements Serializable{
 
     public void setWardName(String wardName) {
         this.wardName = wardName;
+    }
+
+    public Integer getExamnum() {
+        return examnum;
+    }
+
+    public void setExamnum(Integer examnum) {
+        this.examnum = examnum;
     }
 }
