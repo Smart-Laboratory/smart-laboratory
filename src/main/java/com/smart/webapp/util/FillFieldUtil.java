@@ -135,10 +135,11 @@ public class FillFieldUtil {
 								value = df.format(Double.parseDouble(value));
 							}
 						} else {
-							if (value.split("[.]")[0].equals("-0")) {
+							StringBuilder sb = new StringBuilder("#0");
+							DecimalFormat df = new DecimalFormat(sb.toString());
+							value = df.format(Double.parseDouble(value));
+							if (value.equals("-0")) {
 								value = "0";
-							} else {
-								value = value.split("[.]")[0];
 							}
 						}
 					}
