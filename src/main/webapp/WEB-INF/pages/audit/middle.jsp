@@ -81,7 +81,8 @@
 				<button id="imageBtn" class="btn btn-success"><b><fmt:message key="button.image" /></b></button>
 				<button id="uploadBtn" class="btn btn-info"><b><fmt:message key="button.upload" /></b></button>
 				<button id="unaudit_reason_btn" type="button" data-container="body" data-toggle="popover" data-placement="bottom" class="btn btn-danger" style="width:75px;"><b><fmt:message key="sample.unpass.reason" /></b></button>
-				<button id="auditPrintBtn" class="btn btn-info"><b><fmt:message key="print" /></b></button>
+				<button id="auditPrintBtn" class="btn btn-info" style="display: none"><b><fmt:message key="print" /></b></button>
+				<button id="auditPrintViewBtn" class="btn btn-info" style="display: none">打印预览</b></button>
 				<button id="collectBtn" class="btn btn-info"><b><fmt:message key="button.collect" /></b></button>
 			</div>
 			<div style="margin-top:4px;float:right;">

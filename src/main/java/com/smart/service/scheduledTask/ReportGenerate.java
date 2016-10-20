@@ -58,30 +58,30 @@ public class ReportGenerate {
 
         velocityContext.put("type", type);
         velocityContext.put("blh", ConvertUtil.null2String(sample.getPatientblh()));
-        velocityContext.put("patientName", sample.getPatientname());
-        velocityContext.put("sex", sample.getSexValue());
-        velocityContext.put("age", sample.getAge());
-        velocityContext.put("ageUnit", sample.getAgeunit());
-        velocityContext.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(String.valueOf(sample.getSampleType())));
-        velocityContext.put("diagnostic", sample.getDiagnostic());
+        velocityContext.put("patientName", ConvertUtil.null2String(sample.getPatientname()));
+        velocityContext.put("sex", ConvertUtil.null2String(sample.getSexValue()));
+        velocityContext.put("age", ConvertUtil.null2String(sample.getAge()));
+        velocityContext.put("ageUnit", ConvertUtil.null2String(sample.getAgeunit()));
+        velocityContext.put("sampleType", ConvertUtil.null2String(SampleUtil.getInstance(dictionaryManager).getValue(ConvertUtil.null2String(sample.getSampleType()))));
+        velocityContext.put("diagnostic", ConvertUtil.null2String(sample.getDiagnostic()));
         velocityContext.put("note", ConvertUtil.null2String(sample.getNote()));
-        velocityContext.put("barCode", sample.getBarcode());
-        velocityContext.put("sampleNo", sample.getSampleNo());
-        velocityContext.put("sampleId", sample.getId());
+        velocityContext.put("barCode", ConvertUtil.null2String(sample.getBarcode()));
+        velocityContext.put("sampleNo", ConvertUtil.null2String(sample.getSampleNo()));
+        velocityContext.put("sampleId", ConvertUtil.null2String(sample.getId()));
         //velocityContext.put("phone",patient.getPhone());
 
         if(sample.getStayHospitalMode() == 2) {
-            velocityContext.put("bed", sample.getDepartBed());
+            velocityContext.put("bed", ConvertUtil.null2String(sample.getDepartBed()));
         }
-        velocityContext.put("staymode", sample.getStayHospitalMode());
-        velocityContext.put("pId", sample.getPatientId());
-        velocityContext.put("section", sectionutil.getValue(sample.getHosSection()));
+        velocityContext.put("staymode", ConvertUtil.null2String(sample.getStayHospitalMode()));
+        velocityContext.put("pId", ConvertUtil.null2String(sample.getPatientId()));
+        velocityContext.put("section", ConvertUtil.null2String(sectionutil.getValue(sample.getHosSection())));
 
         if(likeLabMap.size() == 0) {
             initLikeLabMap();
         }
-        velocityContext.put("requester", process.getRequester());
-        velocityContext.put("tester", sample.getChkoper2());
+        velocityContext.put("requester", ConvertUtil.null2String(process.getRequester()));
+        velocityContext.put("tester", ConvertUtil.null2String(sample.getChkoper2()));
         //更改为电子签名图片地址
         //info.put("auditor", process.getCheckoperator());
         String dzqm_imghtm = "";
@@ -143,9 +143,6 @@ public class ReportGenerate {
         engine.setProperty(Velocity.RESOURCE_LOADER, "class");
         engine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         engine.init();
-
-
-
         String tmplate="/template/testReport.vm";
         if(testResultVos.size()>20){
             tmplate ="/template/testReport32.vm";
@@ -153,12 +150,12 @@ public class ReportGenerate {
         //根据检验套餐获取报告单模板
         Ylxh ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
         if(ylxh.getTemplate()!=null && !ylxh.getTemplate().isEmpty()){
-            tmplate = ylxh.getTemplate();
+            tmplate = "/template/"+ylxh.getTemplate();
         }
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        //System.out.println(writer.toString());
+        System.out.println(writer.toString());
         return writer.toString();
     }
 

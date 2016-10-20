@@ -35,7 +35,6 @@ date:2016-10-04
 
         .head {
             width: 100%;
-            padding-bottom: 4px;
             font-size: 10pt !important;
         }
 
@@ -146,12 +145,13 @@ date:2016-10-04
             </tr>
             #foreach($item in $results)
                 <tr>
-                    <td >$!item.testName</td>
-                    #if($!item.resultFlag=='阳性')
-                        <span style="background: #eee">阳性$!item.testResult</span>
-                    #else
-                        阴性$!item.testResult
-                    #end
+                    <td>$!item.testName</td>
+                    <td>
+                        #if($!item.resultFlag=='阳性')
+                            <span style="background: #ddd">阳性$!item.testResult</span>
+                        #else
+                            阴性$!item.testResult
+                        #end
                     </td>
                     <td>$!item.reference</td>
                     <td>$!item.unit</td>

@@ -902,7 +902,7 @@ public class SamplePrintController extends BaseAuditController {
 		ReportGenerate reportGenerate = new ReportGenerate();
 		//生成报告单Html
 		String html = reportGenerate.getReportHtml(s,process,list,false);
-		reportGenerate.createReportPdf(s,process,list,false);
+		//reportGenerate.createReportPdf(s,process,list,false);
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().write(html);
 		return null;

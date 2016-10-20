@@ -9,7 +9,7 @@
                 <div class="rlogo"><img src="$!requestUrl/images/r_logo.png"/></div>
             </td>
         </tr>
-        <tr>
+        <tr style="padding-top: 4px">
             <td colspan="3"><b>检验目的:$!examinaim</b></td>
         </tr>
     </table>

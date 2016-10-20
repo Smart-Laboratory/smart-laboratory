@@ -82,7 +82,7 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 			sql += " and  l.requestId in (:requestIds)";
 		}
 		if(startDate !=null && !startDate.isEmpty()){
-			sql += " and  l.requesttime >=to_date(:startDate,'yyyy-mm-dd hh24:mi:ss')";
+			sql += " and  p.printtime >=to_date(:startDate,'yyyy-mm-dd hh24:mi:ss')";
 		}
 		sql += " order by l.barcode desc";
 		Query query = getSession().createQuery(sql);

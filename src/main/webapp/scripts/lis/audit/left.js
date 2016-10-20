@@ -43,10 +43,13 @@ function getList(text, lab) {
             }
             $("#rbcLabel").css('display', 'none');
             var ret = jQuery("#list").jqGrid('getRowData', id);
-            if (ret.lisPass != "") {
+            console.log(ret);
+            if (ret.status && ret.status !='undefined' && ret.status != "无结果") {
                 $("#auditPrintBtn").css('display', 'inline');
+                $("#auditPrintViewBtn").css('display', 'inline');
             } else {
                 $("#auditPrintBtn").css('display', 'none');
+                $("#auditPrintViewBtn").css('display', 'none');
             }
             $("#hiddenSampleNo").val(ret.sample);
             getPatient(ret);
