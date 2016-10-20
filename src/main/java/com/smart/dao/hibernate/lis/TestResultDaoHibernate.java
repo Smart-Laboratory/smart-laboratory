@@ -125,7 +125,7 @@ public class TestResultDaoHibernate extends
 	public List<TestResult> getSingleHistory(String testid, String patientid) {
 		String hql = "select t from Sample s, TestResult t where t.testId in ("
 				+ testid + ")  and s.patientblh='" + patientid
-				+ "' and s.sampleNo=t.sampleNo order by t.measureTime desc";
+				+ "' and s.sampleNo=t.sampleNo and s.sampleStatus>=7 order by t.measureTime desc";
 		Query q = getSession().createQuery(hql);
 		return q.list();
 	}
