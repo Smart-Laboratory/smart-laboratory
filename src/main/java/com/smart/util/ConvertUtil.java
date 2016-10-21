@@ -211,7 +211,8 @@ public final class ConvertUtil {
                 }else {
                     retFlag = " ";
                 }
-            } else if(flag.charAt(1) == 'B') {
+            }
+            /*else if(flag.charAt(1) == 'B') {
                 if(flag.charAt(0)=='A'){
                     retFlag = "阴性";
                 }else if(flag.charAt(0)=='B'){
@@ -219,7 +220,7 @@ public final class ConvertUtil {
                 }else {
                     retFlag = " ";
                 }
-            }
+            }*/
 
         }catch (Exception e){
             e.printStackTrace();

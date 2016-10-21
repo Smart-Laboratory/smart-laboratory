@@ -278,6 +278,11 @@
 							});
 							$("#modifyBtn").css('display','inline');
 							CalculateRbc(id);
+							var next = $("#"+id).next("tr").attr("id");
+							if (next != null) {
+								$("#rowed3").setSelection(id, false);
+								$("#rowed3").setSelection(next, true);
+							}
 						}
 					});
 				}
@@ -641,59 +646,49 @@
 		   	height: "100%",
 		   	rowNum: 50,
 		    caption: "",
-			onSelectRow: function(id) {
-				
-				if($("#needEdit").val() == "true") {
-					if (lastsel) {
-						if (lastsel == id) {
-							if (!isEdit) {
-								isEdit = true;
-								
-								var ret = jQuery("#sample0").jqGrid('getRowData',id);
-								var pre = "<div class=''>";
-								cl = ret.result;
-								lastval = $(ret.result).find(":eq(0)").html();
-								jQuery("#sample0").jqGrid('setRowData', id, {result:lastval});
-								jQuery("#sample0").jqGrid('editRow',id, {
-									keys:true,
-									aftersavefunc:function() {
-										var newVal = jQuery("#sample0").jqGrid('getRowData',id);
-										var hl = newVal.scope.split("-");
-					        			var h = parseFloat(hl[1]);
-					        			var l = parseFloat(hl[0]);
-										if(hl.length == 3) {
-											var h = parseFloat(hl[2]);
-											var l = parseFloat(hl[1])*(-1);
-										}
-					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
-					        			var res = "";
-					        			
-					        			if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
-					        				if (va < l) {
-					        					res = "<font color='red'>\u2193</font>";
-					        				} else if (va > h) {
-					        					res = "<font color='red'>\u2191</font>";
-					        				}
-					        			}
-										jQuery("#sample0").jqGrid('setRowData', id, {result:pre + "<span class='two_result_span'>" + newVal.result + "</span>"+res+"</div>"});
-										isEdit = false;
-									}				
-								});
-							}
-						} else {
-							jQuery('#sample0').jqGrid('restoreRow', lastsel);
-							if (isEdit) {
-								jQuery("#sample0").jqGrid('setRowData', lastsel, {result:cl});
-							}
-							isEdit = false;
-						}
-					}
-					lastsel=id;
-				}
-				
+			onSelectRow: function (id) {
 				var sample1_selected = jQuery("#sample1").jqGrid('getGridParam','selrow');
 				if(sample1_selected!=null) {
 					jQuery("#sample1").jqGrid("resetSelection", sample1_selected);
+				}
+			},
+			ondblClickRow: function(id) {
+				if($("#needEdit").val() == "true") {
+					var ret = jQuery("#sample0").jqGrid('getRowData',id);
+					var pre = "<div class=''>";
+					cl = ret.result;
+					lastval = $(ret.result).find(":eq(0)").html();
+					jQuery("#sample0").jqGrid('setRowData', id, {result:lastval});
+					jQuery("#sample0").jqGrid('editRow',id, {
+						keys:true,
+						aftersavefunc:function() {
+							var newVal = jQuery("#sample0").jqGrid('getRowData',id);
+							var hl = newVal.scope.split("-");
+							var h = parseFloat(hl[1]);
+							var l = parseFloat(hl[0]);
+							if(hl.length == 3) {
+								var h = parseFloat(hl[2]);
+								var l = parseFloat(hl[1])*(-1);
+							}
+							var va = parseFloat(newVal.result.replace("<","").replace(">",""));
+							var res = "";
+
+							if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
+								if (va < l) {
+									res = "<font color='red'>\u2193</font>";
+								} else if (va > h) {
+									res = "<font color='red'>\u2191</font>";
+								}
+							}
+							jQuery("#sample0").jqGrid('setRowData', id, {result:pre + "<span class='two_result_span'>" + newVal.result + "</span>"+res+"</div>"});
+							isEdit = false;
+							var next = $("#"+id).next("tr").attr("id");
+							if (next != null) {
+								$("#sample0").setSelection(id, false);
+								$("#sample0").setSelection(next, true);
+							}
+						}
+					});
 				}
 			},
 			loadComplete: function() {
@@ -863,57 +858,44 @@
 		   	height: "100%",
 		   	rowNum: 50,
 		    caption: "",
-			onSelectRow: function(id) {
-
-				if($("#needEdit").val() == "true") {
-					if (lastsel) {
-						if (lastsel == id) {
-							if (!isEdit) {
-								isEdit = true;
-								var ret = jQuery("#sample1").jqGrid('getRowData',id);
-								var pre = "<div class=''>";
-								cl=ret.result;
-								lastval =  $(ret.result).find(":eq(0)").html();
-								jQuery("#sample1").jqGrid('setRowData', id, {result:lastval});
-								jQuery("#sample1").jqGrid('editRow',id, {
-									keys:true,
-									aftersavefunc:function() {
-										var newVal = jQuery("#sample1").jqGrid('getRowData',id);
-										var hl = newVal.scope.split("-");
-					        			var h = parseFloat(hl[1]);
-					        			var l = parseFloat(hl[0]);
-										if(hl.length == 3) {
-											var h = parseFloat(hl[2]);
-											var l = parseFloat(hl[1])*(-1);
-										}
-					        			var va = parseFloat(newVal.result.replace("<","").replace(">",""));
-					        			var res = "";
-					        			if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
-					        				if (va < l) {
-					        					res = "<font color='red'>\u2193</font>";
-					        				} else if (va > h) {
-					        					res = "<font color='red'>\u2191</font>";
-					        				}
-					        			}
-										jQuery("#sample1").jqGrid('setRowData', id, {result:pre + "<span class='two_result_span'>" + newVal.result + "</span>"+res+"</div>"});
-										isEdit = false;
-									}				
-								});
-							}
-						} else {
-							jQuery('#sample1').jqGrid('restoreRow', lastsel);
-							if (isEdit) {
-								jQuery("#sample1").jqGrid('setRowData', lastsel, {result:cl});
-							}
-							isEdit = false;
-						}
-					}
-					lastsel=id;
-				}
-				
+			onSelectRow: function (id) {
 				var sample0_selected = jQuery("#sample0").jqGrid('getGridParam','selrow');
 				if(sample0_selected!=null) {
 					jQuery("#sample0").jqGrid("resetSelection", sample0_selected);
+				}
+			},
+			ondblClickRow: function(id) {
+
+				if($("#needEdit").val() == "true") {
+					var ret = jQuery("#sample1").jqGrid('getRowData',id);
+					var pre = "<div class=''>";
+					cl=ret.result;
+					lastval =  $(ret.result).find(":eq(0)").html();
+					jQuery("#sample1").jqGrid('setRowData', id, {result:lastval});
+					jQuery("#sample1").jqGrid('editRow',id, {
+						keys:true,
+						aftersavefunc:function() {
+							var newVal = jQuery("#sample1").jqGrid('getRowData',id);
+							var hl = newVal.scope.split("-");
+							var h = parseFloat(hl[1]);
+							var l = parseFloat(hl[0]);
+							if(hl.length == 3) {
+								var h = parseFloat(hl[2]);
+								var l = parseFloat(hl[1])*(-1);
+							}
+							var va = parseFloat(newVal.result.replace("<","").replace(">",""));
+							var res = "";
+							if (!isNaN(h) && !isNaN(l) && !isNaN(va)) {
+								if (va < l) {
+									res = "<font color='red'>\u2193</font>";
+								} else if (va > h) {
+									res = "<font color='red'>\u2191</font>";
+								}
+							}
+							jQuery("#sample1").jqGrid('setRowData', id, {result:pre + "<span class='two_result_span'>" + newVal.result + "</span>"+res+"</div>"});
+							isEdit = false;
+						}
+					});
 				}
 			},
 			loadComplete: function() {

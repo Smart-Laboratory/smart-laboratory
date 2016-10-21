@@ -149,7 +149,7 @@ $(function(){
 				var page = parseInt(jQuery("#list").jqGrid('getGridParam','page'));
 				page = page + 1;
 				var records = parseInt(jQuery("#list").jqGrid('getGridParam','records'));
-				var total = (records - records % 25) / 25 + 1;
+				var total = (records - records % 100) / 100 + 1;
 				if (page <= total) {
 					$("#list").setGridParam({page:page}).trigger("reloadGrid");
 				}
