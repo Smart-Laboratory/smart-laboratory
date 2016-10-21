@@ -158,7 +158,7 @@ public class AjaxController extends BaseAuditController {
     		Double sd;
     		List<Double> resultList = new ArrayList<Double>();
         	for (int i = 0; i < num; i++) {
-        		if(StringUtils.isNumericSpace(list.get(i).getTestResult().replace(".", ""))) {
+        		if(list.get(i).getTestResult()!= null && StringUtils.isNumericSpace(list.get(i).getTestResult().replace(".", ""))) {
         			double d = Double.parseDouble(list.get(i).getTestResult());
 					if(d > max){
 						max = d;

@@ -121,22 +121,22 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}else if(patientId!=null && !patientId.isEmpty()){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_CHECKED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}
