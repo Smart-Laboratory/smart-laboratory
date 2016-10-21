@@ -45,7 +45,7 @@ public class TestResultDaoHibernate extends
 			formula = formula.substring(12, formula.indexOf("),1,("));
 		}
 		String sql = "select to_char(round(" + formula
-				+ ", 2),'fm99990.000') from dual";
+				+ ", 3),'fm99990.000') from dual";
 		// String sql = "select concat(round(" + formula + ", 2),'')";
 		return (String) getSession().createSQLQuery(sql).uniqueResult();
 	}
