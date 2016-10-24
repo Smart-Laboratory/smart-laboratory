@@ -135,13 +135,15 @@ $(function(){
 			}
  		}
  	});
-	
+
 	$(document).keydown(function(e){
 		if(e.keyCode == 40)
 		{
 			var s = jQuery("#list").jqGrid('getGridParam','selrow');
 			var next = $("#"+s).next("tr").attr("id");
-			
+			if($("#"+next)[0].offsetTop >= $("#list").parent().parent().height() + $("#list").parent().parent().scrollTop()) {
+				$("#list").parent().parent().scrollTop(46)
+			}
 			if (next != null) {
 				$("#list").setSelection(s, false);
 				$("#list").setSelection(next, true);
