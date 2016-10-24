@@ -37,15 +37,12 @@ import com.smart.service.execute.SampleNoBuilderManager;
 @RequestMapping("/manage*")
 public class ExecuteController {
 	
-	private SimpleDateFormat ymd1 = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat ymd2 = new SimpleDateFormat("yyyy/MM/dd");
-	private static SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMdd");
-	private static SimpleDateFormat hhmm = new SimpleDateFormat("hh:mm");
 	private static SimpleDateFormat ymdh = new SimpleDateFormat("yyyy年MM月dd日 HH:mm(EEE)" );
 	
 	private Map<String, String> sampleTypeMap = new HashMap<String,String>();
 
-	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET)
+	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		String selfExecute = request.getParameter("selfexecute");
@@ -53,11 +50,7 @@ public class ExecuteController {
 		String unExecuteRequestIds = "";
 		String executeRequestIds = "";
 
-		String examinaim="",labDepart="",sampleNo="",ybh_like="",ylxhDescribe="";
-		boolean sampleNoExist = false ;
 		Date executeTime = new Date();
-		double time=0,day=0;
-		int nextDay=0;
         JSONObject o = new JSONObject();
 
 		for(String str : selectValue.split(";")){
@@ -94,6 +87,18 @@ public class ExecuteController {
 		String itemId = "";
 		for(int i=0;i<unExecuteList.size();i++) {
 			LabOrder labOrder = unExecuteList.get(i);	//当前采样项目
+			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
+			String key = labOrder.getRequestId() + "_" +
+					ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
+					ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
+					ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
+					ConvertUtil.null2String(ylxh.getSglx())+"_"+
+					ConvertUtil.null2String(ylxh.getSgsl())+"_"+
+					ConvertUtil.null2String(ylxh.getSegment())+"_"+
+					ConvertUtil.null2String(ylxh.getCjbw());
+			if(ylxh.getSfhb() == 0) {
+				key += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
+			}
 			if (labOrder.getZxbz() == 0) {
 				//设置执行标志
 				labOrder.setZxbz(1);
@@ -105,7 +110,6 @@ public class ExecuteController {
 				labOrder.setExecutetime(executeTime);
 				labOrder.setExecutor(user.getUsername());
 				if (i == 0) {
-					Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
 					labOrder.setExamitem(ylxh.getYlmc());
 					labOrder.setQbgdt(ylxh.getQbgdd());
 					labOrder.setSampletype(ylxh.getYblx());
@@ -128,8 +132,19 @@ public class ExecuteController {
 				if (!sampleType.isEmpty()) {
 					for (int j = i + 1; j < unExecuteList.size(); j++) {
 						LabOrder lo = unExecuteList.get(j);		//后续采样项目
+						Ylxh ylxh2 = ylxhMap.get(ConvertUtil.null2String(lo.getYlxh()));	//后续检验目的信息
+						String key2 = labOrder.getRequestId() + "_" +
+								ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
+								ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
+								ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
+								ConvertUtil.null2String(ylxh.getSglx())+"_"+
+								ConvertUtil.null2String(ylxh.getSgsl())+"_"+
+								ConvertUtil.null2String(ylxh.getSegment())+"_"+
+								ConvertUtil.null2String(ylxh.getCjbw());
+						if(ylxh.getSfhb() == 0) {
+							key2 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
+						}
 						if (isFirst) {
-							Ylxh ylxh2 = ylxhMap.get(ConvertUtil.null2String(lo.getYlxh()));
 							lo.setExamitem(ylxh2.getYlmc());
 							lo.setQbgdt(ylxh2.getQbgdd());
 							lo.setSampletype(ylxh2.getYblx());
@@ -144,9 +159,7 @@ public class ExecuteController {
 						}
 
 						//判断合并条件
-						if (lo.getZxbz() == 0 && labOrder.getRequestId().equals(lo.getRequestId()) && lo.getRequestmode() == labOrder.getRequestmode() && lo.getSampletype().equals(labOrder.getSampletype()) && lo.getLabdepartment().equals(labOrder.getLabdepartment()) && lo.getQbgsj().equals(labOrder.getQbgsj())
-								&& lo.getQbgdt().equals(labOrder.getQbgdt())) {
-
+						if (key.equals(key2)) {
 							if (labOrder.getExamitem().indexOf(lo.getExamitem()) < 0 && lo.getExamitem().indexOf(labOrder.getExamitem()) < 0) {
 								//合并组合
 								labOrder.setExamitem(labOrder.getExamitem() + "+" + lo.getExamitem());
@@ -177,21 +190,11 @@ public class ExecuteController {
 		List<Process> needSaveProcess = new ArrayList<Process>();
 		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
 		for(int i = 0; i < needSaveList.size(); i++) {
-			//生成样本号
 			LabOrder labOrder = needSaveList.get(i);
-			boolean needNo = true;			//需要编号
-			System.out.println("执行科室：" + labOrder.getLabdepartment());
-            if(autoMap.containsKey(labOrder.getLabdepartment())) {
-                for(SampleNoBuilder sampleNoBuilder : autoMap.get(labOrder.getLabdepartment())) {
-                    if(needNo && sampleNoBuilder.getNowNo() < sampleNoBuilder.getEndNo()) {
-                        int nowNo = sampleNoBuilder.getNowNo() + 1;
-                        labOrder.setSampleno(Constants.DF3.format(executeTime) + sampleNoBuilder.getSegment() + String.format("%03d", nowNo));
-                        sampleNoBuilder.setNowNo(nowNo);
-                        autoUtil.updateSampleNoBuilder(sampleNoBuilderManager, sampleNoBuilder);
-                        needNo = false;
-                    }
-                }
-            }
+			//生成样本号
+			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
+			String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
+			labOrder.setSampleno(newSampleNo);
 
 			//生成条码号
 			Sample sample = new Sample();
@@ -255,38 +258,36 @@ public class ExecuteController {
                 processManager.removeAll(needSaveProcess);
                 labOrderManager.removeAll(needSaveLabOrder);
             }
+            JSONArray array = new JSONArray();
+			for(LabOrder labOrder : needSaveLabOrder) {
+				JSONObject object = new JSONObject();
+				object.put("barcode", labOrder.getBarcode());
+				object.put("patientName", labOrder.getPatientname());
+				object.put("sex", labOrder.getSex());
+				object.put("age", labOrder.getAge());
+				object.put("ageUnit", labOrder.getAgeUnit());
+				object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
+				object.put("patientCode",labOrder.getBlh());
+				object.put("executeTime",labOrder.getExecutetime());
+				object.put("requestMode",labOrder.getRequestmode());
+				object.put("sampleNo",labOrder.getSampleno());
+				object.put("container", labOrder.getContainer());
+				object.put("volume", labOrder.getVolume());
+				object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
+				object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
+				object.put("testName", labOrder.getExamitem());
+				object.put("hosSectionName", SectionUtil.getInstance(sectionManager).getValue(labOrder.getHossection()));
+				object.put("ageUnit", labOrder.getAgeUnit());
+				object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
+				object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
+				object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
+				object.put("requester", labOrder.getRequesterName());
+				object.put("reportPlace", labOrder.getQbgdt());
+				array.add(object);
+			}
+			o.put("labOrders", array);
         }
-        JSONArray array = new JSONArray();
-        for(LabOrder labOrder : needSaveLabOrder) {
-            JSONObject object = new JSONObject();
-            object.put("barcode", labOrder.getBarcode());
-            object.put("patientName", labOrder.getPatientname());
-            object.put("sex", labOrder.getSex());
-            object.put("age", labOrder.getAge());
-            object.put("ageUnit", labOrder.getAgeUnit());
-            object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
-            object.put("patientCode",labOrder.getBlh());
-            object.put("executeTime",labOrder.getExecutetime());
-            object.put("requestMode",labOrder.getRequestmode());
-            object.put("sampleNo",labOrder.getSampleno());
-            object.put("container", labOrder.getContainer());
-            object.put("volume", labOrder.getVolume());
-            object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
-            object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
-            object.put("testName", labOrder.getExamitem());
-            object.put("hosSectionName", SectionUtil.getInstance(sectionManager).getValue(labOrder.getHossection()));
-            object.put("ageUnit", labOrder.getAgeUnit());
-            object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
-            object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
-            object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
-            object.put("requester", labOrder.getRequesterName());
-            object.put("reportPlace", labOrder.getQbgdt());
-            array.add(object);
-        }
-        o.put("labOrders", array);
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(o.toString());
-		return null;
+		return o.toString();
 	}
 
 	@RequestMapping(value = "/printBarcode*", method = RequestMethod.GET)

@@ -340,7 +340,7 @@ public class InExecuteViewController extends RequestContextListener implements S
         WebService webService = new WebService();
         HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(request.getParameter("userid"));
         String ward = request.getParameter("ward");
-                //需采集LIST
+        //需采集LIST
         String regex = "requestId\":\"(.*?)\",";
         List<String> requestIds = new ArrayList<String>();
         Matcher matcher = Pattern.compile(regex).matcher(orders);
