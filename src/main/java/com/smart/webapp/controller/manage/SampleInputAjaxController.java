@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.util.*;
 import java.util.jar.JarException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -376,13 +378,30 @@ public class SampleInputAjaxController {
                 process.setReceiver(UserUtil.getInstance().getValue(request.getRemoteUser()));
                 process.setReceivetime(new Date());
 
-                sampleManager.save(sample);
-                processManager.save(process);
+                //获取编号
+                if(!isRegularRptCode(sampleno)){
+                    o.put("message", "样本号为" + sampleno + "的标本格式不正确！");
+                    o.put("success", false);
+                }else {
+                    String inSegment = getSegment(sampleno);
+                    int serialno = 0;
+                    if(sampleno != null && !sampleno.isEmpty()){
+                        serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
+                    }
+                    String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(inSegment,serialno));
+                    if(newSampleNo.isEmpty()){
+                        sample.setSampleNo(sampleno);
+                    }else {
+                        sample.setSampleNo(newSampleNo);
+                    }
+                    sampleManager.save(sample);
+                    processManager.save(process);
 
-                testResultManager.updateSampleNo(oldSampleNo, sampleno);
+                    testResultManager.updateSampleNo(oldSampleNo, sampleno);
 
-                o.put("message", "样本号为" + sampleno + "的标本编辑成功！");
-                o.put("success", true);
+                    o.put("message", "样本号为" + sampleno + "的标本编辑成功！");
+                    o.put("success", true);
+                }
             }
         }
         o.put("barcode", sample.getBarcode());
@@ -415,17 +434,19 @@ public class SampleInputAjaxController {
     @RequestMapping(value = "/hasSameSample*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     @ResponseBody
     public synchronized String sameSample(HttpServletRequest request) throws Exception {
-        String code = request.getParameter("id");
-        String sampleno = request.getParameter("sampleno");
-        Sample sample = sampleManager.getBySampleNo(sampleno);
-        sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
+        String code = ConvertUtil.null2String(request.getParameter("id"));
+        String sampleno = ConvertUtil.null2String(request.getParameter("sampleno"));
         JSONObject o = new JSONObject();
-        if (sample != null) {
-            o.put("success", 0);
-            o.put("message", "样本号为" + sampleno + "的标本已存在，不能对条码为" + code + "的标本编号！");
-        } else {
+//        Sample sample = sampleManager.getBySampleNo(sampleno);
+//        sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
+//        JSONObject o = new JSONObject();
+//        if (sample != null) {
+//            o.put("success", 0);
+//            o.put("message", "样本号为" + sampleno + "的标本已存在，不能对条码为" + code + "的标本编号！");
+//        } else {
+//            o.put("success", 1);
+//        }
             o.put("success", 1);
-        }
         return o.toString();
     }
 
@@ -437,8 +458,18 @@ public class SampleInputAjaxController {
         Sample sample = null;
         Process process = null;
         String code = ConvertUtil.null2String(request.getParameter("id")).toUpperCase();
-        String sampleno = request.getParameter("sampleno");
-        sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
+        String sampleno = ConvertUtil.null2String(request.getParameter("sampleno"));
+        //sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
+        JSONObject o = new JSONObject();
+        if(!sampleno.isEmpty() && !isRegularRptCode(sampleno)){
+            o.put("success", 5);
+            o.put("message", "输入的样本号格式不正确");
+            return o.toString();
+        }
+        String inSegment="";
+        if(!sampleno.isEmpty() ){
+            inSegment = getSegment(sampleno);
+        }
 
         int mode = ConvertUtil.getStayHospitalMode(code);
         if (mode == 4) {
@@ -446,7 +477,7 @@ public class SampleInputAjaxController {
             return receiveExamination(code, user, sampleno);
         }
 
-        JSONObject o = new JSONObject();
+
         try {
             sample = sampleManager.getSampleByBarcode(code);
         } catch (Exception e) {
@@ -462,6 +493,20 @@ public class SampleInputAjaxController {
             }
             //sample.setSectionId(ylxh.getKsdm());
         }
+        String segment = "";
+        if (!isNight()) {
+            //白班
+            segment = ylxh.getSegment();
+        } else {
+            //夜班
+            sample.setSectionId(Constants.DEPART_NIGHT);
+            segment = ylxh.getNightSegment();
+        }
+//        if(!segment.equals(inSegment)){
+//            o.put("success", 5);
+//            o.put("message", "输入样本号检验段" + inSegment + "与当前样本检验段不符！");
+//            return o.toString();
+//        }
         if (sample == null) {
             o.put("success", 1);
             o.put("message", "医嘱号为" + code + "的标本不存在！");
@@ -494,45 +539,21 @@ public class SampleInputAjaxController {
             plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
             plog.setLogtime(receiveTime);
             processLogManager.save(plog);
-            if (sample.getSampleNo() == null || sample.getSampleNo().equals("0") || sample.getSampleNo().isEmpty()) {
-                String segment = "";
-                if (!isNight()) {
-                    //白班
-                    segment = ylxh.getSegment();
-                } else {
-                    //夜班
-                    sample.setSectionId(Constants.DEPART_NIGHT);
-                    segment = ylxh.getNightSegment();
-                }
-                //非夜班科室取白班
-                if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
-                    sample.setSectionId(user.getLastLab());
-                    segment = ylxh.getSegment();
-                }
-                if (segment == null || segment.isEmpty()) {
-                    o.put("success", 5);
-                    o.put("message", "检验段没有设置，不允许接收，请检查！");
-                    return o.toString();
-                }
-                if (segment != null && segment.equals(sampleno.substring(8, 11))) {
-                    sample.setSampleNo(sampleno);
-                } else {
-                    String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime) + segment);
-                    if (receiveSampleNo == null) {
-                        sampleno = Constants.DF3.format(receiveTime) + segment + "0001";
-                    } else {
-                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11)) + 1));
-                    }
-                    sample.setSampleNo(sampleno);
-                }
-                //设置检验者
-                sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
+
+
+            //非夜班科室取白班
+            if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
+                sample.setSectionId(user.getLastLab());
+                segment = ylxh.getSegment();
+            }
+            if (segment == null || segment.isEmpty()) {
+                o.put("success", 5);
+                o.put("message", "检验段没有设置，不允许接收，请检查！");
+                return o.toString();
             }
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             process.setReceiver(user.getName());
             process.setReceivetime(receiveTime);
-
 
             LabOrder labOrder = labOrderManager.get(sample.getId());
             //计试管费、采血针费
@@ -544,6 +565,29 @@ public class SampleInputAjaxController {
             //计项目费
             String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
             if (updateStatusSuccess.isEmpty()) {
+                int serialno = 0;
+                if(sampleno != null && !sampleno.isEmpty()){
+                    if(segment.equals(inSegment)){
+                        serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
+                    }
+                }
+                String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
+                if(newSampleNo.isEmpty()){
+                    Sample sample1 = sampleManager.getBySampleNo(sampleno);
+                    if(sample1 != null){
+                        o.put("success", 5);
+                        o.put("message", "样本号已存在，不允许保存，请重新设置！");
+                        return o.toString();
+                    }else {
+                        sample.setSampleNo(sampleno);
+                        //o.put("newSampleNo",sampleno );
+                    }
+                }else {
+                    sample.setSampleNo(newSampleNo);
+                    //o.put("newSampleNo",newSampleNo);
+                }
+                //设置检验者
+                sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
                 sample.setFeestatus("1");
                 sampleManager.save(sample);
                 processManager.save(process);
@@ -602,6 +646,7 @@ public class SampleInputAjaxController {
             o.put("message", "医嘱号为" + barcode + "的标本不存在！");
             return o.toString();
         }
+
 
         sample = getSample(labOrderList);
 
@@ -671,23 +716,33 @@ public class SampleInputAjaxController {
                     o.put("message", "检验段没有设置，不允许接收，请检查！");
                     return o.toString();
                 }
-                if (segment != null && segment.equals(sampleno.substring(8, 11))) {
-                    sample.setSampleNo(sampleno);
-                } else {
-                    String receiveSampleNo = sampleManager.getReceiveSampleno(user.getLastLab(), Constants.DF3.format(receiveTime) + segment);
-                    if (receiveSampleNo == null) {
-                        sampleno = Constants.DF3.format(receiveTime) + segment + "0001";
-                    } else {
-                        sampleno = receiveSampleNo.substring(0, 11) + String.format("%04d", (Integer.parseInt(receiveSampleNo.substring(11)) + 1));
+                int serialno = 0;
+                if(sampleno != null && !sampleno.isEmpty()){
+                    serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()));
+                }
+                String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
+                if(newSampleNo.isEmpty()){
+                    Sample sample1 = sampleManager.getBySampleNo(sampleno);
+                    if(sample1 != null){
+                        o.put("success", 5);
+                        o.put("message", "样本号已存在，不允许保存，请重新设置！");
+                        return o.toString();
+                    }else {
+                        sample.setSampleNo(sampleno);
+                        //o.put("newSampleNo",sampleno );
                     }
-                    sample.setSampleNo(sampleno);
+                }else {
+                    sample.setSampleNo(newSampleNo);
+                    //o.put("newSampleNo",newSampleNo);
                 }
                 //设置检验者
                 sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-                o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
+               // o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
             }
-            sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
 
+
+
+            sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             sample.setFeestatus("1");
             sampleManager.save(sample);
             processManager.save(process);
@@ -802,4 +857,22 @@ public class SampleInputAjaxController {
         }
         return sample;
     }
+
+    private boolean isRegularRptCode(String sampleNo){
+        String regEx = "\\d{8}[A-Z]{3}\\d{4}";
+        Pattern pattern = Pattern.compile(regEx);
+        Matcher matcher = pattern.matcher(sampleNo);
+        boolean flag =  matcher.matches();
+        return flag;
+    }
+    private String getSegment(String sampleNo){
+        Pattern p = Pattern.compile("([A-Z]+)");
+        Matcher m = p.matcher(sampleNo);
+        String result="";
+        while(m.find()){
+            result = m.group(1);
+        }
+        return result;
+    }
+
 }

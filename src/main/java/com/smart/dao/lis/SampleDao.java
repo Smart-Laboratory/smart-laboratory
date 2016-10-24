@@ -1,5 +1,6 @@
 package com.smart.dao.lis;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -86,4 +87,7 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	void updateChkoper2(String text, String chkoper2);
+
+	@Transactional
+	String generateSampleNo(String segment,int seriano) throws SQLException;
 }

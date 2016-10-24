@@ -1,5 +1,6 @@
 package com.smart.service.impl.lis;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -126,5 +127,9 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 
 	public void updateChkoper2(String text, String chkoper2) {
 		sampleDao.updateChkoper2(text, chkoper2);
+	}
+
+	public String generateSampleNo(String segment,int seriano) throws SQLException{
+		return sampleDao.generateSampleNo(segment,seriano);
 	}
 }

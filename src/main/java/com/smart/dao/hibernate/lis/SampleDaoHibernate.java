@@ -2,6 +2,10 @@ package com.smart.dao.hibernate.lis;
 
 import com.smart.dao.lis.SampleDao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,10 +14,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
+import org.omg.CORBA.ParameterMode;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import com.smart.Constants;
@@ -559,5 +567,26 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 
 	public void updateChkoper2(String text, String chkoper2) {
 		getSession().createSQLQuery("update l_sample set chkoper2='" + chkoper2 + "' where sampleno like '" + text + "%' and chkoper2 is null").executeUpdate();
+	}
+
+	public String generateSampleNo(String segment,int seriano) throws SQLException{
+//		System.out.println("segment=>"+segment);
+//		System.out.println("seriano=>"+seriano);
+		Connection c = SessionFactoryUtils.getDataSource(getSessionFactory()).getConnection();
+		CallableStatement cs = c.prepareCall("{call proc_getSampleNo(?,?,?)}");
+		String sampleNo="";
+		try {
+
+			cs.setString(1, segment);
+			cs.setInt(2, seriano);
+			cs.registerOutParameter(3, Types.VARCHAR);
+			cs.execute();
+			sampleNo =  ConvertUtil.null2String(cs.getString(3));
+		}catch (Exception e){
+		}finally {
+			cs.close();
+			c.close();
+		}
+		return sampleNo;
 	}
 }

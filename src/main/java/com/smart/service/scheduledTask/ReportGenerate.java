@@ -90,11 +90,8 @@ public class ReportGenerate {
 
         //实现获取电子签名
         String dzqm_filepath ="";
-
         String path=System.getProperty("search.root");
-
-
-        System.out.println("path->"+path);
+       //System.out.println("path->"+path);
         File file = new File(path+"/images/bmp/"+userNo+".png");
         if(file.exists()){
             dzqm_filepath = webPath+"/images/bmp/"+userNo+".png";
@@ -129,7 +126,6 @@ public class ReportGenerate {
             } else {
                 testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             }
-
             testResultVo.setTestResult(result.getTestResult());
             testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
             testResultVo.setUnit(result.getUnit());
@@ -155,7 +151,7 @@ public class ReportGenerate {
         Template template = engine.getTemplate(tmplate, "UTF-8");
         StringWriter writer = new StringWriter();
         template.merge(velocityContext, writer);
-        System.out.println(writer.toString());
+        //System.out.println(writer.toString());
         return writer.toString();
     }
 
@@ -190,6 +186,8 @@ public class ReportGenerate {
         dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
         likeLabManager = (LikeLabManager)SpringContextUtil.getBean("likeLabManager");
     }
+
+
 
     private SectionManager sectionManager = null;
     private DictionaryManager dictionaryManager = null;

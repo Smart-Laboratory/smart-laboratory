@@ -1,5 +1,6 @@
 package com.smart.service.lis;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -92,4 +93,6 @@ public interface SampleManager extends GenericManager<Sample, Long> {
     void removeAll(List<Sample> needSaveSample);
 
 	void updateChkoper2(String text, String chkoper2);
+
+	String generateSampleNo(String segment,int seriano) throws SQLException;
 }
