@@ -263,7 +263,7 @@ public class TestResult extends BaseObject{
         refLo = ConvertUtil.null2String(refLo);
         refHi = ConvertUtil.null2String(refHi);
         if (refLo.isEmpty() && refHi.isEmpty()) {
-            return "-";
+            return " ";
         } else if (refLo.isEmpty() && (!refHi.isEmpty())) {
             return refHi;
         } else if (refHi.isEmpty() && (!refLo.isEmpty())) {
