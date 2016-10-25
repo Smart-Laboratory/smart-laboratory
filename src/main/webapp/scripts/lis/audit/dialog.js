@@ -633,10 +633,10 @@ function openOpStatusDialog() {
                         $("#auditUnpassBtn").css('display', 'inline');
                         $("#auditPassBtn").css('display', 'none');
                         $("#collectBtn").css('display', 'inline');
-                        layer.close(index);
+                        layer.closeAll();
                     } else {
+                        layer.closeAll();
                         layer.alert(data, {icon: 2, title: "提示"});
-                        layer.close(index);
                     }
                 });
             } else {
@@ -660,17 +660,17 @@ function openOpStatusDialog() {
                         $("#auditUnpassBtn").css('display', 'none');
                         $("#auditPassBtn").css('display', 'inline');
                         $("#collectBtn").css('display', 'none');
-                        layer.close(index);
+                        layer.closeAll();
                     } else {
+                        layer.closeAll();
                         layer.alert(data, {icon: 2, title: "提示"});
-                        layer.close(index);
                     }
                 });
             }
         },
         content: $("#opStatusDialog"),
         cancel: function (index) {
-            layer.close(index);
+            layer.closeAll();
         }
     });
 }
@@ -1006,6 +1006,51 @@ $(function () {
                 }
             });
         }
+    });
+
+    $("#tatBtn").hover(function(){
+        $("#tat_request").html("");
+        $("#tat_execute").html("");
+        $("#tat_receive").html("");
+        $("#tat_audit").html("");
+        $("#tat_result").html("");
+        $("#tat_send").html("");
+        $("#tat_ksreceive").html("");
+        $("#audit_tat").html("");
+        var doc = $("#hiddenDocId").val();
+        $.get("../audit/tat", {id: doc}, function (data) {
+            $("#tat_request").html(data.request);
+            $("#tat_execute").html(data.execute);
+            $("#tat_receive").html(data.receive);
+            $("#tat_audit").html("<a href='javascript:void(0);' class='btn btn-sm btn-info' onclick='getAuditHistory()'>" + data.audit + "</a>");
+            $("#tat_auditor").html(data.auditor);
+            $("#tat_result").html(data.result);
+            $("#tat_send").html(data.send);
+            $("#tat_ksreceive").html(data.ksreceive);
+            var time = parseInt(data.tat);
+            var tStr = "";
+            if (time >= 1440) {
+                var day = Math.floor(time / 1440);
+                tStr += day.toString();
+                tStr += "天";
+                time = time - day * 1440;
+            }
+
+            if (time >= 60) {
+                var hour = Math.floor(time / 60);
+                tStr += hour.toString();
+                tStr += "小时";
+                time = time - hour * 60;
+            }
+            tStr += time.toString();
+            tStr += "分钟";
+
+            $("#audit_tat").html(tStr);
+        });
+        $("#tatBtn").popover({title:$("#tatBtn").text(),html:true,content:$("#tatDialog").html(),trigger:'manual',placement:'bottom'});
+        $("#tatBtn").popover("show");
+    },function(){
+        $("#tatBtn").popover("destroy");
     });
 
     $("#tatBtn").click(function () {

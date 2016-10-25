@@ -292,7 +292,7 @@ $(function(){
 	});
 	function printReport(sampleno){
 		$.get(baseUrl+"/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
-			print(data);
+			Print(data);
 		})
 	}
 	function printViewReport(sampleno){

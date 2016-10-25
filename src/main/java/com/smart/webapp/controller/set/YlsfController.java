@@ -123,6 +123,7 @@ public class YlsfController extends BaseAuditController {
 			map.put("ksdm", ConvertUtil.null2String(y.getKsdm()));
 			map.put("segment", ConvertUtil.null2String(y.getSegment()));
 			map.put("nightSegment", ConvertUtil.null2String(y.getNightSegment()));
+			map.put("outSegment", ConvertUtil.null2String(y.getOutSegment()));
 			dataRows.add(map);
 		}
 

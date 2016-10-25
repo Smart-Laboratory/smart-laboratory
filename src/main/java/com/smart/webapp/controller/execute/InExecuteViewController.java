@@ -408,7 +408,7 @@ public class InExecuteViewController extends RequestContextListener implements S
                         key1 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
                     }
 
-                    if (!unLabOrderlistMap.isEmpty() && unLabOrderlistMap.containsKey(key1)) {
+                    if (unLabOrderlistMap.size() > 0 && unLabOrderlistMap.containsKey(key1)) {
                         LabOrder labOrder1 = unLabOrderlistMap.get(key1);
                         String examItem = ConvertUtil.null2String(labOrder1.getExamitem()) + "+" + ConvertUtil.null2String(labOrder.getExamitem());
                         String strYlxh = ConvertUtil.null2String(labOrder1.getYlxh()) + "+" + ConvertUtil.null2String(labOrder.getYlxh());

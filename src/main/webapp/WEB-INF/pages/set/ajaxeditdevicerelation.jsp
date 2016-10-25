@@ -199,14 +199,14 @@
                                             <label class="col-sm-1 control-label"  style="padding-left: 2px;">显示历史记录</label>
                                             <div class="col-sm-2">
                                                 <label class="control-label pull-left inline">
-                                                    <input id="needhistory" type="checkbox" <c:if test="${index.needhistory=='1'}">checked</c:if> name="needhistory" value="${index.needhistory}" class="ace ace-switch ace-switch-3">
+                                                    <input id="needhistory" type="checkbox" <c:if test="${index.needhistory=='1'}">checked</c:if> name="needhistory" value="${index.needhistory}" class="ace ace-switch ace-switch-3" onclick="changeCheckBox(this)">
                                                     <span class="lbl middle"></span>
                                                 </label>
                                             </div>
                                             <label class="col-sm-1 control-label"  style="padding-left: 2px;">是否打印</label>
                                             <div class="col-sm-2">
                                                 <label class="control-label pull-left inline">
-                                                    <input id="isprint" type="checkbox" <c:if test="${index.isprint=='1'}">checked</c:if> name="isprint" value="${index.isprint}" class="ace ace-switch ace-switch-3">
+                                                    <input id="isprint" type="checkbox" <c:if test="${index.isprint=='1'}">checked</c:if> name="isprint" value="${index.isprint}" class="ace ace-switch ace-switch-3" onclick="changeCheckBox(this)">
                                                     <span class="lbl middle"></span>
                                                 </label>
                                             </div>
@@ -264,9 +264,16 @@
                                                 <%--</span>--%>
                                                 <%--</div>--%>
                                             <%--</div>--%>
-                                            <label class="col-sm-1 control-label" for="inuredate">生效日期</label>
+                                            <%--<label class="col-sm-1 control-label" for="inuredate">生效日期</label>
                                             <div class="col-sm-5">
                                                 <input class="form-control" id="inuredate" type="text" value="${index.inureDate}" placeholder="生效日期" disabled/>
+                                            </div>--%>
+                                            <label class="col-sm-1 control-label"  style="padding-left: 2px;">结果依参考范围格式化</label>
+                                            <div class="col-sm-5">
+                                                <label class="control-label pull-left inline">
+                                                    <input id="needFormat" type="checkbox" <c:if test="${index.needFormat=='1'}">checked</c:if> name="needhistory" value="${index.needFormat}" class="ace ace-switch ace-switch-3" onclick="changeCheckBox(this)">
+                                                    <span class="lbl middle"></span>
+                                                </label>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -814,6 +821,14 @@
 
 
     })
+
+   function changeCheckBox(obj) {
+        if(obj.checked == true) {
+            $(obj).val("1");
+        } else {
+            $(obj).val("0");
+        }
+   }
 
    $('#isprint').on('switch-change', function () {
        alert(1)
