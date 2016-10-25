@@ -54,8 +54,8 @@
 <input type="hidden" id="laborder" />
 
 <div class="row">
-	<div class="col-sm-3">
-		<div class="widget-box widget-color-green">
+	<div class="col-sm-3 leftbar " style="height: 100%" >
+		<div class="widget-box widget-color-green col-sm-12" style="height: 100%">
 			<div class="widget-header widget-header-small">
 				<h4 class="widget-title"><fmt:message key="execute.cxxx" /></h4>
 				<div class="widget-toolbar">
@@ -64,7 +64,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="widget-body">
+			<div class="widget-body"  >
 				<div class="widget-main">
 					<div>
 						<label ><fmt:message key="execute.jzkh" /></label>
@@ -80,15 +80,14 @@
 						</label>
 					</div>
 					<div id="dateChose" style="padding:5px 0px;">
-						<span><fmt:message key="execute.date" /></span>
+
 						<div class="form-inline">
-							<label for="from" style="margin-left : 10px; width:50px;"><b><fmt:message key="from" /></b></label>
-							<input type="text" id="from" name="from" class="laydate-icon-molv" style="height:33px;"/>
+							<label for="from" style="margin-left : 2px; width:50px;"><b><fmt:message key="from" /></b></label>
+							<input type="text" id="from" name="from" class="laydate-icon-molv" style="height:33px;width: 110px"/>
+							<label for="to" style="margin-left : 2px; width:30px;" ><b><fmt:message key="to" /></b></label>
+							<input type="text" id="to" name="to" class="laydate-icon-molv" style="height:33px;width: 110px">
 						</div>
-						<div class="form-inline">
-							<label for="to" style="margin-left : 10px; width:50px;" ><b><fmt:message key="to" /></b></label>
-							<input type="text" id="to" name="to" class="laydate-icon-molv" style="height:33px;">
-						</div>
+
 						
 					</div>
 					<button id="conform" class="btn btn-sm btn-success"><fmt:message key="button.confirm" /></button>
@@ -97,26 +96,6 @@
 						<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 						回执单打印设计
 					</button>
-					<div>
-						<div class="radio">
-							<label class="radio">
-			  				<input type="radio" name="select_type" id="uncheck" value="0" checked>
-			  				<fmt:message key="execute.uncheck" />
-							</label>
-						</div>
-						<div class="radio">
-							<label class="radio">
-				  			<input type="radio" name="select_type" id="all" value="100" >
-				  			<fmt:message key="execute.all" />
-							</label>
-						</div>
-						<div class="radio">
-							<label class="radio">
-				  			<input type="radio" name="select_type" id="executed" value="999" >
-				  			<fmt:message key="execute.executed" />
-							</label>
-						</div>
-					</div>
 					<div class="checkbox" style="border-top:1px solid #000000;">
 			    		<label>
 			      			<input type="checkbox" id="selfexecute" value=""> 自抽
@@ -127,28 +106,32 @@
 			      			<input type="checkbox" value=""> <fmt:message key="execute.printbarcode" />
 			    		</label>
 			  		</div>
+
+					<div class="col-sm-12" id="cxhis" >
+						<div class="col-sm-12 ">
+							<span class='col-sm-4'>抽血次数:</span><b id="cxcx"></b>
+						</div>
+						<span class='col-sm-12'>最后一次抽血情况:</span>
+						<div class="col-sm-12 ">
+							<span class='col-sm-4'>抽血人员:</span><b id="cxry"></b>
+						</div>
+						<div class="col-sm-12 ">
+							<span class='col-sm-4'>抽血时间:</span><b id="cxsj"></b>
+						</div>
+						<div class="col-sm-12 ">
+							<span class='col-sm-4'>检验项目:</span><b id="cxxm"></b>
+						</div>
+					</div>
 				</div>
+
 			</div>
+
 		</div>
-		<div class="col-sm-12" id="cxhis" style="margin:5px 0px;border:1px solid #82af6f;">
-			<div class="col-sm-12 ">
-				<span class='col-sm-4'>抽血次数:</span><b id="cxcx"></b>
-			</div>
-			<span class='col-sm-12'>最后一次抽血情况:</span>
-			<div class="col-sm-12 ">
-				<span class='col-sm-4'>抽血人员:</span><b id="cxry"></b>
-			</div>
-			<div class="col-sm-12 ">
-				<span class='col-sm-4'>抽血时间:</span><b id="cxsj"></b>
-			</div>
-			<div class="col-sm-12 ">
-				<span class='col-sm-4'>检验项目:</span><b id="cxxm"></b>
-			</div>
-		</div>
+
 	</div>
-	<div class="col-sm-9" style="">
-		<div id="patientInfo" style="width:99%;margin:10px 5px;">
-			<div class="widget-box widget-color-green">
+	<div class="col-sm-9 rightbar" style="">
+		<div id="patientInfo">
+			<div class="widget-box widget-color-green"  style="height: 85px; overflow: auto">
 				<div class="widget-header widget-header-small">
 					<h4 class="widget-title"><fmt:message key="execute.brxx" /></h4>
 					<div class="widget-toolbar">
@@ -189,7 +172,25 @@
 				</div>
 			</div>
 		</div>
-		<div style="width:99%; width:99%;margin:10px 5px;">
+
+
+		<div id="testlist" style="padding-top: 8px">
+			<div class="tabbable">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active">
+						<a data-toggle="tab" href="#tests">
+							<i class="blue ace-icon fa  fa-home bigger-120"></i>
+							未化验
+						</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#tests1">
+							<i class="pink ace-icon fa fa-tachometer bigger-120"></i>
+							已采集
+						</a>
+					</li>
+				</ul>
+			</div>
 			<div class="widget-box widget-color-green">
 				<div class="widget-header widget-header-small">
 					<h4 class="widget-title"><fmt:message key="execute.datalist" /></h4>
@@ -209,14 +210,18 @@
 						<input id="checkAll" type='checkbox'/>全选/全不选
 					</div>
 				</div>
-				<div class="widget-body" style="overflow-x:scroll;">
-					<div id="tests" class="widget-main">
+				<div class="widget-body" >
+
+					<div id="tests" class="widget-main tab-pane fade in active" style="overflow:auto;">
+
+					</div>
+					<div id="tests1" class="widget-main tab-pane fade" style="overflow:auto;">
 
 					</div>
 				</div>
 			</div>
 		</div>
-	
+
 	</div>
 
 
@@ -264,5 +269,4 @@
 		<input type="button" id="tijiao" class="btn btn-info" onclick="unusual()" value="提交">
 	</form>
 </div>
-
 </body>

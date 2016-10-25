@@ -178,27 +178,27 @@ function getData(item,event){
                     $("#examtodo").html("待做项："+data.examtodo);
 			});
 
-			reloadTests();
-
+			reloadTests(0);
+			reloadTests(999);
 		}
 
 	}
 }
 
-function reloadTests() {
+function reloadTests(requestmode) {
 	var jzkh=$("#jzkh").val();
 	if(jzkh==null || jzkh.length=="") {
 		layer.msg("请输入就诊卡号！", {icon: 0, time: 1000});
 		return;
 	}
-	$.get("../manage/execute/ajax/getTests",{patientId:jzkh,requestmode:$("input[name='select_type']:checked").val(),from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
+	$.get("../manage/execute/ajax/getTests",{patientId:jzkh,requestmode:requestmode,from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
 		if(data!=null){
 			var jsonArr = jQuery.parseJSON(data);
 			if(jsonArr.length == 0) {
 			    if($("input[name='select_type']:checked").val() == 999) {
-                    layer.msg("当前病人没有已采集的检验项目！", {icon: 0, time: 1000});
+                    //layer.msg("当前病人没有已采集的检验项目！", {icon: 0, time: 1000});
                 } else{
-                    layer.msg("当前病人没有需要采样的检验项目！", {icon: 0, time: 1000});
+                    //layer.msg("当前病人没有需要采样的检验项目！", {icon: 0, time: 1000});
                 }
                 $("#tests").html("");
 				return;
@@ -244,7 +244,12 @@ function reloadTests() {
 					"</div>";
 				html+="</div></div>";
 			}
-			$("#tests").html(html);
+			if(requestmode==0){
+				$("#tests").html(html);
+			}
+			if(requestmode==999){
+				$("#tests1").html(html);
+			}
 			if(data.examtodo!=null)
 				$("#examtodo").html("待做项："+data.examtodo);
 		}
@@ -252,7 +257,19 @@ function reloadTests() {
 }
 
 $(function(){
-	
+	$('a[data-toggle="tab"]').on('click', function (e) {
+		// 获取已激活的标签页的名称
+		var text = e.currentTarget.hash;
+		// if(text=='#tests'){
+		// 	//未检验
+		// 	reloadTests(0)
+		// }
+		// if(text=='#tests1'){
+		// 	//已检验
+		// 	reloadTests(999)
+		// }
+	});
+
 	$(".footer").css('display','none');
     laydate.skin('molv');
 	laydate({
@@ -346,7 +363,6 @@ $(function(){
 		} else {
 			$('#tests input[type=checkbox]').prop('checked',false);
 		}
-
 	});
 
 	$("#requestModeSelect").change(function() {
@@ -356,6 +372,10 @@ $(function(){
     $("input[name='select_type']").click(function () {
         reloadTests();
     });
+	var clientHeight= $(window).innerHeight();
+	var height =clientHeight-$('#menuheader').height()- $('#patientInfo').height()-160;
+	$('.row').height(clientHeight-$('#menuheader').height()-30);
+	$('#tests').height(height);
 });
 
 function unusual(){

@@ -459,6 +459,7 @@ public class SampleInputAjaxController {
         Process process = null;
         String code = ConvertUtil.null2String(request.getParameter("id")).toUpperCase();
         String sampleno = ConvertUtil.null2String(request.getParameter("sampleno"));
+
         //sampleno = sampleno.substring(0,11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11))));
         JSONObject o = new JSONObject();
         if(!sampleno.isEmpty() && !isRegularRptCode(sampleno)){
@@ -502,6 +503,16 @@ public class SampleInputAjaxController {
             sample.setSectionId(Constants.DEPART_NIGHT);
             segment = ylxh.getNightSegment();
         }
+        //非夜班科室取白班
+        if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
+            sample.setSectionId(user.getLastLab());
+            segment = ylxh.getSegment();
+        }
+        if (segment == null || segment.isEmpty()) {
+            o.put("success", 5);
+            o.put("message", "检验段没有设置，不允许接收，请检查！");
+            return o.toString();
+        }
 //        if(!segment.equals(inSegment)){
 //            o.put("success", 5);
 //            o.put("message", "输入样本号检验段" + inSegment + "与当前样本检验段不符！");
@@ -541,16 +552,7 @@ public class SampleInputAjaxController {
             processLogManager.save(plog);
 
 
-            //非夜班科室取白班
-            if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
-                sample.setSectionId(user.getLastLab());
-                segment = ylxh.getSegment();
-            }
-            if (segment == null || segment.isEmpty()) {
-                o.put("success", 5);
-                o.put("message", "检验段没有设置，不允许接收，请检查！");
-                return o.toString();
-            }
+
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             process.setReceiver(user.getName());
             process.setReceivetime(receiveTime);
@@ -580,6 +582,7 @@ public class SampleInputAjaxController {
                         return o.toString();
                     }else {
                         sample.setSampleNo(sampleno);
+                        o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
                         //o.put("newSampleNo",sampleno );
                     }
                 }else {
