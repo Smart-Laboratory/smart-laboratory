@@ -261,7 +261,7 @@ public final class ConvertUtil {
         if(barcode.indexOf("A12006")>=0){
             mode = 2;
         }else if(barcode.indexOf("A12001")>=0){
-            mode = 4;       //体检
+            mode = 3;       //体检
         }else {
             mode = 1;
         }
@@ -277,9 +277,6 @@ public final class ConvertUtil {
                 value = "病房";
                 break;
             case 3:
-                value = "急诊";
-                break;
-            case 4:
                 value = "体检";
                 break;
             default:

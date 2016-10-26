@@ -289,7 +289,7 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            list = jsonTolist(4, obj);
+            list = jsonTolist(3, obj);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -332,7 +332,7 @@ public class WebService {
                 labOrder.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("requestDateTime")));
                 labOrder.setRequestNum(arr.getJSONObject(i).getInt("quantity"));
                 labOrder.setSex(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("sex")));
-                labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检4
+                labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检3
                 labOrder.setToponymy(arr.getJSONObject(i).getString("testPart"));
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
                 labOrder.setExamitem(arr.getJSONObject(i).getString("itemName"));

@@ -191,7 +191,7 @@ function reloadTests(requestmode) {
 		layer.msg("请输入就诊卡号！", {icon: 0, time: 1000});
 		return;
 	}
-	$.get("../manage/execute/ajax/getTests",{patientId:jzkh,requestmode:requestmode,from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
+	$.get(baseUrl + "/manage/execute/ajax/getTests",{patientId:jzkh,requestmode:requestmode,from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
 		if(data!=null){
 			var jsonArr = jQuery.parseJSON(data);
 			if(jsonArr.length == 0) {
@@ -307,7 +307,7 @@ $(function(){
 			selfexecute =1;
 		}
 //		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
-		$.get("../manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
+		$.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
 			data = jQuery.parseJSON(data);
 			console.log(data);
 			for(i=0;i<data.labOrders.length;i++){
@@ -324,7 +324,7 @@ $(function(){
 		$("#unpatientid").val(jzkh);
 		var laborders = $("#laborder").val();
 		if(laborders!=null && laborders!=""){
-			$.get("../manage/getUnusualExecute",{laborder:laborders},function(data){
+			$.get(baseUrl + "/manage/getUnusualExecute",{laborder:laborders},function(data){
 				if(data!=null && data.patientId!=null){
 					$("#unpatientid").val(data.patientId);
 					$("#part").val(data.part);

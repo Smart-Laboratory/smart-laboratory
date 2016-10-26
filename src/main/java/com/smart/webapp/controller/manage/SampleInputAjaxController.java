@@ -261,10 +261,24 @@ public class SampleInputAjaxController {
 
             //退费项目费
             if ("1".equals(sample.getFeestatus())) {
-                //已计费
-                LabOrder labOrder = labOrderManager.get(sample.getId());
-                String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
-                if (updateStatusSuccess.isEmpty()) {
+                if(sample.getStayHospitalMode() == 2) {     //住院退费
+                    //已计费
+                    LabOrder labOrder = labOrderManager.get(sample.getId());
+                    String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
+                    if (updateStatusSuccess.isEmpty()) {
+                        sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
+                        sample.setSampleNo("0");
+                        process.setReceiver("");
+                        process.setReceivetime(null);
+                        sampleManager.save(sample);
+                        processManager.save(process);
+                        o.put("message", "样本号为" + sampleno + "的标本退回成功！");
+                        o.put("success", true);
+                    } else {
+                        o.put("message", "样本号为" + sampleno + "的标本退费失败，无法退回！" + updateStatusSuccess);
+                        o.put("success", false);
+                    }
+                } else if(sample.getStayHospitalMode() == 3) {     //体检退费
                     sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
                     sample.setSampleNo("0");
                     process.setReceiver("");
@@ -273,10 +287,8 @@ public class SampleInputAjaxController {
                     processManager.save(process);
                     o.put("message", "样本号为" + sampleno + "的标本退回成功！");
                     o.put("success", true);
-                } else {
-                    o.put("message", "样本号为" + sampleno + "的标本退费失败，无法退回！" + updateStatusSuccess);
-                    o.put("success", false);
                 }
+
             } else {
                 //未记费标本直接修改
                 sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);

@@ -202,8 +202,7 @@
 					<div class="widget-toolbar">
 						<select id="requestModeSelect">
 							<option value="0" selected>全部</option>
-							<option value="1">门诊</option>
-							<option value="2">急诊</option>
+							<option value="1">急诊</option>
 						</select>
 					</div>
 					<div class="widget-toolbar">
