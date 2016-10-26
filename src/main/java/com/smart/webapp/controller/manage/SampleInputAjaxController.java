@@ -485,7 +485,7 @@ public class SampleInputAjaxController {
         }
 
         int mode = ConvertUtil.getStayHospitalMode(code);
-        if (mode == 4) {
+        if (mode == 3) {
             //体检
             return receiveExamination(code, user, sampleno);
         }
@@ -676,8 +676,8 @@ public class SampleInputAjaxController {
         sample.setSectionId(ylxh.getKsdm());
         sample.setSampleType(ylxh.getYblx());
         sample.setAgeunit("岁");
-        process = processManager.getBySampleId(sample.getId());
-        if (process != null) {
+        if (sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
+            process = processManager.getBySampleId(sample.getId());
             o.put("success", 2);
             o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
             return o.toString();
