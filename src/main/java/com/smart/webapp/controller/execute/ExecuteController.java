@@ -43,7 +43,10 @@ public class ExecuteController {
 	private Map<String, String> sampleTypeMap = new HashMap<String,String>();
 
 	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
 	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		long start = System.currentTimeMillis();
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		String selfExecute = request.getParameter("selfexecute");
 		String selectValue = request.getParameter("selval");
@@ -182,7 +185,7 @@ public class ExecuteController {
 			//合并后的采样项目添加到记录表
 			needSaveList.add(labOrder);
 		}
-
+		System.out.println(System.currentTimeMillis() - start);
 		Set<Long> labOrders = new HashSet<Long>();
 		AutoSampleNoUtil autoUtil = AutoSampleNoUtil.getInstance(sampleNoBuilderManager);
 		Map<String, List<SampleNoBuilder>> autoMap = autoUtil.getMap();
@@ -251,6 +254,7 @@ public class ExecuteController {
             e.printStackTrace();
             saveSuccess = false;
         }
+		System.out.println(System.currentTimeMillis() - start);
         if(saveSuccess) {
         	String updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(executeTime,"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
             if(!updateStatusSuccess.isEmpty()){
@@ -271,7 +275,7 @@ public class ExecuteController {
 				object.put("executeTime",labOrder.getExecutetime());
 				object.put("requestMode",labOrder.getRequestmode());
 				object.put("sampleNo",labOrder.getSampleno());
-				object.put("container", labOrder.getContainer());
+				object.put("container", ConvertUtil.null2String(labOrder.getContainer()));
 				object.put("volume", labOrder.getVolume());
 				object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
 				object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
@@ -287,6 +291,7 @@ public class ExecuteController {
 			}
 			o.put("labOrders", array);
         }
+		System.out.println(System.currentTimeMillis() - start);
 		return o.toString();
 	}
 

@@ -66,7 +66,7 @@ function CreateDataBill(data) {
 
         LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","51.25mm",180,20,patientInfo);
         LODOP.ADD_PRINT_TEXTA("testinfo","82mm","51.25mm",180,20,data.testName);
-        LODOP.ADD_PRINT_BARCODEA("barcode","86mm","51.25mm","46mm",30,"128B",data.barcode);
+        LODOP.ADD_PRINT_BARCODEA("barcode","86mm","51.25mm","40mm",30,"128B",data.barcode);
         LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
         LODOP.ADD_PRINT_TEXTA("code","94mm","55.95mm",150,20,"*"+data.sampleNo+"*");
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
@@ -178,23 +178,25 @@ function getData(item,event){
                     $("#examtodo").html("待做项："+data.examtodo);
 			});
 
-			reloadTests(0);
-			reloadTests(999);
+			reloadTests();
 		}
 
 	}
 }
 
-function reloadTests(requestmode) {
+function reloadTests() {
 	var jzkh=$("#jzkh").val();
 	if(jzkh==null || jzkh.length=="") {
 		layer.msg("请输入就诊卡号！", {icon: 0, time: 1000});
 		return;
 	}
-	$.get(baseUrl + "/manage/execute/ajax/getTests",{patientId:jzkh,requestmode:requestmode,from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
+	$.get(baseUrl + "/manage/execute/ajax/getTests",{patientId:jzkh,from:$("#from").val(),to:$("#to").val(), isEmergency: $("#requestModeSelect").val()},function(data){
+		$("#tests").html("");
+		$("#tests1").html("");
 		if(data!=null){
-			var jsonArr = jQuery.parseJSON(data);
-			if(jsonArr.length == 0) {
+			var executeArray = data.execute;
+			var unExecuteArray = data.unexecute;
+			if(unExecuteArray.length == 0) {
 			    if($("input[name='select_type']:checked").val() == 999) {
                     //layer.msg("当前病人没有已采集的检验项目！", {icon: 0, time: 1000});
                 } else{
@@ -204,52 +206,8 @@ function reloadTests(requestmode) {
 				return;
 			}
 			$("#checkAll").prop('checked', true);
-			var html = "";
-			for(var i = 0; i<jsonArr.length; i++) {
-				if(i%2 == 0) {
-					html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#f5f5f5'>";
-				}else{
-					html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#fff'>";
-				}
-				if(jsonArr[i].zxbz == 0) {
-					html+="<div class='col-sm-2' style=''>"+
-						"<div class='col-sm-6'><label><input type='checkbox' checked value='"+jsonArr[i].labOrderOrg+"+"+ jsonArr[i].zxbz +"+"+jsonArr[i].qbgsj+"+"+jsonArr[i].qbgdd+"'></label></div>";
-				} else {
-					html+="<div class='col-sm-3' style=''>"+
-						"<div class='col-sm-6'><label><input type='checkbox' value='"+jsonArr[i].labOrderOrg+"+"+ jsonArr[i].zxbz +"+"+jsonArr[i].qbgsj+"+"+jsonArr[i].qbgdd+"' style='outline:5px solid greenyellow'></label></div>";
-				}
-				if(jsonArr[i].bmp == "") {
-					html+="<div class='col-sm-4'>&nbsp;</div>";
-				} else {
-					html+="<div class='col-sm-4'><img src='"+jsonArr[i].bmp+"' alt='"+jsonArr[i].sglx +"' height='50px' /></div>";
-				}
-				if(jsonArr[i].requestMode == 1) {
-					html+="<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>";
-				} else {
-					html+="<div class='col-sm-2'>&nbsp;</div>";
-				}
-				html+="</div>";
-				html+="<div class='col-sm-10' style=''>";
-				html+="<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+jsonArr[i].ylmc+"</b>"+
-					"<span >发票号:</span><b id='sfsb'>"+jsonArr[i].requestId+"</b>"+
-					"<span >单价:</span><b id='dj'>"+jsonArr[i].price+"</b>"+
-					"×<b id='sl'>"+jsonArr[i].amount+"</b>"+
-					"<span >执行科室:</span><b id='ksdm'>"+jsonArr[i].labDepart+"</b>"+
-					"<span >采集量:</span><b id='bbl'>"+jsonArr[i].bbl+"</b></div>"+
-					"<div>"
-					+ "<span >报告时间:</span><b id='qbgsj'>"+jsonArr[i].qbgsj+"</b>"+
-					"<span >申请时间:</span><b id='kdsj'>"+jsonArr[i].requestTime+"</b>"+
-					"<span >申请科室:</span><b id='sjksdm'>"+jsonArr[i].hosSection+"</b>"+
-					"<span >地点:</span><b id='qbgdd'>"+jsonArr[i].qbgdd+"</b>"+
-					"</div>";
-				html+="</div></div>";
-			}
-			if(requestmode==0){
-				$("#tests").html(html);
-			}
-			if(requestmode==999){
-				$("#tests1").html(html);
-			}
+			createHtml(unExecuteArray, 'tests');
+			createHtml(executeArray, 'tests1');
 			if(data.examtodo!=null)
 				$("#examtodo").html("待做项："+data.examtodo);
 		}
@@ -308,7 +266,6 @@ $(function(){
 		}
 //		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
 		$.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
-			data = jQuery.parseJSON(data);
 			console.log(data);
 			for(i=0;i<data.labOrders.length;i++){
 				startPrint(data.labOrders[i]);
@@ -398,7 +355,49 @@ function unusual(){
 	}
 }
 
-
+function createHtml(jsonArray, id) {
+	var html = "";
+	for(var i = 0; i<jsonArray.length; i++) {
+		if(i%2 == 0) {
+			html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#f5f5f5'>";
+		}else{
+			html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#fff'>";
+		}
+		if(jsonArray[i].zxbz == 0) {
+			html+="<div class='col-sm-2' style=''>"+
+				"<div class='col-sm-6'><label><input type='checkbox' checked value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"'></label></div>";
+		} else {
+			html+="<div class='col-sm-3' style=''>"+
+				"<div class='col-sm-6'><label><input type='checkbox' value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"' style='outline:5px solid greenyellow'></label></div>";
+		}
+		if(jsonArray[i].bmp == "") {
+			html+="<div class='col-sm-4'>&nbsp;</div>";
+		} else {
+			html+="<div class='col-sm-4'><img src='"+jsonArray[i].bmp+"' alt='"+jsonArray[i].sglx +"' height='50px' /></div>";
+		}
+		if(jsonArray[i].requestMode == 1) {
+			html+="<div class='col-sm-2'><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></div>";
+		} else {
+			html+="<div class='col-sm-2'>&nbsp;</div>";
+		}
+		html+="</div>";
+		html+="<div class='col-sm-10' style=''>";
+		html+="<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+jsonArray[i].ylmc+"</b>"+
+			"<span >发票号:</span><b id='sfsb'>"+jsonArray[i].requestId+"</b>"+
+			"<span >单价:</span><b id='dj'>"+jsonArray[i].price+"</b>"+
+			"×<b id='sl'>"+jsonArray[i].amount+"</b>"+
+			"<span >执行科室:</span><b id='ksdm'>"+jsonArray[i].labDepart+"</b>"+
+			"<span >采集量:</span><b id='bbl'>"+jsonArray[i].bbl+"</b></div>"+
+			"<div>"
+			+ "<span >报告时间:</span><b id='qbgsj'>"+jsonArray[i].qbgsj+"</b>"+
+			"<span >申请时间:</span><b id='kdsj'>"+jsonArray[i].requestTime+"</b>"+
+			"<span >申请科室:</span><b id='sjksdm'>"+jsonArray[i].hosSection+"</b>"+
+			"<span >地点:</span><b id='qbgdd'>"+jsonArray[i].qbgdd+"</b>"+
+			"</div>";
+		html+="</div></div>";
+	}
+	$("#" + id).html(html);
+}
 
 
 //------------------------------------------
