@@ -109,7 +109,8 @@ public class WebService {
                 JSONArray arr = obj.getJSONArray("Message");
                 for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
-                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setId(Long.parseLong(arr.getJSONObject(i).getString("Id")));
+                    s.setCode(arr.getJSONObject(i).getString("Code"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
                     list.add(s);
                 }
@@ -123,7 +124,8 @@ public class WebService {
                 JSONArray arr = obj2.getJSONArray("Message");
                 for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
-                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setId(Long.parseLong(arr.getJSONObject(i).getString("Id")));
+                    s.setCode(arr.getJSONObject(i).getString("Code"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
                     list.add(s);
                 }

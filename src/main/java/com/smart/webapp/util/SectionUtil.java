@@ -25,19 +25,16 @@ public class SectionUtil {
 		if (map == null || map.size() == 0) {
 			map = new HashMap<String, String>();
 			for(Section s : new WebService().getSectionList()) {
+				map.put(ConvertUtil.null2String(s.getId()), s.getName());
 				map.put(s.getCode(), s.getName());
 			}
 		}
-		if (labMap == null || labMap.size() == 0) {
+		if (labMap == null || labMap.size() == 0 || departMap == null || departMap.size() == 0) {
 			labMap = new HashMap<String, String>();
+			departMap = new HashMap<String, Section>();
 			for (Section s : sectionManager.getAll()) {
 				labMap.put(s.getCode(), s.getName());
-			}
-		}
-		if (departMap == null || departMap.size() == 0) {
-			departMap = new HashMap<String, Section>();
-			for (Section section : sectionManager.getAll()) {
-				departMap.put(section.getCode(), section);
+				departMap.put(s.getCode(), s);
 			}
 		}
 		return instance;
@@ -46,11 +43,10 @@ public class SectionUtil {
 	public String getValue(String key) {
 		if (map.containsKey(key)) {
 			return map.get(key);
-		} else {
-			return key;
 		}
+		return key;
 	}
-	
+
 	public String getLabValue(String key) {
 		if (labMap.containsKey(key)) {
 			return labMap.get(key);

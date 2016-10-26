@@ -140,7 +140,7 @@ public class GetPatientController extends BaseAuditController {
 				}
 				map.put("dgTime", dealTimeStr);
 			}
-			map.put("bed", info.getDepartBed());
+			map.put("bed", ConvertUtil.null2String(info.getDepartBed()));
 			map.put("size", size);
 			map.put("passReason", info.getPassReason());
 			map.put("patientId", info.getPatientId());
