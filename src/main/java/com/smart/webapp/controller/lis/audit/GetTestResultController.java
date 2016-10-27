@@ -558,6 +558,7 @@ public class GetTestResultController extends BaseAuditController {
 					testresult2.setMeasureTime(new Date());
 					testresult2.setResultFlag("AAAAAA");
 					testresult2.setEditMark(Constants.MANUAL_EDIT_FLAG);
+					testresult2.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 //					fillUtil.fillResult(testresult2, info);
 					testResultManager.save(testresult2);
 				} else {
@@ -567,6 +568,7 @@ public class GetTestResultController extends BaseAuditController {
 					testresult2.setMeasureTime(new Date());
 					testresult2.setResultFlag("AAAAAA");
 					testresult2.setEditMark(Constants.MANUAL_EDIT_FLAG);
+					testresult2.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 //					fillUtil.fillResult(testresult2, info);
 					testResultManager.save(testresult2);
 				}
@@ -575,8 +577,8 @@ public class GetTestResultController extends BaseAuditController {
 			String oldResult = testResult.getTestResult();
 			testResult.setTestResult(result);
 			testResult.setOperator(request.getRemoteUser());
-			testResult.setMeasureTime(new Date()); 
-			
+			testResult.setMeasureTime(new Date());
+			testResult.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 			testResult.setResultFlag("AAAAAA");
 			fillFieldUtil.fillResult(testResult, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 			if (testResult.getEditMark() == 0) {
@@ -590,6 +592,9 @@ public class GetTestResultController extends BaseAuditController {
 			
 			info.setModifyFlag(1);
 			info.setAuditStatus(Constants.STATUS_UNAUDIT);
+			if(info.getSampleStatus() < Constants.SAMPLE_STATUS_TESTED) {
+				info.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
+			}
 			sampleManager.save(info);
 			
 			TestModify testModify = new TestModify();
@@ -740,6 +745,8 @@ public class GetTestResultController extends BaseAuditController {
 			}
 		}
 		testResultManager.saveAll(needSaveTests);
+		sample.setSampleStatus(Constants.SAMPLE_STATUS_TESTED);
+		sampleManager.save(sample);
 	}
 	
 }

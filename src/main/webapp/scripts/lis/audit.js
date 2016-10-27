@@ -99,7 +99,7 @@ $(function(){
 				isFirst = false;
 			}
 			else{
-				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
+				jQuery("#rowed3").jqGrid("setGridParam",{url:baseUrl + "/audit/sample?id="+ret.sample,editurl: baseUrl + "/audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
 			}
  		} else {
  			var s = jQuery("#list").jqGrid('getGridParam','selrow');
