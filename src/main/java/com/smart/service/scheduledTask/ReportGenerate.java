@@ -127,7 +127,7 @@ public class ReportGenerate {
                 testResultVo.setTestName(idMap.get(result.getTestId()).getName());
             }
             testResultVo.setTestResult(result.getTestResult());
-            testResultVo.setResultFlag(ConvertUtil.getResultFlag(result.getResultFlag()));
+            testResultVo.setResultFlag(ConvertUtil.getPrintResultFlag(result.getResultFlag()));
             testResultVo.setUnit(result.getUnit());
             testResultVo.setReference(ConvertUtil.null2String(result.getReference()));
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());

@@ -252,26 +252,44 @@ $(function(){
 	$("#conform").click(function(){
 		
 		var selval="";
-		$("#tests input:checkbox").each(function(){
-			if($(this).prop("checked")==true)
-				selval = selval + $(this).val()+";";
-		});
-		if(selval==null || selval == ''){
-			layer.msg("请选择检验项目", {icon: 2, time: 1000});
-			return;
-		}
-		var selfexecute = 0;
-		if($("#selfexecute").prop("checked")==true){
-			selfexecute =1;
-		}
-//		selval:selval,patientId:jzkh,requestmode:0,from:$("#from").val(),to:$("#to").val()
-		$.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
-			console.log(data);
-			for(i=0;i<data.labOrders.length;i++){
-				startPrint(data.labOrders[i]);
+        if($("#tests").css('display') == 'none') {
+			$("#tests1 input:checkbox").each(function(){
+				if($(this).prop("checked")==true)
+					selval = selval + $(this).val()+";";
+			});
+			if(selval==null || selval == ''){
+				layer.msg("请选择需要重新打印条码的项目", {icon: 2, time: 1000});
+				return;
 			}
-			reloadTests();
-		});
+			$.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,reprint:true},function(data){
+				console.log(data);
+				for(i=0;i<data.labOrders.length;i++){
+					startPrint(data.labOrders[i]);
+				}
+				reloadTests();
+			});
+        } else {
+            $("#tests input:checkbox").each(function(){
+                if($(this).prop("checked")==true)
+                    selval = selval + $(this).val()+";";
+            });
+            if(selval==null || selval == ''){
+                layer.msg("请选择需要采样的项目", {icon: 2, time: 1000});
+                return;
+            }
+            var selfexecute = 0;
+            if($("#selfexecute").prop("checked")==true){
+                selfexecute =1;
+            }
+            $.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute,reprint:false},function(data){
+                console.log(data);
+                for(i=0;i<data.labOrders.length;i++){
+                    startPrint(data.labOrders[i]);
+                }
+                reloadTests();
+            });
+        }
+
 		
 	});
 	
@@ -316,9 +334,17 @@ $(function(){
 
 	$('#checkAll').click(function(){
 		if($(this).prop("checked")) {
-			$('#tests input[type=checkbox]').prop('checked',true);
+			if($('#tests').css("display") == 'none') {
+				$('#tests1 input[type=checkbox]').prop('checked',true);
+			} else {
+				$('#tests input[type=checkbox]').prop('checked',true);
+			}
 		} else {
-			$('#tests input[type=checkbox]').prop('checked',false);
+			if($('#tests').css("display") == 'none') {
+				$('#tests1 input[type=checkbox]').prop('checked',false);
+			} else {
+				$('#tests input[type=checkbox]').prop('checked',false);
+			}
 		}
 	});
 
@@ -326,13 +352,19 @@ $(function(){
         reloadTests();
 	});
 
-    $("input[name='select_type']").click(function () {
+    $("#myTab a").click(function () {
+		if($(this).prop("href").indexOf("tests1") > 0) {
+			$("#back").css("display","inline");
+		} else {
+			$("#back").css("display","none");
+		}
         reloadTests();
     });
 	var clientHeight= $(window).innerHeight();
 	var height =clientHeight-$('#menuheader').height()- $('#patientInfo').height()-160;
-	$('.row').height(clientHeight-$('#menuheader').height()-30);
+	$('.row').height(clientHeight-$('#menuheader').height()-20);
 	$('#tests').height(height);
+	$('#tests1').height(height);
 });
 
 function unusual(){
@@ -349,7 +381,6 @@ function unusual(){
 	if(laborders!=null && jzkh!=null){
 		$.get("../manage/ajax/unusual",{laborder:laborders,jzkh:jzkh,part:part,mode:mode,reaction:reaction,time:time,note:note},function(data){
 			data = jQuery.parseJSON(data);
-			alert(data.data);
 			$("#executeUnusualDialog").dialog("close");
 		});
 	}
@@ -367,8 +398,8 @@ function createHtml(jsonArray, id) {
 			html+="<div class='col-sm-2' style=''>"+
 				"<div class='col-sm-6'><label><input type='checkbox' checked value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"'></label></div>";
 		} else {
-			html+="<div class='col-sm-3' style=''>"+
-				"<div class='col-sm-6'><label><input type='checkbox' value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"' style='outline:5px solid greenyellow'></label></div>";
+			html+="<div class='col-sm-2' style=''>"+
+				"<div class='col-sm-6'><label><input type='checkbox' value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"'></label></div>";
 		}
 		if(jsonArray[i].bmp == "") {
 			html+="<div class='col-sm-4'>&nbsp;</div>";

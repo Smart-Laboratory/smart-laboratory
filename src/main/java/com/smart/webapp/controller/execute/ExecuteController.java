@@ -97,7 +97,7 @@ public class ExecuteController {
 					ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
 					ConvertUtil.null2String(ylxh.getSglx())+"_"+
 					ConvertUtil.null2String(ylxh.getSgsl())+"_"+
-					ConvertUtil.null2String(ylxh.getSegment())+"_"+
+					ConvertUtil.null2String(ylxh.getOutSegment())+"_"+
 					ConvertUtil.null2String(ylxh.getCjbw());
 			if(ylxh.getSfhb() == 0) {
 				key += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
@@ -142,7 +142,7 @@ public class ExecuteController {
 								ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
 								ConvertUtil.null2String(ylxh.getSglx())+"_"+
 								ConvertUtil.null2String(ylxh.getSgsl())+"_"+
-								ConvertUtil.null2String(ylxh.getSegment())+"_"+
+								ConvertUtil.null2String(ylxh.getOutSegment())+"_"+
 								ConvertUtil.null2String(ylxh.getCjbw());
 						if(ylxh.getSfhb() == 0) {
 							key2 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
@@ -196,7 +196,7 @@ public class ExecuteController {
 			LabOrder labOrder = needSaveList.get(i);
 			//生成样本号
 			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
-			String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
+			String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getOutSegment(),0));
 			labOrder.setSampleno(newSampleNo);
 
 			//生成条码号
