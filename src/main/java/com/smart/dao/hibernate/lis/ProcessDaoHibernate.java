@@ -144,4 +144,8 @@ public class ProcessDaoHibernate extends GenericDaoHibernate<Process, Long> impl
 		s.close();
 	}
 
+	public void removeBySampleIds(String ids) {
+		getSession().createSQLQuery("delete from l_process where sample_id in (" + ids + ")").executeUpdate();
+	}
+
 }
