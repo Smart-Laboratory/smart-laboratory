@@ -22,13 +22,24 @@ function printSetting() {
 		return;
 	}
 };
+function getCookie(name) {
+	var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+	if (arr = document.cookie.match(reg))
+		return unescape(arr[2]);
+	else
+		return null;
+};
 function setCookie(name, value) {
 	var Days = 9999;
 	var exp = new Date();
 	exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
 };
-
+function setPrintIndex(index) {
+	var index = getCookie("lis_print");
+	LODOP = getLodop();
+	LODOP.SET_PRINTER_INDEX(index)
+}
 function CreateDataBill(data) {
 	if(data && data!=null){
 	    var patientInfo = data.patientName + " "+ data.sex + " "+ data.age+data.ageUnit
@@ -113,6 +124,7 @@ function CreateDataBill(data) {
 }
 function startPrint(data) {
 	CreateDataBill(data);
+	setPrintIndex();
 	//开始打印
 	LODOP.PRINT();
 }
