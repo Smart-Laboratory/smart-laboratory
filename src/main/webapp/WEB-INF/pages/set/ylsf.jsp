@@ -272,6 +272,12 @@
 					</select>
 				</div>
 			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-left" for="segment"> 报告单模板 </label>
+				<div class="col-xs-8">
+					<input type="text" name="template" id="template" value="" class="col-xs-8">
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-6">
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
@@ -327,6 +333,15 @@
 						<c:forEach items="${segments }" var="labcode">
 							<option value="${labcode}">${labcode}</option>
 						</c:forEach>
+					</select>
+				</div>
+			</div>
+			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+				<label class="col-xs-4 control-label no-padding-right" for="segment"> 门诊自动编号 </label>
+				<div class="col-xs-8">
+					<select type="text" id="isAutoNo" name="isAutoNo" class="col-xs-8" style="height:33px;">
+						<option value="0" <c:if test="${isAutoNo=='0'}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${isAutoNo=='0'}">selected</c:if>>是</option>
 					</select>
 				</div>
 			</div>

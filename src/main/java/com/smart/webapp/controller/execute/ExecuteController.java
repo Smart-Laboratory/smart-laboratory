@@ -184,8 +184,8 @@ public class ExecuteController {
 		}
 
 		Set<Long> labOrders = new HashSet<Long>();
-		AutoSampleNoUtil autoUtil = AutoSampleNoUtil.getInstance(sampleNoBuilderManager);
-		Map<String, List<SampleNoBuilder>> autoMap = autoUtil.getMap();
+//		AutoSampleNoUtil autoUtil = AutoSampleNoUtil.getInstance(sampleNoBuilderManager);
+//		Map<String, List<SampleNoBuilder>> autoMap = autoUtil.getMap();
 		List<Sample> needSaveSample = new ArrayList<Sample>();
 		List<Process> needSaveProcess = new ArrayList<Process>();
 		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
@@ -193,9 +193,12 @@ public class ExecuteController {
 			LabOrder labOrder = needSaveList.get(i);
 			//生成样本号
 			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
-			String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
-			labOrder.setSampleno(newSampleNo);
-
+			String isAutoNo = ConvertUtil.null2String(ylxh.getIsAutoNo());
+			//自动生成样本号
+			if(isAutoNo.equals("1")){
+				String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
+				labOrder.setSampleno(newSampleNo);
+			}
 			//生成条码号
 			Sample sample = new Sample();
 			sample.setBirthday(labOrder.getBirthday());

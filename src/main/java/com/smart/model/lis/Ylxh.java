@@ -46,6 +46,8 @@ public class Ylxh extends BaseObject {
 	private String nightSegment; //夜班实验室检验段
 
 	private String template;		//报告单模板名称
+
+	private String isAutoNo;		//门诊是否自动编号 0 否 1 是
 	
 	/**
 	 * 医疗序号
@@ -282,5 +284,13 @@ public class Ylxh extends BaseObject {
 
 	public void setTemplate(String template) {
 		this.template = template;
+	}
+
+	public String getIsAutoNo() {
+		return isAutoNo;
+	}
+
+	public void setIsAutoNo(String isAutoNo) {
+		this.isAutoNo = isAutoNo;
 	}
 }

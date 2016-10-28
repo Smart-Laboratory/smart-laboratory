@@ -105,7 +105,7 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 	public List<Ylxh> getYlxhByLab(String query, String lab, int start, int end, String sidx, String sord) {
 		String sql = "from Ylxh where ksdm='" + lab + "'";
 		if(query!= null && !query.isEmpty()) {
-			sql +=" and (ylmc like '" + query + "%' or pinyin like '" + query + "%' or wubi like '" + query + "%')";
+			sql +=" and (ylmc like '%" + query + "%' or pinyin like '" + query + "%' or wubi like '" + query + "%')";
 		}
 		sidx = sidx.equals("") ? "ylxh" : sidx;
 		sql +=" order by  " +sidx + " " + sord;

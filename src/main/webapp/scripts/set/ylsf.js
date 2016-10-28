@@ -62,7 +62,8 @@ function editYlxh() {
 	$('#sfhb').val(rowData.sfhb);
 	$('#segment').val(rowData.segment);
     $('#nightSegment').val(rowData.nightSegment);
-
+	$('#isAutoNo').val(rowData.isAutoNo);
+	$('#template').val(rowData.template);
 	layer.open({
 		type: 1,
 		area: ['650px','580px'],
@@ -227,7 +228,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-		colNames:['序号', '检验目的','英文名称','价格','检验段','夜班检验段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM'],
+		colNames:['序号', '检验目的','英文名称','价格','检验段','夜班检验段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:true},
     		{name:'ylmc',index:'ylmc',width:200, sortable:true},
@@ -252,7 +253,9 @@ function getList(lab) {
     		{name:'mzpb',index:'mzpb', hidden:true},
     		{name:'zypb',index:'zypb', hidden:true},
 			{name:'sfhb',index:'sfhb', hidden:true},
-			{name:'ksdm',index:'ksdm', hidden:true}
+			{name:'ksdm',index:'ksdm', hidden:true},
+			{name:'isAutoNo',index:'isAutoNo', hidden:true},
+			{name:'template',index:'template', hidden:true}
     	],
     	loadComplete : function() {
             var table = this;
@@ -320,6 +323,12 @@ $(function() {
 		tiptype:4,
 		callback:function(){
 
+		}
+	});
+
+	$("#query").keypress(function(e){
+		if (e.keyCode == 13){
+			search();
 		}
 	});
 
