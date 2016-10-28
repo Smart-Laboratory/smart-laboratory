@@ -9,6 +9,25 @@ function Setup() {//打印维护
 	LODOP = getLodop();
 	LODOP.PRINT_SETUP();
 };
+function printSetting() {
+	//readPrintFile();
+	if (LODOP.CVERSION) {
+		LODOP.On_Return = function (TaskID, Value) {
+			if (Value >= 0)
+				setCookie("lis_print", Value);
+			else
+				alert("选择失败！");
+		};
+		LODOP.SELECT_PRINTER();
+		return;
+	}
+};
+function setCookie(name, value) {
+	var Days = 9999;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+};
 
 function CreateDataBill(data) {
 	if(data && data!=null){
@@ -80,10 +99,10 @@ function CreateDataBill(data) {
         LODOP.ADD_PRINT_BARCODEA("barcode","90mm","53.25mm","36mm",35,"128Auto",data.barcode);
         LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
 		if(data.sampleNo == '0') {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.barcode+"*");
+			LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.barcode+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		} else {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
+			LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.sampleNo+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		}
         //LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","51.25mm",180,20,patientInfo1);

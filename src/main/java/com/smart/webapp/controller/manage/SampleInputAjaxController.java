@@ -489,11 +489,9 @@ public class SampleInputAjaxController {
             //体检
             return receiveExamination(code, user, sampleno);
         } else if (mode == 1) {
-            //体检
+            //门诊
             return receiveOutPatient(code, user, sampleno, inSegment);
         }
-
-
         try {
             sample = sampleManager.getSampleByBarcode(code);
         } catch (Exception e) {
@@ -630,7 +628,11 @@ public class SampleInputAjaxController {
             o.put("message", "医嘱号为" + barcode + "的标本不存在！");
             return o.toString();
         }
-        sample = sampleManager.get(labOrder.getLaborder());
+        try {
+            sample = sampleManager.get(labOrder.getLaborder());
+        } catch (Exception e) {
+            sample = null;
+        }
         if(sample == null) {
             sample = getSample(labOrderList);
         } else {
@@ -727,7 +729,31 @@ public class SampleInputAjaxController {
             o.put("success", 3);
             o.put("message", "医嘱号为" + barcode + "的标本接收成功！");
         }
-        return jsonToString(sample, process, o);
+        if (sample != null) {
+            o.put("barcode", sample.getBarcode());
+            o.put("sampleno", sample.getSampleNo());
+            o.put("pid", sample.getPatientId());
+            o.put("pname", sample.getPatientname());
+            o.put("sex", sample.getSexValue());
+            o.put("age", sample.getAge() + sample.getAgeunit());
+            o.put("diag", sample.getDiagnostic());
+            o.put("exam", sample.getInspectionName());
+            o.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
+            o.put("cycle", sample.getCycle());
+            o.put("fee", sample.getFee() + "");
+            o.put("feestatus", sample.getFeestatus());
+            o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
+            o.put("shm", sample.getStayHospitalModelValue());
+            o.put("section", SectionUtil.getInstance(sectionManager).getLabValue(sample.getSectionId()));
+            o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
+            o.put("sampleType", sample.getSampleType());
+            o.put("part", sample.getPart() == null ? "" : sample.getPart());
+            o.put("requestmode", sample.getRequestMode());
+            o.put("requester", process.getRequester());
+            o.put("sampleStatus", sample.getSampleStatus());
+            o.put("sampleStatusValue", sample.getSampleStatusValue());
+        }
+        return o.toString();
     }
 
     /**
