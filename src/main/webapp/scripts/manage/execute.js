@@ -56,23 +56,29 @@ function CreateDataBill(data) {
 
 		LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","2.85mm",180,20,patientInfo);
         LODOP.ADD_PRINT_TEXTA("testinfo","82mm","2.95mm",180,20,data.testName);
-		LODOP.ADD_PRINT_BARCODEA("barcode","86mm","2.85mm","46mm",30,"128B",data.barcode);
+		if(exam.length > 36) {
+			LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
+		}
+		LODOP.ADD_PRINT_BARCODEA("barcode","90mm","4.85mm","36mm",35,"128Auto",data.barcode);
 		LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
-		LODOP.ADD_PRINT_TEXTA("code","94mm","8.2mm",150,20,"*"+data.sampleNo+"*");
+		LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
 		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
-		LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","2.95mm",180,20,patientInfo1);
-		LODOP.ADD_PRINT_TEXTA("labInfo","102mm","2.95mm",180,20, labInfo);
-		LODOP.ADD_PRINT_TEXTA("datetime","106mm","2.95mm",180,20,"采集时间 "+data.executeTime);
+		//LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","2.95mm",180,20,patientInfo1);
+		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","2.95mm",180,20, labInfo);
+		LODOP.ADD_PRINT_TEXTA("datetime","107mm","2.95mm",180,20,"采集时间 "+data.executeTime);
 
         LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","51.25mm",180,20,patientInfo);
         LODOP.ADD_PRINT_TEXTA("testinfo","82mm","51.25mm",180,20,data.testName);
-        LODOP.ADD_PRINT_BARCODEA("barcode","86mm","51.25mm","40mm",30,"128B",data.barcode);
+		if(exam.length > 36) {
+			LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
+		}
+        LODOP.ADD_PRINT_BARCODEA("barcode","90mm","53.25mm","36mm",35,"128Auto",data.barcode);
         LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
-        LODOP.ADD_PRINT_TEXTA("code","94mm","55.95mm",150,20,"*"+data.sampleNo+"*");
+        LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.sampleNo+"*");
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
-        LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","51.25mm",180,20,patientInfo1);
-		LODOP.ADD_PRINT_TEXTA("labInfo","102mm","51.25mm",180,20, labInfo);
-		LODOP.ADD_PRINT_TEXTA("datetime","106mm","51.25mm",180,20,"采集时间 "+data.executeTime);
+        //LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","51.25mm",180,20,patientInfo1);
+		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","51.25mm",180,20, labInfo);
+		LODOP.ADD_PRINT_TEXTA("datetime","107mm","51.25mm",180,20,"采集时间 "+data.executeTime);
 
 	}
 }
@@ -95,7 +101,7 @@ function printSet() {
 		"volume": "2mL",
 		"sampleType": "血清",
 		"sex": "男",
-		"testName": "抗精子抗体测定(IgM)",
+		"testName": "粪便常规+OB+寄生虫、虫卵镜检+虫卵计数",
 		"hosSectionName": "肝胆胰外科",
         "ageUnit": "岁",
         "requestTime":"2016-09-07 08:50:28",
@@ -248,9 +254,28 @@ $(function(){
 	$( "#to" ).val(new Date().Format("yyyy-MM-dd"));
 	
 	$("#bloodCheck").prop("checked",'true');
+
+	$("#back").click(function(){
+		var selval="";
+		$("#tests1 input:checkbox").each(function(){
+			if($(this).prop("checked")==true)
+				selval = selval + $(this).val()+";";
+		});
+		if(selval==null || selval == ''){
+			layer.msg("请选择需要重新退回的项目", {icon: 2, time: 1000});
+			return;
+		}
+		$.get(baseUrl + "/manage/execute/ajax/back",{selval:selval},function(data){
+			if(data.success == 1) {
+				layer.msg(data.message, {icon: 1, time: 1000});
+			} else {
+				layer.msg(data.message, {icon: 2, time: 1000});
+			}
+			reloadTests();
+		});
+	});
 	
 	$("#conform").click(function(){
-		
 		var selval="";
         if($("#tests").css('display') == 'none') {
 			$("#tests1 input:checkbox").each(function(){
@@ -261,8 +286,7 @@ $(function(){
 				layer.msg("请选择需要重新打印条码的项目", {icon: 2, time: 1000});
 				return;
 			}
-			$.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,reprint:true},function(data){
-				console.log(data);
+			$.get(baseUrl + "/manage/execute/ajax/reprint",{selval:selval},function(data){
 				for(i=0;i<data.labOrders.length;i++){
 					startPrint(data.labOrders[i]);
 				}
@@ -281,8 +305,7 @@ $(function(){
             if($("#selfexecute").prop("checked")==true){
                 selfexecute =1;
             }
-            $.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute,reprint:false},function(data){
-                console.log(data);
+            $.get(baseUrl + "/manage/execute/ajax/submit",{selval:selval,selfexecute:selfexecute},function(data){
                 for(i=0;i<data.labOrders.length;i++){
                     startPrint(data.labOrders[i]);
                 }

@@ -1,6 +1,6 @@
 #*
 author:zhou
-description:乙肝三第定性模板
+description:乙肝三系定性模板
 date:2016-10-04
 *#
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -145,8 +145,8 @@ date:2016-10-04
                 <tr>
                     <td >$!item.testName</td>
                     <td>
-                        #if($!item.testResult=='阳性' && ($!item.testName !='乙肝表面抗体' ||  $!item.testName !='乙肝e抗体'))
-                            <span style="background: #eee">$!item.testResult</span>
+                        #if($!item.resultFlag=='阳性' && ($!item.testName !='乙肝表面抗体定性' ||  $!item.testName !='乙肝e抗体定性'))
+                            <span style="background: #ddd">$!item.testResult</span>
                         #else
                             $!item.testResult
                         #end

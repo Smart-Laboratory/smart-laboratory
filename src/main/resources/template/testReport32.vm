@@ -157,7 +157,13 @@
                                 <tr>
                                     <td >$!item.testName</td>
                                     <td>$!item.testResult</td>
-                                    <td>$!item.resultFlag</td>
+                                    <td>
+                                        #if($!item.resultFlag=='↑' || $!item.resultFlag=='↓')
+                                            $!item.resultFlag
+                                        #else
+                                            &nbsp;
+                                        #end
+                                    </td>
                                     <td>$!item.unit</td>
                                     <td>$!item.reference</td>
 
@@ -187,7 +193,13 @@
                                 <tr>
                                     <td style="padding-left: 15px;">$!item.testName</td>
                                     <td>$!item.testResult</td>
-                                    <td>$!item.resultFlag</td>
+                                    <td>
+                                        #if($!item.resultFlag=='↑' || $!item.resultFlag=='↓')
+                                            $!item.resultFlag
+                                        #else
+                                            &nbsp;
+                                        #end
+                                    </td>
                                     <td>$!item.unit</td>
                                     <td>$!item.reference</td>
                                 </tr>

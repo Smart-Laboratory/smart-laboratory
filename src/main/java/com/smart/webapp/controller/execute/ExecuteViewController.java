@@ -187,19 +187,25 @@ public class ExecuteViewController {
 			return "";
 		String bmpStr=str;
 		if (str.indexOf("黑")>=0) //and str.indexOf('1.6')>0 
-			bmpStr="black1d6.bmp";
+			bmpStr="black.jpg";
+		else if ( str.indexOf("白")>=0)
+			bmpStr="white.jpg";
 		else if (str.indexOf("蓝")>=0  &&  (str.indexOf("2")>=0 || str.indexOf("3")>=0)) 
-			bmpStr="blue2d7.bmp";
+			bmpStr="blue.jpg";
 		else if ( str.indexOf("蓝")>=0 && (str.indexOf("4")>=0 || str.indexOf("5")>=0) )
-			bmpStr="blue5.bmp";
+			bmpStr="blue.jpg";
 		else if (str.indexOf("灰")>=0)  //and str.indexOf('2')>0 
-			bmpStr="gray2.bmp";
+			bmpStr="gray.jpg";
 		else if (str.indexOf("紫")>=0)
-			bmpStr="purple.png";
+			bmpStr="purple.jpg";
 		else if ( str.indexOf("红")>=0)
-			bmpStr="red5.bmp";
+			bmpStr="red.jpg";
+		else if ( str.indexOf("粉")>=0)
+			bmpStr="pink.jpg";
+		else if ( str.indexOf("绿")>=0)
+			bmpStr="green.jpg";
 		else if ( str.indexOf("黄")>=0) //and str.indexOf('5')>0 
-			bmpStr="yellow.png";
+			bmpStr="yellow.jpg";
 		else if ( str.indexOf("普通")>=0 && str.indexOf("2.7ml")>=0) 
 			bmpStr="no_1.bmp";
 		else if ( str.indexOf("普通")>=0 && str.indexOf("3ml")>=0) 

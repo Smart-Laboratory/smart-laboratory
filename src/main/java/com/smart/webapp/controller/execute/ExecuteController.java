@@ -44,43 +44,28 @@ public class ExecuteController {
 
 	@RequestMapping(value = "/execute/ajax/submit*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		long start = System.currentTimeMillis();
 		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
 		String selfExecute = request.getParameter("selfexecute");
 		String selectValue = request.getParameter("selval");
 		String unExecuteRequestIds = "";
-		String executeRequestIds = "";
+		for(String str : selectValue.split(";")){
+			if(str!=null && !str.isEmpty()){
+				if(unExecuteRequestIds.isEmpty()) {
+					unExecuteRequestIds = str.split("[+]")[0];
+				} else {
+					unExecuteRequestIds += "," + str.split("[+]")[0];
+				}
+			}
+		}
 
 		Date executeTime = new Date();
         JSONObject o = new JSONObject();
 
-		for(String str : selectValue.split(";")){
-			if(str!=null && !str.isEmpty()){
-				if(str.split("\\+")[1].equals("0")) {
-					if(unExecuteRequestIds.isEmpty()) {
-						unExecuteRequestIds = str.split("\\+")[0];
-					} else {
-						unExecuteRequestIds += "," + str.split("\\+")[0];
-					}
-				} else {
-					if(executeRequestIds.isEmpty()) {
-						executeRequestIds = str.split("\\+")[0];
-					} else {
-						executeRequestIds += "," + str.split("\\+")[0];
-					}
-				}
-
-			}
-		}
-
 		WebService webService = new WebService();
 		List<LabOrder> unExecuteList = webService.getExecuteInfoByRequestIds(unExecuteRequestIds);
-		List<LabOrder> executeList = new ArrayList<LabOrder>();
-		if(!executeRequestIds.isEmpty()) {
-			executeList.addAll(labOrderManager.getByRequestIds(executeRequestIds));
-		}
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
 
 		double fee=0;
@@ -271,37 +256,135 @@ public class ExecuteController {
                 processManager.removeAll(needSaveProcess);
                 labOrderManager.removeAll(needSaveLabOrder);
             }
-            JSONArray array = new JSONArray();
-			for(LabOrder labOrder : needSaveLabOrder) {
-				JSONObject object = new JSONObject();
-				object.put("barcode", labOrder.getBarcode());
-				object.put("patientName", labOrder.getPatientname());
-				object.put("sex", labOrder.getSex());
-				object.put("age", labOrder.getAge());
-				object.put("ageUnit", labOrder.getAgeUnit());
-				object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
-				object.put("patientCode",labOrder.getBlh());
-				object.put("executeTime",labOrder.getExecutetime());
-				object.put("requestMode",labOrder.getRequestmode());
-				object.put("sampleNo",labOrder.getSampleno());
-				object.put("container", ConvertUtil.null2String(labOrder.getContainer()));
-				object.put("volume", labOrder.getVolume());
-				object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
-				object.put("sex",labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
-				object.put("testName", labOrder.getExamitem());
-				object.put("hosSectionName", SectionUtil.getInstance(sectionManager).getValue(labOrder.getHossection()));
-				object.put("ageUnit", labOrder.getAgeUnit());
-				object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
-				object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
-				object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
-				object.put("requester", labOrder.getRequesterName());
-				object.put("reportPlace", labOrder.getQbgdt());
-				array.add(object);
-			}
-			o.put("labOrders", array);
+			o.put("labOrders", printJson(needSaveLabOrder));
         }
 		System.out.println(System.currentTimeMillis() - start);
 		return o.toString();
+	}
+
+	/**
+	 * 已采集标本重新打印条码
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/execute/ajax/reprint*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String reprint(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String selectValue = request.getParameter("selval");
+		String executeRequestIds = "";
+		for(String str : selectValue.split(";")){
+			if(str!=null && !str.isEmpty()){
+				if(executeRequestIds.isEmpty()) {
+					executeRequestIds = "'" + str.split("[+]")[0] + "'";
+				} else {
+					executeRequestIds += ",'" + str.split("[+]")[0] + "'";
+				}
+			}
+		}
+		List<LabOrder> executeList = new ArrayList<LabOrder>();
+		if(!executeRequestIds.isEmpty()) {
+			executeList = labOrderManager.getByRequestIds(executeRequestIds);
+		}
+		JSONObject o = new JSONObject();
+		o.put("labOrders", printJson(executeList));
+		return o.toString();
+	}
+
+	/**
+	 * 已采集标本退回
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/execute/ajax/back*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String back(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		User user = UserUtil.getInstance().getUser(request.getRemoteUser());
+		String selectValue = request.getParameter("selval");
+		String requestIds = "";
+		for(String str : selectValue.split(";")){
+			if(str!=null && !str.isEmpty()){
+				if(requestIds.isEmpty()) {
+					requestIds = "'" + str.split("[+]")[0] + "'";
+				} else {
+					requestIds += ",'" + str.split("[+]")[0] + "'";
+				}
+			}
+		}
+		List<LabOrder> list = labOrderManager.getByRequestIds(requestIds);
+		String sampleIds = "";
+		Map<Long, LabOrder> map = new HashMap<Long, LabOrder>();
+		for(LabOrder labOrder : list) {
+			if(sampleIds.isEmpty()) {
+				sampleIds = "" + labOrder.getLaborder();
+			} else {
+				sampleIds += "," + labOrder.getLaborder();
+			}
+			map.put(labOrder.getLaborder(), labOrder);
+		}
+		List<Sample> sampleList = sampleManager.getByIds(sampleIds);
+		List<Sample> needRemoveSample = new ArrayList<Sample>();
+		List<LabOrder> needRemoveLabOrder = new ArrayList<LabOrder>();
+		JSONObject o = new JSONObject();
+		o.put("success", 1);
+		o.put("message", "标本退回成功！");
+		String itemId = "";
+		String needRemoveSampleIds = "";
+		for(Sample sample : sampleList) {
+			if(sample.getSampleStatus() < Constants.SAMPLE_STATUS_RECEIVED) {
+				needRemoveSampleIds += sample.getId() + ",";
+				needRemoveSample.add(sample);
+				needRemoveLabOrder.add(map.get(sample.getId()));
+				if(itemId.isEmpty()) {
+					itemId = map.get(sample.getId()).getLaborderorg().replace(",","|");
+				} else {
+					itemId += "|" + map.get(sample.getId()).getLaborderorg().replace(",","|");
+				}
+			} else {
+				o.put("success", 0);
+				o.put("message", "标本部分退回不成功，有标本已检验！");
+			}
+		}
+		String updateStatusSuccess = new WebService().requestUpdate(11, itemId, 2, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(new Date(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
+		if(updateStatusSuccess.isEmpty()){
+			sampleManager.removeAll(needRemoveSample);
+			processManager.removeBySampleIds(needRemoveSampleIds.substring(0, needRemoveSampleIds.length()-1));
+			labOrderManager.removeAll(needRemoveLabOrder);
+		} else {
+			o.put("success", 0);
+			o.put("message", updateStatusSuccess);
+		}
+		return o.toString();
+	}
+
+	private JSONArray printJson(List<LabOrder> labOrderList) throws Exception {
+		JSONArray array = new JSONArray();
+		for(LabOrder labOrder : labOrderList) {
+			JSONObject object = new JSONObject();
+			object.put("barcode", labOrder.getBarcode());
+			object.put("patientName", labOrder.getPatientname());
+			object.put("sex", labOrder.getSex());
+			object.put("age", labOrder.getAge());
+			object.put("ageUnit", labOrder.getAgeUnit());
+			object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
+			object.put("patientCode", labOrder.getBlh());
+			object.put("executeTime", labOrder.getExecutetime());
+			object.put("requestMode", labOrder.getRequestmode());
+			object.put("sampleNo", labOrder.getSampleno());
+			object.put("container", ConvertUtil.null2String(labOrder.getContainer()));
+			object.put("volume", ConvertUtil.null2String(labOrder.getVolume()));
+			object.put("sampleType", SampleUtil.getInstance(dictionaryManager).getValue(labOrder.getSampletype()));
+			object.put("sex", labOrder.getSex() == 1 ? "男" : (labOrder.getSex() == 2 ? "女" : "未知"));
+			object.put("testName", labOrder.getExamitem());
+			object.put("hosSectionName", SectionUtil.getInstance(sectionManager).getValue(labOrder.getHossection()));
+			object.put("ageUnit", labOrder.getAgeUnit());
+			object.put("requestTime", Constants.SDF.format(labOrder.getRequesttime()));
+			object.put("executeTime", Constants.SDF.format(labOrder.getExecutetime()));
+			object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
+			object.put("requester", ConvertUtil.null2String(labOrder.getRequesterName()));
+			object.put("reportPlace", labOrder.getQbgdt());
+			array.add(object);
+		}
+		return array;
 	}
 
 	@RequestMapping(value = "/printBarcode*", method = RequestMethod.GET)
