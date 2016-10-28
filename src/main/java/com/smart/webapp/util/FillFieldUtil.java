@@ -118,7 +118,7 @@ public class FillFieldUtil {
 			String reflo = result.getRefLo();
 			String refhi = result.getRefHi();
 			try {
-				if (value != null && value.length() > 0) {
+				if (value != null && value.length() > 0 && indexMap.get(testid).getNeedFormat() == 1) {
 					if (value.charAt(0) == '.') {
 						value = "0" + value;
 					}
@@ -224,7 +224,7 @@ public class FillFieldUtil {
 				} else {
 					flags[0] = 'A';
 				}
-			}else {
+			} else {
 				flags[1] = 'B';
 				if (ls_result.indexOf("+") > -1 || ls_result.indexOf("阳") > -1) {
 					flags[0] = 'B';

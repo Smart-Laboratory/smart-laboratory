@@ -56,6 +56,7 @@ public class Index extends BaseObject implements Serializable {
 	private int isprint;
 	private int printord;
 	private int needhistory;
+	private int needFormat;		//是否根据参考范围格式化结果，1:是;2:否.
 	private String method;
 	private String defaultvalue;
 	private String dictionaries;
@@ -477,7 +478,16 @@ public class Index extends BaseObject implements Serializable {
 	public void setInstrument(String instrument) {
 		this.instrument = instrument;
 	}
-	
+
+	@Column
+	public int getNeedFormat() {
+		return needFormat;
+	}
+
+	public void setNeedFormat(int needFormat) {
+		this.needFormat = needFormat;
+	}
+
 	public String toString() {
 		return null;
 	}

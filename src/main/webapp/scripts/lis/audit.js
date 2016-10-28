@@ -99,7 +99,7 @@ $(function(){
 				isFirst = false;
 			}
 			else{
-				jQuery("#rowed3").jqGrid("setGridParam",{url:"../audit/sample?id="+ret.sample,editurl: "../audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
+				jQuery("#rowed3").jqGrid("setGridParam",{url:baseUrl + "/audit/sample?id="+ret.sample,editurl: baseUrl + "/audit/edit?sampleNo=" + ret.sample}).trigger("reloadGrid");
 			}
  		} else {
  			var s = jQuery("#list").jqGrid('getGridParam','selrow');
@@ -292,7 +292,7 @@ $(function(){
 	});
 	function printReport(sampleno){
 		$.get(baseUrl+"/print/ajax/printReport",{sampleno:sampleno, haslast:'0', type:''}, function(data){
-			print(data);
+			Print(data);
 		})
 	}
 	function printViewReport(sampleno){

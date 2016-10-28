@@ -109,7 +109,8 @@ public class WebService {
                 JSONArray arr = obj.getJSONArray("Message");
                 for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
-                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setId(Long.parseLong(arr.getJSONObject(i).getString("Id")));
+                    s.setCode(arr.getJSONObject(i).getString("Code"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
                     list.add(s);
                 }
@@ -123,7 +124,8 @@ public class WebService {
                 JSONArray arr = obj2.getJSONArray("Message");
                 for (int i = 0; i < arr.length(); i++) {
                     Section s = new Section();
-                    s.setCode(arr.getJSONObject(i).getString("Id"));
+                    s.setId(Long.parseLong(arr.getJSONObject(i).getString("Id")));
+                    s.setCode(arr.getJSONObject(i).getString("Code"));
                     s.setName(arr.getJSONObject(i).getString("Name"));
                     list.add(s);
                 }
@@ -289,7 +291,7 @@ public class WebService {
             method.releaseConnection();
             httpClient.executeMethod(method);
             JSONObject obj = new JSONObject(method.getResponseBodyAsString());
-            list = jsonTolist(4, obj);
+            list = jsonTolist(3, obj);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -332,7 +334,7 @@ public class WebService {
                 labOrder.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("requestDateTime")));
                 labOrder.setRequestNum(arr.getJSONObject(i).getInt("quantity"));
                 labOrder.setSex(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("sex")));
-                labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检4
+                labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检3
                 labOrder.setToponymy(arr.getJSONObject(i).getString("testPart"));
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));
                 labOrder.setExamitem(arr.getJSONObject(i).getString("itemName"));

@@ -108,6 +108,9 @@ public class SampleController {
 				patientName = ConvertUtil.null2String(info.getPatientname());
 			}
 			map.put("patientName", patientName);
+			map.put("sex", ConvertUtil.null2String(info.getSexValue()));
+			map.put("age", ConvertUtil.null2String(info.getAge() + info.getAgeunit()));
+			map.put("examItem", ConvertUtil.null2String(info.getInspectionName()));
 			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());
 			map.put("size", 0);

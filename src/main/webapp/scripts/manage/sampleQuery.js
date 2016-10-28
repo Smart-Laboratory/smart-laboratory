@@ -7,7 +7,7 @@ function getList(text) {
 		colNames:['ID', '样本号','条码号','SAMPLENO', '状态','写回状态','检验目的', '临床诊断','病人姓名','病历号','性别','出生日期','年龄','就诊方式','科室','床号','就诊号','申请方式','样本类型'],
 		colModel:[
 			{name:'id',index:'id', hidden:true},
-			{name:'sample',index:'sample',width:120, sortable:false},
+			{name:'sample',index:'sample',width:140, sortable:false},
 			{name:'barcode',index:'barcode',width:120, sortable:false},
 			{name:'sampleno',index:'sampleno',hidden:true},
 			{name:'status',index:'status',width:50,sortable:false},

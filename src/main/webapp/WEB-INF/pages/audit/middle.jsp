@@ -86,10 +86,10 @@
 				<button id="collectBtn" class="btn btn-info"><b><fmt:message key="button.collect" /></b></button>
 			</div>
 			<div style="margin-top:4px;float:right;">
+				<button id="tatBtn" class="btn btn-info"><b>TAT</b></button>
 				<button id="testImplement" class="btn btn-success" onclick="implementTest()"><b>录入</b></button>
 				<button id="testAdd" class="btn btn-success"><b><fmt:message key="button.add" /></b></button>
 				<button id="testDelete" class="btn btn-danger" ><b><fmt:message key="button.delete" /></b></button>
-				<button id="tatBtn" class="btn btn-info"><b>TAT</b></button>
 				<button id="modifyBtn" class="btn btn-success"><b><fmt:message key="sample.test.modify.record" /></b></button>
 			</div>
 		</div>

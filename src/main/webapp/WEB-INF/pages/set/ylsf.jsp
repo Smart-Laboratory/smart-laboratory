@@ -263,11 +263,11 @@
 				</div>
 			</div>
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
-				<label class="col-xs-4 control-label no-padding-right" for="nightSegment"> 夜班检验段 </label>
+				<label class="col-xs-4 control-label no-padding-right" for="segment"> 住院检验段 </label>
 				<div class="col-xs-8">
-					<select type="text" id="nightSegment" name="nightSegment" class="col-xs-8" style="height:33px;">
-						<c:forEach items="${nightSegments }" var="night">
-							<option value="${night }">${night }</option>
+					<select type="text" id="segment" name="segment" class="col-xs-8" style="height:33px;">
+						<c:forEach items="${segments }" var="labcode">
+							<option value="${labcode}">${labcode}</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -327,9 +327,9 @@
 				</div>
 			</div>
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
-				<label class="col-xs-4 control-label no-padding-right" for="segment"> 检验段 </label>
+				<label class="col-xs-4 control-label no-padding-right" for="outSegment"> 门诊检验段 </label>
 				<div class="col-xs-8">
-					<select type="text" id="segment" name="segment" class="col-xs-8" style="height:33px;">
+					<select type="text" id="outSegment" name="outSegment" class="col-xs-8" style="height:33px;">
 						<c:forEach items="${segments }" var="labcode">
 							<option value="${labcode}">${labcode}</option>
 						</c:forEach>
@@ -337,11 +337,20 @@
 				</div>
 			</div>
 			<div class="form-group" style="margin-left:0px;margin-right:0px;">
+<<<<<<< HEAD
 				<label class="col-xs-4 control-label no-padding-right" for="segment"> 门诊自动编号 </label>
 				<div class="col-xs-8">
 					<select type="text" id="isAutoNo" name="isAutoNo" class="col-xs-8" style="height:33px;">
 						<option value="0" <c:if test="${isAutoNo=='0'}">selected</c:if>>否</option>
 						<option value="1" <c:if test="${isAutoNo=='0'}">selected</c:if>>是</option>
+=======
+				<label class="col-xs-4 control-label no-padding-right" for="nightSegment"> 夜班检验段 </label>
+				<div class="col-xs-8">
+					<select type="text" id="nightSegment" name="nightSegment" class="col-xs-8" style="height:33px;">
+						<c:forEach items="${nightSegments }" var="night">
+							<option value="${night }">${night }</option>
+						</c:forEach>
+>>>>>>> origin/master
 					</select>
 				</div>
 			</div>

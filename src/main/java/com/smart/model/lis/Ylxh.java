@@ -44,6 +44,7 @@ public class Ylxh extends BaseObject {
 	private String wubi;
 	private String segment; //实验室检验段
 	private String nightSegment; //夜班实验室检验段
+	private String outSegment;		//门诊检验段
 
 	private String template;		//报告单模板名称
 
@@ -264,6 +265,15 @@ public class Ylxh extends BaseObject {
 
 	public void setNightSegment(String nightSegment) {
 		this.nightSegment = nightSegment;
+	}
+
+	@Column
+	public String getOutSegment() {
+		return outSegment;
+	}
+
+	public void setOutSegment(String outSegment) {
+		this.outSegment = outSegment;
 	}
 
 	public String toString() {

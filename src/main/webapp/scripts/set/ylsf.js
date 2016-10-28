@@ -61,6 +61,7 @@ function editYlxh() {
 	$('#sgsl').val(rowData.sgsl);
 	$('#sfhb').val(rowData.sfhb);
 	$('#segment').val(rowData.segment);
+	$('#outSegment').val(rowData.outSegment);
     $('#nightSegment').val(rowData.nightSegment);
 	$('#isAutoNo').val(rowData.isAutoNo);
 	$('#template').val(rowData.template);
@@ -228,12 +229,17 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
+<<<<<<< HEAD
 		colNames:['序号', '检验目的','英文名称','价格','检验段','夜班检验段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
+=======
+		colNames:['序号', '检验目的','英文名称','价格','门诊段','住院段','夜班段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM'],
+>>>>>>> origin/master
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:true},
     		{name:'ylmc',index:'ylmc',width:200, sortable:true},
     		{name:'english',index:'english',width:80, sortable:true},
     		{name:'price',index:'price',width:50, sortable:false},
+			{name:'outSegment',index:'outSegment',width:50, sortable:false},
 			{name:'segment',index:'segment',width:50, sortable:false},
             {name:'nightSegment',index:'nightSegment',width:50, sortable:false},
     		{name:'mzpbStr',index:'mzpbStr',width:70, sortable:false},
@@ -410,11 +416,23 @@ $(function() {
 	});
 
 	$("#ksdm").change(function () {
+		var rowId = jQuery("#s3list").jqGrid('getGridParam','selrow');
+		var rowData = $("#s3list").jqGrid('getRowData',rowId);
 		$.get(baseUrl + "/set/section/ajax/getCode",{code:$(this).val()}, function (data) {
 			$("#segment").html("");
+			$("#outSegment").html("");
 			for(var i in data.split(",")) {
 				if(data.split(",")[i] != "") {
-					$("#segment").append("<option value='" + data.split(",")[i] + "'>" + data.split(",")[i] + "</option>");
+					if(rowData.segment == data.split(",")[i]) {
+						$("#segment").append("<option value='" + data.split(",")[i] + "' selected>" + data.split(",")[i] + "</option>");
+					} else {
+						$("#segment").append("<option value='" + data.split(",")[i] + "'>" + data.split(",")[i] + "</option>");
+					}
+					if(rowData.outSegment == data.split(",")[i]) {
+						$("#outSegment").append("<option value='" + data.split(",")[i] + "' selected>" + data.split(",")[i] + "</option>");
+					} else {
+						$("#outSegment").append("<option value='" + data.split(",")[i] + "'>" + data.split(",")[i] + "</option>");
+					}
 				}
 			}
 		});

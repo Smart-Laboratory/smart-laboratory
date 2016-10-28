@@ -656,9 +656,6 @@ public class Sample extends BaseObject {
                 value = "病房";
                 break;
             case 3:
-                value = "急诊";
-                break;
-            case 4:
                 value = "体检";
                 break;
             default:

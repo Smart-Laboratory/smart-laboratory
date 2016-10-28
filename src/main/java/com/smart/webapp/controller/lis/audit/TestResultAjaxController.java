@@ -175,6 +175,7 @@ public class TestResultAjaxController extends BaseAuditController{
 						nt.setSampleType(""+ index.getSampleFrom());
 						nt.setUnit(index.getUnit());
 					}
+					nt.setTestStatus(Constants.SAMPLE_STATUS_TESTED);
 					fillUtil.fillResult(nt, info.getCycle(), new AgeUtil().getAge(info.getAge(), info.getAgeunit()), Integer.parseInt(info.getSex()));
 					testResultManager.save(nt);
 					TestModify testModify = new TestModify();

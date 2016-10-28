@@ -108,85 +108,75 @@ public class ExecuteViewController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/ajax/getTests*", method = RequestMethod.GET)
+	@RequestMapping(value = "/ajax/getTests*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getTests(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String patientId = request.getParameter("patientId");
-		String requestmode = request.getParameter("requestmode");
         int isEmergency = Integer.parseInt(request.getParameter("isEmergency"));
 		String from=request.getParameter("from");
         String to=request.getParameter("to");
 
-		List<LabOrder> loList = new ArrayList<LabOrder>();
+		List<LabOrder> unExecuteList = new ArrayList<LabOrder>();
+		List<LabOrder> executeList = new ArrayList<LabOrder>();
 		WebService webService = new WebService();
-		if(requestmode.equals("0")) {
-			loList.addAll(webService.getExecuteInfo(patientId, requestmode, from, to));
-		} else if(requestmode.equals("100")){
-			loList.addAll(webService.getExecuteInfo(patientId, "0", from, to));
-			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
-		} else {
-			loList.addAll(labOrderManager.getByPatientId(patientId, from, to));
-		}
+		unExecuteList = webService.getExecuteInfo(patientId, "0", from, to);
+		executeList = labOrderManager.getByPatientId(patientId, from, to);
 		Map<String, Ylxh> ylxhMap = YlxhUtil.getInstance().getMap();
-		StringBuilder html = new StringBuilder();
-		LabOrder labOrder = new LabOrder();
-		Ylxh ylxh = new Ylxh();
-		//记录最新的发票号
-		String recentInvoiceNum="";
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("execute", getJsonObject(executeList, ylxhMap, isEmergency));
+		jsonObject.put("unexecute", getJsonObject(unExecuteList, ylxhMap, isEmergency));
+		return jsonObject.toString();
+	}
 
+	//取所有样本信息列表
+	private JSONArray getJsonObject(List<LabOrder> list, Map<String, Ylxh> ylxhMap, int isEmergency) {
 		JSONArray jsonArray = new JSONArray();
-		for(int i = 0; i < loList.size(); i++) {
-			labOrder = loList.get(i);
+		LabOrder labOrder = null;
+		Ylxh ylxh = null;
+		for(int i = 0; i < list.size(); i++) {
+			labOrder = list.get(i);
 			ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
-			if(ylxh == null) {
-
-			}
 			labOrder.setSampletype(ylxh.getYblx());
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());
 			labOrder.setLabdepartment(ylxh.getKsdm());
-			System.out.println("执行标志：" + labOrder.getZxbz() + " 急诊标志：" + labOrder.getRequestmode());
-            switch (isEmergency) {
-                case 0 :
-                    jsonArray.add(getJsonObject(labOrder, ylxh));
-                    break;
-                case 1 :
-                    if(labOrder.getRequestmode() == 0) {
-                        jsonArray.add(getJsonObject(labOrder, ylxh));
-                    }
-                    break;
-                case 2 :
-                    if(labOrder.getRequestmode() != 0) {
-                        jsonArray.add(getJsonObject(labOrder, ylxh));
-                    }
-                    break;
-            }
+			labOrder.setContainer(ylxh.getSglx());
+			labOrder.setVolume(ylxh.getBbl());
+			switch (isEmergency) {
+				case 0 :
+					jsonArray.add(getJsonObject(labOrder));
+					break;
+				case 1 :
+					if(labOrder.getRequestmode() == 1) {
+						jsonArray.add(getJsonObject(labOrder));
+					}
+					break;
+			}
 		}
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write(jsonArray.toString());
-		return null;
+		return jsonArray;
 	}
 
-    private JSONObject getJsonObject(LabOrder labOrder, Ylxh ylxh) {
+	//取单个样本信息
+    private JSONObject getJsonObject(LabOrder labOrder) {
         SectionUtil sectionUtil = SectionUtil.getInstance(sectionManager);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("zxbz", labOrder.getZxbz());
-        if(!getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).equals("notube") && !getBmp(ylxh.getSglx() + " " + ylxh.getBbl()).isEmpty()){
-            jsonObject.put("bmp", "../images/bmp/"+ getBmp(ylxh.getSglx() + " " + ylxh.getBbl()));
+        if(!getBmp(labOrder.getContainer() + " " + labOrder.getVolume()).equals("notube") && !getBmp(labOrder.getContainer() + " " + labOrder.getVolume()).isEmpty()){
+            jsonObject.put("bmp", "../images/bmp/"+ getBmp(labOrder.getContainer() + " " + labOrder.getVolume()));
         } else {
             jsonObject.put("bmp", "");
         }
         jsonObject.put("requestId", labOrder.getRequestId());
         jsonObject.put("labOrderOrg", labOrder.getLaborderorg());
-        jsonObject.put("qbgsj", ylxh.getQbgsj());
-        jsonObject.put("qbgdd", ylxh.getQbgdd());
+        jsonObject.put("qbgsj", labOrder.getQbgsj());
+        jsonObject.put("qbgdd", labOrder.getQbgdt());
         jsonObject.put("requestMode", labOrder.getRequestmode());
-        jsonObject.put("ylmc", ylxh.getYlmc());
-        jsonObject.put("sglx", ylxh.getSglx());
-        jsonObject.put("bbl", ConvertUtil.null2String(ylxh.getBbl()));
+        jsonObject.put("ylmc", labOrder.getExamitem());
+        jsonObject.put("sglx", ConvertUtil.null2String(labOrder.getContainer()));
+        jsonObject.put("bbl", ConvertUtil.null2String(labOrder.getVolume()));
         jsonObject.put("price", labOrder.getPrice());
         jsonObject.put("amount", labOrder.getRequestNum());
-        jsonObject.put("labDepart", sectionUtil.getLabValue(ylxh.getKsdm()));
+        jsonObject.put("labDepart", sectionUtil.getLabValue(labOrder.getLabdepartment()));
         jsonObject.put("hosSection", sectionUtil.getValue(labOrder.getHossection()));
         jsonObject.put("requestTime", Constants.DF8.format(labOrder.getRequesttime()));
         return jsonObject;

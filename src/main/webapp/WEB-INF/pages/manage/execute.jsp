@@ -32,6 +32,12 @@
 	margin:0px;
 }
 
+#tests1 input[type=checkbox]{
+	width:50px;
+	height:50px;
+	margin:0px;
+}
+
 #checkAll {
 	width:15px;
 	height:15px;
@@ -91,6 +97,10 @@
 						
 					</div>
 					<button id="conform" class="btn btn-sm btn-success"><fmt:message key="button.confirm" /></button>
+					<button id="back" class="btn btn-sm btn-danger" style="display: none;">
+						<i class="ace-icon fa fa-times bigger-110"></i>
+						退回
+					</button>
 					<button id="unusualRegister" class="btn btn-sm btn-warning">异常登记</button>
 					<button type="button" class="btn btn-sm btn-info" title="打印设计" onclick="printSet()">
 						<i class="ace-icon fa fa-pencil-square bigger-110"></i>
@@ -101,11 +111,6 @@
 			      			<input type="checkbox" id="selfexecute" value=""> 自抽
 			    		</label>
 			    	</div>
-			    	<div class="checkbox">
-			    		<label>
-			      			<input type="checkbox" value=""> <fmt:message key="execute.printbarcode" />
-			    		</label>
-			  		</div>
 
 					<div class="col-sm-12" id="cxhis" >
 						<div class="col-sm-12 ">
@@ -202,15 +207,14 @@
 					<div class="widget-toolbar">
 						<select id="requestModeSelect">
 							<option value="0" selected>全部</option>
-							<option value="1">门诊</option>
-							<option value="2">急诊</option>
+							<option value="1">急诊</option>
 						</select>
 					</div>
 					<div class="widget-toolbar">
 						<input id="checkAll" type='checkbox'/>全选/全不选
 					</div>
 				</div>
-				<div class="widget-body" >
+				<div class="widget-body tab-content" >
 
 					<div id="tests" class="widget-main tab-pane fade in active" style="overflow:auto;">
 

@@ -38,79 +38,80 @@ function receive(obj,event) {
 		case 13 : 
 			var id=obj.value;
 			var sampleno = $("#sampleno_text").val();
-			$.get(baseUrl + "/sample/ajax/hasSameSample",{id:id,sampleno:sampleno},function(data) {
+			/*$.get(baseUrl + "/sample/ajax/hasSameSample",{id:id,sampleno:sampleno},function(data) {
 				if(data.success == 0) {
 					layer.msg(data.message, {icon: 2, time: 1000});
 					$("#sampleno_text").val(sampleno.substring(0,11) + Pad((parseInt(sampleno.substring(11)) + 1),4));
 					$("#receive_id").val("").focus();
 				} else {
-					$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
-						//var data = JSON.parse(data);
-						if(data.success == 1) {
-							layer.msg(data.message, {icon: 2, time: 1000});
-						} else if(data.success == 2) {
-							layer.msg(data.message, {icon: 2, time: 1000});
-							var html = "";
-							html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
-							html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
-							html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
-							html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
-							html += "<tr><td><b>性别</b></td><td>" + data.sex + "</td></tr>";
-							html += "<tr><td><b>年龄</b></td><td>" + data.age + "</td></tr>";
-							html += "<tr><td><b>诊断</b></td><td>" + data.diag + "</td></tr>";
-							html += "<tr><td><b>检验目的</b></td><td>" + data.exam + "</td></tr>";
-							html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
-							$("#now").html(html);
-						}else if(data.success == 3){
-							var html = "";
-							html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
-							html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
-							html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
-							html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
-							html += "<tr><td><b>性别</b></td><td>" + data.sex + "</td></tr>";
-							html += "<tr><td><b>年龄</b></td><td>" + data.age + "</td></tr>";
-							html += "<tr><td><b>诊断</b></td><td>" + data.diag + "</td></tr>";
-							html += "<tr><td><b>检验目的</b></td><td>" + data.exam + "</td></tr>";
-							html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
-							$("#now").html(html);
-							var rowData = {
-								barcode:data.barcode,
-								sampleno:data.sampleno,
-								shm:data.shm,
-								pname:data.pname,
-								section:data.section,
-								bed:data.bed,
-								sex:data.sex,
-								age:data.age,
-								receivetime:data.receivetime,
-								exam:data.exam,
-								pid:data.pid,
-								feestatus:data.feestatus,
-								diag:data.diag,
-								cycle:data.cycle,
-								requester:data.requester,
-								part:data.part,
-								requestmode:data.requestmode,
-								fee:data.fee,
-								sampleType: data.sampleType,
-								sampleTypeValue: data.sampleTypeValue,
-								sampleStatus:data.sampleStatus,
-								sampleStatusValue:data.sampleStatusValue
-							};
-							var ids = $('#new').jqGrid('getDataIDs');
-							var newId = parseInt(ids[ids.length - 1] || 0) + 1;
-							$("#new").jqGrid('addRowData', newId, rowData, "first");
-							$("#sampleno_text").val(data.newSampleNo);
-							layer.msg(data.message, {icon: 1, time: 1000});
-						}else if(data.success == 4) {
-							layer.alert(data.message);
-						}else {
-							layer.msg(data.message, {icon: 2, time: 2000});
-						}
-					});
-					$("#receive_id").val("").focus();
+
+				}
+			});*/
+			$.get(baseUrl + "/sample/ajax/receive",{id:id,sampleno:sampleno},function(data) {
+				//var data = JSON.parse(data);
+				if(data.success == 1) {
+					layer.msg(data.message, {icon: 2, time: 1000});
+				} else if(data.success == 2) {
+					layer.msg(data.message, {icon: 2, time: 1000});
+					var html = "";
+					html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
+					html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
+					html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
+					html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
+					html += "<tr><td><b>性别</b></td><td>" + data.sex + "</td></tr>";
+					html += "<tr><td><b>年龄</b></td><td>" + data.age + "</td></tr>";
+					html += "<tr><td><b>诊断</b></td><td>" + data.diag + "</td></tr>";
+					html += "<tr><td><b>检验目的</b></td><td>" + data.exam + "</td></tr>";
+					html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
+					$("#now").html(html);
+				}else if(data.success == 3){
+					var html = "";
+					html += "<tr><td><b>医嘱号</b></td><td>" + data.barcode + "</td></tr>";
+					html += "<tr><td><b>样本号</b></td><td>" + data.sampleno + "</td></tr>";
+					html += "<tr><td><b>姓名</b></td><td>" + data.pname + "</td></tr>";
+					html += "<tr><td><b>就诊卡号</b></td><td>" + data.pid + "</td></tr>";
+					html += "<tr><td><b>性别</b></td><td>" + data.sex + "</td></tr>";
+					html += "<tr><td><b>年龄</b></td><td>" + data.age + "</td></tr>";
+					html += "<tr><td><b>诊断</b></td><td>" + data.diag + "</td></tr>";
+					html += "<tr><td><b>检验目的</b></td><td>" + data.exam + "</td></tr>";
+					html += "<tr><td><b>检验时间</b></td><td>" + data.receivetime + "</td></tr>";
+					$("#now").html(html);
+					var rowData = {
+						barcode:data.barcode,
+						sampleno:data.sampleno,
+						shm:data.shm,
+						pname:data.pname,
+						section:data.section,
+						bed:data.bed,
+						sex:data.sex,
+						age:data.age,
+						receivetime:data.receivetime,
+						exam:data.exam,
+						pid:data.pid,
+						feestatus:data.feestatus,
+						diag:data.diag,
+						cycle:data.cycle,
+						requester:data.requester,
+						part:data.part,
+						requestmode:data.requestmode,
+						fee:data.fee,
+						sampleType: data.sampleType,
+						sampleTypeValue: data.sampleTypeValue,
+						sampleStatus:data.sampleStatus,
+						sampleStatusValue:data.sampleStatusValue
+					};
+					var ids = $('#new').jqGrid('getDataIDs');
+					var newId = parseInt(ids[ids.length - 1] || 0) + 1;
+					$("#new").jqGrid('addRowData', newId, rowData, "first");
+					$("#sampleno_text").val(data.newSampleNo);
+					layer.msg(data.message, {icon: 1, time: 1000});
+				}else if(data.success == 4) {
+					layer.alert(data.message);
+				}else {
+					layer.msg(data.message, {icon: 2, time: 2000});
 				}
 			});
+			$("#receive_id").val("").focus();
 			break;
 	}
 }
@@ -538,7 +539,7 @@ $(function() {
 		colModel: [
 			{ name: 'sampleStatusValue', index: 'sampleStatusValue', width: 70},
 			{ name: 'sampleStatus', index: 'sampleStatus', hidden: true},
-			{ name: 'sampleno', index: 'sampleno', width: 130,cellattr: addCellAttr, key: true},
+			{ name: 'sampleno', index: 'sampleno', width: 140,cellattr: addCellAttr, key: true},
 			{ name: 'shm', index: 'shm', width: 70},
 			{ name: 'pname', index: 'pname', width: 80 },
 			{ name: 'section', index: 'section', width: 80 },

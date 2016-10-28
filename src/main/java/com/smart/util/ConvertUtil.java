@@ -203,6 +203,44 @@ public final class ConvertUtil {
                 if(flag==null || flag.isEmpty())
                     return "";
                 if(flag.charAt(0)=='A'){
+                    retFlag = "正常";
+                }else if(flag.charAt(0)=='B'){
+                    retFlag = "↑";
+                }else if (flag.charAt(0)=='C'){
+                    retFlag = "↓";
+                }else {
+                    retFlag = "正常";
+                }
+            }
+            /*else if(flag.charAt(1) == 'B') {
+                if(flag.charAt(0)=='A'){
+                    retFlag = "阴性";
+                }else if(flag.charAt(0)=='B'){
+                    retFlag = "阳性";
+                }else {
+                    retFlag = " ";
+                }
+            }*/
+
+        }catch (Exception e){
+            e.printStackTrace();
+            retFlag = "正常";
+        }
+        return  retFlag;
+    }
+
+    /**
+     * 打印结果标记
+     * @param flag
+     * @return
+     */
+    public static String getPrintResultFlag(String flag){
+        String retFlag="";
+        try {
+            if(flag.charAt(1) == 'A') {
+                if(flag==null || flag.isEmpty())
+                    return "";
+                if(flag.charAt(0)=='A'){
                     retFlag = " ";
                 }else if(flag.charAt(0)=='B'){
                     retFlag = "↑";
@@ -261,7 +299,7 @@ public final class ConvertUtil {
         if(barcode.indexOf("A12006")>=0){
             mode = 2;
         }else if(barcode.indexOf("A12001")>=0){
-            mode = 4;       //体检
+            mode = 3;       //体检
         }else {
             mode = 1;
         }
@@ -277,9 +315,6 @@ public final class ConvertUtil {
                 value = "病房";
                 break;
             case 3:
-                value = "急诊";
-                break;
-            case 4:
                 value = "体检";
                 break;
             default:
