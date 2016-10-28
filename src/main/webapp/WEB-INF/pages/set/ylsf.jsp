@@ -350,8 +350,8 @@
 				<label class="col-xs-4 control-label no-padding-right" for="segment"> 门诊自动编号 </label>
 				<div class="col-xs-8">
 					<select type="text" id="isAutoNo" name="isAutoNo" class="col-xs-8" style="height:33px;">
-						<option value="0" <c:if test="${isAutoNo=='0'}">selected</c:if>>否</option>
-						<option value="1" <c:if test="${isAutoNo=='0'}">selected</c:if>>是</option>
+						<option value="0" >否</option>
+						<option value="1" >是</option>
 					</select>
 				</div>
 			</div>

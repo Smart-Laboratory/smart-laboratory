@@ -48,7 +48,7 @@ public class Ylxh extends BaseObject {
 
 	private String template;		//报告单模板名称
 
-	private String isAutoNo;		//门诊是否自动编号 0 否 1 是
+	private int isAutoNo;		//门诊是否自动编号 0 否 1 是
 	
 	/**
 	 * 医疗序号
@@ -296,11 +296,11 @@ public class Ylxh extends BaseObject {
 		this.template = template;
 	}
 
-	public String getIsAutoNo() {
+	public int getIsAutoNo() {
 		return isAutoNo;
 	}
 
-	public void setIsAutoNo(String isAutoNo) {
+	public void setIsAutoNo(Integer isAutoNo) {
 		this.isAutoNo = isAutoNo;
 	}
 }

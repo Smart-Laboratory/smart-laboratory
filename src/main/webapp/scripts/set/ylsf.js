@@ -2,7 +2,7 @@ function AddYlxh() {
 	clearData();
 	layer.open({
 		type: 1,
-		area: ['650px','580px'],
+		area: ['650px','620px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -67,7 +67,7 @@ function editYlxh() {
 	$('#template').val(rowData.template);
 	layer.open({
 		type: 1,
-		area: ['650px','580px'],
+		area: ['650px','620px'],
 		fix: false, //不固定
 		skin: 'layui-layer-molv',
 		maxmin: false,
@@ -229,7 +229,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-		colNames:['序号', '检验目的','英文名称','价格','门诊段','住院段','夜班段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
+		colNames:['序号', '检验目的','英文名称','价格','门诊段','住院段','夜班段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','自动编号','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:true},
     		{name:'ylmc',index:'ylmc',width:200, sortable:true},
@@ -248,6 +248,7 @@ function getList(lab) {
 			{name:'cjbw',index:'cjbw',width:80, sortable:false},
 			{name:'sgsl',index:'sgsl',width:80, sortable:false},
 			{name:'sfhbStr',index:'sfhbStr',width:80, sortable:false},
+			{name:'isAutoNoStr',index:'isAutoNoStr',width:80, sortable:false},
 			{name:'yblx',index:'yblx',hidden:true},
     		{name:'ptest',index:'ptest', hidden:true},
     		{name:'ptest2',index:'ptest2', hidden:true},

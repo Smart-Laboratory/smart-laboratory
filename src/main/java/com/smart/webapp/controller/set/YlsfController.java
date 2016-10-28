@@ -126,6 +126,8 @@ public class YlsfController extends BaseAuditController {
 			map.put("isAutoNo",ConvertUtil.null2String(y.getIsAutoNo()));
 			map.put("template",ConvertUtil.null2String(y.getTemplate()));
 			map.put("outSegment", ConvertUtil.null2String(y.getOutSegment()));
+			map.put("isAutoNo", y.getIsAutoNo());
+			map.put("isAutoNoStr", y.getIsAutoNo() == 1 ? "是" : "否");
 			dataRows.add(map);
 		}
 
