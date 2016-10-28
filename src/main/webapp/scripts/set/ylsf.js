@@ -229,11 +229,7 @@ function getList(lab) {
 		mtype: "GET",
 		datatype: "json",
 		width:$('.leftContent').width()-10,
-<<<<<<< HEAD
-		colNames:['序号', '检验目的','英文名称','价格','检验段','夜班检验段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
-=======
-		colNames:['序号', '检验目的','英文名称','价格','门诊段','住院段','夜班段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM'],
->>>>>>> origin/master
+		colNames:['序号', '检验目的','英文名称','价格','门诊段','住院段','夜班段','门诊开单','住院开单','标本类型','容器类型','标本量','取报告时间','取报告地点','采集部位','试管数量','允许合并','YBLX','PTEST','PTEST2','PTEST3','MZPB','ZYPB','SFHB','KSDM','isAutoNo','template'],
     	colModel:[ 
     		{name:'ylxh',index:'ylxh', width:60, sortable:true},
     		{name:'ylmc',index:'ylmc',width:200, sortable:true},

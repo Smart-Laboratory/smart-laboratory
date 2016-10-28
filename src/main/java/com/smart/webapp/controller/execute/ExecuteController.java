@@ -181,18 +181,12 @@ public class ExecuteController {
 			LabOrder labOrder = needSaveList.get(i);
 			//生成样本号
 			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
-<<<<<<< HEAD
 			String isAutoNo = ConvertUtil.null2String(ylxh.getIsAutoNo());
 			//自动生成样本号
 			if(isAutoNo.equals("1")){
 				String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
 				labOrder.setSampleno(newSampleNo);
 			}
-=======
-			String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getOutSegment(),0));
-			labOrder.setSampleno(newSampleNo);
-
->>>>>>> origin/master
 			//生成条码号
 			Sample sample = new Sample();
 			sample.setBirthday(labOrder.getBirthday());
