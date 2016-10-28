@@ -61,8 +61,13 @@ function CreateDataBill(data) {
 		}
 		LODOP.ADD_PRINT_BARCODEA("barcode","90mm","4.85mm","36mm",35,"128Auto",data.barcode);
 		LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
-		LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
-		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		if(data.sampleNo == '0') {
+			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.barcode+"*");
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		} else {
+			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		}
 		//LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","2.95mm",180,20,patientInfo1);
 		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","2.95mm",180,20, labInfo);
 		LODOP.ADD_PRINT_TEXTA("datetime","107mm","2.95mm",180,20,"采集时间 "+data.executeTime);
@@ -74,8 +79,13 @@ function CreateDataBill(data) {
 		}
         LODOP.ADD_PRINT_BARCODEA("barcode","90mm","53.25mm","36mm",35,"128Auto",data.barcode);
         LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
-        LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.sampleNo+"*");
-        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		if(data.sampleNo == '0') {
+			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.barcode+"*");
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		} else {
+			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
+			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		}
         //LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","51.25mm",180,20,patientInfo1);
 		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","51.25mm",180,20, labInfo);
 		LODOP.ADD_PRINT_TEXTA("datetime","107mm","51.25mm",180,20,"采集时间 "+data.executeTime);

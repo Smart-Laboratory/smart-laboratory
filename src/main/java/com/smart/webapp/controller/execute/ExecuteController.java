@@ -184,8 +184,10 @@ public class ExecuteController {
 			String isAutoNo = ConvertUtil.null2String(ylxh.getIsAutoNo());
 			//自动生成样本号
 			if(isAutoNo.equals("1")){
-				String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getSegment(),0));
+				String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(ylxh.getOutSegment(),0));
 				labOrder.setSampleno(newSampleNo);
+			} else {
+				labOrder.setSampleno("0");
 			}
 			//生成条码号
 			Sample sample = new Sample();
