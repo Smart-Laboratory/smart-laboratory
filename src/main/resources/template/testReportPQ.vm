@@ -1,12 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#*
+author:yuzh
+description:乙肝P区耐药模板
+date:2016-10-28
+*#
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        *{
-            font-family:SimSun;
+        * {
+            font-family: SimSun;
             font-size: 9pt;
         }
+
         html * {
             margin: 0 auto;
         }
@@ -27,7 +35,6 @@
 
         .head {
             width: 100%;
-            padding-bottom:4px;
             font-size: 10pt !important;
         }
 
@@ -35,7 +42,7 @@
             width: 100%;
             border-top: 2px solid #000;
             border-bottom: 2px solid #000;
-            padding-bottom:2px;
+            padding-bottom: 2px;
         }
 
         .patientinfo td {
@@ -47,17 +54,18 @@
             padding-left: 5px;
         }
 
-        .result  {
+        .result {
             width: 100%;
             height: 8.5cm;
         }
 
-        .resultL{
+        .resultL {
             width: 396px;
             border-right: 1px solid #000;
             float: left;
         }
-        .resultR{
+
+        .resultR {
             width: 397px;
             float: right;
         }
@@ -70,14 +78,16 @@
             text-align: left;
             font-bold: weight;
             border-bottom: 1px solid #000;
-            padding-bottom:2px;
+            padding-bottom: 2px;
         }
+
         .result table tr td {
             text-align: left;
             #if($!results.size() <10)
                 font-size: 10.5pt !important;
             #end
         }
+
         .footer {
             width: 100%;
         }
@@ -106,12 +116,12 @@
 
         .line1 td {
             border-bottom: 1px solid #000;
-            padding-bottom:2px;
+            padding-bottom: 2px;
         }
 
         .line2 td {
             border-bottom: 2px solid #000;
-            padding-bottom:2px;
+            padding-bottom: 2px;
         }
     </style>
 </head>
@@ -124,26 +134,23 @@
             <colgroup>
                 <col width="35%"/>
                 <col width="15%"/>
-                <col width="5%"/>
                 <col width="35%"/>
                 <col width="10%"/>
             </colgroup>
             <tr>
                 <th>检验项目</th>
                 <th>结果</th>
-                <th>&#160;</th>
                 <th>参考值</th>
                 <th>单位</th>
             </tr>
             #foreach($item in $results)
                 <tr>
                     <td>$!item.testName</td>
-                    <td>$!item.testResult</td>
                     <td>
-                        #if($!item.resultFlag=='↑' || $!item.resultFlag=='↓')
-                            $!item.resultFlag
+                        #if($!item.resultFlag=='阳性')
+                            <span style="background: #ddd">阳性$!item.testResult</span>
                         #else
-                            &nbsp;
+                            阴性$!item.testResult
                         #end
                     </td>
                     <td>$!item.reference</td>

@@ -488,6 +488,9 @@ public class SampleInputAjaxController {
         if (mode == 3) {
             //体检
             return receiveExamination(code, user, sampleno);
+        } else if (mode == 1) {
+            //体检
+            return receiveOutPatient(code, user, sampleno, inSegment);
         }
 
 
@@ -504,7 +507,10 @@ public class SampleInputAjaxController {
             } else {
                 ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
             }
-            //sample.setSectionId(ylxh.getKsdm());
+        } else {
+            o.put("success", 1);
+            o.put("message", "医嘱号为" + code + "的标本不存在！");
+            return o.toString();
         }
         String segment = "";
         if (!isNight()) {
@@ -525,17 +531,7 @@ public class SampleInputAjaxController {
             o.put("message", "检验段没有设置，不允许接收，请检查！");
             return o.toString();
         }
-//        if(!segment.equals(inSegment)){
-//            o.put("success", 5);
-//            o.put("message", "输入样本号检验段" + inSegment + "与当前样本检验段不符！");
-//            return o.toString();
-//        }
-        if (sample == null) {
-            o.put("success", 1);
-            o.put("message", "医嘱号为" + code + "的标本不存在！");
-            return o.toString();
-        } else if (sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
-            process = processManager.getBySampleId(sample.getId());
+        if (sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
             o.put("success", 2);
             o.put("message", "医嘱号为" + code + "的标本已编号接收！");
             return o.toString();
@@ -562,8 +558,6 @@ public class SampleInputAjaxController {
             plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
             plog.setLogtime(receiveTime);
             processLogManager.save(plog);
-
-
 
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             process.setReceiver(user.getName());
@@ -613,41 +607,15 @@ public class SampleInputAjaxController {
                 o.put("message", "医嘱号为" + code + "的计费失败！" + updateStatusSuccess);
             }
         }
-        if (sample != null) {
-            o.put("barcode", sample.getBarcode());
-            o.put("sampleno", sample.getSampleNo());
-            o.put("pid", sample.getPatientId());
-            o.put("pname", sample.getPatientname());
-            o.put("sex", sample.getSexValue());
-            o.put("age", sample.getAge() + sample.getAgeunit());
-            o.put("diag", sample.getDiagnostic());
-            o.put("exam", sample.getInspectionName());
-            o.put("bed", sample.getDepartBed() == null ? "" : sample.getDepartBed());
-            o.put("cycle", sample.getCycle());
-            o.put("fee", sample.getFee() + "");
-            o.put("feestatus", sample.getFeestatus());
-            o.put("receivetime", process.getReceivetime() == null ? Constants.SDF.format(new Date()) : Constants.SDF.format(process.getReceivetime()));
-            o.put("shm", sample.getStayHospitalModelValue());
-            o.put("section", SectionUtil.getInstance(sectionManager).getLabValue(sample.getSectionId()));
-            o.put("sampleTypeValue", SampleUtil.getInstance(dictionaryManager).getValue(sample.getSampleType()));
-            o.put("sampleType", sample.getSampleType());
-            o.put("part", sample.getPart() == null ? "" : sample.getPart());
-            o.put("requestmode", sample.getRequestMode());
-            o.put("requester", process.getRequester());
-            o.put("sampleStatus", sample.getSampleStatus());
-            o.put("sampleStatusValue", sample.getSampleStatusValue());
-        }
-        return o.toString();
+        return jsonToString(sample, process, o);
     }
 
     /**
-     * 体检
+     * 体检接收
      *
      * @return
      */
-    private String receiveExamination(String barcode,
-                                      User user,
-                                      String sampleno) throws JSONException, Exception {
+    private String receiveExamination(String barcode, User user, String sampleno) throws Exception {
         List<LabOrder> labOrderList = new WebService().getExaminationRequestInfo(barcode, "", "", "");
         Sample sample = null;
         Process process = null;
@@ -656,15 +624,20 @@ public class SampleInputAjaxController {
         if (labOrderList.size() > 0) {
             labOrder = labOrderList.get(0);
             labOrder.setBarcode(barcode);
+            labOrder.setLaborder(ConvertUtil.getLongValue(labOrder.getBarcode().replace("A1200", "")));
         } else {
             o.put("success", 1);
             o.put("message", "医嘱号为" + barcode + "的标本不存在！");
             return o.toString();
         }
-
-
-        sample = getSample(labOrderList);
-
+        sample = sampleManager.get(labOrder.getLaborder());
+        if(sample == null) {
+            sample = getSample(labOrderList);
+        } else {
+            o.put("success", 2);
+            o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
+            return o.toString();
+        }
         Ylxh ylxh = new Ylxh();
         if (sample != null) {
             if (sample.getYlxh().indexOf("+") > -1) {
@@ -676,12 +649,6 @@ public class SampleInputAjaxController {
         sample.setSectionId(ylxh.getKsdm());
         sample.setSampleType(ylxh.getYblx());
         sample.setAgeunit("岁");
-        if (sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
-            process = processManager.getBySampleId(sample.getId());
-            o.put("success", 2);
-            o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
-            return o.toString();
-        }
         if (!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
             o.put("success", 1);
             o.put("message", "医嘱号为" + barcode + "的标本不属于当前专业组，不能接收！");
@@ -698,7 +665,6 @@ public class SampleInputAjaxController {
             SampleLog slog = new SampleLog();
             slog.setSampleEntity(sample);
             slog.setLogger(UserUtil.getInstance().getValue(user.getUsername()));
-            //System.out.println(InetAddress.getLocalHost().getHostAddress());
             slog.setLogip(InetAddress.getLocalHost().getHostAddress());
             slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
             slog.setLogtime(receiveTime);
@@ -712,20 +678,7 @@ public class SampleInputAjaxController {
             plog.setLogtime(receiveTime);
             processLogManager.save(plog);
             if (sample.getSampleNo() == null || sample.getSampleNo().equals("0") || sample.getSampleNo().isEmpty()) {
-                String segment = "";
-                if (!isNight()) {
-                    //白班
-                    segment = ylxh.getSegment();
-                } else {
-                    //夜班
-                    sample.setSectionId(Constants.DEPART_NIGHT);
-                    segment = ylxh.getNightSegment();
-                }
-                //非夜班科室取白班
-                if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
-                    sample.setSectionId(user.getLastLab());
-                    segment = ylxh.getSegment();
-                }
+                String segment = ylxh.getSegment();
                 if (segment == null || segment.isEmpty()) {
                     o.put("success", 5);
                     o.put("message", "检验段没有设置，不允许接收，请检查！");
@@ -744,19 +697,13 @@ public class SampleInputAjaxController {
                         return o.toString();
                     }else {
                         sample.setSampleNo(sampleno);
-                        //o.put("newSampleNo",sampleno );
                     }
                 }else {
                     sample.setSampleNo(newSampleNo);
-                    //o.put("newSampleNo",newSampleNo);
                 }
                 //设置检验者
                 sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
-               // o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
             }
-
-
-
             sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
             sample.setFeestatus("1");
             sampleManager.save(sample);
@@ -780,6 +727,133 @@ public class SampleInputAjaxController {
             o.put("success", 3);
             o.put("message", "医嘱号为" + barcode + "的标本接收成功！");
         }
+        return jsonToString(sample, process, o);
+    }
+
+    /**
+     * 门诊接收
+     *
+     * @return
+     */
+    private String receiveOutPatient(String barcode, User user, String sampleno, String inSegment) throws Exception {
+        Sample sample = null;
+        Process process = null;
+
+        try {
+            sample = sampleManager.getSampleByBarcode(barcode);
+        } catch (Exception e) {
+            sample = null;
+        }
+        JSONObject o = new JSONObject();
+        Ylxh ylxh = new Ylxh();
+        if (sample != null) {
+            if (sample.getYlxh().indexOf("+") > -1) {
+                ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
+            } else {
+                ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
+            }
+        } else {
+            o.put("success", 2);
+            o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
+            return o.toString();
+        }
+        String segment = "";
+        if (!isNight()) {
+            //白班
+            segment = ylxh.getOutSegment();
+        } else {
+            //夜班
+            sample.setSectionId(Constants.DEPART_NIGHT);
+            segment = ylxh.getNightSegment();
+        }
+        //非夜班科室取白班
+        if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
+            sample.setSectionId(user.getLastLab());
+            segment = ylxh.getSegment();
+        }
+        if (segment == null || segment.isEmpty()) {
+            o.put("success", 5);
+            o.put("message", "检验段没有设置，不允许接收，请检查！");
+            return o.toString();
+        }
+        if (sample.getSampleStatus() >= Constants.SAMPLE_STATUS_RECEIVED) {
+            o.put("success", 2);
+            o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
+            return o.toString();
+        } else if (!user.getLastLab().equals(Constants.DEPART_NIGHT) && !sample.getSectionId().equals(user.getLastLab())) {
+            o.put("success", 1);
+            o.put("message", "医嘱号为" + barcode + "的标本不属于当前专业组，不能接收！");
+            return o.toString();
+        } else {
+            Date receiveTime = new Date();
+            process = processManager.getBySampleId(sample.getId());
+            SampleLog slog = new SampleLog();
+            slog.setSampleEntity(sample);
+            slog.setLogger(UserUtil.getInstance().getValue(user.getUsername()));
+            System.out.println(InetAddress.getLocalHost().getHostAddress());
+            slog.setLogip(InetAddress.getLocalHost().getHostAddress());
+            slog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+            slog.setLogtime(receiveTime);
+            slog = sampleLogManager.save(slog);
+            ProcessLog plog = new ProcessLog();
+            plog.setSampleLogId(slog.getId());
+            plog.setProcessEntity(process);
+            plog.setLogger(UserUtil.getInstance().getValue(user.getUsername()));
+            plog.setLogip(InetAddress.getLocalHost().getHostAddress());
+            plog.setLogoperate(Constants.LOG_OPERATE_EDIT);
+            plog.setLogtime(receiveTime);
+            processLogManager.save(plog);
+
+            sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
+            process.setReceiver(user.getName());
+            process.setReceivetime(receiveTime);
+
+            int serialno = 0;
+            if(sampleno != null && !sampleno.isEmpty()){
+                if(segment.equals(inSegment)){
+                    serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
+                }
+            }
+            String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
+            if(newSampleNo.isEmpty()){
+                Sample sample1 = sampleManager.getBySampleNo(sampleno);
+                if(sample1 != null){
+                    o.put("success", 5);
+                    o.put("message", "样本号已存在，不允许保存，请重新设置！");
+                    return o.toString();
+                }else {
+                    sample.setSampleNo(sampleno);
+                    o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
+                }
+            }else {
+                sample.setSampleNo(newSampleNo);
+            }
+            //设置检验者
+            sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
+            sample.setFeestatus("1");
+            sample = sampleManager.save(sample);
+            processManager.save(process);
+
+            //记账
+            List<Account> accountList = new ArrayList<Account>();
+            Account account = new Account();
+            account.setYlxh(sample.getYlxh());
+            account.setYlmc(sample.getInspectionName());
+            account.setBarcode(barcode);
+            BigDecimal price = new BigDecimal(ConvertUtil.getDoubleValue(sample.getFee()));
+            double price1 = price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            account.setPrice(price1);
+            account.setOperator(user.getName());
+            account.setOperateTime(new Date());
+            accountList.add(account);
+            accountManager.saveAll(accountList);
+            o.put("success", 3);
+            o.put("message", "医嘱号为" + barcode + "的标本接收成功！");
+        }
+        return jsonToString(sample, process, o);
+    }
+
+    private String jsonToString(Sample sample, Process process, JSONObject o) throws Exception {
         if (sample != null) {
             o.put("barcode", sample.getBarcode());
             o.put("sampleno", sample.getSampleNo());

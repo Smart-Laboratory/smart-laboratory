@@ -148,9 +148,9 @@ date:2016-10-04
                     <td>$!item.testName</td>
                     <td>
                         #if($!item.resultFlag=='阳性')
-                            <span style="background: #ddd">阳性$!item.testResult</span>
+                            <span style="background: #ddd">$!item.testResult</span>
                         #else
-                            阴性$!item.testResult
+                            $!item.testResult
                         #end
                     </td>
                     <td>$!item.reference</td>
