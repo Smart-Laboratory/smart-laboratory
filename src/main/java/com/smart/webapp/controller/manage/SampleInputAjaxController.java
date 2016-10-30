@@ -513,6 +513,10 @@ public class SampleInputAjaxController {
         String segment = "";
         if (!isNight()) {
             //白班
+            //夜班标本退回，白班重新接收到对应的白班科室
+            if(sample.getSectionId().equals(Constants.DEPART_NIGHT)) {
+                sample.setSectionId(ylxh.getKsdm());
+            }
             segment = ylxh.getSegment();
         } else {
             //夜班
@@ -964,7 +968,6 @@ public class SampleInputAjaxController {
                     itemCode = "+" + itemCode;
                     itemName = "+" + itemName;
                 }
-                amount += ConvertUtil.getFloatValue(sample.getFee());
                 sample.setYlxh(ConvertUtil.null2String(sample.getYlxh()) + itemCode);
                 sample.setInspectionName(ConvertUtil.null2String(sample.getInspectionName()) + itemName);
                 sample.setFee("" + (ConvertUtil.getFloatValue(sample.getFee()) + amount));
