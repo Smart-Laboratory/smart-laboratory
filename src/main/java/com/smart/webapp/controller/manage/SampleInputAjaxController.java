@@ -958,7 +958,7 @@ public class SampleInputAjaxController {
             for (LabOrder labOrder1 : labOrders) {
                 String itemCode = ConvertUtil.null2String(labOrder1.getYlxh());
                 String itemName = ConvertUtil.null2String(labOrder1.getExamitem());
-                Ylxh ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
+                Ylxh ylxh = YlxhUtil.getInstance().getYlxh(labOrder1.getYlxh());
                 Float amount = ConvertUtil.getFloatValue(ylxh.getPrice());
                 if (!itemCode.isEmpty() && !ConvertUtil.null2String(sample.getYlxh()).isEmpty()) {
                     itemCode = "+" + itemCode;
