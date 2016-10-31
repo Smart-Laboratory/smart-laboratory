@@ -146,17 +146,18 @@ date:2016-10-28
             #foreach($item in $results)
                 <tr>
                     <td>$!item.testName</td>
-                    <td>
-                        #if($!item.resultFlag=='阳性')
-                            <span style="background: #ddd">阳性$!item.testResult</span>
-                        #else
-                            阴性$!item.testResult
-                        #end
-                    </td>
+                    <td>$!item.testResult</td>
                     <td>$!item.reference</td>
                     <td>$!item.unit</td>
                 </tr>
             #end
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr class="line1">
+                <td style="border-bottom:1px solid #000">备注: A丙氨酸；I异亮氨酸；L亮氨酸；M蛋氨酸；N天冬氨酸；G甘氨酸；S丝氨酸；T苏氨酸；V缬氨酸</td>
+            </tr>
         </table>
     </div>
     <!--结果信息 end-->

@@ -156,6 +156,13 @@ date:2016-10-04
             #end
         </table>
     </div>
+    <div>
+        <table>
+            <tr class="line1">
+                <td style="border-bottom:1px solid #000">备注:</td>
+            </tr>
+        </table>
+    </div>
     <!--结果信息 end-->
     #parse ("/template/testReportFooter.vm")
 </div>
