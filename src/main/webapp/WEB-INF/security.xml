@@ -34,6 +34,12 @@
         <intercept-url pattern="/app/quality/invalid*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/quality/sampleTrace*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
         <intercept-url pattern="/app/manage/receive/ajax/sample*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+        <intercept-url pattern="/app/manage/patientList*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
+        <intercept-url pattern="/app/manage/patientList/**" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
+        <intercept-url pattern="/app/audit/sample*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
+        <intercept-url pattern="/app/audit/ajax/singleChart*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
+        <intercept-url pattern="/app/manage/sampleQuery*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
+        <intercept-url pattern="/app/manage/sampleQuery/**" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
         <intercept-url pattern="/app/manage/execute*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
         <intercept-url pattern="/app/manage/execute/**" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
         <intercept-url pattern="/app/users/ajax/hospital*" access="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>

@@ -81,6 +81,9 @@ public class SearchController {
 		int size = 0;
 		User operator = userManager.getUserByUsername(request.getRemoteUser());
 		String lab = operator.getDepartment();
+		if(lab.charAt(lab.length()-1) == ',') {
+			lab = lab.substring(0,lab.length()-1);
+		}
 
 		//获取样本信息
 		switch (type) {
