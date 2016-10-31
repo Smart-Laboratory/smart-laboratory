@@ -80,7 +80,7 @@
 						<button><fmt:message key="execute.smk" /></button>
 						<button><fmt:message key="execute.jkk" /></button>
 					</div>--%>
-					<div class="checkbox">
+					<div class="checkbox" style="display: none">
 						<label>
 							<input type="checkbox" id="bloodCheck" class="ace ace-switch ace-switch-4" ><fmt:message key="execute.bloodSample" />
 						</label>
@@ -112,20 +112,20 @@
 					</button>--%>
 					<div class="checkbox" style="border-top:1px solid #000000;">
 			    		<label>
-			      			<input type="checkbox" id="selfexecute" value=""> 自抽
+			      			<input type="checkbox" id="selfexecute" value=""> 自行采样
 			    		</label>
 			    	</div>
 
 					<div class="col-sm-12" id="cxhis" >
 						<div class="col-sm-12 ">
-							<span class='col-sm-4'>抽血次数:</span><b id="cxcx"></b>
+							<span class='col-sm-4'>采样次数:</span><b id="cxcx"></b>
 						</div>
-						<span class='col-sm-12'>最后一次抽血情况:</span>
+						<span class='col-sm-12'>最后一次采样情况:</span>
 						<div class="col-sm-12 ">
-							<span class='col-sm-4'>抽血人员:</span><b id="cxry"></b>
+							<span class='col-sm-4'>采样人员:</span><b id="cxry"></b>
 						</div>
 						<div class="col-sm-12 ">
-							<span class='col-sm-4'>抽血时间:</span><b id="cxsj"></b>
+							<span class='col-sm-4'>采样时间:</span><b id="cxsj"></b>
 						</div>
 						<div class="col-sm-12 ">
 							<span class='col-sm-4'>检验项目:</span><b id="cxxm"></b>

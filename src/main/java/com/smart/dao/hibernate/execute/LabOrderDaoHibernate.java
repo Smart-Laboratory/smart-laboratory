@@ -37,7 +37,7 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 	
 	@SuppressWarnings("unchecked")
 	public List<LabOrder> getByPatientId(String patientId, String fromDate, String toDate){
-		String hql = "from LabOrder where patientid = '"+patientId+"'";
+		String hql = "from LabOrder where patientid = '"+patientId+"' and stayhospitalmode=1";
 		if (!fromDate.equals("")) {
 			fromDate += " 00:00:00";
 			hql += "and requesttime>=to_date('" + fromDate + "','yyyy-MM-dd hh24:mi:ss')";
@@ -46,6 +46,7 @@ public class LabOrderDaoHibernate extends GenericDaoHibernate<LabOrder, Long> im
 			toDate += " 23:59:59";
 			hql += "and requesttime<=to_date('" + toDate + "','yyyy-MM-dd hh24:mi:ss')";
 		}
+		hql += " order by executetime desc";
 		return getSession().createQuery(hql).list();
 	}
 

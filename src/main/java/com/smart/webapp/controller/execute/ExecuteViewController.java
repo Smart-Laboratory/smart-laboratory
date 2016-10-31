@@ -140,7 +140,7 @@ public class ExecuteViewController {
 			} else {
 				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
 			}
-			labOrder.setSampletype(ylxh.getYblx());
+			labOrder.setSampletype(ConvertUtil.null2String(ylxh.getYblx()));
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());
 			labOrder.setLabdepartment(ylxh.getKsdm());

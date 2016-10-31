@@ -243,14 +243,15 @@ function reloadTests() {
 		if(data!=null){
 			var executeArray = data.execute;
 			var unExecuteArray = data.unexecute;
-			if(unExecuteArray.length == 0) {
-			    if($("input[name='select_type']:checked").val() == 999) {
+			if(unExecuteArray.length == 0 && $("#tests1").css('display') == 'none') {
+				layer.msg("当前病人没有需要采样的检验项目！", {icon: 0, time: 1000});
+			    /*if($("input[name='select_type']:checked").val() == 999) {
                     //layer.msg("当前病人没有已采集的检验项目！", {icon: 0, time: 1000});
                 } else{
                     //layer.msg("当前病人没有需要采样的检验项目！", {icon: 0, time: 1000});
                 }
                 $("#tests").html("");
-				return;
+				return;*/
 			}
 			$("#checkAll").prop('checked', true);
 			createHtml(unExecuteArray, 'tests');
@@ -419,8 +420,12 @@ $(function(){
     $("#myTab a").click(function () {
 		if($(this).prop("href").indexOf("tests1") > 0) {
 			$("#back").css("display","inline");
+			$('#tests').css("display", "none");
+			$('#tests1').css("display", "block");
 		} else {
 			$("#back").css("display","none");
+			$('#tests').css("display", "block");
+			$('#tests1').css("display", "none");
 		}
         reloadTests();
     });

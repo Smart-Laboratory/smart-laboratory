@@ -5,9 +5,9 @@
     </Displayers>
     <Menus>
         <!-- <Menu name="Home" title="home.title" page="/home" roles="ROLE_ADMIN,ROLE_USER"/> -->
-        <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER">
+        <Menu name="SampleManage" title="sample.manage.title" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR">
         	<Item name="Input" title="sample.manage.input" page="/manage/input" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
-        	<Item name="Execute" title="sample.manage.execute" page="/manage/execute" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+        	<Item name="Execute" title="sample.manage.execute" page="/manage/execute" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
             <Item name="Modify" title="sample.manage.modify" page="/manage/modify" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="Receive" title="sample.manage.receive" page="/manage/receive" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
             <Item name="Audit" title="sample.manage.audit" page="/manage/audit" roles="ROLE_ADMIN,ROLE_USER"/>
@@ -68,7 +68,7 @@
             <Item name="CustomerDiscount" title="menu.customerDiscount" page="/dsf/customerDiscount/viewCustomerDiscount" roles="ROLE_ADMIN"/>
         </Menu>
 
-        <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER"/>
+        <Menu name="Logout" title="user.logout" page="/logout" roles="ROLE_ADMIN,ROLE_USER,ROLE_WORKER,ROLE_EXECUTOR"/>
         </Menus>
 
 
