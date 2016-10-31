@@ -279,12 +279,8 @@ public class SampleInputAjaxController {
                         o.put("success", false);
                     }
                 } else if(sample.getStayHospitalMode() == 3) {     //体检退费
-                    sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
-                    sample.setSampleNo("0");
-                    process.setReceiver("");
-                    process.setReceivetime(null);
-                    sampleManager.save(sample);
-                    processManager.save(process);
+                    sampleManager.remove(sample);
+                    processManager.remove(process);
                     o.put("message", "样本号为" + sampleno + "的标本退回成功！");
                     o.put("success", true);
                 }
