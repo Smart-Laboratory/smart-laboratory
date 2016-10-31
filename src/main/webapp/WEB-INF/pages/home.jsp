@@ -14,20 +14,27 @@
 <p><fmt:message key="home.message"/></p>
 
 <ul class="glassList">
-    <li>
-        <a href="<c:url value='/manage/input'/>"><fmt:message key="sample.manage.input"/></a>
-    </li>
-    <li>
-        <a href="<c:url value='/manage/receive'/>"><fmt:message key="sample.manage.receive"/></a>
-    </li>
-    <li>
-        <a href="<c:url value='/manage/audit'/>"><fmt:message key="sample.manage.audit"/></a>
-    </li>
-    <li>
-        <a href="<c:url value='/nursestation/inexecute?ward=1001&userid=${pageContext.request.remoteUser}'/>">住院条码打印</a>
-    </li>
-    <li>
-        <a href="<c:url value='/manage/testerSet'/>">检验者设置</a>
-    </li>
+    <security:authorize ifAnyGranted="ROLE_ADMIN,ROLE_USER">
+        <li>
+            <a href="<c:url value='/manage/input'/>"><fmt:message key="sample.manage.input"/></a>
+        </li>
+        <li>
+            <a href="<c:url value='/manage/receive'/>"><fmt:message key="sample.manage.receive"/></a>
+        </li>
+        <li>
+            <a href="<c:url value='/manage/audit'/>"><fmt:message key="sample.manage.audit"/></a>
+        </li>
+        <li>
+            <a href="<c:url value='/nursestation/inexecute?ward=1001&userid=${pageContext.request.remoteUser}'/>">住院条码打印</a>
+        </li>
+        <li>
+            <a href="<c:url value='/manage/testerSet'/>">检验者设置</a>
+        </li>
+    </security:authorize>
+    <security:authorize ifAnyGranted="ROLE_EXECUTOR">
+        <li>
+            <a href="<c:url value='/manage/execute'/>">标本采集</a>
+        </li>
+    </security:authorize>
 </ul>
 </body>
