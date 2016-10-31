@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONArray;
 import com.smart.Constants;
 import com.smart.lisservice.WebService;
+import com.smart.model.reagent.In;
 import com.smart.service.lis.*;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
@@ -77,9 +78,9 @@ public class ExecuteController {
 			LabOrder labOrder = unExecuteList.get(i);	//当前采样项目
 			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
 			String key = labOrder.getRequestId() + "_" +
-					ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
-					ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
-					ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
+					ConvertUtil.null2String(ylxh.getYblx()) + "_" +
+					ConvertUtil.null2String(ylxh.getKsdm()) + "_" +
+					ConvertUtil.null2String(ylxh.getQbgsj())+"_"+
 					ConvertUtil.null2String(ylxh.getSglx())+"_"+
 					ConvertUtil.null2String(ylxh.getSgsl())+"_"+
 					ConvertUtil.null2String(ylxh.getOutSegment())+"_"+
@@ -122,13 +123,13 @@ public class ExecuteController {
 						LabOrder lo = unExecuteList.get(j);		//后续采样项目
 						Ylxh ylxh2 = ylxhMap.get(ConvertUtil.null2String(lo.getYlxh()));	//后续检验目的信息
 						String key2 = labOrder.getRequestId() + "_" +
-								ConvertUtil.null2String(labOrder.getSampletype()) + "_" +
-								ConvertUtil.null2String(labOrder.getLabdepartment()) + "_" +
-								ConvertUtil.null2String(labOrder.getQbgsj())+"_"+
-								ConvertUtil.null2String(ylxh.getSglx())+"_"+
-								ConvertUtil.null2String(ylxh.getSgsl())+"_"+
-								ConvertUtil.null2String(ylxh.getOutSegment())+"_"+
-								ConvertUtil.null2String(ylxh.getCjbw());
+								ConvertUtil.null2String(ylxh2.getYblx()) + "_" +
+								ConvertUtil.null2String(ylxh2.getKsdm()) + "_" +
+								ConvertUtil.null2String(ylxh2.getQbgsj())+"_"+
+								ConvertUtil.null2String(ylxh2.getSglx())+"_"+
+								ConvertUtil.null2String(ylxh2.getSgsl())+"_"+
+								ConvertUtil.null2String(ylxh2.getOutSegment())+"_"+
+								ConvertUtil.null2String(ylxh2.getCjbw());
 						if(ylxh.getSfhb() == 0) {
 							key2 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
 						}
@@ -163,12 +164,12 @@ public class ExecuteController {
 				} else {
 					o.put("error", "警告！检验项目" + labOrder.getExamitem() + "样本类型为空！");
 				}
-
 				//获得取报告单时间
 
+				//合并后的采样项目添加到记录表
+				needSaveList.add(labOrder);
 			}
-			//合并后的采样项目添加到记录表
-			needSaveList.add(labOrder);
+
 		}
 		System.out.println(System.currentTimeMillis() - start);
 		Set<Long> labOrders = new HashSet<Long>();
@@ -179,8 +180,13 @@ public class ExecuteController {
 		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
 		for(int i = 0; i < needSaveList.size(); i++) {
 			LabOrder labOrder = needSaveList.get(i);
+			Ylxh ylxh = null;
 			//生成样本号
-			Ylxh ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
+			if(labOrder.getYlxh().indexOf("+") > 0) {
+				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh().split("[+]")[0])); //获得检验段
+			} else {
+				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
+			}
 			String isAutoNo = ConvertUtil.null2String(ylxh.getIsAutoNo());
 			//自动生成样本号
 			if(isAutoNo.equals("1")){

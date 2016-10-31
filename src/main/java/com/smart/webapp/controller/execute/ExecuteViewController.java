@@ -135,7 +135,11 @@ public class ExecuteViewController {
 		Ylxh ylxh = null;
 		for(int i = 0; i < list.size(); i++) {
 			labOrder = list.get(i);
-			ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh()));
+			if(labOrder.getYlxh().indexOf("+") > 0) {
+				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh().split("[+]")[0])); //获得检验段
+			} else {
+				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh())); //获得检验段
+			}
 			labOrder.setSampletype(ylxh.getYblx());
 			labOrder.setQbgdt(ylxh.getQbgdd());
 			labOrder.setQbgsj(ylxh.getQbgsj());
