@@ -571,17 +571,16 @@ public class SampleInputAjaxController {
 
             //add by zcw 20160929 样本接收更新PDA接收时间
             new WebService().savePdaInfo(sample, process);
-
+            int serialno = 0;
+            if(sampleno != null && !sampleno.isEmpty()){
+                if(segment.equals(inSegment)){
+                    serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
+                }
+            }
+            String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
             //计项目费
             String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
             if (updateStatusSuccess.isEmpty()) {
-                int serialno = 0;
-                if(sampleno != null && !sampleno.isEmpty()){
-                    if(segment.equals(inSegment)){
-                        serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
-                    }
-                }
-                String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
                 if(newSampleNo.isEmpty()){
                     Sample sample1 = sampleManager.getBySampleNo(sampleno);
                     if(sample1 != null){
