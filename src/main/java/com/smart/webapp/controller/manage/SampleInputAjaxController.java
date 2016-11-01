@@ -576,33 +576,32 @@ public class SampleInputAjaxController {
             String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
             //计项目费
             String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
-            if (updateStatusSuccess.isEmpty()) {
-                if(newSampleNo.isEmpty()){
-                    Sample sample1 = sampleManager.getBySampleNo(sampleno);
-                    if(sample1 != null){
-                        o.put("success", 5);
-                        o.put("message", "样本号已存在，不允许保存，请重新设置！");
-                        return o.toString();
-                    }else {
-                        sample.setSampleNo(sampleno);
-                        o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
-                        //o.put("newSampleNo",sampleno );
-                    }
+            if(!sampleno.isEmpty()){
+                Sample sample1 = sampleManager.getBySampleNo(sampleno);
+                if(sample1 != null){
+                    o.put("success", 5);
+                    o.put("message", "样本号已存在，不允许保存，请重新设置！");
+                    return o.toString();
                 }else {
-                    sample.setSampleNo(newSampleNo);
-                    //o.put("newSampleNo",newSampleNo);
+                    sample.setSampleNo(sampleno);
+                    o.put("newSampleNo", sampleno.substring(0, 11) + String.format("%04d", (Integer.parseInt(sampleno.substring(11)) + 1)));
+                    //o.put("newSampleNo",sampleno );
                 }
-                //设置检验者
-                sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
+            }else {
+                sample.setSampleNo(newSampleNo);
+            }
+            //设置检验者
+            sample.setChkoper2(TesterSetMapUtil.getInstance().getTester(segment));
+            if (updateStatusSuccess.isEmpty()) {
                 sample.setFeestatus("1");
-                sampleManager.save(sample);
-                processManager.save(process);
                 o.put("success", 3);
                 o.put("message", "医嘱号为" + code + "的标本接收成功！");
             } else {
                 o.put("success", 4);
                 o.put("message", "医嘱号为" + code + "的计费失败！" + updateStatusSuccess);
             }
+            sampleManager.save(sample);
+            processManager.save(process);
         }
         return jsonToString(sample, process, o);
     }
