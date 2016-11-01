@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.util.InBarcode;
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.UserUtil;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -310,10 +312,46 @@ public class ReagentAjaxController extends ReagentBaseController {
 		return null;
 	}
 
-	@RequestMapping(value = "/savein*", method = RequestMethod.POST)
+	@RequestMapping(value = "/print*", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String printJson(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<In> inList = new ArrayList<In>();
+		inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));
+		String rgIds = "";
+		for(In in : inList) {
+			rgIds += in.getRgId() + ",";
+		}
+		List<Reagent> rgList = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
+		for(Reagent r : rgList) {
+			rMap.put(r.getId(), r);
+		}
+		return printJson(inList, rMap);
+	}
+
+	private String printJson(List<In> inList,Map<Long, Reagent> rMap) throws Exception {
+		JSONArray jsonArray = new JSONArray();
+		for(In in : inList) {
+			for(int i=1; i<=in.getNum(); i++) {
+				JSONObject object = new JSONObject();
+				object.put("barcode", String.format("%07d", in.getId()) + String.format("%03d", i));
+				object.put("batch", in.getBatch());
+				object.put("name", rMap.get(in.getRgId()).getNameAndSpecification());
+				object.put("exdate", in.getExdate());
+				object.put("indate", in.getIndate());
+				object.put("condition", ConvertUtil.null2String(rMap.get(in.getRgId()).getStorageCondition()));
+				jsonArray.put(object);
+			}
+		}
+		return jsonArray.toString();
+	}
+
+	@RequestMapping(value = "/savein*", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String saveIn(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Date now = new Date();
+		List<In> inList = new ArrayList<In>();
+		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
 		try {
 			String text = request.getParameter("text");
 			User user = UserUtil.getInstance().getUser(request.getRemoteUser());
@@ -328,6 +366,9 @@ public class ReagentAjaxController extends ReagentBaseController {
 			}
 			String s = inmap.keySet().toString().replace("[", "").replace("]", "");
 			List<Reagent> list = reagentManager.getByIds(s);
+			for(Reagent r : list) {
+				rMap.put(r.getId(), r);
+			}
 			List<Batch> needSaveBatch = new ArrayList<Batch>();
 			List<In> needSaveIn = new ArrayList<In>();
 			for(Reagent r : list) {
@@ -360,11 +401,11 @@ public class ReagentAjaxController extends ReagentBaseController {
 				needSaveIn.add(indata);
 			}
 			batchManager.saveAll(needSaveBatch);
-			inManager.saveAll(needSaveIn);
+			inList = inManager.saveAll(needSaveIn);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Constants.SDF.format(now);
+		return printJson(inList, rMap);
 	}
 	
 	@RequestMapping(value = "/saveout*", method = RequestMethod.POST)

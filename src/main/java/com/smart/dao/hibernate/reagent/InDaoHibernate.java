@@ -1,6 +1,6 @@
 package com.smart.dao.hibernate.reagent;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -17,13 +17,15 @@ public class InDaoHibernate extends GenericDaoHibernate<In, Long> implements InD
 		super(In.class);
 	}
 
-	public void saveAll(List<In> needSaveIn) {
+	public List<In> saveAll(List<In> needSaveIn) {
 		Session s = getSessionFactory().openSession();
+		List<In> returnList  = new ArrayList<In>();
 		for(In i : needSaveIn) {
-			s.saveOrUpdate(i);
+			returnList.add((In)s.merge(i));
 		}
 		s.flush();
 		s.close();
+		return returnList;
 	}
 
 	@SuppressWarnings("unchecked")

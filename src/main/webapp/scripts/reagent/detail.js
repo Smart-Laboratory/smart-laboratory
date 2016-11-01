@@ -1,3 +1,72 @@
+	var LODOP; //声明为全局变量
+	function printSetting() {
+		//readPrintFile();
+		if (LODOP.CVERSION) {
+			LODOP.On_Return = function (TaskID, Value) {
+				if (Value >= 0)
+					setCookie("lis_print", Value);
+				else
+					alert("选择失败！");
+			};
+			LODOP.SELECT_PRINTER();
+			return;
+		}
+	};
+	function getCookie(name) {
+		var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+		if (arr = document.cookie.match(reg))
+			return unescape(arr[2]);
+		else
+			return null;
+	};
+	function setCookie(name, value) {
+		var Days = 9999;
+		var exp = new Date();
+		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+		document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+	};
+	function setPrintIndex(index) {
+		var index = getCookie("lis_print");
+		LODOP = getLodop();
+		LODOP.SET_PRINTER_INDEX(index)
+	}
+	function CreateDataBill(data) {
+		if (data && data != null) {
+			LODOP.PRINT_INIT("");
+			LODOP.SET_PRINT_PAGESIZE(0, 500, 350, "A4");
+			LODOP.ADD_PRINT_BARCODEA("barcode", "10.42mm", "2.84mm", "34.66mm", 35, "128Auto", data.barcode);
+			LODOP.SET_PRINT_STYLEA(0, "ShowBarText", 0);
+			LODOP.SET_PRINT_STYLEA(0, "Horient", 2);
+			LODOP.ADD_PRINT_TEXTA("code", "19.39mm", "2.85mm", 161, 25, "*" + data.barcode + "*");
+			LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+			LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+			LODOP.ADD_PRINT_TEXTA("name", "2.89mm", "2.95mm", 190, 25, data.name);
+			LODOP.ADD_PRINT_TEXTA("batch", "23.36mm", "2.85mm", 180, 20, "LOT:" + data.batch + " " + "EXP:" + data.exdate);
+			LODOP.ADD_PRINT_TEXTA("indate", "27.36mm", "2.85mm", 180, 20, "REP:" + data.indate);
+			LODOP.ADD_PRINT_TEXTA("exdate", "31.36mm", "2.85mm", 180, 20, "CON:" + data.condition);
+
+		}
+	}
+	function startPrint(data) {
+		CreateDataBill(data);
+		setPrintIndex();
+		//开始打印
+		LODOP.PRINT();
+	}
+
+	function printSet() {
+		var data ={
+			"barcode": "0000492001",
+			"batch": "ABR169A",
+			"name": "ABO/Rh正反定型血型定型试剂卡[20盒/箱]",
+			"exdate": "20170402",
+			"indate": "2016-10-29 13:27:13 ",
+			"condition": "在2-8℃下"
+		}
+		CreateDataBill(data);
+		LODOP.PRINT_DESIGN();
+	}
+
 	function changeTab(str) {
 		if(str.indexOf("in") >=0) {
 			$("#inpre").attr("class", "active");
@@ -15,10 +84,11 @@
 	}
 	
 	function reprint(id) {
-		$('#printFrame').empty();
-		$("#printFrame").append("<iframe id='iframe_print' name='iframe_print' frameborder=0 style='background-color:transparent' width='99%' height='93%' src=\"../reagent/print?id=" + id + "\"/>");
-		$("#printDialog").dialog("open");
-
+		$.get(baseUrl + "/ajax/reagent/print",{id:id},function(data) {
+			for (i = 0; i < data.length; i++) {
+				startPrint(data[i]);
+			}
+		});
 	}
 	
 	function cancel(id) {
@@ -45,14 +115,6 @@
 		})
 	}
 	$(function() {
-		$("#printDialog").dialog({
-			title: "条码打印",
-			autoOpen: false,
-			resizable: false,
-			modal:true,
-		    width: 680,
-		    height: 600
-		});
 		var clientHeight= $(window).innerHeight();
 		var height =clientHeight-$('#head').height()- $('.tabbable').height()-$('.footer-content').height()-200;
 

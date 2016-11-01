@@ -22,8 +22,8 @@ public class InManagerImpl extends GenericManagerImpl<In, Long> implements InMan
         this.inDao = inDao;
     }
 
-	public void saveAll(List<In> needSaveIn) {
-		inDao.saveAll(needSaveIn);
+	public List<In> saveAll(List<In> needSaveIn) {
+		return inDao.saveAll(needSaveIn);
 	}
 
 	public List<In> getByInDate(String indate) {

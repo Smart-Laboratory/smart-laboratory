@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
 	<script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
 	<script type="text/javascript" src="../scripts/layer/layer.js"></script>
+	<script src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
 	<script type="text/javascript" src="../scripts/reagent/in.js"></script>
 
 	<%--<link rel="stylesheet" type="text/css"  href="<c:url value='../styles/jquery-ui.min.css'/>" />--%>
@@ -35,7 +36,15 @@
 		<option value="2" selected><fmt:message key='reagent.single'/></option>
 		<option value="3"><fmt:message key='reagent.combo.select'/></option>
 	</select>
-	<button id="inBtn" type="button" class="btn btn-success" style="float:right;"><fmt:message key='reagent.in'/></button>
+	<button id="inBtn" type="button" class="btn btn-success" style="float:right;margin-left:10px;"><fmt:message key='reagent.in'/></button>
+	<button type="button" class="btn btn-pink" style="float:right;margin-left:10px;" title="打印机选择" onclick="printSetting()">
+		<i class="ace-icon fa fa-pencil-square bigger-110"></i>
+		打印设定
+	</button>
+	<button type="button" class="btn btn-purple" style="float:right;" onclick="printSet()">
+		<i class="ace-icon fa fa-pencil-square bigger-110"></i>
+		打印设计
+	</button>
 	<form action="#" method="post" enctype ="multipart/form-data" id="excelForm" class="form-control">
 		<input type="file" id="fileUpload" name="fileUpload" label=“上传Excel文件" style="padding:0px 0px;float:left;width:200px;"/>
 		<input id="readExcel" type="button" class="btn btn-minier btn-success" value="Excel导入" style="padding:0px 0px;float:left;">
@@ -46,9 +55,5 @@
 </div>
 </div>
 
-<div id="printDialog" align="left">
-	<button class="btn btn-success" onclick="document.getElementById('iframe_print').contentWindow.print();"><fmt:message key="print"/></button>
-	<div id="printFrame" style="height:500px;"></div>
-</div>
 </div>
 </body>

@@ -52,44 +52,6 @@ InController {
 		return dataResponse;
 	}
 	
-	@RequestMapping(value = "/print*", method = RequestMethod.GET)
-	public ModelAndView print(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<InBarcode> ibList = new ArrayList<InBarcode>();
-		List<In> inList = new ArrayList<In>();
-		if(request.getParameter("id") == null) {
-			String indate = request.getParameter("time");
-			inList = inManager.getByInDate(indate);
-		} else {
-			inList.add(inManager.get(Long.parseLong(request.getParameter("id"))));
-		}
-		String rgIds = "";
-		
-		for(In in : inList) {
-			rgIds += in.getRgId() + ",";
-		}
-//		System.out.println("id="+rgIds);
-		List<Reagent> rglist = reagentManager.getByIds(rgIds.substring(0, rgIds.length()-1));
-		Map<Long, Reagent> rMap = new HashMap<Long, Reagent>();
-		for(Reagent r : rglist) {
-			rMap.put(r.getId(), r);
-		}
-		for(In in : inList) {
-			for(int i=1; i<=in.getNum(); i++) {
-				InBarcode ib = new InBarcode();
-				ib.setBarcode(String.format("%07d", in.getId()) + String.format("%03d", i));
-				ib.setName(rMap.get(in.getRgId()).getNameAndSpecification());
-				ib.setBatch(in.getBatch());
-				ib.setExdate(in.getExdate());
-				ib.setIndate(in.getIndate());
-				ib.setCondition(rMap.get(in.getRgId()).getStorageCondition());
-				ibList.add(ib);
-			}
-		}
-		request.setAttribute("list", ibList);
-		request.setAttribute("size", ibList.size());
-		return new ModelAndView();
-	}
-	
 	@RequestMapping(value = "/smallprint*", method = RequestMethod.GET)
 	public ModelAndView smallprint(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String begintime = request.getParameter("begintime");

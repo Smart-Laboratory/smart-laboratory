@@ -10,11 +10,9 @@ import com.smart.model.reagent.In;
 
 public interface InDao extends GenericDao<In, Long> {
 
-	void saveAll(List<In> needSaveIn);
+	List<In> saveAll(List<In> needSaveIn);
 
-	@Transactional
 	List<In> getByInDate(String indate);
 
-	@Transactional
 	List<In> getByLab(String lab);
 }

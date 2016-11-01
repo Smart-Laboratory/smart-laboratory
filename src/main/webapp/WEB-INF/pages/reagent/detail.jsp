@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
     <script type="text/javascript" src="../scripts/jquery.jqGrid.js"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/ui.jqgrid.css'/>"/>
+    <script src="<c:url value="/scripts/LodopFuncs.js"/>"></script>
     <script type="text/javascript" src="../scripts/reagent/detail.js"></script>
     <script src="<c:url value="/scripts/layer/layer.js"/>"></script>
 
@@ -132,11 +133,6 @@
             </div>
         </div>
 
-    </div>
-    <div id="printDialog" align="left">
-        <button class="btn btn-success" onclick="document.getElementById('iframe_print').contentWindow.print();">
-            <fmt:message key="print"/></button>
-        <div id="printFrame" style="height:500px;"></div>
     </div>
 </div>
 </body>
