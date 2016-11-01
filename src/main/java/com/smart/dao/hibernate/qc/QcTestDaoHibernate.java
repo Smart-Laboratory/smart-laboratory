@@ -91,4 +91,17 @@ public class QcTestDaoHibernate  extends GenericDaoHibernate<QcTest, Long> imple
             }
         }
     }
+
+    public QcTest getByTestId(String lab,String deviceid, String qcBatch, String testid){
+        String hql = "from QcTest where  labDepart=:lab and deviceid=:deviceid and qcBatch=:qcbatch and testId=:testid ";
+        Query q = getSession().createQuery(hql);
+        q.setString("lab",lab);
+        q.setString("deviceid",deviceid);
+        q.setString("qcbatch",qcBatch);
+        q.setString("testid",testid);
+        List<QcTest> list = q.list();
+        if(list.size()>0)
+            return list.get(0);
+        return  null;
+    }
 }

@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.lis.Device;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ import com.smart.webapp.util.DataResponse;
 @Controller
 @RequestMapping("/qc/rule*")
 public class QcRuleController {
-	
+
 	@Autowired
 	private QcRuleManager qcRuleManager = null;
 
@@ -33,10 +35,10 @@ public class QcRuleController {
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return new ModelAndView();
 	}
-	
-	@RequestMapping(value = "/list*",method = RequestMethod.GET)
+
+	@RequestMapping(value = "/list*", method = RequestMethod.GET)
 	@ResponseBody
-	public DataResponse getRuleList( HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public DataResponse getRuleList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		String pages = request.getParameter("page");
 		String rows = request.getParameter("rows");
@@ -50,7 +52,7 @@ public class QcRuleController {
 
 		DataResponse dataResponse = new DataResponse();
 		List<QcRule> list = new ArrayList<QcRule>();
-		list = qcRuleManager.getRuleList(query,start,end,sidx,sord);
+		list = qcRuleManager.getRuleList(query, start, end, sidx, sord);
 
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(list.size());
@@ -61,7 +63,7 @@ public class QcRuleController {
 		int totalPage = (list.size() + x) / (row == 0 ? list.size() : row);
 		dataResponse.setPage(page);
 		dataResponse.setTotal(totalPage);
-		for(QcRule info :list) {
+		for (QcRule info : list) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", info.getId());
 			map.put("name", info.getName());
@@ -74,66 +76,86 @@ public class QcRuleController {
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}
-	
+
 	/**
-     * 新增质控规则
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value="/add*",method=RequestMethod.POST)
-    @ResponseBody
-    public String addRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response)throws  Exception{
-        JSONObject success = new JSONObject();
-        try {
-        	qcRuleManager.save(qcRule);
-        	success.put("success","0");
-        } catch(Exception e) {
-        	success.put("success", "新增质控规则失败！");
-        }
-        return success.toString();
-    }
-    
-    /**
-     * 编辑质控规则
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value="/edit*",method=RequestMethod.POST)
-    @ResponseBody
-    public String editRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response)throws  Exception{
-        JSONObject success = new JSONObject();
-        try {
-        	qcRuleManager.save(qcRule);
-        	success.put("success","0");
-        } catch(Exception e) {
-        	success.put("success", "质控规则保存失败！");
-        }
-        return success.toString();
-    }
-    
-    /**
-     * 删除质控规则
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value="/delete*",method=RequestMethod.POST)
-    @ResponseBody
-    public String deleteRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response)throws  Exception{
-        JSONObject success = new JSONObject();
-        try {
-        	System.out.println(qcRule.getId());
-        	qcRuleManager.remove(qcRule.getId());
-        	success.put("success","0");
-        } catch(Exception e) {
-        	success.put("success", "质控规则删除失败！");
-        }
-        success.put("success","0");
-        return success.toString();
-    }
+	 * 新增质控规则
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/add*", method = RequestMethod.POST)
+	@ResponseBody
+	public String addRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject success = new JSONObject();
+		try {
+			qcRuleManager.save(qcRule);
+			success.put("success", "0");
+		} catch (Exception e) {
+			success.put("success", "新增质控规则失败！");
+		}
+		return success.toString();
+	}
+
+	/**
+	 * 编辑质控规则
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/edit*", method = RequestMethod.POST)
+	@ResponseBody
+	public String editRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject success = new JSONObject();
+		try {
+			qcRuleManager.save(qcRule);
+			success.put("success", "0");
+		} catch (Exception e) {
+			success.put("success", "质控规则保存失败！");
+		}
+		return success.toString();
+	}
+
+	/**
+	 * 删除质控规则
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/delete*", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteRule(@ModelAttribute @Validated QcRule qcRule, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JSONObject success = new JSONObject();
+		try {
+			System.out.println(qcRule.getId());
+			qcRuleManager.remove(qcRule.getId());
+			success.put("success", "0");
+		} catch (Exception e) {
+			success.put("success", "质控规则删除失败！");
+		}
+		success.put("success", "0");
+		return success.toString();
+	}
+
+	@RequestMapping(value = "/getRules*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getRules(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		List<QcRule> qcRules = qcRuleManager.getAll();
+		JSONArray array = new JSONArray();
+		if (qcRules != null) {
+			for (QcRule d : qcRules) {
+				JSONObject o = new JSONObject();
+				o.put("id", d.getId());
+				o.put("name", d.getName());
+				array.put(o);
+			}
+		}
+		return array.toString();
+
+	}
 }

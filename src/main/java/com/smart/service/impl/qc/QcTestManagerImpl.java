@@ -39,4 +39,8 @@ public class QcTestManagerImpl  extends GenericManagerImpl<QcTest, Long> impleme
     public List<QcTest> getDetails(String qcBatch, int start, int end, String sidx, String sord){
         return qcTestDao.getDetails(qcBatch,start,end,sidx,sord);
     }
+
+    public QcTest getByTestId(String lab,String deviceid, String qcBatch, String testid){
+        return qcTestDao.getByTestId(lab,deviceid,qcBatch,testid);
+    }
 }

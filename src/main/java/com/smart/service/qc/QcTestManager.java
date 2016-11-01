@@ -17,4 +17,6 @@ public interface QcTestManager  extends GenericManager<QcTest, Long> {
     void saveDetails(List<QcTest> qcBatchList);
     int getCount(String qcBatch, int start, int end, String sidx, String sord);
     List<QcTest> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+
+    QcTest getByTestId(String lab,String deviceid, String qcBatch, String testid);
 }

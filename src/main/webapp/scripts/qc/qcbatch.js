@@ -43,9 +43,58 @@ TSLAB.Custom=(function(){
                 page : 1
             }).trigger('reloadGrid');//重新载入
         },
+        ruleSel: function () {
+            var rowId = cache.drugGrid.jqGrid('getGridParam','selrow');
+            var rowData = cache.drugGrid.jqGrid('getRowData',rowId);
+            if(!rowId || rowId =='' || rowId==null){
+                layer.msg("请先选择要编辑的质控批号",{icon:2});
+                return false;
+            };
+
+            $.get("../qc/qctest/ajax/getIndexs",{qcbatch:rowData.qcBatch,deviceid:$("#deviceSelect").val()},function (data) {
+                var ol = $("#indexList");
+                ol.empty();
+                data = jQuery.parseJSON(data);
+                for(var i=0;i<data.length;i++){
+                    var item = data[i];
+                    var li = $('<li><a href="#" tabindex="-1" testid="'+item.id+'" testname="olindex" onclick="TSLAB.Custom.getRules('+item.id+')">'+ item.name+'</a></li>');
+
+                    // var li = $('<li><p  testid="'+item.id+'" testname="olindex" onclick="TSLAB.Custom.getRules('+item.id+')">'+ item.name+'</p></li>');
+                    ol.append(li);
+                }
+            });
+            layer.open({
+                type: 1,
+                area: ['400px','420px'],
+                fix: false, //不固定
+                maxmin: false,
+                shade:0.6,
+                title: "设置检验项目质控规则",
+                content: $("#ruleSelectDialog"),
+                btn:["保存","取消"],
+                yes: function(index, layero){
+                    // public.SaveRule(index);
+                    //layer.close(index); //如果设定了yes回调，需进行手工关闭
+                }
+            });
+
+        },
+        getRules:function (id) {
+            $.get("../qc/qctest/ajax/getRuleSel",{id:id},function (data) {
+                data = jQuery.parseJSON(data);
+                $("#qctestid").val(id);
+                var rules = data.ruleSel;
+                $("#ruleList input:checkbox").each(function (index,item) {
+                    $(item).prop("checked",false);
+                    if(rules.indexOf(";"+item.id+";")>0 || rules.indexOf(item.id+";")==0){
+                        $(item).prop("checked",true);
+                    };
+                });
+            });
+        },
+
         Add:function(){
             public.clearData();
-            public.loadDualListbox();
 
             $("#sampleType").autocomplete({
                 source: function( request, response ) {
@@ -303,7 +352,7 @@ TSLAB.Custom=(function(){
                 url : "../qc/qctest/getList",
                 height :height,
                 width:$('.rightContent').width(),
-                colNames : ['id', '项目id','试验项目','英文缩写', '靶值', '标准差','频率(小时)','是否在用','仪器号','科室','pt低限','pt高限'],
+                colNames : ['id', '项目id','试验项目','英文缩写', '靶值', '标准差','频率(小时)','质控规则','是否在用','仪器号','科室','pt低限','pt高限'],
                 colModel : [
                     {name : 'id',index : 'id',width : 60,hidden : true,key:true},
                     {name : 'testId',index : 'testId',width : 90,hidden : true, editable: true,editrules: { edithidden: true }},
@@ -312,6 +361,7 @@ TSLAB.Custom=(function(){
                     {name : 'targetValue',index : 'targetValue',width : 100, editable: true},
                     {name : 'stdV',index : 'stdV',width : 100, editable: true},
                     {name : 'frequency',index : 'frequency',width : 100, editable: true},
+                    {name : 'ruleSelected',index : 'ruleSelected',width : 100, editable: true},
                     {name : 'inuse',index : 'inuse',width : 100, editable: true, edittype : "checkbox",editoptions : {value : "1:0"}},
                     {name : 'deviceid',index : 'deviceid',width : 100, editable: true},
                     {name : 'labDepart',index : 'labDepart',width : 100, editable: true},
@@ -357,8 +407,7 @@ TSLAB.Custom=(function(){
                         url:'qctest/save?qcBatch='+rowData.qcBatch+'&sampleType='+rowData.sampleType,
                         closeAfterAdd : true,
                         beforeShowForm:function(){
-                        	
-                        	$('#labDepart').val($("#scode").html()).attr('readonly', true);
+                        	$('#labDepart').val($("#labText").html()).attr('readonly', true);
                         	$("#deviceid").val(rowData.deviceid).attr('readonly',true);
                             $('#testId').autocomplete({
                                 source: function( request, response ) {
@@ -490,7 +539,7 @@ TSLAB.Custom=(function(){
 	                postData : {lab:$("#scode").val(),deviceid:$("#deviceSelect").val()},
             	}).trigger('reloadGrid');
             });
-            	
+            
             labChange=function(select){
         		$.ajax({
         			  type: 'POST',
@@ -498,7 +547,6 @@ TSLAB.Custom=(function(){
         			  success:function(data){
         				  var section = $(select).children().attr("title");
         				  $("#labText").html($(select).children().html());
-        				  $("#scode").val(section);
         				  cache.drugGrid.jqGrid('setGridParam',{
         		                url:'../qc/qcbatch/getList',
         		                postData : {lab:section,deviceid:$("#deviceSelect").val()},
@@ -529,7 +577,23 @@ $(function(){
 
     
     TSLAB.Custom.init();
-
+    $.get("../qc/rule/getRules",function (data) {
+        data = jQuery.parseJSON(data);
+        var ul = $('#ruleList');
+        ul.empty();
+        for(i=0;i< data.length;i++){
+            var item = data[i];
+            var li = $('<li><div class="checkbox"><label><input type="checkbox" id="'+item.id+'" testname="'+item.name+'" onclick="UpdateRule(this)">'+ item.name+'</label></div></li>');
+            ul.append(li);
+        }
+    });
 
 
 });
+
+function UpdateRule(item) {
+
+    $.get("../qc/qctest/upRuleSel",{ruleid:item.id,check:$(item).prop("checked"),qctestid:$("#qctestid").val()},function (data) {
+        layer.msg("success");
+    });
+}

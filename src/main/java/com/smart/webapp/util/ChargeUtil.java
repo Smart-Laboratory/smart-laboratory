@@ -179,7 +179,7 @@ public class ChargeUtil {
             param.put("fitItemId","0");
             //param.put("price", "");
             //param.put("testPurposesCode", TestTubeUtil.getInstance(testTubeManager).getValue(labOrder.getContainer()));   //获取费用项目ID
-            if(labOrder.getContainer().equals("红色管")) {
+            if(ConvertUtil.null2String(labOrder.getContainer()).equals("红色管")) {
                 param.put("feeItemCode", "16041");
                 //param.put("feeItemName", "");
                 param.put("feeItemName","采血器(普通真空试管)");

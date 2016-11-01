@@ -2,6 +2,7 @@ package com.smart.webapp.controller.qc;
 
 import com.alibaba.fastjson.JSON;
 import com.smart.Constants;
+import com.smart.check.DiffCheck;
 import com.smart.model.lis.Device;
 import com.smart.model.lis.Section;
 import com.smart.model.qc.QcBatch;
@@ -75,7 +76,7 @@ public class QcBatchController {
     	for(Device d : dList){
     		deviceMap.put(d.getId(), d.getName());
     	}
-    	
+
     	return new ModelAndView().addObject("sections", sections).addObject("devices",deviceMap);
     }
 

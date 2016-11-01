@@ -576,7 +576,7 @@ public class SampleInputAjaxController {
             String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
             //计项目费
             String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
-            if(!sampleno.isEmpty()){
+            if(newSampleNo.isEmpty()){
                 Sample sample1 = sampleManager.getBySampleNo(sampleno);
                 if(sample1 != null){
                     o.put("success", 5);

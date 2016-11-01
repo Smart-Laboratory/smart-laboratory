@@ -20,6 +20,8 @@ public class QcRule {
 	private String name;
 	private String describe;
 	private int inuse;
+
+	private String ruleClassName;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
@@ -63,5 +65,14 @@ public class QcRule {
 	@Transient
 	public String getUseInfo() {
 		return inuse == 1 ? "是" : "否";
+	}
+
+	@Column
+	public String getRuleClassName() {
+		return ruleClassName;
+	}
+
+	public void setRuleClassName(String ruleClassName) {
+		this.ruleClassName = ruleClassName;
 	}
 }

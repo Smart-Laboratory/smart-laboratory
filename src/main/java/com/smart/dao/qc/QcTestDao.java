@@ -24,4 +24,7 @@ public interface QcTestDao extends GenericDao<QcTest, Long> {
     
     @Transactional
     List<QcTest> getDetails(String qcBatch, int start, int end, String sidx, String sord);
+
+    @Transactional
+    QcTest getByTestId(String lab,String deviceid, String qcBatch, String testid);
 }

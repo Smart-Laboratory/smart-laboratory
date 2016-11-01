@@ -3,7 +3,6 @@
 
 <head>
 	<title><fmt:message key="menu.quality.qc.data"/></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 	<script type="text/javascript" src="../scripts/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../scripts/i18n/grid.locale-cn.js"></script>
@@ -38,9 +37,9 @@
 			</div>
 			<div class="input-group col-sm-1 " style="float: left;"></div>
 			<div class="col-sm-3" style="float: right;">
-				<button type="button" class="btn btn-sm btn-primary " title="添加质控规则" onclick="Add()">
+				<button type="button" class="btn btn-sm btn-primary " title="添加质控规则" onclick="Save()">
 					<i class="ace-icon fa fa-fire bigger-110"></i>
-					<fmt:message key="button.add" />
+					保存
 				</button>
 				<button type="button" class="btn btn-sm  btn-success" title="编辑质控规则" onclick="Edit()">
 					<i class="ace-icon fa fa-pencil-square bigger-110"></i>
@@ -59,11 +58,11 @@
 <div class="row">
 	<div class="col-xs-9" id="qcDataTable">
 		<table id="list"></table>
-		<div id="pager"></div>
+		<div id="leftPager"></div>
 	</div>
 	<div class="col-xs-3">
 		<table id="qcInfo"></table>
-		<div id="pager"></div>
+		<div id="pager1"></div>
 	</div>
 </div>
 

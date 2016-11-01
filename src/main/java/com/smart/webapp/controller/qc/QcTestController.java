@@ -10,7 +10,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jettison.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.smart.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,28 +39,28 @@ import com.zju.api.service.RMIService;
 @RequestMapping("/qc/qctest*")
 public class QcTestController {
 
-	@Autowired
+    @Autowired
     private QcBatchManager qcBatchManager = null;
 
     @Autowired
     private DeviceManager deviceManager = null;
-    
+
     @Autowired
     private UserManager userManager = null;
-    
+
     @Autowired
     private RMIService rmiService;
-    
+
     @Autowired
     private SectionManager sectionManager;
-    
+
     @Autowired
     private QcTestManager qcTestManager;
-    
+
     @Autowired
     private IndexManager indexManager;
-    
-	@RequestMapping( value = "/getList" ,method = {RequestMethod.GET,RequestMethod.POST} )
+
+    @RequestMapping(value = "/getList", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public DataResponse getList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String pages = request.getParameter("page");
@@ -76,7 +78,7 @@ public class QcTestController {
         int size = 0;
         size = qcTestManager.getCount(qcBatch, start, end, sidx, sord);
         dataResponse.setRecords(size);
-        List<QcTest> list =  qcTestManager.getDetails(qcBatch, start, end, sidx, sord); 
+        List<QcTest> list = qcTestManager.getDetails(qcBatch, start, end, sidx, sord);
         int x = size % (row == 0 ? size : row);
         if (x != 0) {
             x = row - x;
@@ -86,7 +88,7 @@ public class QcTestController {
         dataResponse.setTotal(totalPage);
         List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
         instanceTest instance = instanceTest.getInstance();
-        for(QcTest info :list) {
+        for (QcTest info : list) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("id", ConvertUtil.null2String(info.getId()));
             map.put("testId", ConvertUtil.null2String(info.getTestId()));
@@ -100,33 +102,66 @@ public class QcTestController {
             map.put("labDepart", ConvertUtil.null2String(info.getLabDepart()));
             map.put("ptlow", ConvertUtil.null2String(info.getPtlow()));
             map.put("pthigh", ConvertUtil.null2String(info.getPthigh()));
-            
+
             String labname = instance.getValue(info.getLabDepart());
             map.put("labDepart", labname);
+            map.put("ruleSelected", info.getRuleSelected());
             dataRows.add(map);
         }
         dataResponse.setRows(dataRows);
         response.setContentType("text/html;charset=UTF-8");
         return dataResponse;
     }
-	
-	 /**
+
+    /**
+     * 根据qcbatchid获取检验项目id列表
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/ajax/getIndexs", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String getIndexList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String qcBatch = ConvertUtil.null2String(request.getParameter("qcbatch"));
+        String deviceid = ConvertUtil.null2String(request.getParameter("deviceid"));
+
+        String lab = UserUtil.getInstance().getUser(request.getRemoteUser()).getLastLab();
+
+        List<QcTest> qcTests = qcTestManager.getDetails(qcBatch, 0, 0, "", "");
+
+        JSONArray jsonArray = new JSONArray();
+        for (QcTest qcTest : qcTests) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", qcTest.getId());
+            jsonObject.put("name", TestIdMapUtil.getInstance(indexManager).getIndex(qcTest.getTestId()).getName());
+            jsonArray.add(jsonObject);
+        }
+
+        response.setContentType("text/html; charset=UTF-8");
+        response.getWriter().write(jsonArray.toString());
+        return null;
+    }
+
+    /**
      * 保存质控靶值
+     *
      * @param
      * @param request
      * @param response
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="/save*",method={RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/save*", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public String save(HttpServletRequest request, HttpServletResponse response)throws  Exception{
+    public String save(HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject success = new JSONObject();
-        Long id= ConvertUtil.getLongValue(request.getParameter("id"));
+        Long id = ConvertUtil.getLongValue(request.getParameter("id"));
         QcTest qcTest = null;
-        if(id>0){
+        if (id > 0) {
             qcTest = qcTestManager.get(id);
-        }else {
+        } else {
             qcTest = new QcTest();
         }
         String qcBatch = ConvertUtil.null2String(request.getParameter("qcBatch"));
@@ -141,6 +176,7 @@ public class QcTestController {
         String labDepart = ConvertUtil.null2String(request.getParameter("labDepart"));
         String ptlow = ConvertUtil.null2String(request.getParameter("ptlow"));
         String pthigh = ConvertUtil.null2String(request.getParameter("pthigh"));
+        String ruleSelected = ConvertUtil.null2String(request.getParameter("ruleSelected"));
 
         qcTest.setQcBatch(qcBatch);
         qcTest.setSampleType(sampleType);
@@ -154,32 +190,68 @@ public class QcTestController {
         qcTest.setLabDepart(labDepart);
         qcTest.setPtlow(ptlow);
         qcTest.setPthigh(pthigh);
-        
+        qcTest.setRuleSelected(ruleSelected);
+
         try {
             qcTestManager.save(qcTest);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        success.put("success","0");
+        success.put("success", "0");
         return success.toString();
     }
 
     /**
      * 删除
+     *
      * @param id
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping(value="/delete*",method=RequestMethod.POST)
+    @RequestMapping(value = "/delete*", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(@RequestParam(value = "id") Long id, HttpServletRequest request, HttpServletResponse response) throws  Exception{
+    public String delete(@RequestParam(value = "id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //检测状态
-        QcTest qcTest  = qcTestManager.get(id);
+        QcTest qcTest = qcTestManager.get(id);
         JSONObject result = new JSONObject();
-            qcTestManager.remove(qcTest);
-            result.put("susess","0");
-            return result.toString();
+        qcTestManager.remove(qcTest);
+        result.put("susess", "0");
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/ajax/getRuleSel*", method = RequestMethod.GET)
+    @ResponseBody
+    public String getRuleSel(@RequestParam(value = "id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        QcTest qcTest = qcTestManager.get(id);
+
+        JSONObject result = new JSONObject();
+        if (qcTest != null) {
+            result.put("ruleSel", qcTest.getRuleSelected());
+        }
+        return result.toString();
+    }
+
+
+    @RequestMapping(value = "/upRuleSel*", method = RequestMethod.GET)
+    @ResponseBody
+    public String updateRule(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String ruleid = ConvertUtil.null2String(request.getParameter("ruleid"));
+        String check = ConvertUtil.null2String(request.getParameter("qcrule"));
+        Long qctestid = ConvertUtil.getLongValue(request.getParameter("qctestid"));
+
+        QcTest qcTest = qcTestManager.get(qctestid);
+        if(qcTest==null || ruleid.isEmpty() || check.isEmpty())
+            return "false";
+        String ruleSel = ConvertUtil.null2String(qcTest.getRuleSelected());
+        if(ruleSel.contains(ruleid))
+            ruleSel = ruleSel.replace(ruleid+";","");
+        else
+            ruleSel += ruleid + ";";
+        qcTest.setRuleSelected(ruleSel);
+
+        qcTestManager.save(qcTest);
+        return null;
     }
 }

@@ -32,7 +32,8 @@ public class QcBatch {
 	private String lotNo;			//批号
 	private String qcBatchName;		//质控品名称
 	private Date expDate;			//质控品失效日期
-	
+
+
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_QC_BATCH")
@@ -170,4 +171,5 @@ public class QcBatch {
 	public void setExpDate(Date expDate) {
 		this.expDate = expDate;
 	}
+
 }

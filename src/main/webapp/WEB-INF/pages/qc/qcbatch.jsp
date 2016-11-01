@@ -125,8 +125,15 @@
         .EditTable tr:first-child {
    			display: table-row !important;
 		}
+        #editmodrightGrid{
+            width:400px !important;
+        }
+        .FormGrid{
+            width:400px;
+        }
     </style>
 </head>
+
 <div class="row" id="toolbar">
     <div class="col-xs-12">
         <div  style="padding-top: 5px;">
@@ -160,7 +167,11 @@
                     <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
                 </button>
 			</span>
+
             </div>
+            <button type="button" class="btn btn-purple btn-sm" onclick="TSLAB.Custom.ruleSel()">
+                质控规则选择
+            </button>
         </div>
 
     </div>
@@ -237,7 +248,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-2 control-label no-padding-right" for="medthod">方法学 </label>
+            <label class="col-xs-2 control-label no-padding-right" for="method">方法学 </label>
             <div class="col-xs-4">
                 <input type="text" id="method" name="method" placeholder="方法学" value="" class="col-xs-12 text"/>
             </div>
@@ -283,6 +294,26 @@
 
         </div>
     </form>
+</div>
+<div id="ruleSelectDialog" style="display: none;">
+    <input type="hidden" id="qctestid" />
+    <div class="col-xs-5">
+        <h4 style="margin-left: 25px;">检验项目列表 </h4>
+        <div class="dropdown ">
+            <ul id="indexList" class="dropdown-menu" style="border-top:solid 1px; display:block !important;margin-left: 25px;">
+
+            </ul>
+        </div>
+
+    </div>
+    <div id="ruleListdiv" class="col-xs-7">
+        <h4 style="margin-left: 25px;">规则列表 </h4>
+
+
+        <ul id="ruleList" style="margin-left: 25px;border-top:solid 1px;">
+
+        </ul>
+    </div>
 </div>
 <textarea name="antibiotics" id="antibiotics" style="display: none">${antibiotics}</textarea>
 <script type="text/javascript" src="<c:url value="/scripts/qc/qcbatch.js"/>"></script>
