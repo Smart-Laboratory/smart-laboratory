@@ -293,16 +293,12 @@ public final class ConvertUtil {
      * @param barcode
      * @return
      */
-    public static int getStayHospitalMode(String barcode){
-        int mode = 1;
-        if(barcode.indexOf("A12006")>=0){
-            mode = 2;
-        }else if(barcode.indexOf("A12001")>=0){
-            mode = 3;       //体检
-        }else {
-            mode = 1;
+    public static boolean getStayHospitalMode(String barcode){
+        boolean isTest = false;
+        if(barcode.indexOf("A12001")>=0){
+            isTest = true;      //体检
         }
-        return mode;
+        return false;
     }
     public static  String getStayHospitalModelValue(int model) {
         String value = "";

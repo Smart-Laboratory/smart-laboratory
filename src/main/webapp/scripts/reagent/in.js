@@ -150,6 +150,7 @@
 				layer.alert("请至少选择一种需要出/入库的试剂耗材！",{icon:0,title:"提示"});
 		    } else {
 		    	$.post(baseUrl + "/ajax/reagent/savein",{text:str},function(data) {
+					layer.msg("试剂入库成功！",{icon:1,time:1000});
 					for (i = 0; i < data.length; i++) {
 						startPrint(data[i]);
 					}

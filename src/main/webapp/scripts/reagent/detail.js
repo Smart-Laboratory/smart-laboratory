@@ -85,6 +85,7 @@
 	
 	function reprint(id) {
 		$.get(baseUrl + "/ajax/reagent/print",{id:id},function(data) {
+			//layer.msg("试剂重打条码成功！",{icon:1,time:1000});
 			for (i = 0; i < data.length; i++) {
 				startPrint(data[i]);
 			}

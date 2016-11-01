@@ -152,7 +152,7 @@
 		   	multiselect: true,
 		    viewrecords: true,
 		    sortorder: "asc",
-		    caption: "<h5><b>试剂入库</b></h5>"
+		    caption: "<h5><b>试剂出库</b></h5>"
 		});
 
 		$("#reagentdes").focus();

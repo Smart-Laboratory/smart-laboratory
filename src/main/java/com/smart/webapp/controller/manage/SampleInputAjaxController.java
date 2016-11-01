@@ -480,13 +480,9 @@ public class SampleInputAjaxController {
             inSegment = getSegment(sampleno);
         }
 
-        int mode = ConvertUtil.getStayHospitalMode(code);
-        if (mode == 3) {
-            //体检
+        boolean isTest = ConvertUtil.getStayHospitalMode(code);
+        if(isTest) {
             return receiveExamination(code, user, sampleno);
-        } else if (mode == 1) {
-            //门诊
-            return receiveOutPatient(code, user, sampleno, inSegment);
         }
         try {
             sample = sampleManager.getSampleByBarcode(code);
@@ -496,6 +492,10 @@ public class SampleInputAjaxController {
 
         Ylxh ylxh = new Ylxh();
         if (sample != null) {
+            if(sample.getStayHospitalMode() == 1) {
+                //门诊
+                return receiveOutPatient(code, user, sampleno, inSegment);
+            }
             if (sample.getYlxh().indexOf("+") > 0) {
                 ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
             } else {
@@ -760,26 +760,14 @@ public class SampleInputAjaxController {
      * @return
      */
     private String receiveOutPatient(String barcode, User user, String sampleno, String inSegment) throws Exception {
-        Sample sample = null;
-        Process process = null;
-
-        try {
-            sample = sampleManager.getSampleByBarcode(barcode);
-        } catch (Exception e) {
-            sample = null;
-        }
+        Sample sample = sampleManager.getSampleByBarcode(barcode);
+        Process process = processManager.getBySampleId(sample.getId());
         JSONObject o = new JSONObject();
         Ylxh ylxh = new Ylxh();
-        if (sample != null) {
-            if (sample.getYlxh().indexOf("+") > -1) {
-                ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
-            } else {
-                ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
-            }
+        if (sample.getYlxh().indexOf("+") > -1) {
+            ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
         } else {
-            o.put("success", 2);
-            o.put("message", "医嘱号为" + barcode + "的标本已编号接收！");
-            return o.toString();
+            ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh());
         }
         String segment = "";
         if (!isNight()) {
@@ -810,7 +798,6 @@ public class SampleInputAjaxController {
             return o.toString();
         } else {
             Date receiveTime = new Date();
-            process = processManager.getBySampleId(sample.getId());
             SampleLog slog = new SampleLog();
             slog.setSampleEntity(sample);
             slog.setLogger(UserUtil.getInstance().getValue(user.getUsername()));

@@ -368,7 +368,7 @@ public class ExecuteController {
 			object.put("age", labOrder.getAge());
 			object.put("ageUnit", labOrder.getAgeUnit());
 			object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
-			object.put("patientCode", labOrder.getBlh());
+			object.put("patientCode", labOrder.getPatientid());
 			object.put("executeTime", labOrder.getExecutetime());
 			object.put("requestMode", labOrder.getRequestmode());
 			object.put("sampleNo", labOrder.getSampleno());
