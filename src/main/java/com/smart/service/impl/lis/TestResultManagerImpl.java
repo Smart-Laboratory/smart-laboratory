@@ -89,5 +89,4 @@ public class TestResultManagerImpl extends GenericManagerImpl<TestResult, TestRe
 		testResultDao.updateSampleNo(oldSampleNo, samplenNo);
 	}
 
-
 }

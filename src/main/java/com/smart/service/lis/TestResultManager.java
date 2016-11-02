@@ -67,4 +67,5 @@ public interface TestResultManager extends GenericManager<TestResult, TestResult
 
 	@Transactional
     void updateSampleNo(String oldSampleNo, String sampleno);
+
 }

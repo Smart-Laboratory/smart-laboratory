@@ -12,7 +12,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.lis.*;
+import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
+import com.smart.service.lis.TestResultLogManager;
+import com.smart.service.lis.TestResultManager;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -24,10 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.Constants;
-import com.smart.model.lis.Process;
-import com.smart.model.lis.Sample;
-import com.smart.model.lis.TestModify;
-import com.smart.model.lis.TestResult;
 import com.smart.service.lis.TestModifyManager;
 import com.zju.api.model.SyncResult;
 
@@ -38,6 +38,8 @@ public class GetTestResultController extends BaseAuditController {
 	
 	@Autowired
 	private TestModifyManager testModifyManager;
+	@Autowired
+	private TestResultLogManager testResultLogManager;
 	
 	/**
 	 * 获取某一样本的检验数据
@@ -193,11 +195,12 @@ public class GetTestResultController extends BaseAuditController {
 		}
 		int color = 0;
 		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
-		List<SyncResult> editTests = rmiService.getEditTests(sampleNo);
+		List<TestResultLog> editTests = testResultLogManager.getEditTests(sampleNo);
+		//List<SyncResult> editTests = rmiService.getEditTests(sampleNo);
 		Map<String, String> editMap = new HashMap<String, String>();
 		if (editTests.size() > 0) {
-			for (SyncResult sr : editTests) {
-				editMap.put(sr.getTESTID(), sr.getTESTRESULT());
+			for (TestResultLog sr : editTests) {
+				editMap.put(sr.getTestId(), sr.getTestResult());
 			}
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
