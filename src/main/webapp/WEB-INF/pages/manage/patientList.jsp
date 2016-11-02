@@ -1,9 +1,10 @@
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp" %>
 
 <head>
     <title><fmt:message key="sample.manage.audit"/></title>
     
-    <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" />
+    <!--link rel="stylesheet" type="text/css"  href="<c:url value='/styles/jquery-ui.min.css'/>" /-->
     <link rel="stylesheet" type="text/css"  href="<c:url value='/styles/ui.jqgrid.css'/>" />
 
     <script type="text/javascript" src="<c:url value='/scripts/jquery-2.1.4.min.js'/> "></script>
@@ -55,40 +56,55 @@
 				<div id="pager"></div>
 			</div>
 		</div>
-		<div id="midContent" class="col-sm-7"
-			 style="float: left; display: none;">
+		<div id="midContent" class="col-sm-9" style="float: left;">
 			<div class="clearfix">
-				<h2 style="display:none;" id="sampleTitle"></h2>
-				<div id="patient-info" class="alert alert-info" style="width:630px;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">
-					<div class="pItem">
-						<span class="pLabel"><fmt:message key="patient.name" /></span>
-						<span class="pText"><b id="pName"></b></span>
-						<span class="pLabel"><fmt:message key="patient.sex" /></span>
-						<span class="pText"><b id="pSex"></b></span>
-						<span class="pLabel"><fmt:message key="patient.age" /></span>
-						<span class="pText"><b id="pAge"></b></span>
-						<span class="pLabel"><fmt:message key="patient.sampleType" /></span>
-						<span class="pText"><b id="pType"></b></span>
+				<!--h2 style="display:none;" id="sampleTitle"></h2-->
+				<div id="patientinfo" class="col-sm-12">
+					<h2 style="display:none;" id="sampleTitle"></h2>
+					<%--<div id='passLabel' class="alert alert-success" style="display:none;margin-bottom:2px;padding:0px;padding-left:10px;padding-bottom:4px;">--%>
+					<%--<b><fmt:message key="passreason"/>&nbsp;</b>--%>
+					<%--<b id="passreason"></b>--%>
+					<%--</div>--%>
+					<div class="clearfix alert alert-info" style="margin-bottom:0px;padding:2px;padding-bottom:2px;">
+						<table style="width: 100%" cellpadding="0" cellspacing="0" class="patientinfo">
+							<colgroup>
+								<col width="30%"/>
+								<col width="30%"/>
+								<col width="*"/>
+							</colgroup>
+							<tr>
+								<td>姓&#8195;名:</span><b id="pName"></b></td>
+								<td>性&#8195;别:</span><b id="pSex"></b></td>
+								<td>年&#8195;&#8195;龄:</span><b id="pAge"></b></td>
+							</tr>
+							<tr>
+								<td>类&#8195;型:</span><b id="pType"></b></td>
+								<td>医嘱号:</span><b id="doctadviseno"></b></td>
+								<td>在院方式:</span><b id="stayhospitalmode"></b></td>
+							</tr>
+							<tr>
+								<td>病历号:</span><b id="blh"></b></td>
+								<td>科&#8195;室:</span><b id="pSection"></b></td>
+								<td>床&#8195;&#8195;号:</span><b id="pBed"></b></td>
+							</tr>
+							<tr>
+								<td colspan="2">诊&#8195;断:</span><b id="diagnostic"></b>
+									<input type="hidden" id="diagnosisValue" />
+									<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
+										<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
+									</div></td>
+								<td>开单医生:</span><b id="requester"></b></td>
+							</tr>
+						</table>
+					</div>
+					<div style="display:none;" class="clearfix" id="unaudit_reason">
+						<div style="float:left;width:80px;margin:0px;padding:2px;padding-left:10px;margin-right:10px;" class="alert alert-error"><b><fmt:message key="unpass.reason" /></b></div>
+						<div style="width: 350px;float:left;"><span id="audit_reason"></span></div>
 					</div>
 
-					<div class="pItem">
-						<span class="pLabel"><fmt:message key="patient.blh" /></span>
-						<span class="pText"><b id="blh"></b></span>
-						<span class="pLabel"><fmt:message key="patient.patientId" /></span>
-						<span class="pText"><b id="pId"></b></span>
-					</div>
-
-					<div class="pItem">
-						<span class="pLabel"><fmt:message key="patient.section"/>&nbsp;</span>
-						<span class="pText"><b id="pSection"></b></span>
-						<span id="pBedLabel" class="pLabel"><fmt:message key="patient.departbed"/>&nbsp;</span>
-						<span id="pBedText" class="pText"><b id="pBed"></b></span>
-						<span class="pLabel"><fmt:message key="diagnostic"/>&nbsp;</span>
-						<span class="pText"><b id="diagnostic"></b></span>
-					</div>
 				</div>
 			</div>
-			<div class="col-sm-11" style="margin-top:10px;">
+			<div class="col-sm-12" style="margin-top:10px;">
 				<div id="patientRow" style="font-size: 13px;">
 					<table id="rowed3"></table>
 				</div>

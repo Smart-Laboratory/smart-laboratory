@@ -482,7 +482,7 @@ public class SampleInputAjaxController {
 
         boolean isTest = ConvertUtil.getStayHospitalMode(code);
         if(isTest) {
-            return receiveExamination(code, user, sampleno);
+            return receiveExamination(code, user, sampleno,inSegment);
         }
         try {
             sample = sampleManager.getSampleByBarcode(code);
@@ -611,7 +611,7 @@ public class SampleInputAjaxController {
      *
      * @return
      */
-    private String receiveExamination(String barcode, User user, String sampleno) throws Exception {
+    private String receiveExamination(String barcode, User user, String sampleno,String inSegment) throws Exception {
         List<LabOrder> labOrderList = new WebService().getExaminationRequestInfo(barcode, "", "", "");
         Sample sample = null;
         Process process = null;
@@ -686,7 +686,9 @@ public class SampleInputAjaxController {
                 }
                 int serialno = 0;
                 if(sampleno != null && !sampleno.isEmpty()){
-                    serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()));
+                    if(segment.equals(inSegment)){
+                        serialno = ConvertUtil.getIntValue(sampleno.substring(11,sampleno.length()),0);
+                    }
                 }
                 String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
                 if(newSampleNo.isEmpty()){

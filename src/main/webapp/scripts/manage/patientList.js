@@ -49,6 +49,7 @@ function getPatient(docNo) {
  	
 	function getSample(sampleNo) {
         var cl = "";
+		var width = $("#midContent").width();
 		jQuery("#rowed3").jqGrid({
 		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
@@ -64,8 +65,9 @@ function getPatient(docNo) {
 		   		{name:'scope',index:'scope',width:'15%',sortable:false},
 		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
 		   	],
-		   	width: 630,
+		   	width: width,
 		   	height: '404',
+			shrinkToFit:true,
 		   	rowNum: 100,
 		   	rownumbers: true,
 		    caption: " ",
