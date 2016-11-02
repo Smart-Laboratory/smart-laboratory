@@ -70,7 +70,9 @@ public class ReportGenerate {
         velocityContext.put("sampleNo", ConvertUtil.null2String(sample.getSampleNo()));
         velocityContext.put("sampleId", ConvertUtil.null2String(sample.getId()));
         velocityContext.put("patientId", ConvertUtil.null2String(sample.getPatientId()));
-        //velocityContext.put("phone",patient.getPhone());
+        if(sample.getStayHospitalMode() == 1) {
+            velocityContext.put("phone",patientManager.getByBlh(sample.getPatientblh()).getPhone());
+        }
 
         if(sample.getStayHospitalMode() == 2) {
             velocityContext.put("bed", ConvertUtil.null2String(sample.getDepartBed()));
@@ -204,6 +206,8 @@ public class ReportGenerate {
         dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
         likeLabManager = (LikeLabManager)SpringContextUtil.getBean("likeLabManager");
         deviceManager = (DeviceManager)SpringContextUtil.getBean("deviceManager");
+        patientManager = (PatientManager)SpringContextUtil.getBean("patientManager");
+
     }
 
     private SectionManager sectionManager = null;
@@ -211,5 +215,6 @@ public class ReportGenerate {
     private IndexManager indexManager = null;
     private LikeLabManager likeLabManager = null;
     private DeviceManager deviceManager = null;
+    private PatientManager patientManager = null;
 
 }

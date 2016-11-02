@@ -16,7 +16,7 @@
                 #end
 
             </td>
-            <td>受检者电话:</td>
+            <td>受检者电话:$!phone</td>
             <td>&#160;</td>
         </tr>
         <tr style="font-size: 7.5pt">
