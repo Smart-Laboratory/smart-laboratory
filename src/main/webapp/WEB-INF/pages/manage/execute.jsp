@@ -26,15 +26,26 @@
 	margin-left:10px;
 }
 
+.table>thead>tr>th {
+	font-size: 18px;
+	text-align: center;
+}
+
+.table>tbody>tr>td {
+	font-size: 18px;
+	text-align: center;
+}
+
+
 #tests input[type=checkbox]{
-	width:50px;
-	height:50px;
+	width:30px;
+	height:30px;
 	margin:0px;
 }
 
 #tests1 input[type=checkbox]{
-	width:50px;
-	height:50px;
+	width:30px;
+	height:30px;
 	margin:0px;
 }
 
@@ -151,21 +162,25 @@
 				</div>
 				<div class="widget-body" style="overflow:auto;">
 					<div class="widget-main">
-						<div  style="height:30px;padding-top:5px;">
-							<div class="col-sm-2 ">
-									<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
+						<div  style="height:30px;padding-top:5px;font-size:20px;">
+							<div class="col-sm-2 " style="display:none;">
+								<span class='col-sm-6'><fmt:message key="patient.blh" />:</span><b id="blh"></b>
 							</div>
-							<div class="col-sm-3 ">
-									<span class='col-sm-4'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
+							<div class="col-sm-5">
+								<span class='col-sm-2'><fmt:message key="patient.name" />:</span><b id="pName" class='col-sm-3'></b>
+								<span class='col-sm-3'><fmt:message key="patient.patientId" />:</span><b id="pId" class='col-sm-4'></b>
 							</div>
-							<div class="col-sm-2 ">
-								<span class='col-sm-6'><fmt:message key="patient.name" />:</span><b id="pName"></b>
+							<div class="col-sm-3 " style="display:none;">
+								<span class='col-sm-4'><fmt:message key="patient.patientId" />:</span><b id="patientId"></b>
 							</div>
 							<div class="col-sm-3 ">
 								<span class='col-sm-3'><fmt:message key="patient.sex" />:</span><b id="pSex" class='col-sm-3'></b>
 								<span class='col-sm-3'><fmt:message key="patient.age" />:</span><b id="pAge" class='col-sm-3'></b>
 							</div>
-							<button class="btn btn-info btn-minier" id="sampleQuery">检验结果查询</button>
+							<div class="col-sm-3 ">
+								<span class='col-sm-5'>联系方式:</span><b id="phone"></b>
+							</div>
+							<button class="btn btn-info btn-minier" style="height:20px;" id="sampleQuery">检验结果查询</button>
 						</div>
 						<div class="col-sm-12">
 							<div id="warnLabel" class="alert alert-success col-sm-5" style="display: block; margin:5px 5px; padding: 0px 0px;">

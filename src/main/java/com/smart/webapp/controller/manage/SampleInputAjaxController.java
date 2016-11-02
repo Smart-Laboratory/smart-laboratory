@@ -764,6 +764,11 @@ public class SampleInputAjaxController {
         Process process = processManager.getBySampleId(sample.getId());
         JSONObject o = new JSONObject();
         Ylxh ylxh = new Ylxh();
+        if(!sample.getSampleNo().equals("0")) {
+            o.put("success", 2);
+            o.put("message", "医嘱号为" + barcode + "的标本已自动编号，无需接收！");
+            return o.toString();
+        }
         if (sample.getYlxh().indexOf("+") > -1) {
             ylxh = YlxhUtil.getInstance().getYlxh(sample.getYlxh().split("[+]")[0]);
         } else {

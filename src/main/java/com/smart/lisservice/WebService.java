@@ -188,7 +188,7 @@ public class WebService {
     }
 
     /**
-     * 获取信息病人信息
+     * 获取住院病人信息
      *
      * @param ward 病区
      * @return
@@ -211,6 +211,12 @@ public class WebService {
         return patientList;
     }
 
+    /**
+     * 获取门诊病人申请信息
+     *
+     * @param patientId 就诊卡号
+     * @return
+     */
     public List<LabOrder> getExecuteInfo(String patientId, String requestmode, String from, String to) {
         List<LabOrder> list = new ArrayList<LabOrder>();
         try {
@@ -334,6 +340,9 @@ public class WebService {
                 labOrder.setRequesttime(Constants.SDF.parse(arr.getJSONObject(i).getString("requestDateTime")));
                 labOrder.setRequestNum(arr.getJSONObject(i).getInt("quantity"));
                 labOrder.setSex(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("sex")));
+                if(stayhospitalmode == 1) {
+                    labOrder.setSpecial(ConvertUtil.null2String(arr.getJSONObject(i).getString("specialFlag")));
+                }
                 labOrder.setStayhospitalmode(stayhospitalmode); //门诊1 住院2 体检3
                 labOrder.setToponymy(arr.getJSONObject(i).getString("testPart"));
                 labOrder.setYlxh(arr.getJSONObject(i).getString("itemCode"));

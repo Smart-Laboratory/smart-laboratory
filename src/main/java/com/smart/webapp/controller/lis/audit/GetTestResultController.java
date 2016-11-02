@@ -419,11 +419,11 @@ public class GetTestResultController extends BaseAuditController {
 		}
 		int color = 0;
 		Map<String, Integer> colorMap = StringToMap(info.getMarkTests());
-		List<SyncResult> editTests = rmiService.getEditTests(sampleNo);
+		List<TestResultLog> editTests = testResultLogManager.getEditTests(sampleNo);
 		Map<String, String> editMap = new HashMap<String, String>();
 		if (editTests.size() > 0) {
-			for (SyncResult sr : editTests) {
-				editMap.put(sr.getTESTID(), sr.getTESTRESULT());
+			for (TestResultLog sr : editTests) {
+				editMap.put(sr.getTestId(), sr.getTestResult());
 			}
 		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();

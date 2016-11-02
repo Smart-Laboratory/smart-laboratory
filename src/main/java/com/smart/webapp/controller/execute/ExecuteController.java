@@ -213,7 +213,11 @@ public class ExecuteController {
 			sample.setRequestMode(labOrder.getRequestmode());
 			sample.setSampleNo(labOrder.getSampleno());
 			sample.setSex("" + labOrder.getSex());
-			sample.setSampleStatus(Constants.SAMPLE_STATUS_EXECUTED);
+			if(sample.getSampleNo().equals("0")) {
+				sample.setSampleStatus(Constants.SAMPLE_STATUS_EXECUTED);
+			} else {
+				sample.setSampleStatus(Constants.SAMPLE_STATUS_RECEIVED);
+			}
 			sample.setSampleType(labOrder.getSampletype());
 			sample.setSectionId(labOrder.getLabdepartment());
 			sample.setStayHospitalMode(labOrder.getStayhospitalmode());
@@ -228,7 +232,10 @@ public class ExecuteController {
 			process.setRequester(labOrder.getRequester());
 			process.setExecutetime(labOrder.getExecutetime());
 			process.setExecutor(labOrder.getExecutor());
-
+			if(!sample.getSampleNo().equals("0")) {
+				process.setReceivetime(labOrder.getExecutetime());
+				process.setReceiver(labOrder.getExecutor());
+			}
 			labOrder.setLaborder(sample.getId());
             labOrder.setBarcode(sample.getBarcode());
 
@@ -367,6 +374,7 @@ public class ExecuteController {
 			object.put("sex", labOrder.getSex());
 			object.put("age", labOrder.getAge());
 			object.put("ageUnit", labOrder.getAgeUnit());
+			object.put("special", ConvertUtil.null2String(labOrder.getSpecial()));
 			object.put("labDepartment", SectionUtil.getInstance(sectionManager).getLabValue(labOrder.getLabdepartment()));
 			object.put("patientCode", labOrder.getPatientid());
 			object.put("executeTime", labOrder.getExecutetime());

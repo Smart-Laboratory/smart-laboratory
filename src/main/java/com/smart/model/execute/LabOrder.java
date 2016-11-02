@@ -60,6 +60,7 @@ public class LabOrder implements Serializable {
 	private String toponymy; 		//采集部位
 	private Integer cycle;			//生理周期
 	private Integer count;			//采集数量
+	private String special;		//特殊病人标记信息
 
 	//add by zcw 20160825
 	private String hossectionName;	//申请科室名称
@@ -442,12 +443,22 @@ public class LabOrder implements Serializable {
         this.barcode = barcode;
     }
 
+	@Column
 	public String getAccountId() {
 		return accountId;
 	}
 
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
+	}
+
+	@Column
+	public String getSpecial() {
+		return special;
+	}
+
+	public void setSpecial(String special) {
+		this.special = special;
 	}
 
 	@Transient

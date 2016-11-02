@@ -48,18 +48,18 @@ function CreateDataBill(data) {
 		}
         var exam = data.testName + "  "+ data.sampleType;
 		var patientInfo1 = data.patientCode +"  "+data.hosSectionName;
-        var labInfo = data.labDepartment + " " + data.sampleType + " " + data.container+data.volume;
+        var labInfo = data.special + "     " + data.sampleType + " " + data.container+data.volume;
 		LODOP = getLodop();
 		LODOP.PRINT_INIT("");
 		LODOP.SET_PRINT_PAGESIZE(0,980,1100,"A4");
 		LODOP.ADD_PRINT_IMAGE(10,10,80,80,"<img src='../images/shulan.png' style='width:80px;'/>");
-        LODOP.ADD_PRINT_TEXT(10,100,230,35,"树兰（杭州）医院");
+        LODOP.ADD_PRINT_TEXT(10,85,230,35,"树兰（杭州）医院");
         LODOP.SET_PRINT_STYLEA(0,"FontSize",20);
-        LODOP.ADD_PRINT_TEXT(45,100,230,35,"浙江大学国际医院");
+        LODOP.ADD_PRINT_TEXT(45,85,230,35,"浙江大学国际医院");
         LODOP.SET_PRINT_STYLEA(0,"FontSize",20);
-        LODOP.ADD_PRINT_BARCODEA("patientCode","21.98mm","27.01mm","46.57mm",40,"128B",data.patientCode);
+        LODOP.ADD_PRINT_BARCODEA("patientCode","20.98mm","32.01mm","46.57mm",40,"128B",data.patientCode);
         LODOP.SET_PRINT_STYLEA(0,"Horient",2);
-        LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","12.46mm",45,20,"姓名：");
+        LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","5.85mm",90,20,"姓    名：");
         LODOP.ADD_PRINT_TEXTA("name","33.00mm","23.31mm",90,20,data.patientName);
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
         LODOP.ADD_PRINT_TEXTA("sexText","33.00mm","46.86mm",45,20,"性别：");
@@ -73,51 +73,51 @@ function CreateDataBill(data) {
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
         LODOP.ADD_PRINT_TEXTA("requestTimeText","43.00mm","5.85mm",70,20,"开单时间：");
         LODOP.ADD_PRINT_TEXTA("requestTime","43.00mm","23.31mm",300,20,data.requestTime);
-        LODOP.ADD_PRINT_TEXTA("requesterText","48.00mm","5.85mm",70,20,"开单信息：");
-        LODOP.ADD_PRINT_TEXTA("requester","48.00mm","23.31mm",300,20,data.hosSectionName + " " + data.requester);
-        LODOP.ADD_PRINT_TEXTA("executeTimeText","53.00mm","5.85mm",70,20,"采集时间：");
-        LODOP.ADD_PRINT_TEXTA("executeTime","53.00mm","23.31mm",300,20,data.executeTime);
-        LODOP.ADD_PRINT_TEXTA("reportTimeText","58.00mm","5.58mm",70,20,"报告时间：");
-        LODOP.ADD_PRINT_TEXTA("reportTime","58.00mm","23.31mm",300,20,data.reportTime);
+        LODOP.ADD_PRINT_TEXTA("requesterText","47.00mm","5.85mm",70,20,"开单信息：");
+        LODOP.ADD_PRINT_TEXTA("requester","47.00mm","23.31mm",300,20,data.hosSectionName + " " + data.requester);
+        LODOP.ADD_PRINT_TEXTA("executeTimeText","51.00mm","5.85mm",70,20,"采集时间：");
+        LODOP.ADD_PRINT_TEXTA("executeTime","51.00mm","23.31mm",300,20,data.executeTime);
+        LODOP.ADD_PRINT_TEXTA("reportTimeText","55.00mm","5.58mm",70,20,"报告时间：");
+        LODOP.ADD_PRINT_TEXTA("reportTime","55.00mm","23.31mm",300,20,data.reportTime);
         LODOP.ADD_PRINT_TEXTA("reportPlaceText","63.00mm","5.58mm",70,20,"取单地点：");
         LODOP.ADD_PRINT_TEXTA("reportPlace","63.00mm","23.31mm",300,20,data.reportPlace);
         LODOP.ADD_PRINT_TEXTA("tip1","68.00mm","5.58mm",360,20,"*法定节假日(如:春节等)仪器故障报告时间顺延*");
         LODOP.ADD_PRINT_TEXTA("tip2","73.00mm","5.58mm",360,20,"*抽血时请携带就诊卡，凭此单或就诊卡取检验报告*");
 
-		LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","2.85mm",180,20,patientInfo);
-        LODOP.ADD_PRINT_TEXTA("testinfo","82mm","2.95mm",180,20,data.testName);
+		//条码1
+		LODOP.ADD_PRINT_TEXTA("labInfo","78mm","2.85mm",180,20,labInfo);
+        LODOP.ADD_PRINT_TEXTA("patientInfo","81mm","2.95mm",180,20,patientInfo);
+		LODOP.ADD_PRINT_TEXTA("testinfo","85mm","2.95mm",180,20, data.testName);
 		if(exam.length > 36) {
 			LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
 		}
-		LODOP.ADD_PRINT_BARCODEA("barcode","90mm","4.85mm","36mm",35,"128Auto",data.barcode);
+		LODOP.ADD_PRINT_BARCODEA("barcode","94mm","5.05mm","36mm",35,"128Auto",data.barcode);
 		LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
 		if(data.sampleNo == '0') {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.barcode+"*");
+			LODOP.ADD_PRINT_TEXTA("code","103mm","6.7mm",150,20,"*"+data.barcode+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		} else {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","5.2mm",150,20,"*"+data.sampleNo+"*");
+			LODOP.ADD_PRINT_TEXTA("code","103mm","6.7mm",150,20,"*"+data.sampleNo+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		}
-		//LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","2.95mm",180,20,patientInfo1);
-		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","2.95mm",180,20, labInfo);
 		LODOP.ADD_PRINT_TEXTA("datetime","107mm","2.95mm",180,20,"采集时间 "+data.executeTime);
 
-        LODOP.ADD_PRINT_TEXTA("patientinfo","78mm","51.25mm",180,20,patientInfo);
-        LODOP.ADD_PRINT_TEXTA("testinfo","82mm","51.25mm",180,20,data.testName);
+		//条码2
+		LODOP.ADD_PRINT_TEXTA("labInfo","78mm","51.25mm",180,20,labInfo);
+		LODOP.ADD_PRINT_TEXTA("patientInfo","81mm","51.25mm",180,20,patientInfo);
+		LODOP.ADD_PRINT_TEXTA("testinfo","85mm","51.25mm",180,20, data.testName);
 		if(exam.length > 36) {
 			LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
 		}
-        LODOP.ADD_PRINT_BARCODEA("barcode","90mm","53.25mm","36mm",35,"128Auto",data.barcode);
-        LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
+		LODOP.ADD_PRINT_BARCODEA("barcode","94mm","53.25mm","36mm",35,"128Auto",data.barcode);
+		LODOP.SET_PRINT_STYLEA(0,"ShowBarText",0);
 		if(data.sampleNo == '0') {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.barcode+"*");
+			LODOP.ADD_PRINT_TEXTA("code","103mm","54.85mm",150,20,"*"+data.barcode+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		} else {
-			LODOP.ADD_PRINT_TEXTA("code","100mm","53.95mm",150,20,"*"+data.sampleNo+"*");
+			LODOP.ADD_PRINT_TEXTA("code","103mm","54.85mm",150,20,"*"+data.sampleNo+"*");
 			LODOP.SET_PRINT_STYLEA(0,"Bold",1);
 		}
-        //LODOP.ADD_PRINT_TEXTA("patientinfo1","98mm","51.25mm",180,20,patientInfo1);
-		LODOP.ADD_PRINT_TEXTA("labInfo","104mm","51.25mm",180,20, labInfo);
 		LODOP.ADD_PRINT_TEXTA("datetime","107mm","51.25mm",180,20,"采集时间 "+data.executeTime);
 
 	}
@@ -137,6 +137,7 @@ function printSet() {
 		"patientCode": "00000496",
 		"patientName": "电子病历测试",
 		"requestMode": 1,
+		"special": "卒中",
 		"sampleNo": "20160907XCG001",
         "container":"黄色管",
 		"volume": "2mL",
@@ -188,12 +189,11 @@ function getData(item,event){
 			}
 			$("laborder").val("");
 			$.get("../manage/execute/getPatient",{patientId:jzkh,from:$("#from").val(),to:$("#to").val()},function(data){
-				//先清空数据
-				$("#blh").html("");$("#patientId").html("");$("#pName").html("");$("#pSex").html("");$("#pAge").html("");
 				//插入数据
 				var patient = data.patient;
 				var invalidsample = data.invalidsample;
-				$("#blh").html(patient.blh);$("#patientId").html(patient.patientId);$("#pName").html(patient.patientName);$("#pSex").html(patient.sexValue);$("#pAge").html(patient.age);
+				$("#blh").html(patient.blh);$("#patientId").html(patient.patientId);$("#pName").html(patient.patientName);
+				$("#pSex").html(patient.sexValue);$("#pAge").html(patient.age);$("#phone").html(patient.phone);$("#pId").html(jzkh);
 				if(invalidsample !=null ){
 					$("#warnLabel").html("不合格标本登记：<b>"+invalidsample+"</b>  ");
 				}
@@ -262,6 +262,19 @@ function reloadTests() {
 	});
 }
 
+function clearData(){
+	$("#blh").html("");$("#patientId").html("");$("#pName").html("");$("#pSex").html("");$("#pAge").html("");$("#phone").html("");$("#pId").html("");
+	$("#jzkh").val("");
+	$("#tests").html("");
+	$("#tests1").html("");
+	$("#examtodo").html("");
+	$("#cxcx").html("");
+	$("#cxry").html("");
+	$("#cxsj").html("");
+	$("#cxxm").html("");
+	$("#samplehis").html("");
+}
+
 $(function(){
 	$('a[data-toggle="tab"]').on('click', function (e) {
 		// 获取已激活的标签页的名称
@@ -313,7 +326,9 @@ $(function(){
 			} else {
 				layer.msg(data.message, {icon: 2, time: 1000});
 			}
-			reloadTests();
+			//打印完清空数据
+			clearData();
+			//reloadTests();
 		});
 	});
 	
@@ -332,7 +347,9 @@ $(function(){
 				for(i=0;i<data.labOrders.length;i++){
 					startPrint(data.labOrders[i]);
 				}
-				reloadTests();
+				//打印完清空数据
+				clearData();
+				//reloadTests();
 			});
         } else {
             $("#tests input:checkbox").each(function(){
@@ -351,7 +368,9 @@ $(function(){
                 for(i=0;i<data.labOrders.length;i++){
                     startPrint(data.labOrders[i]);
                 }
-                reloadTests();
+				//打印完清空数据
+				clearData();
+                //reloadTests();
             });
         }
 
@@ -457,11 +476,40 @@ function unusual(){
 
 function createHtml(jsonArray, id) {
 	var html = "";
+	html += "<table class='table' style='font-size:20px;'>";
+	html += "<thead><tr><th></th><th></th><th></th><th>收费项目</th><th>执行科室</th><th>申请时间</th><th>申请科室</th><th>诊断</th></tr></thead>";
+	html += "<tbody>";
 	for(var i = 0; i<jsonArray.length; i++) {
+		html += "<tr>";
+		if(jsonArray[i].zxbz == 0) {
+			html += "<td><input type='checkbox' checked value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"'/></td>";
+		} else {
+			html += "<td><input type='checkbox' value='"+jsonArray[i].labOrderOrg+"+"+ jsonArray[i].zxbz +"+"+jsonArray[i].qbgsj+"+"+jsonArray[i].qbgdd+"'/></td>";
+		}
+		if(jsonArray[i].bmp == "") {
+			html+="<td>&nbsp;</td>";
+		} else {
+			html+="<td><img src='"+jsonArray[i].bmp+"' alt='"+jsonArray[i].sglx +"' height='30px' /></td>";
+		}
+		if(jsonArray[i].requestMode == 1) {
+			html+="<td><span class='glyphicon glyphicon-star btn-lg' style='color:red;padding-left:0px;' aria-hidden='true'></span></td>";
+		} else {
+			html+="<td>&nbsp;</td>";
+		}
+		html += "<td>"+jsonArray[i].ylmc+"</td>";
+		html += "<td>"+jsonArray[i].labDepart+"</td>";
+		html += "<td>"+jsonArray[i].requestTime+"</td>";
+		html += "<td>"+jsonArray[i].hosSection+"</td>";
+		html += "<td>"+jsonArray[i].diagnostic+"</td>";
+		html += "</tr>";
+	}
+	html += "</tbody>";
+	html += "</table>";
+	/*for(var i = 0; i<jsonArray.length; i++) {
 		if(i%2 == 0) {
-			html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#f5f5f5'>";
+			html+="<div id='date"+i+"' class='alert sampleInfo' style='font-size:20px;background-color:#f5f5f5'>";
 		}else{
-			html+="<div id='date"+i+"' class='alert sampleInfo' style='background-color:#fff'>";
+			html+="<div id='date"+i+"' class='alert sampleInfo' style='font-size:20px;background-color:#fff'>";
 		}
 		if(jsonArray[i].zxbz == 0) {
 			html+="<div class='col-sm-2' style=''>"+
@@ -483,19 +531,19 @@ function createHtml(jsonArray, id) {
 		html+="</div>";
 		html+="<div class='col-sm-10' style=''>";
 		html+="<div ><span class='datespan'>收费项目:</span><b id='ylmc'>"+jsonArray[i].ylmc+"</b>"+
-			"<span >发票号:</span><b id='sfsb'>"+jsonArray[i].requestId+"</b>"+
+			/!*"<span >发票号:</span><b id='sfsb'>"+jsonArray[i].requestId+"</b>"+
 			"<span >单价:</span><b id='dj'>"+jsonArray[i].price+"</b>"+
-			"×<b id='sl'>"+jsonArray[i].amount+"</b>"+
+			"×<b id='sl'>"+jsonArray[i].amount+"</b>"+*!/
 			"<span >执行科室:</span><b id='ksdm'>"+jsonArray[i].labDepart+"</b>"+
-			"<span >采集量:</span><b id='bbl'>"+jsonArray[i].bbl+"</b></div>"+
+			/!*"<span >采集量:</span><b id='bbl'>"+jsonArray[i].bbl+"</b></div>"+
 			"<div>"
-			+ "<span >报告时间:</span><b id='qbgsj'>"+jsonArray[i].qbgsj+"</b>"+
+			+ "<span >报告时间:</span><b id='qbgsj'>"+jsonArray[i].qbgsj+"</b>"+*!/
 			"<span >申请时间:</span><b id='kdsj'>"+jsonArray[i].requestTime+"</b>"+
 			"<span >申请科室:</span><b id='sjksdm'>"+jsonArray[i].hosSection+"</b>"+
-			"<span >地点:</span><b id='qbgdd'>"+jsonArray[i].qbgdd+"</b>"+
+			/!*"<span >地点:</span><b id='qbgdd'>"+jsonArray[i].qbgdd+"</b>"+*!/
 			"</div>";
 		html+="</div></div>";
-	}
+	}*/
 	$("#" + id).html(html);
 }
 

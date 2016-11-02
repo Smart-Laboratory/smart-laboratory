@@ -183,6 +183,7 @@ public class ExecuteViewController {
         jsonObject.put("labDepart", sectionUtil.getLabValue(labOrder.getLabdepartment()));
         jsonObject.put("hosSection", sectionUtil.getValue(labOrder.getHossection()));
         jsonObject.put("requestTime", Constants.DF8.format(labOrder.getRequesttime()));
+		jsonObject.put("diagnostic", ConvertUtil.null2String(labOrder.getDiagnostic()));
         return jsonObject;
     }
 
