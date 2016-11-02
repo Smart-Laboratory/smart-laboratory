@@ -31,7 +31,7 @@ public class PatientDaoHibernate extends GenericDaoHibernate<Patient, Long> impl
 
 	@SuppressWarnings("unchecked")
 	public Patient getByPatientId(String pid) {
-		List<Patient> list = getSession().createQuery("from Patient where patientId like '%" + pid + "%' or blh ='" + pid + "'").list();
+		List<Patient> list = getSession().createQuery("from Patient where patientId like '%" + pid + ",%' or blh ='" + pid + "'").list();
 		if(list.size() > 0) {
 			return list.get(0);
 		}
