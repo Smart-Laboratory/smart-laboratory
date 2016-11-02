@@ -298,7 +298,7 @@ public final class ConvertUtil {
         if(barcode.indexOf("A12001")>=0){
             isTest = true;      //体检
         }
-        return false;
+        return isTest;
     }
     public static  String getStayHospitalModelValue(int model) {
         String value = "";
