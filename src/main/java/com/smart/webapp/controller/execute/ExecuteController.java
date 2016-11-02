@@ -229,7 +229,7 @@ public class ExecuteController {
             Process process = new Process();
 			process.setSampleid(sample.getId());
 			process.setRequesttime(labOrder.getRequesttime());
-			process.setRequester(labOrder.getRequester());
+			process.setRequester(labOrder.getRequesterName());
 			process.setExecutetime(labOrder.getExecutetime());
 			process.setExecutor(labOrder.getExecutor());
 			if(!sample.getSampleNo().equals("0")) {

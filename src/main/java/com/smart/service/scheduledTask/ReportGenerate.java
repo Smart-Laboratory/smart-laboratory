@@ -4,6 +4,7 @@ import com.smart.Constants;
 import com.smart.model.lis.*;
 import com.smart.model.lis.Process;
 import com.smart.model.rule.Index;
+import com.smart.model.util.HospitalUser;
 import com.smart.service.DictionaryManager;
 import com.smart.service.lis.*;
 import com.smart.service.rule.IndexManager;
@@ -68,6 +69,7 @@ public class ReportGenerate {
         velocityContext.put("barCode", ConvertUtil.null2String(sample.getBarcode()));
         velocityContext.put("sampleNo", ConvertUtil.null2String(sample.getSampleNo()));
         velocityContext.put("sampleId", ConvertUtil.null2String(sample.getId()));
+        velocityContext.put("patientId", ConvertUtil.null2String(sample.getPatientId()));
         //velocityContext.put("phone",patient.getPhone());
 
         if(sample.getStayHospitalMode() == 2) {
@@ -80,7 +82,12 @@ public class ReportGenerate {
         if(likeLabMap.size() == 0) {
             initLikeLabMap();
         }
-        velocityContext.put("requester", ConvertUtil.null2String(process.getRequester()));
+        HospitalUser hospitalUser = HospitalUserUtil.getInstance().getHospitalUser(process.getRequester());
+        if(hospitalUser.getId() == null) {
+            velocityContext.put("requester", ConvertUtil.null2String(process.getRequester()));
+        } else {
+            velocityContext.put("requester", hospitalUser.getName());
+        }
         velocityContext.put("tester", ConvertUtil.null2String(sample.getChkoper2()));
         //更改为电子签名图片地址
         //info.put("auditor", process.getCheckoperator());
@@ -115,11 +122,21 @@ public class ReportGenerate {
 
         List<TestResultVo> testResultVos = new ArrayList<TestResultVo>();
         Map<String, Index> idMap = TestIdMapUtil.getInstance(indexManager).getIdMap();
+        String device = "";
+        String deviceId = "";   //用来标记已包含仪器
         for(TestResult result:testResultList){
             String testId = result.getTestId();
             Set<String> sameTests = util.getKeySet(testId);
             sameTests.add(testId);
             TestResultVo testResultVo = new TestResultVo();
+            if(result.getDeviceId() != null && deviceId.indexOf(result.getDeviceId()) < 0) {
+                deviceId += result.getDeviceId() + ",";
+                if(device.isEmpty()) {
+                    device = DeviceUtil.getInstance(deviceManager).getValue(result.getDeviceId());
+                } else {
+                    device += "+" + DeviceUtil.getInstance(deviceManager).getValue(result.getDeviceId());
+                }
+            }
             //危急值判断
             if(result.getResultFlag() != null && result.getResultFlag().charAt(2) == 'D') {
                 testResultVo.setTestName("" + idMap.get(result.getTestId()).getName());
@@ -133,6 +150,7 @@ public class ReportGenerate {
             testResultVo.setDescription(idMap.get(result.getTestId()).getDescription());
             testResultVos.add(testResultVo);
         }
+        velocityContext.put("device", device);
         velocityContext.put("resultSize",testResultVos.size());
         velocityContext.put("results",testResultVos);
         VelocityEngine engine = new VelocityEngine();
@@ -185,13 +203,13 @@ public class ReportGenerate {
         sectionManager = (SectionManager)SpringContextUtil.getBean("sectionManager");
         dictionaryManager = (DictionaryManager)SpringContextUtil.getBean("dictionaryManager");
         likeLabManager = (LikeLabManager)SpringContextUtil.getBean("likeLabManager");
+        deviceManager = (DeviceManager)SpringContextUtil.getBean("deviceManager");
     }
-
-
 
     private SectionManager sectionManager = null;
     private DictionaryManager dictionaryManager = null;
     private IndexManager indexManager = null;
     private LikeLabManager likeLabManager = null;
+    private DeviceManager deviceManager = null;
 
 }

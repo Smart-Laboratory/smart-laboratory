@@ -28,12 +28,12 @@
 
 .table>thead>tr>th {
 	font-size: 18px;
-	text-align: center;
+	text-align: left;
 }
 
 .table>tbody>tr>td {
 	font-size: 18px;
-	text-align: center;
+	text-align: left;
 }
 
 
