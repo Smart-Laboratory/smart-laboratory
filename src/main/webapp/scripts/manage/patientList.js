@@ -374,7 +374,7 @@ function getPatient(docNo) {
         	mtype: "GET", 
         	pager: '#pager',
 
-        	onSelectRow: function(id) {    
+        	onSelectRow: function(id) {
         		var ret = jQuery("#list").jqGrid('getRowData',id);
         		
         		getPatient(ret.id);

@@ -59,8 +59,9 @@ public class GetTestResultController extends BaseAuditController {
 		String hisDate = "";
 		String sameSample = "";
 
-		if (sampleNo == null) {
-			throw new NullPointerException();
+		if (sampleNo == null || sampleNo.isEmpty()) {
+			//throw new NullPointerException();
+			return dataResponse;
 		}
 		if (deviceMap.size() == 0)
 			initDeviceMap();
