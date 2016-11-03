@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="<c:url value='/scripts/highcharts.js'/> "></script>
 	<script type="text/javascript" src="<c:url value='/scripts/layer/layer.js'/> "></script>
 	<script type="text/javascript" src="<c:url value='/scripts/layer/extend/layer.ext.js'/> "></script>
-    
+	<script type="text/javascript" src="<c:url value="/scripts/laydate/laydate.js"/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/manage/patientList.js'/> "></script>
 	<script language="javascript" src="<c:url value='/scripts/LodopFuncs.js'/> "></script>
 <style>
@@ -50,7 +50,7 @@
 <body>
 
 <div class="row">
-	<div class="form-inline">
+	<div class="form-inline" style="margin-top:5px;">
 		<label for="from" style="margin-left : 20px;"><b><fmt:message key="from" /></b></label>
 		<input type="text" id="from" name="from" class="form-control" />
 		<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
@@ -64,8 +64,12 @@
 			<option value="3"><fmt:message key="sample.id"></fmt:message></option>
 			<option value="1"><fmt:message key="patient.blh" /></option>
 		</select>
-		<button id="searchBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
-		<button id="search_detailed_printBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="print" /></button>
+		<button id="searchBtn" class="btn btn-sm btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
+		<button id="search_detailed_printBtn" class="btn btn-sm btn-success" style="margin-left:20px;"><fmt:message key="print" /></button>
+		<button type="button" class="btn btn-sm btn-pink" title="打印机选择" style="margin-left:20px;" onclick="printSetting()">
+			<i class="ace-icon fa fa-pencil-square bigger-110"></i>
+			打印设定
+		</button>
 	</div>
 
 

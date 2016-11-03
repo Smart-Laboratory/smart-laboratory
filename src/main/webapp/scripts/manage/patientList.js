@@ -94,7 +94,7 @@ function getPatient(docNo) {
         var cl = "";
 		var width = $("#patientinfo").width();
 		var clientHeight = $(window).innerHeight();
-		var height = clientHeight - $('#head').height() - $('.form-inline').height() - $('.footer-content').height() - 200;
+		var height = clientHeight - $('#head').height() - $('.form-inline').height() - $('.footer-content').height() - 210;
 		jQuery("#rowed3").jqGrid({
 		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
@@ -357,7 +357,7 @@ function getPatient(docNo) {
 		var isFirstTime = true;
 		var isFirstTimeForResult = true;
 		var clientHeight = $(window).innerHeight();
-		var height = clientHeight - $('#head').height() - $('。form-inline').height() - $('.footer-content').height() - 150;
+		var height = clientHeight - $('#head').height() - $('.form-inline').height() - $('.footer-content').height() - 100;
 		var mygrid = jQuery("#list").jqGrid({
         	url:"../manage/patientList/data?type=0&patientId=" + patientId +"&blh="+blh,
         	datatype: "json", 
@@ -429,28 +429,23 @@ function getPatient(docNo) {
 		    return null;
 		}
 		$.ajaxSetup({cache:false});
-		
-		$( "#from" ).datepicker({
-			changeMonth: true,
-			dateFormat:"yy-mm-dd",
-			monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-			dayNamesMin: ['日','一','二','三','四','五','六'],
-			onClose: function( selectedDate ) {
-				$( "#to" ).datepicker( "option", "minDate", selectedDate );
-			}
+
+		laydate.skin('molv');
+		laydate({
+			elem: '#from',
+			event: 'focus',
+			festival: true,
+			format: 'YYYY-MM-DD'
 		});
-		$( "#to" ).datepicker({
-			changeMonth: true,
-			dateFormat:"yy-mm-dd",
-			monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-			dayNamesMin: ['日','一','二','三','四','五','六'],
-			onClose: function( selectedDate ) {
-				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
-		    }
+		laydate({
+			elem: '#to',
+			event: 'focus',
+			festival: true,
+			format: 'YYYY-MM-DD'
 		});
 		$( "#from" ).val(new Date().Format("yyyy-MM-dd"));
 		$( "#to" ).val(new Date().Format("yyyy-MM-dd"));
-		
+
 		$("#searchBtn").click(function() {
 			var from = $("#from").val();
 			var to = $("#to").val();
@@ -532,15 +527,42 @@ function getPatient(docNo) {
 	  return fmt;   
 	};
 
+var LODOP; //声明为全局变量
+function printSetting() {
+	//readPrintFile();
+	if (LODOP.CVERSION) {
+		LODOP.On_Return = function (TaskID, Value) {
+			if (Value >= 0)
+				setCookie("report_print", Value);
+			else
+				alert("选择失败！");
+		};
+		LODOP.SELECT_PRINTER();
+		return;
+	}
+};
+function getCookie(name) {
+	var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+	if (arr = document.cookie.match(reg))
+		return unescape(arr[2]);
+	else
+		return null;
+};
+function setCookie(name, value) {
+	var Days = 9999;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+};
 function Preview(strHtml) {//打印预览
-	LODOP = getLodop();
 	//CreateDataBill(data)
 	LODOP=getLodop();
 	LODOP.PRINT_INIT("打印报告单");
 	LODOP.SET_PRINT_PAGESIZE(2,0,0,'A5');
 	LODOP.ADD_PRINT_HTM("0",0,"RightMargin:0cm","BottomMargin:0mm",strHtml);
 	//LODOP.ADD_PRINT_HTM(0,0,"100%","100%",strHtml);
-	LODOP.SET_PRINTER_INDEX(-1);
+	var index = getCookie("report_print");
+	LODOP.SET_PRINTER_INDEX(index)
 	LODOP.PRINT();
 	//LODOP.PREVIEW();
 }
