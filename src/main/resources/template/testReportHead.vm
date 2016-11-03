@@ -29,7 +29,8 @@
                 <td>床&#12288;&#12288;号:<span>$!bed</span></td>
             #else
                 <td>科&#12288;&#12288;别:<span>$!section</span></td>
-                <td colspan="2">就&#8194;诊&#8194;号:<span>$!patientId</span></td>
+                <td>就&#8194;诊&#8194;号:<span>$!patientId</span></td>
+                <td>病&#8194;历&#8194;号:<span>$!blh</span></td>
             #end
             <td>标&#8194;本&#8194;号:<span>$!sampleNo</span></td>
         </tr>
@@ -40,8 +41,7 @@
             <td>检验仪器:<span>$!device</span></td>
         </tr>
         <tr>
-            <td colspan="3">临床诊断:<span>$!diagnostic</span></td>
-            <td>病&#8194;历&#8194;号:<span>$!blh</span></td>
+            <td colspan="4">临床诊断:<span>$!diagnostic</span></td>
         </tr>
     </table>
 </div>

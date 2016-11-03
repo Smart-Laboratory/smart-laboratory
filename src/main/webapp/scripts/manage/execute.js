@@ -411,7 +411,7 @@ $(function(){
 	$("#sampleQuery").click(function(){
 		var jzkh = $("#jzkh").val();
 		if(jzkh!=null && jzkh!=''){
-			window.open("../manage/patientList?patientId="+jzkh);
+			window.open("../manage/patientList?patientId="+jzkh +"&type=1");
 		}
 			
 	});

@@ -50,12 +50,10 @@
 <body>
 
 <div class="row">
-	<div class="form-inline" style="margin-top:5px;">
-		<label for="from" style="margin-left : 20px;"><b><fmt:message key="from" /></b></label>
-		<input type="text" id="from" name="from" class="form-control" />
-		<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
-		<input type="text" id="to" name="to" class="form-control">
-		<label for="search_text" style="margin-left : 50px;"></label>
+	<div class="form-inline" style="margin-top:5px;text-align: center">
+		日期范围：
+		<input type="text" id="from" name="from" class="form-control" style="width: 120px;"/>
+		<input type="text" id="to" name="to" class="form-control" style="width: 120px;">
 		<input type="text" id="search_text" name="search_text" class="form-control" value="${param.patientId}"/>
 		<select id="search_select" class="form-control select" >
 			<option value="5" selected>就诊号</option>
@@ -63,10 +61,23 @@
 			<option value="4">样本号</option>
 			<option value="3"><fmt:message key="sample.id"></fmt:message></option>
 			<option value="1"><fmt:message key="patient.blh" /></option>
+			<option value="6">检验目的</option>
 		</select>
-		<button id="searchBtn" class="btn btn-sm btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
-		<button id="search_detailed_printBtn" class="btn btn-sm btn-success" style="margin-left:20px;"><fmt:message key="print" /></button>
-		<button type="button" class="btn btn-sm btn-pink" title="打印机选择" style="margin-left:20px;" onclick="printSetting()">
+		<select id="patientType" class="form-control select" <c:if test="${type==1}"> style="display: none" </c:if>>
+			<option value="">全部</option>
+			<option value="1" <c:if test="${type==1}"> selected </c:if>>门诊</option>
+			<option value="2">住院</option>
+			<option value="3">其他</option>
+		</select>
+		<select id="labSelect_seach"  class="form-control select">
+			<option value=''>全部</option>
+			<c:forEach var="depart" items="${departList}">
+				<option value='<c:out value="${depart.key}" />'><c:out value="${depart.value}" /></option>
+			</c:forEach>
+		</select>
+		<button id="searchBtn" class="btn btn-sm btn-info"><fmt:message key="search" /></button>
+		<button id="search_detailed_printBtn" class="btn btn-sm btn-success" style="margin-left:2px;"><fmt:message key="print" /></button>
+		<button type="button" class="btn btn-sm btn-pink" title="打印机选择" style="margin-left:2px;" onclick="printSetting()">
 			<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 			打印设定
 		</button>
@@ -142,7 +153,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- 2016-5-19  张晋南 查询详细信息打印 -->
+
 		<div id="auditPrint" align="left"
 			 title='<fmt:message key="audit.preview" />'>
 			<button class="btn btn-success"
@@ -153,6 +164,9 @@
 			<button class="btn btn-success"
 					onclick="document.getElementById('iframe_print').contentWindow.print();">
 				<fmt:message key="audit.print" />
+			</button>
+			<button class="btn btn-success"
+					onclick="batchPrint()">批量打印
 			</button>
 		</div>
 		<%-- <div id="rightContent" class="col-sm-2" style="position:absolute;right:0px;">

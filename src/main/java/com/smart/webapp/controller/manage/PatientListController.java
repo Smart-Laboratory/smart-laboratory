@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.user.User;
 import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +48,7 @@ public class PatientListController extends BaseAuditController {
 	
 	@Autowired
 	private ReasoningModifyManager reasoningModifyManager;
-	
+
 	/**
 	 * 获取样本中的病人信息
 	 * 
@@ -404,6 +405,8 @@ public class PatientListController extends BaseAuditController {
 		String text = request.getParameter("text");
 		String patientId = request.getParameter("patientId");
 		String blh = ConvertUtil.null2String(request.getParameter("blh"));
+		int patientType = ConvertUtil.getIntValue(request.getParameter("patientType"),-1);
+		String lab  = ConvertUtil.null2String(request.getParameter("lab"));
 		int type = ConvertUtil.getIntValue(request.getParameter("type"));
 		DataResponse dataResponse = new DataResponse();
 		int start = rows * (pages - 1);
@@ -431,10 +434,17 @@ public class PatientListController extends BaseAuditController {
 			sample.setSampleNo(text);
 		}else if (type==5) {
 			sample.setPatientId(text);
+		}else if (type==6) {
+			sample.setInspectionName(text);
 		}else {
 			sample.setPatientId(patientId);
 		}
-		sample.setStayHospitalMode(1); //门诊
+		if( patientType > 0){
+			sample.setStayHospitalMode(patientType);
+		}
+		if(!lab.isEmpty()){
+			sample.setSectionId(lab);
+		}
 		int size = 0;
 		try {
 			size = sampleManager.findCountByCriteria(sample, from, to);
@@ -481,7 +491,30 @@ public class PatientListController extends BaseAuditController {
 		ModelAndView view=new ModelAndView();
 		String patientId = request.getParameter("patientId");
 		String blh = request.getParameter("blh");
-		return view.addObject("patientId",patientId).addObject("blh", blh);
+		int type = ConvertUtil.getIntValue(request.getParameter("type"));
+
+		User operator = userManager.getUserByUsername(request.getRemoteUser());
+		String lab = "";
+		String department = operator.getDepartment();
+		Map<String, String> depart = new HashMap<String, String>();
+		if (operator.getLastLab() != null) {
+			lab = operator.getLastLab();
+		}
+		SectionUtil sectionutil = SectionUtil.getInstance(sectionManager);
+		if (department != null) {
+			for (String s : department.split(",")) {
+				depart.put(s, sectionutil.getLabValue(s));
+				if (StringUtils.isEmpty(lab)) {
+					lab = s;
+				}
+			}
+		}
+		view.addObject("departList", depart);
+		view.addObject("lastlab", lab);
+		view.addObject("patientId",patientId);
+		view.addObject("blh", blh);
+		view.addObject("type",type);
+		return view;
 	}
 
 }

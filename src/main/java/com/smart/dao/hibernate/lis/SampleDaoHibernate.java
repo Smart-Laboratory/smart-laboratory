@@ -571,11 +571,18 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		if(!ConvertUtil.null2String(sample.getSampleNo()).isEmpty()) {
 			criteria.add(Restrictions.eq("sampleNo", sample.getSampleNo()));
 		}
-
+		if(!ConvertUtil.null2String(sample.getSectionId()).isEmpty()) {
+			criteria.add(Restrictions.eq("sectionId", sample.getSectionId()));
+		}
+		if(!ConvertUtil.null2String(sample.getInspectionName()).isEmpty()){
+			criteria.add(Restrictions.like("inspectionName", sample.getInspectionName(),MatchMode.START));
+		}
+		if(sample.getStayHospitalMode()>0){
+			criteria.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()));
+		}
 		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
 				                        .add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
 				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE))
-				.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()))
 				.setProjection(Projections.rowCount());
 		return  ((Long) criteria.uniqueResult()).intValue();
 	}
@@ -608,10 +615,18 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		if(!ConvertUtil.null2String(sample.getSampleNo()).isEmpty()) {
 			criteria.add(Restrictions.eq("sampleNo", sample.getSampleNo()));
 		}
+		if(!ConvertUtil.null2String(sample.getSectionId()).isEmpty()) {
+			criteria.add(Restrictions.eq("sectionId", sample.getSectionId()));
+		}
+		if(sample.getStayHospitalMode()>0){
+			criteria.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()));
+		}
+		if(!ConvertUtil.null2String(sample.getInspectionName()).isEmpty()){
+			criteria.add(Restrictions.like("inspectionName", sample.getInspectionName(),MatchMode.START));
+		}
 		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
 				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
-				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE))
-				.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()));
+				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE));
 		if(sidx.isEmpty()){
 			sidx="id";
 		}
