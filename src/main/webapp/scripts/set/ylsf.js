@@ -4,7 +4,7 @@ function fromHis() {
 		url: baseUrl + '/set/ylsf/fromHis',
 		success: function(data){
 			if(parseInt(data.success)==0) {
-				layer.msg("导入检验目的成功！",{icon:2,time: 1000});
+				layer.msg("导入检验目的成功！",{icon:1,time: 1000});
 				search();
 			} else {
 				layer.msg("导入检验目的失败！",{icon:2,time: 1000});

@@ -273,6 +273,7 @@ function clearData(){
 	$("#cxsj").html("");
 	$("#cxxm").html("");
 	$("#samplehis").html("");
+	$("#jzkh").focus();
 }
 
 $(function(){
