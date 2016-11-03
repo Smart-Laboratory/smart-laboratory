@@ -27,6 +27,9 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 	List<Sample> getHistorySample(String patientId, String blh, String lab);
 
 	@Transactional
+	List<Sample> getHistorySample(String patientId, String blh, String lab,int sampleStatus);
+
+	@Transactional
 	List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab);
 	
 	@Transactional
@@ -76,7 +79,13 @@ public interface SampleDao extends GenericDao<Sample, Long> {
 
 	@Transactional
 	List<Object[]> getReceiveList(String sampleNo, String sectionId,String sampleStatus,String fromDate,String toDate);
-	
+
+	@Transactional
+	int findCountByCriteria(Sample sample,String from,String to);
+
+	@Transactional
+	List<Sample> getSampleListByCriteria(Sample sample,String from,String to,int start, int end, String sidx, String sord);
+
 	@Transactional
 	List<Sample> getOutList(String sender,Date sendtime);
 

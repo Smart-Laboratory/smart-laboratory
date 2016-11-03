@@ -17,9 +17,13 @@ import java.util.Map;
 
 import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.*;
 import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.StringType;
 import org.omg.CORBA.ParameterMode;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.stereotype.Repository;
@@ -124,27 +128,32 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
         return returnList;
     }
 
+    public List<Sample> getHistorySample(String patientId, String blh, String lab){
+    	return getHistorySample(patientId,blh,lab,-1);
+	}
 	@SuppressWarnings("unchecked")
-	public List<Sample> getHistorySample(String patientId, String blh, String lab) {
-
+	public List<Sample> getHistorySample(String patientId, String blh, String lab,int sampleStatus) {
+		if(sampleStatus<0){
+			sampleStatus = Constants.SAMPLE_STATUS_TESTED;
+		}
 		if(blh != null && !blh.equals("null")){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh ='" + blh + "' and s.sampleStatus>=" + sampleStatus + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + sampleStatus + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientblh='" + blh + "' and s.sampleStatus>=" + sampleStatus + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}else if(patientId!=null && !patientId.isEmpty()){
 			if(lab.isEmpty()) {
-				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " order by p.receivetime desc").list();
+				return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + sampleStatus + " order by p.receivetime desc").list();
 			} else {
 				if(lab.contains(",")) {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + sampleStatus + " and s.sectionId in (" + lab + ") order by p.receivetime desc").list();
 				} else {
-					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + Constants.SAMPLE_STATUS_TESTED + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
+					return getSession().createQuery("select s from Sample s, Process p where s.id=p.sampleid and s.patientId ='" + patientId + "' and s.sampleStatus>=" + sampleStatus + " and s.sectionId=" + lab + " order by p.receivetime desc").list();
 				}
 			}
 		}
@@ -544,6 +553,69 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		return getSession().createQuery(sql).list();
 	}
 
+	public int findCountByCriteria(Sample sample,String from,String to) {
+		Criteria criteria = getSession().createCriteria(Sample.class);
+		String patientBlh = ConvertUtil.null2String(sample.getPatientblh());
+		if(!ConvertUtil.null2String(sample.getPatientblh()).isEmpty()) {
+			criteria.add(Restrictions.eq("patientblh", sample.getPatientblh()));
+		}
+		if(!ConvertUtil.null2String(sample.getPatientId()).isEmpty()) {
+			criteria.add(Restrictions.eq("patientId", sample.getPatientId()));
+		}
+		if(!ConvertUtil.null2String(sample.getBarcode()).isEmpty()) {
+			criteria.add(Restrictions.eq("barcode", sample.getBarcode()));
+		}
+		if(!ConvertUtil.null2String(sample.getPatientname()).isEmpty()) {
+			criteria.add(Restrictions.like("patientname", sample.getPatientname(),MatchMode.ANYWHERE));
+		}
+		if(!ConvertUtil.null2String(sample.getSampleNo()).isEmpty()) {
+			criteria.add(Restrictions.eq("sampleNo", sample.getSampleNo()));
+		}
+		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
+				                        .add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
+				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE))
+				.setProjection(Projections.rowCount());
+		return  ((Long) criteria.uniqueResult()).intValue();
+	}
+	/**
+	 * 样本列表查询
+	 * @param sample	样本信息
+	 * @param start
+	 * @param end
+	 * @param sidx
+	 * @param sord
+	 * @return 返回样本列表
+	 *
+	 * add by zcw 20161102
+	 */
+	public List<Sample> getSampleListByCriteria(Sample sample,String from,String to,int start, int end, String sidx, String sord){
+		Criteria criteria = getSession().createCriteria(Sample.class);
+		String patientBlh = ConvertUtil.null2String(sample.getPatientblh());
+		if(!ConvertUtil.null2String(sample.getPatientblh()).isEmpty()) {
+			criteria.add(Restrictions.eq("patientblh", sample.getPatientblh()));
+		}
+		if(!ConvertUtil.null2String(sample.getPatientId()).isEmpty()) {
+			criteria.add(Restrictions.eq("patientId", sample.getPatientId()));
+		}
+		if(!ConvertUtil.null2String(sample.getBarcode()).isEmpty()) {
+			criteria.add(Restrictions.eq("barcode", sample.getBarcode()));
+		}
+		if(!ConvertUtil.null2String(sample.getPatientname()).isEmpty()) {
+			criteria.add(Restrictions.like("patientname", sample.getPatientname(),MatchMode.ANYWHERE));
+		}
+		if(!ConvertUtil.null2String(sample.getSampleNo()).isEmpty()) {
+			criteria.add(Restrictions.eq("sampleNo", sample.getSampleNo()));
+		}
+		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
+				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
+				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE));
+		if(sidx.isEmpty()){
+			sidx="id";
+		}
+		criteria.addOrder(Order.asc(sidx));
+		List<Sample> list = criteria.setFirstResult(start).setMaxResults(end).list();
+		return list;
+	}
 	@SuppressWarnings("unchecked")
 	public List<Sample> getOutList(String sender,Date sendtime){
 		String sql = "select s from Sample s, Process p where s.id=p.sampleid and p.sender='"+sender+"' and p.sendtime > "

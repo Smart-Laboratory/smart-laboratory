@@ -20,6 +20,8 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 
 	List<Sample> getHistorySample(String patientId, String blh, String lab);
 
+	List<Sample> getHistorySample(String patientId, String blh, String lab,int sampleStatus);
+
 	List<Sample> getDiffCheck(String patientId, String blh, String sampleNo, String lab);
 
 	Sample getBySampleNo(String sampleNo);
@@ -85,6 +87,10 @@ public interface SampleManager extends GenericManager<Sample, Long> {
 	List<Object[]> getReceiveList(String text, String lab);
 
 	List<Object[]> getReceiveList(String sampleNo, String sectionId,String sampleStatus,String fromDate,String toDate);
+
+	int findCountByCriteria(Sample sample,String from,String to);
+
+	List<Sample> getSampleListByCriteria(Sample sample,String from,String to,int start, int end, String sidx, String sord);
 
 	List<Sample> getOutList(String sender,Date sendtime);
 

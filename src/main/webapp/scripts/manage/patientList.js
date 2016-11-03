@@ -49,7 +49,9 @@ function getPatient(docNo) {
  	
 	function getSample(sampleNo) {
         var cl = "";
-		var width = $("#midContent").width();
+		var width = $("#patientinfo").width();
+		var clientHeight = $(window).innerHeight();
+		var height = clientHeight - $('#head').height() - $('.form-inline').height() - $('.footer-content').height() - 200;
 		jQuery("#rowed3").jqGrid({
 		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
@@ -57,20 +59,22 @@ function getPatient(docNo) {
 		   	colNames:['ID','项目', '结果','历史', '历史1', '历史2', '参考范围', '单位'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
-		   		{name:'name',index:'name',width:'20%',sortable:false},
-		   		{name:'result',index:'result',width:'15%', sortable:false},
-		   		{name:'last',index:'last',width:'13%', sortable:false},
-		   		{name:'last1',index:'last1',width:'13%', hidden:true, sortable:false},
-		   		{name:'last2',index:'last2',width:'13%', hidden:true, sortable:false},
-		   		{name:'scope',index:'scope',width:'15%',sortable:false},
-		   		{name:'unit', sortable:false, width:'15%', index:'unit'},
+		   		{name:'name',index:'name',width:'250',sortable:false},
+		   		{name:'result',index:'result',width:'100', sortable:false},
+		   		{name:'last',index:'last',width:'100', sortable:false},
+		   		{name:'last1',index:'last1',width:'100', hidden:true, sortable:false},
+		   		{name:'last2',index:'last2',width:'100', hidden:true, sortable:false},
+		   		{name:'scope',index:'scope',width:'100',sortable:false},
+		   		{name:'unit', sortable:false, width:'100', index:'unit'},
 		   	],
 		   	width: width,
-		   	height: '404',
-			shrinkToFit:true,
-		   	rowNum: 100,
-		   	rownumbers: true,
-		    caption: " ",
+		   	height: height,
+			viewrecords:true,
+			shrinkToFit: false,
+			repeatitems: false,
+			rowNum: 300,
+			rownumbers: true,
+			caption:"结果信息",
 			onRightClickRow: function(id) {
 				//关闭浏览器右键
 				document.oncontextmenu=function(){return false;};
@@ -144,6 +148,11 @@ function getPatient(docNo) {
 				});
 			},
 			loadComplete: function() {
+				var table = this;
+				setTimeout(function () {
+					updatePagerIcons(table);
+				}, 0);
+
 				if ($("#sampleTitle").html() == "") {
 //					$("#rowed3").jqGrid("setCaption", $("#sampleTitle").html());
 				}
@@ -284,13 +293,15 @@ function getPatient(docNo) {
 		   	width:width
 		});
 	}
-	
+
 	function getList(patientId,blh) {
 		var width = $("#leftContent").width();
 		var isFirstTime = true;
 		var isFirstTimeForResult = true;
+		var clientHeight = $(window).innerHeight();
+		var height = clientHeight - $('#head').height() - $('。form-inline').height() - $('.footer-content').height() - 150;
 		var mygrid = jQuery("#list").jqGrid({
-        	url:"../manage/patientList/data?type=1&patientId=" + patientId +"&blh="+blh, 
+        	url:"../manage/patientList/data?type=0&patientId=" + patientId +"&blh="+blh,
         	datatype: "json", 
         	width: width, 
         	colNames:['ID', '样本号', '检验目的', '状态'], 
@@ -300,10 +311,11 @@ function getPatient(docNo) {
         		{name:'examinaim',index:'examinaim',width:80, sortable:false}, 
         		{name:'type',index:'type',width:40, sortable:false}], 
         	rowNum:16,
-        	height: '100%',
+        	height: height,
         	jsonReader : {repeatitems : false},
         	mtype: "GET", 
         	pager: '#pager',
+
         	onSelectRow: function(id) {    
         		var ret = jQuery("#list").jqGrid('getRowData',id);
         		
@@ -329,6 +341,10 @@ function getPatient(docNo) {
         		$("#historyTabs").css('display','block');
         	},
         	loadComplete: function() {
+				var table = this;
+				setTimeout(function () {
+					updatePagerIcons(table);
+				}, 0);
         		var firstDocId, firstSampleNo;
         		$.each(jQuery('#list').jqGrid('getCol','id', false), function(k,v) {
         			var ret = jQuery("#list").jqGrid('getRowData',v);
@@ -382,7 +398,7 @@ function getPatient(docNo) {
 			var to = $("#to").val();
 			var select = $("#search_select").val();
 			var searchText = $("#search_text").val();
-			
+			jQuery("#list").jqGrid("clearGridData");
 			jQuery("#list").jqGrid("setGridParam",{
 				url:"../manage/patientList/data?from="+from+"&to="+to+"&text="+searchText+"&type="+select
 			}).trigger("reloadGrid"); 
@@ -437,6 +453,7 @@ function getPatient(docNo) {
 		});
 		
 		getList(getQueryString("patientId"),getQueryString("blh"));
+		getSample("");
 	});
 	Date.prototype.Format = function(fmt)   
 	{ //author: meizz   

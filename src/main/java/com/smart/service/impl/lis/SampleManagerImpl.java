@@ -45,6 +45,10 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 		return sampleDao.getHistorySample(patientId, blh, lab);
 	}
 
+	public List<Sample> getHistorySample(String patientId, String blh, String lab,int sampleStatus){
+		return sampleDao.getHistorySample(patientId,blh,lab,sampleStatus);
+	}
+
 	public List<Sample> getDiffCheck(String patientid, String blh, String sampleno, String lab) {
 		return sampleDao.getDiffCheck(patientid, blh, sampleno, lab);
 	}
@@ -111,6 +115,14 @@ public class SampleManagerImpl extends GenericManagerImpl<Sample, Long> implemen
 	@Override
 	public List<Object[]> getReceiveList(String sampleNo, String sectionId, String sampleStatus, String fromDate, String toDate) {
 		return sampleDao.getReceiveList(sampleNo,sectionId,sampleStatus,fromDate,toDate);
+	}
+
+	public int findCountByCriteria(Sample sample,String from,String to){
+		return sampleDao.findCountByCriteria(sample,from,to);
+	}
+
+	public List<Sample> getSampleListByCriteria(Sample sample,String from,String to, int start, int end, String sidx, String sord) {
+		return sampleDao.getSampleListByCriteria(sample,from,to,start,end,sidx,sord);
 	}
 
 	public List<Sample> getOutList(String sender,Date sendtime){

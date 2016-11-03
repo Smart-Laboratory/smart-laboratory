@@ -1,6 +1,7 @@
 package com.smart.webapp.controller.manage;
 
-import java.util.ArrayList;	
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.util.ConvertUtil;
 import com.smart.webapp.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
@@ -392,54 +394,70 @@ public class PatientListController extends BaseAuditController {
 	@ResponseBody
 	public DataResponse getData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String pages = request.getParameter("page");
-		String rows = request.getParameter("rows");
-		String from = request.getParameter("from");
-		String to = request.getParameter("to");
+		int pages = ConvertUtil.getIntValue(request.getParameter("page"),0);
+		int rows = ConvertUtil.getIntValue(request.getParameter("rows"));
+		String sidx = request.getParameter("sidx");
+		String sord = request.getParameter("sord");
+		String from = ConvertUtil.null2String(request.getParameter("from"));
+		String to = ConvertUtil.null2String(request.getParameter("to"));
 		String text = request.getParameter("text");
 		String patientId = request.getParameter("patientId");
-		String blh = request.getParameter("blh");
-		String type = request.getParameter("type");
+		String blh = ConvertUtil.null2String(request.getParameter("blh"));
+		int type = ConvertUtil.getIntValue(request.getParameter("type"));
 		DataResponse dataResponse = new DataResponse();
-		int page = Integer.parseInt(pages);
-		int row = Integer.parseInt(rows);
-		int select = Integer.parseInt(type);
+		int start = rows * (pages - 1);
+		int end = rows * pages;
 
+		if(from.isEmpty()){
+			from = ConvertUtil.getFormatDate(new Date(),"yyyyMMdd");
+		}else {
+			from= from.replaceAll("-","");
+		}
+		if(to.isEmpty()){
+			to = ConvertUtil.getFormatDate(new Date(),"yyyyMMdd");
+		}else {
+			to= to.replaceAll("-","");
+		}
 		List<Sample> list = new ArrayList<Sample>();
-		if (select == 1) {
-			list = sampleManager.getHistorySample(patientId,blh,"");
-		} else if (select==2 && text != null && from != null && to != null) {
-			list = sampleManager.getSampleByPatientName(from, to, text);
-		} else if (select==3) {
-			Sample p = sampleManager.get(Long.parseLong(text));
-			if (p != null) {
-				list.add(p);  
-			}
+		Sample sample = new Sample();
+		if (type == 1) {
+			sample.setPatientblh(text);
+		} else if (type==2) {
+			sample.setPatientname(text);
+		} else if (type==3) {
+			sample.setBarcode(text);
+		}else if (type==4) {
+			sample.setSampleNo(text);
+		}else if (type==5) {
+			sample.setPatientId(text);
+		}else {
+			sample.setPatientId(patientId);
 		}
-		if(list.size()==0)
-			return dataResponse;
-		
-		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
-		int listSize = 0;
-		if (list != null)
-			listSize = list.size();
-		dataResponse.setRecords(listSize);
-		int x = listSize % (row == 0 ? listSize : row);
+		int size = 0;
+		try {
+			size = sampleManager.findCountByCriteria(sample, from, to);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		dataResponse.setRecords(size);
+		int x = size % (rows == 0 ? size : rows);
 		if (x != 0) {
-			x = row - x;
+			x = rows - x;
 		}
-		int totalPage = (listSize + x) / (row == 0 ? listSize : row);
-		dataResponse.setPage(page);
+		int totalPage = (size + x) / (rows == 0 ? size : rows);
+		dataResponse.setPage(pages);
 		dataResponse.setTotal(totalPage);
-		int start = row * (page - 1);
-		int index = 0;
-		while (index < row && (start + index) < listSize) {
+		try {
+			list = sampleManager.getSampleListByCriteria(sample, from, to, start, end, sidx, sord);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
+		for(Sample info:list){
 			Map<String, Object> map = new HashMap<String, Object>();
-			Sample info = list.get(start + index);
 			map.put("id",info.getId());
 			map.put("sample",info.getSampleNo());
 			//map.put("receivetime", info.getExecutetime() == null ? "" : sdf.format(info.getExecutetime()));
-
 			if (info.getAuditStatus() == -1) {
 				map.put("type", "<font color='red'>无结果</font>");
 			} else {
@@ -450,10 +468,8 @@ public class PatientListController extends BaseAuditController {
 			}
 			map.put("examinaim", info.getInspectionName());
 			dataRows.add(map);
-			index++;
 		}
 		dataResponse.setRows(dataRows);
-
 		response.setContentType("text/html;charset=UTF-8");
 		return dataResponse;
 	}

@@ -24,6 +24,24 @@
 	font-size:16px;
 	color:#000;
 }
+.patientinfo tr td{
+	text-align: left;
+	padding-left: 15px;
+}
+
+.patientinfo tr td b{
+	padding-left: 10px;
+}
+
+.patientinfo tr td b,a{
+	text-underline: none;
+	color: #23527c ;
+}
+
+.alert-info{
+	margin:0 auto;
+	text-align: center;
+}
 </style>
 
 
@@ -43,6 +61,8 @@
 			<option value="1"><fmt:message key="patient.blh" /></option>
 			<option value="2"><fmt:message key="patient.name" /></option>
 			<option value="3"><fmt:message key="sample.id"></fmt:message></option>
+			<option value="4">样本号</option>
+			<option value="5">就诊号</option>
 		</select>
 		<button id="searchBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
 		<button id="search_detailed_printBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="print" /></button>
@@ -105,7 +125,7 @@
 				</div>
 			</div>
 			<div class="col-sm-12" style="margin-top:10px;">
-				<div id="patientRow" style="font-size: 13px;">
+				<div id="patientRow" style="font-size: 13px;width:100%">
 					<table id="rowed3"></table>
 				</div>
 			</div>
