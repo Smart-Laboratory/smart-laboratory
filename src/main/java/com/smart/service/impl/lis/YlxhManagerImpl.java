@@ -48,5 +48,14 @@ public class YlxhManagerImpl extends GenericManagerImpl<Ylxh, Long> implements Y
 	public List<Ylxh> getYlxhByLab(String query, String lab, int start, int end, String sidx, String sord) {
 		return ylxhDao.getYlxhByLab(query, lab, start, end, sidx, sord);
 	}
+
+	public String getLatestYlxh() {
+		return ylxhDao.getLatestYlxh();
+	}
+
+	public void saveAll(List<Ylxh> list) {
+		ylxhDao.saveAll(list);
+	}
+
 	
 }

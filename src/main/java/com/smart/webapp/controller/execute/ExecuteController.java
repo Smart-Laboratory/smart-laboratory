@@ -180,7 +180,7 @@ public class ExecuteController {
 		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
 		for(int i = 0; i < needSaveList.size(); i++) {
 			LabOrder labOrder = needSaveList.get(i);
-			/*Ylxh ylxh = null;
+			Ylxh ylxh = null;
 			//生成样本号
 			if(labOrder.getYlxh().indexOf("+") > 0) {
 				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh().split("[+]")[0])); //获得检验段
@@ -194,8 +194,7 @@ public class ExecuteController {
 				labOrder.setSampleno(newSampleNo);
 			} else {
 				labOrder.setSampleno("0");
-			}*/
-			labOrder.setSampleno("0");
+			}
 			//生成条码号
 			Sample sample = new Sample();
 			sample.setBirthday(labOrder.getBirthday());
@@ -260,7 +259,7 @@ public class ExecuteController {
         }
 		System.out.println(System.currentTimeMillis() - start);
         if(saveSuccess) {
-        	String updateStatusSuccess = webService.requestUpdate(11, itemId, 1, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(executeTime,"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
+        	String updateStatusSuccess = webService.requestUpdate(11, itemId, 1, Constants.LaboratoryCode, "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(executeTime,"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
             if(!updateStatusSuccess.isEmpty()){
                 sampleManager.removeAll(needSaveSample);
                 processManager.removeAll(needSaveProcess);
@@ -354,7 +353,7 @@ public class ExecuteController {
 				o.put("message", "标本部分退回不成功，有标本已检验！");
 			}
 		}
-		String updateStatusSuccess = new WebService().requestUpdate(11, itemId, 2, "21", "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(new Date(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
+		String updateStatusSuccess = new WebService().requestUpdate(11, itemId, 2, Constants.LaboratoryCode, "检验科", user.getHisId(), user.getName(), ConvertUtil.getFormatDateGMT(new Date(),"yyyy-MM-dd'T'HH:mm:ss'Z'" ), "");
 		if(updateStatusSuccess.isEmpty()){
 			sampleManager.removeAll(needRemoveSample);
 			processManager.removeBySampleIds(needRemoveSampleIds.substring(0, needRemoveSampleIds.length()-1));

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.smart.Constants;
+import com.smart.lisservice.WebService;
 import com.smart.webapp.util.*;
 
 import org.apache.commons.logging.Log;
@@ -144,6 +145,26 @@ public class YlsfController extends BaseAuditController {
 		try {
 			ylxh = ylxhManager.save(ylxh);
 			YlxhUtil.getInstance().updateMap(ylxh);
+			success.put("success", "0");
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			success.put("success", "1");
+		}
+		return success.toString();
+	}
+
+	/**
+	 * 从HIS导入检验目的
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/fromHis*", method = RequestMethod.GET)
+	@ResponseBody
+	public String getTestPurposeFromHis() throws Exception {
+		JSONObject success = new JSONObject();
+		try {
+			List<Ylxh> list = new WebService().getTestPurposeList(ylxhManager.getLatestYlxh());
+			ylxhManager.saveAll(list);
 			success.put("success", "0");
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

@@ -28,4 +28,9 @@ public interface YlxhManager extends GenericManager<Ylxh, Long> {
 
 	@Transactional
 	List<Ylxh> searchData(String query, String lab);
+
+	@Transactional
+    String getLatestYlxh();
+
+	void saveAll(List<Ylxh> list);
 }

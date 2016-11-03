@@ -45,6 +45,7 @@ public class Ylxh extends BaseObject {
 	private String segment; //实验室检验段
 	private String nightSegment; //夜班实验室检验段
 	private String outSegment;		//门诊检验段
+	private String section;		//
 
 	private String template;		//报告单模板名称
 
@@ -288,6 +289,7 @@ public class Ylxh extends BaseObject {
 		return 0;
 	}
 
+	@Column
 	public String getTemplate() {
 		return template;
 	}
@@ -296,11 +298,21 @@ public class Ylxh extends BaseObject {
 		this.template = template;
 	}
 
+	@Column
 	public int getIsAutoNo() {
 		return isAutoNo;
 	}
 
 	public void setIsAutoNo(Integer isAutoNo) {
 		this.isAutoNo = isAutoNo;
+	}
+
+	@Column
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 }

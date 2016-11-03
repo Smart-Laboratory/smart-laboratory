@@ -114,6 +114,10 @@
 				<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 				<fmt:message key="button.edit" />
 			</button>
+			<button type="button" class="btn btn-sm	 btn-pink" title="从HIS导入" onclick="fromHis()">
+				<i class="ace-icon fa fa-share bigger-110"></i>
+				从HIS导入
+			</button>
 			<div class="input-group col-sm-3 " style="float: right;" >
 				<input type="text" id="query" class="form-control search-query" placeholder="输入检验目的编号或名称" />
 				<span class="input-group-btn">

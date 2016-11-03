@@ -795,4 +795,42 @@ public class WebService {
         return processList;
     }
 
+    /**
+     * 从LIS 获取新的检验目的
+     *
+     * @return
+     */
+    public List<Ylxh> getTestPurposeList(String id) {
+        List<Ylxh> list = new ArrayList<Ylxh>();
+        try {
+            HttpClient httpClient = new HttpClient();
+            httpClient.getHostConfiguration().setHost(url + "getHisTestPurpose/" + id);
+            GetMethod method = new GetMethod(url + "getHisTestPurpose/" + id);
+            method.releaseConnection();
+
+            httpClient.executeMethod(method);
+            JSONObject obj = new JSONObject(method.getResponseBodyAsString());
+
+            if ((Integer) obj.get("State") == 1) {
+                JSONArray arr = obj.getJSONArray("Message");
+                for (int i = 0; i < arr.length(); i++) {
+                    Ylxh ylxh = new Ylxh();
+                    ylxh.setYlxh(ConvertUtil.getLongValue(arr.getJSONObject(i).getString("Id")));
+                    ylxh.setYlmc(ConvertUtil.null2String(arr.getJSONObject(i).getString("Name")));
+                    ylxh.setPinyin(ConvertUtil.null2String(arr.getJSONObject(i).getString("PinYin")));
+                    ylxh.setWubi(ConvertUtil.null2String(arr.getJSONObject(i).getString("WuBi")));
+                    ylxh.setPrice(ConvertUtil.null2String(arr.getJSONObject(i).getString("Price")));
+                    ylxh.setMzpb(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("IsOutPatient")));
+                    ylxh.setZypb(ConvertUtil.getIntValue(arr.getJSONObject(i).getString("IsInPatient")));
+                    ylxh.setSection(ConvertUtil.null2String(arr.getJSONObject(i).getString("Type")));
+                    ylxh.setKsdm(Constants.LaboratoryCode);     //检验科
+                    list.add(ylxh);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

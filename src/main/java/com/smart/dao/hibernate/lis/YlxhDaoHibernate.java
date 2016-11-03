@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.hql.internal.ast.HqlASTFactory;
 import org.springframework.stereotype.Repository;
 
@@ -115,5 +116,18 @@ public class YlxhDaoHibernate extends GenericDaoHibernate<Ylxh, Long> implements
 			q.setMaxResults(end);
 		}
 		return q.list();
+	}
+
+	public String getLatestYlxh() {
+		return getSession().createSQLQuery("select ylxh from L_YLXHDESCRIBE where rownum=1 ORDER BY ylxh desc ").uniqueResult().toString();
+	}
+
+	public void saveAll(List<Ylxh> list) {
+		Session s = getSessionFactory().openSession();
+		for (Ylxh ylxh : list) {
+			s.merge(ylxh);
+		}
+		s.flush();
+		s.close();
 	}
 }

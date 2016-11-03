@@ -21,4 +21,8 @@ public interface YlxhDao extends GenericDao<Ylxh, Long> {
 
 	//搜索检验套餐
 	List<Ylxh> searchData(String text, String lab);
+
+    String getLatestYlxh();
+
+	void saveAll(List<Ylxh> list);
 }

@@ -264,7 +264,7 @@ public class SampleInputAjaxController {
                 if(sample.getStayHospitalMode() == 2) {     //住院退费
                     //已计费
                     LabOrder labOrder = labOrderManager.get(sample.getId());
-                    String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
+                    String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 4, Constants.LaboratoryCode, "检验科", user.getHisId(), user.getName(), Constants.DF9.format(time), "");
                     if (updateStatusSuccess.isEmpty()) {
                         sample.setSampleStatus(Constants.SAMPLE_STATUS_BACKED);
                         sample.setSampleNo("0");
@@ -575,7 +575,7 @@ public class SampleInputAjaxController {
             }
             String newSampleNo = ConvertUtil.null2String(sampleManager.generateSampleNo(segment,serialno));
             //计项目费
-            String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, "21", "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
+            String updateStatusSuccess = new WebService().requestUpdate(21, labOrder.getLaborderorg().replaceAll(",", "|"), 3, Constants.LaboratoryCode, "检验科", user.getHisId(), user.getName(), Constants.DF9.format(receiveTime), "");
             if(newSampleNo.isEmpty()){
                 Sample sample1 = sampleManager.getBySampleNo(sampleno);
                 if(sample1 != null){
