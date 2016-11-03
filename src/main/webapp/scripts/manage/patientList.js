@@ -19,6 +19,48 @@ function openChartDialog() {
 	});
 }
 
+function show_knowledge(item) {
+	jQuery.ajax({
+		type:'GET',
+		url: encodeURI('/item.jsp?page='+item),
+		dataType: 'html',
+		success: function(data) {
+			openKnowledgeLayer(data);
+		}
+	});
+}
+
+function openKnowledgeLayer(data) {
+	var dataArray = data.split('<div class="tab-');
+	var title = [];
+	for(var i=0; i<dataArray.length;i++){
+		var str = dataArray[i].replace('">',"!@#$%^&*");
+		if(i!=0){
+			var arr = str.split("!@#$%^&*");
+			title[i] = arr[0];
+			dataArray[i] = arr[1].replace("<\/div>","");
+		}
+		if(i==dataArray.length-1){
+			dataArray[i] = dataArray[i].replace("<\/div>","");
+			dataArray[i] = dataArray[i].replace("<\/div>","");
+		}
+	}
+	var jsonArr = [];
+	for(var j=0;j<dataArray.length;j++){
+		if(j!=0) {
+			var jsonObj = {};
+			jsonObj["title"] = title[j];
+			jsonObj["content"] = dataArray[j].replace("<\/div>", "");
+			jsonArr.push(jsonObj)
+		}
+	}
+	layer.tab({
+		area: ['1000px', '360px'],
+		tab: jsonArr
+	});
+
+}
+
 function getPatient(docNo) {
 		$.get("../manage/patientList/patient",{id:docNo},function(data){
 			$("#midContent").css('display','block');
@@ -57,7 +99,7 @@ function getPatient(docNo) {
 		   	url: baseUrl + "/audit/sample?id="+sampleNo,
 			datatype: "json",
 			jsonReader : {repeatitems : false},  
-		   	colNames:['ID','项目', '结果','历史', '历史1', '历史2', '参考范围', '单位'],
+		   	colNames:['ID','项目', '结果','历史', '历史1', '历史2', '参考范围', '单位','KNOWLEDGE'],
 		   	colModel:[
 		   		{name:'id',index:'id', hidden:true},
 		   		{name:'name',index:'name',width:'250',sortable:false},
@@ -67,6 +109,7 @@ function getPatient(docNo) {
 		   		{name:'last2',index:'last2',width:'100', hidden:true, sortable:false},
 		   		{name:'scope',index:'scope',width:'100',sortable:false},
 		   		{name:'unit', sortable:false, width:'100', index:'unit'},
+				{name:'knowledgeName',index:'knowledgeName',hidden:true}
 		   	],
 		   	width: width,
 		   	height: height,
