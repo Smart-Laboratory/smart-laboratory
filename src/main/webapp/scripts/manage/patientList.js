@@ -33,7 +33,8 @@ function getPatient(docNo) {
         	$("#pSection").html(data.section);
         	$("#pType").html(data.type);
         	$("#diagnostic").html(data.diagnostic);
-        	
+			$("#patientId").html(data.patientId);
+			$("#requester").html(data.requester);
         	if(data.bed == null){
         		$("#pBedText").css('display','none');
         		$("#pBedLabel").css('display','none');
@@ -269,7 +270,21 @@ function getPatient(docNo) {
 								res3 = "<font color='red'>↑</font>";
 							}
 						}
-
+						if (ret.editMark != 0 && ret.editMark % 33 == 0) {
+							jQuery("#rowed3").jqGrid('setRowData', v, {
+								result:color+"<span class='result_span'>"+ret.result+"</span>"+res+"</div>",
+								last:"<span class='last_span'>" + ret.last + "</span>"+res1,
+								last1:"<span class='last_span'>" + ret.last1 + "</span>"+res2,
+								last2:"<span class='last_span'>" + ret.last2 + "</span>"+res3
+							});
+						} else {
+							jQuery("#rowed3").jqGrid('setRowData', v, {
+								result:color+"<span class='result_span'>"+ret.result+"</span>"+res+"</div>",
+								last:"<span class='last_span'>" + ret.last + "</span>"+res1,
+								last1:"<span class='last_span'>" + ret.last1 + "</span>"+res2,
+								last2:"<span class='last_span'>" + ret.last2 + "</span>"+res3
+							});
+						}
 					}
 				});
 			},

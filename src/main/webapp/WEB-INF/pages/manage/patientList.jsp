@@ -58,11 +58,11 @@
 		<label for="search_text" style="margin-left : 50px;"></label>
 		<input type="text" id="search_text" name="search_text" class="form-control" />
 		<select id="search_select" class="form-control select" >
-			<option value="1"><fmt:message key="patient.blh" /></option>
+			<option value="5" selected>就诊号</option>
 			<option value="2"><fmt:message key="patient.name" /></option>
-			<option value="3"><fmt:message key="sample.id"></fmt:message></option>
 			<option value="4">样本号</option>
-			<option value="5">就诊号</option>
+			<option value="3"><fmt:message key="sample.id"></fmt:message></option>
+			<option value="1"><fmt:message key="patient.blh" /></option>
 		</select>
 		<button id="searchBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="search" /></button>
 		<button id="search_detailed_printBtn" class="btn btn-info" style="margin-left:20px;"><fmt:message key="print" /></button>
@@ -103,16 +103,17 @@
 								<td>在院方式:</span><b id="stayhospitalmode"></b></td>
 							</tr>
 							<tr>
-								<td>病历号:</span><b id="blh"></b></td>
+								<td>就诊号:</span><b id="patientId"></b></td>
 								<td>科&#8195;室:</span><b id="pSection"></b></td>
 								<td>床&#8195;&#8195;号:</span><b id="pBed"></b></td>
 							</tr>
 							<tr>
-								<td colspan="2">诊&#8195;断:</span><b id="diagnostic"></b>
+								<td>诊&#8195;断:</span><b id="diagnostic"></b>
 									<input type="hidden" id="diagnosisValue" />
 									<div id='rbcLabel' style='display:none;float:right;height:15px;color:red;'>
 										<fmt:message key="rbc.total"/>&nbsp;<b id="rbctotal"></b>
 									</div></td>
+								<td>病历号:</span><b id="blh"></b></td>
 								<td>开单医生:</span><b id="requester"></b></td>
 							</tr>
 						</table>

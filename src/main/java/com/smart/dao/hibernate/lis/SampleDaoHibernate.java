@@ -571,9 +571,11 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		if(!ConvertUtil.null2String(sample.getSampleNo()).isEmpty()) {
 			criteria.add(Restrictions.eq("sampleNo", sample.getSampleNo()));
 		}
+
 		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
 				                        .add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
 				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE))
+				.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()))
 				.setProjection(Projections.rowCount());
 		return  ((Long) criteria.uniqueResult()).intValue();
 	}
@@ -608,7 +610,8 @@ public class SampleDaoHibernate extends GenericDaoHibernate<Sample, Long> implem
 		}
 		criteria.add(Restrictions.ge("sampleStatus", Constants.SAMPLE_STATUS_RECEIVED ))
 				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)>=? ", from, StringType.INSTANCE))
-				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE));
+				.add(Restrictions.sqlRestriction("SUBSTR(sampleNo,1,8)<=? ", to, StringType.INSTANCE))
+				.add(Restrictions.eq("stayHospitalMode", sample.getStayHospitalMode()));
 		if(sidx.isEmpty()){
 			sidx="id";
 		}

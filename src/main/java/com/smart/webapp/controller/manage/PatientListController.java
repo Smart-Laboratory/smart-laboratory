@@ -78,6 +78,7 @@ public class PatientListController extends BaseAuditController {
 			if (ex.length() > 16) {
 				ex = ex.substring(0, 16) + "...";
 			}*/
+			map.put("patientId",info.getPatientId());
 			map.put("examinaim", info.getInspectionName());
 			map.put("diagnostic", info.getDiagnostic());
 			map.put("section", section.getName());
@@ -433,6 +434,7 @@ public class PatientListController extends BaseAuditController {
 		}else {
 			sample.setPatientId(patientId);
 		}
+		sample.setStayHospitalMode(1); //门诊
 		int size = 0;
 		try {
 			size = sampleManager.findCountByCriteria(sample, from, to);
@@ -464,7 +466,7 @@ public class PatientListController extends BaseAuditController {
 				map.put("type", "有结果");
 			}
 			if (info.getSampleStatus()>=6) {
-				map.put("type", "已打印");
+				map.put("type", "已审核");
 			}
 			map.put("examinaim", info.getInspectionName());
 			dataRows.add(map);
