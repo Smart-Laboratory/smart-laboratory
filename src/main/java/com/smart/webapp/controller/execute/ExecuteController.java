@@ -180,7 +180,7 @@ public class ExecuteController {
 		List<LabOrder> needSaveLabOrder = new ArrayList<LabOrder>();
 		for(int i = 0; i < needSaveList.size(); i++) {
 			LabOrder labOrder = needSaveList.get(i);
-			Ylxh ylxh = null;
+			/*Ylxh ylxh = null;
 			//生成样本号
 			if(labOrder.getYlxh().indexOf("+") > 0) {
 				ylxh = ylxhMap.get(ConvertUtil.null2String(labOrder.getYlxh().split("[+]")[0])); //获得检验段
@@ -194,7 +194,8 @@ public class ExecuteController {
 				labOrder.setSampleno(newSampleNo);
 			} else {
 				labOrder.setSampleno("0");
-			}
+			}*/
+			labOrder.setSampleno("0");
 			//生成条码号
 			Sample sample = new Sample();
 			sample.setBirthday(labOrder.getBirthday());
