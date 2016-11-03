@@ -56,7 +56,7 @@
 		<label for="to" style="margin-left : 10px;" ><b><fmt:message key="to" /></b></label>
 		<input type="text" id="to" name="to" class="form-control">
 		<label for="search_text" style="margin-left : 50px;"></label>
-		<input type="text" id="search_text" name="search_text" class="form-control" />
+		<input type="text" id="search_text" name="search_text" class="form-control" value="${param.patientId}"/>
 		<select id="search_select" class="form-control select" >
 			<option value="5" selected>就诊号</option>
 			<option value="2"><fmt:message key="patient.name" /></option>
