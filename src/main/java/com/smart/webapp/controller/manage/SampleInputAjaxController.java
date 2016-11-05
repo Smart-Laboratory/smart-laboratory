@@ -509,10 +509,7 @@ public class SampleInputAjaxController {
         String segment = "";
         if (!isNight()) {
             //白班
-            //夜班标本退回，白班重新接收到对应的白班科室
-            if(sample.getSectionId().equals(Constants.DEPART_NIGHT)) {
-                sample.setSectionId(ylxh.getKsdm());
-            }
+            sample.setSectionId(ylxh.getKsdm());
             segment = ylxh.getSegment();
         } else {
             //夜班
@@ -520,8 +517,8 @@ public class SampleInputAjaxController {
             segment = ylxh.getNightSegment();
         }
         //非夜班科室取白班
-        if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
-            sample.setSectionId(user.getLastLab());
+        if ("210100,210200,".indexOf(sample.getSectionId() +",") < 0) {
+            sample.setSectionId(ylxh.getKsdm());
             segment = ylxh.getSegment();
         }
         if (segment == null || segment.isEmpty()) {
@@ -779,6 +776,7 @@ public class SampleInputAjaxController {
         String segment = "";
         if (!isNight()) {
             //白班
+            sample.setSectionId(ylxh.getKsdm());
             segment = ylxh.getOutSegment();
         } else {
             //夜班
@@ -786,9 +784,9 @@ public class SampleInputAjaxController {
             segment = ylxh.getNightSegment();
         }
         //非夜班科室取白班
-        if ("210800,210400,210300".indexOf(user.getLastLab()) >= 0) {
-            sample.setSectionId(user.getLastLab());
-            segment = ylxh.getSegment();
+        if ("210100,210200,".indexOf(sample.getSectionId() +",") < 0) {
+            sample.setSectionId(ylxh.getKsdm());
+            segment = ylxh.getOutSegment();
         }
         if (segment == null || segment.isEmpty()) {
             o.put("success", 5);
