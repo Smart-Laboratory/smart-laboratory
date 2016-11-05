@@ -517,7 +517,7 @@ public class SampleInputAjaxController {
             segment = ylxh.getNightSegment();
         }
         //非夜班科室取白班
-        if ("210100,210200,".indexOf(sample.getSectionId() +",") < 0) {
+        if ("210100,210200,".indexOf(ylxh.getKsdm() +",") < 0) {
             sample.setSectionId(ylxh.getKsdm());
             segment = ylxh.getSegment();
         }
@@ -784,7 +784,7 @@ public class SampleInputAjaxController {
             segment = ylxh.getNightSegment();
         }
         //非夜班科室取白班
-        if ("210100,210200,".indexOf(sample.getSectionId() +",") < 0) {
+        if ("210100,210200,".indexOf(ylxh.getKsdm() +",") < 0) {
             sample.setSectionId(ylxh.getKsdm());
             segment = ylxh.getOutSegment();
         }
