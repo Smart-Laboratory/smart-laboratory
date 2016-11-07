@@ -131,7 +131,7 @@ public class ExecuteController {
 								ConvertUtil.null2String(ylxh2.getOutSegment())+"_"+
 								ConvertUtil.null2String(ylxh2.getCjbw());
 						if(ylxh.getSfhb() == 0) {
-							key2 += "_"+ ConvertUtil.null2String(ylxh.getYlxh());
+							key2 += "_"+ ConvertUtil.null2String(ylxh2.getYlxh());
 						}
 						if (isFirst) {
 							lo.setExamitem(ylxh2.getYlmc());

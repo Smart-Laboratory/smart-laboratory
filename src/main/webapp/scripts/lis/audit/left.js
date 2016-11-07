@@ -6,7 +6,7 @@ function getList(text, lab) {
         url: "../audit/data?sample=" + text + "&lab=" + lab,
         datatype: "json",
         width: $("#sampleListPanel").width(),
-        colNames: ['id', '状态', '标记',  '姓名', '样本号','性别','年龄','检验目的', 'FLAG', 'SIZE'],
+        colNames: ['id', '状态', '标记',  '姓名', '样本号','性别','年龄','检验目的', 'FLAG', 'SIZE','联系方式'],
         colModel: [
             {name: 'id', index: 'id', hidden: true},
             {
@@ -29,7 +29,9 @@ function getList(text, lab) {
             {name: 'age', index: 'age', width: 50},
             {name: 'examItem', index: 'examItem', width: 150},
             {name: 'flag', index: 'flag', hidden: true},
-            {name: 'size', index: 'size', hidden: true}],
+            {name: 'size', index: 'size', hidden: true},
+            {name: 'phone', index: 'phone', width: 100}
+        ],
         rowNum: 100,
         viewrecords: true,
         shrinkToFit: false,
@@ -147,6 +149,7 @@ function getList(text, lab) {
             $("#gs_age").css('display', 'none');
             $("#gs_examItem").css('display', 'none');
             $("#gs_lisPass").css('display', 'none');
+            $("#gs_phone").css('display', 'none');
             if ($("#gs_status").children('option:selected').val() != 1 && $("#gs_status").children('option:selected').val() != 2) {
                 $("#gs_mark").css('display', 'none');
             }

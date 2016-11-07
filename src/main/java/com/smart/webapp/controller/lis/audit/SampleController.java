@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.smart.model.lis.Patient;
+import com.smart.service.lis.PatientManager;
 import com.smart.util.ConvertUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class SampleController {
 	
 	@Autowired
 	private SectionManager sectionManager = null;
+
+	@Autowired
+	private PatientManager patientManager = null;
 	
 	/**
 	 * 根据条件查询该检验人员的样本
@@ -86,7 +91,20 @@ public class SampleController {
 		String labCode = sectionManager.getByCode(lab).getSegment();
 		int size = sampleManager.getSampleCount(text, lab, mark, status, labCode);
 		list = sampleManager.getSampleList(text, lab, mark, status, labCode, start, end);
-		
+		String blhs = "";
+		for(Sample s : list) {
+			if(s.getStayHospitalMode() == 1) {
+				blhs += s.getPatientblh() + ",";
+			}
+		}
+		List<Patient> patientList = new ArrayList<Patient>();
+		Map<String, String> phoneMap = new HashMap<String, String>();
+		if(!blhs.isEmpty()) {
+			patientList = patientManager.getHisPatient(blhs.substring(0, blhs.length()-1));
+		}
+		for(Patient patient : patientList) {
+			phoneMap.put(patient.getBlh(), patient.getPhone());
+		}
 		List<Map<String, Object>> dataRows = new ArrayList<Map<String, Object>>();
 		dataResponse.setRecords(size);
 		int x = size % (row == 0 ? size : row);
@@ -113,6 +131,11 @@ public class SampleController {
 			map.put("examItem", ConvertUtil.null2String(info.getInspectionName()));
 			map.put("status", info.getAuditStatusValue());
 			map.put("flag", info.getModifyFlag());
+			if(info.getStayHospitalMode() == 1) {
+				map.put("phone", phoneMap.get(info.getPatientblh()));
+			} else {
+				map.put("phone", "");
+			}
 			map.put("size", 0);
 			dataRows.add(map);
 		}
