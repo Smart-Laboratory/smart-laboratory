@@ -42,7 +42,7 @@ function setPrintIndex(index) {
 }
 function CreateDataBill(data) {
 	if(data && data!=null){
-	    var patientInfo = data.patientName + " "+ data.sex + " "+ data.age+data.ageUnit
+	    var patientInfo = data.patientName + " " + data.blh + " " + data.sex + " "+ data.age+data.ageUnit
 		if(data.requestMode != 0) {
 			patientInfo += " 急";
 		}
@@ -59,7 +59,7 @@ function CreateDataBill(data) {
         LODOP.SET_PRINT_STYLEA(0,"FontSize",20);
         LODOP.ADD_PRINT_BARCODEA("patientCode","20.98mm","32.01mm","46.57mm",40,"128B",data.patientCode);
         LODOP.SET_PRINT_STYLEA(0,"Horient",2);
-        LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","5.85mm",90,20,"姓    名：");
+        /*LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","5.85mm",90,20,"姓    名：");
         LODOP.ADD_PRINT_TEXTA("name","33.00mm","23.31mm",90,20,data.patientName);
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
         LODOP.ADD_PRINT_TEXTA("sexText","33.00mm","46.86mm",45,20,"性别：");
@@ -67,7 +67,17 @@ function CreateDataBill(data) {
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
         LODOP.ADD_PRINT_TEXTA("ageText","33.00mm","65.91mm",45,20,"年龄：");
         LODOP.ADD_PRINT_TEXTA("age","33.00mm","77.55mm",40,20,data.age + data.ageUnit);
-        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);*/
+		LODOP.ADD_PRINT_TEXTA("nameText","33.00mm","5.85mm",90,20,"个人信息：");
+		LODOP.ADD_PRINT_TEXTA("name","33.00mm","23.31mm",90,20,data.patientName);
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		LODOP.ADD_PRINT_TEXTA("sex","33.00mm","46.86mm",30,20,data.sex);
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		LODOP.ADD_PRINT_TEXTA("age","33.00mm","53.5mm",40,20,data.age+ data.ageUnit);
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+		LODOP.ADD_PRINT_TEXTA("blhText","33.00mm","63.91mm",70,20,"病 历 号：");
+		LODOP.ADD_PRINT_TEXTA("blh","33.00mm","80.55mm",80,20,data.blh);
+		LODOP.SET_PRINT_STYLEA(0,"Bold",1);
         LODOP.ADD_PRINT_TEXTA("examText","38.00mm","5.85mm",70,20,"检验目的：");
         LODOP.ADD_PRINT_TEXTA("exam","38.00mm","23.31mm",300,20,data.testName);
         LODOP.SET_PRINT_STYLEA(0,"Bold",1);
@@ -150,7 +160,8 @@ function printSet() {
         "executeTime":"2016-09-07 09:17:21",
         "reportTime":"2016-09-07 13:17:00",
         "requester":"开单医生",
-        "reportPlace":"在服务台或自助机上取单"
+        "reportPlace":"在服务台或自助机上取单",
+		"blh":"60044097"
 	}
 	CreateDataBill(data);
 	LODOP.PRINT_DESIGN();

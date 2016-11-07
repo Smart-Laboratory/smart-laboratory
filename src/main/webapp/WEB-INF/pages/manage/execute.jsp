@@ -117,10 +117,10 @@
 						<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 						打印设定
 					</button>
-					<%--<button type="button" class="btn btn-sm btn-info" title="打印设计" onclick="printSet()">
+					<button type="button" class="btn btn-sm btn-info" title="打印设计" onclick="printSet()">
 						<i class="ace-icon fa fa-pencil-square bigger-110"></i>
 						回执单打印设计
-					</button>--%>
+					</button>
 					<div class="checkbox" style="border-top:1px solid #000000;">
 			    		<label>
 			      			<input type="checkbox" id="selfexecute" value=""> 自行采样

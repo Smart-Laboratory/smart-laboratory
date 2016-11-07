@@ -392,6 +392,7 @@ public class ExecuteController {
 			object.put("reportTime", new GetReportTimeUtil().getReportTime(labOrder.getExecutetime(), labOrder.getQbgsj()));
 			object.put("requester", ConvertUtil.null2String(labOrder.getRequesterName()));
 			object.put("reportPlace", labOrder.getQbgdt());
+			object.put("blh", labOrder.getBlh());
 			array.add(object);
 		}
 		return array;
